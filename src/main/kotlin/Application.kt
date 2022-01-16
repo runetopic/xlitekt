@@ -1,58 +1,49 @@
+import com.runetopic.cache.store.Js5Store
 import io.ktor.network.selector.ActorSelectorManager
-import io.ktor.network.sockets.Socket
 import io.ktor.network.sockets.aSocket
-import io.ktor.network.sockets.isClosed
 import io.ktor.network.sockets.openReadChannel
 import io.ktor.network.sockets.openWriteChannel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import java.net.InetSocketAddress
-import kotlinx.coroutines.withContext
+import java.nio.file.Path
+import kotlin.time.measureTime
 
 fun main() {
-    println("Hello World")
-
     runBlocking {
+        val store = Js5Store(path = Path.of("${System.getProperty("user.home")}/202/"), parallel = true)
+
         val server = aSocket(ActorSelectorManager(Dispatchers.IO)).tcp().bind(InetSocketAddress(43594))
+        println("online!")
 
         while (true) {
             val socket = server.accept() // this blocks
 
             launch {
-                val readChannel = socket.openReadChannel()
-                val writeChannel = socket.openWriteChannel(autoFlush = true)
+                val client = Client(
+                    store,
+                    socket,
+                    socket.openReadChannel(),
+                    socket.openWriteChannel()
+                )
 
-                while (socket.isClosed.not()) {
-                    Handshake(socket).let {
-                        it.read(readChannel)
-                        it.write(writeChannel)
+                try {
+                    while (client.active) {
+                        val time = measureTime {
+                            client.pipeline!!.read(client)?.let { readEvent ->
+                                client.reactor!!.process(client, readEvent)?.let { writeEvent ->
+                                    client.pipeline!!.write(client, writeEvent)
+                                } ?: client.disconnect()
+                            } ?: client.disconnect()
+                        }
+                        println(time)
                     }
-
-                    JS5(socket).let {
-                        it.read(readChannel)
-                        it.write(writeChannel)
-                    }
+                } catch (exception: Exception) {
+                    println("Exception caught with ${exception.message}")
+                    client.disconnect()
                 }
-
-//                Handshake(socket).let { handshake ->
-//                    handshake.read(readChannel)
-//                    handshake.write(writeChannel)
-//
-//                    if (handshake.response == 0) {
-//                        while (true) {
-//                            JS5().let { js5 ->
-//                                js5.read(readChannel)
-//                                js5.write(writeChannel)
-//                            }
-//                        }
-//                    }
-//                }
             }
         }
     }
-}
-
-suspend fun closeSocket(socket: Socket) = withContext(Dispatchers.IO) {
-    socket.close()
 }
