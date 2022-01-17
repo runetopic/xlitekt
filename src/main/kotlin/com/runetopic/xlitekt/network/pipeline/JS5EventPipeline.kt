@@ -1,6 +1,6 @@
 package com.runetopic.xlitekt.network.pipeline
 
-import IO_TIMEOUT
+import com.runetopic.xlitekt.IO_TIMEOUT
 import com.runetopic.xlitekt.client.Client
 import com.runetopic.xlitekt.network.event.ReadEvent
 import com.runetopic.xlitekt.network.event.WriteEvent
