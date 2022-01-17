@@ -1,6 +1,7 @@
 [versions]
 ktor = "1.6.7"
 koin = "3.1.5"
+logback = "1.2.9"
 cache = "1.4.19-SNAPSHOT"
 
 [libraries]
@@ -8,8 +9,9 @@ ktor-server-netty = { module = "io.ktor:ktor-server-netty", version.ref = "ktor"
 koin-core = { module = "io.insert-koin:koin-core", version.ref = "koin" }
 koin-ktor = { module = "io.insert-koin:koin-ktor", version.ref = "koin" }
 koin-test = { module = "io.insert-koin:koin-test", version.ref = "koin" }
+logback = { module = "ch.qos.logback:logback-classic", version.ref = "logback" }
 cache = { module = "com.runetopic.cache:cache", version.ref = "cache" }
 
 [bundles]
-ktor = ["ktor-server-netty"]
+ktor = ["ktor-server-netty", "logback"]
 koin = ["koin-core", "koin-ktor"]

@@ -1,23 +1,17 @@
 package com.runetopic.xlitekt
 
-import com.runetopic.cache.store.Js5Store
-import com.runetopic.xlitekt.network.startListeningOnPort
+import com.runetopic.xlitekt.network.awaitOnPort
+import com.runetopic.xlitekt.plugin.ktor.installKoin
+import com.runetopic.xlitekt.plugin.ktor.installLogging
 import io.ktor.application.Application
-import io.ktor.application.install
-import org.koin.dsl.module
-import org.koin.ktor.ext.Koin
-import java.nio.file.Path
+import io.ktor.server.engine.commandLineEnvironment
+import java.util.TimeZone
 
-const val PORT = 43594 // TODO move this into a properties file or some shit
-const val IO_TIMEOUT = 10_000L // TODO move this into a properties file or some shit
+fun main(args: Array<String>) = commandLineEnvironment(args).start()
 
-fun Application.module() {
-    install(Koin) {
-        modules(
-            module {
-                single { Js5Store(path = Path.of("${System.getProperty("user.home")}/202/"), parallel = true) }
-            }
-        )
-    }
-    startListeningOnPort(PORT)
+fun Application.main() {
+    TimeZone.setDefault(TimeZone.getTimeZone("UTC"))
+    installLogging()
+    installKoin()
+    awaitOnPort(environment.config.property("network.port").getString().toInt())
 }

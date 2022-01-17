@@ -1,16 +1,19 @@
 package com.runetopic.xlitekt.network.pipeline
 
-import com.runetopic.xlitekt.IO_TIMEOUT
 import com.runetopic.xlitekt.client.Client
 import com.runetopic.xlitekt.network.event.ReadEvent
 import com.runetopic.xlitekt.network.event.WriteEvent
+import com.runetopic.xlitekt.network.inject
+import io.ktor.application.ApplicationEnvironment
 import kotlinx.coroutines.withTimeout
 
 class JS5EventPipeline : EventPipeline<ReadEvent.JS5ReadEvent, WriteEvent.JS5WriteEvent> {
 
+    private val environment by inject<ApplicationEnvironment>()
+
     override suspend fun read(client: Client): ReadEvent.JS5ReadEvent? {
         if (client.readChannel.availableForRead < 4) {
-            withTimeout(IO_TIMEOUT) { client.readChannel.awaitContent() }
+            withTimeout(environment.config.property("network.timeout").getString().toLong()) { client.readChannel.awaitContent() }
         }
         val opcode = client.readChannel.readByte().toInt()
         val indexId = client.readChannel.readByte().toInt() and 0xff

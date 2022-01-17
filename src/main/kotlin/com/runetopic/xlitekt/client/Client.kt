@@ -1,18 +1,18 @@
 package com.runetopic.xlitekt.client
 
-import com.runetopic.cache.store.Js5Store
 import com.runetopic.xlitekt.network.event.ReadEvent
 import com.runetopic.xlitekt.network.event.WriteEvent
-import com.runetopic.xlitekt.network.pipeline.HandshakeEventPipeline
-import com.runetopic.xlitekt.network.pipeline.EventPipeline
-import com.runetopic.xlitekt.network.handler.HandshakeEventHandler
 import com.runetopic.xlitekt.network.handler.EventHandler
+import com.runetopic.xlitekt.network.handler.HandshakeEventHandler
+import com.runetopic.xlitekt.network.inject
+import com.runetopic.xlitekt.network.pipeline.EventPipeline
+import com.runetopic.xlitekt.network.pipeline.HandshakeEventPipeline
 import io.ktor.network.sockets.Socket
 import io.ktor.utils.io.ByteReadChannel
 import io.ktor.utils.io.ByteWriteChannel
+import org.slf4j.Logger
 
 class Client(
-    val store: Js5Store,
     private val socket: Socket,
     val readChannel: ByteReadChannel,
     val writeChannel: ByteWriteChannel
@@ -23,25 +23,27 @@ class Client(
     var connectedToJs5 = false
     var loggedIn = false
 
+    private val logger by inject<Logger>()
+
     init {
-        useEventPipeline(HandshakeEventPipeline())
-        useEventHandler(HandshakeEventHandler())
+        useEventPipeline(inject<HandshakeEventPipeline>())
+        useEventHandler(inject<HandshakeEventHandler>())
         active = true
     }
 
     fun disconnect() {
         active = false
         socket.close()
-        println("Client disconnected.")
+        logger.info("Client disconnected.")
     }
 
     @Suppress("UNCHECKED_CAST")
-    fun useEventPipeline(eventPipeline: EventPipeline<*, *>) {
-        this.eventPipeline = eventPipeline as EventPipeline<ReadEvent, WriteEvent>
+    fun useEventPipeline(eventPipeline: Lazy<EventPipeline<*, *>>) {
+        this.eventPipeline = eventPipeline.value as EventPipeline<ReadEvent, WriteEvent>
     }
 
     @Suppress("UNCHECKED_CAST")
-    fun useEventHandler(eventHandler: EventHandler<*, *>) {
-        this.eventHandler = eventHandler as EventHandler<ReadEvent, WriteEvent>
+    fun useEventHandler(eventHandler: Lazy<EventHandler<*, *>>) {
+        this.eventHandler = eventHandler.value as EventHandler<ReadEvent, WriteEvent>
     }
 }

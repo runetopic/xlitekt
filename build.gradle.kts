@@ -11,7 +11,7 @@ group = "com.runetopic.xlite"
 version = "1.0.0-SNAPSHOT"
 
 application {
-    mainClass.set("io.ktor.server.netty.EngineMain")
+    mainClass.set("com.runetopic.xlitekt.ApplicationKt")
 }
 
 dependencies {
@@ -33,7 +33,7 @@ with(tasks) {
     }
     withType<ShadowJar> {
         manifest {
-            attributes(Pair("Main-Class", "io.ktor.server.netty.EngineMain"))
+            attributes(Pair("Main-Class", "com.runetopic.xlitekt.ApplicationKt"))
         }
     }
 }

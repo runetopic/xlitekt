@@ -1,7 +1,10 @@
 package com.runetopic.xlitekt.network
 
-import com.runetopic.cache.store.Js5Store
 import com.runetopic.xlitekt.client.Client
+import com.runetopic.xlitekt.network.handler.HandshakeEventHandler
+import com.runetopic.xlitekt.network.handler.JS5EventHandler
+import com.runetopic.xlitekt.network.pipeline.HandshakeEventPipeline
+import com.runetopic.xlitekt.network.pipeline.JS5EventPipeline
 import io.ktor.network.selector.ActorSelectorManager
 import io.ktor.network.sockets.aSocket
 import io.ktor.network.sockets.openReadChannel
@@ -12,20 +15,26 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import org.koin.core.parameter.ParametersDefinition
 import org.koin.core.qualifier.Qualifier
+import org.koin.dsl.module
 import org.koin.mp.KoinPlatformTools
 import java.net.InetSocketAddress
 import java.util.concurrent.Executors
+import org.slf4j.Logger
 
+val networkModule = module {
+    single { HandshakeEventPipeline() }
+    single { HandshakeEventHandler() }
+    single { JS5EventPipeline() }
+    single { JS5EventHandler() }
+}
 
-fun startListeningOnPort(port: Int) = runBlocking {
-    val store by inject<Js5Store>()
+fun awaitOnPort(port: Int) = runBlocking {
     val dispatcher = ActorSelectorManager(Executors.newCachedThreadPool().asCoroutineDispatcher())
     val server = aSocket(dispatcher).tcp().bind(InetSocketAddress(port))
     while (true) {
         val socket = server.accept()
 
         val client = Client(
-            store,
             socket,
             socket.openReadChannel(),
             socket.openWriteChannel()
@@ -44,7 +53,7 @@ private suspend fun startClientIOEvents(client: Client) = with(client) {
                 } ?: disconnect()
             } ?: disconnect()
         } catch (exception: Exception) {
-            println("Exception caught with ${exception.message}")
+            inject<Logger>().value.error("Exception caught with ${exception.message}")
             disconnect()
         }
     }
