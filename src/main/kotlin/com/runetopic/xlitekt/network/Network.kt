@@ -1,5 +1,6 @@
 package com.runetopic.xlitekt.network
 
+import com.runetopic.xlitekt.client.Client
 import io.ktor.network.selector.ActorSelectorManager
 import io.ktor.network.sockets.aSocket
 import io.ktor.network.sockets.openReadChannel
@@ -16,7 +17,7 @@ fun startListeningOnPort(port: Int) = runBlocking {
     val dispatcher = ActorSelectorManager(Executors.newCachedThreadPool().asCoroutineDispatcher())
     val server = aSocket(dispatcher).tcp().bind(InetSocketAddress(port))
     while (true) {
-        val socket = server.accept() // this is connect
+        val socket = server.accept()
 
         val client = Client(
             store,
@@ -25,21 +26,21 @@ fun startListeningOnPort(port: Int) = runBlocking {
             socket.openWriteChannel()
         )
 
-        launch(Dispatchers.IO) { loopClientIO(client) }
+        launch(Dispatchers.IO) { startClientIOEvents(client) }
     }
 }
 
-private suspend fun loopClientIO(client: Client) {
-    while (client.active) {
+private suspend fun startClientIOEvents(client: Client) = with(client) {
+    while (active) {
         try {
-            client.pipeline!!.read(client)?.let { readEvent ->
-                client.reactor!!.process(client, readEvent)?.let { writeEvent ->
-                    client.pipeline!!.write(client, writeEvent)
-                } ?: client.disconnect()
-            } ?: client.disconnect()
+            eventPipeline!!.read(this)?.let { read ->
+                eventHandler!!.handleEvent(this, read)?.let { write ->
+                    eventPipeline!!.write(this, write)
+                } ?: disconnect()
+            } ?: disconnect()
         } catch (exception: Exception) {
             println("Exception caught with ${exception.message}")
-            client.disconnect()
+            disconnect()
         }
     }
 }

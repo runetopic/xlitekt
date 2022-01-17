@@ -1,0 +1,9 @@
+package com.runetopic.xlitekt.network.handler
+
+import com.runetopic.xlitekt.client.Client
+import com.runetopic.xlitekt.network.event.ReadEvent
+import com.runetopic.xlitekt.network.event.WriteEvent
+
+interface EventHandler<R : ReadEvent, W : WriteEvent> {
+    fun handleEvent(client: Client, event: R): W?
+}

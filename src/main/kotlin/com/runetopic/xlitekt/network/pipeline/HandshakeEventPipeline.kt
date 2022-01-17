@@ -1,13 +1,18 @@
 package com.runetopic.xlitekt.network.pipeline
 
-import com.runetopic.xlitekt.network.Client
+import IO_TIMEOUT
+import com.runetopic.xlitekt.client.Client
 import com.runetopic.xlitekt.network.event.ReadEvent
 import com.runetopic.xlitekt.network.event.WriteEvent
-import com.runetopic.xlitekt.network.reactor.JS5Reactor
+import com.runetopic.xlitekt.network.handler.JS5EventHandler
+import kotlinx.coroutines.withTimeout
 
-class HandshakePipeline : Pipeline<ReadEvent.HandshakeReadEvent, WriteEvent.HandshakeWriteEvent> {
+class HandshakeEventPipeline : EventPipeline<ReadEvent.HandshakeReadEvent, WriteEvent.HandshakeWriteEvent> {
 
     override suspend fun read(client: Client): ReadEvent.HandshakeReadEvent {
+        if (client.readChannel.availableForRead < 5) {
+            withTimeout(IO_TIMEOUT) { client.readChannel.awaitContent() }
+        }
         val opcode = client.readChannel.readByte().toInt()
         val version = client.readChannel.readInt()
         return ReadEvent.HandshakeReadEvent(opcode, version)
@@ -18,8 +23,8 @@ class HandshakePipeline : Pipeline<ReadEvent.HandshakeReadEvent, WriteEvent.Hand
             client.writeChannel.writeByte(event.response.toByte())
             client.writeChannel.flush()
             if (event.response == 0) {
-                client.usePipeline(JS5Pipeline())
-                client.useReactor(JS5Reactor())
+                client.useEventPipeline(JS5EventPipeline())
+                client.useEventHandler(JS5EventHandler())
             } else {
                 client.disconnect()
             }

@@ -1,13 +1,13 @@
-package com.runetopic.xlitekt.network.reactor
+package com.runetopic.xlitekt.network.handler
 
-import com.runetopic.xlitekt.network.Client
+import com.runetopic.xlitekt.client.Client
 import com.runetopic.xlitekt.network.event.ReadEvent
 import com.runetopic.xlitekt.network.event.WriteEvent
 import java.nio.ByteBuffer
 
-class JS5Reactor : Reactor<ReadEvent.JS5ReadEvent, WriteEvent.JS5WriteEvent> {
+class JS5EventHandler : EventHandler<ReadEvent.JS5ReadEvent, WriteEvent.JS5WriteEvent> {
 
-    override fun process(client: Client, event: ReadEvent.JS5ReadEvent): WriteEvent.JS5WriteEvent? {
+    override fun handleEvent(client: Client, event: ReadEvent.JS5ReadEvent): WriteEvent.JS5WriteEvent? {
         return when (event.opcode) {
             0, 1 -> {
                 val indexId = event.indexId
