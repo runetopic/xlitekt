@@ -1,6 +1,9 @@
-package com.runetopic.xlitekt.network
+package com.runetopic.xlitekt.network.pipeline
 
-import Client
+import com.runetopic.xlitekt.network.Client
+import com.runetopic.xlitekt.network.event.ReadEvent
+import com.runetopic.xlitekt.network.event.WriteEvent
+import com.runetopic.xlitekt.network.reactor.JS5Reactor
 
 class HandshakePipeline : Pipeline<ReadEvent.HandshakeReadEvent, WriteEvent.HandshakeWriteEvent> {
 

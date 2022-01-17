@@ -1,6 +1,8 @@
-package com.runetopic.xlitekt.network
+package com.runetopic.xlitekt.network.reactor
 
-import Client
+import com.runetopic.xlitekt.network.Client
+import com.runetopic.xlitekt.network.event.ReadEvent
+import com.runetopic.xlitekt.network.event.WriteEvent
 
 class HandshakeReactor : Reactor<ReadEvent.HandshakeReadEvent, WriteEvent.HandshakeWriteEvent> {
 

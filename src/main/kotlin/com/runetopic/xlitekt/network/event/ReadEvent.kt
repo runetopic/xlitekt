@@ -1,4 +1,4 @@
-package com.runetopic.xlitekt.network
+package com.runetopic.xlitekt.network.event
 
 sealed class ReadEvent {
     data class HandshakeReadEvent(

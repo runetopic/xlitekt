@@ -1,4 +1,4 @@
-package com.runetopic.xlitekt.network
+package com.runetopic.xlitekt.network.event
 
 import java.nio.ByteBuffer
 
@@ -14,5 +14,5 @@ sealed class WriteEvent {
         val compression: Int,
         val size: Int,
         val bytes: ByteBuffer
-    ) : WriteEvent()
+    ) : WriteEvent() { constructor() : this(-1, -1, -1, -1, ByteBuffer.allocate(0)) }
 }

@@ -1,10 +1,12 @@
+package com.runetopic.xlitekt.network
+
 import com.runetopic.cache.store.Js5Store
-import com.runetopic.xlitekt.network.HandshakePipeline
-import com.runetopic.xlitekt.network.HandshakeReactor
-import com.runetopic.xlitekt.network.Pipeline
-import com.runetopic.xlitekt.network.Reactor
-import com.runetopic.xlitekt.network.ReadEvent
-import com.runetopic.xlitekt.network.WriteEvent
+import com.runetopic.xlitekt.network.event.ReadEvent
+import com.runetopic.xlitekt.network.event.WriteEvent
+import com.runetopic.xlitekt.network.pipeline.HandshakePipeline
+import com.runetopic.xlitekt.network.pipeline.Pipeline
+import com.runetopic.xlitekt.network.reactor.HandshakeReactor
+import com.runetopic.xlitekt.network.reactor.Reactor
 import io.ktor.network.sockets.Socket
 import io.ktor.utils.io.ByteReadChannel
 import io.ktor.utils.io.ByteWriteChannel
@@ -18,6 +20,8 @@ class Client(
     var active = false
     var pipeline: Pipeline<ReadEvent, WriteEvent>? = null
     var reactor: Reactor<ReadEvent, WriteEvent>? = null
+    var connectedToJs5 = false
+    var loggedIn = false
 
     init {
         usePipeline(HandshakePipeline())
@@ -28,6 +32,7 @@ class Client(
     fun disconnect() {
         active = false
         socket.close()
+        println("com.runetopic.xlitekt.network.Client disconnected.")
     }
 
     @Suppress("UNCHECKED_CAST")
