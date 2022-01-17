@@ -4,9 +4,9 @@ import com.runetopic.cache.store.Js5Store
 import com.runetopic.xlitekt.client.Client
 import com.runetopic.xlitekt.network.event.ReadEvent
 import com.runetopic.xlitekt.network.event.WriteEvent
-import com.runetopic.xlitekt.network.inject
-import java.nio.ByteBuffer
+import com.runetopic.xlitekt.plugin.ktor.inject
 import org.slf4j.Logger
+import java.nio.ByteBuffer
 
 class JS5EventHandler : EventHandler<ReadEvent.JS5ReadEvent, WriteEvent.JS5WriteEvent> {
 

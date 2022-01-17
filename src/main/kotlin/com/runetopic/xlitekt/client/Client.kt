@@ -4,9 +4,9 @@ import com.runetopic.xlitekt.network.event.ReadEvent
 import com.runetopic.xlitekt.network.event.WriteEvent
 import com.runetopic.xlitekt.network.handler.EventHandler
 import com.runetopic.xlitekt.network.handler.HandshakeEventHandler
-import com.runetopic.xlitekt.network.inject
 import com.runetopic.xlitekt.network.pipeline.EventPipeline
 import com.runetopic.xlitekt.network.pipeline.HandshakeEventPipeline
+import com.runetopic.xlitekt.plugin.ktor.inject
 import io.ktor.network.sockets.Socket
 import io.ktor.utils.io.ByteReadChannel
 import io.ktor.utils.io.ByteWriteChannel

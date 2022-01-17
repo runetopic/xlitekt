@@ -5,6 +5,7 @@ import com.runetopic.xlitekt.network.handler.HandshakeEventHandler
 import com.runetopic.xlitekt.network.handler.JS5EventHandler
 import com.runetopic.xlitekt.network.pipeline.HandshakeEventPipeline
 import com.runetopic.xlitekt.network.pipeline.JS5EventPipeline
+import com.runetopic.xlitekt.plugin.ktor.inject
 import io.ktor.network.selector.ActorSelectorManager
 import io.ktor.network.sockets.aSocket
 import io.ktor.network.sockets.openReadChannel
@@ -13,13 +14,10 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.asCoroutineDispatcher
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-import org.koin.core.parameter.ParametersDefinition
-import org.koin.core.qualifier.Qualifier
 import org.koin.dsl.module
-import org.koin.mp.KoinPlatformTools
+import org.slf4j.Logger
 import java.net.InetSocketAddress
 import java.util.concurrent.Executors
-import org.slf4j.Logger
 
 val networkModule = module {
     single { HandshakeEventPipeline() }
@@ -58,9 +56,3 @@ private suspend fun startClientIOEvents(client: Client) = with(client) {
         }
     }
 }
-
-inline fun <reified T : Any> inject(
-    qualifier: Qualifier? = null,
-    mode: LazyThreadSafetyMode = KoinPlatformTools.defaultLazyMode(),
-    noinline parameters: ParametersDefinition? = null
-): Lazy<T> = KoinPlatformTools.defaultContext().get().inject(qualifier, mode, parameters)
