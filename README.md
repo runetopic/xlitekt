@@ -13,7 +13,8 @@ Download a cache from one of the archives:
 - [archive.runestats.com](https://archive.runestats.com/osrs/)
 - [archive.openrs2.org](https://archive.openrs2.org/)
 
-Place the cache you downloaded into the ``./cache/`` folder inside of the project. This path is configurable in the ``application.conf``
+Place the cache you downloaded into the ``./cache/`` folder inside of the project. This path is configurable in the [application.conf](/src/main/resources/application.conf)
+
 ```
 ktor {
     development = true
