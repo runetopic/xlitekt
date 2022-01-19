@@ -10,7 +10,9 @@ import com.runetopic.xlitekt.network.handler.JS5EventHandler
 import com.runetopic.xlitekt.network.handler.LoginEventHandler
 import com.runetopic.xlitekt.plugin.ktor.inject
 import io.ktor.application.ApplicationEnvironment
+import io.ktor.http.parametersOf
 import kotlinx.coroutines.withTimeout
+import org.koin.core.parameter.parametersOf
 
 class HandshakeEventPipeline : EventPipeline<ReadEvent.HandshakeReadEvent, WriteEvent.HandshakeWriteEvent> {
     private val environment by inject<ApplicationEnvironment>()
@@ -43,7 +45,10 @@ class HandshakeEventPipeline : EventPipeline<ReadEvent.HandshakeReadEvent, Write
                 client.useEventHandler(inject<JS5EventHandler>())
             }
             LOGIN_OPCODE -> {
-                client.useEventPipeline(inject<LoginEventPipeline>())
+                val serverSeed = ((Math.random() * 99999999.0).toLong() shl 32) + (Math.random() * 99999999.0).toLong()
+                client.writeChannel.writeLong(serverSeed)
+                client.writeChannel.flush()
+                client.useEventPipeline(inject<LoginEventPipeline> { parametersOf(serverSeed) })
                 client.useEventHandler(inject<LoginEventHandler>())
             }
         }

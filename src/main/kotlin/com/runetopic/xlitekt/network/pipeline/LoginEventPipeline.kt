@@ -6,7 +6,7 @@ import com.runetopic.xlitekt.network.event.WriteEvent
 import com.runetopic.xlitekt.plugin.ktor.inject
 import org.slf4j.Logger
 
-class LoginEventPipeline : EventPipeline<ReadEvent.LoginReadEvent, WriteEvent.LoginWriteEvent> {
+class LoginEventPipeline(val serverSeed: Long = -1L) : EventPipeline<ReadEvent.LoginReadEvent, WriteEvent.LoginWriteEvent> {
     private val logger by inject<Logger>()
 
     override suspend fun read(client: Client): ReadEvent.LoginReadEvent {
