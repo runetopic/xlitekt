@@ -1,4 +1,4 @@
-package com.runetopic.xlitekt.client
+package com.runetopic.xlitekt.network.client
 
 import com.runetopic.xlitekt.network.event.ReadEvent
 import com.runetopic.xlitekt.network.event.WriteEvent
@@ -17,33 +17,29 @@ class Client(
     val readChannel: ByteReadChannel,
     val writeChannel: ByteWriteChannel
 ) {
-    var active = false
-    var eventPipeline: EventPipeline<ReadEvent, WriteEvent>? = null
-    var eventHandler: EventHandler<ReadEvent, WriteEvent>? = null
+    var connected = false
+    var eventPipeline: EventPipeline<ReadEvent, WriteEvent> = useEventPipeline(inject<HandshakeEventPipeline>())
+    var eventHandler: EventHandler<ReadEvent, WriteEvent> = useEventHandler(inject<HandshakeEventHandler>())
     var connectedToJs5 = false
     var loggedIn = false
 
     private val logger by inject<Logger>()
 
-    init {
-        useEventPipeline(inject<HandshakeEventPipeline>())
-        useEventHandler(inject<HandshakeEventHandler>())
-        active = true
-    }
-
     fun disconnect() {
-        active = false
+        connected = false
         socket.close()
         logger.info("Client disconnected.")
     }
 
     @Suppress("UNCHECKED_CAST")
-    fun useEventPipeline(eventPipeline: Lazy<EventPipeline<*, *>>) {
+    fun useEventPipeline(eventPipeline: Lazy<EventPipeline<out ReadEvent, out WriteEvent>>): EventPipeline<ReadEvent, WriteEvent> {
         this.eventPipeline = eventPipeline.value as EventPipeline<ReadEvent, WriteEvent>
+        return this.eventPipeline
     }
 
     @Suppress("UNCHECKED_CAST")
-    fun useEventHandler(eventHandler: Lazy<EventHandler<*, *>>) {
+    fun useEventHandler(eventHandler: Lazy<EventHandler<*, *>>): EventHandler<ReadEvent, WriteEvent> {
         this.eventHandler = eventHandler.value as EventHandler<ReadEvent, WriteEvent>
+        return this.eventHandler
     }
 }

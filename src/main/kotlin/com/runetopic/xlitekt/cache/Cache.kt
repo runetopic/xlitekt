@@ -9,5 +9,5 @@ import java.nio.file.Path
  * @author Jordan Abraham
  */
 val cacheModule = module {
-    single { Js5Store(path = Path.of(inject<ApplicationEnvironment>().value.config.property("cache.path").getString()), parallel = true) }
+    single { Js5Store(path = Path.of(inject<ApplicationEnvironment>().value.config.property("game.cache.path").getString()), parallel = true) }
 }

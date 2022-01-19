@@ -1,7 +1,13 @@
 package com.runetopic.xlitekt.network.handler
 
 import com.runetopic.cache.store.Js5Store
-import com.runetopic.xlitekt.client.Client
+import com.runetopic.xlitekt.network.client.Client
+import com.runetopic.xlitekt.network.client.ClientRequestOpcode.CONNECTION_LOGGED_IN_OPCODE
+import com.runetopic.xlitekt.network.client.ClientRequestOpcode.CONNECTION_LOGGED_OUT_OPCODE
+import com.runetopic.xlitekt.network.client.ClientRequestOpcode.ENCRYPTION_OPCODE
+import com.runetopic.xlitekt.network.client.ClientRequestOpcode.HIGH_PRIORITY_OPCODE
+import com.runetopic.xlitekt.network.client.ClientRequestOpcode.LOW_PRIORITY_OPCODE
+import com.runetopic.xlitekt.network.client.ClientResponseOpcode.LOGIN_SUCCESS_OPCODE
 import com.runetopic.xlitekt.network.event.ReadEvent
 import com.runetopic.xlitekt.network.event.WriteEvent
 import com.runetopic.xlitekt.plugin.ktor.inject
@@ -15,7 +21,7 @@ class JS5EventHandler : EventHandler<ReadEvent.JS5ReadEvent, WriteEvent.JS5Write
 
     override fun handleEvent(client: Client, event: ReadEvent.JS5ReadEvent): WriteEvent.JS5WriteEvent? {
         return when (event.opcode) {
-            0, 1 -> {
+            HIGH_PRIORITY_OPCODE, LOW_PRIORITY_OPCODE -> {
                 val indexId = event.indexId
                 val groupId = event.groupId
                 logger.info("${Thread.currentThread().id} $indexId, $groupId")
@@ -25,12 +31,12 @@ class JS5EventHandler : EventHandler<ReadEvent.JS5ReadEvent, WriteEvent.JS5Write
                 val size = if (requestingChecksums) store.checksumsWithoutRSA().size else buffer.int
                 WriteEvent.JS5WriteEvent(indexId, groupId, compression, size, buffer)
             }
-            2, 3 -> {
-                client.loggedIn = event.opcode == 2
+            CONNECTION_LOGGED_IN_OPCODE, CONNECTION_LOGGED_OUT_OPCODE -> {
+                client.loggedIn = event.opcode == LOGIN_SUCCESS_OPCODE
                 client.connectedToJs5 = !client.connectedToJs5
                 WriteEvent.JS5WriteEvent()
             }
-            4 -> {
+            ENCRYPTION_OPCODE -> {
                 WriteEvent.JS5WriteEvent()
             } // TODO
             else -> null

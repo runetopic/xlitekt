@@ -1,35 +1,50 @@
 package com.runetopic.xlitekt.network.pipeline
 
-import com.runetopic.xlitekt.client.Client
+import com.runetopic.xlitekt.network.NetworkOpcode.JS5_OPCODE
+import com.runetopic.xlitekt.network.NetworkOpcode.LOGIN_OPCODE
+import com.runetopic.xlitekt.network.client.Client
+import com.runetopic.xlitekt.network.client.ClientResponseOpcode.HANDSHAKE_SUCCESS_OPCODE
 import com.runetopic.xlitekt.network.event.ReadEvent
 import com.runetopic.xlitekt.network.event.WriteEvent
 import com.runetopic.xlitekt.network.handler.JS5EventHandler
+import com.runetopic.xlitekt.network.handler.LoginEventHandler
 import com.runetopic.xlitekt.plugin.ktor.inject
 import io.ktor.application.ApplicationEnvironment
 import kotlinx.coroutines.withTimeout
 
 class HandshakeEventPipeline : EventPipeline<ReadEvent.HandshakeReadEvent, WriteEvent.HandshakeWriteEvent> {
-
     private val environment by inject<ApplicationEnvironment>()
 
     override suspend fun read(client: Client): ReadEvent.HandshakeReadEvent {
-        if (client.readChannel.availableForRead < 5) {
-            withTimeout(environment.config.property("network.timeout").getString().toLong()) { client.readChannel.awaitContent() }
+        if (client.readChannel.availableForRead < 4) {
+            withTimeout(
+                environment.config.property("network.timeout").getString().toLong()
+            ) { client.readChannel.awaitContent() }
         }
-        val opcode = client.readChannel.readByte().toInt()
-        val version = client.readChannel.readInt()
-        return ReadEvent.HandshakeReadEvent(opcode, version)
+        return when (val opcode = client.readChannel.readByte().toInt()) {
+            JS5_OPCODE -> ReadEvent.HandshakeReadEvent(opcode, client.readChannel.readInt())
+            LOGIN_OPCODE -> ReadEvent.HandshakeReadEvent(opcode)
+            else -> throw IllegalStateException("Unhandled opcode found during client/server handshake. Opcode=$opcode")
+        }
     }
 
     override suspend fun write(client: Client, event: WriteEvent.HandshakeWriteEvent) {
-        if (event.opcode == 15) { // js5 request
-            client.writeChannel.writeByte(event.response.toByte())
-            client.writeChannel.flush()
-            if (event.response == 0) {
+        client.writeChannel.writeByte(event.response.toByte())
+        client.writeChannel.flush()
+
+        if (event.response != HANDSHAKE_SUCCESS_OPCODE) {
+            client.disconnect()
+            return
+        }
+
+        when (event.opcode) {
+            JS5_OPCODE -> {
                 client.useEventPipeline(inject<JS5EventPipeline>())
                 client.useEventHandler(inject<JS5EventHandler>())
-            } else {
-                client.disconnect()
+            }
+            LOGIN_OPCODE -> {
+                client.useEventPipeline(inject<LoginEventPipeline>())
+                client.useEventHandler(inject<LoginEventHandler>())
             }
         }
     }

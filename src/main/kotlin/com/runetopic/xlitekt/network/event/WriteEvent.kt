@@ -8,6 +8,8 @@ sealed class WriteEvent {
         val response: Int
     ) : WriteEvent()
 
+    data class LoginWriteEvent(val testing: Int = -1) : WriteEvent()
+
     data class JS5WriteEvent(
         val indexId: Int,
         val groupId: Int,

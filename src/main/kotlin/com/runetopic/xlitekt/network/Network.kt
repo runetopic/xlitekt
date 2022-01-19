@@ -1,10 +1,12 @@
 package com.runetopic.xlitekt.network
 
-import com.runetopic.xlitekt.client.Client
+import com.runetopic.xlitekt.network.client.Client
 import com.runetopic.xlitekt.network.handler.HandshakeEventHandler
 import com.runetopic.xlitekt.network.handler.JS5EventHandler
+import com.runetopic.xlitekt.network.handler.LoginEventHandler
 import com.runetopic.xlitekt.network.pipeline.HandshakeEventPipeline
 import com.runetopic.xlitekt.network.pipeline.JS5EventPipeline
+import com.runetopic.xlitekt.network.pipeline.LoginEventPipeline
 import com.runetopic.xlitekt.plugin.ktor.inject
 import io.ktor.network.selector.ActorSelectorManager
 import io.ktor.network.sockets.aSocket
@@ -24,6 +26,8 @@ val networkModule = module {
     single { HandshakeEventHandler() }
     single { JS5EventPipeline() }
     single { JS5EventHandler() }
+    single { LoginEventPipeline() }
+    single { LoginEventHandler() }
 }
 
 fun awaitOnPort(port: Int) = runBlocking {
@@ -38,16 +42,18 @@ fun awaitOnPort(port: Int) = runBlocking {
             socket.openWriteChannel()
         )
 
+        client.connected = true
+
         launch(Dispatchers.IO) { startClientIOEvents(client) }
     }
 }
 
 private suspend fun startClientIOEvents(client: Client) = with(client) {
-    while (active) {
+    while (connected) {
         try {
-            eventPipeline!!.read(this)?.let { read ->
-                eventHandler!!.handleEvent(this, read)?.let { write ->
-                    eventPipeline!!.write(this, write)
+            eventPipeline.read(this)?.let { read ->
+                eventHandler.handleEvent(this, read)?.let { write ->
+                    eventPipeline.write(this, write)
                 } ?: disconnect()
             } ?: disconnect()
         } catch (exception: Exception) {
