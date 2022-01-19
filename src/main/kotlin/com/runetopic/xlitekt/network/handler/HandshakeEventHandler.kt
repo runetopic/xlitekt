@@ -12,7 +12,7 @@ import io.ktor.application.ApplicationEnvironment
 
 class HandshakeEventHandler : EventHandler<ReadEvent.HandshakeReadEvent, WriteEvent.HandshakeWriteEvent> {
     private val environment by inject<ApplicationEnvironment>()
-    private val clientBuild = environment.config.property("game.build").getString().toInt()
+    private val clientBuild = environment.config.property("game.build.major").getString().toInt()
 
     override fun handleEvent(client: Client, event: ReadEvent.HandshakeReadEvent): WriteEvent.HandshakeWriteEvent {
         return when (event.opcode) {

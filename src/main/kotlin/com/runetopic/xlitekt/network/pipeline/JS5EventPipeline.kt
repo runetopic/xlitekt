@@ -16,7 +16,7 @@ class JS5EventPipeline : EventPipeline<ReadEvent.JS5ReadEvent, WriteEvent.JS5Wri
 
     private val environment by inject<ApplicationEnvironment>()
 
-    override suspend fun read(client: Client): ReadEvent.JS5ReadEvent? {
+    override suspend fun read(client: Client): ReadEvent.JS5ReadEvent {
         if (client.readChannel.availableForRead < 4) {
             withTimeout(
                 environment.config.property("network.timeout").getString().toLong()
@@ -31,7 +31,7 @@ class JS5EventPipeline : EventPipeline<ReadEvent.JS5ReadEvent, WriteEvent.JS5Wri
                 indexId,
                 groupId
             )
-            else -> null
+            else -> throw IllegalStateException("Unhandled Js5 opcode. Opcode=$opcode")
         }
     }
 

@@ -25,6 +25,11 @@ class Client(
 
     private val logger by inject<Logger>()
 
+    suspend fun writeResponse(response: Int) {
+        writeChannel.writeByte(response.toByte())
+        writeChannel.flush()
+    }
+
     fun disconnect() {
         connected = false
         socket.close()

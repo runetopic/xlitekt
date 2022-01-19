@@ -6,7 +6,7 @@ sealed class ReadEvent {
         val version: Int = -1,
     ) : ReadEvent()
 
-    data class LoginReadEvent(val idk: Int = -1) : ReadEvent()
+    data class LoginReadEvent(val opcode: Int = -1) : ReadEvent()
 
     data class JS5ReadEvent(
         val opcode: Int,
