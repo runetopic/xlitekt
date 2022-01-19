@@ -10,7 +10,6 @@ import com.runetopic.xlitekt.network.handler.JS5EventHandler
 import com.runetopic.xlitekt.network.handler.LoginEventHandler
 import com.runetopic.xlitekt.plugin.ktor.inject
 import io.ktor.application.ApplicationEnvironment
-import io.ktor.http.parametersOf
 import kotlinx.coroutines.withTimeout
 import org.koin.core.parameter.parametersOf
 
