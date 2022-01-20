@@ -10,6 +10,7 @@ import com.runetopic.xlitekt.network.event.ReadEvent
 import com.runetopic.xlitekt.network.event.WriteEvent
 import com.runetopic.xlitekt.plugin.ktor.inject
 import io.ktor.application.ApplicationEnvironment
+import io.ktor.utils.io.core.IoBuffer
 import org.slf4j.Logger
 import java.math.BigInteger
 import java.nio.ByteBuffer
@@ -61,24 +62,25 @@ class LoginEventPipeline : EventPipeline<ReadEvent.LoginReadEvent, WriteEvent.Lo
                     return null
                 }
 
-                if (isValidAuthenticationType(rsaBlock)) {
+                if (!isValidAuthenticationType(rsaBlock)) {
                     client.writeResponse(BAD_SESSION_OPCODE)
                     return null
                 }
 
                 rsaBlock.get() // Unknown byte #3
-                val password = rsaBlock.readString()
+                val password = rsaBlock.getString()
                 val xteaBytes = ByteArray(client.readChannel.availableForRead)
                 client.readChannel.readAvailable(xteaBytes, 0, xteaBytes.size)
                 val xteaBlock = ByteBuffer.wrap(xteaBytes.fromXTEA(32, clientKeys))
-                val username = xteaBlock.readString()
+
+                val username = xteaBlock.getString()
 
                 val clientSettings = xteaBlock.get().toInt()
                 val clientResizeable = (clientSettings shr 1) == 1
                 val clientWidth = xteaBlock.short.toInt() and 0xffff
                 val clientHeight = xteaBlock.short.toInt() and 0xffff
                 xteaBlock.position(xteaBlock.position() + 24)
-                val token = xteaBlock.readString() // Token in jav_config
+                val token = xteaBlock.getString() // Token in jav_config
 
                 logger.info("Token $token")
                 xteaBlock.int // Unknown Int #1
@@ -91,12 +93,15 @@ class LoginEventPipeline : EventPipeline<ReadEvent.LoginReadEvent, WriteEvent.Lo
                 val cacheCRCs = IntArray(20) { store.index(it).crc }
                 val clientCRCs = IntArray(20) { -1 }
 
+                logger.info("Cache CRCS: ${cacheCRCs.toList()}")
                 if (xteaBlock.int != 0 && xteaBlock.int != 0) {
                     client.writeResponse(BAD_SESSION_OPCODE)
                     return null
                 }
 
-//                clientCRCs[6] = xteaBlock.readIntLE()
+                clientCRCs[6] = xteaBlock.getIntLE()
+
+                logger.info("Client CRCS: ${clientCRCs.toList()}")
 //                clientCRCs[1] = xteaBlock.readIntV2()
 //                clientCRCs[14] = xteaBlock.readIntLE()
 //                clientCRCs[13] = xteaBlock.readIntV1()
@@ -137,21 +142,21 @@ class LoginEventPipeline : EventPipeline<ReadEvent.LoginReadEvent, WriteEvent.Lo
         xteaBlock.get()
         xteaBlock.position(xteaBlock.position() + 3)
         xteaBlock.short
-        xteaBlock.readTerminatedString()
-        xteaBlock.readTerminatedString()
-        xteaBlock.readTerminatedString()
-        xteaBlock.readTerminatedString()
+        xteaBlock.getTerminatedString()
+        xteaBlock.getTerminatedString()
+        xteaBlock.getTerminatedString()
+        xteaBlock.getTerminatedString()
         xteaBlock.get()
         xteaBlock.short
-        xteaBlock.readTerminatedString()
-        xteaBlock.readTerminatedString()
+        xteaBlock.getTerminatedString()
+        xteaBlock.getTerminatedString()
         xteaBlock.get()
         xteaBlock.get()
         xteaBlock.int
         xteaBlock.int
         xteaBlock.int
         xteaBlock.int
-        xteaBlock.readTerminatedString()
+        xteaBlock.getTerminatedString()
     }
 
     private fun isValidAuthenticationType(rsaBlock: ByteBuffer): Boolean {
@@ -202,15 +207,18 @@ class LoginEventPipeline : EventPipeline<ReadEvent.LoginReadEvent, WriteEvent.Lo
     }
 
     // TODO move this out most likely into it's own file
-    private fun ByteBuffer.readString(): String {
+    private fun ByteBuffer.getString(): String {
         var s = ""
         var b: Int
         while (get().toInt().also { b = it } != 0) s += b.toChar()
         return s
     }
 
-    private fun ByteBuffer.readTerminatedString(): String {
+    private fun ByteBuffer.getTerminatedString(): String {
         if (get().toInt() != 0) throw IllegalArgumentException()
-        return readString()
+        return getString()
     }
+
+    private fun ByteBuffer.getIntLE(): Int =
+        (get().toInt() and 0xff shl 8) + (get().toInt() and 0xff) + (get().toInt() and 0xff shl 24) + (get().toInt() and 0xff shl 16)
 }
