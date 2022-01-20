@@ -57,7 +57,7 @@ private suspend fun startClientIOEvents(client: Client) = with(client) {
                 } ?: disconnect()
             } ?: disconnect()
         } catch (exception: Exception) {
-            inject<Logger>().value.error("Exception caught with ${exception.message}")
+            inject<Logger>().value.error("Exception caught during client IO Events.", exception)
             disconnect()
         }
     }

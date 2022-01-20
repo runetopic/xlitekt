@@ -18,7 +18,7 @@ dependencies {
     implementation(kotlin("stdlib"))
     implementation(deps.bundles.ktor)
     implementation(deps.bundles.koin)
-    implementation(deps.cache)
+    implementation(deps.bundles.runetopic)
 }
 
 with(tasks) {
@@ -29,7 +29,11 @@ with(tasks) {
     }
     withType<KotlinCompile> {
         kotlinOptions.jvmTarget = "1.8"
-        kotlinOptions.freeCompilerArgs = listOf("-Xopt-in=kotlinx.coroutines.ExperimentalCoroutinesApi", "-Xopt-in=kotlin.time.ExperimentalTime")
+        kotlinOptions.freeCompilerArgs = listOf(
+            "-Xopt-in=kotlinx.coroutines.ExperimentalCoroutinesApi",
+            "-Xopt-in=kotlin.time.ExperimentalTime",
+            "-Xopt-in=io.ktor.util.InternalAPI"
+        )
     }
     withType<ShadowJar> {
         manifest {

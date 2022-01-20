@@ -17,6 +17,7 @@ class Client(
     val readChannel: ByteReadChannel,
     val writeChannel: ByteWriteChannel
 ) {
+    val seed = ((Math.random() * 99999999.0).toLong() shl 32) + (Math.random() * 99999999.0).toLong()
     var connected = false
     var eventPipeline: EventPipeline<ReadEvent, WriteEvent> = useEventPipeline(inject<HandshakeEventPipeline>())
     var eventHandler: EventHandler<ReadEvent, WriteEvent> = useEventHandler(inject<HandshakeEventHandler>())

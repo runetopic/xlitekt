@@ -13,5 +13,5 @@ fun Application.main() {
     TimeZone.setDefault(TimeZone.getTimeZone("UTC"))
     installLogging()
     installKoin()
-    awaitOnPort(environment.config.property("network.port").getString().toInt())
+    awaitOnPort(environment.config.property("ktor.deployment.port").getString().toInt())
 }
