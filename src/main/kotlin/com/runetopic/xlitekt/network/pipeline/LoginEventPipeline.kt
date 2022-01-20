@@ -10,7 +10,6 @@ import com.runetopic.xlitekt.network.event.ReadEvent
 import com.runetopic.xlitekt.network.event.WriteEvent
 import com.runetopic.xlitekt.plugin.ktor.inject
 import io.ktor.application.ApplicationEnvironment
-import io.ktor.utils.io.core.internal.DangerousInternalIoApi
 import java.math.BigInteger
 import java.nio.ByteBuffer
 import org.slf4j.Logger
@@ -25,7 +24,6 @@ class LoginEventPipeline : EventPipeline<ReadEvent.LoginReadEvent, WriteEvent.Lo
     private val store by inject<Js5Store>()
     private val environment by inject<ApplicationEnvironment>()
 
-    @OptIn(DangerousInternalIoApi::class)
     override suspend fun read(client: Client): ReadEvent.LoginReadEvent? {
         val opcode = client.readChannel.readByte().toInt() and 0xff
 
