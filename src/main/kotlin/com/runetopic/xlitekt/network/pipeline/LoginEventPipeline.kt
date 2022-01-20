@@ -10,10 +10,10 @@ import com.runetopic.xlitekt.network.event.ReadEvent
 import com.runetopic.xlitekt.network.event.WriteEvent
 import com.runetopic.xlitekt.plugin.ktor.inject
 import io.ktor.application.ApplicationEnvironment
-import io.ktor.utils.io.core.IoBuffer
-import org.slf4j.Logger
+import io.ktor.utils.io.core.internal.DangerousInternalIoApi
 import java.math.BigInteger
 import java.nio.ByteBuffer
+import org.slf4j.Logger
 
 /**
  * @author Tyler Telis
@@ -25,6 +25,7 @@ class LoginEventPipeline : EventPipeline<ReadEvent.LoginReadEvent, WriteEvent.Lo
     private val store by inject<Js5Store>()
     private val environment by inject<ApplicationEnvironment>()
 
+    @OptIn(DangerousInternalIoApi::class)
     override suspend fun read(client: Client): ReadEvent.LoginReadEvent? {
         val opcode = client.readChannel.readByte().toInt() and 0xff
 
@@ -68,6 +69,7 @@ class LoginEventPipeline : EventPipeline<ReadEvent.LoginReadEvent, WriteEvent.Lo
                 }
 
                 rsaBlock.get() // Unknown byte #3
+
                 val password = rsaBlock.getString()
                 val xteaBytes = ByteArray(client.readChannel.availableForRead)
                 client.readChannel.readAvailable(xteaBytes, 0, xteaBytes.size)
@@ -99,9 +101,7 @@ class LoginEventPipeline : EventPipeline<ReadEvent.LoginReadEvent, WriteEvent.Lo
                     return null
                 }
 
-                clientCRCs[6] = xteaBlock.getIntLE()
-
-                logger.info("Client CRCS: ${clientCRCs.toList()}")
+//                clientCRCs[6] = xteaBlock.getIntLE()
 //                clientCRCs[1] = xteaBlock.readIntV2()
 //                clientCRCs[14] = xteaBlock.readIntLE()
 //                clientCRCs[13] = xteaBlock.readIntV1()
@@ -121,7 +121,7 @@ class LoginEventPipeline : EventPipeline<ReadEvent.LoginReadEvent, WriteEvent.Lo
 //                clientCRCs[10] = xteaBlock.readInt()
 //                clientCRCs[20] = xteaBlock.readIntLE()
 //                clientCRCs[0] = xteaBlock.readIntLE()
-
+                logger.info("Client CRCS: ${clientCRCs.toList()}")
                 logger.info("Username $username Password $password Client Type $clientType")
             }
         }
@@ -218,7 +218,4 @@ class LoginEventPipeline : EventPipeline<ReadEvent.LoginReadEvent, WriteEvent.Lo
         if (get().toInt() != 0) throw IllegalArgumentException()
         return getString()
     }
-
-    private fun ByteBuffer.getIntLE(): Int =
-        (get().toInt() and 0xff shl 8) + (get().toInt() and 0xff) + (get().toInt() and 0xff shl 24) + (get().toInt() and 0xff shl 16)
 }
