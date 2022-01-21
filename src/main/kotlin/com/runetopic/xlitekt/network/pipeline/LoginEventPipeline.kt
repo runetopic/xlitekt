@@ -10,9 +10,9 @@ import com.runetopic.xlitekt.network.event.ReadEvent
 import com.runetopic.xlitekt.network.event.WriteEvent
 import com.runetopic.xlitekt.plugin.ktor.inject
 import io.ktor.application.ApplicationEnvironment
+import org.slf4j.Logger
 import java.math.BigInteger
 import java.nio.ByteBuffer
-import org.slf4j.Logger
 
 /**
  * @author Tyler Telis
