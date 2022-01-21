@@ -36,25 +36,25 @@ class JS5EventPipeline : EventPipeline<ReadEvent.JS5ReadEvent, WriteEvent.JS5Wri
     override suspend fun write(client: Client, event: WriteEvent.JS5WriteEvent) {
         if (event.bytes.capacity() == 0 || event.bytes.limit() == 0) return
 
-        val indexId = event.indexId
-        val groupId = event.groupId
         val compression = event.compression
         val size = event.size
 
-        client.writeChannel.writeByte(indexId.toByte())
-        client.writeChannel.writeShort(groupId.toShort())
-        client.writeChannel.writeByte(compression.toByte())
-        client.writeChannel.writeInt(size)
+        client.writeChannel.let {
+            it.writeByte(event.indexId.toByte())
+            it.writeShort(event.groupId.toShort())
+            it.writeByte(compression.toByte())
+            it.writeInt(size)
 
-        var writeOffset = 8
-        repeat(if (compression != 0) size + 4 else size) {
-            if (writeOffset % 512 == 0) {
-                client.writeChannel.writeByte(0xff.toByte())
-                writeOffset = 1
+            var writeOffset = 8
+            repeat(if (compression != 0) size + 4 else size) { value ->
+                if (writeOffset % 512 == 0) {
+                    it.writeByte(0xff.toByte())
+                    writeOffset = 1
+                }
+                it.writeByte(event.bytes[value + event.bytes.position()])
+                writeOffset++
             }
-            client.writeChannel.writeByte(event.bytes[it + event.bytes.position()])
-            writeOffset++
+            it.flush()
         }
-        client.writeChannel.flush()
     }
 }

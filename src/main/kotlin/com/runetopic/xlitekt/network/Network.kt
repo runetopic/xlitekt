@@ -1,9 +1,11 @@
 package com.runetopic.xlitekt.network
 
 import com.runetopic.xlitekt.network.client.Client
+import com.runetopic.xlitekt.network.handler.GameEventHandler
 import com.runetopic.xlitekt.network.handler.HandshakeEventHandler
 import com.runetopic.xlitekt.network.handler.JS5EventHandler
 import com.runetopic.xlitekt.network.handler.LoginEventHandler
+import com.runetopic.xlitekt.network.pipeline.GameEventPipeline
 import com.runetopic.xlitekt.network.pipeline.HandshakeEventPipeline
 import com.runetopic.xlitekt.network.pipeline.JS5EventPipeline
 import com.runetopic.xlitekt.network.pipeline.LoginEventPipeline
@@ -28,6 +30,8 @@ val networkModule = module {
     single { JS5EventHandler() }
     single { LoginEventPipeline() }
     single { LoginEventHandler() }
+    single { GameEventPipeline() }
+    single { GameEventHandler() }
 }
 
 fun awaitOnPort(port: Int) = runBlocking {

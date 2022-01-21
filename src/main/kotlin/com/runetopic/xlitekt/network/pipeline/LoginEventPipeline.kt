@@ -6,10 +6,22 @@ import com.runetopic.xlitekt.network.NetworkOpcode.LOGIN_NORMAL_OPCODE
 import com.runetopic.xlitekt.network.client.Client
 import com.runetopic.xlitekt.network.client.ClientResponseOpcode.BAD_SESSION_OPCODE
 import com.runetopic.xlitekt.network.client.ClientResponseOpcode.CLIENT_OUTDATED_OPCODE
+import com.runetopic.xlitekt.network.client.ClientResponseOpcode.LOGIN_SUCCESS_OPCODE
 import com.runetopic.xlitekt.network.event.ReadEvent
 import com.runetopic.xlitekt.network.event.WriteEvent
+import com.runetopic.xlitekt.network.handler.GameEventHandler
 import com.runetopic.xlitekt.plugin.ktor.inject
+import com.runetopic.xlitekt.util.ext.readIntV1
+import com.runetopic.xlitekt.util.ext.readIntV2
+import com.runetopic.xlitekt.util.ext.readMedium
+import com.runetopic.xlitekt.util.ext.readStringCp1252NullCircumfixed
+import com.runetopic.xlitekt.util.ext.readStringCp1252NullTerminated
 import io.ktor.application.ApplicationEnvironment
+import io.ktor.utils.io.core.ByteReadPacket
+import io.ktor.utils.io.core.readInt
+import io.ktor.utils.io.core.readIntLittleEndian
+import io.ktor.utils.io.core.readLong
+import io.ktor.utils.io.core.readShort
 import org.slf4j.Logger
 import java.math.BigInteger
 import java.nio.ByteBuffer
@@ -42,18 +54,22 @@ class LoginEventPipeline : EventPipeline<ReadEvent.LoginReadEvent, WriteEvent.Lo
                     client.writeResponse(BAD_SESSION_OPCODE)
                     return null
                 }
-                val rsaBlock = ByteBuffer.wrap(
-                    BigInteger(rsa).modPow(
-                        BigInteger(environment.config.property("game.rsa.exponent").getString()),
-                        BigInteger(environment.config.property("game.rsa.modulus").getString())
-                    ).toByteArray()
+
+                val rsaBlock = ByteReadPacket(
+                    ByteBuffer.wrap(
+                        BigInteger(rsa).modPow(
+                            BigInteger(environment.config.property("game.rsa.exponent").getString()),
+                            BigInteger(environment.config.property("game.rsa.modulus").getString())
+                        ).toByteArray()
+                    )
                 )
+
                 if (!isValidLoginRSA(rsaBlock)) {
                     client.writeResponse(BAD_SESSION_OPCODE)
                     return null
                 }
-                val clientKeys = IntArray(4) { rsaBlock.int }
-                val clientSeed = rsaBlock.long
+                val clientKeys = IntArray(4) { rsaBlock.readInt() }
+                val clientSeed = rsaBlock.readLong()
 
                 if (clientSeed != client.seed) {
                     client.writeResponse(BAD_SESSION_OPCODE)
@@ -66,111 +82,123 @@ class LoginEventPipeline : EventPipeline<ReadEvent.LoginReadEvent, WriteEvent.Lo
                     return null
                 }
 
-                rsaBlock.get() // Unknown byte #3
-
-                val password = rsaBlock.getString()
-                val xteaBytes = ByteArray(client.readChannel.availableForRead)
-                client.readChannel.readAvailable(xteaBytes, 0, xteaBytes.size)
-                val xteaBlock = ByteBuffer.wrap(xteaBytes.fromXTEA(32, clientKeys))
-
-                val username = xteaBlock.getString()
-
-                val clientSettings = xteaBlock.get().toInt()
+                rsaBlock.readByte() // Unknown byte #3
+                val password = rsaBlock.readStringCp1252NullTerminated()
+                val xtea = ByteArray(client.readChannel.availableForRead)
+                client.readChannel.readAvailable(xtea, 0, xtea.size)
+                val xteaBlock = ByteReadPacket(xtea.fromXTEA(32, clientKeys))
+                val username = xteaBlock.readStringCp1252NullTerminated()
+                val clientSettings = xteaBlock.readByte().toInt()
                 val clientResizeable = (clientSettings shr 1) == 1
-                val clientWidth = xteaBlock.short.toInt() and 0xffff
-                val clientHeight = xteaBlock.short.toInt() and 0xffff
-                xteaBlock.position(xteaBlock.position() + 24)
-                val token = xteaBlock.getString() // Token in jav_config
-
-                logger.info("Token $token")
-                xteaBlock.int // Unknown Int #1
-
+                val clientWidth = xteaBlock.readShort().toInt() and 0xffff
+                val clientHeight = xteaBlock.readShort().toInt() and 0xffff
+                xteaBlock.discard(24)
+                val token = xteaBlock.readStringCp1252NullTerminated()
+                xteaBlock.readInt() // Unknown Int #1
                 readMachineInformation(xteaBlock)
+                val clientType = xteaBlock.readByte().toInt() and 0xff
+                val cacheCRCs = IntArray(21) { store.index(it).crc } // TODO make the cache library expose # of indexes available
+                val clientCRCs = IntArray(21) { -1 }
 
-                val clientType = xteaBlock.get().toInt() and 0xff
-
-                // TODO make the cache library expose # of indexes available
-                val cacheCRCs = IntArray(20) { store.index(it).crc }
-                val clientCRCs = IntArray(20) { -1 }
-
-                logger.info("Cache CRCS: ${cacheCRCs.toList()}")
-                if (xteaBlock.int != 0 && xteaBlock.int != 0) {
+                if (xteaBlock.readInt() != 0 || xteaBlock.readInt() != 0) {
                     client.writeResponse(BAD_SESSION_OPCODE)
                     return null
                 }
 
-//                clientCRCs[6] = xteaBlock.getIntLE()
-//                clientCRCs[1] = xteaBlock.readIntV2()
-//                clientCRCs[14] = xteaBlock.readIntLE()
-//                clientCRCs[13] = xteaBlock.readIntV1()
-//                clientCRCs[12] = xteaBlock.readInt()
-//                clientCRCs[19] = xteaBlock.readInt()
-//                clientCRCs[15] = xteaBlock.readIntLE()
-//                clientCRCs[3] = xteaBlock.readIntV2()
-//                clientCRCs[8] = xteaBlock.readIntV2()
-//                clientCRCs[17] = xteaBlock.readIntV1()
-//                clientCRCs[7] = xteaBlock.readIntV2()
-//                clientCRCs[11] = xteaBlock.readInt()
-//                clientCRCs[18] = xteaBlock.readIntLE()
-//                clientCRCs[5] = xteaBlock.readInt()
-//                clientCRCs[2] = xteaBlock.readIntV2()
-//                clientCRCs[4] = xteaBlock.readIntLE()
-//                clientCRCs[9] = xteaBlock.readIntV2()
-//                clientCRCs[10] = xteaBlock.readInt()
-//                clientCRCs[20] = xteaBlock.readIntLE()
-//                clientCRCs[0] = xteaBlock.readIntLE()
-                logger.info("Client CRCS: ${clientCRCs.toList()}")
-                logger.info("Username $username Password $password Client Type $clientType")
+                clientCRCs[6] = xteaBlock.readIntLittleEndian()
+                clientCRCs[1] = xteaBlock.readIntV2()
+                clientCRCs[14] = xteaBlock.readIntLittleEndian()
+                clientCRCs[13] = xteaBlock.readIntV1()
+                clientCRCs[12] = xteaBlock.readInt()
+                clientCRCs[19] = xteaBlock.readInt()
+                clientCRCs[15] = xteaBlock.readIntLittleEndian()
+                clientCRCs[3] = xteaBlock.readIntV2()
+                clientCRCs[8] = xteaBlock.readIntV2()
+                clientCRCs[17] = xteaBlock.readIntV1()
+                clientCRCs[7] = xteaBlock.readIntV2()
+                clientCRCs[11] = xteaBlock.readInt()
+                clientCRCs[18] = xteaBlock.readIntLittleEndian()
+                clientCRCs[5] = xteaBlock.readInt()
+                clientCRCs[2] = xteaBlock.readIntV2()
+                clientCRCs[4] = xteaBlock.readIntLittleEndian()
+                clientCRCs[9] = xteaBlock.readIntV2()
+                clientCRCs[10] = xteaBlock.readInt()
+                clientCRCs[20] = xteaBlock.readIntLittleEndian()
+                clientCRCs[0] = xteaBlock.readIntLittleEndian()
+                clientCRCs[16] = cacheCRCs[16] // This is -1 from the client.
+
+                if (!isValidCacheCRCs(clientCRCs)) {
+                    client.writeResponse(CLIENT_OUTDATED_OPCODE)
+                    return null
+                }
+
+                val serverKeys = IntArray(clientKeys.size) { clientKeys[it] + 50 }
+                return ReadEvent.LoginReadEvent(
+                    opcode,
+                    clientKeys.toSet(),
+                    serverKeys.toSet(),
+                    username,
+                    password,
+                    clientResizeable,
+                    clientWidth,
+                    clientHeight,
+                    token,
+                    clientType
+                )
             }
         }
-        return ReadEvent.LoginReadEvent(opcode)
+        return null
     }
 
-    private fun readMachineInformation(xteaBlock: ByteBuffer) {
-        xteaBlock.get()
-        xteaBlock.get()
-        xteaBlock.get()
-        xteaBlock.short
-        xteaBlock.get()
-        xteaBlock.get()
-        xteaBlock.get()
-        xteaBlock.get()
-        xteaBlock.get()
-        xteaBlock.short
-        xteaBlock.get()
-        xteaBlock.position(xteaBlock.position() + 3)
-        xteaBlock.short
-        xteaBlock.getTerminatedString()
-        xteaBlock.getTerminatedString()
-        xteaBlock.getTerminatedString()
-        xteaBlock.getTerminatedString()
-        xteaBlock.get()
-        xteaBlock.short
-        xteaBlock.getTerminatedString()
-        xteaBlock.getTerminatedString()
-        xteaBlock.get()
-        xteaBlock.get()
-        xteaBlock.int
-        xteaBlock.int
-        xteaBlock.int
-        xteaBlock.int
-        xteaBlock.getTerminatedString()
-    }
+    override suspend fun write(client: Client, event: WriteEvent.LoginWriteEvent) {
+        client.writeResponse(event.response)
 
-    private fun isValidAuthenticationType(rsaBlock: ByteBuffer): Boolean {
-        when (val authenticationType = rsaBlock.get().toInt()) {
-            1 -> rsaBlock.position(rsaBlock.position() + 4)
-            0, 3 -> rsaBlock.position(rsaBlock.position() + 3)
-            2 -> rsaBlock.position(rsaBlock.position() + 4)
-            else -> {
-                logger.info("Bad Session. Unhandled authentication type=$authenticationType")
-                return false
+        if (event.response == LOGIN_SUCCESS_OPCODE) {
+            client.writeChannel.let {
+                it.writeByte(11)
+                it.writeByte(0)
+                it.writeInt(0)
+                it.writeByte(event.rights.toByte())
+                it.writeByte(0)
+                it.writeShort(event.pid.toShort())
+                it.writeByte(0)
+                it.flush()
             }
+            client.useEventPipeline(inject<GameEventPipeline>())
+            client.useEventHandler(inject<GameEventHandler>())
         }
-        return true
     }
 
-    private fun isValidLoginRSA(buffer: ByteBuffer) = buffer.get().toInt() and 0xff == 1
+    private fun readMachineInformation(xteaBlock: ByteReadPacket) {
+        xteaBlock.readByte()
+        xteaBlock.readByte()
+        xteaBlock.readByte()
+        xteaBlock.readShort()
+        xteaBlock.readByte()
+        xteaBlock.readByte()
+        xteaBlock.readByte()
+        xteaBlock.readByte()
+        xteaBlock.readByte()
+        xteaBlock.readShort()
+        xteaBlock.readByte()
+        xteaBlock.readMedium()
+        xteaBlock.readShort()
+        xteaBlock.readStringCp1252NullCircumfixed()
+        xteaBlock.readStringCp1252NullCircumfixed()
+        xteaBlock.readStringCp1252NullCircumfixed()
+        xteaBlock.readStringCp1252NullCircumfixed()
+        xteaBlock.readByte()
+        xteaBlock.readShort()
+        xteaBlock.readStringCp1252NullCircumfixed()
+        xteaBlock.readStringCp1252NullCircumfixed()
+        xteaBlock.readByte()
+        xteaBlock.readByte()
+        xteaBlock.readInt()
+        xteaBlock.readInt()
+        xteaBlock.readInt()
+        xteaBlock.readInt()
+        xteaBlock.readStringCp1252NullCircumfixed()
+    }
 
     private suspend fun isValidLoginRequestHeader(client: Client): Boolean {
         val size = client.readChannel.readShort().toInt() and 0xffff
@@ -201,19 +229,20 @@ class LoginEventPipeline : EventPipeline<ReadEvent.LoginReadEvent, WriteEvent.Lo
         return true
     }
 
-    override suspend fun write(client: Client, event: WriteEvent.LoginWriteEvent) {
+    private fun isValidLoginRSA(buffer: ByteReadPacket) = buffer.readByte().toInt() and 0xff == 1
+
+    private fun isValidAuthenticationType(rsaBlock: ByteReadPacket): Boolean {
+        when (val authenticationType = rsaBlock.readByte().toInt()) {
+            1 -> rsaBlock.discard(4)
+            0, 3 -> rsaBlock.discard(3)
+            2 -> rsaBlock.discard(4)
+            else -> {
+                logger.info("Bad Session. Unhandled authentication type=$authenticationType")
+                return false
+            }
+        }
+        return true
     }
 
-    // TODO move this out most likely into it's own file
-    private fun ByteBuffer.getString(): String {
-        var s = ""
-        var b: Int
-        while (get().toInt().also { b = it } != 0) s += b.toChar()
-        return s
-    }
-
-    private fun ByteBuffer.getTerminatedString(): String {
-        if (get().toInt() != 0) throw IllegalArgumentException()
-        return getString()
-    }
+    private fun isValidCacheCRCs(clientCRCs: IntArray): Boolean = IntArray(21) { store.index(it).crc }.contentEquals(clientCRCs)
 }

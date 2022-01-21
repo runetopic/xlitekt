@@ -8,8 +8,6 @@ sealed class WriteEvent {
         val response: Int
     ) : WriteEvent()
 
-    data class LoginWriteEvent(val testing: Int = -1) : WriteEvent()
-
     data class JS5WriteEvent(
         val indexId: Int,
         val groupId: Int,
@@ -17,4 +15,14 @@ sealed class WriteEvent {
         val size: Int,
         val bytes: ByteBuffer
     ) : WriteEvent() { constructor() : this(-1, -1, -1, -1, ByteBuffer.allocate(0)) }
+
+    data class LoginWriteEvent(
+        val response: Int,
+        val rights: Int,
+        val pid: Int
+    ) : WriteEvent()
+
+    data class GameWriteEvent(
+        val opcode: Int
+    ) : WriteEvent()
 }
