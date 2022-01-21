@@ -45,9 +45,6 @@ fun awaitOnPort(port: Int) = runBlocking {
             socket.openReadChannel(),
             socket.openWriteChannel()
         )
-
-        client.connected = true
-
         launch(Dispatchers.IO) { startClientIOEvents(client) }
     }
 }
