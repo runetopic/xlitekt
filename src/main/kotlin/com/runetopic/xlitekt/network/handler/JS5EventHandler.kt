@@ -31,12 +31,13 @@ class JS5EventHandler : EventHandler<ReadEvent.JS5ReadEvent, WriteEvent.JS5Write
                 val size = if (requestingChecksums) store.checksumsWithoutRSA().size else buffer.int
                 WriteEvent.JS5WriteEvent(indexId, groupId, compression, size, buffer)
             }
+            // TODO HANDLE this outside of the when so we dont need to return anything for this event
             CONNECTION_LOGGED_IN_OPCODE, CONNECTION_LOGGED_OUT_OPCODE -> {
                 client.loggedIn = event.opcode == LOGIN_SUCCESS_OPCODE
                 client.connectedToJs5 = !client.connectedToJs5
                 WriteEvent.JS5WriteEvent()
             }
-            ENCRYPTION_OPCODE -> { WriteEvent.JS5WriteEvent() } // TODO
+            ENCRYPTION_OPCODE -> { WriteEvent.JS5WriteEvent() } // TODO this does need to return something so we can handle the encryption value properly
             else -> null
         }
     }
