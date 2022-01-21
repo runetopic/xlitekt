@@ -36,9 +36,7 @@ class JS5EventHandler : EventHandler<ReadEvent.JS5ReadEvent, WriteEvent.JS5Write
                 client.connectedToJs5 = !client.connectedToJs5
                 WriteEvent.JS5WriteEvent()
             }
-            ENCRYPTION_OPCODE -> {
-                WriteEvent.JS5WriteEvent()
-            } // TODO
+            ENCRYPTION_OPCODE -> { WriteEvent.JS5WriteEvent() } // TODO
             else -> null
         }
     }
