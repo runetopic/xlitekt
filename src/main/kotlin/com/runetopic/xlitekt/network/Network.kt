@@ -5,6 +5,7 @@ import com.runetopic.xlitekt.network.handler.GameEventHandler
 import com.runetopic.xlitekt.network.handler.HandshakeEventHandler
 import com.runetopic.xlitekt.network.handler.JS5EventHandler
 import com.runetopic.xlitekt.network.handler.LoginEventHandler
+import com.runetopic.xlitekt.network.pipeline.EventPipeline
 import com.runetopic.xlitekt.network.pipeline.GameEventPipeline
 import com.runetopic.xlitekt.network.pipeline.HandshakeEventPipeline
 import com.runetopic.xlitekt.network.pipeline.JS5EventPipeline
@@ -52,11 +53,21 @@ fun awaitOnPort(port: Int) = runBlocking {
 private suspend fun startClientIOEvents(client: Client) = with(client) {
     while (connected) {
         try {
-            eventPipeline.read(this)?.let { read ->
-                eventHandler.handleEvent(this, read)?.let { write ->
-                    eventPipeline.write(this, write)
-                } ?: disconnect()
-            } ?: disconnect()
+            when (eventPipeline) {
+                is HandshakeEventPipeline, is JS5EventPipeline, is LoginEventPipeline -> {
+                    val readEvent = eventPipeline!!.read(client)
+                    val writeEvent = eventHandler!!.handleEvent(client, readEvent!!)
+                    eventPipeline!!.write(client, writeEvent!!)
+                }
+                is GameEventPipeline -> {
+
+                }
+            }
+//            eventPipeline.read(this)?.let { read ->
+//                eventHandler.handleEvent(this, read)?.let { write ->
+//                    if ((client.eventPipeline as EventPipeline<*, *>) !is GameEventPipeline) eventPipeline.write(this, write)
+//                } ?: disconnect()
+//            } ?: disconnect()
         } catch (exception: Exception) {
             inject<Logger>().value.error("Exception caught during client IO Events.", exception)
             disconnect()

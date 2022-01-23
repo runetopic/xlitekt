@@ -13,6 +13,7 @@ import io.ktor.application.ApplicationEnvironment
 import kotlinx.coroutines.withTimeout
 
 class HandshakeEventPipeline : EventPipeline<ReadEvent.HandshakeReadEvent, WriteEvent.HandshakeWriteEvent> {
+
     private val environment by inject<ApplicationEnvironment>()
 
     override suspend fun read(client: Client): ReadEvent.HandshakeReadEvent {
@@ -45,8 +46,8 @@ class HandshakeEventPipeline : EventPipeline<ReadEvent.HandshakeReadEvent, Write
                     it.writeLong(client.seed)
                     it.flush()
                 }
-                client.useEventPipeline(inject<LoginEventPipeline>())
-                client.useEventHandler(inject<LoginEventHandler>())
+                client.useEventPipeline<ReadEvent.LoginReadEvent, WriteEvent.LoginWriteEvent>(inject<LoginEventPipeline>())
+                client.useEventHandler<ReadEvent.LoginReadEvent, WriteEvent.LoginWriteEvent>(inject<LoginEventHandler>())
             }
         }
     }

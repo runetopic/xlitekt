@@ -17,6 +17,7 @@ class GameEventPipeline : EventPipeline<ReadEvent.GameReadEvent, WriteEvent.Game
     }
 
     override suspend fun write(client: Client, event: WriteEvent.GameWriteEvent) {
+
         // println("Write packet.")
     }
 }
