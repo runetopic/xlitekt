@@ -20,6 +20,13 @@ class JS5EventHandler : EventHandler<ReadEvent.JS5ReadEvent, WriteEvent.JS5Write
     private val logger by inject<Logger>()
 
     override fun handleEvent(client: Client, event: ReadEvent.JS5ReadEvent): WriteEvent.JS5WriteEvent? {
+        when (event.opcode) {
+            CONNECTION_LOGGED_IN_OPCODE, CONNECTION_LOGGED_OUT_OPCODE -> {
+                client.loggedIn = event.opcode == LOGIN_SUCCESS_OPCODE
+                client.connectedToJs5 = !client.connectedToJs5
+            }
+        }
+
         return when (event.opcode) {
             HIGH_PRIORITY_OPCODE, LOW_PRIORITY_OPCODE -> {
                 val indexId = event.indexId
@@ -31,14 +38,8 @@ class JS5EventHandler : EventHandler<ReadEvent.JS5ReadEvent, WriteEvent.JS5Write
                 val size = if (requestingChecksums) store.checksumsWithoutRSA().size else buffer.int
                 WriteEvent.JS5WriteEvent(indexId, groupId, compression, size, buffer)
             }
-            // TODO HANDLE this outside of the when so we dont need to return anything for this event
-            CONNECTION_LOGGED_IN_OPCODE, CONNECTION_LOGGED_OUT_OPCODE -> {
-                client.loggedIn = event.opcode == LOGIN_SUCCESS_OPCODE
-                client.connectedToJs5 = !client.connectedToJs5
-                WriteEvent.JS5WriteEvent()
-            }
             ENCRYPTION_OPCODE -> { WriteEvent.JS5WriteEvent() } // TODO this does need to return something so we can handle the encryption value properly
-            else -> null
+            else -> throw IllegalStateException("Unhandled Js5 Opcode in event handler. Opcode=${event.opcode}")
         }
     }
 }

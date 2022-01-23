@@ -7,7 +7,7 @@ import com.runetopic.xlitekt.network.event.WriteEvent
 
 class LoginEventHandler : EventHandler<ReadEvent.LoginReadEvent, WriteEvent.LoginWriteEvent> {
 
-    override fun handleEvent(client: Client, event: ReadEvent.LoginReadEvent): WriteEvent.LoginWriteEvent? {
+    override fun handleEvent(client: Client, event: ReadEvent.LoginReadEvent): WriteEvent.LoginWriteEvent {
         // TODO: Construct the player here.
         return WriteEvent.LoginWriteEvent(LOGIN_SUCCESS_OPCODE, 2, 1)
     }
