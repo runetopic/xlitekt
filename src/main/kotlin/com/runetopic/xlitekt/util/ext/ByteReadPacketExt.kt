@@ -1,6 +1,11 @@
 package com.runetopic.xlitekt.util.ext
 
+import com.runetopic.cryptography.isaac.ISAAC
 import io.ktor.utils.io.core.ByteReadPacket
+import io.ktor.utils.io.core.readShort
+import io.netty.buffer.ByteBuf
+import java.lang.Exception
+import kotlin.experimental.and
 
 /**
  * @author Jordan Abraham

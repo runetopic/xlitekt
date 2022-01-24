@@ -5,6 +5,7 @@ plugins {
     kotlin("jvm")
     id("com.github.johnrengelman.shadow")
     application
+    kotlin("plugin.serialization")
 }
 
 group = "com.runetopic.xlite"
@@ -19,6 +20,7 @@ dependencies {
     implementation(deps.bundles.ktor)
     implementation(deps.bundles.koin)
     implementation(deps.bundles.runetopic)
+    implementation(deps.kotlinx.serialization.json)
 }
 
 with(tasks) {
@@ -32,7 +34,8 @@ with(tasks) {
         kotlinOptions.freeCompilerArgs = listOf(
             "-Xopt-in=kotlinx.coroutines.ExperimentalCoroutinesApi",
             "-Xopt-in=kotlin.time.ExperimentalTime",
-            "-Xopt-in=io.ktor.util.InternalAPI"
+            "-Xopt-in=io.ktor.util.InternalAPI",
+            "-Xopt-in=kotlinx.serialization.ExperimentalSerializationApi"
         )
     }
     withType<ShadowJar> {

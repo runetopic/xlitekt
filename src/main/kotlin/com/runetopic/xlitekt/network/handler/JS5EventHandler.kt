@@ -19,7 +19,7 @@ class JS5EventHandler : EventHandler<ReadEvent.JS5ReadEvent, WriteEvent.JS5Write
     private val store by inject<Js5Store>()
     private val logger by inject<Logger>()
 
-    override fun handleEvent(client: Client, event: ReadEvent.JS5ReadEvent): WriteEvent.JS5WriteEvent? {
+    override suspend fun handleEvent(client: Client, event: ReadEvent.JS5ReadEvent): WriteEvent.JS5WriteEvent? {
         return when (event.opcode) {
             HIGH_PRIORITY_OPCODE, LOW_PRIORITY_OPCODE -> {
                 val indexId = event.indexId

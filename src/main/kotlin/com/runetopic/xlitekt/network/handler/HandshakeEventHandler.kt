@@ -15,7 +15,7 @@ class HandshakeEventHandler : EventHandler<ReadEvent.HandshakeReadEvent, WriteEv
     private val environment by inject<ApplicationEnvironment>()
     private val clientBuild = environment.config.property("game.build.major").getString().toInt()
 
-    override fun handleEvent(client: Client, event: ReadEvent.HandshakeReadEvent): WriteEvent.HandshakeWriteEvent {
+    override suspend fun handleEvent(client: Client, event: ReadEvent.HandshakeReadEvent): WriteEvent.HandshakeWriteEvent {
         return when (event.opcode) {
             HANDSHAKE_JS5_OPCODE -> WriteEvent.HandshakeWriteEvent(event.opcode, if (event.version == clientBuild) HANDSHAKE_SUCCESS_OPCODE else CLIENT_OUTDATED_OPCODE)
             HANDSHAKE_LOGIN_OPCODE -> WriteEvent.HandshakeWriteEvent(event.opcode, HANDSHAKE_SUCCESS_OPCODE)

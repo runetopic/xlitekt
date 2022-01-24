@@ -3,11 +3,11 @@ package com.runetopic.xlitekt.util.ext
 import io.ktor.utils.io.core.BytePacketBuilder
 import io.ktor.utils.io.core.writeFully
 
-fun BytePacketBuilder.writeByteAdd(value: Int) = writeByte((value + 128).toByte())
+fun BytePacketBuilder.writeByteAdd(value: Byte) = writeByte((value + 128).toByte())
 
-fun BytePacketBuilder.writeShortAdd(value: Int) {
-    writeByte((value shr 8).toByte())
-    writeByteAdd(value)
+fun BytePacketBuilder.writeShortAdd(value: Short) {
+    writeByte((value.toInt() shr 8).toByte())
+    writeByteAdd(value.toByte())
 }
 
 fun BytePacketBuilder.withBitAccess(block: BitAccess.() -> Unit) {

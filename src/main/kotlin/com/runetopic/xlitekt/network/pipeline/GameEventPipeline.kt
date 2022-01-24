@@ -3,8 +3,13 @@ package com.runetopic.xlitekt.network.pipeline
 import com.runetopic.xlitekt.network.client.Client
 import com.runetopic.xlitekt.network.event.ReadEvent
 import com.runetopic.xlitekt.network.event.WriteEvent
+import com.runetopic.xlitekt.network.packet.Packet
+import com.runetopic.xlitekt.util.ext.readPacketOpcode
+import com.runetopic.xlitekt.util.ext.readPacketSize
 import com.runetopic.xlitekt.util.ext.writePacketOpcode
 import com.runetopic.xlitekt.util.ext.writePacketSize
+import io.ktor.utils.io.readPacket
+import kotlinx.coroutines.withTimeout
 
 /**
  * @author Jordan Abraham
@@ -12,10 +17,20 @@ import com.runetopic.xlitekt.util.ext.writePacketSize
 class GameEventPipeline : EventPipeline<ReadEvent.GameReadEvent, WriteEvent.GameWriteEvent> {
 
     override suspend fun read(client: Client): ReadEvent.GameReadEvent? {
-        println("Read packet.")
-        val opcode = client.readChannel.readByte().toInt() and 0xff
+        if (client.readChannel.availableForRead <= 0) {
+            withTimeout(10_000) { client.readChannel.awaitContent() }
+        }
+        val opcode = client.readChannel.readPacketOpcode(client.clientCipher!!)
         println(opcode)
-        return null
+        if (opcode < 0 || opcode >= Packet.READ_SIZES.size) {
+            client.disconnect()
+            return null
+        }
+
+        val size = client.readChannel.readPacketSize(Packet.READ_SIZES[opcode])
+
+        println("Read Packet with opcode=$opcode and size=$size")
+        return ReadEvent.GameReadEvent(opcode, size, client.readChannel.readPacket(size))
     }
 
     override suspend fun write(client: Client, event: WriteEvent.GameWriteEvent) {
