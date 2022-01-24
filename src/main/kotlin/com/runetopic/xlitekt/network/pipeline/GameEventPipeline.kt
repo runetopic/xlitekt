@@ -21,7 +21,7 @@ class GameEventPipeline : EventPipeline<ReadEvent.GameReadEvent, WriteEvent.Game
     override suspend fun write(client: Client, event: WriteEvent.GameWriteEvent) {
         println("Writing packet Opcode=${event.opcode} Size=${event.payload.remaining}")
         client.writeChannel.writePacketOpcode(client.serverCipher!!, event.opcode)
-        client.writeChannel.writePacketSize(event.size, client.writeChannel.availableForWrite)
+        client.writeChannel.writePacketSize(event.size, event.payload.remaining)
         client.writeChannel.writePacket(event.payload)
         client.writeChannel.flush()
         event.payload.release()

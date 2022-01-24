@@ -10,9 +10,10 @@ suspend fun ByteWriteChannel.writePacketOpcode(isaac: ISAAC, opcode: Int) {
     writeByte((0xFF and opcode + isaac.getNext()).toByte())
 }
 
-suspend fun ByteWriteChannel.writePacketSize(input: Int, size: Int) {
+suspend fun ByteWriteChannel.writePacketSize(input: Int, size: Long) {
     when (input) {
         -1 -> writeByte(size.toByte())
         -2 -> writeShort(size.toShort())
     }
 }
+
