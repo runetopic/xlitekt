@@ -1,5 +1,6 @@
 package com.runetopic.xlitekt.network.client
 
+import com.runetopic.cryptography.isaac.ISAAC
 import com.runetopic.xlitekt.network.event.ReadEvent
 import com.runetopic.xlitekt.network.event.WriteEvent
 import com.runetopic.xlitekt.network.handler.EventHandler
@@ -19,9 +20,11 @@ class Client(
     val readChannel: ByteReadChannel,
     val writeChannel: ByteWriteChannel
 ) {
-    private var eventPipeline: EventPipeline<ReadEvent, WriteEvent> = useEventPipeline(inject<HandshakeEventPipeline>())
+    var eventPipeline: EventPipeline<ReadEvent, WriteEvent> = useEventPipeline(inject<HandshakeEventPipeline>())
     private var eventHandler: EventHandler<ReadEvent, WriteEvent> = useEventHandler(inject<HandshakeEventHandler>())
 
+    var clientCipher: ISAAC? = null
+    var serverCipher: ISAAC? = null
     var connected: Boolean = true
     val seed = ((Math.random() * 99999999.0).toLong() shl 32) + (Math.random() * 99999999.0).toLong()
     var connectedToJs5 = false

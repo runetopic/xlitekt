@@ -16,6 +16,7 @@ import com.runetopic.xlitekt.util.ext.readIntV2
 import com.runetopic.xlitekt.util.ext.readMedium
 import com.runetopic.xlitekt.util.ext.readStringCp1252NullCircumfixed
 import com.runetopic.xlitekt.util.ext.readStringCp1252NullTerminated
+import com.runetopic.xlitekt.util.ext.sendRebuildNormalMap
 import io.ktor.application.ApplicationEnvironment
 import io.ktor.utils.io.core.ByteReadPacket
 import io.ktor.utils.io.core.readInt
@@ -155,7 +156,7 @@ class LoginEventPipeline : EventPipeline<ReadEvent.LoginReadEvent, WriteEvent.Lo
 
         if (event.response == LOGIN_SUCCESS_OPCODE) {
             client.writeChannel.let {
-                it.writeByte(11)
+                it.writeByte(13)
                 it.writeByte(0)
                 it.writeInt(0)
                 it.writeByte(event.rights.toByte())
@@ -164,8 +165,11 @@ class LoginEventPipeline : EventPipeline<ReadEvent.LoginReadEvent, WriteEvent.Lo
                 it.writeByte(0)
                 it.flush()
             }
+
             client.useEventPipeline(inject<GameEventPipeline>())
             client.useEventHandler(inject<GameEventHandler>())
+
+            client.sendRebuildNormalMap()
         }
     }
 

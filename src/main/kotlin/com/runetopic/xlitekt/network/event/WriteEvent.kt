@@ -1,5 +1,6 @@
 package com.runetopic.xlitekt.network.event
 
+import io.ktor.utils.io.core.ByteReadPacket
 import java.nio.ByteBuffer
 
 sealed class WriteEvent {
@@ -23,6 +24,8 @@ sealed class WriteEvent {
     ) : WriteEvent()
 
     data class GameWriteEvent(
-        val opcode: Int
+        val opcode: Int,
+        val size: Int,
+        val payload: ByteReadPacket
     ) : WriteEvent()
 }
