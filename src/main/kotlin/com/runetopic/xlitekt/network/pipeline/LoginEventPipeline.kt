@@ -156,7 +156,7 @@ class LoginEventPipeline : EventPipeline<ReadEvent.LoginReadEvent, WriteEvent.Lo
 
         if (event.response == LOGIN_SUCCESS_OPCODE) {
             client.writeChannel.let {
-                it.writeByte(13)
+                it.writeByte(11)
                 it.writeByte(0)
                 it.writeInt(0)
                 it.writeByte(event.rights.toByte())
