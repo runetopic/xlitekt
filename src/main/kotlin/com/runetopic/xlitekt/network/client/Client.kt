@@ -44,8 +44,7 @@ class Client(
             try {
                 if (eventPipeline.instanceOf(GameEventPipeline::class)) {
                     val readEvent = eventPipeline.read(this)!!
-                    val writeEvent = eventHandler.handleEvent(this, readEvent)!!
-                    eventPipeline.write(this, writeEvent)
+                    eventHandler.handleEvent(this, readEvent)
                     return
                 }
 
