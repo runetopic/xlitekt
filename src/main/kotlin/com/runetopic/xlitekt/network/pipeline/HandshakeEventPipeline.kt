@@ -46,8 +46,8 @@ class HandshakeEventPipeline : EventPipeline<ReadEvent.HandshakeReadEvent, Write
                     it.writeLong(client.seed)
                     it.flush()
                 }
-                client.useEventPipeline<ReadEvent.LoginReadEvent, WriteEvent.LoginWriteEvent>(inject<LoginEventPipeline>())
-                client.useEventHandler<ReadEvent.LoginReadEvent, WriteEvent.LoginWriteEvent>(inject<LoginEventHandler>())
+                client.useEventPipeline(inject<LoginEventPipeline>())
+                client.useEventHandler(inject<LoginEventHandler>())
             }
         }
     }

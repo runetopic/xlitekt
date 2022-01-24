@@ -5,7 +5,6 @@ import com.runetopic.xlitekt.network.handler.GameEventHandler
 import com.runetopic.xlitekt.network.handler.HandshakeEventHandler
 import com.runetopic.xlitekt.network.handler.JS5EventHandler
 import com.runetopic.xlitekt.network.handler.LoginEventHandler
-import com.runetopic.xlitekt.network.pipeline.EventPipeline
 import com.runetopic.xlitekt.network.pipeline.GameEventPipeline
 import com.runetopic.xlitekt.network.pipeline.HandshakeEventPipeline
 import com.runetopic.xlitekt.network.pipeline.JS5EventPipeline
@@ -15,6 +14,7 @@ import io.ktor.network.selector.ActorSelectorManager
 import io.ktor.network.sockets.aSocket
 import io.ktor.network.sockets.openReadChannel
 import io.ktor.network.sockets.openWriteChannel
+import io.ktor.util.reflect.instanceOf
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.asCoroutineDispatcher
 import kotlinx.coroutines.launch
@@ -50,27 +50,21 @@ fun awaitOnPort(port: Int) = runBlocking {
     }
 }
 
-private suspend fun startClientIOEvents(client: Client) = with(client) {
-    while (connected) {
-        try {
-            when (eventPipeline) {
-                is HandshakeEventPipeline, is JS5EventPipeline, is LoginEventPipeline -> {
-                    val readEvent = eventPipeline!!.read(client)
-                    val writeEvent = eventHandler!!.handleEvent(client, readEvent!!)
-                    eventPipeline!!.write(client, writeEvent!!)
-                }
-                is GameEventPipeline -> {
+private suspend fun startClientIOEvents(client: Client) = with(client) { while (connected) handleEventPipeline() }
 
-                }
-            }
-//            eventPipeline.read(this)?.let { read ->
-//                eventHandler.handleEvent(this, read)?.let { write ->
-//                    if ((client.eventPipeline as EventPipeline<*, *>) !is GameEventPipeline) eventPipeline.write(this, write)
-//                } ?: disconnect()
-//            } ?: disconnect()
-        } catch (exception: Exception) {
-            inject<Logger>().value.error("Exception caught during client IO Events.", exception)
-            disconnect()
+private suspend fun Client.handleEventPipeline() {
+    try {
+        if (eventPipeline.instanceOf(GameEventPipeline::class)) {
+            return
         }
+
+        eventPipeline.read(this)?.let { read ->
+            eventHandler.handleEvent(this, read)?.let { write ->
+                eventPipeline.write(this, write)
+            } ?: disconnect()
+        } ?: disconnect()
+    } catch (exception: Exception) {
+        inject<Logger>().value.error("Exception caught during client IO Events.", exception)
+        disconnect()
     }
 }
