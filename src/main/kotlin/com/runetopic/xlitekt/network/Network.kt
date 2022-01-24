@@ -46,11 +46,11 @@ fun awaitOnPort(port: Int) = runBlocking {
             socket.openReadChannel(),
             socket.openWriteChannel()
         )
-        launch(Dispatchers.IO) { client.startClientIOEvents() }
+        launch(Dispatchers.IO) { client.startIOEvents() }
     }
 }
 
-private suspend fun Client.startClientIOEvents() { while (connected) handleEventPipeline() }
+private suspend fun Client.startIOEvents() { while (connected) handleEventPipeline() }
 
 private suspend fun Client.handleEventPipeline() {
     try {
