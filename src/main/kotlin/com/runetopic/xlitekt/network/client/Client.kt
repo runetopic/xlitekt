@@ -44,8 +44,9 @@ class Client(
         while (connected) {
             try {
                 if (eventPipeline.instanceOf(GameEventPipeline::class)) {
-                    val readEvent = eventPipeline.read(this)!!
-                    eventHandler.handleEvent(this, readEvent)
+                    eventPipeline.read(this)?.let {
+                        eventHandler.handleEvent(this, it)
+                    }
                     return
                 }
 
