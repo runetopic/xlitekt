@@ -32,7 +32,7 @@ class HandshakeEventPipeline : EventPipeline<ReadEvent.HandshakeReadEvent, Write
         client.writeChannel.flush()
 
         if (event.response != HANDSHAKE_SUCCESS_OPCODE) {
-            client.disconnect()
+            client.disconnect("Handshake response was not successful. Response was ${event.response}.")
             return
         }
 

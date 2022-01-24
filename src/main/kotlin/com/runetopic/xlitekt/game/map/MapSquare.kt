@@ -1,4 +1,4 @@
-package com.runetopic.xlitekt.fs
+package com.runetopic.xlitekt.game.map
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

@@ -3,6 +3,15 @@ package com.runetopic.xlitekt.util.ext
 import io.ktor.utils.io.core.BytePacketBuilder
 import io.ktor.utils.io.core.writeFully
 
+fun BytePacketBuilder.writeString(value: String) {
+    value.chars().forEach { writeByte(it.toByte()) }
+    writeByte(0)
+}
+
+fun BytePacketBuilder.writeBytesAdd(bytes: ByteArray) {
+    bytes.forEach { writeByteAdd(it) }
+}
+
 fun BytePacketBuilder.writeByteAdd(value: Byte) = writeByte((value + 128).toByte())
 
 fun BytePacketBuilder.writeShortAdd(value: Short) {

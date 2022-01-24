@@ -1,6 +1,6 @@
 package com.runetopic.xlitekt.network.event
 
-import com.runetopic.xlitekt.game.player.Player
+import com.runetopic.xlitekt.game.actor.player.Player
 import io.ktor.utils.io.core.ByteReadPacket
 import java.nio.ByteBuffer
 

@@ -11,20 +11,17 @@ import com.runetopic.xlitekt.network.client.ClientResponseOpcode.LOGIN_SUCCESS_O
 import com.runetopic.xlitekt.network.event.ReadEvent
 import com.runetopic.xlitekt.network.event.WriteEvent
 import com.runetopic.xlitekt.plugin.ktor.inject
-import org.slf4j.Logger
 import java.nio.ByteBuffer
 
 class JS5EventHandler : EventHandler<ReadEvent.JS5ReadEvent, WriteEvent.JS5WriteEvent> {
 
     private val store by inject<Js5Store>()
-    private val logger by inject<Logger>()
 
-    override suspend fun handleEvent(client: Client, event: ReadEvent.JS5ReadEvent): WriteEvent.JS5WriteEvent? {
+    override suspend fun handleEvent(client: Client, event: ReadEvent.JS5ReadEvent): WriteEvent.JS5WriteEvent {
         return when (event.opcode) {
             HIGH_PRIORITY_OPCODE, LOW_PRIORITY_OPCODE -> {
                 val indexId = event.indexId
                 val groupId = event.groupId
-                logger.info("${Thread.currentThread().id} $indexId, $groupId")
                 val requestingChecksums = indexId == 0xff && groupId == 0xff
                 val buffer = ByteBuffer.wrap(if (requestingChecksums) store.checksumsWithoutRSA() else store.groupReferenceTable(indexId, groupId))
                 val compression = if (requestingChecksums) 0 else buffer.get().toInt() and 0xff

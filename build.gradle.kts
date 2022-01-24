@@ -20,6 +20,7 @@ dependencies {
     implementation(deps.bundles.ktor)
     implementation(deps.bundles.koin)
     implementation(deps.bundles.runetopic)
+    implementation(deps.bundles.logger)
     implementation(deps.kotlinx.serialization.json)
 }
 

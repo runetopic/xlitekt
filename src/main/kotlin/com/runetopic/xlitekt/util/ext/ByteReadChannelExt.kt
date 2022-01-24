@@ -2,11 +2,9 @@ package com.runetopic.xlitekt.util.ext
 
 import com.runetopic.cryptography.isaac.ISAAC
 import io.ktor.utils.io.ByteReadChannel
-import kotlinx.coroutines.withTimeout
 
 suspend fun ByteReadChannel.readPacketOpcode(isaac: ISAAC): Int {
     var opcode = -1
-    println(availableForRead)
     if (availableForRead > 0) {
         opcode = (0xff and (readByte().toInt() and 0xff) - isaac.getNext())
     }
@@ -25,7 +23,7 @@ suspend fun ByteReadChannel.readPacketSize(input: Int): Int {
             when (input) {
                 -1 -> if (availableForRead >= bytes) readByte().toInt() and 0xff else availableForRead
                 -2 -> if (availableForRead >= bytes) readShort().toInt() and 0xffff else availableForRead
-                else -> throw Exception("Input dynamic packet size must be either -1 or -2.")
+                else -> throw IllegalStateException("Input dynamic packet size must be either -1 or -2.")
             }
         }
         else -> input

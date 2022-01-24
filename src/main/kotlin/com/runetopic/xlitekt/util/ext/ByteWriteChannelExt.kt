@@ -16,4 +16,3 @@ suspend fun ByteWriteChannel.writePacketSize(input: Int, size: Long) {
         -2 -> writeShort(size.toShort())
     }
 }
-

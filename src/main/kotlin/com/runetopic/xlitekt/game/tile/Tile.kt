@@ -1,5 +1,7 @@
 package com.runetopic.xlitekt.game.tile
 
+import com.runetopic.xlitekt.game.actor.player.Player
+
 @JvmInline
 value class Tile(val coordinates: Int) {
     constructor(
@@ -18,4 +20,11 @@ value class Tile(val coordinates: Int) {
     val regionCoordinates: Int get() = z shr 13 or (x shr 13 shl 8) or (plane shl 16)
     val xInRegion: Int get() = (x and 0x3F)
     val zInRegion: Int get() = (z and 0x3F)
+}
+
+fun Tile.withinDistance(other: Player, distance: Int = 14): Boolean {
+    if (other.tile.plane != plane) return false
+    val deltaX: Int = other.tile.x - x
+    val deltaY: Int = other.tile.z - z
+    return deltaX <= distance && deltaX >= -distance && deltaY <= distance && deltaY >= -distance
 }

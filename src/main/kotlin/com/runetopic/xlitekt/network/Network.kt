@@ -43,6 +43,6 @@ fun awaitOnPort(port: Int) = runBlocking {
             socket.openReadChannel(),
             socket.openWriteChannel()
         )
-        launch(Dispatchers.IO) { client.startIOEvents() }
+        launch(Dispatchers.IO) { client.start() }
     }
 }

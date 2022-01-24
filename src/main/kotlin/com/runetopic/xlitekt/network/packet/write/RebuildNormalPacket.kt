@@ -1,41 +1,34 @@
 package com.runetopic.xlitekt.network.packet.write
 
-import com.runetopic.xlitekt.fs.MapSquare
-import com.runetopic.xlitekt.game.tile.Tile
+import com.runetopic.xlitekt.game.actor.player.Player
+import com.runetopic.xlitekt.game.map.MapSquare
 import com.runetopic.xlitekt.network.packet.Packet
 import com.runetopic.xlitekt.plugin.ktor.inject
-import com.runetopic.xlitekt.util.ext.withBitAccess
 import com.runetopic.xlitekt.util.ext.writeShortAdd
 import io.ktor.utils.io.core.writeInt
 import io.ktor.utils.io.core.writeShort
 import io.ktor.utils.io.core.writeShortLittleEndian
 
 class RebuildNormalPacket(
+    private val player: Player,
     private val update: Boolean
 ) : Packet {
-    private val tile = Tile(3222, 3222) // TODO this will come from player
-
     override fun opcode(): Int = 54
     override fun size(): Int = -2
     override fun builder() = buildPacket {
         if (update) {
-            withBitAccess {
-                writeBits(30, tile.coordinates)
-                for (index in 1..2047) {
-                    if (index == 1) continue
-                    writeBits(18, 0)
-                }
-            }
+            player.viewport.init(this@buildPacket)
         }
 
-        val chunkX = tile.chunkX
-        val chunkZ = tile.chunkZ
+        val chunkX = player.tile.chunkX
+        val chunkZ = player.tile.chunkZ
 
         writeShortAdd(chunkX.toShort())
         writeShortLittleEndian(chunkZ.toShort())
 
         var size = 0
         var forceSend = false
+
         if ((chunkX / 8 == 48 || chunkX / 8 == 49) && chunkZ / 8 == 48) {
             forceSend = true
         }

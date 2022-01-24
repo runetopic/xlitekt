@@ -1,5 +1,6 @@
 package com.runetopic.xlitekt.network.client
 
+import com.github.michaelbull.logging.InlineLogger
 import com.runetopic.cryptography.isaac.ISAAC
 import com.runetopic.xlitekt.network.event.ReadEvent
 import com.runetopic.xlitekt.network.event.WriteEvent
@@ -14,30 +15,28 @@ import io.ktor.network.sockets.Socket
 import io.ktor.util.reflect.instanceOf
 import io.ktor.utils.io.ByteReadChannel
 import io.ktor.utils.io.ByteWriteChannel
-import kotlinx.coroutines.Dispatchers
-import org.slf4j.Logger
+import java.net.SocketException
+import kotlinx.coroutines.TimeoutCancellationException
 
 class Client(
     private val socket: Socket,
     val readChannel: ByteReadChannel,
     val writeChannel: ByteWriteChannel
 ) {
+    private val logger = InlineLogger()
     private var eventPipeline: EventPipeline<ReadEvent, WriteEvent> = useEventPipeline(inject<HandshakeEventPipeline>())
     private var eventHandler: EventHandler<ReadEvent, WriteEvent> = useEventHandler(inject<HandshakeEventHandler>())
+    private var connected: Boolean = true
 
     var clientCipher: ISAAC? = null
     var serverCipher: ISAAC? = null
-    private var connected: Boolean = true
     val seed = ((Math.random() * 99999999.0).toLong() shl 32) + (Math.random() * 99999999.0).toLong()
     var connectedToJs5 = false
     var loggedIn = false
 
-    private val logger by inject<Logger>()
-
-    suspend fun startIOEvents() {
+    suspend fun start() {
         while (connected) {
             try {
-                println("OK")
                 if (eventPipeline.instanceOf(GameEventPipeline::class)) {
                     eventPipeline.read(this)?.let {
                         eventHandler.handleEvent(this, it)
@@ -46,12 +45,18 @@ class Client(
                     eventPipeline.read(this)?.let { read ->
                         eventHandler.handleEvent(this, read)?.let { write ->
                             eventPipeline.write(this, write)
-                        } ?: disconnect()
-                    } ?: disconnect()
+                        } ?: disconnect("Event handler returned null for $eventHandler.")
+                    } ?: disconnect("Read event returned null for $eventPipeline.")
                 }
             } catch (exception: Exception) {
-                inject<Logger>().value.error("Exception caught during client IO Events.", exception)
-                disconnect()
+                when {
+                    exception.instanceOf(TimeoutCancellationException::class) -> disconnect("Client timed out.")
+                    exception.instanceOf(SocketException::class) -> disconnect("Connection reset.")
+                    else -> {
+                        logger.error(exception) { "Exception caught during client IO Events." }
+                        disconnect(exception.message.toString())
+                    }
+                }
             }
         }
     }
@@ -63,7 +68,7 @@ class Client(
 
     fun setIsaacCiphers(clientCipher: ISAAC, serverCipher: ISAAC) {
         if (this.clientCipher != null || this.serverCipher != null) {
-            disconnect()
+            disconnect("Client or server cipher is already set.")
             return
         }
         this.clientCipher = clientCipher
@@ -72,10 +77,10 @@ class Client(
 
     suspend fun writePacket(packet: Packet) = eventPipeline.write(this, WriteEvent.GameWriteEvent(packet.opcode(), packet.size(), packet.builder().build()))
 
-    fun disconnect() {
+    fun disconnect(reason: String) {
         connected = false
         socket.close()
-        logger.info("Client disconnected.")
+        logger.info { "Client disconnected for reason={$reason}." }
     }
 
     @Suppress("UNCHECKED_CAST")
