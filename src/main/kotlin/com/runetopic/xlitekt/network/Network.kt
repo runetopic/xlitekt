@@ -9,18 +9,15 @@ import com.runetopic.xlitekt.network.pipeline.GameEventPipeline
 import com.runetopic.xlitekt.network.pipeline.HandshakeEventPipeline
 import com.runetopic.xlitekt.network.pipeline.JS5EventPipeline
 import com.runetopic.xlitekt.network.pipeline.LoginEventPipeline
-import com.runetopic.xlitekt.plugin.ktor.inject
 import io.ktor.network.selector.ActorSelectorManager
 import io.ktor.network.sockets.aSocket
 import io.ktor.network.sockets.openReadChannel
 import io.ktor.network.sockets.openWriteChannel
-import io.ktor.util.reflect.instanceOf
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.asCoroutineDispatcher
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import org.koin.dsl.module
-import org.slf4j.Logger
 import java.net.InetSocketAddress
 import java.util.concurrent.Executors
 
@@ -47,24 +44,5 @@ fun awaitOnPort(port: Int) = runBlocking {
             socket.openWriteChannel()
         )
         launch(Dispatchers.IO) { client.startIOEvents() }
-    }
-}
-
-private suspend fun Client.startIOEvents() { while (connected) handleEventPipeline() }
-
-private suspend fun Client.handleEventPipeline() {
-    try {
-        if (eventPipeline.instanceOf(GameEventPipeline::class)) {
-            return
-        }
-
-        eventPipeline.read(this)?.let { read ->
-            eventHandler.handleEvent(this, read)?.let { write ->
-                eventPipeline.write(this, write)
-            } ?: disconnect()
-        } ?: disconnect()
-    } catch (exception: Exception) {
-        inject<Logger>().value.error("Exception caught during client IO Events.", exception)
-        disconnect()
     }
 }

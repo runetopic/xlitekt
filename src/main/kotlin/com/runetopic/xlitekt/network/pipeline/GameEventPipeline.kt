@@ -13,11 +13,8 @@ class GameEventPipeline : EventPipeline<ReadEvent.GameReadEvent, WriteEvent.Game
         println("Read packet.")
         val opcode = client.readChannel.readByte().toInt() and 0xff
         println(opcode)
-        return ReadEvent.GameReadEvent(-1)
+        return null
     }
 
-    override suspend fun write(client: Client, event: WriteEvent.GameWriteEvent) {
-
-        // println("Write packet.")
-    }
+    override suspend fun write(client: Client, event: WriteEvent.GameWriteEvent) {}
 }

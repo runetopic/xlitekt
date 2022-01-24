@@ -5,9 +5,11 @@ import com.runetopic.xlitekt.network.event.WriteEvent
 import com.runetopic.xlitekt.network.handler.EventHandler
 import com.runetopic.xlitekt.network.handler.HandshakeEventHandler
 import com.runetopic.xlitekt.network.pipeline.EventPipeline
+import com.runetopic.xlitekt.network.pipeline.GameEventPipeline
 import com.runetopic.xlitekt.network.pipeline.HandshakeEventPipeline
 import com.runetopic.xlitekt.plugin.ktor.inject
 import io.ktor.network.sockets.Socket
+import io.ktor.util.reflect.instanceOf
 import io.ktor.utils.io.ByteReadChannel
 import io.ktor.utils.io.ByteWriteChannel
 import org.slf4j.Logger
@@ -35,6 +37,28 @@ class Client(
         connected = false
         socket.close()
         logger.info("Client disconnected.")
+    }
+
+    suspend fun startIOEvents() {
+        while (connected) {
+            try {
+                if (eventPipeline.instanceOf(GameEventPipeline::class)) {
+                    val readEvent = eventPipeline.read(this)!!
+                    val writeEvent = eventHandler.handleEvent(this, readEvent)!!
+                    eventPipeline.write(this, writeEvent)
+                    return
+                }
+
+                eventPipeline.read(this)?.let { read ->
+                    eventHandler.handleEvent(this, read)?.let { write ->
+                        eventPipeline.write(this, write)
+                    } ?: disconnect()
+                } ?: disconnect()
+            } catch (exception: Exception) {
+                inject<Logger>().value.error("Exception caught during client IO Events.", exception)
+                disconnect()
+            }
+        }
     }
 
     @Suppress("UNCHECKED_CAST")
