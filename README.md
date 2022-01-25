@@ -98,9 +98,3 @@ Maps are loaded using the xteas provided from Runestar, which follows this forma
 ]
 ```
 
-
-# Documentation
-
-Xlite out of the box provides you a built-in HTTP Server, JS5 Server, and Game Server.
-
-
