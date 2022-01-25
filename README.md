@@ -15,7 +15,7 @@ documented.
 Make sure to download the Jan 6th #202 cache version from one of the archives below. We don't push this to github for
 obvious reasons.
 
-Download a cache from one of the archives:
+**Download a cache from one of the archives:**
 
 - [archive.runestats.com](https://archive.runestats.com/osrs/)
 - [archive.openrs2.org](https://archive.openrs2.org/)
@@ -23,9 +23,14 @@ Download a cache from one of the archives:
 Place the cache you downloaded into the ``./cache/`` folder inside of the project. This path is configurable in
 the [application.conf](/src/main/resources/application.conf).
 
+**Generate RSA tokens and update your application.conf file**
+
+This will eventually be a gradle task to generate new RSA keys. For now, you can reference the rune-server thread: [any-revision-enabling-rsa](https://www.rune-server.ee/runescape-development/rs2-server/tutorials/305532-any-revision-enabling-rsa.html)
+
 ## Application configuration:
 
-Most everything will be setup and configured already for you, unless you're porting to a recent revision.
+_Most everything will be setup and configured already for you for around the build #202. So unless you're porting to a recent revision you'll really only need to worry about updating the RSA Keys in the application.conf file._
+
 
 **Configuration for ktor can be found in the ```ktor``` block.**
 ```shell
@@ -47,9 +52,9 @@ cache {
   path = "./cache/"
 }
 ```
+**Configuration for game related properties. You will need to generate your RSA exponent and modulus, as well as the packet sizes.**
 
-Configuration for game related properties. You will need to generate your RSA exponent and modulus to provide here, as well as the packet sizes.
-We will write a tutorial in the future for dumping these from the client as well as a gradle task to generate RSA tokens.
+**We will be writing a tutorial in the future for dumping these from the current OSRS client as well as the gradle task to generate RSA tokens.**
 ```shell
 game {
     build {
@@ -69,14 +74,14 @@ game {
 }
 ```
 
-Configuration related to network.
+**Configuration related to network.**
 ```shell
 network {
     timeout = 10000
 }
 ```
 
-### Loading Maps
+### Loading Xtea Keys
 Maps are loaded using the xteas provided from Runestar, which follows this format:
 
 ```json
@@ -92,5 +97,10 @@ Maps are loaded using the xteas provided from Runestar, which follows this forma
   }
 ]
 ```
+
+
+# Documentation
+
+Xlite out of the box provides you a built-in HTTP Server, JS5 Server, and Game Server.
 
 
