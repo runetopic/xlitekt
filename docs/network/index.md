@@ -1,6 +1,6 @@
 ## Network
 
-The network pipeline for XliteKt consist of a few moving parts (We we dive deep into each one of these specifically:
+The network pipeline for XliteKt consist of a few moving parts:
 
 - HTTP (This is used for serving client configuration files along with the latest gamepack.jar)
 - JS5 (This is used for serving the cache files to the client)
