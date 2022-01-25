@@ -39,7 +39,7 @@ fun awaitOnPort(port: Int) = runBlocking {
     val dispatcher = ActorSelectorManager(Executors.newCachedThreadPool().asCoroutineDispatcher())
     val server = aSocket(dispatcher).tcp().bind(InetSocketAddress(port))
 
-    logger.info { "Network is now accepting connections. " }
+    logger.info { "Network is now accepting connections." }
 
     while (true) {
         val socket = server.accept()

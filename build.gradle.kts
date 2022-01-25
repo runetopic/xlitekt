@@ -1,11 +1,11 @@
-import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
+@Suppress("DSL_SCOPE_VIOLATION")
 plugins {
-    kotlin("jvm")
-    id("com.github.johnrengelman.shadow")
     application
-    kotlin("plugin.serialization")
+    alias(deps.plugins.jvm)
+    alias(deps.plugins.serialization)
+    alias(deps.plugins.shadowjar)
 }
 
 group = "com.runetopic.xlite"
@@ -38,11 +38,6 @@ with(tasks) {
             "-Xopt-in=io.ktor.util.InternalAPI",
             "-Xopt-in=kotlinx.serialization.ExperimentalSerializationApi"
         )
-    }
-    withType<ShadowJar> {
-        manifest {
-            attributes(Pair("Main-Class", "com.runetopic.xlitekt.ApplicationKt"))
-        }
     }
 }
 
