@@ -23,17 +23,9 @@ class PlayerAppearanceBlock : RenderingBlock<Player, Render.Appearance> {
             writeByte(render.gender.mask.toByte())
             writeByte(render.skullIcon.toByte())
             writeByte(render.headIcon.toByte())
-            if (render.transform != -1) {
-                buildTransmogrification(this, render)
-            } else {
-                buildIdentityKit(this, render)
-            }
+            if (render.transform != -1) writeTransmogrification(render) else writeIdentityKit(render)
             colour(this, render.bodyPartColors.entries)
-            if (render.transform == -1) {
-                intArrayOf(0x328, 0x337, 0x333, 0x334, 0x335, 0x336, 0x338).forEach { writeShort(it.toShort()) }
-            } else {
-                // TODO load npc defs for walking and stand anims for transmog.
-            }
+            animate(render)
             writeString(actor.displayName)
             writeByte(126) // Combat level
             writeShort(0) // Total level
@@ -43,16 +35,24 @@ class PlayerAppearanceBlock : RenderingBlock<Player, Render.Appearance> {
         writeBytesAdd(data.readBytes())
     }
 
-    private fun buildTransmogrification(builder: BytePacketBuilder, render: Render.Appearance) {
-        builder.writeShort(65535.toShort())
-        builder.writeShort(render.transform.toShort())
+    private fun BytePacketBuilder.animate(render: Render.Appearance) {
+        if (render.transform == -1) {
+            intArrayOf(0x328, 0x337, 0x333, 0x334, 0x335, 0x336, 0x338).forEach { writeShort(it.toShort()) }
+        } else {
+            // TODO load npc defs for walking and stand anims for transmog.
+        }
     }
 
-    private fun buildIdentityKit(builder: BytePacketBuilder, render: Render.Appearance) = PlayerIdentityKit.values()
+    private fun BytePacketBuilder.writeTransmogrification(render: Render.Appearance) {
+        writeShort(65535.toShort())
+        writeShort(render.transform.toShort())
+    }
+
+    private fun BytePacketBuilder.writeIdentityKit(render: Render.Appearance) = PlayerIdentityKit.values()
         .sortedWith(compareBy { it.info.index() })
         .forEach {
             it.info.build(
-                builder,
+                this,
                 BodyPartCompanion(
                     render.gender,
                     render.bodyParts.getOrDefault(it.bodyPart, 0)

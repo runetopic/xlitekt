@@ -6,4 +6,4 @@ import io.ktor.application.ApplicationEnvironment
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.decodeFromStream
 
-fun loadAllMapSquares(): List<MapSquare> = Json.decodeFromStream(MapSquare::class.java.getResourceAsStream("/map/xteas${inject<ApplicationEnvironment>().value.config.property("game.build.major")}.json")!!)
+fun loadAllMapSquares(): List<MapSquare> = Json.decodeFromStream(MapSquare::class.java.getResourceAsStream("/map/xteas${inject<ApplicationEnvironment>().value.config.property("game.build.major").getString()}.json")!!)

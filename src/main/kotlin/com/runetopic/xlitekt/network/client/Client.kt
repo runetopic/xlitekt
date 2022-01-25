@@ -15,8 +15,8 @@ import io.ktor.network.sockets.Socket
 import io.ktor.util.reflect.instanceOf
 import io.ktor.utils.io.ByteReadChannel
 import io.ktor.utils.io.ByteWriteChannel
-import java.net.SocketException
 import kotlinx.coroutines.TimeoutCancellationException
+import java.net.SocketException
 
 class Client(
     private val socket: Socket,
@@ -33,6 +33,21 @@ class Client(
     val seed = ((Math.random() * 99999999.0).toLong() shl 32) + (Math.random() * 99999999.0).toLong()
     var connectedToJs5 = false
     var loggedIn = false
+
+    fun disconnect(reason: String) {
+        connected = false
+        socket.close()
+        logger.info { "Client disconnected for reason={$reason}." }
+    }
+
+    fun setIsaacCiphers(clientCipher: ISAAC, serverCipher: ISAAC) {
+        if (this.clientCipher != null || this.serverCipher != null) {
+            disconnect("Client or server cipher is already set.")
+            return
+        }
+        this.clientCipher = clientCipher
+        this.serverCipher = serverCipher
+    }
 
     suspend fun start() {
         while (connected) {
@@ -66,22 +81,7 @@ class Client(
         writeChannel.flush()
     }
 
-    fun setIsaacCiphers(clientCipher: ISAAC, serverCipher: ISAAC) {
-        if (this.clientCipher != null || this.serverCipher != null) {
-            disconnect("Client or server cipher is already set.")
-            return
-        }
-        this.clientCipher = clientCipher
-        this.serverCipher = serverCipher
-    }
-
     suspend fun writePacket(packet: Packet) = eventPipeline.write(this, WriteEvent.GameWriteEvent(packet.opcode(), packet.size(), packet.builder().build()))
-
-    fun disconnect(reason: String) {
-        connected = false
-        socket.close()
-        logger.info { "Client disconnected for reason={$reason}." }
-    }
 
     @Suppress("UNCHECKED_CAST")
     fun useEventPipeline(eventPipeline: Lazy<EventPipeline<out ReadEvent, out WriteEvent>>): EventPipeline<ReadEvent, WriteEvent> {
