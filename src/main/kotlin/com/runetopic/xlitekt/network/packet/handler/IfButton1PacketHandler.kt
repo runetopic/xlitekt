@@ -12,6 +12,6 @@ class IfButton1PacketHandler : PacketHandler<IfButtonPacket> {
     private val logger = InlineLogger()
 
     override suspend fun handlePacket(player: Player, message: IfButtonPacket) {
-        logger.info { "Fuck my asshole dad." }
+        logger.info { "IfButton1 Handler." }
     }
 }

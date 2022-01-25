@@ -8,3 +8,5 @@ val gameModule = module {
     single { loadAllMapSquares() }
     single { World() }
 }
+
+class Game
