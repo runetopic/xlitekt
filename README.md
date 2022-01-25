@@ -28,7 +28,7 @@ This will eventually be a gradle task to generate new RSA keys. For now, you can
 
 ## Application configuration:
 
-_Most everything will be setup and configured already for you for around the build #202. So unless you're porting to a recent revision you'll really only need to worry about updating the RSA Keys in the application.conf file._
+_Most everything will be setup and configured already for you around the build #202. So unless you're porting to a recent revision you'll really only need to worry about updating the RSA Keys in the application.conf file._
 
 
 **Configuration for ktor can be found in the ```ktor``` block.**
