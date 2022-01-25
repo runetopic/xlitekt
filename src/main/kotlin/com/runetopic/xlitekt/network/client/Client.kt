@@ -2,11 +2,15 @@ package com.runetopic.xlitekt.network.client
 
 import com.github.michaelbull.logging.InlineLogger
 import com.runetopic.cryptography.isaac.ISAAC
+import com.runetopic.xlitekt.game.actor.player.Player
 import com.runetopic.xlitekt.network.event.ReadEvent
 import com.runetopic.xlitekt.network.event.WriteEvent
 import com.runetopic.xlitekt.network.handler.EventHandler
 import com.runetopic.xlitekt.network.handler.HandshakeEventHandler
 import com.runetopic.xlitekt.network.packet.Packet
+import com.runetopic.xlitekt.network.packet.RegisteredPackets.assemblers
+import com.runetopic.xlitekt.network.packet.RegisteredPackets.disassemblers
+import com.runetopic.xlitekt.network.packet.RegisteredPackets.handlers
 import com.runetopic.xlitekt.network.pipeline.EventPipeline
 import com.runetopic.xlitekt.network.pipeline.GameEventPipeline
 import com.runetopic.xlitekt.network.pipeline.HandshakeEventPipeline
@@ -15,6 +19,7 @@ import io.ktor.network.sockets.Socket
 import io.ktor.util.reflect.instanceOf
 import io.ktor.utils.io.ByteReadChannel
 import io.ktor.utils.io.ByteWriteChannel
+import io.ktor.utils.io.core.ByteReadPacket
 import kotlinx.coroutines.TimeoutCancellationException
 import java.net.SocketException
 
@@ -28,11 +33,12 @@ class Client(
     private var eventHandler: EventHandler<ReadEvent, WriteEvent> = useEventHandler(inject<HandshakeEventHandler>())
     private var connected: Boolean = true
 
+    val seed = ((Math.random() * 99999999.0).toLong() shl 32) + (Math.random() * 99999999.0).toLong()
     var clientCipher: ISAAC? = null
     var serverCipher: ISAAC? = null
-    val seed = ((Math.random() * 99999999.0).toLong() shl 32) + (Math.random() * 99999999.0).toLong()
     var connectedToJs5 = false
     var loggedIn = false
+    var player: Player? = null
 
     fun disconnect(reason: String) {
         connected = false
@@ -81,7 +87,18 @@ class Client(
         writeChannel.flush()
     }
 
-    suspend fun writePacket(packet: Packet) = eventPipeline.write(this, WriteEvent.GameWriteEvent(packet.opcode(), packet.size(), packet.builder().build()))
+    suspend fun writePacket(message: Packet) {
+        val packet = assemblers[message::class] ?: return disconnect("Unhandled message found when trying to write packet. Message was $message.")
+        eventPipeline.write(this, WriteEvent.GameWriteEvent(packet.opcode, packet.size, packet.assemblePacket(message).build()))
+    }
+
+    suspend fun readPacket(opcode: Int, packet: ByteReadPacket) {
+        val player = player ?: return disconnect("Player is not established when attempting to read and handle packet. Opcode was $opcode.")
+        val decoder = disassemblers.firstOrNull { it.opcode == opcode } ?: return logger.info { "Unhandled packet opcode when looking for decoder. Opcode was $opcode." }
+        val message = decoder.disassemblePacket(packet)
+        val handler = handlers[message::class] ?: return logger.info { "Unhandled packet opcode found when looking for handler. Opcode was $opcode." }
+        handler.handlePacket(player, message)
+    }
 
     @Suppress("UNCHECKED_CAST")
     fun useEventPipeline(eventPipeline: Lazy<EventPipeline<out ReadEvent, out WriteEvent>>): EventPipeline<ReadEvent, WriteEvent> {

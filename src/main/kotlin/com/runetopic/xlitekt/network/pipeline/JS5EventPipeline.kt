@@ -15,10 +15,11 @@ import kotlinx.coroutines.withTimeout
 class JS5EventPipeline : EventPipeline<ReadEvent.JS5ReadEvent, WriteEvent.JS5WriteEvent> {
 
     private val environment by inject<ApplicationEnvironment>()
+    private val timeout = environment.config.property("network.timeout").getString().toLong()
 
     override suspend fun read(client: Client): ReadEvent.JS5ReadEvent {
         if (client.readChannel.availableForRead < 4) {
-            withTimeout(environment.config.property("network.timeout").getString().toLong()) { client.readChannel.awaitContent() }
+            withTimeout(timeout) { client.readChannel.awaitContent() }
         }
         val opcode = client.readChannel.readByte().toInt()
         val indexId = client.readChannel.readByte().toInt() and 0xff

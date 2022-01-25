@@ -23,6 +23,7 @@ import io.ktor.utils.io.core.readInt
 import io.ktor.utils.io.core.readIntLittleEndian
 import io.ktor.utils.io.core.readLong
 import io.ktor.utils.io.core.readShort
+import kotlinx.coroutines.withTimeout
 import java.math.BigInteger
 import java.nio.ByteBuffer
 
@@ -35,8 +36,13 @@ class LoginEventPipeline : EventPipeline<ReadEvent.LoginReadEvent, WriteEvent.Lo
     private val logger = InlineLogger()
     private val store by inject<Js5Store>()
     private val environment by inject<ApplicationEnvironment>()
+    private val timeout = environment.config.property("network.timeout").getString().toLong()
 
     override suspend fun read(client: Client): ReadEvent.LoginReadEvent? {
+        if (client.readChannel.availableForRead <= 0) {
+            withTimeout(timeout) { client.readChannel.awaitContent() }
+        }
+
         val opcode = client.readChannel.readByte().toInt() and 0xff
 
         if (!isValidLoginRequestHeader(client)) {
@@ -154,13 +160,15 @@ class LoginEventPipeline : EventPipeline<ReadEvent.LoginReadEvent, WriteEvent.Lo
         client.writeResponse(event.response)
 
         if (event.response == LOGIN_SUCCESS_OPCODE) {
+            val player = client.player ?: return client.disconnect("Login write event does not have an established player.")
+
             client.writeChannel.let {
                 it.writeByte(11)
                 it.writeByte(0)
                 it.writeInt(0)
-                it.writeByte(event.rights.toByte())
+                it.writeByte(player.rights.toByte())
                 it.writeByte(0)
-                it.writeShort(event.pid.toShort())
+                it.writeShort(player.pid.toShort())
                 it.writeByte(0)
                 it.flush()
             }
@@ -168,7 +176,7 @@ class LoginEventPipeline : EventPipeline<ReadEvent.LoginReadEvent, WriteEvent.Lo
             client.useEventPipeline(inject<GameEventPipeline>())
             client.useEventHandler(inject<GameEventHandler>())
 
-            event.player.login()
+            player.login()
         }
     }
 

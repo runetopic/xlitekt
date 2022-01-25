@@ -4,7 +4,6 @@ import com.github.michaelbull.logging.InlineLogger
 import com.runetopic.xlitekt.network.client.Client
 import com.runetopic.xlitekt.network.event.ReadEvent
 import com.runetopic.xlitekt.network.event.WriteEvent
-import com.runetopic.xlitekt.network.packet.Packet
 import com.runetopic.xlitekt.plugin.ktor.inject
 import com.runetopic.xlitekt.util.ext.readPacketOpcode
 import com.runetopic.xlitekt.util.ext.readPacketSize
@@ -20,18 +19,20 @@ import kotlinx.coroutines.withTimeout
 class GameEventPipeline : EventPipeline<ReadEvent.GameReadEvent, WriteEvent.GameWriteEvent> {
 
     private val environment by inject<ApplicationEnvironment>()
+    private val sizes = environment.config.property("game.packet.sizes").getList().map { it.toInt() }
+    private val timeout = environment.config.property("network.timeout").getString().toLong()
     private val logger = InlineLogger()
 
     override suspend fun read(client: Client): ReadEvent.GameReadEvent? {
         if (client.readChannel.availableForRead <= 0) {
-            withTimeout(environment.config.property("network.timeout").getString().toLong()) { client.readChannel.awaitContent() }
+            withTimeout(timeout) { client.readChannel.awaitContent() }
         }
         val opcode = client.readChannel.readPacketOpcode(client.clientCipher!!)
-        if (opcode < 0 || opcode >= Packet.READ_SIZES.size) {
-            client.disconnect("Packet read opcode was out of bounds. Opcode was $opcode.")
+        if (opcode < 0 || opcode >= sizes.size) {
+            // client.disconnect("Packet read opcode was out of bounds. Opcode was $opcode.")
             return null
         }
-        val size = client.readChannel.readPacketSize(Packet.READ_SIZES[opcode])
+        val size = client.readChannel.readPacketSize(sizes[opcode])
         logger.info { "Read Packet with opcode=$opcode and size=$size" }
         return ReadEvent.GameReadEvent(opcode, size, client.readChannel.readPacket(size))
     }

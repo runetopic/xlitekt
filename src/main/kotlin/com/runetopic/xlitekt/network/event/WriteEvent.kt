@@ -1,6 +1,5 @@
 package com.runetopic.xlitekt.network.event
 
-import com.runetopic.xlitekt.game.actor.player.Player
 import io.ktor.utils.io.core.ByteReadPacket
 import java.nio.ByteBuffer
 
@@ -20,9 +19,6 @@ sealed class WriteEvent {
 
     data class LoginWriteEvent(
         val response: Int,
-        val rights: Int,
-        val pid: Int,
-        val player: Player
     ) : WriteEvent()
 
     data class GameWriteEvent(
