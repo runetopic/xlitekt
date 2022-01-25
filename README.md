@@ -47,6 +47,8 @@ ktor {
 **Configuration for game related properties. You will need to generate your RSA exponent and modulus, as well as the packet sizes.**
 
 **We will be writing a tutorial in the future for dumping these from the current OSRS client as well as the gradle task to generate RSA tokens.**
+
+**Please change the RSA tokens for a production based environment, these keys are just an example. Do not use this for anything other than local development.**
 ```shell
 game {
     build {
