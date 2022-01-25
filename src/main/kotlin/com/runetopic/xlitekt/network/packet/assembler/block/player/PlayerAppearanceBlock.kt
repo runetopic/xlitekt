@@ -60,5 +60,5 @@ class PlayerAppearanceBlock : RenderingBlock<Player, Render.Appearance>(5, 0x1) 
 
     private fun colour(builder: BytePacketBuilder, colours: Set<Map.Entry<BodyPartColor, Int>>) = colours
         .sortedWith(compareBy { it.key.id })
-        .forEach { (value) -> builder.writeByte(value.color.toByte()) }
+        .forEach { builder.writeByte(it.value.toByte()) }
 }
