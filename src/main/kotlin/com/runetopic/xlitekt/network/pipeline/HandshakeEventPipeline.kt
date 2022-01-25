@@ -13,11 +13,13 @@ import io.ktor.application.ApplicationEnvironment
 import kotlinx.coroutines.withTimeout
 
 class HandshakeEventPipeline : EventPipeline<ReadEvent.HandshakeReadEvent, WriteEvent.HandshakeWriteEvent> {
+
     private val environment by inject<ApplicationEnvironment>()
+    private val timeout = environment.config.property("network.timeout").getString().toLong()
 
     override suspend fun read(client: Client): ReadEvent.HandshakeReadEvent {
         if (client.readChannel.availableForRead < 4) {
-            withTimeout(environment.config.property("network.timeout").getString().toLong()) { client.readChannel.awaitContent() }
+            withTimeout(timeout) { client.readChannel.awaitContent() }
         }
         return when (val opcode = client.readChannel.readByte().toInt()) {
             HANDSHAKE_JS5_OPCODE -> ReadEvent.HandshakeReadEvent(opcode, client.readChannel.readInt())
@@ -31,7 +33,7 @@ class HandshakeEventPipeline : EventPipeline<ReadEvent.HandshakeReadEvent, Write
         client.writeChannel.flush()
 
         if (event.response != HANDSHAKE_SUCCESS_OPCODE) {
-            client.disconnect()
+            client.disconnect("Handshake response was not successful. Response was ${event.response}.")
             return
         }
 

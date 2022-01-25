@@ -1,5 +1,6 @@
 package com.runetopic.xlitekt.network.pipeline
 
+import com.github.michaelbull.logging.InlineLogger
 import com.runetopic.cache.store.Js5Store
 import com.runetopic.cryptography.fromXTEA
 import com.runetopic.xlitekt.network.NetworkOpcode.LOGIN_NORMAL_OPCODE
@@ -22,7 +23,7 @@ import io.ktor.utils.io.core.readInt
 import io.ktor.utils.io.core.readIntLittleEndian
 import io.ktor.utils.io.core.readLong
 import io.ktor.utils.io.core.readShort
-import org.slf4j.Logger
+import kotlinx.coroutines.withTimeout
 import java.math.BigInteger
 import java.nio.ByteBuffer
 
@@ -32,15 +33,20 @@ import java.nio.ByteBuffer
  */
 class LoginEventPipeline : EventPipeline<ReadEvent.LoginReadEvent, WriteEvent.LoginWriteEvent> {
 
-    private val logger by inject<Logger>()
+    private val logger = InlineLogger()
     private val store by inject<Js5Store>()
     private val environment by inject<ApplicationEnvironment>()
+    private val timeout = environment.config.property("network.timeout").getString().toLong()
 
     override suspend fun read(client: Client): ReadEvent.LoginReadEvent? {
+        if (client.readChannel.availableForRead <= 0) {
+            withTimeout(timeout) { client.readChannel.awaitContent() }
+        }
+
         val opcode = client.readChannel.readByte().toInt() and 0xff
 
         if (!isValidLoginRequestHeader(client)) {
-            logger.info("Invalid login request header. Client=$client Opcode=$opcode Available bytes=${client.readChannel.availableForRead}")
+            logger.info { "Invalid login request header. Client=$client Opcode=$opcode Available bytes=${client.readChannel.availableForRead}" }
             return null
         }
 
@@ -73,7 +79,7 @@ class LoginEventPipeline : EventPipeline<ReadEvent.LoginReadEvent, WriteEvent.Lo
 
                 if (clientSeed != client.seed) {
                     client.writeResponse(BAD_SESSION_OPCODE)
-                    logger.info("Bad Session. Client/Server seed miss-match. ClientSeed=$clientSeed Seed=${client.seed}")
+                    logger.info { "Bad Session. Client/Server seed miss-match. ClientSeed=$clientSeed Seed=${client.seed}" }
                     return null
                 }
 
@@ -154,18 +160,23 @@ class LoginEventPipeline : EventPipeline<ReadEvent.LoginReadEvent, WriteEvent.Lo
         client.writeResponse(event.response)
 
         if (event.response == LOGIN_SUCCESS_OPCODE) {
+            val player = client.player ?: return client.disconnect("Login write event does not have an established player.")
+
             client.writeChannel.let {
                 it.writeByte(11)
                 it.writeByte(0)
                 it.writeInt(0)
-                it.writeByte(event.rights.toByte())
+                it.writeByte(player.rights.toByte())
                 it.writeByte(0)
-                it.writeShort(event.pid.toShort())
+                it.writeShort(player.pid.toShort())
                 it.writeByte(0)
                 it.flush()
             }
+
             client.useEventPipeline(inject<GameEventPipeline>())
             client.useEventHandler(inject<GameEventHandler>())
+
+            player.login()
         }
     }
 
@@ -205,7 +216,7 @@ class LoginEventPipeline : EventPipeline<ReadEvent.LoginReadEvent, WriteEvent.Lo
         val availableBytes = client.readChannel.availableForRead
 
         if (size != availableBytes) {
-            logger.info("Bad session. Client=$client Size Read=$size Available bytes=$availableBytes")
+            logger.info { "Bad session. Client=$client Size Read=$size Available bytes=$availableBytes" }
             client.writeResponse(BAD_SESSION_OPCODE)
             return false
         }
@@ -213,7 +224,7 @@ class LoginEventPipeline : EventPipeline<ReadEvent.LoginReadEvent, WriteEvent.Lo
         val majorVersion = client.readChannel.readInt()
 
         if (majorVersion != environment.config.property("game.build.major").getString().toInt()) {
-            logger.info("Client outdated. Client=$client Major Version=$majorVersion")
+            logger.info { "Client outdated. Client=$client Major Version=$majorVersion" }
             client.writeResponse(CLIENT_OUTDATED_OPCODE)
             return false
         }
@@ -221,7 +232,7 @@ class LoginEventPipeline : EventPipeline<ReadEvent.LoginReadEvent, WriteEvent.Lo
         val minorVersion = client.readChannel.readInt()
 
         if (minorVersion != environment.config.property("game.build.minor").getString().toInt()) {
-            logger.info("Client outdated. Client=$client Minor Version=$majorVersion")
+            logger.info { "Client outdated. Client=$client Minor Version=$majorVersion" }
             client.writeResponse(CLIENT_OUTDATED_OPCODE)
             return false
         }
@@ -237,7 +248,7 @@ class LoginEventPipeline : EventPipeline<ReadEvent.LoginReadEvent, WriteEvent.Lo
             0, 3 -> rsaBlock.discard(3)
             2 -> rsaBlock.discard(4)
             else -> {
-                logger.info("Bad Session. Unhandled authentication type=$authenticationType")
+                logger.info { "Bad Session. Unhandled authentication type=$authenticationType" }
                 return false
             }
         }

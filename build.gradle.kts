@@ -1,10 +1,11 @@
-import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
+@Suppress("DSL_SCOPE_VIOLATION")
 plugins {
-    kotlin("jvm")
-    id("com.github.johnrengelman.shadow")
     application
+    alias(deps.plugins.jvm)
+    alias(deps.plugins.serialization)
+    alias(deps.plugins.shadowjar)
 }
 
 group = "com.runetopic.xlite"
@@ -19,6 +20,8 @@ dependencies {
     implementation(deps.bundles.ktor)
     implementation(deps.bundles.koin)
     implementation(deps.bundles.runetopic)
+    implementation(deps.bundles.logger)
+    implementation(deps.kotlinx.serialization.json)
 }
 
 with(tasks) {
@@ -32,13 +35,9 @@ with(tasks) {
         kotlinOptions.freeCompilerArgs = listOf(
             "-Xopt-in=kotlinx.coroutines.ExperimentalCoroutinesApi",
             "-Xopt-in=kotlin.time.ExperimentalTime",
-            "-Xopt-in=io.ktor.util.InternalAPI"
+            "-Xopt-in=io.ktor.util.InternalAPI",
+            "-Xopt-in=kotlinx.serialization.ExperimentalSerializationApi"
         )
-    }
-    withType<ShadowJar> {
-        manifest {
-            attributes(Pair("Main-Class", "com.runetopic.xlitekt.ApplicationKt"))
-        }
     }
 }
 

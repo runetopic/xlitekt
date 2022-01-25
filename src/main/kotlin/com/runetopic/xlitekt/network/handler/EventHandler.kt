@@ -5,5 +5,5 @@ import com.runetopic.xlitekt.network.event.ReadEvent
 import com.runetopic.xlitekt.network.event.WriteEvent
 
 interface EventHandler<R : ReadEvent, W : WriteEvent> {
-    fun handleEvent(client: Client, event: R): W?
+    suspend fun handleEvent(client: Client, event: R): W?
 }

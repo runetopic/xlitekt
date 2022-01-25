@@ -1,25 +1,31 @@
 package com.runetopic.xlitekt.util.ext
 
-import io.ktor.utils.io.core.ByteReadPacket
+import com.runetopic.cryptography.isaac.ISAAC
+import io.ktor.utils.io.ByteReadChannel
 
-/**
- * @author Jordan Abraham
- */
-fun ByteReadPacket.readStringCp1252NullTerminated(): String = buildString {
-    while (true) {
-        val digit = readByte().toInt()
-        if (digit == 0) break
-        append(digit.toChar())
+suspend fun ByteReadChannel.readPacketOpcode(isaac: ISAAC): Int {
+    var opcode = -1
+    if (availableForRead > 0) {
+        opcode = (0xff and (readByte().toInt() and 0xff) - isaac.getNext())
+    }
+    if (opcode > Byte.MAX_VALUE) {
+        if (availableForRead > 0) {
+            opcode = (opcode - (Byte.MAX_VALUE + 1) shl 8) + ((readByte().toInt() and 0xff) - isaac.getNext())
+        }
+    }
+    return opcode
+}
+
+suspend fun ByteReadChannel.readPacketSize(input: Int): Int {
+    return when (input) {
+        -1, -2 -> {
+            val bytes = if (input == -1) Byte.SIZE_BYTES else Short.SIZE_BYTES
+            when (input) {
+                -1 -> if (availableForRead >= bytes) readByte().toInt() and 0xff else availableForRead
+                -2 -> if (availableForRead >= bytes) readShort().toInt() and 0xffff else availableForRead
+                else -> throw IllegalStateException("Input dynamic packet size must be either -1 or -2.")
+            }
+        }
+        else -> input
     }
 }
-
-fun ByteReadPacket.readStringCp1252NullCircumfixed(): String = buildString {
-    if (readByte().toInt() != 0) throw IllegalArgumentException()
-    return readStringCp1252NullTerminated()
-}
-
-fun ByteReadPacket.readMedium(): Int = ((readByte().toInt() and 0xff) shl 16) + ((readByte().toInt() and 0xff) shl 8) + (readByte().toInt() and 0xff)
-
-fun ByteReadPacket.readIntV1(): Int = ((readByte().toInt() and 0xff) shl 8) + (readByte().toInt() and 0xff) + ((readByte().toInt() and 0xff) shl 24) + ((readByte().toInt() and 0xff) shl 16)
-
-fun ByteReadPacket.readIntV2(): Int = ((readByte().toInt() and 0xff) shl 16) + ((readByte().toInt() and 0xff) shl 24) + (readByte().toInt() and 0xff) + ((readByte().toInt() and 0xff) shl 8)

@@ -7,10 +7,9 @@ import com.runetopic.xlitekt.network.event.WriteEvent
 /**
  * @author Jordan Abraham
  */
-class GameEventHandler : EventHandler<ReadEvent.GameReadEvent, WriteEvent.GameWriteEvent> {
-
-    override fun handleEvent(client: Client, event: ReadEvent.GameReadEvent): WriteEvent.GameWriteEvent {
-        println("Handle packet.")
-        return WriteEvent.GameWriteEvent(event.opcode)
+open class GameEventHandler : EventHandler<ReadEvent.GameReadEvent, WriteEvent.GameWriteEvent> {
+    override suspend fun handleEvent(client: Client, event: ReadEvent.GameReadEvent): WriteEvent.GameWriteEvent? {
+        client.readPacket(event.opcode, event.packet)
+        return null
     }
 }

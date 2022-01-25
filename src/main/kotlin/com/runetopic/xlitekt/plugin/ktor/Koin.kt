@@ -1,9 +1,9 @@
 package com.runetopic.xlitekt.plugin.ktor
 
 import com.runetopic.xlitekt.cache.cacheModule
+import com.runetopic.xlitekt.game.gameModule
 import com.runetopic.xlitekt.network.networkModule
 import io.ktor.application.Application
-import io.ktor.application.log
 import org.koin.core.parameter.ParametersDefinition
 import org.koin.core.qualifier.Qualifier
 import org.koin.dsl.module
@@ -16,9 +16,9 @@ import org.koin.mp.KoinPlatformTools
 fun Application.installKoin() {
     modules(
         module { single { this@installKoin.environment } },
-        module { single { this@installKoin.log } },
         cacheModule,
-        networkModule
+        networkModule,
+        gameModule
     )
 }
 
