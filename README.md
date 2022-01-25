@@ -49,7 +49,7 @@ ktor {
 **Configuration for cache related properties can be found in the ```cache``` block.**
 ```shell
 cache {
-  path = "./cache/"
+    path = "./cache/"
 }
 ```
 **Configuration for game related properties. You will need to generate your RSA exponent and modulus, as well as the packet sizes.**
