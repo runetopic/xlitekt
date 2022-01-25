@@ -6,8 +6,7 @@ import com.runetopic.xlitekt.network.packet.write.block.player.kit.BodyPartCompa
 import com.runetopic.xlitekt.network.packet.write.block.player.kit.BodyPartInfo
 import io.ktor.utils.io.core.BytePacketBuilder
 
-class WeaponInfo : BodyPartInfo {
-    override fun index(): Int = 3
+class WeaponInfo : BodyPartInfo(index = 3) {
     override fun equipmentIndex(gender: Render.Appearance.Gender): Int = Equipment.SLOT_WEAPON
     override fun build(builder: BytePacketBuilder, kit: BodyPartCompanion) = builder.writeByte(kit.id.toByte())
 }

@@ -14,9 +14,7 @@ import io.ktor.utils.io.core.buildPacket
 import io.ktor.utils.io.core.readBytes
 import io.ktor.utils.io.core.writeShort
 
-class PlayerAppearanceBlock : RenderingBlock<Player, Render.Appearance> {
-
-    override fun keyPair(): Pair<Int, Int> = Pair(5, 0x1)
+class PlayerAppearanceBlock : RenderingBlock<Player, Render.Appearance>(5, 0x1) {
 
     override fun build(actor: Player, render: Render.Appearance): ByteReadPacket = buildPacket {
         val data = buildPacket {
@@ -49,7 +47,7 @@ class PlayerAppearanceBlock : RenderingBlock<Player, Render.Appearance> {
     }
 
     private fun BytePacketBuilder.writeIdentityKit(render: Render.Appearance) = PlayerIdentityKit.values()
-        .sortedWith(compareBy { it.info.index() })
+        .sortedWith(compareBy { it.info.index })
         .forEach {
             it.info.build(
                 this,

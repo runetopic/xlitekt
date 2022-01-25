@@ -5,7 +5,6 @@ import com.runetopic.xlitekt.game.actor.render.Render
 import com.runetopic.xlitekt.game.tile.withinDistance
 import com.runetopic.xlitekt.game.world.World
 import com.runetopic.xlitekt.network.packet.Packet
-import com.runetopic.xlitekt.network.packet.write.block.RenderingBlock
 import com.runetopic.xlitekt.network.packet.write.block.player.PlayerAppearanceBlock
 import com.runetopic.xlitekt.plugin.ktor.inject
 import com.runetopic.xlitekt.util.ext.BitAccess
@@ -70,9 +69,8 @@ class PlayerInfoPacket(private val player: Player) : Packet {
                 }
                 val other = world.players[index]
                 val adding = shouldAdd(player, other)
-                val active = adding
-                writeBit(active)
-                if (active.not()) {
+                writeBit(adding)
+                if (adding.not()) {
                     skip += skip(player, false, it, nsn)
                     player.viewport.nsnFlags[index] = player.viewport.nsnFlags[index] or 2
                 } else {
@@ -230,10 +228,10 @@ class PlayerInfoPacket(private val player: Player) : Packet {
     }
 
     private fun encodePendingUpdates(other: Player, blocks: BytePacketBuilder) {
-        val updates = other.renderer.pendingUpdates.map { mapToBlock(it) }.sortedWith(compareBy { it.second.keyPair().first }).toMap()
+        val updates = other.renderer.pendingUpdates.map { mapToBlock(it) }.sortedWith(compareBy { it.second.index }).toMap()
         var mask = 0x0
         updates.forEach {
-            mask = mask or it.value.keyPair().second
+            mask = mask or it.value.mask
         }
         if (mask >= 0xFF) {
             mask = mask or 0x10
@@ -242,14 +240,11 @@ class PlayerInfoPacket(private val player: Player) : Packet {
         if (mask >= 0xFF) {
             blocks.writeByte((mask shr 8).toByte())
         }
-        updates.forEach {
-            blocks.writePacket(it.value.build(other, it.key))
-        }
+        updates.forEach { blocks.writePacket(it.value.build(other, it.key)) }
     }
 
-    @Suppress("UNCHECKED_CAST")
     private fun mapToBlock(it: Render) = when (it) {
-        is Render.Appearance -> Pair(it, PlayerAppearanceBlock() as RenderingBlock<Player, Render>)
+        is Render.Appearance -> it to PlayerAppearanceBlock()
         else -> throw RuntimeException()
     }
 

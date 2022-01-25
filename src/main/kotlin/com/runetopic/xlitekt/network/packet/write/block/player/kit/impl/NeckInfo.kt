@@ -6,8 +6,7 @@ import com.runetopic.xlitekt.network.packet.write.block.player.kit.BodyPartCompa
 import com.runetopic.xlitekt.network.packet.write.block.player.kit.BodyPartInfo
 import io.ktor.utils.io.core.BytePacketBuilder
 
-class NeckInfo : BodyPartInfo {
-    override fun index(): Int = 2
+class NeckInfo : BodyPartInfo(index = 7) {
     override fun equipmentIndex(gender: Render.Appearance.Gender): Int = Equipment.SLOT_NECK
     override fun build(builder: BytePacketBuilder, kit: BodyPartCompanion) = builder.writeByte(kit.id.toByte())
 }

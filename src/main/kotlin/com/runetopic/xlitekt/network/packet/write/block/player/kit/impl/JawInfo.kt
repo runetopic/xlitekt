@@ -7,9 +7,7 @@ import com.runetopic.xlitekt.network.packet.write.block.player.kit.BodyPartInfo
 import io.ktor.utils.io.core.BytePacketBuilder
 import io.ktor.utils.io.core.writeShort
 
-class JawInfo : BodyPartInfo {
-    override fun index(): Int = 11
-
+class JawInfo : BodyPartInfo(index = 11) {
     override fun equipmentIndex(gender: Render.Appearance.Gender): Int =
         if (gender === Render.Appearance.Gender.MALE) Equipment.SLOT_HEAD else Equipment.SLOT_CHEST
 
