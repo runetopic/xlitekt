@@ -7,6 +7,9 @@ import org.koin.dsl.module
 val gameModule = module {
     single { loadAllMapSquares() }
     single { World() }
+    single { Game202() }
 }
+
+class Game202() : Game
 
 interface Game
