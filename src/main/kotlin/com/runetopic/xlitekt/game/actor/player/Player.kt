@@ -10,6 +10,7 @@ import com.runetopic.xlitekt.network.packet.MessageGamePacket
 import com.runetopic.xlitekt.network.packet.PlayerInfoPacket
 import com.runetopic.xlitekt.network.packet.RebuildNormalPacket
 import com.runetopic.xlitekt.network.packet.SetMapFlagPacket
+import com.runetopic.xlitekt.network.packet.UpdateStatPacket
 import kotlinx.coroutines.runBlocking
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
@@ -28,6 +29,7 @@ class Player(
         renderer.appearance(Render.Appearance.Gender.MALE, -1, -1, false)
         client.writePacket(MessageGamePacket(0, "Testing messages"))
         client.writePacket(SetMapFlagPacket(255, 255))
+        client.writePacket(UpdateStatPacket(200.0, 2, 2))
         // TODO Just for now loop it here.
         val service = Executors.newScheduledThreadPool(1)
         service.scheduleAtFixedRate({

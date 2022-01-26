@@ -20,7 +20,8 @@ object RegisteredPackets {
         NoTimeoutPacket::class to NoTimeoutPacketAssembler(),
         PlayerInfoPacket::class to PlayerInfoPacketAssembler(),
         RebuildNormalPacket::class to RebuildNormalPacketAssembler(),
-        SetMapFlagPacket::class to SetMapFlagPacketAssembler()
+        SetMapFlagPacket::class to SetMapFlagPacketAssembler(),
+        UpdateStatPacket::class to UpdateStatAssembler()
     )
 
     val disassemblers = setOf(

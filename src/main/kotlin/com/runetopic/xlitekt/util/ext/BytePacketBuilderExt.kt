@@ -25,6 +25,20 @@ fun BytePacketBuilder.writeShortAdd(value: Short) {
     writeByteAdd(value.toByte())
 }
 
+fun BytePacketBuilder.writeIntV1(value: Int) {
+    writeByte((value shr 8).toByte())
+    writeByte(value.toByte())
+    writeByte((value shr 24).toByte())
+    writeByte((value shr 16).toByte())
+}
+
+fun BytePacketBuilder.writeIntV2(value: Int) {
+    writeByte((value shr 16).toByte())
+    writeByte((value shr 24).toByte())
+    writeByte(value.toByte())
+    writeByte((value shr 8).toByte())
+}
+
 fun BytePacketBuilder.withBitAccess(block: BitAccess.() -> Unit) {
     val accessor = BitAccess()
     block.invoke(accessor)
