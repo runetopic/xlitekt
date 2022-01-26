@@ -9,6 +9,10 @@ update: [#202](https://oldschool.runescape.wiki/w/5_January) (Nex)
 The goal behind this project is to provide the community with a powerful, yet simple to use framework that is _heavily_
 documented.
 
+Xlite is currently built by two developers:
+ - [tyler27 (me)](https://github.com/tyler27)
+ - [ultraviolet-jordan](https://github.com/ultraviolet-jordan)
+
 ## Getting Started
 
 Make sure to download the Jan 6th #202 cache version from one of the archives below. We don't push this to github for
