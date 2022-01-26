@@ -26,6 +26,7 @@ object RegisteredPackets {
         UpdateContainerFullPacket::class to UpdateContainerFullPacketAssembler(),
         UpdateRunEnergyPacket::class to UpdateRunEnergyAssembler(),
         UpdateStatPacket::class to UpdateStatAssembler(),
+        UpdatePublicChatStatusPacket::class to UpdatePublicChatStatusPacketAssembler(),
         UpdatePrivateChatStatusPacket::class to UpdatePrivateChatStatusPacketAssembler(),
         UpdateWeightPacket::class to UpdateWeightPacketAssembler()
     )

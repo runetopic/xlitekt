@@ -17,6 +17,7 @@ fun BytePacketBuilder.writeSmart(value: Int) {
     if (value > 128) writeShort(value.toShort()) else writeByte(value.toByte())
 }
 
+fun BytePacketBuilder.writeByteNegate(value: Byte) = writeByte((0 - value).toByte())
 fun BytePacketBuilder.writeByteSubtract(value: Byte) = writeByte((128 - value).toByte())
 fun BytePacketBuilder.writeByteAdd(value: Byte) = writeByte((value + 128).toByte())
 
