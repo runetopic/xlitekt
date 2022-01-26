@@ -7,7 +7,7 @@ import com.runetopic.xlitekt.network.packet.assembler.block.player.kit.BodyPartC
 import com.runetopic.xlitekt.network.packet.assembler.block.player.kit.BodyPartCompanion
 import com.runetopic.xlitekt.network.packet.assembler.block.player.kit.PlayerIdentityKit
 import com.runetopic.xlitekt.util.ext.writeBytesAdd
-import com.runetopic.xlitekt.util.ext.writeString
+import com.runetopic.xlitekt.util.ext.writeStringCp1252NullTerminated
 import io.ktor.utils.io.core.BytePacketBuilder
 import io.ktor.utils.io.core.ByteReadPacket
 import io.ktor.utils.io.core.buildPacket
@@ -24,7 +24,7 @@ class PlayerAppearanceBlock : RenderingBlock<Player, Render.Appearance>(5, 0x1) 
             if (render.transform != -1) writeTransmogrification(render) else writeIdentityKit(render)
             colour(this, render.bodyPartColors.entries)
             animate(render)
-            writeString(actor.displayName)
+            writeStringCp1252NullTerminated(actor.displayName)
             writeByte(126) // Combat level
             writeShort(0) // Total level
             writeByte(0) // Hidden

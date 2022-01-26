@@ -2,14 +2,19 @@ package com.runetopic.xlitekt.util.ext
 
 import io.ktor.utils.io.core.BytePacketBuilder
 import io.ktor.utils.io.core.writeFully
+import io.ktor.utils.io.core.writeShort
 
-fun BytePacketBuilder.writeString(value: String) {
+fun BytePacketBuilder.writeStringCp1252NullTerminated(value: String) {
     value.chars().forEach { writeByte(it.toByte()) }
     writeByte(0)
 }
 
 fun BytePacketBuilder.writeBytesAdd(bytes: ByteArray) {
     bytes.forEach { writeByteAdd(it) }
+}
+
+fun BytePacketBuilder.writeSmart(value: Int) {
+    if (value > 128) writeShort(value.toShort()) else writeByte(value.toByte())
 }
 
 fun BytePacketBuilder.writeByteSubtract(value: Byte) = writeByte((128 - value).toByte())

@@ -18,7 +18,7 @@ class LoginEventHandler : EventHandler<ReadEvent.LoginReadEvent, WriteEvent.Logi
             event.clientKeys.toIntArray().toISAAC(),
             event.serverKeys.toIntArray().toISAAC()
         )
-        val player = Player(client, event.username, event.username)
+        val player = Player(client, event.username)
         client.player = player
         world.players.add(player)
         return WriteEvent.LoginWriteEvent(LOGIN_SUCCESS_OPCODE)
