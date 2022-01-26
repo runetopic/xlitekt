@@ -23,6 +23,7 @@ object RegisteredPackets {
         PlayerInfoPacket::class to PlayerInfoPacketAssembler(),
         RebuildNormalPacket::class to RebuildNormalPacketAssembler(),
         SetMapFlagPacket::class to SetMapFlagPacketAssembler(),
+        SetPlayerOpPacket::class to SetPlayerOpPacketAssembler(),
         UpdateContainerFullPacket::class to UpdateContainerFullPacketAssembler(),
         UpdateRunEnergyPacket::class to UpdateRunEnergyAssembler(),
         UpdateStatPacket::class to UpdateStatAssembler(),

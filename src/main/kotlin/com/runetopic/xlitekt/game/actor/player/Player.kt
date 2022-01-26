@@ -6,15 +6,7 @@ import com.runetopic.xlitekt.game.item.Item
 import com.runetopic.xlitekt.game.map.Viewport
 import com.runetopic.xlitekt.game.tile.Tile
 import com.runetopic.xlitekt.network.client.Client
-import com.runetopic.xlitekt.network.packet.IfOpenTopPacket
-import com.runetopic.xlitekt.network.packet.IfSetColorPacket
-import com.runetopic.xlitekt.network.packet.MessageGamePacket
-import com.runetopic.xlitekt.network.packet.MidiSongPacket
-import com.runetopic.xlitekt.network.packet.PlayerInfoPacket
-import com.runetopic.xlitekt.network.packet.RebuildNormalPacket
-import com.runetopic.xlitekt.network.packet.SetMapFlagPacket
-import com.runetopic.xlitekt.network.packet.UpdateContainerFullPacket
-import com.runetopic.xlitekt.network.packet.UpdateStatPacket
+import com.runetopic.xlitekt.network.packet.*
 import kotlinx.coroutines.runBlocking
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
@@ -37,6 +29,7 @@ class Player(
         client.writePacket(MidiSongPacket(0))
         client.writePacket(IfSetColorPacket(22, 99))
         client.writePacket(UpdateContainerFullPacket(149 shl 16 or 65536, 93, listOf(Item(4151, 1), Item(995, Int.MAX_VALUE))))
+        client.writePacket(SetPlayerOpPacket(false, "Trade", 1))
         // TODO Just for now loop it here.
         val service = Executors.newScheduledThreadPool(1)
         service.scheduleAtFixedRate({
