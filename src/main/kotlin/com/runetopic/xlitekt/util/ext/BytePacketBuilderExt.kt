@@ -12,6 +12,7 @@ fun BytePacketBuilder.writeBytesAdd(bytes: ByteArray) {
     bytes.forEach { writeByteAdd(it) }
 }
 
+fun BytePacketBuilder.writeByteSubtract(value: Byte) = writeByte((128 - value).toByte())
 fun BytePacketBuilder.writeByteAdd(value: Byte) = writeByte((value + 128).toByte())
 
 fun BytePacketBuilder.writeShortAdd(value: Short) {
