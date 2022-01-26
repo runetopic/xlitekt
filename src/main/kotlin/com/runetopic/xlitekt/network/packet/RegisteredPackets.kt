@@ -4,6 +4,7 @@ import com.runetopic.xlitekt.network.packet.assembler.IfCloseSubPacketAssembler
 import com.runetopic.xlitekt.network.packet.assembler.IfMoveSubPacketAssembler
 import com.runetopic.xlitekt.network.packet.assembler.IfOpenSubPacketAssembler
 import com.runetopic.xlitekt.network.packet.assembler.IfOpenTopPacketAssembler
+import com.runetopic.xlitekt.network.packet.assembler.LogoutPacketAssembler
 import com.runetopic.xlitekt.network.packet.assembler.MessageGamePacketAssembler
 import com.runetopic.xlitekt.network.packet.assembler.NoTimeoutPacketAssembler
 import com.runetopic.xlitekt.network.packet.assembler.PlayerInfoPacketAssembler
@@ -22,6 +23,7 @@ object RegisteredPackets {
         IfOpenSubPacket::class to IfOpenSubPacketAssembler(),
         IfMoveSubPacket::class to IfMoveSubPacketAssembler(),
         IfCloseSubPacket::class to IfCloseSubPacketAssembler(),
+        LogoutPacket::class to LogoutPacketAssembler(),
         MessageGamePacket::class to MessageGamePacketAssembler(),
         NoTimeoutPacket::class to NoTimeoutPacketAssembler(),
         PlayerInfoPacket::class to PlayerInfoPacketAssembler(),
