@@ -16,6 +16,7 @@ object RegisteredPackets {
         IfMoveSubPacket::class to IfMoveSubPacketAssembler(),
         IfCloseSubPacket::class to IfCloseSubPacketAssembler(),
         IfSetColorPacket::class to IfSetColorPacketAssembler(),
+        IfSetTextPacket::class to IfSetTextPacketAssembler(),
         LogoutPacket::class to LogoutPacketAssembler(),
         MessageGamePacket::class to MessageGamePacketAssembler(),
         MidiSongPacket::class to MidiSongPacketAssembler(),
