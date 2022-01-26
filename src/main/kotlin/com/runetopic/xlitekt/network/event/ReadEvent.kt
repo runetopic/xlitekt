@@ -16,8 +16,8 @@ sealed class ReadEvent {
 
     data class LoginReadEvent(
         val opcode: Int,
-        val clientKeys: Set<Int>,
-        val serverKeys: Set<Int>,
+        val clientKeys: List<Int>,
+        val serverKeys: List<Int>,
         val username: String,
         val password: String,
         val clientResizeable: Boolean,

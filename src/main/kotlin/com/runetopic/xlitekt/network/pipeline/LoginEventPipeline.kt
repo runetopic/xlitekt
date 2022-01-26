@@ -141,8 +141,8 @@ class LoginEventPipeline : EventPipeline<ReadEvent.LoginReadEvent, WriteEvent.Lo
                 val serverKeys = IntArray(clientKeys.size) { clientKeys[it] + 50 }
                 return ReadEvent.LoginReadEvent(
                     opcode,
-                    clientKeys.toSet(),
-                    serverKeys.toSet(),
+                    clientKeys.toList(),
+                    serverKeys.toList(),
                     username,
                     password,
                     clientResizeable,
