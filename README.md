@@ -7,18 +7,16 @@ XliteKt is an open-source, and forever open-source Kotlin based OSRS Emulator fo
 update: [#202](https://oldschool.runescape.wiki/w/5_January) (Nex)
 
 The goal behind this project is to provide the community with a powerful, yet simple to use framework that is _heavily_
-documented.
+documented. 
 
 Xlite is currently built by two developers:
  - [tyler27 (me)](https://github.com/tyler27)
  - [ultraviolet-jordan](https://github.com/ultraviolet-jordan)
+# Getting Started
+_Make sure to download the Jan 6th #202 cache version from one of the archives below. We don't push this to github for
+obvious reasons._
 
-## Getting Started
-
-Make sure to download the Jan 6th #202 cache version from one of the archives below. We don't push this to github for
-obvious reasons.
-
-**Download a cache from one of the archives:**
+Download a cache from one of the archives:
 
 - [archive.runestats.com](https://archive.runestats.com/osrs/)
 - [archive.openrs2.org](https://archive.openrs2.org/)
@@ -28,12 +26,14 @@ the [application.conf](/src/main/resources/application.conf).
 
 **Generate RSA tokens and update your application.conf file**
 
-This will eventually be a gradle task to generate new RSA keys. For now, you can reference the rune-server thread: [any-revision-enabling-rsa](https://www.rune-server.ee/runescape-development/rs2-server/tutorials/305532-any-revision-enabling-rsa.html)
+_This will eventually be a gradle task to generate new RSA keys. For now, you can reference the rune-server thread: [any-revision-enabling-rsa](https://www.rune-server.ee/runescape-development/rs2-server/tutorials/305532-any-revision-enabling-rsa.html)_
 
-## Application configuration:
+**Download and install the #202 xteas inside of the maps folder in resources.**
+
+You can find this file on the runstats repo, called [xteas.json](https://archive.runestats.com/osrs/xtea/2022-01-19-rev202.json)
+# Application configuration:
 
 _Most everything will be setup and configured already for you around the build #202. So unless you're porting to a recent revision you'll really only need to worry about updating the RSA Keys in the application.conf file._
-
 
 **Configuration for ktor can be found in the ```ktor``` block.**
 ```shell

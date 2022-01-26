@@ -11,7 +11,7 @@ private val logger = InlineLogger()
 
 fun main(args: Array<String>) = commandLineEnvironment(args).start()
 
-fun Application.main() {
+fun Application.module() {
     logger.info { "Starting XliteKt." }
     TimeZone.setDefault(TimeZone.getTimeZone("UTC"))
     installKoin()
