@@ -19,9 +19,9 @@ class PlayerInfoPacketAssembler : PacketAssembler<PlayerInfoPacket>(opcode = 80,
 
     private val world by inject<World>()
 
-    override fun assemblePacket(message: PlayerInfoPacket) = buildPacket {
+    override fun assemblePacket(packet: PlayerInfoPacket) = buildPacket {
         val blocks = buildPacket { }
-        message.player.let {
+        packet.player.let {
             syncHighDefinition(it, this, blocks, true)
             syncHighDefinition(it, this, blocks, false)
             lowDefinition(it, this, blocks, true)

@@ -10,13 +10,13 @@ import io.ktor.utils.io.core.writeShortLittleEndian
 
 class RebuildNormalPacketAssembler : PacketAssembler<RebuildNormalPacket>(opcode = 54, size = -2) {
 
-    override fun assemblePacket(message: RebuildNormalPacket) = buildPacket {
-        if (message.update) {
-            message.viewport.init(this@buildPacket)
+    override fun assemblePacket(packet: RebuildNormalPacket) = buildPacket {
+        if (packet.update) {
+            packet.viewport.init(this@buildPacket)
         }
 
-        val chunkX = message.tile.chunkX
-        val chunkZ = message.tile.chunkZ
+        val chunkX = packet.tile.chunkX
+        val chunkZ = packet.tile.chunkZ
 
         writeShortAdd(chunkX.toShort())
         writeShortLittleEndian(chunkZ.toShort())

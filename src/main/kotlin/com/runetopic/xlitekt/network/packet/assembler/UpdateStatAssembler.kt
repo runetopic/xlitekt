@@ -5,9 +5,9 @@ import com.runetopic.xlitekt.util.ext.writeByteSubtract
 import com.runetopic.xlitekt.util.ext.writeIntV1
 
 class UpdateStatAssembler : PacketAssembler<UpdateStatPacket>(opcode = 34, size = 6) {
-    override fun assemblePacket(message: UpdateStatPacket) = buildPacket {
-        writeByte(message.level.toByte())
-        writeByteSubtract(message.skillId.toByte())
-        writeIntV1(message.xp.toInt())
+    override fun assemblePacket(packet: UpdateStatPacket) = buildPacket {
+        writeByte(packet.level.toByte())
+        writeByteSubtract(packet.skillId.toByte())
+        writeIntV1(packet.xp.toInt())
     }
 }

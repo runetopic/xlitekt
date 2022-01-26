@@ -9,10 +9,10 @@ import com.runetopic.xlitekt.util.ext.writeStringCp1252NullTerminated
  * @author Tyler Telis
  */
 class MessageGamePacketAssembler : PacketAssembler<MessageGamePacket>(opcode = 69, size = -1) {
-    override fun assemblePacket(message: MessageGamePacket) = buildPacket {
-        writeSmart(message.type)
-        writeByte(message.hasPrefix.toByte())
-        if (message.hasPrefix) writeStringCp1252NullTerminated(message.prefix)
-        writeStringCp1252NullTerminated(message.message)
+    override fun assemblePacket(packet: MessageGamePacket) = buildPacket {
+        writeSmart(packet.type)
+        writeByte(packet.hasPrefix.toByte())
+        if (packet.hasPrefix) writeStringCp1252NullTerminated(packet.prefix)
+        writeStringCp1252NullTerminated(packet.message)
     }
 }
