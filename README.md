@@ -3,7 +3,7 @@
 
 # Introduction
 
-XliteKt is a Kotlin based OSRS Emulator for educational purposes. Currently built around the game
+XliteKt is an open-source, and forever open-source Kotlin based OSRS Emulator for educational purposes. Currently built around the game
 update: [#202](https://oldschool.runescape.wiki/w/5_January) (Nex)
 
 The goal behind this project is to provide the community with a powerful, yet simple to use framework that is _heavily_
