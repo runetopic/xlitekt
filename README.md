@@ -99,3 +99,5 @@ Maps are loaded using the xteas provided from Runestar, which follows this forma
 ]
 ```
 
+## Documentation
+https://runetopic.github.io/xlitekt/
