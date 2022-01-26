@@ -1,5 +1,6 @@
 package com.runetopic.xlitekt.network.packet
 
+import com.runetopic.xlitekt.network.packet.assembler.IfCloseSubPacketAssembler
 import com.runetopic.xlitekt.network.packet.assembler.IfMoveSubPacketAssembler
 import com.runetopic.xlitekt.network.packet.assembler.IfOpenSubPacketAssembler
 import com.runetopic.xlitekt.network.packet.assembler.IfOpenTopPacketAssembler
@@ -19,6 +20,7 @@ object RegisteredPackets {
         IfOpenTopPacket::class to IfOpenTopPacketAssembler(),
         IfOpenSubPacket::class to IfOpenSubPacketAssembler(),
         IfMoveSubPacket::class to IfMoveSubPacketAssembler(),
+        IfCloseSubPacket::class to IfCloseSubPacketAssembler(),
         NoTimeoutPacket::class to NoTimeoutPacketAssembler(),
         PlayerInfoPacket::class to PlayerInfoPacketAssembler(),
         RebuildNormalPacket::class to RebuildNormalPacketAssembler(),
