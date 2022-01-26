@@ -24,7 +24,8 @@ object RegisteredPackets {
         RebuildNormalPacket::class to RebuildNormalPacketAssembler(),
         SetMapFlagPacket::class to SetMapFlagPacketAssembler(),
         UpdateContainerFullPacket::class to UpdateContainerFullPacketAssembler(),
-        UpdateStatPacket::class to UpdateStatAssembler()
+        UpdateStatPacket::class to UpdateStatAssembler(),
+        UpdateRunEnergyPacket::class to UpdateRunEnergyAssembler()
     )
 
     val disassemblers = setOf(
