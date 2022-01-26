@@ -10,6 +10,6 @@ class IfOpenSubPacketAssembler : PacketAssembler<IfOpenSubPacket>(opcode = 2, si
     override fun assemblePacket(packet: IfOpenSubPacket) = buildPacket {
         writeShortLittleEndian(packet.interfaceId.toShort())
         writeByteSubtract(packet.isWalkable.toInt().toByte())
-        writeInt(packet.hash)
+        writeInt(packet.toPackedInterface)
     }
 }

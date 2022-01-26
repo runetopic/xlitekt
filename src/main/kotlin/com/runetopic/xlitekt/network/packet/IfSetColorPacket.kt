@@ -1,8 +1,9 @@
 package com.runetopic.xlitekt.network.packet
 
 /**
- * @author Tyler Telis
+ * @author Jordan Abraham
  */
-data class IfCloseSubPacket(
+data class IfSetColorPacket(
     val packedInterface: Int,
+    val color: Int,
 ) : Packet

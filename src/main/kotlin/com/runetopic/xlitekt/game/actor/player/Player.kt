@@ -6,6 +6,7 @@ import com.runetopic.xlitekt.game.map.Viewport
 import com.runetopic.xlitekt.game.tile.Tile
 import com.runetopic.xlitekt.network.client.Client
 import com.runetopic.xlitekt.network.packet.IfOpenTopPacket
+import com.runetopic.xlitekt.network.packet.IfSetColorPacket
 import com.runetopic.xlitekt.network.packet.MessageGamePacket
 import com.runetopic.xlitekt.network.packet.MidiSongPacket
 import com.runetopic.xlitekt.network.packet.PlayerInfoPacket
@@ -32,6 +33,7 @@ class Player(
         client.writePacket(SetMapFlagPacket(255, 255))
         client.writePacket(UpdateStatPacket(200.0, 2, 2))
         client.writePacket(MidiSongPacket(0))
+        client.writePacket(IfSetColorPacket(22, 99))
         // TODO Just for now loop it here.
         val service = Executors.newScheduledThreadPool(1)
         service.scheduleAtFixedRate({
