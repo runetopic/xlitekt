@@ -11,6 +11,7 @@ import com.runetopic.xlitekt.network.packet.handler.PingStatisticsPacketHandler
  */
 object RegisteredPackets {
     val assemblers = mapOf(
+        CamResetPacket::class to CamResetPacketAssembler(),
         IfOpenTopPacket::class to IfOpenTopPacketAssembler(),
         IfOpenSubPacket::class to IfOpenSubPacketAssembler(),
         IfMoveSubPacket::class to IfMoveSubPacketAssembler(),
