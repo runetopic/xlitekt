@@ -10,6 +10,7 @@ import com.runetopic.xlitekt.network.packet.assembler.IfSetColorPacketAssembler
 import com.runetopic.xlitekt.network.packet.assembler.IfSetTextPacketAssembler
 import com.runetopic.xlitekt.network.packet.assembler.MessageGamePacketAssembler
 import com.runetopic.xlitekt.network.packet.assembler.MidiSongPacketAssembler
+import com.runetopic.xlitekt.network.packet.assembler.MiniMapTogglePacketAssembler
 import com.runetopic.xlitekt.network.packet.assembler.NoTimeoutPacketAssembler
 import com.runetopic.xlitekt.network.packet.assembler.PlayerInfoPacketAssembler
 import com.runetopic.xlitekt.network.packet.assembler.RebuildNormalPacketAssembler
@@ -50,6 +51,7 @@ object RegisteredPackets {
         ForceLogoutPacket::class to ForceLogoutPacketAssembler(),
         MessageGamePacket::class to MessageGamePacketAssembler(),
         MidiSongPacket::class to MidiSongPacketAssembler(),
+        MiniMapTogglePacket::class to MiniMapTogglePacketAssembler(),
         NoTimeoutPacket::class to NoTimeoutPacketAssembler(),
         PlayerInfoPacket::class to PlayerInfoPacketAssembler(),
         RebuildNormalPacket::class to RebuildNormalPacketAssembler(),
