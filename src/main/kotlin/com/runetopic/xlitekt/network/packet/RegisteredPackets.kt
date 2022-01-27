@@ -24,7 +24,6 @@ import com.runetopic.xlitekt.network.packet.assembler.UpdateWeightPacketAssemble
 import com.runetopic.xlitekt.network.packet.disassembler.IfButton1PacketDisassembler
 import com.runetopic.xlitekt.network.packet.disassembler.IfButton2PacketDisassembler
 import com.runetopic.xlitekt.network.packet.handler.IfButtonPacketHandler
-import com.runetopic.xlitekt.network.packet.handler.PingStatisticsPacketHandler
 
 /**
  * @author Jordan Abraham
@@ -60,7 +59,6 @@ object RegisteredPackets {
     )
 
     val handlers = mapOf(
-        PingStatisticsPacket::class to PingStatisticsPacketHandler(),
         IfButtonPacket::class to IfButtonPacketHandler()
     )
 }
