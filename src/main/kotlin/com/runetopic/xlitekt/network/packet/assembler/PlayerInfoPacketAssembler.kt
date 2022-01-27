@@ -192,23 +192,23 @@ class PlayerInfoPacketAssembler : PacketAssembler<PlayerInfoPacket>(opcode = 80,
         nsn: Boolean
     ): Int {
         var count = 0
+
         if (local) {
-            (offset + 1 until player.viewport.localIndexesSize)
-                .asSequence()
-                .map { player.viewport.localIndexes[it] }
-                .filter { nsn != (0x1 and player.viewport.nsnFlags[it] != 0) }
-                .map { player.viewport.localPlayers[it] }
-                .takeWhile { shouldRemove(player, it).not() }
-                .takeWhile { (it != null && it.renderer.hasPendingUpdate()).not() }
-                .forEach { _ -> count++ }
+            for (it in offset + 1 until player.viewport.localIndexesSize) {
+                val localIndex = player.viewport.localIndexes[it]
+                if (nsn == (0x1 and player.viewport.nsnFlags[localIndex] != 0)) continue
+                val localPlayer = player.viewport.localPlayers[it]
+                if (shouldRemove(player, localPlayer) || (localPlayer != null && localPlayer.renderer.hasPendingUpdate())) break
+                count++
+            }
         } else {
-            (offset + 1 until player.viewport.externalIndexesSize)
-                .asSequence()
-                .map { player.viewport.externalIndexes[it] }
-                .filter { nsn != (0x1 and player.viewport.nsnFlags[it] == 0) }
-                .map { world.players[it] }
-                .takeWhile { shouldAdd(player, it).not() }
-                .forEach { _ -> count++ }
+            for (it in offset + 1 until player.viewport.externalIndexesSize) {
+                val externalIndex = player.viewport.externalIndexes[it]
+                if (nsn == (0x1 and player.viewport.nsnFlags[externalIndex] == 0)) continue
+                val externalPlayer = world.players[externalIndex]
+                if (shouldAdd(player, externalPlayer)) break
+                count++
+            }
         }
 
         when {

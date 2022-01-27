@@ -33,6 +33,7 @@ import com.runetopic.xlitekt.network.packet.VarpSmallPacket
 import kotlinx.coroutines.runBlocking
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
+import kotlin.time.measureTime
 
 /**
  * @author Jordan Abraham
@@ -88,10 +89,13 @@ class Player(
         // TODO Just for now loop it here.
         val service = Executors.newScheduledThreadPool(1)
         service.scheduleAtFixedRate({
-            runBlocking {
-                client.writePacket(PlayerInfoPacket(this@Player))
-                renderer.clearUpdates()
+            val time = measureTime {
+                runBlocking {
+                    client.writePacket(PlayerInfoPacket(this@Player))
+                    renderer.clearUpdates()
+                }
             }
+            println("Loop took $time to complete.")
         }, 0, 600, TimeUnit.MILLISECONDS)
     }
 }
