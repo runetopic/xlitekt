@@ -32,8 +32,7 @@ class HandshakeEventPipeline : EventPipeline<ReadEvent.HandshakeReadEvent, Write
     }
 
     override suspend fun write(client: Client, event: WriteEvent.HandshakeWriteEvent) {
-        client.writeChannel.writeByte(event.response.toByte())
-        client.writeChannel.flush()
+        client.writeResponse(event.response)
 
         if (event.response != HANDSHAKE_SUCCESS_OPCODE) {
             client.disconnect("Handshake response was not successful. Response was ${event.response}.")

@@ -26,7 +26,6 @@ sealed class ReadEvent {
         val clientResizeable: Boolean,
         val clientWidth: Int,
         val clientHeight: Int,
-        val token: String,
         val clientType: Int
     ) : ReadEvent()
 
