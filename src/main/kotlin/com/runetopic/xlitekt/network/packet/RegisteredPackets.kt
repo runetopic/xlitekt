@@ -27,6 +27,7 @@ import com.runetopic.xlitekt.network.packet.assembler.UpdateRunEnergyAssembler
 import com.runetopic.xlitekt.network.packet.assembler.UpdateStatAssembler
 import com.runetopic.xlitekt.network.packet.assembler.UpdateWeightPacketAssembler
 import com.runetopic.xlitekt.network.packet.assembler.VarpLargePacketAssembler
+import com.runetopic.xlitekt.network.packet.assembler.VarpSmallPacketAssembler
 import com.runetopic.xlitekt.network.packet.disassembler.IfButton10PacketDisassembler
 import com.runetopic.xlitekt.network.packet.disassembler.IfButton1PacketDisassembler
 import com.runetopic.xlitekt.network.packet.disassembler.IfButton2PacketDisassembler
@@ -70,7 +71,8 @@ object RegisteredPackets {
         UpdatePublicChatStatusPacket::class to UpdatePublicChatStatusPacketAssembler(),
         UpdatePrivateChatStatusPacket::class to UpdatePrivateChatStatusPacketAssembler(),
         UpdateWeightPacket::class to UpdateWeightPacketAssembler(),
-        VarpLargePacket::class to VarpLargePacketAssembler()
+        VarpLargePacket::class to VarpLargePacketAssembler(),
+        VarpSmallPacket::class to VarpSmallPacketAssembler()
     )
 
     val disassemblers = setOf(

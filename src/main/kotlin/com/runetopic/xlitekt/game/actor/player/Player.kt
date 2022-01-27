@@ -25,6 +25,7 @@ import com.runetopic.xlitekt.network.packet.UpdateFriendListPacket
 import com.runetopic.xlitekt.network.packet.UpdateRebootTimerPacket
 import com.runetopic.xlitekt.network.packet.UpdateStatPacket
 import com.runetopic.xlitekt.network.packet.VarpLargePacket
+import com.runetopic.xlitekt.network.packet.VarpSmallPacket
 import kotlinx.coroutines.runBlocking
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
@@ -69,7 +70,8 @@ class Player(
         client.writePacket(UpdateFriendListPacket(listOf(Friend("_jordan", true))))
 
         client.writePacket(SoundEffectPacket(20, 2, 0))
-        client.writePacket(VarpLargePacket(10, 200))
+        client.writePacket(VarpLargePacket(10, Byte.MAX_VALUE + 1))
+        client.writePacket(VarpSmallPacket(10, 1))
         client.writePacket(UpdateRebootTimerPacket(10_000))
         client.writePacket(UpdateContainerPartialPacket(149 shl 16 or 65536, 93, listOf(Item(4151, 1), Item(995, 1)), listOf(1)))
         // TODO Just for now loop it here.
