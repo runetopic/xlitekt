@@ -22,6 +22,9 @@ import org.koin.dsl.module
 import java.net.InetSocketAddress
 import java.util.concurrent.Executors
 
+/**
+ * @author Jordan Abraham
+ */
 private val logger = InlineLogger()
 
 val networkModule = module {

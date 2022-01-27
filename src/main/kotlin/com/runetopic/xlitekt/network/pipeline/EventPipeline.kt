@@ -4,6 +4,9 @@ import com.runetopic.xlitekt.network.client.Client
 import com.runetopic.xlitekt.network.event.ReadEvent
 import com.runetopic.xlitekt.network.event.WriteEvent
 
+/**
+ * @author Jordan Abraham
+ */
 interface EventPipeline<R : ReadEvent, W : WriteEvent> {
     suspend fun read(client: Client): R?
     suspend fun write(client: Client, event: W)

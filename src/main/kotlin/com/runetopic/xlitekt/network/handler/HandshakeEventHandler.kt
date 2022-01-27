@@ -10,6 +10,9 @@ import com.runetopic.xlitekt.network.event.WriteEvent
 import com.runetopic.xlitekt.plugin.ktor.inject
 import io.ktor.application.ApplicationEnvironment
 
+/**
+ * @author Jordan Abraham
+ */
 class HandshakeEventHandler : EventHandler<ReadEvent.HandshakeReadEvent, WriteEvent.HandshakeWriteEvent> {
 
     private val environment by inject<ApplicationEnvironment>()

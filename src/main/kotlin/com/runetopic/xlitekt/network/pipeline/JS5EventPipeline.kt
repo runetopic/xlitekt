@@ -12,6 +12,9 @@ import com.runetopic.xlitekt.plugin.ktor.inject
 import io.ktor.application.ApplicationEnvironment
 import kotlinx.coroutines.withTimeout
 
+/**
+ * @author Jordan Abraham
+ */
 class JS5EventPipeline : EventPipeline<ReadEvent.JS5ReadEvent, WriteEvent.JS5WriteEvent> {
 
     private val environment by inject<ApplicationEnvironment>()
