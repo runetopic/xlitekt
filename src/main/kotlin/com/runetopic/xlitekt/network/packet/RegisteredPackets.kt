@@ -16,6 +16,7 @@ import com.runetopic.xlitekt.network.packet.assembler.PlayerInfoPacketAssembler
 import com.runetopic.xlitekt.network.packet.assembler.RebuildNormalPacketAssembler
 import com.runetopic.xlitekt.network.packet.assembler.SetMapFlagPacketAssembler
 import com.runetopic.xlitekt.network.packet.assembler.SetPlayerOpPacketAssembler
+import com.runetopic.xlitekt.network.packet.assembler.SoundEffectPacketAssembler
 import com.runetopic.xlitekt.network.packet.assembler.UpdateContainerFullPacketAssembler
 import com.runetopic.xlitekt.network.packet.assembler.UpdateContainerPartialPacketAssembler
 import com.runetopic.xlitekt.network.packet.assembler.UpdateFriendsListPacketAssembler
@@ -58,6 +59,7 @@ object RegisteredPackets {
         RebuildNormalPacket::class to RebuildNormalPacketAssembler(),
         SetMapFlagPacket::class to SetMapFlagPacketAssembler(),
         SetPlayerOpPacket::class to SetPlayerOpPacketAssembler(),
+        SoundEffectPacket::class to SoundEffectPacketAssembler(),
         UpdateContainerFullPacket::class to UpdateContainerFullPacketAssembler(),
         UpdateContainerPartialPacket::class to UpdateContainerPartialPacketAssembler(),
         UpdateFriendListPacket::class to UpdateFriendsListPacketAssembler(),

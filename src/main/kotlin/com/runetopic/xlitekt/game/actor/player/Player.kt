@@ -51,6 +51,7 @@ class Player(
 
         client.writePacket(UpdateFriendListPacket(listOf(Friend("_jordan", true))))
 
+        client.writePacket(SoundEffectPacket(20, 2, 0))
         client.writePacket(UpdateRebootTimerPacket(10_000))
         client.writePacket(UpdateContainerPartialPacket(149 shl 16 or 65536, 93, listOf(Item(4151, 1), Item(995, 1)), listOf(1)))
         // TODO Just for now loop it here.
