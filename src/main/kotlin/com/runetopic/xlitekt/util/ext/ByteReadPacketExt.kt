@@ -24,6 +24,6 @@ fun ByteReadPacket.readMedium(): Int = (readUByte().toInt() shl 16) + (readUByte
 fun ByteReadPacket.readIntV1(): Int = (readUByte().toInt() shl 8) + readUByte().toInt() + (readUByte().toInt() shl 24) + (readUByte().toInt() shl 16)
 fun ByteReadPacket.readIntV2(): Int = (readUByte().toInt() shl 16) + (readUByte().toInt() shl 24) + readUByte().toInt() + (readUByte().toInt() shl 8)
 
-fun ByteReadPacket.readUByteAdd(): Int = readUByte().toInt() - 128
+fun ByteReadPacket.readUByteSubtract(): Int = readUByte().toInt() - 128
 
-fun ByteReadPacket.readUShortLittleEndianAdd(): Int = readUByteAdd() + (readUByte().toInt() shl 8)
+fun ByteReadPacket.readUShortLittleEndianSubtract(): Int = readUByteSubtract() + (readUByte().toInt() shl 8)
