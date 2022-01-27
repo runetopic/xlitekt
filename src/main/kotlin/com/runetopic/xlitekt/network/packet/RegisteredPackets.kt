@@ -21,6 +21,7 @@ import com.runetopic.xlitekt.network.packet.assembler.UpdatePublicChatStatusPack
 import com.runetopic.xlitekt.network.packet.assembler.UpdateRunEnergyAssembler
 import com.runetopic.xlitekt.network.packet.assembler.UpdateStatAssembler
 import com.runetopic.xlitekt.network.packet.assembler.UpdateWeightPacketAssembler
+import com.runetopic.xlitekt.network.packet.disassembler.IfButton1PacketDisassembler
 import com.runetopic.xlitekt.network.packet.disassembler.IfButton2PacketDisassembler
 import com.runetopic.xlitekt.network.packet.disassembler.PingStatisticsPacketDisassembler
 import com.runetopic.xlitekt.network.packet.handler.IfButtonPacketHandler
@@ -55,6 +56,7 @@ object RegisteredPackets {
     )
 
     val disassemblers = setOf(
+        IfButton1PacketDisassembler(),
         IfButton2PacketDisassembler(),
         PingStatisticsPacketDisassembler(),
     )
