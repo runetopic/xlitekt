@@ -5,6 +5,7 @@ import java.util.concurrent.CopyOnWriteArrayList
 /**
  * @author Tyler Telis
  * @email <xlitersps@gmail.com>
+ * @author Jordan Abraham
  */
 class ActorRenderer {
 

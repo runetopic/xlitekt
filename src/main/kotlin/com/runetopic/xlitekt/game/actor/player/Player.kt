@@ -32,6 +32,9 @@ import kotlinx.coroutines.runBlocking
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
 
+/**
+ * @author Jordan Abraham
+ */
 class Player(
     val client: Client,
     var displayName: String

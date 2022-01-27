@@ -2,6 +2,9 @@ package com.runetopic.xlitekt.network.event
 
 import io.ktor.utils.io.core.ByteReadPacket
 
+/**
+ * @author Jordan Abraham
+ */
 sealed class ReadEvent {
     data class HandshakeReadEvent(
         val opcode: Int,

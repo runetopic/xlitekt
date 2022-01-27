@@ -3,6 +3,9 @@ package com.runetopic.xlitekt.network.event
 import io.ktor.utils.io.core.ByteReadPacket
 import java.nio.ByteBuffer
 
+/**
+ * @author Jordan Abraham
+ */
 sealed class WriteEvent {
     data class HandshakeWriteEvent(
         val opcode: Int,

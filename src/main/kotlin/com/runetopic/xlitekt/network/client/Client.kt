@@ -23,6 +23,9 @@ import io.ktor.utils.io.core.ByteReadPacket
 import kotlinx.coroutines.TimeoutCancellationException
 import java.net.SocketException
 
+/**
+ * @author Jordan Abraham
+ */
 class Client(
     private val socket: Socket,
     val readChannel: ByteReadChannel,

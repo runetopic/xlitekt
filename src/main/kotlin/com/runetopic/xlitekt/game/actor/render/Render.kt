@@ -4,6 +4,9 @@ import com.runetopic.xlitekt.network.packet.assembler.block.player.kit.BodyPart
 import com.runetopic.xlitekt.network.packet.assembler.block.player.kit.BodyPartColor
 import java.util.EnumMap
 
+/**
+ * @author Jordan Abraham
+ */
 sealed class Render {
     data class Animation(
         val animationIds: Set<Int>,

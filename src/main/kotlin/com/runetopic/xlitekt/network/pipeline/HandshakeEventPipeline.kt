@@ -12,6 +12,9 @@ import com.runetopic.xlitekt.plugin.ktor.inject
 import io.ktor.application.ApplicationEnvironment
 import kotlinx.coroutines.withTimeout
 
+/**
+ * @author Jordan Abraham
+ */
 class HandshakeEventPipeline : EventPipeline<ReadEvent.HandshakeReadEvent, WriteEvent.HandshakeWriteEvent> {
 
     private val environment by inject<ApplicationEnvironment>()

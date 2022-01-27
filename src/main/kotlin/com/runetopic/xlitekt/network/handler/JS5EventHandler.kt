@@ -13,6 +13,9 @@ import com.runetopic.xlitekt.network.event.WriteEvent
 import com.runetopic.xlitekt.plugin.ktor.inject
 import java.nio.ByteBuffer
 
+/**
+ * @author Jordan Abraham
+ */
 class JS5EventHandler : EventHandler<ReadEvent.JS5ReadEvent, WriteEvent.JS5WriteEvent> {
 
     private val store by inject<Js5Store>()
