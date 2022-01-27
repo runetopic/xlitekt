@@ -22,8 +22,8 @@ class PlayerInfoPacketAssembler : PacketAssembler<PlayerInfoPacket>(opcode = 80,
     override fun assemblePacket(packet: PlayerInfoPacket) = buildPacket {
         val blocks = buildPacket { }
         packet.player.let {
-            syncHighDefinition(it, this, blocks, true)
-            syncHighDefinition(it, this, blocks, false)
+            highDefinition(it, this, blocks, true)
+            highDefinition(it, this, blocks, false)
             lowDefinition(it, this, blocks, true)
             lowDefinition(it, this, blocks, false)
             writePacket(blocks.build())
@@ -31,7 +31,7 @@ class PlayerInfoPacketAssembler : PacketAssembler<PlayerInfoPacket>(opcode = 80,
         }
     }
 
-    private fun syncHighDefinition(player: Player, builder: BytePacketBuilder, blocks: BytePacketBuilder, nsn: Boolean) {
+    private fun highDefinition(player: Player, builder: BytePacketBuilder, blocks: BytePacketBuilder, nsn: Boolean) {
         var skip = 0
         builder.withBitAccess {
             repeat(player.viewport.localIndexesSize) {
@@ -165,7 +165,7 @@ class PlayerInfoPacketAssembler : PacketAssembler<PlayerInfoPacket>(opcode = 80,
             builder.writeBits(5, (deltaPlane shl 3) + (opcode and 0x7))
         } else {
             builder.writeBits(2, 3)
-            builder.writeBits(18, (deltaZ and 0xFF) + (deltaX and 0xFF shl 8) + (deltaPlane shl 16))
+            builder.writeBits(18, (deltaZ and 0xff) + (deltaX and 0xff shl 8) + (deltaPlane shl 16))
         }
     }
 
