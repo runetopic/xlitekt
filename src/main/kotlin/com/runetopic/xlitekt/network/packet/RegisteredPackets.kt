@@ -10,18 +10,23 @@ import com.runetopic.xlitekt.network.packet.assembler.IfSetColorPacketAssembler
 import com.runetopic.xlitekt.network.packet.assembler.IfSetTextPacketAssembler
 import com.runetopic.xlitekt.network.packet.assembler.MessageGamePacketAssembler
 import com.runetopic.xlitekt.network.packet.assembler.MidiSongPacketAssembler
+import com.runetopic.xlitekt.network.packet.assembler.MiniMapTogglePacketAssembler
 import com.runetopic.xlitekt.network.packet.assembler.NoTimeoutPacketAssembler
 import com.runetopic.xlitekt.network.packet.assembler.PlayerInfoPacketAssembler
 import com.runetopic.xlitekt.network.packet.assembler.RebuildNormalPacketAssembler
 import com.runetopic.xlitekt.network.packet.assembler.SetMapFlagPacketAssembler
 import com.runetopic.xlitekt.network.packet.assembler.SetPlayerOpPacketAssembler
+import com.runetopic.xlitekt.network.packet.assembler.SoundEffectPacketAssembler
 import com.runetopic.xlitekt.network.packet.assembler.UpdateContainerFullPacketAssembler
 import com.runetopic.xlitekt.network.packet.assembler.UpdateContainerPartialPacketAssembler
+import com.runetopic.xlitekt.network.packet.assembler.UpdateFriendsListPacketAssembler
 import com.runetopic.xlitekt.network.packet.assembler.UpdatePrivateChatStatusPacketAssembler
 import com.runetopic.xlitekt.network.packet.assembler.UpdatePublicChatStatusPacketAssembler
+import com.runetopic.xlitekt.network.packet.assembler.UpdateRebootTimerPacketAssembler
 import com.runetopic.xlitekt.network.packet.assembler.UpdateRunEnergyAssembler
 import com.runetopic.xlitekt.network.packet.assembler.UpdateStatAssembler
 import com.runetopic.xlitekt.network.packet.assembler.UpdateWeightPacketAssembler
+import com.runetopic.xlitekt.network.packet.assembler.VarpLargePacketAssembler
 import com.runetopic.xlitekt.network.packet.disassembler.IfButton10PacketDisassembler
 import com.runetopic.xlitekt.network.packet.disassembler.IfButton1PacketDisassembler
 import com.runetopic.xlitekt.network.packet.disassembler.IfButton2PacketDisassembler
@@ -53,18 +58,23 @@ object RegisteredPackets {
         ForceLogoutPacket::class to ForceLogoutPacketAssembler(),
         MessageGamePacket::class to MessageGamePacketAssembler(),
         MidiSongPacket::class to MidiSongPacketAssembler(),
+        MiniMapTogglePacket::class to MiniMapTogglePacketAssembler(),
         NoTimeoutPacket::class to NoTimeoutPacketAssembler(),
         PlayerInfoPacket::class to PlayerInfoPacketAssembler(),
         RebuildNormalPacket::class to RebuildNormalPacketAssembler(),
         SetMapFlagPacket::class to SetMapFlagPacketAssembler(),
         SetPlayerOpPacket::class to SetPlayerOpPacketAssembler(),
+        SoundEffectPacket::class to SoundEffectPacketAssembler(),
         UpdateContainerFullPacket::class to UpdateContainerFullPacketAssembler(),
         UpdateContainerPartialPacket::class to UpdateContainerPartialPacketAssembler(),
+        UpdateFriendListPacket::class to UpdateFriendsListPacketAssembler(),
+        UpdateRebootTimerPacket::class to UpdateRebootTimerPacketAssembler(),
         UpdateRunEnergyPacket::class to UpdateRunEnergyAssembler(),
         UpdateStatPacket::class to UpdateStatAssembler(),
         UpdatePublicChatStatusPacket::class to UpdatePublicChatStatusPacketAssembler(),
         UpdatePrivateChatStatusPacket::class to UpdatePrivateChatStatusPacketAssembler(),
         UpdateWeightPacket::class to UpdateWeightPacketAssembler(),
+        VarpLargePacket::class to VarpLargePacketAssembler()
     )
 
     val disassemblers = setOf(

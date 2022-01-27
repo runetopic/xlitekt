@@ -26,6 +26,11 @@ fun BytePacketBuilder.writeShortAdd(value: Short) {
     writeByteAdd(value.toByte())
 }
 
+fun BytePacketBuilder.writeShortAddLittle(value: Short) {
+    writeByteAdd(value.toByte())
+    writeByte((value.toInt() shr 8).toByte())
+}
+
 fun BytePacketBuilder.writeIntV1(value: Int) {
     writeByte((value shr 8).toByte())
     writeByte(value.toByte())
