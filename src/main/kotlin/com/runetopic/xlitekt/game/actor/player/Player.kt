@@ -18,6 +18,7 @@ import com.runetopic.xlitekt.network.packet.MessageGamePacket
 import com.runetopic.xlitekt.network.packet.MidiSongPacket
 import com.runetopic.xlitekt.network.packet.PlayerInfoPacket
 import com.runetopic.xlitekt.network.packet.RebuildNormalPacket
+import com.runetopic.xlitekt.network.packet.RunClientScriptPacket
 import com.runetopic.xlitekt.network.packet.SetMapFlagPacket
 import com.runetopic.xlitekt.network.packet.SetPlayerOpPacket
 import com.runetopic.xlitekt.network.packet.SoundEffectPacket
@@ -73,6 +74,8 @@ class Player(
         client.writePacket(IfOpenSubPacket(239, 161 shl 16 or 88, true)) // Music Player
 
         client.writePacket(UpdateFriendListPacket(listOf(Friend("_jordan", true))))
+
+        client.writePacket(RunClientScriptPacket(915, listOf(4)))
 
         client.writePacket(HintArrowPacket(HintArrowType.LOCATION, 3220, 3220, 0))
         client.writePacket(SoundEffectPacket(20, 2, 0))

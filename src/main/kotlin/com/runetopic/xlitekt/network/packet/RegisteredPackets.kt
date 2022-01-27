@@ -15,6 +15,7 @@ import com.runetopic.xlitekt.network.packet.assembler.MiniMapTogglePacketAssembl
 import com.runetopic.xlitekt.network.packet.assembler.NoTimeoutPacketAssembler
 import com.runetopic.xlitekt.network.packet.assembler.PlayerInfoPacketAssembler
 import com.runetopic.xlitekt.network.packet.assembler.RebuildNormalPacketAssembler
+import com.runetopic.xlitekt.network.packet.assembler.RunClientScriptPacketAssembler
 import com.runetopic.xlitekt.network.packet.assembler.SetMapFlagPacketAssembler
 import com.runetopic.xlitekt.network.packet.assembler.SetPlayerOpPacketAssembler
 import com.runetopic.xlitekt.network.packet.assembler.SoundEffectPacketAssembler
@@ -65,6 +66,7 @@ object RegisteredPackets {
         NoTimeoutPacket::class to NoTimeoutPacketAssembler(),
         PlayerInfoPacket::class to PlayerInfoPacketAssembler(),
         RebuildNormalPacket::class to RebuildNormalPacketAssembler(),
+        RunClientScriptPacket::class to RunClientScriptPacketAssembler(),
         SetMapFlagPacket::class to SetMapFlagPacketAssembler(),
         SetPlayerOpPacket::class to SetPlayerOpPacketAssembler(),
         SoundEffectPacket::class to SoundEffectPacketAssembler(),
