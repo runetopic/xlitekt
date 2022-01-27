@@ -13,7 +13,7 @@ import com.runetopic.xlitekt.network.packet.HintArrowPacket
 import com.runetopic.xlitekt.network.packet.IfOpenSubPacket
 import com.runetopic.xlitekt.network.packet.IfOpenTopPacket
 import com.runetopic.xlitekt.network.packet.IfSetColorPacket
-import com.runetopic.xlitekt.network.packet.IfSetHiddenPacket
+import com.runetopic.xlitekt.network.packet.IfSetEventsPacket
 import com.runetopic.xlitekt.network.packet.IfSetTextPacket
 import com.runetopic.xlitekt.network.packet.MessageGamePacket
 import com.runetopic.xlitekt.network.packet.MidiSongPacket
@@ -76,6 +76,7 @@ class Player(
 
         client.writePacket(UpdateFriendListPacket(listOf(Friend("_jordan", true))))
 
+        client.writePacket(IfSetEventsPacket(161 shl 16 or 88, 0, 28, 2))
         client.writePacket(RunClientScriptPacket(915, listOf(4)))
 
         client.writePacket(HintArrowPacket(HintArrowType.LOCATION, 3220, 3220, 0))

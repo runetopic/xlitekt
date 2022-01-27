@@ -8,6 +8,7 @@ import com.runetopic.xlitekt.network.packet.assembler.IfMoveSubPacketAssembler
 import com.runetopic.xlitekt.network.packet.assembler.IfOpenSubPacketAssembler
 import com.runetopic.xlitekt.network.packet.assembler.IfOpenTopPacketAssembler
 import com.runetopic.xlitekt.network.packet.assembler.IfSetColorPacketAssembler
+import com.runetopic.xlitekt.network.packet.assembler.IfSetEventsPacketAssembler
 import com.runetopic.xlitekt.network.packet.assembler.IfSetHiddenPacketAssembler
 import com.runetopic.xlitekt.network.packet.assembler.IfSetTextPacketAssembler
 import com.runetopic.xlitekt.network.packet.assembler.MessageGamePacketAssembler
@@ -59,6 +60,7 @@ object RegisteredPackets {
         IfMoveSubPacket::class to IfMoveSubPacketAssembler(),
         IfCloseSubPacket::class to IfCloseSubPacketAssembler(),
         IfSetColorPacket::class to IfSetColorPacketAssembler(),
+        IfSetEventsPacket::class to IfSetEventsPacketAssembler(),
         IfSetHiddenPacket::class to IfSetHiddenPacketAssembler(),
         IfSetTextPacket::class to IfSetTextPacketAssembler(),
         ForceLogoutPacket::class to ForceLogoutPacketAssembler(),
