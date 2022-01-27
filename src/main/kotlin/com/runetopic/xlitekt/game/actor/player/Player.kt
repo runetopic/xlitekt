@@ -48,6 +48,7 @@ class Player(
         client.writePacket(IfOpenSubPacket(216, 161 shl 16 or 87, true)) // Emotes
         client.writePacket(IfOpenSubPacket(239, 161 shl 16 or 88, true)) // Music Player
 
+        client.writePacket(UpdateContainerPartialPacket(149 shl 16 or 65536, 93, listOf(Item(4151, 1), Item(995, 1)), listOf(1)))
         // TODO Just for now loop it here.
         val service = Executors.newScheduledThreadPool(1)
         service.scheduleAtFixedRate({

@@ -27,11 +27,12 @@ object RegisteredPackets {
         SetMapFlagPacket::class to SetMapFlagPacketAssembler(),
         SetPlayerOpPacket::class to SetPlayerOpPacketAssembler(),
         UpdateContainerFullPacket::class to UpdateContainerFullPacketAssembler(),
+        UpdateContainerPartialPacket::class to UpdateContainerPartialPacketAssembler(),
         UpdateRunEnergyPacket::class to UpdateRunEnergyAssembler(),
         UpdateStatPacket::class to UpdateStatAssembler(),
         UpdatePublicChatStatusPacket::class to UpdatePublicChatStatusPacketAssembler(),
         UpdatePrivateChatStatusPacket::class to UpdatePrivateChatStatusPacketAssembler(),
-        UpdateWeightPacket::class to UpdateWeightPacketAssembler()
+        UpdateWeightPacket::class to UpdateWeightPacketAssembler(),
     )
 
     val disassemblers = setOf(
