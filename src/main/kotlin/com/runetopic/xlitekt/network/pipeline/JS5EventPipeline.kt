@@ -1,11 +1,11 @@
 package com.runetopic.xlitekt.network.pipeline
 
 import com.runetopic.xlitekt.network.client.Client
-import com.runetopic.xlitekt.network.client.ClientRequestOpcode.CONNECTION_LOGGED_IN_OPCODE
-import com.runetopic.xlitekt.network.client.ClientRequestOpcode.CONNECTION_LOGGED_OUT_OPCODE
-import com.runetopic.xlitekt.network.client.ClientRequestOpcode.ENCRYPTION_OPCODE
-import com.runetopic.xlitekt.network.client.ClientRequestOpcode.HIGH_PRIORITY_OPCODE
-import com.runetopic.xlitekt.network.client.ClientRequestOpcode.LOW_PRIORITY_OPCODE
+import com.runetopic.xlitekt.network.client.ClientRequestOpcode.JS5_LOGGED_IN_OPCODE
+import com.runetopic.xlitekt.network.client.ClientRequestOpcode.JS5_LOGGED_OUT_OPCODE
+import com.runetopic.xlitekt.network.client.ClientRequestOpcode.JS5_ENCRYPTION_OPCODE
+import com.runetopic.xlitekt.network.client.ClientRequestOpcode.JS5_HIGH_PRIORITY_OPCODE
+import com.runetopic.xlitekt.network.client.ClientRequestOpcode.JS5_LOW_PRIORITY_OPCODE
 import com.runetopic.xlitekt.network.event.ReadEvent
 import com.runetopic.xlitekt.network.event.WriteEvent
 import com.runetopic.xlitekt.plugin.ktor.inject
@@ -28,7 +28,7 @@ class JS5EventPipeline : EventPipeline<ReadEvent.JS5ReadEvent, WriteEvent.JS5Wri
         val indexId = client.readChannel.readByte().toInt() and 0xff
         val groupId = client.readChannel.readShort().toInt() and 0xffff
         return when (opcode) {
-            HIGH_PRIORITY_OPCODE, LOW_PRIORITY_OPCODE, CONNECTION_LOGGED_IN_OPCODE, CONNECTION_LOGGED_OUT_OPCODE, ENCRYPTION_OPCODE -> ReadEvent.JS5ReadEvent(
+            JS5_HIGH_PRIORITY_OPCODE, JS5_LOW_PRIORITY_OPCODE, JS5_LOGGED_IN_OPCODE, JS5_LOGGED_OUT_OPCODE, JS5_ENCRYPTION_OPCODE -> ReadEvent.JS5ReadEvent(
                 opcode,
                 indexId,
                 groupId
