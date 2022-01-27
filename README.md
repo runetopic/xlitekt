@@ -31,7 +31,7 @@ _This will eventually be a gradle task to generate new RSA keys. For now, you ca
 **Download and install the #202 xteas inside of the [map](/src/main/resources/map) folder in resources.**
 
 You can find this file on the runstats repo, called [xteas.json](https://archive.runestats.com/osrs/xtea/2022-01-19-rev202.json)
-# Application configuration:
+# Application configuration
 
 _Most everything will be setup and configured already for you around the build #202. So unless you're porting to a recent revision you'll really only need to worry about updating the RSA Keys in the application.conf file._
 
