@@ -32,7 +32,9 @@ import com.runetopic.xlitekt.network.packet.disassembler.IfButton6PacketDisassem
 import com.runetopic.xlitekt.network.packet.disassembler.IfButton7PacketDisassembler
 import com.runetopic.xlitekt.network.packet.disassembler.IfButton8PacketDisassembler
 import com.runetopic.xlitekt.network.packet.disassembler.IfButton9PacketDisassembler
+import com.runetopic.xlitekt.network.packet.disassembler.OpObj6PacketDisassembler
 import com.runetopic.xlitekt.network.packet.handler.IfButtonPacketHandler
+import com.runetopic.xlitekt.network.packet.handler.OpObjPacketHandler
 
 /**
  * @author Jordan Abraham
@@ -74,9 +76,12 @@ object RegisteredPackets {
         IfButton8PacketDisassembler(),
         IfButton9PacketDisassembler(),
         IfButton10PacketDisassembler(),
+
+        OpObj6PacketDisassembler()
     )
 
     val handlers = mapOf(
-        IfButtonPacket::class to IfButtonPacketHandler()
+        IfButtonPacket::class to IfButtonPacketHandler(),
+        OpObjPacket::class to OpObjPacketHandler()
     )
 }

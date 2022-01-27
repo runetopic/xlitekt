@@ -5,6 +5,9 @@ import io.ktor.utils.io.core.ByteReadPacket
 import io.ktor.utils.io.core.readInt
 import io.ktor.utils.io.core.readUShort
 
+/**
+ * @author Jordan Abraham
+ */
 class IfButton10PacketDisassembler : PacketDisassembler<IfButtonPacket>(opcode = 8, size = 8) {
     override fun disassemblePacket(packet: ByteReadPacket): IfButtonPacket {
         val packedInterface = packet.readInt()
