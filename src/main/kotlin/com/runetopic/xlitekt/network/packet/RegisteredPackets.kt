@@ -25,6 +25,7 @@ import com.runetopic.xlitekt.network.packet.assembler.UpdateWeightPacketAssemble
 import com.runetopic.xlitekt.network.packet.disassembler.IfButton1PacketDisassembler
 import com.runetopic.xlitekt.network.packet.disassembler.IfButton2PacketDisassembler
 import com.runetopic.xlitekt.network.packet.disassembler.IfButton3PacketDisassembler
+import com.runetopic.xlitekt.network.packet.disassembler.IfButton4PacketDisassembler
 import com.runetopic.xlitekt.network.packet.handler.IfButtonPacketHandler
 
 /**
@@ -60,6 +61,7 @@ object RegisteredPackets {
         IfButton1PacketDisassembler(),
         IfButton2PacketDisassembler(),
         IfButton3PacketDisassembler(),
+        IfButton4PacketDisassembler(),
     )
 
     val handlers = mapOf(
