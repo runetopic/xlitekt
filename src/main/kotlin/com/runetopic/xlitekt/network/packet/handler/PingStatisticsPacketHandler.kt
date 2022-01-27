@@ -12,7 +12,7 @@ class PingStatisticsPacketHandler : PacketHandler<PingStatisticsPacket> {
 
     private val logger = InlineLogger()
 
-    override suspend fun handlePacket(player: Player, message: PingStatisticsPacket) {
+    override suspend fun handlePacket(player: Player, packet: PingStatisticsPacket) {
         logger.info { "Handling ping statistics packet decoder." }
         player.client.writePacket(NoTimeoutPacket())
     }

@@ -7,11 +7,16 @@ import com.runetopic.xlitekt.network.packet.IfButtonPacket
 /**
  * @author Jordan Abraham
  */
-class IfButton1PacketHandler : PacketHandler<IfButtonPacket> {
+class IfButtonPacketHandler : PacketHandler<IfButtonPacket> {
 
     private val logger = InlineLogger()
 
-    override suspend fun handlePacket(player: Player, message: IfButtonPacket) {
-        logger.info { "IfButton1 Handler." }
+    override suspend fun handlePacket(player: Player, packet: IfButtonPacket) {
+        val index = packet.index
+        val interfaceId = packet.packedInterface shr 16
+        val childId = packet.packedInterface and 0xffff
+        val slotId = packet.slotId
+        val itemId = packet.itemId
+        logger.info { "Clicked interfaceId=$interfaceId, childId=$childId, slotId=$slotId, itemId=$itemId, index=$index" }
     }
 }

@@ -1,9 +1,29 @@
 package com.runetopic.xlitekt.network.packet
 
-import com.runetopic.xlitekt.network.packet.assembler.* // ktlint-disable no-unused-imports
-import com.runetopic.xlitekt.network.packet.disassembler.IfButton1PacketDisassembler
+import com.runetopic.xlitekt.network.packet.assembler.CamResetPacketAssembler
+import com.runetopic.xlitekt.network.packet.assembler.IfCloseSubPacketAssembler
+import com.runetopic.xlitekt.network.packet.assembler.IfMoveSubPacketAssembler
+import com.runetopic.xlitekt.network.packet.assembler.IfOpenSubPacketAssembler
+import com.runetopic.xlitekt.network.packet.assembler.IfOpenTopPacketAssembler
+import com.runetopic.xlitekt.network.packet.assembler.IfSetColorPacketAssembler
+import com.runetopic.xlitekt.network.packet.assembler.IfSetTextPacketAssembler
+import com.runetopic.xlitekt.network.packet.assembler.LogoutPacketAssembler
+import com.runetopic.xlitekt.network.packet.assembler.MessageGamePacketAssembler
+import com.runetopic.xlitekt.network.packet.assembler.MidiSongPacketAssembler
+import com.runetopic.xlitekt.network.packet.assembler.NoTimeoutPacketAssembler
+import com.runetopic.xlitekt.network.packet.assembler.PlayerInfoPacketAssembler
+import com.runetopic.xlitekt.network.packet.assembler.RebuildNormalPacketAssembler
+import com.runetopic.xlitekt.network.packet.assembler.SetMapFlagPacketAssembler
+import com.runetopic.xlitekt.network.packet.assembler.SetPlayerOpPacketAssembler
+import com.runetopic.xlitekt.network.packet.assembler.UpdateContainerFullPacketAssembler
+import com.runetopic.xlitekt.network.packet.assembler.UpdatePrivateChatStatusPacketAssembler
+import com.runetopic.xlitekt.network.packet.assembler.UpdatePublicChatStatusPacketAssembler
+import com.runetopic.xlitekt.network.packet.assembler.UpdateRunEnergyAssembler
+import com.runetopic.xlitekt.network.packet.assembler.UpdateStatAssembler
+import com.runetopic.xlitekt.network.packet.assembler.UpdateWeightPacketAssembler
+import com.runetopic.xlitekt.network.packet.disassembler.IfButton2PacketDisassembler
 import com.runetopic.xlitekt.network.packet.disassembler.PingStatisticsPacketDisassembler
-import com.runetopic.xlitekt.network.packet.handler.IfButton1PacketHandler
+import com.runetopic.xlitekt.network.packet.handler.IfButtonPacketHandler
 import com.runetopic.xlitekt.network.packet.handler.PingStatisticsPacketHandler
 
 /**
@@ -35,12 +55,12 @@ object RegisteredPackets {
     )
 
     val disassemblers = setOf(
+        IfButton2PacketDisassembler(),
         PingStatisticsPacketDisassembler(),
-        IfButton1PacketDisassembler()
     )
 
     val handlers = mapOf(
         PingStatisticsPacket::class to PingStatisticsPacketHandler(),
-        IfButtonPacket::class to IfButton1PacketHandler()
+        IfButtonPacket::class to IfButtonPacketHandler()
     )
 }
