@@ -2,12 +2,11 @@ package com.runetopic.xlitekt.network.handler
 
 import com.runetopic.cache.store.Js5Store
 import com.runetopic.xlitekt.network.client.Client
-import com.runetopic.xlitekt.network.client.ClientRequestOpcode.JS5_LOGGED_IN_OPCODE
-import com.runetopic.xlitekt.network.client.ClientRequestOpcode.JS5_LOGGED_OUT_OPCODE
 import com.runetopic.xlitekt.network.client.ClientRequestOpcode.JS5_ENCRYPTION_OPCODE
 import com.runetopic.xlitekt.network.client.ClientRequestOpcode.JS5_HIGH_PRIORITY_OPCODE
+import com.runetopic.xlitekt.network.client.ClientRequestOpcode.JS5_LOGGED_IN_OPCODE
+import com.runetopic.xlitekt.network.client.ClientRequestOpcode.JS5_LOGGED_OUT_OPCODE
 import com.runetopic.xlitekt.network.client.ClientRequestOpcode.JS5_LOW_PRIORITY_OPCODE
-import com.runetopic.xlitekt.network.client.ClientResponseOpcode.LOGIN_SUCCESS_OPCODE
 import com.runetopic.xlitekt.network.event.ReadEvent
 import com.runetopic.xlitekt.network.event.WriteEvent
 import com.runetopic.xlitekt.plugin.ktor.inject
@@ -33,7 +32,7 @@ class JS5EventHandler : EventHandler<ReadEvent.JS5ReadEvent, WriteEvent.JS5Write
             }
             JS5_ENCRYPTION_OPCODE -> { WriteEvent.JS5WriteEvent() } // TODO this does need to return something so we can handle the encryption value properly
             JS5_LOGGED_IN_OPCODE, JS5_LOGGED_OUT_OPCODE -> {
-                client.loggedIn = event.opcode == LOGIN_SUCCESS_OPCODE
+                client.loggedIn = event.opcode == JS5_LOGGED_IN_OPCODE
                 client.connectedToJs5 = !client.connectedToJs5
                 WriteEvent.JS5WriteEvent()
             }
