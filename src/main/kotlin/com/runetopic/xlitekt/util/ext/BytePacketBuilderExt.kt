@@ -13,6 +13,12 @@ fun BytePacketBuilder.writeBytesAdd(bytes: ByteArray) {
     bytes.forEach { writeByteAdd(it) }
 }
 
+fun BytePacketBuilder.writeMedium(value: Int) {
+    writeByte((value shr 16).toByte())
+    writeByte((value shr 8).toByte())
+    writeByte(value.toByte())
+}
+
 fun BytePacketBuilder.writeSmart(value: Int) {
     if (value > 128) writeShort(value.toShort()) else writeByte(value.toByte())
 }

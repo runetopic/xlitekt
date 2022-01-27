@@ -1,6 +1,7 @@
 package com.runetopic.xlitekt.game.actor.player
 
 import com.runetopic.xlitekt.game.actor.Actor
+import com.runetopic.xlitekt.game.actor.HintArrowType
 import com.runetopic.xlitekt.game.actor.player.friends.Friend
 import com.runetopic.xlitekt.game.actor.render.Render
 import com.runetopic.xlitekt.game.item.Item
@@ -8,6 +9,7 @@ import com.runetopic.xlitekt.game.map.Viewport
 import com.runetopic.xlitekt.game.tile.Tile
 import com.runetopic.xlitekt.network.client.Client
 import com.runetopic.xlitekt.network.packet.CamResetPacket
+import com.runetopic.xlitekt.network.packet.HintArrowPacket
 import com.runetopic.xlitekt.network.packet.IfOpenSubPacket
 import com.runetopic.xlitekt.network.packet.IfOpenTopPacket
 import com.runetopic.xlitekt.network.packet.IfSetColorPacket
@@ -69,6 +71,7 @@ class Player(
 
         client.writePacket(UpdateFriendListPacket(listOf(Friend("_jordan", true))))
 
+        client.writePacket(HintArrowPacket(HintArrowType.LOCATION, 3220, 3220, 0))
         client.writePacket(SoundEffectPacket(20, 2, 0))
         client.writePacket(VarpLargePacket(10, Byte.MAX_VALUE + 1))
         client.writePacket(VarpSmallPacket(10, 1))

@@ -2,6 +2,7 @@ package com.runetopic.xlitekt.network.packet
 
 import com.runetopic.xlitekt.network.packet.assembler.CamResetPacketAssembler
 import com.runetopic.xlitekt.network.packet.assembler.ForceLogoutPacketAssembler
+import com.runetopic.xlitekt.network.packet.assembler.HintArrowPacketAssembler
 import com.runetopic.xlitekt.network.packet.assembler.IfCloseSubPacketAssembler
 import com.runetopic.xlitekt.network.packet.assembler.IfMoveSubPacketAssembler
 import com.runetopic.xlitekt.network.packet.assembler.IfOpenSubPacketAssembler
@@ -57,6 +58,7 @@ object RegisteredPackets {
         IfSetColorPacket::class to IfSetColorPacketAssembler(),
         IfSetTextPacket::class to IfSetTextPacketAssembler(),
         ForceLogoutPacket::class to ForceLogoutPacketAssembler(),
+        HintArrowPacket::class to HintArrowPacketAssembler(),
         MessageGamePacket::class to MessageGamePacketAssembler(),
         MidiSongPacket::class to MidiSongPacketAssembler(),
         MiniMapTogglePacket::class to MiniMapTogglePacketAssembler(),
