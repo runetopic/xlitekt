@@ -1,7 +1,5 @@
 package com.runetopic.xlitekt.game.actor.render
 
-import java.util.concurrent.CopyOnWriteArrayList
-
 /**
  * @author Tyler Telis
  * @email <xlitersps@gmail.com>
@@ -9,16 +7,16 @@ import java.util.concurrent.CopyOnWriteArrayList
  */
 class ActorRenderer {
 
-    val pendingUpdates = CopyOnWriteArrayList<Render>()
+    val pendingUpdates = mutableListOf<Render>()
 
-    internal fun animate(
-        animationIds: IntArray,
-        speed: Int = 0
+    fun animate(
+        id: Int,
+        delay: Int = 0
     ) {
-        pendingUpdates += Render.Animation(animationIds.toSet(), speed)
+        pendingUpdates += Render.Animation(id, delay)
     }
 
-    internal fun appearance(
+    fun appearance(
         gender: Render.Appearance.Gender,
         headIcon: Int,
         skullIcon: Int,

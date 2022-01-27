@@ -32,7 +32,7 @@ fun BytePacketBuilder.writeShortAdd(value: Short) {
     writeByteAdd(value.toByte())
 }
 
-fun BytePacketBuilder.writeShortAddLittle(value: Short) {
+fun BytePacketBuilder.writeShortLittleEndianAdd(value: Short) {
     writeByteAdd(value.toByte())
     writeByte((value.toInt() shr 8).toByte())
 }

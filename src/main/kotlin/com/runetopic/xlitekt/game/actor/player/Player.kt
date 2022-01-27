@@ -17,7 +17,6 @@ import com.runetopic.xlitekt.network.packet.IfSetEventsPacket
 import com.runetopic.xlitekt.network.packet.IfSetTextPacket
 import com.runetopic.xlitekt.network.packet.MessageGamePacket
 import com.runetopic.xlitekt.network.packet.MidiSongPacket
-import com.runetopic.xlitekt.network.packet.PlayerInfoPacket
 import com.runetopic.xlitekt.network.packet.RebuildNormalPacket
 import com.runetopic.xlitekt.network.packet.RunClientScriptPacket
 import com.runetopic.xlitekt.network.packet.SetMapFlagPacket
@@ -30,10 +29,6 @@ import com.runetopic.xlitekt.network.packet.UpdateRebootTimerPacket
 import com.runetopic.xlitekt.network.packet.UpdateStatPacket
 import com.runetopic.xlitekt.network.packet.VarpLargePacket
 import com.runetopic.xlitekt.network.packet.VarpSmallPacket
-import kotlinx.coroutines.runBlocking
-import java.util.concurrent.Executors
-import java.util.concurrent.TimeUnit
-import kotlin.time.measureTime
 
 /**
  * @author Jordan Abraham
@@ -86,16 +81,5 @@ class Player(
         client.writePacket(VarpSmallPacket(10, 1))
         client.writePacket(UpdateRebootTimerPacket(10_000))
         client.writePacket(UpdateContainerPartialPacket(149 shl 16 or 65536, 93, listOf(Item(4151, 1), Item(995, 1)), listOf(1)))
-        // TODO Just for now loop it here.
-        val service = Executors.newScheduledThreadPool(1)
-        service.scheduleAtFixedRate({
-            val time = measureTime {
-                runBlocking {
-                    client.writePacket(PlayerInfoPacket(this@Player))
-                    renderer.clearUpdates()
-                }
-            }
-            println("Loop took $time to complete.")
-        }, 0, 600, TimeUnit.MILLISECONDS)
     }
 }

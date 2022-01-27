@@ -9,8 +9,8 @@ import java.util.EnumMap
  */
 sealed class Render {
     data class Animation(
-        val animationIds: Set<Int>,
-        val speed: Int
+        val id: Int,
+        val delay: Int
     ) : Render()
 
     data class Appearance(

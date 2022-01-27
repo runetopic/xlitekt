@@ -1,7 +1,9 @@
 package com.runetopic.xlitekt
 
 import com.github.michaelbull.logging.InlineLogger
+import com.runetopic.xlitekt.game.Game
 import com.runetopic.xlitekt.network.awaitOnPort
+import com.runetopic.xlitekt.plugin.ktor.inject
 import com.runetopic.xlitekt.plugin.ktor.installKoin
 import io.ktor.application.Application
 import io.ktor.server.engine.commandLineEnvironment
@@ -15,5 +17,6 @@ fun Application.module() {
     logger.info { "Starting XliteKt." }
     TimeZone.setDefault(TimeZone.getTimeZone("UTC"))
     installKoin()
+    inject<Game>().value.start()
     awaitOnPort(environment.config.property("ktor.deployment.port").getString().toInt())
 }
