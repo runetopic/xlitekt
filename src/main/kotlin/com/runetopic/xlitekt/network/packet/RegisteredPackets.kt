@@ -21,6 +21,7 @@ import com.runetopic.xlitekt.network.packet.assembler.UpdateContainerPartialPack
 import com.runetopic.xlitekt.network.packet.assembler.UpdateFriendsListPacketAssembler
 import com.runetopic.xlitekt.network.packet.assembler.UpdatePrivateChatStatusPacketAssembler
 import com.runetopic.xlitekt.network.packet.assembler.UpdatePublicChatStatusPacketAssembler
+import com.runetopic.xlitekt.network.packet.assembler.UpdateRebootTimerPacketAssembler
 import com.runetopic.xlitekt.network.packet.assembler.UpdateRunEnergyAssembler
 import com.runetopic.xlitekt.network.packet.assembler.UpdateStatAssembler
 import com.runetopic.xlitekt.network.packet.assembler.UpdateWeightPacketAssembler
@@ -60,6 +61,7 @@ object RegisteredPackets {
         UpdateContainerFullPacket::class to UpdateContainerFullPacketAssembler(),
         UpdateContainerPartialPacket::class to UpdateContainerPartialPacketAssembler(),
         UpdateFriendListPacket::class to UpdateFriendsListPacketAssembler(),
+        UpdateRebootTimerPacket::class to UpdateRebootTimerPacketAssembler(),
         UpdateRunEnergyPacket::class to UpdateRunEnergyAssembler(),
         UpdateStatPacket::class to UpdateStatAssembler(),
         UpdatePublicChatStatusPacket::class to UpdatePublicChatStatusPacketAssembler(),
