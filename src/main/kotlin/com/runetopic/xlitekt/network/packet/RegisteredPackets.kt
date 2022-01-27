@@ -23,7 +23,6 @@ import com.runetopic.xlitekt.network.packet.assembler.UpdateStatAssembler
 import com.runetopic.xlitekt.network.packet.assembler.UpdateWeightPacketAssembler
 import com.runetopic.xlitekt.network.packet.disassembler.IfButton1PacketDisassembler
 import com.runetopic.xlitekt.network.packet.disassembler.IfButton2PacketDisassembler
-import com.runetopic.xlitekt.network.packet.disassembler.PingStatisticsPacketDisassembler
 import com.runetopic.xlitekt.network.packet.handler.IfButtonPacketHandler
 import com.runetopic.xlitekt.network.packet.handler.PingStatisticsPacketHandler
 
@@ -58,7 +57,6 @@ object RegisteredPackets {
     val disassemblers = setOf(
         IfButton1PacketDisassembler(),
         IfButton2PacketDisassembler(),
-        PingStatisticsPacketDisassembler(),
     )
 
     val handlers = mapOf(
