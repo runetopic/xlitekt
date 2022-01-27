@@ -75,14 +75,14 @@ game {
 }
 ```
 
-**Configuration related to network.**
+Configuration related to network.
 ```shell
 network {
     timeout = 10000
 }
 ```
 
-### Maps
+# Maps
 Maps are loaded using the xteas provided from Runestar, which follows this format:
 
 ```json
