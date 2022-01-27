@@ -1,6 +1,7 @@
 package com.runetopic.xlitekt.util.ext
 
 import io.ktor.utils.io.core.ByteReadPacket
+import io.ktor.utils.io.core.readUByte
 
 /**
  * @author Jordan Abraham
@@ -18,8 +19,11 @@ fun ByteReadPacket.readStringCp1252NullCircumfixed(): String = buildString {
     return readStringCp1252NullTerminated()
 }
 
-fun ByteReadPacket.readMedium(): Int = ((readByte().toInt() and 0xff) shl 16) + ((readByte().toInt() and 0xff) shl 8) + (readByte().toInt() and 0xff)
+fun ByteReadPacket.readMedium(): Int = (readUByte().toInt() shl 16) + (readUByte().toInt() shl 8) + readUByte().toInt()
 
-fun ByteReadPacket.readIntV1(): Int = ((readByte().toInt() and 0xff) shl 8) + (readByte().toInt() and 0xff) + ((readByte().toInt() and 0xff) shl 24) + ((readByte().toInt() and 0xff) shl 16)
+fun ByteReadPacket.readIntV1(): Int = (readUByte().toInt() shl 8) + readUByte().toInt() + (readUByte().toInt() shl 24) + (readUByte().toInt() shl 16)
+fun ByteReadPacket.readIntV2(): Int = (readUByte().toInt() shl 16) + (readUByte().toInt() shl 24) + readUByte().toInt() + (readUByte().toInt() shl 8)
 
-fun ByteReadPacket.readIntV2(): Int = ((readByte().toInt() and 0xff) shl 16) + ((readByte().toInt() and 0xff) shl 24) + (readByte().toInt() and 0xff) + ((readByte().toInt() and 0xff) shl 8)
+fun ByteReadPacket.readUByteAdd(): Int = readUByte().toInt() - 128
+
+fun ByteReadPacket.readUShortLittleEndianAdd(): Int = readUByteAdd() + (readUByte().toInt() shl 8)
