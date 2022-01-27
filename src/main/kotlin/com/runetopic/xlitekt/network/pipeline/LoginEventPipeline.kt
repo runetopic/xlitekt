@@ -3,8 +3,8 @@ package com.runetopic.xlitekt.network.pipeline
 import com.github.michaelbull.logging.InlineLogger
 import com.runetopic.cache.store.Js5Store
 import com.runetopic.cryptography.fromXTEA
-import com.runetopic.xlitekt.network.NetworkOpcode.LOGIN_NORMAL_OPCODE
 import com.runetopic.xlitekt.network.client.Client
+import com.runetopic.xlitekt.network.client.ClientRequestOpcode.LOGIN_REQUEST_OPCODE
 import com.runetopic.xlitekt.network.client.ClientResponseOpcode.BAD_SESSION_OPCODE
 import com.runetopic.xlitekt.network.client.ClientResponseOpcode.CLIENT_OUTDATED_OPCODE
 import com.runetopic.xlitekt.network.client.ClientResponseOpcode.LOGIN_SUCCESS_OPCODE
@@ -54,7 +54,7 @@ class LoginEventPipeline : EventPipeline<ReadEvent.LoginReadEvent, WriteEvent.Lo
         client.readChannel.readByte() // Unknown byte #2
 
         when (opcode) {
-            LOGIN_NORMAL_OPCODE -> {
+            LOGIN_REQUEST_OPCODE -> {
                 val rsa = ByteArray(client.readChannel.readShort().toInt() and 0xffff)
                 if (client.readChannel.readAvailable(rsa, 0, rsa.size) != rsa.size) {
                     client.writeResponse(BAD_SESSION_OPCODE)

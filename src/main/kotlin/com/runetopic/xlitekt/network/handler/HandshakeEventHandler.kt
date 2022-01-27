@@ -1,8 +1,8 @@
 package com.runetopic.xlitekt.network.handler
 
-import com.runetopic.xlitekt.network.NetworkOpcode.HANDSHAKE_JS5_OPCODE
-import com.runetopic.xlitekt.network.NetworkOpcode.HANDSHAKE_LOGIN_OPCODE
 import com.runetopic.xlitekt.network.client.Client
+import com.runetopic.xlitekt.network.client.ClientRequestOpcode.HANDSHAKE_JS5_OPCODE
+import com.runetopic.xlitekt.network.client.ClientRequestOpcode.HANDSHAKE_LOGIN_OPCODE
 import com.runetopic.xlitekt.network.client.ClientResponseOpcode.CLIENT_OUTDATED_OPCODE
 import com.runetopic.xlitekt.network.client.ClientResponseOpcode.HANDSHAKE_SUCCESS_OPCODE
 import com.runetopic.xlitekt.network.event.ReadEvent
