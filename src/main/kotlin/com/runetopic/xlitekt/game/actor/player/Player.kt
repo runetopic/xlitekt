@@ -33,6 +33,21 @@ class Player(
         client.writePacket(IfSetTextPacket(22, "Hello"))
         client.writePacket(CamResetPacket())
 
+        client.writePacket(IfOpenSubPacket(593, 161 shl 16 or 75, true)) // Combat Options
+        client.writePacket(IfOpenSubPacket(320, 161 shl 16 or 76, true)) // Skills
+        client.writePacket(IfOpenSubPacket(629, 161 shl 16 or 77, true)) // Quests/Etc List
+        client.writePacket(IfOpenSubPacket(149, 161 shl 16 or 78, true)) // Inventory
+        client.writePacket(IfOpenSubPacket(387, 161 shl 16 or 79, true)) // Worn Equipment
+        client.writePacket(IfOpenSubPacket(541, 161 shl 16 or 80, true)) // Prayer
+        client.writePacket(IfOpenSubPacket(218, 161 shl 16 or 81, true)) // Magic
+        client.writePacket(IfOpenSubPacket(7, 161 shl 16 or 82, true)) // Chat-channel
+        client.writePacket(IfOpenSubPacket(429, 161 shl 16 or 84, true)) // Friends
+        client.writePacket(IfOpenSubPacket(671, 161 shl 16 or 83, true)) // Account Management
+        client.writePacket(IfOpenSubPacket(182, 161 shl 16 or 85, true)) // Logout
+        client.writePacket(IfOpenSubPacket(116, 161 shl 16 or 86, true)) // Options
+        client.writePacket(IfOpenSubPacket(216, 161 shl 16 or 87, true)) // Emotes
+        client.writePacket(IfOpenSubPacket(239, 161 shl 16 or 88, true)) // Music Player
+
         // TODO Just for now loop it here.
         val service = Executors.newScheduledThreadPool(1)
         service.scheduleAtFixedRate({

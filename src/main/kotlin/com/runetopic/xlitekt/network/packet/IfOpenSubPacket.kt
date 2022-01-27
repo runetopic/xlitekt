@@ -6,5 +6,5 @@ package com.runetopic.xlitekt.network.packet
 data class IfOpenSubPacket(
     val interfaceId: Int,
     val toPackedInterface: Int,
-    val isWalkable: Boolean
+    val alwaysOpen: Boolean
 ) : Packet

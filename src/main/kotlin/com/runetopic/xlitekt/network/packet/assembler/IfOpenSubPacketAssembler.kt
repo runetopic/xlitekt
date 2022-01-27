@@ -9,7 +9,7 @@ import io.ktor.utils.io.core.writeShortLittleEndian
 class IfOpenSubPacketAssembler : PacketAssembler<IfOpenSubPacket>(opcode = 2, size = 7) {
     override fun assemblePacket(packet: IfOpenSubPacket) = buildPacket {
         writeShortLittleEndian(packet.interfaceId.toShort())
-        writeByteSubtract(packet.isWalkable.toInt().toByte())
+        writeByteSubtract(packet.alwaysOpen.toInt().toByte())
         writeInt(packet.toPackedInterface)
     }
 }
