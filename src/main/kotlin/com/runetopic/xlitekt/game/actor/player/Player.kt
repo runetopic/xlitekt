@@ -13,6 +13,7 @@ import com.runetopic.xlitekt.network.packet.HintArrowPacket
 import com.runetopic.xlitekt.network.packet.IfOpenSubPacket
 import com.runetopic.xlitekt.network.packet.IfOpenTopPacket
 import com.runetopic.xlitekt.network.packet.IfSetColorPacket
+import com.runetopic.xlitekt.network.packet.IfSetHiddenPacket
 import com.runetopic.xlitekt.network.packet.IfSetTextPacket
 import com.runetopic.xlitekt.network.packet.MessageGamePacket
 import com.runetopic.xlitekt.network.packet.MidiSongPacket
