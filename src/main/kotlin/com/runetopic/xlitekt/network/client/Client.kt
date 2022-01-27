@@ -94,10 +94,10 @@ class Client(
 
     suspend fun readPacket(opcode: Int, packet: ByteReadPacket) {
         val player = player ?: return disconnect("Player is not established when attempting to read and handle packet. Opcode was $opcode.")
-        val decoder = disassemblers.firstOrNull { it.opcode == opcode } ?: return logger.info { "Unhandled packet opcode when looking for decoder. Opcode was $opcode." }
-        val message = decoder.disassemblePacket(packet)
-        val handler = handlers[message::class] ?: return logger.info { "Unhandled packet opcode found when looking for handler. Opcode was $opcode." }
-        handler.handlePacket(player, message)
+        val disassembler = disassemblers.firstOrNull { it.opcode == opcode } ?: return logger.info { "Unhandled packet opcode when looking for decoder. Opcode was $opcode." }
+        val disassembledPacket = disassembler.disassemblePacket(packet)
+        val handler = handlers[disassembledPacket::class] ?: return logger.info { "Unhandled packet opcode found when looking for handler. Opcode was $opcode." }
+        handler.handlePacket(player, disassembledPacket)
     }
 
     @Suppress("UNCHECKED_CAST")

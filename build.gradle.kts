@@ -36,7 +36,8 @@ with(tasks) {
             "-Xopt-in=kotlinx.coroutines.ExperimentalCoroutinesApi",
             "-Xopt-in=kotlin.time.ExperimentalTime",
             "-Xopt-in=io.ktor.util.InternalAPI",
-            "-Xopt-in=kotlinx.serialization.ExperimentalSerializationApi"
+            "-Xopt-in=kotlinx.serialization.ExperimentalSerializationApi",
+            "-Xopt-in=kotlin.ExperimentalUnsignedTypes"
         )
     }
 }
