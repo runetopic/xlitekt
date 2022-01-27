@@ -36,6 +36,7 @@ class LoginEventPipeline : EventPipeline<ReadEvent.LoginReadEvent, WriteEvent.Lo
     private val logger = InlineLogger()
     private val store by inject<Js5Store>()
     private val environment by inject<ApplicationEnvironment>()
+    private val token = environment.config.property("game.build.token").getString()
     private val timeout = environment.config.property("network.timeout").getString().toLong()
 
     override suspend fun read(client: Client): ReadEvent.LoginReadEvent? {
@@ -78,12 +79,13 @@ class LoginEventPipeline : EventPipeline<ReadEvent.LoginReadEvent, WriteEvent.Lo
                 val clientSeed = rsaBlock.readLong()
 
                 if (clientSeed != client.seed) {
-                    client.writeResponse(BAD_SESSION_OPCODE)
                     logger.info { "Bad Session. Client/Server seed miss-match. ClientSeed=$clientSeed Seed=${client.seed}" }
+                    client.writeResponse(BAD_SESSION_OPCODE)
                     return null
                 }
 
                 if (!isValidAuthenticationType(rsaBlock)) {
+                    logger.info { "Bad Session. Authentication type is not valid." }
                     client.writeResponse(BAD_SESSION_OPCODE)
                     return null
                 }
@@ -99,7 +101,14 @@ class LoginEventPipeline : EventPipeline<ReadEvent.LoginReadEvent, WriteEvent.Lo
                 val clientWidth = xteaBlock.readShort().toInt() and 0xffff
                 val clientHeight = xteaBlock.readShort().toInt() and 0xffff
                 xteaBlock.discard(24)
+
                 val token = xteaBlock.readStringCp1252NullTerminated()
+                if (!isValidToken(token)) {
+                    logger.info { "Bad Session. Gamepack token is not valid. Token was $token." }
+                    client.writeResponse(BAD_SESSION_OPCODE)
+                    return null
+                }
+
                 xteaBlock.readInt() // Unknown Int #1
                 readMachineInformation(xteaBlock)
                 val clientType = xteaBlock.readByte().toInt() and 0xff
@@ -134,11 +143,13 @@ class LoginEventPipeline : EventPipeline<ReadEvent.LoginReadEvent, WriteEvent.Lo
                 clientCRCs[16] = cacheCRCs[16] // This is -1 from the client.
 
                 if (!isValidCacheCRCs(clientCRCs)) {
+                    logger.info { "Bad Session. Client and cache crc are mismatched." }
                     client.writeResponse(CLIENT_OUTDATED_OPCODE)
                     return null
                 }
 
                 val serverKeys = IntArray(clientKeys.size) { clientKeys[it] + 50 }
+
                 return ReadEvent.LoginReadEvent(
                     opcode,
                     clientKeys.toList(),
@@ -148,7 +159,6 @@ class LoginEventPipeline : EventPipeline<ReadEvent.LoginReadEvent, WriteEvent.Lo
                     clientResizeable,
                     clientWidth,
                     clientHeight,
-                    token,
                     clientType
                 )
             }
@@ -254,6 +264,8 @@ class LoginEventPipeline : EventPipeline<ReadEvent.LoginReadEvent, WriteEvent.Lo
         }
         return true
     }
+
+    private fun isValidToken(token: String): Boolean = this.token == token
 
     private fun isValidCacheCRCs(clientCRCs: IntArray): Boolean = IntArray(21) { store.index(it).crc }.contentEquals(clientCRCs)
 }
