@@ -7,7 +7,24 @@ import com.runetopic.xlitekt.game.item.Item
 import com.runetopic.xlitekt.game.map.Viewport
 import com.runetopic.xlitekt.game.tile.Tile
 import com.runetopic.xlitekt.network.client.Client
-import com.runetopic.xlitekt.network.packet.*
+import com.runetopic.xlitekt.network.packet.CamResetPacket
+import com.runetopic.xlitekt.network.packet.IfOpenSubPacket
+import com.runetopic.xlitekt.network.packet.IfOpenTopPacket
+import com.runetopic.xlitekt.network.packet.IfSetColorPacket
+import com.runetopic.xlitekt.network.packet.IfSetTextPacket
+import com.runetopic.xlitekt.network.packet.MessageGamePacket
+import com.runetopic.xlitekt.network.packet.MidiSongPacket
+import com.runetopic.xlitekt.network.packet.PlayerInfoPacket
+import com.runetopic.xlitekt.network.packet.RebuildNormalPacket
+import com.runetopic.xlitekt.network.packet.SetMapFlagPacket
+import com.runetopic.xlitekt.network.packet.SetPlayerOpPacket
+import com.runetopic.xlitekt.network.packet.SoundEffectPacket
+import com.runetopic.xlitekt.network.packet.UpdateContainerFullPacket
+import com.runetopic.xlitekt.network.packet.UpdateContainerPartialPacket
+import com.runetopic.xlitekt.network.packet.UpdateFriendListPacket
+import com.runetopic.xlitekt.network.packet.UpdateRebootTimerPacket
+import com.runetopic.xlitekt.network.packet.UpdateStatPacket
+import com.runetopic.xlitekt.network.packet.VarpLargePacket
 import kotlinx.coroutines.runBlocking
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
@@ -52,6 +69,7 @@ class Player(
         client.writePacket(UpdateFriendListPacket(listOf(Friend("_jordan", true))))
 
         client.writePacket(SoundEffectPacket(20, 2, 0))
+        client.writePacket(VarpLargePacket(10, 200))
         client.writePacket(UpdateRebootTimerPacket(10_000))
         client.writePacket(UpdateContainerPartialPacket(149 shl 16 or 65536, 93, listOf(Item(4151, 1), Item(995, 1)), listOf(1)))
         // TODO Just for now loop it here.
