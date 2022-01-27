@@ -1,13 +1,13 @@
 package com.runetopic.xlitekt.network.packet
 
 import com.runetopic.xlitekt.network.packet.assembler.CamResetPacketAssembler
+import com.runetopic.xlitekt.network.packet.assembler.ForceLogoutPacketAssembler
 import com.runetopic.xlitekt.network.packet.assembler.IfCloseSubPacketAssembler
 import com.runetopic.xlitekt.network.packet.assembler.IfMoveSubPacketAssembler
 import com.runetopic.xlitekt.network.packet.assembler.IfOpenSubPacketAssembler
 import com.runetopic.xlitekt.network.packet.assembler.IfOpenTopPacketAssembler
 import com.runetopic.xlitekt.network.packet.assembler.IfSetColorPacketAssembler
 import com.runetopic.xlitekt.network.packet.assembler.IfSetTextPacketAssembler
-import com.runetopic.xlitekt.network.packet.assembler.LogoutPacketAssembler
 import com.runetopic.xlitekt.network.packet.assembler.MessageGamePacketAssembler
 import com.runetopic.xlitekt.network.packet.assembler.MidiSongPacketAssembler
 import com.runetopic.xlitekt.network.packet.assembler.NoTimeoutPacketAssembler
@@ -16,6 +16,7 @@ import com.runetopic.xlitekt.network.packet.assembler.RebuildNormalPacketAssembl
 import com.runetopic.xlitekt.network.packet.assembler.SetMapFlagPacketAssembler
 import com.runetopic.xlitekt.network.packet.assembler.SetPlayerOpPacketAssembler
 import com.runetopic.xlitekt.network.packet.assembler.UpdateContainerFullPacketAssembler
+import com.runetopic.xlitekt.network.packet.assembler.UpdateContainerPartialPacketAssembler
 import com.runetopic.xlitekt.network.packet.assembler.UpdatePrivateChatStatusPacketAssembler
 import com.runetopic.xlitekt.network.packet.assembler.UpdatePublicChatStatusPacketAssembler
 import com.runetopic.xlitekt.network.packet.assembler.UpdateRunEnergyAssembler
@@ -23,6 +24,7 @@ import com.runetopic.xlitekt.network.packet.assembler.UpdateStatAssembler
 import com.runetopic.xlitekt.network.packet.assembler.UpdateWeightPacketAssembler
 import com.runetopic.xlitekt.network.packet.disassembler.IfButton1PacketDisassembler
 import com.runetopic.xlitekt.network.packet.disassembler.IfButton2PacketDisassembler
+import com.runetopic.xlitekt.network.packet.disassembler.IfButton3PacketDisassembler
 import com.runetopic.xlitekt.network.packet.handler.IfButtonPacketHandler
 
 /**
@@ -57,6 +59,7 @@ object RegisteredPackets {
     val disassemblers = setOf(
         IfButton1PacketDisassembler(),
         IfButton2PacketDisassembler(),
+        IfButton3PacketDisassembler(),
     )
 
     val handlers = mapOf(
