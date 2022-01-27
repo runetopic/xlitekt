@@ -28,7 +28,7 @@ the [application.conf](/src/main/resources/application.conf).
 
 _This will eventually be a gradle task to generate new RSA keys. For now, you can reference the rune-server thread: [any-revision-enabling-rsa](https://www.rune-server.ee/runescape-development/rs2-server/tutorials/305532-any-revision-enabling-rsa.html)_
 
-**Download and install the #202 xteas inside of the maps folder in resources.**
+**Download and install the #202 xteas inside of the [map](/src/main/resources/map) folder in resources.**
 
 You can find this file on the runstats repo, called [xteas.json](https://archive.runestats.com/osrs/xtea/2022-01-19-rev202.json)
 # Application configuration:
@@ -82,7 +82,7 @@ network {
 }
 ```
 
-### Loading Xtea Keys
+### Maps
 Maps are loaded using the xteas provided from Runestar, which follows this format:
 
 ```json
