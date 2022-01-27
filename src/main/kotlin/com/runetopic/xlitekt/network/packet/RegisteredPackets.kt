@@ -28,6 +28,7 @@ object RegisteredPackets {
         SetPlayerOpPacket::class to SetPlayerOpPacketAssembler(),
         UpdateContainerFullPacket::class to UpdateContainerFullPacketAssembler(),
         UpdateContainerPartialPacket::class to UpdateContainerPartialPacketAssembler(),
+        UpdateFriendListPacket::class to UpdateFriendsListPacketAssembler(),
         UpdateRunEnergyPacket::class to UpdateRunEnergyAssembler(),
         UpdateStatPacket::class to UpdateStatAssembler(),
         UpdatePublicChatStatusPacket::class to UpdatePublicChatStatusPacketAssembler(),

@@ -1,6 +1,7 @@
 package com.runetopic.xlitekt.game.actor.player
 
 import com.runetopic.xlitekt.game.actor.Actor
+import com.runetopic.xlitekt.game.actor.player.friends.Friend
 import com.runetopic.xlitekt.game.actor.render.Render
 import com.runetopic.xlitekt.game.item.Item
 import com.runetopic.xlitekt.game.map.Viewport
@@ -47,6 +48,8 @@ class Player(
         client.writePacket(IfOpenSubPacket(116, 161 shl 16 or 86, true)) // Options
         client.writePacket(IfOpenSubPacket(216, 161 shl 16 or 87, true)) // Emotes
         client.writePacket(IfOpenSubPacket(239, 161 shl 16 or 88, true)) // Music Player
+
+        client.writePacket(UpdateFriendListPacket(listOf(Friend("_jordan", true))))
 
         client.writePacket(UpdateContainerPartialPacket(149 shl 16 or 65536, 93, listOf(Item(4151, 1), Item(995, 1)), listOf(1)))
         // TODO Just for now loop it here.
