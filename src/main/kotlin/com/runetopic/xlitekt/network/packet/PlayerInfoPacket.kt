@@ -4,6 +4,7 @@ import com.runetopic.xlitekt.game.actor.player.Player
 
 /**
  * @author Jordan Abraham
+ * @author Tyler Telis
  */
 data class PlayerInfoPacket(
     val player: Player

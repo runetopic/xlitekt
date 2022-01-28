@@ -5,7 +5,6 @@ import com.runetopic.xlitekt.game.actor.HintArrowType
 import com.runetopic.xlitekt.game.actor.player.friends.Friend
 import com.runetopic.xlitekt.game.actor.render.Render
 import com.runetopic.xlitekt.game.item.Item
-import com.runetopic.xlitekt.game.map.Viewport
 import com.runetopic.xlitekt.game.tile.Tile
 import com.runetopic.xlitekt.game.world.World
 import com.runetopic.xlitekt.network.client.Client
@@ -34,13 +33,14 @@ import com.runetopic.xlitekt.plugin.ktor.inject
 
 /**
  * @author Jordan Abraham
+ * @author Tyler Telis
  */
 class Player(
     val client: Client,
-    var displayName: String
+    val username: String
 ) : Actor(Tile(3222, 3222)) {
     var rights = 2
-    var viewport = Viewport(this)
+    val viewport = Viewport(this)
 
     suspend fun login() {
         this.previousTile = this.tile

@@ -1,6 +1,6 @@
 package com.runetopic.xlitekt.network.packet
 
-import com.runetopic.xlitekt.game.map.Viewport
+import com.runetopic.xlitekt.game.actor.player.Viewport
 import com.runetopic.xlitekt.game.tile.Tile
 
 /**

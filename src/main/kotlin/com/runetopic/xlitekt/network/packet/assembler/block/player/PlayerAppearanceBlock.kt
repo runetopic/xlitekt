@@ -24,7 +24,7 @@ class PlayerAppearanceBlock : RenderingBlock<Player, Render.Appearance>(5, 0x1) 
             if (render.transform != -1) writeTransmogrification(render) else writeIdentityKit(render)
             colour(this, render.bodyPartColors.entries)
             animate(render)
-            writeStringCp1252NullTerminated(actor.displayName)
+            writeStringCp1252NullTerminated(actor.username)
             writeByte(126) // Combat level
             writeShort(0) // Total level
             writeByte(0) // Hidden

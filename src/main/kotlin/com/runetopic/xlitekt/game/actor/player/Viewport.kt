@@ -1,19 +1,19 @@
-package com.runetopic.xlitekt.game.map
+package com.runetopic.xlitekt.game.actor.player
 
-import com.runetopic.xlitekt.game.actor.player.Player
 import com.runetopic.xlitekt.util.ext.withBitAccess
 import io.ktor.utils.io.core.BytePacketBuilder
 
-data class Viewport(
+class Viewport(
     val player: Player,
-    val nsnFlags: IntArray = IntArray(2048),
-    val coordinates: IntArray = IntArray(2048),
-    val localIndexes: IntArray = IntArray(2048),
-    val externalIndexes: IntArray = IntArray(2048),
-    val localPlayers: Array<Player?> = arrayOfNulls(2048),
-    var localIndexesSize: Int = 0,
-    var externalIndexesSize: Int = 0
 ) {
+    val nsnFlags: IntArray = IntArray(2048)
+    val coordinates: IntArray = IntArray(2048)
+    val localIndexes: IntArray = IntArray(2048)
+    val externalIndexes: IntArray = IntArray(2048)
+    val localPlayers: Array<Player?> = arrayOfNulls(2048)
+    var localIndexesSize: Int = 0
+    var externalIndexesSize: Int = 0
+
     fun init(builder: BytePacketBuilder) = builder.withBitAccess {
         writeBits(30, player.tile.coordinates)
         localPlayers[player.pid] = player
