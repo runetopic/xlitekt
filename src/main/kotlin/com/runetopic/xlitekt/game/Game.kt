@@ -32,7 +32,7 @@ class Game {
                             it.client.writePacket(PlayerInfoPacket(it))
                         }
                         world.value.players.forEach {
-                            it.renderer.clearUpdates()
+                            it.clear()
                         }
                         world.value.players.forEach {
                             it.client.writePacket(NpcInfoPacket(it))

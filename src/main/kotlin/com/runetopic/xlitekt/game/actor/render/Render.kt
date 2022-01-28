@@ -1,5 +1,8 @@
 package com.runetopic.xlitekt.game.actor.render
 
+import com.runetopic.xlitekt.game.actor.Actor
+import com.runetopic.xlitekt.game.actor.HitType
+import com.runetopic.xlitekt.game.tile.Tile
 import com.runetopic.xlitekt.network.packet.assembler.block.player.kit.BodyPart
 import com.runetopic.xlitekt.network.packet.assembler.block.player.kit.BodyPartColor
 import java.util.EnumMap
@@ -17,9 +20,20 @@ sealed class Render {
         val text: String
     ) : Render()
 
+    data class FaceTile(
+        val tile: Tile
+    ) : Render()
+
+    data class HitDamage(
+        val source: Actor?,
+        val type: HitType,
+        val damage: Int,
+        val delay: Int
+    ) : Render()
+
     data class Appearance(
-        val headIcon: Int,
         val gender: Gender = Gender.MALE,
+        val headIcon: Int,
         val skullIcon: Int,
         val transform: Int,
         val hidden: Boolean

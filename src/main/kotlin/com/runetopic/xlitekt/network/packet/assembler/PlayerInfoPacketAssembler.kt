@@ -207,7 +207,7 @@ class PlayerInfoPacketAssembler : PacketAssembler<PlayerInfoPacket>(opcode = 80,
                     val localIndex = it.localIndexes[index]
                     if (nsn == (0x1 and it.nsnFlags[localIndex] != 0)) continue
                     val localPlayer = it.localPlayers[index]
-                    if (shouldRemove(player, localPlayer) || (localPlayer != null && localPlayer.renderer.hasPendingUpdate())) break
+                    if (shouldRemove(player, localPlayer) || (localPlayer != null && localPlayer.hasPendingUpdate())) break
                     count++
                 }
             } else {
@@ -240,8 +240,8 @@ class PlayerInfoPacketAssembler : PacketAssembler<PlayerInfoPacket>(opcode = 80,
     }
 
     private fun encodePendingBlocks(forceOtherUpdate: Boolean, other: Player, blocks: BytePacketBuilder) {
-        if (forceOtherUpdate) other.renderer.appearance(Render.Appearance.Gender.MALE, -1, -1, false)
-        val updates = other.renderer.pendingUpdates.map { mapToBlock(it) }.sortedWith(compareBy { it.second.index }).toMap()
+        if (forceOtherUpdate) other.refreshAppearance(other.appearance)
+        val updates = other.pendingUpdates().map { mapToBlock(it) }.sortedWith(compareBy { it.second.index }).toMap()
         var mask = 0x0
         updates.forEach { mask = mask or it.value.mask }
         if (mask >= 0xff) { mask = mask or 0x10 }
@@ -256,7 +256,7 @@ class PlayerInfoPacketAssembler : PacketAssembler<PlayerInfoPacket>(opcode = 80,
         else -> throw IllegalStateException("Unhandled player block in PlayerInfo. Block was $it")
     }
 
-    private fun shouldUpdate(other: Player?): Boolean = other?.renderer?.hasPendingUpdate() ?: false
+    private fun shouldUpdate(other: Player?): Boolean = other?.hasPendingUpdate() ?: false
     private fun shouldAdd(player: Player, other: Player?): Boolean = (other != null && other != player && other.tile.withinDistance(player))
     private fun shouldRemove(player: Player, other: Player?): Boolean = (other == null || other.tile.withinDistance(player).not() || world.players.contains(other).not())
 }

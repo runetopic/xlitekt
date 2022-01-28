@@ -6,4 +6,7 @@ import com.runetopic.xlitekt.game.tile.Tile
 class NPC(
     val id: Int,
     override var tile: Tile
-) : Actor(tile)
+) : Actor(tile) {
+    override fun totalHitpoints(): Int = 100
+    override fun currentHitpoints(): Int = 100
+}

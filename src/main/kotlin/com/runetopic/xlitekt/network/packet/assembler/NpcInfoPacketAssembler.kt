@@ -6,6 +6,8 @@ import com.runetopic.xlitekt.game.actor.render.Render
 import com.runetopic.xlitekt.game.tile.withinDistance
 import com.runetopic.xlitekt.game.world.World
 import com.runetopic.xlitekt.network.packet.NpcInfoPacket
+import com.runetopic.xlitekt.network.packet.assembler.block.npc.FaceTileBlock
+import com.runetopic.xlitekt.network.packet.assembler.block.npc.HitDamageBlock
 import com.runetopic.xlitekt.network.packet.assembler.block.npc.OverheadChatBlock
 import com.runetopic.xlitekt.plugin.ktor.inject
 import com.runetopic.xlitekt.util.ext.BitAccess
@@ -42,7 +44,7 @@ class NpcInfoPacketAssembler(
                 return@forEach
             }
             val needsWalkUpdate = false
-            val needsUpdate = npc.renderer.hasPendingUpdate()
+            val needsUpdate = npc.hasPendingUpdate()
             writeBits(1, needsUpdate.toInt())
             when {
                 needsWalkUpdate -> {
@@ -70,25 +72,25 @@ class NpcInfoPacketAssembler(
                 if (x < 15) x += 32
                 if (z < 15) z += 32
             }
-            writeBits(1, npc.renderer.hasPendingUpdate().toInt())
+            writeBits(1, npc.hasPendingUpdate().toInt())
             writeBits(3, 512) // TODO orientation
             writeBits(if (extendedViewport) 8 else 5, z)
             writeBits(1, 0) // TODO handle teleporting
             writeBits(14, npc.id)
             writeBits(if (extendedViewport) 8 else 5, x)
             viewport.localNPCs.add(npc)
-            if (npc.renderer.hasPendingUpdate()) writePendingUpdates(npc, blocks)
+            if (npc.hasPendingUpdate()) writePendingUpdates(npc, blocks)
         }
     }
 
-    private fun writePendingUpdates(actor: NPC, blocks: BytePacketBuilder) {
-        val updates = actor.renderer.pendingUpdates.map { mapToBlock(it) }.sortedWith(compareBy { it.second.index }).toMap()
+    private fun writePendingUpdates(npc: NPC, blocks: BytePacketBuilder) {
+        val updates = npc.pendingUpdates().map { mapToBlock(it) }.sortedWith(compareBy { it.second.index }).toMap()
         var mask = 0x0
         updates.forEach { mask = mask or it.value.mask }
         if (mask >= 0xff) { mask = mask or 0x4 }
         blocks.writeByte(mask.toByte())
         if (mask >= 0xff) { blocks.writeByte((mask shr 8).toByte()) }
-        updates.forEach { blocks.writePacket(it.value.build(actor, it.key)) }
+        updates.forEach { blocks.writePacket(it.value.build(npc, it.key)) }
     }
 
     private fun BitAccess.writeNPCSize(viewport: Viewport) = writeBits(8, viewport.localNPCs.size)
@@ -100,6 +102,8 @@ class NpcInfoPacketAssembler(
 
     private fun mapToBlock(it: Render) = when (it) {
         is Render.OverheadChat -> it to OverheadChatBlock()
+        is Render.FaceTile -> it to FaceTileBlock()
+        is Render.HitDamage -> it to HitDamageBlock()
         else -> throw IllegalStateException("Unhandled npc block in NpcInfo. Block was $it")
     }
 

@@ -2,7 +2,6 @@ package com.runetopic.xlitekt.game.actor.player
 
 import com.runetopic.xlitekt.game.actor.Actor
 import com.runetopic.xlitekt.game.actor.HintArrowType
-import com.runetopic.xlitekt.game.actor.npc.NPC
 import com.runetopic.xlitekt.game.actor.player.friends.Friend
 import com.runetopic.xlitekt.game.actor.render.Render
 import com.runetopic.xlitekt.game.item.Item
@@ -42,12 +41,12 @@ class Player(
 ) : Actor(Tile(3222, 3222)) {
     var rights = 2
     val viewport = Viewport(this)
+    var appearance = Render.Appearance(Render.Appearance.Gender.FEMALE, -1, -1, -1, false)
 
     suspend fun login() {
         this.previousTile = this.tile
         client.writePacket(RebuildNormalPacket(viewport, tile, true))
         client.writePacket(IfOpenTopPacket(161))
-        renderer.appearance(Render.Appearance.Gender.MALE, -1, -1, false)
         client.writePacket(MessageGamePacket(0, "Testing messages"))
         client.writePacket(SetMapFlagPacket(255, 255))
         client.writePacket(UpdateStatPacket(200.0, 2, 2))
@@ -84,9 +83,19 @@ class Player(
         client.writePacket(VarpSmallPacket(10, 1))
         client.writePacket(UpdateRebootTimerPacket(10_000))
         client.writePacket(UpdateContainerPartialPacket(149 shl 16 or 65536, 93, listOf(Item(4151, 1), Item(995, 1)), listOf(1)))
+        refreshAppearance()
     }
 
     fun logout() {
         inject<World>().value.players.remove(this)
     }
+
+    // TODO build appearance manager for changing gender and appearance related stuff
+    fun refreshAppearance(appearance: Render.Appearance = this.appearance): Render.Appearance {
+        this.appearance = renderer.appearance(appearance)
+        return this.appearance
+    }
+
+    override fun totalHitpoints(): Int = 100
+    override fun currentHitpoints(): Int = 100
 }

@@ -1,5 +1,9 @@
 package com.runetopic.xlitekt.game.actor.render
 
+import com.runetopic.xlitekt.game.actor.Actor
+import com.runetopic.xlitekt.game.actor.HitType
+import com.runetopic.xlitekt.game.tile.Tile
+
 /**
  * @author Tyler Telis
  * @email <xlitersps@gmail.com>
@@ -13,6 +17,16 @@ class ActorRenderer {
         pendingUpdates += Render.OverheadChat(text)
     }
 
+    fun faceTile(tile: Tile) {
+        pendingUpdates += Render.FaceTile(tile)
+    }
+
+    fun hit(source: Actor?, type: HitType, damage: Int, delay: Int): Render.HitDamage {
+        val hit = Render.HitDamage(source, type, damage, delay)
+        pendingUpdates += hit
+        return hit
+    }
+
     fun animate(
         id: Int,
         delay: Int = 0
@@ -20,13 +34,9 @@ class ActorRenderer {
         pendingUpdates += Render.Animation(id, delay)
     }
 
-    fun appearance(
-        gender: Render.Appearance.Gender,
-        headIcon: Int,
-        skullIcon: Int,
-        hidden: Boolean
-    ) {
-        pendingUpdates += Render.Appearance(headIcon, gender, skullIcon, -1, hidden)
+    fun appearance(appearance: Render.Appearance): Render.Appearance {
+        pendingUpdates += appearance
+        return appearance
     }
 
     fun hasPendingUpdate(): Boolean = pendingUpdates.isNotEmpty()
