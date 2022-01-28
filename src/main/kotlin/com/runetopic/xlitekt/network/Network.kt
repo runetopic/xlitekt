@@ -36,22 +36,37 @@ val networkModule = module {
     single { LoginEventHandler() }
     single { GameEventPipeline() }
     single { GameEventHandler() }
+    single { Network() }
 }
 
-fun awaitOnPort(port: Int) = runBlocking {
-    val dispatcher = ActorSelectorManager(Executors.newCachedThreadPool().asCoroutineDispatcher())
-    val server = aSocket(dispatcher).tcp().bind(InetSocketAddress(port))
+class Network {
+    private var running = false
 
-    logger.info { "Network is now accepting connections." }
+    fun awaitOnPort(port: Int) = runBlocking {
+        val dispatcher = Executors.newCachedThreadPool().asCoroutineDispatcher()
+        val manager = ActorSelectorManager(dispatcher)
+        val server = aSocket(manager).tcp().bind(InetSocketAddress(port))
 
-    while (true) {
-        val socket = server.accept()
+        running = true
+        logger.info { "Network is now accepting connections." }
 
-        val client = Client(
-            socket,
-            socket.openReadChannel(),
-            socket.openWriteChannel()
-        )
-        launch(Dispatchers.IO) { client.start() }
+        while (running) {
+            val socket = server.accept()
+
+            val client = Client(
+                socket,
+                socket.openReadChannel(),
+                socket.openWriteChannel()
+            )
+            launch(Dispatchers.IO) { client.start() }
+        }
+        println("Closing")
+        server.dispose()
+        manager.close()
+        dispatcher.close()
+    }
+
+    fun shutdownGracefully() {
+        running = false
     }
 }

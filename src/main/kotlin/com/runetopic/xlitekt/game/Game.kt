@@ -35,4 +35,6 @@ class Game {
             logger.info { "Loop took $time to complete." }
         }, 0, 600, TimeUnit.MILLISECONDS)
     }
+
+    fun shutdownGracefully() = service.shutdown()
 }
