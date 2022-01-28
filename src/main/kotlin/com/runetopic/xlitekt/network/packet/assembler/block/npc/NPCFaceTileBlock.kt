@@ -8,7 +8,7 @@ import com.runetopic.xlitekt.util.ext.writeShortLittleEndianAdd
 import io.ktor.utils.io.core.buildPacket
 import io.ktor.utils.io.core.writeShortLittleEndian
 
-class FaceTileBlock : RenderingBlock<NPC, Render.FaceTile>(1, 0x8) {
+class NPCFaceTileBlock : RenderingBlock<NPC, Render.FaceTile>(1, 0x8) {
     override fun build(actor: NPC, render: Render.FaceTile) = buildPacket {
         writeShortLittleEndian(((render.tile.x shl 1) + 1).toShort())
         writeShortLittleEndianAdd(((render.tile.z shl 1) + 1).toShort())

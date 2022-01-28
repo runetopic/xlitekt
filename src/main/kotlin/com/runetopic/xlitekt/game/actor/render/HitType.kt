@@ -1,4 +1,4 @@
-package com.runetopic.xlitekt.game.actor
+package com.runetopic.xlitekt.game.actor.render
 
 enum class HitType(
     val id: Int

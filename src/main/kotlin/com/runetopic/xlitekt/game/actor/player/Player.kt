@@ -41,7 +41,7 @@ class Player(
 ) : Actor(Tile(3222, 3222)) {
     var rights = 2
     val viewport = Viewport(this)
-    var appearance = Render.Appearance(Render.Appearance.Gender.FEMALE, -1, -1, -1, false)
+    var appearance = Render.Appearance(Render.Appearance.Gender.MALE, -1, -1, -1, false)
 
     suspend fun login() {
         this.previousTile = this.tile

@@ -1,7 +1,6 @@
 package com.runetopic.xlitekt.game.actor.render
 
 import com.runetopic.xlitekt.game.actor.Actor
-import com.runetopic.xlitekt.game.actor.HitType
 import com.runetopic.xlitekt.game.tile.Tile
 import com.runetopic.xlitekt.network.packet.assembler.block.player.kit.BodyPart
 import com.runetopic.xlitekt.network.packet.assembler.block.player.kit.BodyPartColor

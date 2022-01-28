@@ -2,9 +2,9 @@ package com.runetopic.xlitekt
 
 import com.github.michaelbull.logging.InlineLogger
 import com.runetopic.xlitekt.game.Game
-import com.runetopic.xlitekt.game.actor.HitBarType
-import com.runetopic.xlitekt.game.actor.HitType
 import com.runetopic.xlitekt.game.actor.npc.NPC
+import com.runetopic.xlitekt.game.actor.render.HitBarType
+import com.runetopic.xlitekt.game.actor.render.HitType
 import com.runetopic.xlitekt.game.tile.Tile
 import com.runetopic.xlitekt.game.world.World
 import com.runetopic.xlitekt.network.Network
@@ -30,7 +30,7 @@ fun Application.module() {
     npc.overheadChat("What it do slick?")
     npc.faceTile(Tile(3222, 3222))
     npc.hit(HitBarType.DEFAULT, null, HitType.VENOM_DAMAGE, 5, 0)
-    inject<World>().value.npcs.add(npc)
+    inject<World>().value.npcs.register(npc)
     get<Network>().awaitOnPort(environment.config.property("ktor.deployment.port").getString().toInt())
 }
 

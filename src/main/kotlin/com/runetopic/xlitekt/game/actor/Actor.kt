@@ -1,15 +1,17 @@
 package com.runetopic.xlitekt.game.actor
 
 import com.runetopic.xlitekt.game.actor.render.ActorRenderer
+import com.runetopic.xlitekt.game.actor.render.HitBarType
+import com.runetopic.xlitekt.game.actor.render.HitType
 import com.runetopic.xlitekt.game.actor.render.Render
 import com.runetopic.xlitekt.game.tile.Tile
 
 abstract class Actor(
     open var tile: Tile
 ) {
+    protected val renderer = ActorRenderer()
     var previousTile: Tile? = null
     var index = 0
-    protected val renderer = ActorRenderer()
 
     // TODO maybe move the combat stuff out somewhere else
     val nextHits = mutableListOf<Render.HitDamage>()
@@ -28,7 +30,7 @@ abstract class Actor(
     fun pendingUpdates() = renderer.pendingUpdates
     fun hasPendingUpdate() = renderer.hasPendingUpdate()
 
-    fun clear() {
+    fun reset() {
         renderer.clearUpdates()
     }
 }

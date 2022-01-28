@@ -1,12 +1,11 @@
 package com.runetopic.xlitekt.game.world
 
-import com.runetopic.xlitekt.game.actor.ActorCollection
-import com.runetopic.xlitekt.game.actor.npc.NPC
-import com.runetopic.xlitekt.game.actor.player.Player
+import com.runetopic.xlitekt.game.actor.NpcList
+import com.runetopic.xlitekt.game.actor.PlayerList
 
 data class World(
-    val players: ActorCollection<Player> = ActorCollection(MAX_PLAYERS),
-    val npcs: ActorCollection<NPC> = ActorCollection(MAX_NPCs),
+    val players: PlayerList = PlayerList(),
+    val npcs: NpcList = NpcList()
 ) {
     companion object {
         const val MAX_PLAYERS = 2000

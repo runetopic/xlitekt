@@ -1,8 +1,8 @@
 package com.runetopic.xlitekt.network.packet.assembler.block.npc
 
 import com.runetopic.xlitekt.game.actor.Actor
-import com.runetopic.xlitekt.game.actor.HitType
 import com.runetopic.xlitekt.game.actor.npc.NPC
+import com.runetopic.xlitekt.game.actor.render.HitType
 import com.runetopic.xlitekt.game.actor.render.Render
 import com.runetopic.xlitekt.network.packet.assembler.block.RenderingBlock
 import com.runetopic.xlitekt.util.ext.writeByteAdd
@@ -13,7 +13,7 @@ import io.ktor.utils.io.core.buildPacket
 /**
  * @author Tyler Telis
  */
-class HitDamageBlock : RenderingBlock<NPC, Render.HitDamage>(2, 0x1) {
+class NPCHitDamageBlock : RenderingBlock<NPC, Render.HitDamage>(2, 0x1) {
     override fun build(actor: NPC, render: Render.HitDamage) = buildPacket {
         writeByteAdd(actor.nextHits.size.toByte())
 
@@ -38,9 +38,9 @@ class HitDamageBlock : RenderingBlock<NPC, Render.HitDamage>(2, 0x1) {
     }
 
     private fun getPercentage(e: Actor): Int {
-        val maxHitPoints = e.totalHitpoints()
-        val current = e.currentHitpoints().coerceAtMost(maxHitPoints)
-        var percentage = if (maxHitPoints == 0) 0 else current * 30 /*HitBarDefProvider.lookup(id).getHealthScale()*/ / maxHitPoints
+        val total = e.totalHitpoints()
+        val current = e.currentHitpoints().coerceAtMost(total)
+        var percentage = if (total == 0) 0 else current * 30 /*HitBarDefProvider.lookup(id).getHealthScale()*/ / total
         if (percentage == 0 && current > 0) {
             percentage = 1
         }

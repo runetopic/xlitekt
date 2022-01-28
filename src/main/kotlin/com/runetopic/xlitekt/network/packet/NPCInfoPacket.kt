@@ -5,6 +5,6 @@ import com.runetopic.xlitekt.game.actor.player.Player
 /**
  * @author Tyler Telis
  */
-open class NpcInfoPacket(
+open class NPCInfoPacket(
     open val player: Player
 ) : Packet

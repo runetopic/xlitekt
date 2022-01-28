@@ -1,6 +1,8 @@
 package com.runetopic.xlitekt.game.actor.player
 
 import com.runetopic.xlitekt.game.actor.npc.NPC
+import com.runetopic.xlitekt.game.world.World
+import com.runetopic.xlitekt.plugin.ktor.inject
 import com.runetopic.xlitekt.util.ext.withBitAccess
 import io.ktor.utils.io.core.BytePacketBuilder
 import java.util.LinkedList
@@ -17,13 +19,15 @@ class Viewport(
     var localIndexesSize: Int = 0
     var externalIndexesSize: Int = 0
 
+    private val world by inject<World>()
+
     fun init(builder: BytePacketBuilder) = builder.withBitAccess {
         writeBits(30, player.tile.coordinates)
         localPlayers[player.index] = player
         localIndexes[localIndexesSize++] = player.index
         (1 until 2048).forEach {
             if (it == player.index) return@forEach
-            val otherRegionCoordinates = localPlayers[it]?.tile?.regionCoordinates ?: 0
+            val otherRegionCoordinates = world.players[it]?.tile?.regionCoordinates ?: 0
             writeBits(18, otherRegionCoordinates)
             coordinates[it] = otherRegionCoordinates
             externalIndexes[externalIndexesSize++] = it
