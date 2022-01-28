@@ -17,6 +17,6 @@ class IfButtonPacketHandler : PacketHandler<IfButtonPacket> {
         val childId = packet.packedInterface and 0xffff
         val slotId = packet.slotId
         val itemId = packet.itemId
-        logger.info { "Clicked interfaceId=$interfaceId, childId=$childId, slotId=$slotId, itemId=$itemId, index=$index" }
+        logger.debug { "Clicked interfaceId=$interfaceId, childId=$childId, slotId=$slotId, itemId=$itemId, index=$index" }
     }
 }

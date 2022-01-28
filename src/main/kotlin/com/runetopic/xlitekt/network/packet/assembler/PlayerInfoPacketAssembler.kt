@@ -253,5 +253,5 @@ class PlayerInfoPacketAssembler : PacketAssembler<PlayerInfoPacket>(opcode = 80,
 
     private fun shouldUpdate(other: Player?): Boolean = other?.renderer?.hasPendingUpdate() ?: false
     private fun shouldAdd(player: Player, other: Player?): Boolean = (other != null && other != player && other.tile.withinDistance(player))
-    private fun shouldRemove(player: Player, other: Player?): Boolean = (other == null || other.tile.withinDistance(player).not())
+    private fun shouldRemove(player: Player, other: Player?): Boolean = (other == null || other.tile.withinDistance(player).not() || world.players.contains(other).not())
 }

@@ -7,6 +7,7 @@ import com.runetopic.xlitekt.game.actor.render.Render
 import com.runetopic.xlitekt.game.item.Item
 import com.runetopic.xlitekt.game.map.Viewport
 import com.runetopic.xlitekt.game.tile.Tile
+import com.runetopic.xlitekt.game.world.World
 import com.runetopic.xlitekt.network.client.Client
 import com.runetopic.xlitekt.network.packet.CamResetPacket
 import com.runetopic.xlitekt.network.packet.HintArrowPacket
@@ -29,6 +30,7 @@ import com.runetopic.xlitekt.network.packet.UpdateRebootTimerPacket
 import com.runetopic.xlitekt.network.packet.UpdateStatPacket
 import com.runetopic.xlitekt.network.packet.VarpLargePacket
 import com.runetopic.xlitekt.network.packet.VarpSmallPacket
+import com.runetopic.xlitekt.plugin.ktor.inject
 
 /**
  * @author Jordan Abraham
@@ -81,5 +83,9 @@ class Player(
         client.writePacket(VarpSmallPacket(10, 1))
         client.writePacket(UpdateRebootTimerPacket(10_000))
         client.writePacket(UpdateContainerPartialPacket(149 shl 16 or 65536, 93, listOf(Item(4151, 1), Item(995, 1)), listOf(1)))
+    }
+
+    fun logout() {
+        inject<World>().value.players.remove(this)
     }
 }

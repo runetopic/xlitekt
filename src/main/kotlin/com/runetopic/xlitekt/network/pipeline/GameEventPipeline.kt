@@ -33,12 +33,12 @@ class GameEventPipeline : EventPipeline<ReadEvent.GameReadEvent, WriteEvent.Game
             return null
         }
         val size = client.readChannel.readPacketSize(sizes[opcode])
-        logger.info { "Read Packet with opcode=$opcode and size=$size" }
+        logger.debug { "Read Packet with opcode=$opcode and size=$size" }
         return ReadEvent.GameReadEvent(opcode, size, client.readChannel.readPacket(size))
     }
 
     override suspend fun write(client: Client, event: WriteEvent.GameWriteEvent) {
-        logger.info { "Writing packet Opcode=${event.opcode} Size=${event.payload.remaining}" }
+        logger.debug { "Writing packet Opcode=${event.opcode} Size=${event.payload.remaining}" }
         client.writeChannel.let {
             it.writePacketOpcode(client.serverCipher!!, event.opcode)
             it.writePacketSize(event.size, event.payload.remaining)

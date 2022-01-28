@@ -19,8 +19,11 @@ import io.ktor.network.sockets.Socket
 import io.ktor.util.reflect.instanceOf
 import io.ktor.utils.io.ByteReadChannel
 import io.ktor.utils.io.ByteWriteChannel
+import io.ktor.utils.io.ClosedWriteChannelException
 import io.ktor.utils.io.core.ByteReadPacket
 import kotlinx.coroutines.TimeoutCancellationException
+import kotlinx.coroutines.channels.ClosedReceiveChannelException
+import java.io.IOException
 import java.net.SocketException
 
 /**
@@ -44,6 +47,7 @@ class Client(
     var player: Player? = null
 
     fun disconnect(reason: String) {
+        player?.logout()
         connected = false
         socket.close()
         logger.info { "Client disconnected for reason={$reason}." }
@@ -76,6 +80,8 @@ class Client(
                 when {
                     exception.instanceOf(TimeoutCancellationException::class) -> disconnect("Client timed out.")
                     exception.instanceOf(SocketException::class) -> disconnect("Connection reset.")
+                    exception.instanceOf(ClosedWriteChannelException::class) -> disconnect("The channel was closed.")
+                    exception.instanceOf(ClosedReceiveChannelException::class) -> disconnect("The channel was closed.")
                     else -> {
                         logger.error(exception) { "Exception caught during client IO Events." }
                         disconnect(exception.message.toString())
@@ -91,8 +97,16 @@ class Client(
     }
 
     suspend fun writePacket(message: Packet) {
-        val packet = assemblers[message::class] ?: return disconnect("Unhandled message found when trying to write packet. Message was $message.")
-        eventPipeline.write(this, WriteEvent.GameWriteEvent(packet.opcode, packet.size, packet.assemblePacket(message).build()))
+        val assembler = assemblers[message::class] ?: return disconnect("Unhandled message found when trying to write packet. Message was $message.")
+        try {
+            eventPipeline.write(this, WriteEvent.GameWriteEvent(assembler.opcode, assembler.size, assembler.assemblePacket(message).build()))
+        } catch (exception: Exception) {
+            // This function is used by multiple threads, so we try catch like this.
+            // The main client thread will already handle disconnecting if applicable.
+            if (exception.instanceOf(IOException::class) && !exception.message.equals("An established connection was aborted by the software in your host machine")) disconnect("Client IO exception caught.")
+            if (exception.instanceOf(ClosedWriteChannelException::class)) disconnect("Write channel exception caught.")
+            exception.printStackTrace()
+        }
     }
 
     suspend fun readPacket(opcode: Int, packet: ByteReadPacket) {

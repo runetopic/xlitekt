@@ -47,7 +47,7 @@ class LoginEventPipeline : EventPipeline<ReadEvent.LoginReadEvent, WriteEvent.Lo
         val opcode = client.readChannel.readByte().toInt() and 0xff
 
         if (!isValidLoginRequestHeader(client)) {
-            logger.info { "Invalid login request header. Client=$client Opcode=$opcode Available bytes=${client.readChannel.availableForRead}" }
+            logger.debug { "Invalid login request header. Client=$client Opcode=$opcode Available bytes=${client.readChannel.availableForRead}" }
             return null
         }
 
@@ -79,13 +79,13 @@ class LoginEventPipeline : EventPipeline<ReadEvent.LoginReadEvent, WriteEvent.Lo
                 val clientSeed = rsaBlock.readLong()
 
                 if (clientSeed != client.seed) {
-                    logger.info { "Bad Session. Client/Server seed miss-match. ClientSeed=$clientSeed Seed=${client.seed}" }
+                    logger.debug { "Bad Session. Client/Server seed miss-match. ClientSeed=$clientSeed Seed=${client.seed}" }
                     client.writeResponse(BAD_SESSION_OPCODE)
                     return null
                 }
 
                 if (!isValidAuthenticationType(rsaBlock)) {
-                    logger.info { "Bad Session. Authentication type is not valid." }
+                    logger.debug { "Bad Session. Authentication type is not valid." }
                     client.writeResponse(BAD_SESSION_OPCODE)
                     return null
                 }
@@ -104,7 +104,7 @@ class LoginEventPipeline : EventPipeline<ReadEvent.LoginReadEvent, WriteEvent.Lo
 
                 val token = xteaBlock.readStringCp1252NullTerminated()
                 if (!isValidToken(token)) {
-                    logger.info { "Bad Session. Gamepack token is not valid. Token was $token." }
+                    logger.debug { "Bad Session. Gamepack token is not valid. Token was $token." }
                     client.writeResponse(BAD_SESSION_OPCODE)
                     return null
                 }
@@ -143,7 +143,7 @@ class LoginEventPipeline : EventPipeline<ReadEvent.LoginReadEvent, WriteEvent.Lo
                 clientCRCs[16] = cacheCRCs[16] // This is -1 from the client.
 
                 if (!isValidCacheCRCs(clientCRCs)) {
-                    logger.info { "Bad Session. Client and cache crc are mismatched." }
+                    logger.debug { "Bad Session. Client and cache crc are mismatched." }
                     client.writeResponse(CLIENT_OUTDATED_OPCODE)
                     return null
                 }
@@ -226,7 +226,7 @@ class LoginEventPipeline : EventPipeline<ReadEvent.LoginReadEvent, WriteEvent.Lo
         val availableBytes = client.readChannel.availableForRead
 
         if (size != availableBytes) {
-            logger.info { "Bad session. Client=$client Size Read=$size Available bytes=$availableBytes" }
+            logger.debug { "Bad session. Client=$client Size Read=$size Available bytes=$availableBytes" }
             client.writeResponse(BAD_SESSION_OPCODE)
             return false
         }
@@ -234,7 +234,7 @@ class LoginEventPipeline : EventPipeline<ReadEvent.LoginReadEvent, WriteEvent.Lo
         val majorVersion = client.readChannel.readInt()
 
         if (majorVersion != environment.config.property("game.build.major").getString().toInt()) {
-            logger.info { "Client outdated. Client=$client Major Version=$majorVersion" }
+            logger.debug { "Client outdated. Client=$client Major Version=$majorVersion" }
             client.writeResponse(CLIENT_OUTDATED_OPCODE)
             return false
         }
@@ -242,7 +242,7 @@ class LoginEventPipeline : EventPipeline<ReadEvent.LoginReadEvent, WriteEvent.Lo
         val minorVersion = client.readChannel.readInt()
 
         if (minorVersion != environment.config.property("game.build.minor").getString().toInt()) {
-            logger.info { "Client outdated. Client=$client Minor Version=$majorVersion" }
+            logger.debug { "Client outdated. Client=$client Minor Version=$majorVersion" }
             client.writeResponse(CLIENT_OUTDATED_OPCODE)
             return false
         }
@@ -258,7 +258,7 @@ class LoginEventPipeline : EventPipeline<ReadEvent.LoginReadEvent, WriteEvent.Lo
             0, 3 -> rsaBlock.discard(3)
             2 -> rsaBlock.discard(4)
             else -> {
-                logger.info { "Bad Session. Unhandled authentication type=$authenticationType" }
+                logger.debug { "Bad Session. Unhandled authentication type=$authenticationType" }
                 return false
             }
         }

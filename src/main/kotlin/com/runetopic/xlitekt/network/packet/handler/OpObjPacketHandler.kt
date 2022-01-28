@@ -18,6 +18,6 @@ class OpObjPacketHandler : PacketHandler<OpObjPacket> {
         val childId = packedInterface and 0xffff
         val slotId = packet.slotId
         val itemId = packet.itemId
-        logger.info { "Clicked obj op interfaceId=$interfaceId, childId=$childId, slotId=$slotId, itemId=$itemId, index=$index" }
+        logger.debug { "Clicked obj op interfaceId=$interfaceId, childId=$childId, slotId=$slotId, itemId=$itemId, index=$index" }
     }
 }

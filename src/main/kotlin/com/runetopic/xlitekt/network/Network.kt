@@ -40,17 +40,15 @@ val networkModule = module {
 }
 
 class Network {
-    private var running = false
+    private val logger = InlineLogger()
+    private val dispatcher = Executors.newCachedThreadPool().asCoroutineDispatcher()
+    private val selector = ActorSelectorManager(dispatcher)
 
     fun awaitOnPort(port: Int) = runBlocking {
-        val dispatcher = Executors.newCachedThreadPool().asCoroutineDispatcher()
-        val manager = ActorSelectorManager(dispatcher)
-        val server = aSocket(manager).tcp().bind(InetSocketAddress(port))
-
-        running = true
+        val server = aSocket(selector).tcp().bind(InetSocketAddress(port))
         logger.info { "Network is now accepting connections." }
 
-        while (running) {
+        while (true) {
             val socket = server.accept()
 
             val client = Client(
@@ -60,13 +58,12 @@ class Network {
             )
             launch(Dispatchers.IO) { client.start() }
         }
-        println("Closing")
-        server.dispose()
-        manager.close()
-        dispatcher.close()
     }
 
     fun shutdownGracefully() {
-        running = false
+        logger.debug { "Shutting down network selector..." }
+        selector.close()
+        logger.debug { "Shutting down network dispatcher..." }
+        dispatcher.close()
     }
 }

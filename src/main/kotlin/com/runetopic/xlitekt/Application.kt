@@ -9,7 +9,6 @@ import io.ktor.server.engine.commandLineEnvironment
 import org.koin.core.context.stopKoin
 import org.koin.ktor.ext.get
 import java.util.TimeZone
-import kotlin.system.exitProcess
 
 private val logger = InlineLogger()
 
@@ -22,14 +21,16 @@ fun Application.module() {
     installKoin()
     get<Game>().start()
     get<Network>().awaitOnPort(environment.config.property("ktor.deployment.port").getString().toInt())
-    logger.info { "Main thread reaches end." }
 }
 
 fun Application.addShutdownHook() {
-    Runtime.getRuntime().addShutdownHook(Thread {
-        logger.info { "Shutting down" }
-        get<Game>().shutdownGracefully()
-        get<Network>().shutdownGracefully()
-        stopKoin()
-    })
+    Runtime.getRuntime().addShutdownHook(
+        Thread {
+            logger.debug { "Running shutdown hook..." }
+            get<Game>().shutdownGracefully()
+            get<Network>().shutdownGracefully()
+            logger.debug { "Stopping koin..." }
+            stopKoin()
+        }
+    )
 }

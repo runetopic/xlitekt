@@ -1,10 +1,10 @@
 package com.runetopic.xlitekt.network.pipeline
 
 import com.runetopic.xlitekt.network.client.Client
-import com.runetopic.xlitekt.network.client.ClientRequestOpcode.JS5_LOGGED_IN_OPCODE
-import com.runetopic.xlitekt.network.client.ClientRequestOpcode.JS5_LOGGED_OUT_OPCODE
 import com.runetopic.xlitekt.network.client.ClientRequestOpcode.JS5_ENCRYPTION_OPCODE
 import com.runetopic.xlitekt.network.client.ClientRequestOpcode.JS5_HIGH_PRIORITY_OPCODE
+import com.runetopic.xlitekt.network.client.ClientRequestOpcode.JS5_LOGGED_IN_OPCODE
+import com.runetopic.xlitekt.network.client.ClientRequestOpcode.JS5_LOGGED_OUT_OPCODE
 import com.runetopic.xlitekt.network.client.ClientRequestOpcode.JS5_LOW_PRIORITY_OPCODE
 import com.runetopic.xlitekt.network.event.ReadEvent
 import com.runetopic.xlitekt.network.event.WriteEvent
