@@ -15,6 +15,7 @@ import com.runetopic.xlitekt.network.packet.assembler.MessageGamePacketAssembler
 import com.runetopic.xlitekt.network.packet.assembler.MidiSongPacketAssembler
 import com.runetopic.xlitekt.network.packet.assembler.MiniMapTogglePacketAssembler
 import com.runetopic.xlitekt.network.packet.assembler.NoTimeoutPacketAssembler
+import com.runetopic.xlitekt.network.packet.assembler.NpcInfoPacketAssembler
 import com.runetopic.xlitekt.network.packet.assembler.PlayerInfoPacketAssembler
 import com.runetopic.xlitekt.network.packet.assembler.RebuildNormalPacketAssembler
 import com.runetopic.xlitekt.network.packet.assembler.RunClientScriptPacketAssembler
@@ -69,6 +70,8 @@ object RegisteredPackets {
         MidiSongPacket::class to MidiSongPacketAssembler(),
         MiniMapTogglePacket::class to MiniMapTogglePacketAssembler(),
         NoTimeoutPacket::class to NoTimeoutPacketAssembler(),
+        NpcInfoPacket::class to NpcInfoPacketAssembler(false),
+        NpcInfoExtendedViewportPacket::class to NpcInfoPacketAssembler(false),
         PlayerInfoPacket::class to PlayerInfoPacketAssembler(),
         RebuildNormalPacket::class to RebuildNormalPacketAssembler(),
         RunClientScriptPacket::class to RunClientScriptPacketAssembler(),

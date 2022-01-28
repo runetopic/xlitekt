@@ -18,8 +18,8 @@ class ActorCollection<T : Actor>(private var capacity: Int) : AbstractCollection
 
     override fun remove(element: T): Boolean {
         synchronized(lock) {
-            entities[element.pid] = null
-            indicies.remove(element.pid)
+            entities[element.index] = null
+            indicies.remove(element.index)
             decreaseIndex()
             return true
         }
@@ -47,7 +47,7 @@ class ActorCollection<T : Actor>(private var capacity: Int) : AbstractCollection
             add(entity, curIndex)
         } else {
             entities[curIndex] = entity
-            entity.pid = index
+            entity.index = index
             indicies.add(curIndex)
             increaseIndex()
         }

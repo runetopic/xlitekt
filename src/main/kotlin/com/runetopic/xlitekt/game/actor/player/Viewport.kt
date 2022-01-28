@@ -1,25 +1,28 @@
 package com.runetopic.xlitekt.game.actor.player
 
+import com.runetopic.xlitekt.game.actor.npc.NPC
 import com.runetopic.xlitekt.util.ext.withBitAccess
 import io.ktor.utils.io.core.BytePacketBuilder
+import java.util.LinkedList
 
 class Viewport(
     val player: Player,
 ) {
-    val nsnFlags: IntArray = IntArray(2048)
-    val coordinates: IntArray = IntArray(2048)
-    val localIndexes: IntArray = IntArray(2048)
-    val externalIndexes: IntArray = IntArray(2048)
-    val localPlayers: Array<Player?> = arrayOfNulls(2048)
+    val nsnFlags = IntArray(2048)
+    val coordinates = IntArray(2048)
+    val localIndexes = IntArray(2048)
+    val externalIndexes = IntArray(2048)
+    val localPlayers = Array<Player?>(2048) { null }
+    val localNPCs = LinkedList<NPC>()
     var localIndexesSize: Int = 0
     var externalIndexesSize: Int = 0
 
     fun init(builder: BytePacketBuilder) = builder.withBitAccess {
         writeBits(30, player.tile.coordinates)
-        localPlayers[player.pid] = player
-        localIndexes[localIndexesSize++] = player.pid
+        localPlayers[player.index] = player
+        localIndexes[localIndexesSize++] = player.index
         (1 until 2048).forEach {
-            if (it == player.pid) return@forEach
+            if (it == player.index) return@forEach
             val otherRegionCoordinates = localPlayers[it]?.tile?.regionCoordinates ?: 0
             writeBits(18, otherRegionCoordinates)
             coordinates[it] = otherRegionCoordinates

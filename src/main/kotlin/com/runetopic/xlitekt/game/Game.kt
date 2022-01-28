@@ -2,6 +2,7 @@ package com.runetopic.xlitekt.game
 
 import com.github.michaelbull.logging.InlineLogger
 import com.runetopic.xlitekt.game.world.World
+import com.runetopic.xlitekt.network.packet.NpcInfoPacket
 import com.runetopic.xlitekt.network.packet.PlayerInfoPacket
 import com.runetopic.xlitekt.plugin.ktor.inject
 import com.runetopic.xlitekt.util.resource.loadAllMapSquares
@@ -27,10 +28,19 @@ class Game {
             timerTask {
                 val time = measureTime {
                     runBlocking {
-                        world.value.players.let { players ->
-                            players.forEach { it.client.writePacket(PlayerInfoPacket(it)) }
-                            players.forEach { it.renderer.clearUpdates() }
+                        world.value.players.forEach {
+                            it.client.writePacket(PlayerInfoPacket(it))
                         }
+                        world.value.players.forEach {
+                            it.renderer.clearUpdates()
+                        }
+                        world.value.players.forEach {
+                            it.client.writePacket(NpcInfoPacket(it))
+                        }
+//                        world.value.players.let { players ->
+//                            players.forEach { it.renderer.clearUpdates() }
+//                            players.forEach { it.client.writePacket(NpcInfoPacket(it)) }
+//                        }
                     }
                 }
                 logger.debug { "Loop took $time to complete." }

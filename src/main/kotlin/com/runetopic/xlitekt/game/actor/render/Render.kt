@@ -13,6 +13,10 @@ sealed class Render {
         val delay: Int
     ) : Render()
 
+    data class OverheadChat(
+        val text: String
+    ) : Render()
+
     data class Appearance(
         val headIcon: Int,
         val gender: Gender = Gender.MALE,

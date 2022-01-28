@@ -82,6 +82,7 @@ class Client(
                     exception.instanceOf(SocketException::class) -> disconnect("Connection reset.")
                     exception.instanceOf(ClosedWriteChannelException::class) -> disconnect("The channel was closed.")
                     exception.instanceOf(ClosedReceiveChannelException::class) -> disconnect("The channel was closed.")
+                    exception.instanceOf(IOException::class) -> disconnect("Client IO exception caught.")
                     else -> {
                         logger.error(exception) { "Exception caught during client IO Events." }
                         disconnect(exception.message.toString())
@@ -103,9 +104,14 @@ class Client(
         } catch (exception: Exception) {
             // This function is used by multiple threads, so we try catch like this.
             // The main client thread will already handle disconnecting if applicable.
-            if (exception.instanceOf(IOException::class) && !exception.message.equals("An established connection was aborted by the software in your host machine")) disconnect("Client IO exception caught.")
-            if (exception.instanceOf(ClosedWriteChannelException::class)) disconnect("Write channel exception caught.")
-            exception.printStackTrace()
+            when {
+                exception.instanceOf(IOException::class) -> disconnect("Client IO exception caught.")
+                exception.instanceOf(ClosedWriteChannelException::class) -> disconnect("Write channel exception caught.")
+                else -> {
+                    logger.error(exception) { "Client disconnected due to exception caught during write." }
+                    disconnect(exception.message.toString())
+                }
+            }
         }
     }
 

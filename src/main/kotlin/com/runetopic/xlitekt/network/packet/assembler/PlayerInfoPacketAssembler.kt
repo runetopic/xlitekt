@@ -15,6 +15,10 @@ import com.runetopic.xlitekt.util.ext.withBitAccess
 import io.ktor.utils.io.core.BytePacketBuilder
 import kotlin.math.abs
 
+/**
+ * @author Tyler Telis
+ * @author Jordan Abraham
+ */
 class PlayerInfoPacketAssembler : PacketAssembler<PlayerInfoPacket>(opcode = 80, size = -2) {
 
     private val world by inject<World>()
@@ -128,7 +132,7 @@ class PlayerInfoPacketAssembler : PacketAssembler<PlayerInfoPacket>(opcode = 80,
             // send a force block update
             builder.writeBits(1, 1)
             encodePendingBlocks(true, other, blocks)
-            player.viewport.localPlayers[other.pid] = other
+            player.viewport.localPlayers[other.index] = other
             player.viewport.nsnFlags[index] = player.viewport.nsnFlags[index] or 2
         }
     }
@@ -249,6 +253,7 @@ class PlayerInfoPacketAssembler : PacketAssembler<PlayerInfoPacket>(opcode = 80,
     private fun mapToBlock(it: Render) = when (it) {
         is Render.Appearance -> it to PlayerAppearanceBlock()
         is Render.Animation -> it to PlayerSequenceBlock()
+        else -> throw IllegalStateException("Unhandled player block in PlayerInfo. Block was $it")
     }
 
     private fun shouldUpdate(other: Player?): Boolean = other?.renderer?.hasPendingUpdate() ?: false

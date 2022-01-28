@@ -178,7 +178,7 @@ class LoginEventPipeline : EventPipeline<ReadEvent.LoginReadEvent, WriteEvent.Lo
                 it.writeInt(0)
                 it.writeByte(player.rights.toByte())
                 it.writeByte(0)
-                it.writeShort(player.pid.toShort())
+                it.writeShort(player.index.toShort())
                 it.writeByte(0)
                 it.flush()
             }

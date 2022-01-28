@@ -9,6 +9,10 @@ class ActorRenderer {
 
     val pendingUpdates = mutableListOf<Render>()
 
+    fun overheadChat(text: String) {
+        pendingUpdates += Render.OverheadChat(text)
+    }
+
     fun animate(
         id: Int,
         delay: Int = 0
