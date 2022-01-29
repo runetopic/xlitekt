@@ -25,6 +25,7 @@ abstract class Actor(
         nextHitBars += hitBarType
     }
 
+    fun animate(animation: Render.Animation) = renderer.animate(animation)
     fun spotAnimation(spotAnimation: Render.SpotAnimation) = renderer.spotAnimation(spotAnimation)
     fun overheadChat(text: String) = renderer.overheadChat(text)
     fun faceTile(tile: Tile) = renderer.faceTile(tile)

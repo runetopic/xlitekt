@@ -30,11 +30,8 @@ class ActorRenderer {
         pendingUpdates += spotAnimation
     }
 
-    fun animate(
-        id: Int,
-        delay: Int = 0
-    ) {
-        pendingUpdates += Render.Animation(id, delay)
+    fun animate(animation: Render.Animation) {
+        pendingUpdates += animation
     }
 
     fun appearance(appearance: Render.Appearance): Render.Appearance {

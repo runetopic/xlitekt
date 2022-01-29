@@ -14,7 +14,9 @@ sealed class Render {
     data class Animation(
         val id: Int,
         val delay: Int
-    ) : Render()
+    ) : Render() {
+        constructor(id: Int) : this(id, 0)
+    }
 
     data class SpotAnimation(
         val id: Int,

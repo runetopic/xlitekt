@@ -10,6 +10,7 @@ import com.runetopic.xlitekt.network.packet.assembler.block.npc.NPCCustomCombatL
 import com.runetopic.xlitekt.network.packet.assembler.block.npc.NPCFaceTileBlock
 import com.runetopic.xlitekt.network.packet.assembler.block.npc.NPCHitDamageBlock
 import com.runetopic.xlitekt.network.packet.assembler.block.npc.NPCOverheadChatBlock
+import com.runetopic.xlitekt.network.packet.assembler.block.npc.NPCSequenceBlock
 import com.runetopic.xlitekt.network.packet.assembler.block.npc.NPCSpotAnimationBlock
 import com.runetopic.xlitekt.plugin.ktor.inject
 import com.runetopic.xlitekt.util.ext.BitAccess
@@ -120,11 +121,12 @@ class NPCInfoPacketAssembler(
     }
 
     private fun mapToBlock(it: Render) = when (it) {
-        is Render.OverheadChat -> it to NPCOverheadChatBlock()
+        is Render.Animation -> it to NPCSequenceBlock()
+        is Render.CustomCombatLevel -> it to NPCCustomCombatLevelBLock()
         is Render.FaceTile -> it to NPCFaceTileBlock()
         is Render.HitDamage -> it to NPCHitDamageBlock()
+        is Render.OverheadChat -> it to NPCOverheadChatBlock()
         is Render.SpotAnimation -> it to NPCSpotAnimationBlock()
-        is Render.CustomCombatLevel -> it to NPCCustomCombatLevelBLock()
         else -> throw IllegalStateException("Unhandled npc block in NpcInfo. Block was $it")
     }
 

@@ -31,6 +31,7 @@ fun Application.module() {
     npc.overheadChat("What it do slick?")
     npc.faceTile(Tile(3222, 3222))
     npc.setCustomCombatLevel(3200)
+    npc.animate(Render.Animation(300))
     npc.hit(HitBarType.DEFAULT, null, HitType.VENOM_DAMAGE, 5, 0)
     npc.spotAnimation(Render.SpotAnimation(320))
     inject<World>().value.npcs.register(npc)
