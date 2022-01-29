@@ -30,6 +30,7 @@ fun Application.module() {
     val npc = NPC(10, Tile(3220, 3220))
     npc.overheadChat("What it do slick?")
     npc.faceTile(Tile(3222, 3222))
+    npc.setCustomCombatLevel(3200)
     npc.hit(HitBarType.DEFAULT, null, HitType.VENOM_DAMAGE, 5, 0)
     npc.spotAnimation(Render.SpotAnimation(320))
     inject<World>().value.npcs.register(npc)

@@ -36,6 +36,10 @@ sealed class Render {
         val tile: Tile
     ) : Render()
 
+    data class CustomCombatLevel(
+        val level: Int
+    ) : Render()
+
     data class HitDamage(
         val source: Actor?,
         val type: HitType,

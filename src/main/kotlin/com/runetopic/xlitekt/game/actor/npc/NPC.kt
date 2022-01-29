@@ -9,4 +9,6 @@ class NPC(
 ) : Actor(tile) {
     override fun totalHitpoints(): Int = 100
     override fun currentHitpoints(): Int = 100
+
+    fun setCustomCombatLevel(level: Int) = renderer.setCustomCombatLevel(level)
 }

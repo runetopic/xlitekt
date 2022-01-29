@@ -6,6 +6,7 @@ import com.runetopic.xlitekt.game.actor.render.Render
 import com.runetopic.xlitekt.game.tile.withinDistance
 import com.runetopic.xlitekt.game.world.World
 import com.runetopic.xlitekt.network.packet.NPCInfoPacket
+import com.runetopic.xlitekt.network.packet.assembler.block.npc.NPCCustomCombatLevelBLock
 import com.runetopic.xlitekt.network.packet.assembler.block.npc.NPCFaceTileBlock
 import com.runetopic.xlitekt.network.packet.assembler.block.npc.NPCHitDamageBlock
 import com.runetopic.xlitekt.network.packet.assembler.block.npc.NPCOverheadChatBlock
@@ -123,6 +124,7 @@ class NPCInfoPacketAssembler(
         is Render.FaceTile -> it to NPCFaceTileBlock()
         is Render.HitDamage -> it to NPCHitDamageBlock()
         is Render.SpotAnimation -> it to NPCSpotAnimationBlock()
+        is Render.CustomCombatLevel -> it to NPCCustomCombatLevelBLock()
         else -> throw IllegalStateException("Unhandled npc block in NpcInfo. Block was $it")
     }
 

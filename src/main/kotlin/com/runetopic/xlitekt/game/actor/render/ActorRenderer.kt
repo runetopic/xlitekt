@@ -44,4 +44,8 @@ class ActorRenderer {
 
     fun hasPendingUpdate(): Boolean = pendingUpdates.isNotEmpty()
     fun clearUpdates() = pendingUpdates.clear()
+
+    fun setCustomCombatLevel(level: Int) {
+        pendingUpdates += Render.CustomCombatLevel(level)
+    }
 }
