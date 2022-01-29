@@ -6,6 +6,9 @@ import io.ktor.utils.io.core.writeInt
 import io.ktor.utils.io.core.writeShort
 import kotlin.math.min
 
+/**
+ * @author Tyler Telis
+ */
 class UpdateContainerPartialPacketAssembler : PacketAssembler<UpdateContainerPartialPacket>(opcode = 84, size = -2) {
     override fun assemblePacket(packet: UpdateContainerPartialPacket) = buildPacket {
         writeInt(packet.packedInterface)

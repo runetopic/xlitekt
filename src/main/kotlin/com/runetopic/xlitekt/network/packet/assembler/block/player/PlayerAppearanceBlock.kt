@@ -14,6 +14,9 @@ import io.ktor.utils.io.core.buildPacket
 import io.ktor.utils.io.core.readBytes
 import io.ktor.utils.io.core.writeShort
 
+/**
+ * @author Tyler Telis
+ */
 class PlayerAppearanceBlock : RenderingBlock<Player, Render.Appearance>(5, 0x1) {
 
     override fun build(actor: Player, render: Render.Appearance): ByteReadPacket = buildPacket {

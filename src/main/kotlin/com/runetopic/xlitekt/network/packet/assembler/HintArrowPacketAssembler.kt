@@ -5,6 +5,9 @@ import com.runetopic.xlitekt.network.packet.HintArrowPacket
 import io.ktor.utils.io.core.fill
 import io.ktor.utils.io.core.writeShort
 
+/**
+ * @author Tyler Telis
+ */
 class HintArrowPacketAssembler : PacketAssembler<HintArrowPacket>(opcode = 43, size = 6) {
     override fun assemblePacket(packet: HintArrowPacket) = buildPacket {
         writeByte(packet.type.id.toByte())

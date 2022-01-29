@@ -6,8 +6,11 @@ import com.runetopic.xlitekt.network.packet.assembler.block.RenderingBlock
 import com.runetopic.xlitekt.util.ext.writeIntV1
 import io.ktor.utils.io.core.buildPacket
 
-class NPCCustomCombatLevelBLock : RenderingBlock<NPC, Render.CustomCombatLevel>(5, 0x200) {
-    override fun build(actor: NPC, render: Render.CustomCombatLevel) = buildPacket {
+/**
+ * @author Tyler Telis
+ */
+class NPCCustomLevelBlock : RenderingBlock<NPC, Render.NPCCustomLevel>(5, 0x200) {
+    override fun build(actor: NPC, render: Render.NPCCustomLevel) = buildPacket {
         writeIntV1(render.level)
     }
 }

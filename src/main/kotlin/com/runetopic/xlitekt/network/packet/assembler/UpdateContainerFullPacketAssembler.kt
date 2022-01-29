@@ -7,6 +7,9 @@ import io.ktor.utils.io.core.writeShort
 import io.ktor.utils.io.core.writeShortLittleEndian
 import kotlin.math.min
 
+/**
+ * @author Tyler Telis
+ */
 class UpdateContainerFullPacketAssembler : PacketAssembler<UpdateContainerFullPacket>(opcode = 88, size = -2) {
     override fun assemblePacket(packet: UpdateContainerFullPacket) = buildPacket {
         writeInt(packet.packedInterface)

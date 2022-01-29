@@ -8,6 +8,9 @@ import io.ktor.utils.io.core.writeInt
 import io.ktor.utils.io.core.writeShort
 import io.ktor.utils.io.core.writeShortLittleEndian
 
+/**
+ * @author Tyler Telis
+ */
 class RebuildNormalPacketAssembler : PacketAssembler<RebuildNormalPacket>(opcode = 54, size = -2) {
 
     private val mapSquares = inject<List<MapSquare>>().value

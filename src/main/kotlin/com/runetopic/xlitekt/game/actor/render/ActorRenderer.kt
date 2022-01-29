@@ -47,7 +47,7 @@ class ActorRenderer {
     }
 
     fun setCustomCombatLevel(level: Int) {
-        pendingUpdates += Render.CustomCombatLevel(level)
+        pendingUpdates += Render.NPCCustomLevel(level)
     }
 
     fun recolor(recolor: Render.Recolor) {

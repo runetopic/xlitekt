@@ -6,7 +6,7 @@ import com.runetopic.xlitekt.game.actor.render.Render
 import com.runetopic.xlitekt.game.tile.withinDistance
 import com.runetopic.xlitekt.game.world.World
 import com.runetopic.xlitekt.network.packet.NPCInfoPacket
-import com.runetopic.xlitekt.network.packet.assembler.block.npc.NPCCustomCombatLevelBLock
+import com.runetopic.xlitekt.network.packet.assembler.block.npc.NPCCustomLevelBlock
 import com.runetopic.xlitekt.network.packet.assembler.block.npc.NPCFaceActorBlock
 import com.runetopic.xlitekt.network.packet.assembler.block.npc.NPCFaceTileBlock
 import com.runetopic.xlitekt.network.packet.assembler.block.npc.NPCForceMovementBlock
@@ -126,7 +126,7 @@ class NPCInfoPacketAssembler(
 
     private fun mapToBlock(it: Render) = when (it) {
         is Render.Animation -> it to NPCSequenceBlock()
-        is Render.CustomCombatLevel -> it to NPCCustomCombatLevelBLock()
+        is Render.NPCCustomLevel -> it to NPCCustomLevelBlock()
         is Render.FaceActor -> it to NPCFaceActorBlock()
         is Render.FaceTile -> it to NPCFaceTileBlock()
         is Render.ForceMovement -> it to NPCForceMovementBlock()

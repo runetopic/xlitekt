@@ -7,6 +7,9 @@ import com.runetopic.xlitekt.util.ext.writeIntV2
 import com.runetopic.xlitekt.util.ext.writeShortLittleEndianAdd
 import io.ktor.utils.io.core.buildPacket
 
+/**
+ * @author Tyler Telis
+ */
 class NPCSpotAnimationBlock : RenderingBlock<NPC, Render.SpotAnimation>(4, 0x2) {
     override fun build(actor: NPC, render: Render.SpotAnimation) = buildPacket {
         writeShortLittleEndianAdd(render.id.toShort())

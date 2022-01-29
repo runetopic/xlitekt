@@ -8,6 +8,9 @@ import com.runetopic.xlitekt.util.ext.writeShortAdd
 import io.ktor.utils.io.core.ByteReadPacket
 import io.ktor.utils.io.core.buildPacket
 
+/**
+ * @author Tyler Telis
+ */
 class PlayerSequenceBlock : RenderingBlock<Player, Render.Animation>(8, 0x2) {
 
     override fun build(actor: Player, render: Render.Animation): ByteReadPacket = buildPacket {

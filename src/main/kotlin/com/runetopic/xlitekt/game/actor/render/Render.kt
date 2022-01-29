@@ -54,7 +54,7 @@ sealed class Render {
         val secondDelay: Int = 0,
         val rotation: Int = 0
     ) : Render() {
-        constructor(firstTile: Tile, delay: Int, rotation: Int): this(firstTile, null, delay, 0, rotation)
+        constructor(firstTile: Tile, delay: Int, rotation: Int) : this(firstTile, null, delay, 0, rotation)
     }
 
     data class OverheadChat(
@@ -65,7 +65,7 @@ sealed class Render {
         val tile: Tile
     ) : Render()
 
-    data class CustomCombatLevel(
+    data class NPCCustomLevel(
         val level: Int
     ) : Render()
 

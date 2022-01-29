@@ -8,6 +8,9 @@ import com.runetopic.xlitekt.util.ext.writeShortLittleEndianAdd
 import io.ktor.utils.io.core.buildPacket
 import io.ktor.utils.io.core.writeShort
 
+/**
+ * @author Tyler Telis
+ */
 class NPCForceMovementBlock : RenderingBlock<NPC, Render.ForceMovement>(7, 0x400) {
     override fun build(actor: NPC, render: Render.ForceMovement) = buildPacket {
         writeByteNegate((render.firstTile.x - actor.tile.x).toByte())

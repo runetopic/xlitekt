@@ -14,8 +14,8 @@ import com.runetopic.xlitekt.network.packet.assembler.IfSetTextPacketAssembler
 import com.runetopic.xlitekt.network.packet.assembler.MessageGamePacketAssembler
 import com.runetopic.xlitekt.network.packet.assembler.MidiSongPacketAssembler
 import com.runetopic.xlitekt.network.packet.assembler.MiniMapTogglePacketAssembler
-import com.runetopic.xlitekt.network.packet.assembler.NoTimeoutPacketAssembler
 import com.runetopic.xlitekt.network.packet.assembler.NPCInfoPacketAssembler
+import com.runetopic.xlitekt.network.packet.assembler.NoTimeoutPacketAssembler
 import com.runetopic.xlitekt.network.packet.assembler.PlayerInfoPacketAssembler
 import com.runetopic.xlitekt.network.packet.assembler.RebuildNormalPacketAssembler
 import com.runetopic.xlitekt.network.packet.assembler.RunClientScriptPacketAssembler

@@ -6,6 +6,9 @@ import com.runetopic.xlitekt.network.packet.RunClientScriptPacket
 import com.runetopic.xlitekt.util.ext.writeStringCp1252NullTerminated
 import io.ktor.utils.io.core.writeInt
 
+/**
+ * @author Tyler Telis
+ */
 class RunClientScriptPacketAssembler : PacketAssembler<RunClientScriptPacket>(opcode = 71, size = -2) {
     override fun assemblePacket(packet: RunClientScriptPacket) = buildPacket {
         packet.parameters.let {

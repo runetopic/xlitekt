@@ -6,6 +6,9 @@ import com.runetopic.xlitekt.util.ext.writeStringCp1252NullTerminated
 import io.ktor.utils.io.core.writeInt
 import io.ktor.utils.io.core.writeShort
 
+/**
+ * @author Tyler Telis
+ */
 class UpdateFriendsListPacketAssembler : PacketAssembler<UpdateFriendListPacket>(opcode = 38, size = -2) {
     override fun assemblePacket(packet: UpdateFriendListPacket) = buildPacket {
         for (friend in packet.friends) {
