@@ -26,6 +26,10 @@ class ActorRenderer {
         return hit
     }
 
+    fun spotAnimation(spotAnimation: Render.SpotAnimation) {
+        pendingUpdates += spotAnimation
+    }
+
     fun animate(
         id: Int,
         delay: Int = 0

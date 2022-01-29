@@ -9,6 +9,7 @@ import com.runetopic.xlitekt.network.packet.NPCInfoPacket
 import com.runetopic.xlitekt.network.packet.assembler.block.npc.NPCFaceTileBlock
 import com.runetopic.xlitekt.network.packet.assembler.block.npc.NPCHitDamageBlock
 import com.runetopic.xlitekt.network.packet.assembler.block.npc.NPCOverheadChatBlock
+import com.runetopic.xlitekt.network.packet.assembler.block.npc.NPCSpotAnimationBlock
 import com.runetopic.xlitekt.plugin.ktor.inject
 import com.runetopic.xlitekt.util.ext.BitAccess
 import com.runetopic.xlitekt.util.ext.toInt
@@ -121,6 +122,7 @@ class NPCInfoPacketAssembler(
         is Render.OverheadChat -> it to NPCOverheadChatBlock()
         is Render.FaceTile -> it to NPCFaceTileBlock()
         is Render.HitDamage -> it to NPCHitDamageBlock()
+        is Render.SpotAnimation -> it to NPCSpotAnimationBlock()
         else -> throw IllegalStateException("Unhandled npc block in NpcInfo. Block was $it")
     }
 

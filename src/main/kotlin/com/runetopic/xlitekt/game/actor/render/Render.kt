@@ -8,12 +8,25 @@ import java.util.EnumMap
 
 /**
  * @author Jordan Abraham
+ * @author Tyler Telis
  */
 sealed class Render {
     data class Animation(
         val id: Int,
         val delay: Int
     ) : Render()
+
+    data class SpotAnimation(
+        val id: Int,
+        val speed: Int,
+        val height: Int,
+        val rotation: Int
+    ) : Render() {
+        constructor(id: Int) : this(id, 0, 0, 0)
+        constructor(id: Int, height: Int) : this(id, 0, height, 0)
+        constructor(id: Int, speed: Int, height: Int) : this(id, speed, height, 0)
+        fun packedMetaData(): Int = speed and 0xffff or (height shl 16) // TODO rotation is used?
+    }
 
     data class OverheadChat(
         val text: String
