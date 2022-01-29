@@ -20,7 +20,7 @@ val gameModule = module {
 }
 
 class Game {
-    private val world = inject<World>()
+    private val world by inject<World>()
     private val service = Executors.newScheduledThreadPool(1)
     private val logger = InlineLogger()
 
@@ -28,7 +28,7 @@ class Game {
         service.scheduleAtFixedRate({
             val time = measureTime {
                 runBlocking {
-                    world.value.players.filterNotNull().filter(Player::online).let { players ->
+                    world.players.filterNotNull().filter(Player::online).let { players ->
                         players.forEach { it.client.writePacket(PlayerInfoPacket(it)) }
                         players.forEach { it.client.writePacket(NPCInfoPacket(it)) }
                         players.forEach { it.reset() }
