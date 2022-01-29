@@ -12,23 +12,8 @@ class ActorRenderer {
 
     val pendingUpdates = mutableListOf<Render>()
 
-    fun overheadChat(text: String) {
-        pendingUpdates += Render.OverheadChat(text)
-    }
-
-    fun faceTile(tile: Tile) {
-        pendingUpdates += Render.FaceTile(tile)
-    }
-
-    fun hit(source: Actor?, type: HitType, damage: Int, delay: Int): Render.HitDamage {
-        val hit = Render.HitDamage(source, type, damage, delay)
-        pendingUpdates += hit
-        return hit
-    }
-
-    fun spotAnimation(spotAnimation: Render.SpotAnimation) {
-        pendingUpdates += spotAnimation
-    }
+    fun hasPendingUpdate(): Boolean = pendingUpdates.isNotEmpty()
+    fun clearUpdates() = pendingUpdates.clear()
 
     fun animate(animation: Render.Animation) {
         pendingUpdates += animation
@@ -39,14 +24,41 @@ class ActorRenderer {
         return appearance
     }
 
-    fun hasPendingUpdate(): Boolean = pendingUpdates.isNotEmpty()
-    fun clearUpdates() = pendingUpdates.clear()
+    fun faceActor(index: Int) {
+        pendingUpdates += Render.FaceActor(index)
+    }
+
+    fun faceTile(tile: Tile) {
+        pendingUpdates += Render.FaceTile(tile)
+    }
+
+    fun forceMove(forceMovement: Render.ForceMovement) {
+        pendingUpdates += forceMovement
+    }
+
+    fun hit(source: Actor?, type: HitType, damage: Int, delay: Int): Render.HitDamage {
+        val hit = Render.HitDamage(source, type, damage, delay)
+        pendingUpdates += hit
+        return hit
+    }
+
+    fun overheadChat(text: String) {
+        pendingUpdates += Render.OverheadChat(text)
+    }
 
     fun setCustomCombatLevel(level: Int) {
         pendingUpdates += Render.CustomCombatLevel(level)
     }
 
-    fun forceMove(forceMovement: Render.ForceMovement) {
-        pendingUpdates += forceMovement
+    fun recolor(recolor: Render.Recolor) {
+        pendingUpdates += recolor
+    }
+
+    fun spotAnimation(spotAnimation: Render.SpotAnimation) {
+        pendingUpdates += spotAnimation
+    }
+
+    fun transmog(id: Int) {
+        pendingUpdates += Render.NPCTransmogrification(id)
     }
 }

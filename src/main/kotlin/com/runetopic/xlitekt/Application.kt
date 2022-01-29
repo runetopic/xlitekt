@@ -3,8 +3,6 @@ package com.runetopic.xlitekt
 import com.github.michaelbull.logging.InlineLogger
 import com.runetopic.xlitekt.game.Game
 import com.runetopic.xlitekt.game.actor.npc.NPC
-import com.runetopic.xlitekt.game.actor.render.HitBarType
-import com.runetopic.xlitekt.game.actor.render.HitType
 import com.runetopic.xlitekt.game.actor.render.Render
 import com.runetopic.xlitekt.game.tile.Tile
 import com.runetopic.xlitekt.game.world.World
@@ -28,14 +26,10 @@ fun Application.module() {
     installKoin()
     get<Game>().start()
     val npc = NPC(10, Tile(3220, 3220))
-    npc.overheadChat("What it do slick?")
-    npc.faceTile(Tile(3222, 3222))
-    npc.setCustomCombatLevel(3200)
-    npc.animate(Render.Animation(300))
-    npc.forceMove(Render.ForceMovement(Tile(3222, 3222), 0, 512))
-    npc.hit(HitBarType.DEFAULT, null, HitType.VENOM_DAMAGE, 5, 0)
-    npc.spotAnimation(Render.SpotAnimation(320))
     inject<World>().value.npcs.register(npc)
+    npc.faceActor(1 + 32768)
+    npc.transmog(400)
+    npc.recolor(Render.Recolor(0, 6, 28, 112, 0, 240)) // Nex color
     get<Network>().awaitOnPort(environment.config.property("ktor.deployment.port").getString().toInt())
 }
 

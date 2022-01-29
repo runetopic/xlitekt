@@ -25,13 +25,16 @@ abstract class Actor(
         nextHitBars += hitBarType
     }
 
-    fun forceMove(forceMovement: Render.ForceMovement) = renderer.forceMove(forceMovement)
     fun animate(animation: Render.Animation) = renderer.animate(animation)
-    fun spotAnimation(spotAnimation: Render.SpotAnimation) = renderer.spotAnimation(spotAnimation)
-    fun overheadChat(text: String) = renderer.overheadChat(text)
+    fun faceActor(index: Int) = renderer.faceActor(index)
     fun faceTile(tile: Tile) = renderer.faceTile(tile)
-    fun pendingUpdates() = renderer.pendingUpdates
+    fun forceMove(forceMovement: Render.ForceMovement) = renderer.forceMove(forceMovement)
     fun hasPendingUpdate() = renderer.hasPendingUpdate()
+    fun overheadChat(text: String) = renderer.overheadChat(text)
+    fun pendingUpdates() = renderer.pendingUpdates
+    fun recolor(recolor: Render.Recolor) = renderer.recolor(recolor)
+    fun spotAnimation(spotAnimation: Render.SpotAnimation) = renderer.spotAnimation(spotAnimation)
+    fun transmog(id: Int) = renderer.transmog(id)
 
     fun reset() {
         renderer.clearUpdates()

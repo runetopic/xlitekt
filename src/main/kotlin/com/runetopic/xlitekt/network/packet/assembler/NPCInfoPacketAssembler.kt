@@ -7,12 +7,15 @@ import com.runetopic.xlitekt.game.tile.withinDistance
 import com.runetopic.xlitekt.game.world.World
 import com.runetopic.xlitekt.network.packet.NPCInfoPacket
 import com.runetopic.xlitekt.network.packet.assembler.block.npc.NPCCustomCombatLevelBLock
+import com.runetopic.xlitekt.network.packet.assembler.block.npc.NPCFaceActorBlock
 import com.runetopic.xlitekt.network.packet.assembler.block.npc.NPCFaceTileBlock
 import com.runetopic.xlitekt.network.packet.assembler.block.npc.NPCForceMovementBlock
 import com.runetopic.xlitekt.network.packet.assembler.block.npc.NPCHitDamageBlock
 import com.runetopic.xlitekt.network.packet.assembler.block.npc.NPCOverheadChatBlock
+import com.runetopic.xlitekt.network.packet.assembler.block.npc.NPCRecolorBlock
 import com.runetopic.xlitekt.network.packet.assembler.block.npc.NPCSequenceBlock
 import com.runetopic.xlitekt.network.packet.assembler.block.npc.NPCSpotAnimationBlock
+import com.runetopic.xlitekt.network.packet.assembler.block.npc.NPCTransmogrificationBlock
 import com.runetopic.xlitekt.plugin.ktor.inject
 import com.runetopic.xlitekt.util.ext.BitAccess
 import com.runetopic.xlitekt.util.ext.toInt
@@ -124,11 +127,14 @@ class NPCInfoPacketAssembler(
     private fun mapToBlock(it: Render) = when (it) {
         is Render.Animation -> it to NPCSequenceBlock()
         is Render.CustomCombatLevel -> it to NPCCustomCombatLevelBLock()
+        is Render.FaceActor -> it to NPCFaceActorBlock()
         is Render.FaceTile -> it to NPCFaceTileBlock()
         is Render.ForceMovement -> it to NPCForceMovementBlock()
         is Render.HitDamage -> it to NPCHitDamageBlock()
+        is Render.Recolor -> it to NPCRecolorBlock()
         is Render.OverheadChat -> it to NPCOverheadChatBlock()
         is Render.SpotAnimation -> it to NPCSpotAnimationBlock()
+        is Render.NPCTransmogrification -> it to NPCTransmogrificationBlock()
         else -> throw IllegalStateException("Unhandled npc block in NpcInfo. Block was $it")
     }
 

@@ -30,6 +30,23 @@ sealed class Render {
         fun packedMetaData(): Int = speed and 0xffff or (height shl 16) // TODO rotation is used?
     }
 
+    data class FaceActor(
+        val index: Int
+    ) : Render()
+
+    data class NPCTransmogrification(
+        val id: Int
+    ) : Render()
+
+    data class Recolor(
+        val hue: Int,
+        val saturation: Int,
+        val luminance: Int,
+        val amount: Int,
+        val startDelay: Int,
+        val endDelay: Int
+    ) : Render()
+
     data class ForceMovement(
         val firstTile: Tile,
         val secondTile: Tile?,
