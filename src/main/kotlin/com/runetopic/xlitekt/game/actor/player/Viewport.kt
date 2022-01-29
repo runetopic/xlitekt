@@ -2,6 +2,7 @@ package com.runetopic.xlitekt.game.actor.player
 
 import com.runetopic.xlitekt.game.actor.npc.NPC
 import com.runetopic.xlitekt.game.world.World
+import com.runetopic.xlitekt.game.world.World.Companion.MAX_PLAYERS
 import com.runetopic.xlitekt.plugin.ktor.inject
 import com.runetopic.xlitekt.util.ext.withBitAccess
 import io.ktor.utils.io.core.BytePacketBuilder
@@ -10,11 +11,11 @@ import java.util.LinkedList
 class Viewport(
     val player: Player,
 ) {
-    val nsnFlags = IntArray(2048)
-    val coordinates = IntArray(2048)
-    val localIndexes = IntArray(2048)
-    val externalIndexes = IntArray(2048)
-    val localPlayers = Array<Player?>(2048) { null }
+    val nsnFlags = IntArray(MAX_PLAYERS)
+    val coordinates = IntArray(MAX_PLAYERS)
+    val localIndexes = IntArray(MAX_PLAYERS)
+    val externalIndexes = IntArray(MAX_PLAYERS)
+    val localPlayers = Array<Player?>(MAX_PLAYERS) { null }
     val localNPCs = LinkedList<NPC>()
     var localIndexesSize: Int = 0
     var externalIndexesSize: Int = 0
@@ -25,7 +26,7 @@ class Viewport(
         writeBits(30, player.tile.coordinates)
         localPlayers[player.index] = player
         localIndexes[localIndexesSize++] = player.index
-        (1 until 2048).forEach {
+        (1 until MAX_PLAYERS).forEach {
             if (it == player.index) return@forEach
             val otherRegionCoordinates = world.players[it]?.tile?.regionCoordinates ?: 0
             writeBits(18, otherRegionCoordinates)
@@ -37,7 +38,7 @@ class Viewport(
     fun shift() {
         localIndexesSize = 0
         externalIndexesSize = 0
-        (1 until 2048).forEach {
+        (1 until MAX_PLAYERS).forEach {
             when (localPlayers[it]) {
                 null -> externalIndexes[externalIndexesSize++] = it
                 else -> localIndexes[localIndexesSize++] = it

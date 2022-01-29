@@ -26,7 +26,7 @@ fun Application.module() {
     installKoin()
     get<Game>().start()
     val npc = NPC(10, Tile(3220, 3220))
-    inject<World>().value.npcs.register(npc)
+    inject<World>().value.npcs.add(npc)
     npc.faceActor(1 + 32768)
     npc.transmog(400)
     npc.recolor(Render.Recolor(0, 6, 28, 112, 0, 240)) // Nex color

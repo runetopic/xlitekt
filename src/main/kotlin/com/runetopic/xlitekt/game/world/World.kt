@@ -1,14 +1,26 @@
 package com.runetopic.xlitekt.game.world
 
-import com.runetopic.xlitekt.game.actor.NpcList
+import com.runetopic.xlitekt.game.actor.NPCList
 import com.runetopic.xlitekt.game.actor.PlayerList
+import com.runetopic.xlitekt.game.actor.player.Player
+import com.runetopic.xlitekt.network.packet.NPCInfoPacket
+import com.runetopic.xlitekt.network.packet.PlayerInfoPacket
+import kotlinx.coroutines.runBlocking
 
-data class World(
-    val players: PlayerList = PlayerList(),
-    val npcs: NpcList = NpcList()
-) {
+class World {
+    val players = PlayerList(MAX_PLAYERS)
+    val npcs = NPCList(MAX_NPCs)
+
+    fun process() = runBlocking {
+        players.filterNotNull().filter(Player::online).let { players ->
+            players.forEach { it.client.writePacket(PlayerInfoPacket(it)) }
+            players.forEach { it.client.writePacket(NPCInfoPacket(it)) }
+            players.forEach { it.reset() }
+        }
+    }
+
     companion object {
-        const val MAX_PLAYERS = 2000
+        const val MAX_PLAYERS = 2048
         const val MAX_NPCs = Short.MAX_VALUE.toInt()
     }
 }

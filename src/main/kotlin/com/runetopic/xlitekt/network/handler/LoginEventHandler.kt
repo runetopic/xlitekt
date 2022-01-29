@@ -20,7 +20,7 @@ class LoginEventHandler : EventHandler<ReadEvent.LoginReadEvent, WriteEvent.Logi
         )
         val player = Player(client, event.username)
         client.player = player
-        world.players.register(player)
+        world.players.add(player)
         return WriteEvent.LoginWriteEvent(LOGIN_SUCCESS_OPCODE)
     }
 }

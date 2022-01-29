@@ -3,90 +3,47 @@ package com.runetopic.xlitekt.game.actor
 import com.runetopic.xlitekt.game.actor.npc.NPC
 import com.runetopic.xlitekt.game.actor.player.Player
 
-private const val MAX_PLAYER_COUNT = 2048
-private const val MAX_NPC_COUNT = 32767
-
 private const val INVALID_INDEX = -1
 private const val INDEX_PADDING = 1
 
-private inline fun <reified T> createList(count: Int): MutableList<T?> =
-    arrayOfNulls<T>(count).toMutableList()
+typealias PlayerList = ActorList<Player?>
+typealias NPCList = ActorList<NPC>
 
-private inline fun <reified T> List<T>.freeIndex(): Int {
-    for (i in INDEX_PADDING until indices.last) {
-        if (this[i] == null) {
-            return i
-        }
-    }
-    return INVALID_INDEX
-}
+/**
+ * @author Tyler Telis
+ */
+class ActorList<T>(
+    private val initialCapacity: Int,
+    private val actors: MutableList<T?> = createMutableList<T?>(initialCapacity)
+) : List<T?> by actors {
+    override val size: Int get() = actors.count { it != null }
+    val indices: IntRange get() = actors.indices
+    val capacity: Int get() = actors.size
 
-class PlayerList(
-    private val players: MutableList<Player?> = createList(MAX_PLAYER_COUNT)
-) : List<Player?> by players {
-
-    override val size: Int
-        get() = players.count { it != null }
-
-    val indices: IntRange
-        get() = players.indices
-
-    val capacity: Int
-        get() = players.size
-
-    fun register(player: Player): Boolean {
-        val index = players.freeIndex()
-        if (index == INVALID_INDEX) {
-            return false
-        }
-        players[index] = player
-        player.index = index
-        return true
+    @Suppress("UNCHECKED_CAST")
+    fun add(actor: Actor): Boolean {
+        val index = actors.freeIndex()
+        if (index == INVALID_INDEX) return false
+        actors[index] = actor as T
+        actor.index = index
+        return actors[actor.index] != null
     }
 
-    fun remove(player: Player): Boolean = when {
-        player.index == INVALID_INDEX -> false
-        players[player.index] != player -> false
+    fun remove(actor: Actor): Boolean = when {
+        actor.index == INVALID_INDEX -> false
+        actors[actor.index] != actor -> false
         else -> {
-            players[player.index] = null
-            true
+            actors[actor.index] = null
+            actors[actor.index] == null
         }
     }
 
     override fun isEmpty(): Boolean = size == 0
-}
 
-class NpcList(
-    private val npcs: MutableList<NPC?> = createList(MAX_NPC_COUNT)
-) : List<NPC?> by npcs {
+    private fun <T> List<T>.freeIndex(): Int = (INDEX_PADDING until indices.last).firstOrNull { this[it] == null } ?: INVALID_INDEX
 
-    override val size: Int
-        get() = npcs.count { it != null }
-
-    val indices: IntRange
-        get() = npcs.indices
-
-    val capacity: Int
-        get() = npcs.size
-
-    fun register(npc: NPC): Boolean {
-        val index = npcs.freeIndex()
-        if (index == INVALID_INDEX) {
-            return false
-        }
-        npcs[index] = npc
-        npc.index = index
-        return true
+    companion object {
+        @Suppress("UNCHECKED_CAST")
+        private fun <T> createMutableList(size: Int): MutableList<T?> = (arrayOfNulls<Any?>(size) as Array<T?>).toMutableList()
     }
-
-    fun remove(npc: NPC): Boolean = when {
-        npc.index == INVALID_INDEX -> false
-        npcs[npc.index] != npc -> false
-        else -> {
-            npcs[npc.index] = null
-            true
-        }
-    }
-
-    override fun isEmpty(): Boolean = size == 0
 }
