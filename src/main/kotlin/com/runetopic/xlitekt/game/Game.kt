@@ -1,6 +1,7 @@
 package com.runetopic.xlitekt.game
 
 import com.github.michaelbull.logging.InlineLogger
+import com.runetopic.xlitekt.game.actor.player.Player
 import com.runetopic.xlitekt.game.world.World
 import com.runetopic.xlitekt.network.packet.NPCInfoPacket
 import com.runetopic.xlitekt.network.packet.PlayerInfoPacket
@@ -27,10 +28,10 @@ class Game {
         service.scheduleAtFixedRate({
             val time = measureTime {
                 runBlocking {
-                    world.value.players.let { players ->
-                        players.filterNotNull().forEach { it.client.writePacket(PlayerInfoPacket(it)) }
-                        players.filterNotNull().forEach { it.client.writePacket(NPCInfoPacket(it)) }
-                        players.filterNotNull().forEach { it.reset() }
+                    world.value.players.filterNotNull().filter(Player::online).let { players ->
+                        players.forEach { it.client.writePacket(PlayerInfoPacket(it)) }
+                        players.forEach { it.client.writePacket(NPCInfoPacket(it)) }
+                        players.forEach { it.reset() }
                     }
                 }
             }

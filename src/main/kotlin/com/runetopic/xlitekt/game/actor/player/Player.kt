@@ -42,6 +42,7 @@ class Player(
     var rights = 2
     val viewport = Viewport(this)
     var appearance = Render.Appearance(Render.Appearance.Gender.MALE, -1, -1, -1, false)
+    var online = false
 
     suspend fun login() {
         this.previousTile = this.tile
@@ -84,9 +85,11 @@ class Player(
         client.writePacket(UpdateRebootTimerPacket(10_000))
         client.writePacket(UpdateContainerPartialPacket(149 shl 16 or 65536, 93, listOf(Item(4151, 1), Item(995, 1)), listOf(1)))
         refreshAppearance()
+        online = true
     }
 
     fun logout() {
+        online = false
         inject<World>().value.players.remove(this)
     }
 
