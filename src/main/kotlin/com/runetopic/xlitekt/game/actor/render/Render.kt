@@ -30,6 +30,16 @@ sealed class Render {
         fun packedMetaData(): Int = speed and 0xffff or (height shl 16) // TODO rotation is used?
     }
 
+    data class ForceMovement(
+        val firstTile: Tile,
+        val secondTile: Tile?,
+        val firstDelay: Int = 0,
+        val secondDelay: Int = 0,
+        val rotation: Int = 0
+    ) : Render() {
+        constructor(firstTile: Tile, delay: Int, rotation: Int): this(firstTile, null, delay, 0, rotation)
+    }
+
     data class OverheadChat(
         val text: String
     ) : Render()

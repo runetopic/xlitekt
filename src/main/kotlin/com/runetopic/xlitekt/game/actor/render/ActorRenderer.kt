@@ -45,4 +45,8 @@ class ActorRenderer {
     fun setCustomCombatLevel(level: Int) {
         pendingUpdates += Render.CustomCombatLevel(level)
     }
+
+    fun forceMove(forceMovement: Render.ForceMovement) {
+        pendingUpdates += forceMovement
+    }
 }
