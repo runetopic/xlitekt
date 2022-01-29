@@ -22,11 +22,6 @@ import org.koin.dsl.module
 import java.net.InetSocketAddress
 import java.util.concurrent.Executors
 
-/**
- * @author Jordan Abraham
- */
-private val logger = InlineLogger()
-
 val networkModule = module {
     single { HandshakeEventPipeline() }
     single { HandshakeEventHandler() }
@@ -39,6 +34,9 @@ val networkModule = module {
     single { Network() }
 }
 
+/**
+ * @author Jordan Abraham
+ */
 class Network {
     private val logger = InlineLogger()
     private val dispatcher = Executors.newCachedThreadPool().asCoroutineDispatcher()
