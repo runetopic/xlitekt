@@ -9,7 +9,7 @@ import io.ktor.utils.io.core.buildPacket
 /**
  * @author Tyler Telis
  */
-class PlayerUsernameOverride : RenderingBlock<Player, Render.UsernameOverride>(6, 0x100) {
+class PlayerUsernameOverrideBlock : RenderingBlock<Player, Render.UsernameOverride>(6, 0x100) {
     override fun build(actor: Player, render: Render.UsernameOverride) = buildPacket {
         writeStringCp1252NullTerminated(render.prefix)
         writeStringCp1252NullTerminated(render.infix)
