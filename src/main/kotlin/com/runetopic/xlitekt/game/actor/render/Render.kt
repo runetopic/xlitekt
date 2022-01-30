@@ -18,6 +18,12 @@ sealed class Render {
         constructor(id: Int) : this(id, 0)
     }
 
+    data class UsernameOverride(
+        val prefix: String,
+        val infix: String,
+        val suffix: String
+    ) : Render()
+
     data class SpotAnimation(
         val id: Int,
         val speed: Int,

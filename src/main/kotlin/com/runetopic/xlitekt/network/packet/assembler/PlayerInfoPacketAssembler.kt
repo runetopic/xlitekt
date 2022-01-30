@@ -6,6 +6,7 @@ import com.runetopic.xlitekt.game.tile.withinDistance
 import com.runetopic.xlitekt.game.world.World
 import com.runetopic.xlitekt.network.packet.PlayerInfoPacket
 import com.runetopic.xlitekt.network.packet.assembler.block.player.PlayerAppearanceBlock
+import com.runetopic.xlitekt.network.packet.assembler.block.player.PlayerUsernameOverride
 import com.runetopic.xlitekt.network.packet.assembler.block.player.PlayerFaceActorBlock
 import com.runetopic.xlitekt.network.packet.assembler.block.player.PlayerForceMovementBlock
 import com.runetopic.xlitekt.network.packet.assembler.block.player.PlayerHitDamageBlock
@@ -253,6 +254,7 @@ class PlayerInfoPacketAssembler : PacketAssembler<PlayerInfoPacket>(opcode = 80,
     private fun mapToBlock(it: Render) = when (it) {
         is Render.Appearance -> it to PlayerAppearanceBlock()
         is Render.Animation -> it to PlayerSequenceBlock()
+        is Render.UsernameOverride -> it to PlayerUsernameOverride()
         is Render.FaceActor -> it to PlayerFaceActorBlock()
         is Render.ForceMovement -> it to PlayerForceMovementBlock()
         is Render.HitDamage -> it to PlayerHitDamageBlock()

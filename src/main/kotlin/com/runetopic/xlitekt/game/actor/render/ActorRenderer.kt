@@ -19,6 +19,10 @@ class ActorRenderer {
         pendingUpdates += animation
     }
 
+    fun customOptions(string1: String, string2: String, string3: String) {
+        pendingUpdates += Render.UsernameOverride(string1, string2, string3)
+    }
+
     fun appearance(appearance: Render.Appearance): Render.Appearance {
         pendingUpdates += appearance
         return appearance
