@@ -36,6 +36,11 @@ sealed class Render {
         fun packedMetaData(): Int = speed and 0xffff or (height shl 16) // TODO rotation is used?
     }
 
+    data class PublicChat(
+        val message: String,
+        val packedEffects: Int
+    ) : Render()
+
     data class FaceActor(
         val index: Int
     ) : Render()

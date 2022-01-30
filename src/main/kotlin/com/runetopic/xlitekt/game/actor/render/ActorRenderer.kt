@@ -69,4 +69,8 @@ class ActorRenderer {
     fun setTemporaryMovementType(id: Int) {
         pendingUpdates += Render.TemporaryMovementType(id)
     }
+
+    fun publicChat(message: String, packedEffects: Int) {
+        pendingUpdates += Render.PublicChat(message, packedEffects)
+    }
 }

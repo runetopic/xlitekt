@@ -12,7 +12,7 @@ dependencyResolutionManagement {
             version("koin", "3.1.5")
             version("slf4j", "1.7.32")
             version("cache", "1.4.19-SNAPSHOT")
-            version("cryptography", "1.0.7-SNAPSHOT")
+            version("cryptography", "1.0.10-SNAPSHOT")
             version("kotlinx", "1.3.2")
             version("kotlin-inline-logger", "1.0.4")
 

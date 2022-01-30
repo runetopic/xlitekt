@@ -25,7 +25,7 @@ abstract class Actor(
         nextHitBars += hitBarType
     }
 
-
+    fun publicChat(message: String, packedEffects: Int) = renderer.publicChat(message, packedEffects)
     fun customOptions(string1: String, string2: String, string3: String) = renderer.customOptions(string1, string2, string3)
     fun animate(animation: Render.Animation) = renderer.animate(animation)
     fun faceActor(index: Int) = renderer.faceActor(index)

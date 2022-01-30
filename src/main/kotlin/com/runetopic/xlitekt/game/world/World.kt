@@ -13,6 +13,9 @@ class World {
 
     fun process() = runBlocking {
         players.filterNotNull().filter(Player::online).let { players ->
+            for (player in players) {
+                player.publicChat("Testing", 0)
+            }
             players.forEach {
                 it.client.writePacket(PlayerInfoPacket(it))
             }
