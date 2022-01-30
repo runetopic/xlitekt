@@ -1,19 +1,21 @@
-package com.runetopic.xlitekt.network.packet.assembler.block.npc
+package com.runetopic.xlitekt.network.packet.assembler.block.player
 
-import com.runetopic.xlitekt.game.actor.npc.NPC
+import com.runetopic.xlitekt.game.actor.player.Player
 import com.runetopic.xlitekt.game.actor.render.Render
 import com.runetopic.xlitekt.network.packet.assembler.block.RenderingBlock
 import com.runetopic.xlitekt.util.ext.writeByteAdd
 import com.runetopic.xlitekt.util.ext.writeByteNegate
 import com.runetopic.xlitekt.util.ext.writeSmart
+import io.ktor.utils.io.core.ByteReadPacket
 import io.ktor.utils.io.core.buildPacket
 
 /**
  * @author Tyler Telis
  */
-class NPCHitDamageBlock : RenderingBlock<NPC, Render.HitDamage>(2, 0x1) {
-    override fun build(actor: NPC, render: Render.HitDamage) = buildPacket {
-        writeByteAdd(actor.nextHits.size.toByte())
+class PlayerHitDamageBlock : RenderingBlock<Player, Render.HitDamage>(1, 0x4) {
+
+    override fun build(actor: Player, render: Render.HitDamage): ByteReadPacket = buildPacket {
+        writeByte(actor.nextHits.size.toByte())
 
         actor.nextHits.forEach {
             val type = it.type

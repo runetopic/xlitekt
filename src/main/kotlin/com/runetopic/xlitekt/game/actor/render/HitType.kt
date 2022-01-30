@@ -14,4 +14,6 @@ enum class HitType(
     NIGHTMARE_TEMPOROSS_HIT(18),
     ZALCANO_ARMOUR_HIT(20),
     CHARGE_DAMAGE_NIGHTMARE(22);
+
+    fun isTinted(): Boolean = this != VENOM_DAMAGE && this != POISON_DAMAGE && this != HEAL
 }

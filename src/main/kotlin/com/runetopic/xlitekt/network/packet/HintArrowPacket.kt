@@ -1,6 +1,6 @@
 package com.runetopic.xlitekt.network.packet
 
-import com.runetopic.xlitekt.game.actor.HintArrowType
+import com.runetopic.xlitekt.game.actor.render.HintArrowType
 
 /**
  * @author Jordan Abraham

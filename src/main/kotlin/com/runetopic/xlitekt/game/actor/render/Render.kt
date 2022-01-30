@@ -74,7 +74,9 @@ sealed class Render {
         val type: HitType,
         val damage: Int,
         val delay: Int
-    ) : Render()
+    ) : Render() {
+        fun isInteracting(actor: Actor, target: Actor?): Boolean = source == actor || actor == target
+    }
 
     data class Appearance(
         val gender: Gender = Gender.MALE,

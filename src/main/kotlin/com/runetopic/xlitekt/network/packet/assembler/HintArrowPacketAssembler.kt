@@ -1,6 +1,6 @@
 package com.runetopic.xlitekt.network.packet.assembler
 
-import com.runetopic.xlitekt.game.actor.HintArrowType
+import com.runetopic.xlitekt.game.actor.render.HintArrowType
 import com.runetopic.xlitekt.network.packet.HintArrowPacket
 import io.ktor.utils.io.core.fill
 import io.ktor.utils.io.core.writeShort

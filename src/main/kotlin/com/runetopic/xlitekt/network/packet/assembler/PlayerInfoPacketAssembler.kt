@@ -6,6 +6,7 @@ import com.runetopic.xlitekt.game.tile.withinDistance
 import com.runetopic.xlitekt.game.world.World
 import com.runetopic.xlitekt.network.packet.PlayerInfoPacket
 import com.runetopic.xlitekt.network.packet.assembler.block.player.PlayerAppearanceBlock
+import com.runetopic.xlitekt.network.packet.assembler.block.player.PlayerHitDamageBlock
 import com.runetopic.xlitekt.network.packet.assembler.block.player.PlayerSequenceBlock
 import com.runetopic.xlitekt.plugin.ktor.inject
 import com.runetopic.xlitekt.util.ext.BitAccess
@@ -249,6 +250,7 @@ class PlayerInfoPacketAssembler : PacketAssembler<PlayerInfoPacket>(opcode = 80,
     private fun mapToBlock(it: Render) = when (it) {
         is Render.Appearance -> it to PlayerAppearanceBlock()
         is Render.Animation -> it to PlayerSequenceBlock()
+        is Render.HitDamage -> it to PlayerHitDamageBlock()
         else -> throw IllegalStateException("Unhandled player block in PlayerInfo. Block was $it")
     }
 
