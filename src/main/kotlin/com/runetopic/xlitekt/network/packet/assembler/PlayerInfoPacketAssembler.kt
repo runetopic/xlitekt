@@ -8,6 +8,7 @@ import com.runetopic.xlitekt.network.packet.PlayerInfoPacket
 import com.runetopic.xlitekt.network.packet.assembler.block.player.PlayerAppearanceBlock
 import com.runetopic.xlitekt.network.packet.assembler.block.player.PlayerHitDamageBlock
 import com.runetopic.xlitekt.network.packet.assembler.block.player.PlayerSequenceBlock
+import com.runetopic.xlitekt.network.packet.assembler.block.player.PlayerTemporaryMovementTypeBlock
 import com.runetopic.xlitekt.plugin.ktor.inject
 import com.runetopic.xlitekt.util.ext.BitAccess
 import com.runetopic.xlitekt.util.ext.toInt
@@ -251,6 +252,7 @@ class PlayerInfoPacketAssembler : PacketAssembler<PlayerInfoPacket>(opcode = 80,
         is Render.Appearance -> it to PlayerAppearanceBlock()
         is Render.Animation -> it to PlayerSequenceBlock()
         is Render.HitDamage -> it to PlayerHitDamageBlock()
+        is Render.TemporaryMovementType -> it to PlayerTemporaryMovementTypeBlock()
         else -> throw IllegalStateException("Unhandled player block in PlayerInfo. Block was $it")
     }
 

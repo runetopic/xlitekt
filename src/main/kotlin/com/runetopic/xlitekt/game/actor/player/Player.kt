@@ -1,8 +1,8 @@
 package com.runetopic.xlitekt.game.actor.player
 
 import com.runetopic.xlitekt.game.actor.Actor
-import com.runetopic.xlitekt.game.actor.render.HintArrowType
 import com.runetopic.xlitekt.game.actor.player.friends.Friend
+import com.runetopic.xlitekt.game.actor.render.HintArrowType
 import com.runetopic.xlitekt.game.actor.render.Render
 import com.runetopic.xlitekt.game.item.Item
 import com.runetopic.xlitekt.game.tile.Tile

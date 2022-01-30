@@ -61,4 +61,8 @@ class ActorRenderer {
     fun transmog(id: Int) {
         pendingUpdates += Render.NPCTransmogrification(id)
     }
+
+    fun setTemporaryMovementType(id: Int) {
+        pendingUpdates += Render.TemporaryMovementType(id)
+    }
 }
