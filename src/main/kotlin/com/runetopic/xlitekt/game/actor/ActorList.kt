@@ -3,9 +3,6 @@ package com.runetopic.xlitekt.game.actor
 import com.runetopic.xlitekt.game.actor.npc.NPC
 import com.runetopic.xlitekt.game.actor.player.Player
 
-private const val INVALID_INDEX = -1
-private const val INDEX_PADDING = 1
-
 typealias PlayerList = ActorList<Player?>
 typealias NPCList = ActorList<NPC>
 
@@ -42,8 +39,11 @@ class ActorList<T>(
 
     private fun <T> List<T>.freeIndex(): Int = (INDEX_PADDING until indices.last).firstOrNull { this[it] == null } ?: INVALID_INDEX
 
-    companion object {
+    private companion object {
+        const val INVALID_INDEX = -1
+        const val INDEX_PADDING = 1
+
         @Suppress("UNCHECKED_CAST")
-        private fun <T> createMutableList(size: Int): MutableList<T?> = (arrayOfNulls<Any?>(size) as Array<T?>).toMutableList()
+        fun <T> createMutableList(size: Int): MutableList<T?> = (arrayOfNulls<Any?>(size) as Array<T?>).toMutableList()
     }
 }
