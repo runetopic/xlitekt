@@ -10,6 +10,7 @@ import com.runetopic.xlitekt.network.packet.assembler.block.player.PlayerUsernam
 import com.runetopic.xlitekt.network.packet.assembler.block.player.PlayerFaceActorBlock
 import com.runetopic.xlitekt.network.packet.assembler.block.player.PlayerForceMovementBlock
 import com.runetopic.xlitekt.network.packet.assembler.block.player.PlayerHitDamageBlock
+import com.runetopic.xlitekt.network.packet.assembler.block.player.PlayerMovementTypeBlock
 import com.runetopic.xlitekt.network.packet.assembler.block.player.PlayerPublicChatBlock
 import com.runetopic.xlitekt.network.packet.assembler.block.player.PlayerSequenceBlock
 import com.runetopic.xlitekt.network.packet.assembler.block.player.PlayerTemporaryMovementTypeBlock
@@ -257,6 +258,7 @@ class PlayerInfoPacketAssembler : PacketAssembler<PlayerInfoPacket>(opcode = 80,
         is Render.Animation -> it to PlayerSequenceBlock()
         is Render.UsernameOverride -> it to PlayerUsernameOverrideBlock()
         is Render.FaceActor -> it to PlayerFaceActorBlock()
+        is Render.MovementType -> it to PlayerMovementTypeBlock()
         is Render.ForceMovement -> it to PlayerForceMovementBlock()
         is Render.HitDamage -> it to PlayerHitDamageBlock()
         is Render.PublicChat -> it to PlayerPublicChatBlock()

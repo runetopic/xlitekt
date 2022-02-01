@@ -89,6 +89,10 @@ sealed class Render {
         fun isInteracting(actor: Actor, target: Actor?): Boolean = source == actor || actor == target
     }
 
+    data class MovementType(
+        val running: Boolean
+    ) : Render()
+
     data class TemporaryMovementType(val id: Int) : Render()
 
     data class Appearance(
