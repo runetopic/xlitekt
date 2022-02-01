@@ -45,6 +45,10 @@ sealed class Render {
         val index: Int
     ) : Render()
 
+    data class FaceDirection(
+        val direction: Int
+    ) : Render()
+
     data class NPCTransmogrification(
         val id: Int
     ) : Render()

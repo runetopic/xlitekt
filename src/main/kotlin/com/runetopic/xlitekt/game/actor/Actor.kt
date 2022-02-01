@@ -29,7 +29,7 @@ abstract class Actor(
     fun customOptions(string1: String, string2: String, string3: String) = renderer.customOptions(string1, string2, string3)
     fun animate(animation: Render.Animation) = renderer.animate(animation)
     fun faceActor(index: Int) = renderer.faceActor(index)
-    fun faceTile(tile: Tile) = renderer.faceTile(tile)
+    fun faceDirection(direction: Render.FaceDirection) = renderer.faceDirection(direction)
     fun forceMove(forceMovement: Render.ForceMovement) = renderer.forceMove(forceMovement)
     fun hasPendingUpdate() = renderer.hasPendingUpdate()
     fun overheadChat(text: String) = renderer.overheadChat(text)

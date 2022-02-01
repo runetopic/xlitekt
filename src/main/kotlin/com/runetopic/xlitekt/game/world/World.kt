@@ -15,6 +15,7 @@ class World {
     fun process() = runBlocking {
         players.filterNotNull().filter(Player::online).let { players ->
             for (player in players) {
+                player.faceDirection(Render.FaceDirection(511))
                 player.spotAnimation(Render.SpotAnimation(350))
                 player.publicChat("Testing", 0)
                 player.recolor(Render.Recolor(0, 6, 28, 112, 0, 240))

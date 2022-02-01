@@ -77,4 +77,8 @@ class ActorRenderer {
     fun publicChat(message: String, packedEffects: Int) {
         pendingUpdates += Render.PublicChat(message, packedEffects)
     }
+
+    fun faceDirection(direction: Render.FaceDirection) {
+        pendingUpdates += direction
+    }
 }
