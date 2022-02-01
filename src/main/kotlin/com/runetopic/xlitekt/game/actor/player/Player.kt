@@ -16,13 +16,16 @@ import com.runetopic.xlitekt.plugin.ktor.inject
  */
 class Player(
     val client: Client,
-    val username: String
+    val username: String,
+    val displayMode: DisplayMode = DisplayMode.FIXED
 ) : Actor(Tile(3222, 3222)) {
-    var rights = 2
-    val viewport = Viewport(this)
-    private val interfaceManager = InterfaceManager(this, DisplayMode.RESIZABLE) // TODO get this default from the one sent in login.
     var appearance = Render.Appearance(Render.Appearance.Gender.MALE, -1, -1, -1, false)
+
+    var rights = 2
     var online = false
+    val viewport = Viewport(this)
+
+    val interfaceManager = InterfaceManager(this)
 
     suspend fun login() {
         this.previousTile = this.tile

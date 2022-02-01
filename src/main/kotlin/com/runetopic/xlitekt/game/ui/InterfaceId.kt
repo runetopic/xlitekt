@@ -4,6 +4,7 @@ package com.runetopic.xlitekt.game.ui
  * @author Tyler Telis
  */
 object InterfaceId {
+    const val CHAT_BOX = 162
     const val COMBAT_OPTIONS = 593
     const val SKILLS = 320
     const val CHARACTER_SUMMARY = 629
