@@ -37,7 +37,7 @@ abstract class Actor(
     fun recolor(recolor: Render.Recolor) = renderer.recolor(recolor)
     fun spotAnimation(spotAnimation: Render.SpotAnimation) = renderer.spotAnimation(spotAnimation)
     fun transmog(id: Int) = renderer.transmog(id)
-    fun setTemporaryMovementType(id: Int) = renderer.setTemporaryMovementType(id)
+    fun setTemporaryMovementType(id: Int) = renderer.temporaryMovementType(id)
 
     fun reset() {
         renderer.clearUpdates()

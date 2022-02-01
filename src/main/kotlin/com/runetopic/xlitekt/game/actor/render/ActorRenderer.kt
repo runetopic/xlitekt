@@ -70,7 +70,7 @@ class ActorRenderer {
         pendingUpdates += Render.MovementType(running)
     }
 
-    fun setTemporaryMovementType(id: Int) {
+    fun temporaryMovementType(id: Int) {
         pendingUpdates += Render.TemporaryMovementType(id)
     }
 
