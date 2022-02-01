@@ -12,6 +12,7 @@ import com.runetopic.xlitekt.network.packet.assembler.block.player.PlayerForceMo
 import com.runetopic.xlitekt.network.packet.assembler.block.player.PlayerHitDamageBlock
 import com.runetopic.xlitekt.network.packet.assembler.block.player.PlayerMovementTypeBlock
 import com.runetopic.xlitekt.network.packet.assembler.block.player.PlayerPublicChatBlock
+import com.runetopic.xlitekt.network.packet.assembler.block.player.PlayerRecolorBlock
 import com.runetopic.xlitekt.network.packet.assembler.block.player.PlayerSequenceBlock
 import com.runetopic.xlitekt.network.packet.assembler.block.player.PlayerSpotAnimationBlock
 import com.runetopic.xlitekt.network.packet.assembler.block.player.PlayerTemporaryMovementTypeBlock
@@ -263,8 +264,9 @@ class PlayerInfoPacketAssembler : PacketAssembler<PlayerInfoPacket>(opcode = 80,
         is Render.ForceMovement -> it to PlayerForceMovementBlock()
         is Render.HitDamage -> it to PlayerHitDamageBlock()
         is Render.PublicChat -> it to PlayerPublicChatBlock()
-        is Render.TemporaryMovementType -> it to PlayerTemporaryMovementTypeBlock()
+        is Render.Recolor -> it to PlayerRecolorBlock()
         is Render.SpotAnimation -> it to PlayerSpotAnimationBlock()
+        is Render.TemporaryMovementType -> it to PlayerTemporaryMovementTypeBlock()
         else -> throw IllegalStateException("Unhandled player block in PlayerInfo. Block was $it")
     }
 
