@@ -6,7 +6,6 @@ import com.runetopic.xlitekt.game.tile.withinDistance
 import com.runetopic.xlitekt.game.world.World
 import com.runetopic.xlitekt.network.packet.PlayerInfoPacket
 import com.runetopic.xlitekt.network.packet.assembler.block.player.PlayerAppearanceBlock
-import com.runetopic.xlitekt.network.packet.assembler.block.player.PlayerUsernameOverrideBlock
 import com.runetopic.xlitekt.network.packet.assembler.block.player.PlayerFaceActorBlock
 import com.runetopic.xlitekt.network.packet.assembler.block.player.PlayerFaceDirectionBlock
 import com.runetopic.xlitekt.network.packet.assembler.block.player.PlayerForceMovementBlock
@@ -18,6 +17,7 @@ import com.runetopic.xlitekt.network.packet.assembler.block.player.PlayerRecolor
 import com.runetopic.xlitekt.network.packet.assembler.block.player.PlayerSequenceBlock
 import com.runetopic.xlitekt.network.packet.assembler.block.player.PlayerSpotAnimationBlock
 import com.runetopic.xlitekt.network.packet.assembler.block.player.PlayerTemporaryMovementTypeBlock
+import com.runetopic.xlitekt.network.packet.assembler.block.player.PlayerUsernameOverrideBlock
 import com.runetopic.xlitekt.plugin.ktor.inject
 import com.runetopic.xlitekt.util.ext.BitAccess
 import com.runetopic.xlitekt.util.ext.toInt

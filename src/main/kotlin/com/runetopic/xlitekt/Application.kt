@@ -6,9 +6,9 @@ import com.runetopic.xlitekt.network.Network
 import com.runetopic.xlitekt.plugin.ktor.installKoin
 import io.ktor.application.Application
 import io.ktor.server.engine.commandLineEnvironment
-import java.util.TimeZone
 import org.koin.core.context.stopKoin
 import org.koin.ktor.ext.get
+import java.util.TimeZone
 
 private val logger = InlineLogger()
 
