@@ -12,6 +12,7 @@ import com.runetopic.xlitekt.network.packet.assembler.block.player.PlayerFaceDir
 import com.runetopic.xlitekt.network.packet.assembler.block.player.PlayerForceMovementBlock
 import com.runetopic.xlitekt.network.packet.assembler.block.player.PlayerHitDamageBlock
 import com.runetopic.xlitekt.network.packet.assembler.block.player.PlayerMovementTypeBlock
+import com.runetopic.xlitekt.network.packet.assembler.block.player.PlayerOverheadChatBlock
 import com.runetopic.xlitekt.network.packet.assembler.block.player.PlayerPublicChatBlock
 import com.runetopic.xlitekt.network.packet.assembler.block.player.PlayerRecolorBlock
 import com.runetopic.xlitekt.network.packet.assembler.block.player.PlayerSequenceBlock
@@ -265,6 +266,7 @@ class PlayerInfoPacketAssembler : PacketAssembler<PlayerInfoPacket>(opcode = 80,
         is Render.MovementType -> it to PlayerMovementTypeBlock()
         is Render.ForceMovement -> it to PlayerForceMovementBlock()
         is Render.HitDamage -> it to PlayerHitDamageBlock()
+        is Render.OverheadChat -> it to PlayerOverheadChatBlock()
         is Render.PublicChat -> it to PlayerPublicChatBlock()
         is Render.Recolor -> it to PlayerRecolorBlock()
         is Render.SpotAnimation -> it to PlayerSpotAnimationBlock()
