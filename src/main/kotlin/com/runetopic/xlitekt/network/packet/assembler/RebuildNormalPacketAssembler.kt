@@ -13,7 +13,7 @@ import io.ktor.utils.io.core.writeShortLittleEndian
  */
 class RebuildNormalPacketAssembler : PacketAssembler<RebuildNormalPacket>(opcode = 54, size = -2) {
 
-    private val mapSquares = inject<List<MapSquare>>().value
+    private val mapSquares by inject<List<MapSquare>>()
 
     override fun assemblePacket(packet: RebuildNormalPacket) = buildPacket {
         if (packet.update) {
