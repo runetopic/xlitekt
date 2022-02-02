@@ -22,3 +22,4 @@ object InterfaceId {
     const val CHAT_CHANNEL = 707
     const val CHAT_CHANNEL_OVERLAY = 7
 }
+
