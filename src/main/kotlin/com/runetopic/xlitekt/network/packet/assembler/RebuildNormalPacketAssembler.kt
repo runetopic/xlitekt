@@ -32,11 +32,9 @@ class RebuildNormalPacketAssembler : PacketAssembler<RebuildNormalPacket>(opcode
             for (x in (chunkX - 6) / 8..(chunkX + 6) / 8) {
                 for (y in (chunkZ - 6) / 8..(chunkZ + 6) / 8) {
                     val regionId = y + (x shl 8)
-                    if (y != 49 && y != 149 && y != 147 && x != 50 && (x != 49 || y != 47)) {
-                        val xteaKeys = mapSquares.find { it.regionId == regionId }?.keys ?: listOf(0, 0, 0, 0)
-                        xteaKeys.forEach { writeInt(it) }
-                        ++size
-                    }
+                    val xteaKeys = mapSquares.find { it.regionId == regionId }?.keys ?: listOf(0, 0, 0, 0)
+                    xteaKeys.forEach { writeInt(it) }
+                    ++size
                 }
             }
         }
