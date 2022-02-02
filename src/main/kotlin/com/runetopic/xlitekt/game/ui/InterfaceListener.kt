@@ -1,31 +1,48 @@
 package com.runetopic.xlitekt.game.ui
 
-import com.runetopic.xlitekt.game.event.impl.IfButtonClickEvent
+import com.runetopic.xlitekt.game.event.impl.IfEvent
 import com.runetopic.xlitekt.util.hook.onEvent
 
 /**
  * @author Tyler Telis
  */
 class InterfaceListener(
-    private val event: IfButtonClickEvent
+    private val event: IfEvent
 ) {
-    fun onClick(function: (IfButtonClickEvent).() -> Unit) = function.invoke(event)
-
-    fun onClick(childId: Int, function: (IfButtonClickEvent).() -> Unit) {
-        if (event.childId == childId) {
-            function.invoke(event)
-        }
+    fun onOpenTop(function: (IfEvent.IfOpenTop).() -> Unit) {
+        if (event !is IfEvent.IfOpenTop) return
+        function.invoke(event)
     }
 
-    fun onOption(option: String, function: (IfButtonClickEvent).() -> Unit) {
-        if (event.option == option) {
-            function.invoke(event)
-        }
+    fun onOpenSub(function: (IfEvent.IfOpenSub).() -> Unit) {
+        if (event !is IfEvent.IfOpenSub) return
+        function.invoke(event)
+    }
+
+    fun onClick(function: (IfEvent.IfButtonClickEvent).() -> Unit) {
+        if (event !is IfEvent.IfButtonClickEvent) return
+        function.invoke(event)
+    }
+
+    fun onClick(childId: Int, function: (IfEvent.IfButtonClickEvent).() -> Unit) {
+        if (event !is IfEvent.IfButtonClickEvent || event.childId != childId) return
+        function.invoke(event)
+    }
+
+    fun onOption(option: String, function: (IfEvent.IfButtonClickEvent).() -> Unit) {
+        if (event !is IfEvent.IfButtonClickEvent || event.option != option) return
+        function.invoke(event)
     }
 
     companion object {
-        fun addInterfaceListener(interfaceId: Int, function: InterfaceListener.() -> Unit) {
-            onEvent<IfButtonClickEvent>().filter { this.interfaceId == interfaceId }.use {
+        inline fun addInterfaceListener(interfaceId: Int, crossinline function: InterfaceListener.() -> Unit) {
+            onEvent<IfEvent.IfButtonClickEvent>().filter { this.interfaceId == interfaceId }.use {
+                function.invoke(InterfaceListener(this))
+            }
+            onEvent<IfEvent.IfOpenTop>().filter { this.interfaceId == interfaceId }.use {
+                function.invoke(InterfaceListener(this))
+            }
+            onEvent<IfEvent.IfOpenSub>().filter { this.interfaceId == interfaceId }.use {
                 function.invoke(InterfaceListener(this))
             }
         }

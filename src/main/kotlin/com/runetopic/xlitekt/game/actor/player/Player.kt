@@ -30,17 +30,21 @@ class Player(
     private val interfaceManager = InterfaceManager(this)
 
     suspend fun login() {
+        addInterfaceListener(InterfaceId.SKILLS) {
+            onOpenSub {
+                println("Skilling interface opened")
+            }
+
+            onClick {
+                println("Clicked on: $this")
+            }
+        }
+
         this.previousTile = this.tile
         client.writePacket(RebuildNormalPacket(viewport, tile, true))
         interfaceManager.login()
         refreshAppearance()
         online = true
-
-        addInterfaceListener(InterfaceId.SKILLS) {
-            onClick {
-                println("Clicked on: $this")
-            }
-        }
     }
 
     fun logout() {

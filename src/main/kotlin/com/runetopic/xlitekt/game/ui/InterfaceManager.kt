@@ -1,9 +1,11 @@
 package com.runetopic.xlitekt.game.ui
 
-import com.github.michaelbull.logging.InlineLogger
 import com.runetopic.xlitekt.game.actor.player.Player
+import com.runetopic.xlitekt.game.event.EventBus
+import com.runetopic.xlitekt.game.event.impl.IfEvent
 import com.runetopic.xlitekt.network.packet.IfOpenSubPacket
 import com.runetopic.xlitekt.network.packet.IfOpenTopPacket
+import com.runetopic.xlitekt.plugin.ktor.inject
 
 /**
  * @author Tyler Telis
@@ -12,7 +14,7 @@ class InterfaceManager(
     private val player: Player
 ) {
     private val open = mutableMapOf<Int, Int>()
-    private val logger = InlineLogger()
+    private val eventBus by inject<EventBus>()
 
     suspend fun login() {
         player.displayMode.let { displayMode ->
@@ -27,12 +29,12 @@ class InterfaceManager(
             if (interfaceId == -1) return@forEach
             val componentId = it.componentIdForDisplay(displayMode)
             if (componentId == -1) return@forEach
-            openSub(it.interfaceId, componentId)
+            openSub(it.interfaceId, componentId, true)
         }
     }
 
     private fun open(packed: Int, interfaceId: Int): Boolean {
-        if (open.containsKey(packed)) return false // TODO handle this better
+        if (open.containsKey(packed)) return false
         open[packed] = interfaceId
         return true
     }
@@ -40,17 +42,16 @@ class InterfaceManager(
     private suspend fun openTop(interfaceId: Int) {
         val packed = interfaceId.packInterfaceComponent()
         if (open(packed, interfaceId)) {
+            eventBus.notify(IfEvent.IfOpenTop(interfaceId))
             player.client.writePacket(IfOpenTopPacket(interfaceId))
-            // TODO emit events when I add the event bus system so content can react to IF events
         }
     }
 
-    private suspend fun openSub(interfaceId: Int, component: Int) {
-        val packed = player.displayMode.interfaceId.packInterfaceComponent(component)
+    private suspend fun openSub(interfaceId: Int, childId: Int, alwaysOpen: Boolean) {
+        val packed = player.displayMode.interfaceId.packInterfaceComponent(childId)
         if (open(packed, interfaceId)) {
-            player.client.writePacket(IfOpenSubPacket(interfaceId, packed, true))
-            // TODO emit events when I add the event bus system so content can react to IF events
-            logger.debug { "Opening sub $interfaceId $component ${player.displayMode}" }
+            eventBus.notify(IfEvent.IfOpenSub(interfaceId, childId, alwaysOpen))
+            player.client.writePacket(IfOpenSubPacket(interfaceId, packed, alwaysOpen))
         }
     }
 
