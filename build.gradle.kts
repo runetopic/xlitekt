@@ -22,6 +22,7 @@ dependencies {
     implementation(deps.bundles.runetopic)
     implementation(deps.bundles.logger)
     implementation(deps.kotlinx.serialization.json)
+    implementation(deps.kotlin.reflect)
 }
 
 with(tasks) {

@@ -1,6 +1,7 @@
 package com.runetopic.xlitekt.game
 
 import com.github.michaelbull.logging.InlineLogger
+import com.runetopic.xlitekt.game.event.EventBus
 import com.runetopic.xlitekt.game.world.World
 import com.runetopic.xlitekt.plugin.ktor.inject
 import com.runetopic.xlitekt.util.resource.loadAllMapSquares
@@ -13,6 +14,7 @@ val gameModule = module {
     single { loadAllMapSquares() }
     single { World() }
     single { Game() }
+    single { EventBus() }
 }
 
 class Game {

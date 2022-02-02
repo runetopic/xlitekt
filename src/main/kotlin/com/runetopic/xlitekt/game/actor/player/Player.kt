@@ -4,6 +4,8 @@ import com.runetopic.xlitekt.game.actor.Actor
 import com.runetopic.xlitekt.game.actor.render.Render
 import com.runetopic.xlitekt.game.tile.Tile
 import com.runetopic.xlitekt.game.ui.DisplayMode
+import com.runetopic.xlitekt.game.ui.InterfaceId
+import com.runetopic.xlitekt.game.ui.InterfaceListener.Companion.addInterfaceListener
 import com.runetopic.xlitekt.game.ui.InterfaceManager
 import com.runetopic.xlitekt.game.world.World
 import com.runetopic.xlitekt.network.client.Client
@@ -33,6 +35,12 @@ class Player(
         interfaceManager.login()
         refreshAppearance()
         online = true
+
+        addInterfaceListener(InterfaceId.SKILLS) {
+            onClick {
+                println("Clicked on: $this")
+            }
+        }
     }
 
     fun logout() {
