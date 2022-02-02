@@ -25,7 +25,7 @@ class Player(
     var online = false
     val viewport = Viewport(this)
 
-    val interfaceManager = InterfaceManager(this)
+    private val interfaceManager = InterfaceManager(this)
 
     suspend fun login() {
         this.previousTile = this.tile

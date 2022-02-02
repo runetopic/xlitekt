@@ -10,20 +10,21 @@ enum class InterfaceInfo(
     private val resizableListChildId: Int
 ) {
     CHAT_BOX(InterfaceId.CHAT_BOX, 10, 94, -1),
-    COMBAT_OPTIONS(InterfaceId.COMBAT_OPTIONS, 62, 75, -1),
-    SKILLS(InterfaceId.SKILLS, 63, 76, -1),
-    CHARACTER_SUMMARY(InterfaceId.CHARACTER_SUMMARY, 64, 77, -1),
-    INVENTORY(InterfaceId.INVENTORY, 65, 78, 1),
-    WORN_EQUIPMENT(InterfaceId.WORN_EQUIPMENT, 66, 79, 1),
-    PRAYER(InterfaceId.PRAYER, 67, 80, 1),
-    MAGIC(InterfaceId.MAGIC, 68, 81, 1),
-    CHAT_CHANNEL(InterfaceId.CHAT_CHANNEL, 46, 82, 1),
-    ACCOUNT_MANAGEMENT(InterfaceId.ACCOUNT_MANAGEMENT, 47, 83, -1),
-    FRIENDS(InterfaceId.FRIENDS, 48, 84, 1),
-    LOGOUT(InterfaceId.LOGOUT, 49, 85, -1),
-    SETTINGS(InterfaceId.OPTIONS, 50, 86, -1),
-    EMOTES(InterfaceId.EMOTES, 51, 87, -1),
-    MUSIC_PLAYER(InterfaceId.MUSIC_PLAYER, 52, 88, -1);
+    CHAT_CHANNEL(InterfaceId.CHAT_CHANNEL, 86, -1, -1),
+    COMBAT_OPTIONS(InterfaceId.COMBAT_OPTIONS, 79, 75, -1),
+    SKILLS(InterfaceId.SKILLS, 80, 80, -1),
+    CHARACTER_SUMMARY(InterfaceId.CHARACTER_SUMMARY, 81, 77, -1),
+    INVENTORY(InterfaceId.INVENTORY, 82, 82, 1),
+    WORN_EQUIPMENT(InterfaceId.WORN_EQUIPMENT, 83, 79, 1),
+    PRAYER(InterfaceId.PRAYER, 84, 84, 1),
+    MAGIC(InterfaceId.MAGIC, 85, 85, 1),
+//    CHAT_CHANNEL(InterfaceId.CHAT_CHANNEL, 31, 82, 1), this needs to be sent ontop of interface 707. This is the overlay for chat channel
+    ACCOUNT_MANAGEMENT(InterfaceId.ACCOUNT_MANAGEMENT, 87, 83, -1),
+    FRIENDS(InterfaceId.FRIENDS, 88, 84, 1),
+    LOGOUT(InterfaceId.LOGOUT, 89, 85, -1),
+    SETTINGS(InterfaceId.OPTIONS, 90, 86, -1),
+    EMOTES(InterfaceId.EMOTES, 91, 87, -1),
+    MUSIC_PLAYER(InterfaceId.MUSIC_PLAYER, 92, 88, -1);
 
     fun componentIdForDisplay(mode: DisplayMode) = when (mode) {
         DisplayMode.FIXED -> fixedChildId

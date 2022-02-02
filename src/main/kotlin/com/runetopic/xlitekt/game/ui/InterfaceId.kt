@@ -12,11 +12,13 @@ object InterfaceId {
     const val WORN_EQUIPMENT = 387
     const val PRAYER = 541
     const val MAGIC = 218
-    const val CHAT_CHANNEL = 7
-    const val ACCOUNT_MANAGEMENT = 671
+
+    const val ACCOUNT_MANAGEMENT = 109
     const val FRIENDS = 429
     const val LOGOUT = 182
     const val OPTIONS = 116
     const val EMOTES = 216
     const val MUSIC_PLAYER = 239
+    const val CHAT_CHANNEL = 707
+    const val CHAT_CHANNEL_OVERLAY = 7
 }
