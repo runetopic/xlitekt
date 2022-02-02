@@ -10,7 +10,7 @@ enum class InterfaceInfo(
     private val resizableListChildId: Int
 ) {
     CHAT_BOX(InterfaceId.CHAT_BOX, 10, 94, 91),
-    CHAT_CHANNEL(InterfaceId.CHAT_CHANNEL, 86, -1, 79),
+    CHAT_CHANNEL(InterfaceId.CHAT_CHANNEL, 86, 82, 79),
     COMBAT_OPTIONS(InterfaceId.COMBAT_OPTIONS, 79, 75, 72),
     SKILLS(InterfaceId.SKILLS, 80, 80, 73),
     CHARACTER_SUMMARY(InterfaceId.CHARACTER_SUMMARY, 81, 77, 74),
