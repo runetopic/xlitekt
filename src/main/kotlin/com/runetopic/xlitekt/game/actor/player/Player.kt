@@ -16,21 +16,20 @@ import com.runetopic.xlitekt.plugin.ktor.inject
 class Player(
     val client: Client,
     val username: String,
-    val clientResizable: Boolean
 ) : Actor(Tile(3222, 3222)) {
     var appearance = Render.Appearance(Render.Appearance.Gender.MALE, -1, -1, -1, false)
 
     var rights = 2
     var online = false
-    val viewport = Viewport(this)
 
+    val viewport = Viewport(this)
     val interfaceManager = InterfaceManager(this)
 
     fun login() {
         this.previousTile = this.tile
         client.writePacket(RebuildNormalPacket(viewport, tile, true))
-        interfaceManager.login()
         refreshAppearance()
+        interfaceManager.login()
         online = true
     }
 

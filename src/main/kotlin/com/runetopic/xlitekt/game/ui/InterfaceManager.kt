@@ -8,6 +8,9 @@ import com.runetopic.xlitekt.network.packet.IfMoveSubPacket
 import com.runetopic.xlitekt.network.packet.IfOpenSubPacket
 import com.runetopic.xlitekt.network.packet.IfOpenTopPacket
 import com.runetopic.xlitekt.network.packet.IfSetEventsPacket
+import com.runetopic.xlitekt.network.packet.MessageGamePacket
+import com.runetopic.xlitekt.network.packet.RunClientScriptPacket
+import com.runetopic.xlitekt.network.packet.VarpSmallPacket
 import com.runetopic.xlitekt.plugin.ktor.inject
 import com.runetopic.xlitekt.util.ext.packInterface
 
@@ -23,35 +26,17 @@ class InterfaceManager(
     var displayMode = DisplayMode.FIXED
 
     fun login() {
-        displayMode = if (player.clientResizable) DisplayMode.RESIZABLE else DisplayMode.FIXED
+        player.client.writePacket(VarpSmallPacket(1737, -1))
+        player.client.writePacket(MessageGamePacket(0, "Welcome to Xlitekt.", false))
         openTop(displayMode.interfaceId)
-        sendInterfacesForDisplay(displayMode)
-        // TODO this will be used in KTS or registered listeners map or something
-        InterfaceId.OPTIONS.let { interfaceId ->
-            InterfaceListener.addInterfaceListener(interfaceId) {
-                onOpenSub {
-                    sendInterfaceEvent(interfaceId.packInterface(41), fromSlot = 0, toSlot = 21, events = 2)
-                    sendInterfaceEvent(interfaceId.packInterface(55), fromSlot = 0, toSlot = 21, events = 2)
-                    sendInterfaceEvent(interfaceId.packInterface(69), fromSlot = 0, toSlot = 21, events = 2)
-                    sendInterfaceEvent(interfaceId.packInterface(81), fromSlot = 1, toSlot = 5, events = 2)
-                    sendInterfaceEvent(interfaceId.packInterface(82), fromSlot = 1, toSlot = 4, events = 2)
-                    sendInterfaceEvent(interfaceId.packInterface(84), fromSlot = 1, toSlot = 3, events = 2)
-                    sendInterfaceEvent(interfaceId.packInterface(23), fromSlot = 0, toSlot = 21, events = 2)
-                    sendInterfaceEvent(interfaceId.packInterface(83), fromSlot = 1, toSlot = 5, events = 2)
-                    println("Unlocking interface")
-                }
-
-                onClick {
-                    println("Clicked")
-                }
-            }
-        }
+        sendInterfacesForDisplayMode(displayMode)
     }
 
     fun switchDisplayMode(mode: DisplayMode) {
         val previousMode = this.displayMode
         this.displayMode = mode
         openTop(displayMode.interfaceId)
+        runClientScript(3998, listOf(displayMode.mode - 1))
         InterfaceInfo.values().forEach {
             val fromInterfaceId = previousMode.interfaceId
             val fromChildId = it.componentIdForDisplay(previousMode)
@@ -75,7 +60,7 @@ class InterfaceManager(
         return false
     }
 
-    private fun sendInterfacesForDisplay(displayMode: DisplayMode) {
+    private fun sendInterfacesForDisplayMode(displayMode: DisplayMode) {
         InterfaceInfo.values().forEach {
             val interfaceId = it.interfaceId
             if (interfaceId == -1) return@forEach
@@ -133,4 +118,6 @@ class InterfaceManager(
             )
         )
     }
+
+    fun runClientScript(scriptId: Int, parameters: List<Any>) = player.client.writePacket(RunClientScriptPacket(scriptId, parameters))
 }
