@@ -3,9 +3,6 @@ package com.runetopic.xlitekt.game.actor.player
 import com.runetopic.xlitekt.game.actor.Actor
 import com.runetopic.xlitekt.game.actor.render.Render
 import com.runetopic.xlitekt.game.tile.Tile
-import com.runetopic.xlitekt.game.ui.DisplayMode
-import com.runetopic.xlitekt.game.ui.InterfaceId
-import com.runetopic.xlitekt.game.ui.InterfaceListener.Companion.addInterfaceListener
 import com.runetopic.xlitekt.game.ui.InterfaceManager
 import com.runetopic.xlitekt.game.world.World
 import com.runetopic.xlitekt.network.client.Client
@@ -19,7 +16,7 @@ import com.runetopic.xlitekt.plugin.ktor.inject
 class Player(
     val client: Client,
     val username: String,
-    val displayMode: DisplayMode = DisplayMode.FIXED
+    val clientResizable: Boolean
 ) : Actor(Tile(3222, 3222)) {
     var appearance = Render.Appearance(Render.Appearance.Gender.MALE, -1, -1, -1, false)
 
@@ -27,19 +24,9 @@ class Player(
     var online = false
     val viewport = Viewport(this)
 
-    private val interfaceManager = InterfaceManager(this)
+    val interfaceManager = InterfaceManager(this)
 
-    suspend fun login() {
-        addInterfaceListener(InterfaceId.SKILLS) {
-            onOpenSub {
-                println("Skilling interface opened")
-            }
-
-            onClick {
-                println("Clicked on: $this")
-            }
-        }
-
+    fun login() {
         this.previousTile = this.tile
         client.writePacket(RebuildNormalPacket(viewport, tile, true))
         interfaceManager.login()

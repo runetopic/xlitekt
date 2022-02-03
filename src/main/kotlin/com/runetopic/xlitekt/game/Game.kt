@@ -8,7 +8,6 @@ import com.runetopic.xlitekt.util.resource.loadAllMapSquares
 import org.koin.dsl.module
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
-import kotlin.time.measureTime
 
 val gameModule = module {
     single { loadAllMapSquares() }
@@ -24,8 +23,7 @@ class Game {
 
     fun start() {
         service.scheduleAtFixedRate({
-            val time = measureTime { world.process() }
-            logger.info { "Loop took $time to complete." }
+            world.process()
         }, 0, 600, TimeUnit.MILLISECONDS)
     }
 

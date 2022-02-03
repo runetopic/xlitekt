@@ -3,11 +3,11 @@ package com.runetopic.xlitekt.game.event.impl
 import com.runetopic.xlitekt.game.event.Event
 
 sealed class IfEvent(open val interfaceId: Int) : Event {
-    data class IfOpenTop(
+    data class IfOpenTopEvent(
         override val interfaceId: Int,
     ) : IfEvent(interfaceId)
 
-    data class IfOpenSub(
+    data class IfOpenSubEvent(
         override val interfaceId: Int,
         val childId: Int,
         val alwaysOpen: Boolean

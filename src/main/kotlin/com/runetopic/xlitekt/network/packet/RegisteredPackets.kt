@@ -33,6 +33,7 @@ import com.runetopic.xlitekt.network.packet.assembler.UpdateStatAssembler
 import com.runetopic.xlitekt.network.packet.assembler.UpdateWeightPacketAssembler
 import com.runetopic.xlitekt.network.packet.assembler.VarpLargePacketAssembler
 import com.runetopic.xlitekt.network.packet.assembler.VarpSmallPacketAssembler
+import com.runetopic.xlitekt.network.packet.disassembler.DisplayModePacketDisassembler
 import com.runetopic.xlitekt.network.packet.disassembler.IfButton10PacketDisassembler
 import com.runetopic.xlitekt.network.packet.disassembler.IfButton1PacketDisassembler
 import com.runetopic.xlitekt.network.packet.disassembler.IfButton2PacketDisassembler
@@ -45,6 +46,7 @@ import com.runetopic.xlitekt.network.packet.disassembler.IfButton8PacketDisassem
 import com.runetopic.xlitekt.network.packet.disassembler.IfButton9PacketDisassembler
 import com.runetopic.xlitekt.network.packet.disassembler.OpHeld5PacketDisassembler
 import com.runetopic.xlitekt.network.packet.disassembler.OpObj6PacketDisassembler
+import com.runetopic.xlitekt.network.packet.handler.DisplayModePacketHandler
 import com.runetopic.xlitekt.network.packet.handler.IfButtonPacketHandler
 import com.runetopic.xlitekt.network.packet.handler.OpHeldPacketHandler
 import com.runetopic.xlitekt.network.packet.handler.OpObjPacketHandler
@@ -92,6 +94,8 @@ object RegisteredPackets {
     )
 
     val disassemblers = setOf(
+        DisplayModePacketDisassembler(),
+
         IfButton1PacketDisassembler(),
         IfButton2PacketDisassembler(),
         IfButton3PacketDisassembler(),
@@ -109,6 +113,7 @@ object RegisteredPackets {
     )
 
     val handlers = mapOf(
+        DisplayModePacket::class to DisplayModePacketHandler(),
         IfButtonPacket::class to IfButtonPacketHandler(),
         OpObjPacket::class to OpObjPacketHandler(),
         OpHeldPacket::class to OpHeldPacketHandler()

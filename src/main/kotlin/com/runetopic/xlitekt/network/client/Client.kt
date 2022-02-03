@@ -23,6 +23,7 @@ import io.ktor.utils.io.ClosedWriteChannelException
 import io.ktor.utils.io.core.ByteReadPacket
 import kotlinx.coroutines.TimeoutCancellationException
 import kotlinx.coroutines.channels.ClosedReceiveChannelException
+import kotlinx.coroutines.runBlocking
 import java.io.IOException
 import java.net.SocketException
 
@@ -97,10 +98,10 @@ class Client(
         writeChannel.flush()
     }
 
-    suspend fun writePacket(message: Packet) {
-        val assembler = assemblers[message::class] ?: return disconnect("Unhandled message found when trying to write packet. Message was $message.")
+    fun writePacket(message: Packet) = runBlocking {
+        val assembler = assemblers[message::class] ?: return@runBlocking disconnect("Unhandled message found when trying to write packet. Message was $message.")
         try {
-            eventPipeline.write(this, WriteEvent.GameWriteEvent(assembler.opcode, assembler.size, assembler.assemblePacket(message).build()))
+            eventPipeline.write(this@Client, WriteEvent.GameWriteEvent(assembler.opcode, assembler.size, assembler.assemblePacket(message).build()))
         } catch (exception: Exception) {
             // This function is used by multiple threads, so we try catch like this.
             // The main client thread will already handle disconnecting if applicable.
@@ -116,6 +117,8 @@ class Client(
     }
 
     suspend fun readPacket(opcode: Int, packet: ByteReadPacket) {
+        if (opcode == 12) return
+
         val player = player ?: return disconnect("Player is not established when attempting to read and handle packet. Opcode was $opcode.")
         val disassembler = disassemblers.firstOrNull { it.opcode == opcode } ?: return logger.info { "Unhandled packet opcode when looking for decoder. Opcode was $opcode." }
         val disassembledPacket = disassembler.disassemblePacket(packet)

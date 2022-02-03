@@ -9,13 +9,13 @@ import com.runetopic.xlitekt.util.hook.onEvent
 class InterfaceListener(
     private val event: IfEvent
 ) {
-    fun onOpenTop(function: (IfEvent.IfOpenTop).() -> Unit) {
-        if (event !is IfEvent.IfOpenTop) return
+    fun onOpenTop(function: (IfEvent.IfOpenTopEvent).() -> Unit) {
+        if (event !is IfEvent.IfOpenTopEvent) return
         function.invoke(event)
     }
 
-    fun onOpenSub(function: (IfEvent.IfOpenSub).() -> Unit) {
-        if (event !is IfEvent.IfOpenSub) return
+    fun onOpenSub(function: (IfEvent.IfOpenSubEvent).() -> Unit) {
+        if (event !is IfEvent.IfOpenSubEvent) return
         function.invoke(event)
     }
 
@@ -39,10 +39,10 @@ class InterfaceListener(
             onEvent<IfEvent.IfButtonClickEvent>().filter { this.interfaceId == interfaceId }.use {
                 function.invoke(InterfaceListener(this))
             }
-            onEvent<IfEvent.IfOpenTop>().filter { this.interfaceId == interfaceId }.use {
+            onEvent<IfEvent.IfOpenTopEvent>().filter { this.interfaceId == interfaceId }.use {
                 function.invoke(InterfaceListener(this))
             }
-            onEvent<IfEvent.IfOpenSub>().filter { this.interfaceId == interfaceId }.use {
+            onEvent<IfEvent.IfOpenSubEvent>().filter { this.interfaceId == interfaceId }.use {
                 function.invoke(InterfaceListener(this))
             }
         }
