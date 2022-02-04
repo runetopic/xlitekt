@@ -4,6 +4,7 @@ package com.runetopic.xlitekt.game.display
  * @author Tyler Telis
  */
 object InterfaceId {
+    const val MINI_MAP = 160
     const val CHAT_BOX = 162
     const val UNKNOWN = 651
     const val COMBAT_OPTIONS = 593

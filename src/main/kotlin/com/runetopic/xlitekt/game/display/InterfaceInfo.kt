@@ -10,6 +10,7 @@ enum class InterfaceInfo(
     private val resizableListChildId: Int,
     private val fullScreenChildId: Int = -1
 ) {
+    MINI_MAP(InterfaceId.MINI_MAP, 24, 32, 32),
     CHAT_BOX(InterfaceId.CHAT_BOX, 10, 94, 91),
     UNKNOWN(InterfaceId.UNKNOWN, 31, 6, 6),
     CHAT_CHANNEL(InterfaceId.CHAT_CHANNEL, 86, 82, 79),

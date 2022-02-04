@@ -5,6 +5,7 @@ import com.runetopic.xlitekt.game.display.InterfaceListener.Companion.addInterfa
 import com.runetopic.xlitekt.game.display.Layout
 
 private val layoutDropDownChildId = 84
+private val clientModeCS2Id = 3998
 
 addInterfaceListener(InterfaceId.SETTINGS) {
     onOpen {
@@ -24,7 +25,7 @@ addInterfaceListener(InterfaceId.SETTINGS) {
         player.interfaceManager.let { interfaceManager ->
             val mode = Layout.values().firstOrNull { it.id == slotId - 1 } ?: return@let
             if (mode == Layout.FIXED || mode == Layout.RESIZABLE) {
-                interfaceManager.clientScript(3998, listOf(mode.id))
+                interfaceManager.clientScript(clientModeCS2Id, listOf(mode.id))
             }
             player.interfaceManager.switchLayout(mode)
         }
