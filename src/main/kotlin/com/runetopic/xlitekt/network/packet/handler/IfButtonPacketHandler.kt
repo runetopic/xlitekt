@@ -5,7 +5,7 @@ import com.runetopic.xlitekt.game.actor.player.Player
 import com.runetopic.xlitekt.game.event.EventBus
 import com.runetopic.xlitekt.game.event.impl.IfButtonClickEvent
 import com.runetopic.xlitekt.network.packet.IfButtonPacket
-import com.runetopic.xlitekt.plugin.inject
+import com.runetopic.xlitekt.plugin.koin.inject
 
 /**
  * @author Jordan Abraham

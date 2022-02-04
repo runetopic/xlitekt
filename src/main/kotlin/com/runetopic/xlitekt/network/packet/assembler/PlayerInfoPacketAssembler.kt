@@ -18,7 +18,7 @@ import com.runetopic.xlitekt.network.packet.assembler.block.player.PlayerSequenc
 import com.runetopic.xlitekt.network.packet.assembler.block.player.PlayerSpotAnimationBlock
 import com.runetopic.xlitekt.network.packet.assembler.block.player.PlayerTemporaryMovementTypeBlock
 import com.runetopic.xlitekt.network.packet.assembler.block.player.PlayerUsernameOverrideBlock
-import com.runetopic.xlitekt.plugin.inject
+import com.runetopic.xlitekt.plugin.koin.inject
 import com.runetopic.xlitekt.util.ext.BitAccess
 import com.runetopic.xlitekt.util.ext.toInt
 import com.runetopic.xlitekt.util.ext.toIntInv

@@ -2,8 +2,7 @@ package com.runetopic.xlitekt.game.display
 
 import com.runetopic.xlitekt.game.actor.player.Player
 import com.runetopic.xlitekt.game.event.EventBus
-import com.runetopic.xlitekt.game.event.impl.IfOpenSubEvent
-import com.runetopic.xlitekt.game.event.impl.IfOpenTopEvent
+import com.runetopic.xlitekt.game.event.impl.IfOpenEvent
 import com.runetopic.xlitekt.network.packet.IfCloseSubPacket
 import com.runetopic.xlitekt.network.packet.IfMoveSubPacket
 import com.runetopic.xlitekt.network.packet.IfOpenSubPacket
@@ -12,7 +11,7 @@ import com.runetopic.xlitekt.network.packet.IfSetEventsPacket
 import com.runetopic.xlitekt.network.packet.MessageGamePacket
 import com.runetopic.xlitekt.network.packet.RunClientScriptPacket
 import com.runetopic.xlitekt.network.packet.VarpSmallPacket
-import com.runetopic.xlitekt.plugin.inject
+import com.runetopic.xlitekt.plugin.koin.inject
 import com.runetopic.xlitekt.util.ext.packInterface
 
 /**
@@ -24,26 +23,26 @@ class InterfaceManager(
     private val open = mutableMapOf<Int, Int>()
     private val eventBus by inject<EventBus>()
 
-    var currentLayout = ClientLayout.FIXED
+    var currentLayout = Layout.FIXED
 
     fun login() {
         player.client.writePacket(VarpSmallPacket(1737, -1)) // TODO TEMP until i write a var system
-        setupClientLayout(currentLayout)
+        sendLayout()
         message("Welcome to Xlitekt.")
     }
 
-    private fun setupClientLayout(mode: ClientLayout) {
-        openTop(mode.interfaceId)
+    private fun sendLayout() {
+        openTop(currentLayout.interfaceId)
         InterfaceInfo.values().forEach {
             val interfaceId = it.interfaceId
             if (interfaceId == -1) return@forEach
-            val componentId = it.componentIdForDisplay(mode)
+            val componentId = it.componentIdForDisplay(currentLayout)
             if (componentId == -1) return@forEach
             openSub(it.interfaceId, componentId, true)
         }
     }
 
-    fun switchDisplayMode(mode: ClientLayout) {
+    fun switchLayout(mode: Layout) {
         if (mode == currentLayout) return
 
         closeTop(currentLayout.interfaceId)
@@ -84,7 +83,7 @@ class InterfaceManager(
     private fun openTop(interfaceId: Int) {
         val packed = interfaceId.packInterface()
         if (open(packed, interfaceId)) {
-            eventBus.notify(IfOpenTopEvent(player, interfaceId))
+            eventBus.notify(IfOpenEvent(player, interfaceId, 0, true))
             player.client.writePacket(IfOpenTopPacket(interfaceId))
         }
     }
@@ -100,7 +99,7 @@ class InterfaceManager(
         val packed = currentLayout.interfaceId.packInterface(childId)
         if (open(packed, interfaceId)) {
             eventBus.notify(
-                IfOpenSubEvent(
+                IfOpenEvent(
                     player,
                     interfaceId,
                     childId,

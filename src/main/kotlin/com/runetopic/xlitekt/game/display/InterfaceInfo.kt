@@ -27,10 +27,10 @@ enum class InterfaceInfo(
     EMOTES(InterfaceId.EMOTES, 91, 87, 84),
     MUSIC_PLAYER(InterfaceId.MUSIC_PLAYER, 92, 88, 85);
 
-    fun componentIdForDisplay(mode: ClientLayout) = when (mode) {
-        ClientLayout.FIXED -> fixedChildId
-        ClientLayout.RESIZABLE -> resizableChildId
-        ClientLayout.RESIZABLE_LIST -> resizableListChildId
-        ClientLayout.FULL_SCREEN -> fullScreenChildId
+    fun componentIdForDisplay(mode: Layout) = when (mode) {
+        Layout.FIXED -> fixedChildId
+        Layout.RESIZABLE -> resizableChildId
+        Layout.RESIZABLE_LIST -> resizableListChildId
+        Layout.FULL_SCREEN -> fullScreenChildId
     }
 }

@@ -3,7 +3,7 @@ package com.runetopic.xlitekt
 import com.github.michaelbull.logging.InlineLogger
 import com.runetopic.xlitekt.game.Game
 import com.runetopic.xlitekt.network.Network
-import com.runetopic.xlitekt.plugin.installKoin
+import com.runetopic.xlitekt.plugin.koin.installKoin
 import io.ktor.application.Application
 import io.ktor.server.engine.commandLineEnvironment
 import org.koin.core.context.stopKoin

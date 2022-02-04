@@ -16,6 +16,8 @@ dependencyResolutionManagement {
             version("kotlinx", "1.3.2")
             version("kotlin-inline-logger", "1.0.4")
             version("kotlin-reflect", "1.6.10")
+            version("classgraph", "4.8.138")
+            version("kts", "1.6.10")
 
             alias("ktor-server-netty").to("io.ktor", "ktor-server-netty").versionRef("ktor")
             alias("koin-core").to("io.insert-koin", "koin-core").versionRef("koin")
@@ -23,10 +25,14 @@ dependencyResolutionManagement {
             alias("slf4j-simple").to("org.slf4j", "slf4j-simple").versionRef("slf4j")
             alias("cache").to("com.runetopic.cache", "cache").versionRef("cache")
             alias("cryptography").to("com.runetopic.cryptography", "cryptography").versionRef("cryptography")
+            alias("classgraph").to("io.github.classgraph", "classgraph").versionRef("classgraph")
+            alias("kscripting").to("org.jetbrains.kotlin", "kotlin-scripting-common").versionRef("kts")
+            alias("kruntime").to("org.jetbrains.kotlin", "kotlin-script-runtime").versionRef("kts")
             alias("kotlin-reflect").to("org.jetbrains.kotlin", "kotlin-reflect").versionRef("kotlin-reflect")
             alias("kotlinx-serialization-json").to("org.jetbrains.kotlinx", "kotlinx-serialization-json").versionRef("kotlinx")
             alias("kotlin-inline-logger").to("com.michael-bull.kotlin-inline-logger", "kotlin-inline-logger").versionRef("kotlin-inline-logger")
 
+            bundle("kts", listOf("kscripting", "kruntime"))
             bundle("ktor", listOf("ktor-server-netty"))
             bundle("koin", listOf("koin-core", "koin-ktor"))
             bundle("runetopic", listOf("cache", "cryptography"))

@@ -1,12 +1,13 @@
-package com.runetopic.xlitekt.game.display.listener.impl
-
-import com.runetopic.xlitekt.game.display.ClientLayout
 import com.runetopic.xlitekt.game.display.InterfaceId
-import com.runetopic.xlitekt.game.display.listener.InterfaceEventListener.Companion.addInterfaceListener
+import com.runetopic.xlitekt.game.display.Layout
+import com.runetopic.xlitekt.game.display.InterfaceListener.Companion.addInterfaceListener
 
-// TODO this will be a kts file when i add kotlin script plugins
-val optionsListener = addInterfaceListener(InterfaceId.OPTIONS) {
-    onOpenSub {
+addInterfaceListener(InterfaceId.OPTIONS) {
+    val FIXED_CHILD_ID = 1
+    val RESIZABLE_CHILD_ID = 2
+    val RESIZABNLE_LIST_CHILD_ID = 3
+
+    onOpen {
         player.interfaceManager.let { interfaceManager ->
             interfaceManager.interfaceEvents(interfaceId = 216, childId = 1, fromSlot = 0, toSlot = 50, events = 6)
             interfaceManager.interfaceEvents(interfaceId = 116, childId = 41, fromSlot = 0, toSlot = 21, events = 2)
@@ -23,10 +24,10 @@ val optionsListener = addInterfaceListener(InterfaceId.OPTIONS) {
     onClick {
         player.interfaceManager.let { interfaceManager ->
             when (slotId) {
-                1 -> interfaceManager.switchDisplayMode(ClientLayout.FIXED)
-                2 -> interfaceManager.switchDisplayMode(ClientLayout.RESIZABLE)
-                3 -> interfaceManager.switchDisplayMode(ClientLayout.RESIZABLE_LIST)
-                else -> interfaceManager.message("Unhandled slotId = $slotId for options interface.")
+                FIXED_CHILD_ID -> interfaceManager.switchLayout(Layout.FIXED)
+                RESIZABLE_CHILD_ID -> interfaceManager.switchLayout(Layout.RESIZABLE)
+                RESIZABNLE_LIST_CHILD_ID -> interfaceManager.switchLayout(Layout.RESIZABLE_LIST)
+                else -> interfaceManager.message("Unhandled slotId = $slotId")
             }
         }
     }

@@ -7,7 +7,7 @@ import com.runetopic.xlitekt.network.client.ClientResponseOpcode.CLIENT_OUTDATED
 import com.runetopic.xlitekt.network.client.ClientResponseOpcode.HANDSHAKE_SUCCESS_OPCODE
 import com.runetopic.xlitekt.network.event.ReadEvent
 import com.runetopic.xlitekt.network.event.WriteEvent
-import com.runetopic.xlitekt.plugin.inject
+import com.runetopic.xlitekt.plugin.koin.inject
 import io.ktor.application.ApplicationEnvironment
 
 /**

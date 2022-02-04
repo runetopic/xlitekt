@@ -14,7 +14,7 @@ import com.runetopic.xlitekt.network.packet.RegisteredPackets.handlers
 import com.runetopic.xlitekt.network.pipeline.EventPipeline
 import com.runetopic.xlitekt.network.pipeline.GameEventPipeline
 import com.runetopic.xlitekt.network.pipeline.HandshakeEventPipeline
-import com.runetopic.xlitekt.plugin.inject
+import com.runetopic.xlitekt.plugin.koin.inject
 import io.ktor.network.sockets.Socket
 import io.ktor.util.reflect.instanceOf
 import io.ktor.utils.io.ByteReadChannel

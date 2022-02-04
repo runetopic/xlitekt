@@ -7,7 +7,7 @@ import com.runetopic.xlitekt.game.tile.Tile
 import com.runetopic.xlitekt.game.world.World
 import com.runetopic.xlitekt.network.client.Client
 import com.runetopic.xlitekt.network.packet.RebuildNormalPacket
-import com.runetopic.xlitekt.plugin.inject
+import com.runetopic.xlitekt.plugin.koin.inject
 
 /**
  * @author Jordan Abraham

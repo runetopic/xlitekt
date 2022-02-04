@@ -8,7 +8,7 @@ import com.runetopic.xlitekt.network.client.ClientRequestOpcode.JS5_LOGGED_OUT_O
 import com.runetopic.xlitekt.network.client.ClientRequestOpcode.JS5_LOW_PRIORITY_OPCODE
 import com.runetopic.xlitekt.network.event.ReadEvent
 import com.runetopic.xlitekt.network.event.WriteEvent
-import com.runetopic.xlitekt.plugin.inject
+import com.runetopic.xlitekt.plugin.koin.inject
 import io.ktor.application.ApplicationEnvironment
 import kotlinx.coroutines.withTimeout
 

@@ -5,7 +5,7 @@ import com.runetopic.cryptography.toHuffman
 import com.runetopic.xlitekt.game.actor.player.Player
 import com.runetopic.xlitekt.game.actor.render.Render
 import com.runetopic.xlitekt.network.packet.assembler.block.RenderingBlock
-import com.runetopic.xlitekt.plugin.inject
+import com.runetopic.xlitekt.plugin.koin.inject
 import com.runetopic.xlitekt.util.ext.writeByteAdd
 import com.runetopic.xlitekt.util.ext.writeByteNegate
 import com.runetopic.xlitekt.util.ext.writeSmart

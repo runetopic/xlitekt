@@ -5,12 +5,7 @@ import com.runetopic.xlitekt.game.event.Event
 
 interface IfEvent : Event
 
-data class IfOpenTopEvent(
-    val player: Player,
-    val interfaceId: Int
-) : IfEvent
-
-data class IfOpenSubEvent(
+data class IfOpenEvent(
     val player: Player,
     val interfaceId: Int,
     val childId: Int,
