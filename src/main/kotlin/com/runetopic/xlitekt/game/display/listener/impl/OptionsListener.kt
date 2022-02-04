@@ -26,7 +26,6 @@ val optionsListener = addInterfaceListener(InterfaceId.OPTIONS) {
                 1 -> interfaceManager.switchDisplayMode(ClientLayout.FIXED)
                 2 -> interfaceManager.switchDisplayMode(ClientLayout.RESIZABLE)
                 3 -> interfaceManager.switchDisplayMode(ClientLayout.RESIZABLE_LIST)
-                -1, 65535 -> return@let
                 else -> interfaceManager.message("Unhandled slotId = $slotId for options interface.")
             }
         }
