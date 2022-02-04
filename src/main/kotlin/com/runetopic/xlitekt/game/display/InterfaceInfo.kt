@@ -23,11 +23,11 @@ enum class InterfaceInfo(
     FRIENDS(InterfaceId.FRIENDS, 88, 84, 81),
     ACCOUNT_MANAGEMENT(InterfaceId.ACCOUNT_MANAGEMENT, 87, 83, 80),
     LOGOUT(InterfaceId.LOGOUT, 89, 85, 82),
-    SETTINGS(InterfaceId.OPTIONS, 90, 86, 83),
+    SETTINGS(InterfaceId.SETTINGS, 90, 86, 83),
     EMOTES(InterfaceId.EMOTES, 91, 87, 84),
     MUSIC_PLAYER(InterfaceId.MUSIC_PLAYER, 92, 88, 85);
 
-    fun componentIdForDisplay(mode: Layout) = when (mode) {
+    fun childIdForLayout(mode: Layout) = when (mode) {
         Layout.FIXED -> fixedChildId
         Layout.RESIZABLE -> resizableChildId
         Layout.RESIZABLE_LIST -> resizableListChildId

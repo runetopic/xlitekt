@@ -36,7 +36,7 @@ class InterfaceManager(
         InterfaceInfo.values().forEach {
             val interfaceId = it.interfaceId
             if (interfaceId == -1) return@forEach
-            val componentId = it.componentIdForDisplay(currentLayout)
+            val componentId = it.childIdForLayout(currentLayout)
             if (componentId == -1) return@forEach
             openSub(it.interfaceId, componentId, true)
         }
@@ -51,13 +51,13 @@ class InterfaceManager(
         this.currentLayout = mode
 
         openTop(currentLayout.interfaceId)
-        clientScript(3998, listOf(currentLayout.id))
+
         InterfaceInfo.values().forEach {
             val fromInterfaceId = previousLayout.interfaceId
-            val fromChildId = it.componentIdForDisplay(previousLayout)
+            val fromChildId = it.childIdForLayout(previousLayout)
             if (fromChildId == -1) return@forEach
             val toInterfaceId = mode.interfaceId
-            val toChildId = it.componentIdForDisplay(mode)
+            val toChildId = it.childIdForLayout(mode)
             if (toChildId == -1) return@forEach
             if (moveSub(fromInterfaceId, fromChildId, toInterfaceId, toChildId)) open.remove(fromInterfaceId)
         }

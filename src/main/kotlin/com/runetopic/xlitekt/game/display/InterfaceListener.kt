@@ -15,6 +15,12 @@ class InterfaceListener(
             .filter { interfaceId == this@InterfaceListener.interfaceId }
             .use { function.invoke(this) }
 
+    fun onClick(childId: Int, function: (IfButtonClickEvent).() -> Unit) =
+        onEvent<IfButtonClickEvent>()
+            .filter { this.interfaceId == this@InterfaceListener.interfaceId }
+            .filter { this.childId == childId }
+            .use { function.invoke(this) }
+
     fun onOpen(function: (IfOpenEvent).() -> Unit) =
         onEvent<IfOpenEvent>()
             .filter { interfaceId == this@InterfaceListener.interfaceId }

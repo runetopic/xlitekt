@@ -17,7 +17,7 @@ object InterfaceId {
     const val ACCOUNT_MANAGEMENT = 109
     const val FRIENDS = 429
     const val LOGOUT = 182
-    const val OPTIONS = 116
+    const val SETTINGS = 116
     const val EMOTES = 216
     const val MUSIC_PLAYER = 239
     const val CHAT_CHANNEL = 707
