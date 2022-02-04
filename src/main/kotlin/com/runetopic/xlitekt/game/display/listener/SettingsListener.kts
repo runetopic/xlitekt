@@ -23,11 +23,11 @@ addInterfaceListener(InterfaceId.SETTINGS) {
 
     onClick(layoutDropDownChildId) {
         player.interfaceManager.let { interfaceManager ->
-            val mode = Layout.values().firstOrNull { it.id == slotId - 1 } ?: return@let
-            if (mode == Layout.FIXED || mode == Layout.RESIZABLE) {
-                interfaceManager.clientScript(clientModeCS2Id, listOf(mode.id))
+            val layout = Layout.values().firstOrNull { it.id == slotId - 1 } ?: return@let
+            if (layout == Layout.FIXED || layout == Layout.RESIZABLE) {
+                interfaceManager.clientScript(clientModeCS2Id, listOf(layout.id))
             }
-            player.interfaceManager.switchLayout(mode)
+            player.interfaceManager.switchLayout(layout)
         }
     }
 }

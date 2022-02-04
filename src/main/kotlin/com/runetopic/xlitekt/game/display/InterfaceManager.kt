@@ -109,7 +109,8 @@ class InterfaceManager(
             player.client.writePacket(
                 IfOpenSubPacket(
                     interfaceId,
-                    packed, alwaysOpen
+                    packed,
+                    alwaysOpen
                 )
             )
         }
