@@ -1,4 +1,4 @@
-package com.runetopic.xlitekt.game.ui
+package com.runetopic.xlitekt.game.display
 
 /**
  * @author Tyler Telis

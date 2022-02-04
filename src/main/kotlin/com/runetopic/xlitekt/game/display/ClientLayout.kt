@@ -1,0 +1,11 @@
+package com.runetopic.xlitekt.game.display
+
+/**
+ * @author Tyler Telis
+ */
+enum class ClientLayout(val interfaceId: Int, val id: Int) {
+    FIXED(548, 0),
+    RESIZABLE(161, 1),
+    RESIZABLE_LIST(164, 2),
+    FULL_SCREEN(165, 4)
+}

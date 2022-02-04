@@ -1,4 +1,4 @@
-package com.runetopic.xlitekt.plugin.ktor
+package com.runetopic.xlitekt.plugin
 
 import com.runetopic.xlitekt.cache.cacheModule
 import com.runetopic.xlitekt.game.gameModule

@@ -3,9 +3,9 @@ package com.runetopic.xlitekt.network.packet.handler
 import com.github.michaelbull.logging.InlineLogger
 import com.runetopic.xlitekt.game.actor.player.Player
 import com.runetopic.xlitekt.game.event.EventBus
-import com.runetopic.xlitekt.game.event.impl.IfEvent
+import com.runetopic.xlitekt.game.event.impl.IfButtonClickEvent
 import com.runetopic.xlitekt.network.packet.IfButtonPacket
-import com.runetopic.xlitekt.plugin.ktor.inject
+import com.runetopic.xlitekt.plugin.inject
 
 /**
  * @author Jordan Abraham
@@ -22,7 +22,8 @@ class IfButtonPacketHandler : PacketHandler<IfButtonPacket> {
         val slotId = packet.slotId
         val itemId = packet.itemId
         eventBus.notify(
-            IfEvent.IfButtonClickEvent(
+            IfButtonClickEvent(
+                player,
                 index = index,
                 interfaceId = interfaceId,
                 option = "", // TODO get selected string option where possible

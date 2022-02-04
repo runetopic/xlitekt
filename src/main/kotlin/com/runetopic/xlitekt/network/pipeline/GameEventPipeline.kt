@@ -4,7 +4,7 @@ import com.github.michaelbull.logging.InlineLogger
 import com.runetopic.xlitekt.network.client.Client
 import com.runetopic.xlitekt.network.event.ReadEvent
 import com.runetopic.xlitekt.network.event.WriteEvent
-import com.runetopic.xlitekt.plugin.ktor.inject
+import com.runetopic.xlitekt.plugin.inject
 import com.runetopic.xlitekt.util.ext.readPacketOpcode
 import com.runetopic.xlitekt.util.ext.readPacketSize
 import com.runetopic.xlitekt.util.ext.writePacketOpcode
@@ -37,12 +37,11 @@ class GameEventPipeline : EventPipeline<ReadEvent.GameReadEvent, WriteEvent.Game
     }
 
     override suspend fun write(client: Client, event: WriteEvent.GameWriteEvent) {
-        client.writeChannel.let {
-            it.writePacketOpcode(client.serverCipher!!, event.opcode)
-            it.writePacketSize(event.size, event.payload.remaining)
-            it.writePacket(event.payload)
-            it.flush()
-        }
+        val writeChannel = client.writeChannel
+        writeChannel.writePacketOpcode(client.serverCipher!!, event.opcode)
+        writeChannel.writePacketSize(event.size, event.payload.remaining)
+        writeChannel.writePacket(event.payload)
+        writeChannel.flush()
         event.payload.release()
     }
 }

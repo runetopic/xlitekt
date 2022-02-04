@@ -11,7 +11,7 @@ import com.runetopic.xlitekt.network.client.ClientResponseOpcode.LOGIN_SUCCESS_O
 import com.runetopic.xlitekt.network.event.ReadEvent
 import com.runetopic.xlitekt.network.event.WriteEvent
 import com.runetopic.xlitekt.network.handler.GameEventHandler
-import com.runetopic.xlitekt.plugin.ktor.inject
+import com.runetopic.xlitekt.plugin.inject
 import com.runetopic.xlitekt.util.ext.readIntV1
 import com.runetopic.xlitekt.util.ext.readIntV2
 import com.runetopic.xlitekt.util.ext.readMedium

@@ -3,11 +3,11 @@ package com.runetopic.xlitekt.game.actor.player
 import com.runetopic.xlitekt.game.actor.Actor
 import com.runetopic.xlitekt.game.actor.render.Render
 import com.runetopic.xlitekt.game.tile.Tile
-import com.runetopic.xlitekt.game.ui.InterfaceManager
+import com.runetopic.xlitekt.game.display.InterfaceManager
 import com.runetopic.xlitekt.game.world.World
 import com.runetopic.xlitekt.network.client.Client
 import com.runetopic.xlitekt.network.packet.RebuildNormalPacket
-import com.runetopic.xlitekt.plugin.ktor.inject
+import com.runetopic.xlitekt.plugin.inject
 
 /**
  * @author Jordan Abraham
@@ -42,6 +42,10 @@ class Player(
     fun refreshAppearance(appearance: Render.Appearance = this.appearance): Render.Appearance {
         this.appearance = renderer.appearance(appearance)
         return this.appearance
+    }
+
+    override fun toString(): String {
+        return "Username = $username"
     }
 
     override fun totalHitpoints(): Int = 100

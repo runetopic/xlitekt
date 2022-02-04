@@ -8,7 +8,7 @@ import com.runetopic.xlitekt.network.event.ReadEvent
 import com.runetopic.xlitekt.network.event.WriteEvent
 import com.runetopic.xlitekt.network.handler.JS5EventHandler
 import com.runetopic.xlitekt.network.handler.LoginEventHandler
-import com.runetopic.xlitekt.plugin.ktor.inject
+import com.runetopic.xlitekt.plugin.inject
 import io.ktor.application.ApplicationEnvironment
 import kotlinx.coroutines.withTimeout
 

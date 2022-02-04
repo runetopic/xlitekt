@@ -13,6 +13,6 @@ class IfSetEventsPacketAssembler : PacketAssembler<IfSetEventsPacket>(opcode = 7
         writeIntV2(packet.events)
         writeShortLittleEndian(packet.fromSlot.toShort())
         writeShortLittleEndian(packet.toSlot.toShort())
-        writeInt(packet.packedInterface)
+        writeInt(((packet.interfaceId shl 16) or packet.childId))
     }
 }

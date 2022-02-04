@@ -1,4 +1,4 @@
-package com.runetopic.xlitekt.game.ui
+package com.runetopic.xlitekt.game.display
 
 /**
  * @author Tyler Telis
@@ -7,13 +7,14 @@ enum class InterfaceInfo(
     val interfaceId: Int,
     private val fixedChildId: Int,
     private val resizableChildId: Int,
-    private val resizableListChildId: Int
+    private val resizableListChildId: Int,
+    private val fullScreenChildId: Int = -1
 ) {
     CHAT_BOX(InterfaceId.CHAT_BOX, 10, 94, 91),
     UNKNOWN(InterfaceId.UNKNOWN, 31, 6, 6),
     CHAT_CHANNEL(InterfaceId.CHAT_CHANNEL, 86, 82, 79),
     COMBAT_OPTIONS(InterfaceId.COMBAT_OPTIONS, 79, 75, 72),
-    SKILLS(InterfaceId.SKILLS, 80, 76, 84),
+    SKILLS(InterfaceId.SKILLS, 80, 76, 73),
     CHARACTER_SUMMARY(InterfaceId.CHARACTER_SUMMARY, 81, 77, 74),
     INVENTORY(InterfaceId.INVENTORY, 82, 78, 75),
     WORN_EQUIPMENT(InterfaceId.WORN_EQUIPMENT, 83, 79, 76),
@@ -26,9 +27,10 @@ enum class InterfaceInfo(
     EMOTES(InterfaceId.EMOTES, 91, 87, 84),
     MUSIC_PLAYER(InterfaceId.MUSIC_PLAYER, 92, 88, 85);
 
-    fun componentIdForDisplay(mode: DisplayMode) = when (mode) {
-        DisplayMode.FIXED -> fixedChildId
-        DisplayMode.RESIZABLE -> resizableChildId
-        DisplayMode.RESIZABLE_LIST -> resizableListChildId
+    fun componentIdForDisplay(mode: ClientLayout) = when (mode) {
+        ClientLayout.FIXED -> fixedChildId
+        ClientLayout.RESIZABLE -> resizableChildId
+        ClientLayout.RESIZABLE_LIST -> resizableListChildId
+        ClientLayout.FULL_SCREEN -> fullScreenChildId
     }
 }

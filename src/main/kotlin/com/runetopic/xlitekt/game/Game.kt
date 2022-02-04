@@ -1,9 +1,10 @@
 package com.runetopic.xlitekt.game
 
 import com.github.michaelbull.logging.InlineLogger
+import com.runetopic.xlitekt.game.display.listener.impl.optionsListener
 import com.runetopic.xlitekt.game.event.EventBus
 import com.runetopic.xlitekt.game.world.World
-import com.runetopic.xlitekt.plugin.ktor.inject
+import com.runetopic.xlitekt.plugin.inject
 import com.runetopic.xlitekt.util.resource.loadAllMapSquares
 import org.koin.dsl.module
 import java.util.concurrent.Executors
@@ -17,11 +18,12 @@ val gameModule = module {
 }
 
 class Game {
-    private val world by inject<World>()
-    private val service = Executors.newScheduledThreadPool(1)
     private val logger = InlineLogger()
+    private val service = Executors.newScheduledThreadPool(1)
+    private val world by inject<World>()
 
     fun start() {
+        optionsListener
         service.scheduleAtFixedRate({
             world.process()
         }, 0, 600, TimeUnit.MILLISECONDS)

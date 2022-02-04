@@ -1,7 +1,7 @@
 package com.runetopic.xlitekt.network.packet.assembler
 
 import com.runetopic.xlitekt.network.packet.RebuildNormalPacket
-import com.runetopic.xlitekt.plugin.ktor.inject
+import com.runetopic.xlitekt.plugin.inject
 import com.runetopic.xlitekt.util.ext.writeShortAdd
 import com.runetopic.xlitekt.util.resource.MapSquare
 import io.ktor.utils.io.core.writeInt
