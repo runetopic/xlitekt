@@ -2,7 +2,7 @@ package com.runetopic.xlitekt.game.display
 
 import com.runetopic.xlitekt.game.actor.player.Player
 import com.runetopic.xlitekt.game.event.EventBus
-import com.runetopic.xlitekt.game.event.impl.IfOpenEvent
+import com.runetopic.xlitekt.game.event.impl.IfEvent
 import com.runetopic.xlitekt.network.packet.IfCloseSubPacket
 import com.runetopic.xlitekt.network.packet.IfMoveSubPacket
 import com.runetopic.xlitekt.network.packet.IfOpenSubPacket
@@ -83,7 +83,7 @@ class InterfaceManager(
     private fun openTop(interfaceId: Int) {
         val packed = interfaceId.packInterface()
         if (open(packed, interfaceId)) {
-            eventBus.notify(IfOpenEvent(player, interfaceId, 0, true))
+            eventBus.notify(IfEvent.IfOpenEvent(player, interfaceId, 0, true))
             player.client.writePacket(IfOpenTopPacket(interfaceId))
         }
     }
@@ -99,7 +99,7 @@ class InterfaceManager(
         val packed = currentLayout.interfaceId.packInterface(childId)
         if (open(packed, interfaceId)) {
             eventBus.notify(
-                IfOpenEvent(
+                IfEvent.IfOpenEvent(
                     player,
                     interfaceId,
                     childId,
@@ -125,14 +125,14 @@ class InterfaceManager(
         player.client.writePacket(MessageGamePacket(0, message, false))
     }
 
-    fun interfaceEvents(interfaceId: Int, childId: Int, fromSlot: Int, toSlot: Int, events: Int) {
+    fun interfaceEvents(interfaceId: Int, childId: Int, fromSlot: Int, toSlot: Int, events: InterfaceEvent) {
         player.client.writePacket(
             IfSetEventsPacket(
                 interfaceId,
                 childId,
                 fromSlot,
                 toSlot,
-                events
+                events.value
             )
         )
     }

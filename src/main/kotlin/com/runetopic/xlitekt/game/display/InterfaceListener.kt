@@ -1,7 +1,6 @@
 package com.runetopic.xlitekt.game.display
 
-import com.runetopic.xlitekt.game.event.impl.IfButtonClickEvent
-import com.runetopic.xlitekt.game.event.impl.IfOpenEvent
+import com.runetopic.xlitekt.game.event.impl.IfEvent
 import com.runetopic.xlitekt.util.hook.onEvent
 
 /**
@@ -10,25 +9,35 @@ import com.runetopic.xlitekt.util.hook.onEvent
 class InterfaceListener(
     private val interfaceId: Int
 ) {
-    fun onClick(function: (IfButtonClickEvent).() -> Unit) =
-        onEvent<IfButtonClickEvent>()
+    fun onClick(function: (IfEvent.IfButtonClickEvent).() -> Unit) =
+        onEvent<IfEvent.IfButtonClickEvent>()
             .filter { interfaceId == this@InterfaceListener.interfaceId }
             .use { function.invoke(this) }
 
-    fun onClick(childId: Int, function: (IfButtonClickEvent).() -> Unit) =
-        onEvent<IfButtonClickEvent>()
+    fun onClick(childId: Int, function: (IfEvent.IfButtonClickEvent).() -> Unit) =
+        onEvent<IfEvent.IfButtonClickEvent>()
             .filter { this.interfaceId == this@InterfaceListener.interfaceId }
             .filter { this.childId == childId }
             .use { function.invoke(this) }
 
-    fun onOpen(function: (IfOpenEvent).() -> Unit) =
-        onEvent<IfOpenEvent>()
+    fun onOpen(function: (IfEvent.IfOpenEvent).() -> Unit) =
+        onEvent<IfEvent.IfOpenEvent>()
             .filter { interfaceId == this@InterfaceListener.interfaceId }
             .use { function.invoke(this) }
 
+    fun IfEvent.event(childId: Int, slots: IntRange, events: InterfaceEvent) = player.interfaceManager.apply {
+        interfaceEvents(
+            interfaceId,
+            childId = childId,
+            fromSlot = slots.first,
+            toSlot = slots.last,
+            events = events
+        )
+    }
+
+    fun IfEvent.clientScript(scriptId: Int, parameters: List<Any>) = player.interfaceManager.apply { clientScript(scriptId, parameters) }
+
     companion object {
-        fun addInterfaceListener(interfaceId: Int, function: InterfaceListener.() -> Unit) {
-            function.invoke(InterfaceListener(interfaceId))
-        }
+        fun buildInterfaceListener(interfaceId: Int, function: InterfaceListener.() -> Unit) = function.invoke(InterfaceListener(interfaceId))
     }
 }

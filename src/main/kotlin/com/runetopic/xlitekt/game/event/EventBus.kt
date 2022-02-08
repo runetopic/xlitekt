@@ -19,9 +19,5 @@ class EventBus {
             .count() > 0
     }
 
-    fun clear() {
-        events.clear()
-    }
-
     inline fun <reified T : Event> onEvent(): EventBuilder<T> = EventBuilder(events.computeIfAbsent(T::class) { mutableListOf() })
 }

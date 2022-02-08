@@ -1,33 +1,30 @@
 package com.runetopic.xlitekt.game.display.listener
 
+import com.runetopic.xlitekt.game.display.InterfaceEvent.ClickOp1
 import com.runetopic.xlitekt.game.display.InterfaceId
-import com.runetopic.xlitekt.game.display.InterfaceListener.Companion.addInterfaceListener
+import com.runetopic.xlitekt.game.display.InterfaceListener.Companion.buildInterfaceListener
 import com.runetopic.xlitekt.game.display.Layout
 
 private val layoutDropDownChildId = 84
 private val clientModeCS2Id = 3998
 
-addInterfaceListener(InterfaceId.SETTINGS) {
+buildInterfaceListener(InterfaceId.SETTINGS) {
     onOpen {
-        player.interfaceManager.let { interfaceManager ->
-            interfaceManager.interfaceEvents(interfaceId, childId = 41, fromSlot = 0, toSlot = 21, events = 2)
-            interfaceManager.interfaceEvents(interfaceId, childId = 55, fromSlot = 0, toSlot = 21, events = 2)
-            interfaceManager.interfaceEvents(interfaceId, childId = 69, fromSlot = 0, toSlot = 21, events = 2)
-            interfaceManager.interfaceEvents(interfaceId, childId = 81, fromSlot = 1, toSlot = 5, events = 2)
-            interfaceManager.interfaceEvents(interfaceId, childId = 82, fromSlot = 1, toSlot = 4, events = 2)
-            interfaceManager.interfaceEvents(interfaceId, childId = 84, fromSlot = 1, toSlot = 3, events = 2)
-            interfaceManager.interfaceEvents(interfaceId, childId = 23, fromSlot = 0, toSlot = 21, events = 2)
-            interfaceManager.interfaceEvents(interfaceId, childId = 83, fromSlot = 1, toSlot = 5, events = 2)
-        }
+        event(childId = 41, slots = 0..21, events = ClickOp1)
+        event(childId = 55, slots = 0..21, events = ClickOp1)
+        event(childId = 69, slots = 0..21, events = ClickOp1)
+        event(childId = 81, slots = 1..5, events = ClickOp1)
+        event(childId = 82, slots = 1..4, events = ClickOp1)
+        event(childId = 84, slots = 1..3, events = ClickOp1)
+        event(childId = 23, slots = 0..21, events = ClickOp1)
+        event(childId = 83, slots = 1..5, events = ClickOp1)
     }
 
     onClick(layoutDropDownChildId) {
-        player.interfaceManager.let { interfaceManager ->
-            val layout = Layout.values().firstOrNull { it.id == slotId - 1 } ?: return@let
-            if (layout == Layout.FIXED || layout == Layout.RESIZABLE) {
-                interfaceManager.clientScript(clientModeCS2Id, listOf(layout.id))
-            }
-            player.interfaceManager.switchLayout(layout)
+        val layout = Layout.values().firstOrNull { it.id == slotId - 1 } ?: return@onClick
+        if (layout == Layout.FIXED || layout == Layout.RESIZABLE) {
+            clientScript(clientModeCS2Id, listOf(layout.id))
         }
+        player.interfaceManager.switchLayout(layout)
     }
 }
