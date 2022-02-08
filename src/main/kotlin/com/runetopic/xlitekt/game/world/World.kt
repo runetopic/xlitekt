@@ -5,17 +5,18 @@ import com.runetopic.xlitekt.game.actor.PlayerList
 import com.runetopic.xlitekt.game.actor.player.Player
 import com.runetopic.xlitekt.network.packet.NPCInfoPacket
 import com.runetopic.xlitekt.network.packet.PlayerInfoPacket
-import kotlinx.coroutines.runBlocking
 
 class World {
     val players = PlayerList(MAX_PLAYERS)
     val npcs = NPCList(MAX_NPCs)
 
-    fun process() = runBlocking {
-        players.filterNotNull().filter(Player::online).let { players ->
-            players.forEach { it.client.writePacket(PlayerInfoPacket(it)) }
-            players.forEach { it.client.writePacket(NPCInfoPacket(it)) }
-            players.forEach { it.reset() }
+    fun process() = players.filterNotNull().filter(Player::online).apply {
+        parallelStream().forEach {
+            it.client.writePacket(PlayerInfoPacket(it))
+            it.client.writePacket(NPCInfoPacket(it))
+        }
+        parallelStream().forEach {
+            it.reset()
         }
     }
 

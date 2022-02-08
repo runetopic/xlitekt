@@ -8,6 +8,7 @@ import com.runetopic.xlitekt.game.world.World
 import com.runetopic.xlitekt.network.client.Client
 import com.runetopic.xlitekt.network.packet.RebuildNormalPacket
 import com.runetopic.xlitekt.plugin.koin.inject
+import kotlin.random.Random
 
 /**
  * @author Jordan Abraham
@@ -16,7 +17,7 @@ import com.runetopic.xlitekt.plugin.koin.inject
 class Player(
     val client: Client,
     val username: String,
-) : Actor(Tile(3222, 3222)) {
+) : Actor(Tile(3222 + Random.nextInt(5), 3222 + Random.nextInt(5))) {
     var appearance = Render.Appearance(Render.Appearance.Gender.MALE, -1, -1, -1, false)
 
     var rights = 2
