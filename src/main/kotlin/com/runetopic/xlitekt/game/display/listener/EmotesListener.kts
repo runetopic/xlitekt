@@ -79,7 +79,7 @@ buildInterfaceListener(InterfaceId.EMOTES) {
         // Not every emote has a spot animation associated with it.
         val spotAnimation = spotAnimations.find { it.name == emote.emoteName }
 
-        with(player) {
+        player.apply {
             animate(sequence.id)
             if (spotAnimation != null) {
                 // If the emote has an associated spot animation, use it here.
