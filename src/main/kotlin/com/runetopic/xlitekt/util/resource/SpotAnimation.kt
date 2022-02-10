@@ -7,7 +7,7 @@ import kotlinx.serialization.Serializable
  * @author Jordan Abraham
  */
 @Serializable
-data class Sequence(
+data class SpotAnimation(
     @SerialName("name")
     val name: String,
     @SerialName("id")

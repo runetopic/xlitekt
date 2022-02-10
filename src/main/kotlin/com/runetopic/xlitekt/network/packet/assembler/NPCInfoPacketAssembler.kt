@@ -125,7 +125,7 @@ class NPCInfoPacketAssembler(
     }
 
     private fun mapToBlock(it: Render) = when (it) {
-        is Render.Animation -> it to NPCSequenceBlock()
+        is Render.Sequence -> it to NPCSequenceBlock()
         is Render.NPCCustomLevel -> it to NPCCustomLevelBlock()
         is Render.FaceActor -> it to NPCFaceActorBlock()
         is Render.FaceTile -> it to NPCFaceTileBlock()

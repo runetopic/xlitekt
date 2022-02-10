@@ -17,7 +17,7 @@ import kotlin.random.Random
 class Player(
     val client: Client,
     val username: String,
-) : Actor(Tile(3222 + Random.nextInt(5), 3222 + Random.nextInt(5))) {
+) : Actor(Tile(3222, 3222)) {
     var appearance = Render.Appearance(Render.Appearance.Gender.MALE, -1, -1, -1, false)
 
     var rights = 2

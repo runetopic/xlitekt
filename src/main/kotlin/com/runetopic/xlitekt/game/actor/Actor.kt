@@ -26,16 +26,16 @@ abstract class Actor(
     }
 
     fun publicChat(message: String, packedEffects: Int) = renderer.publicChat(message, packedEffects)
-    fun customOptions(string1: String, string2: String, string3: String) = renderer.customOptions(string1, string2, string3)
-    fun animate(animation: Render.Animation) = renderer.animate(animation)
+    fun customOptions(prefix: String, infix: String, suffix: String) = renderer.customOptions(prefix, infix, suffix)
+    fun animate(id: Int, delay: Int = 0) = renderer.sequence(id, delay)
     fun faceActor(index: Int) = renderer.faceActor(index)
-    fun faceDirection(direction: Render.FaceDirection) = renderer.faceDirection(direction)
-    fun forceMove(forceMovement: Render.ForceMovement) = renderer.forceMove(forceMovement)
+    fun faceDirection(direction: Int) = renderer.faceDirection(direction)
+    // fun forceMove(forceMovement: Render.ForceMovement) = renderer.forceMove(forceMovement)
     fun hasPendingUpdate() = renderer.hasPendingUpdate()
     fun overheadChat(text: String) = renderer.overheadChat(text)
     fun pendingUpdates() = renderer.pendingUpdates
-    fun recolor(recolor: Render.Recolor) = renderer.recolor(recolor)
-    fun spotAnimation(spotAnimation: Render.SpotAnimation) = renderer.spotAnimation(spotAnimation)
+    // fun recolor(recolor: Render.Recolor) = renderer.recolor(recolor)
+    fun spotAnimate(id: Int, speed: Int = 0, height: Int = 0, rotation: Int = 0) = renderer.spotAnimation(id, speed, height, rotation)
     fun transmog(id: Int) = renderer.transmog(id)
     fun setTemporaryMovementType(id: Int) = renderer.temporaryMovementType(id)
 

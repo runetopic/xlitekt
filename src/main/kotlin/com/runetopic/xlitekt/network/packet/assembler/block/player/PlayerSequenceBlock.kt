@@ -11,9 +11,9 @@ import io.ktor.utils.io.core.buildPacket
 /**
  * @author Tyler Telis
  */
-class PlayerSequenceBlock : RenderingBlock<Player, Render.Animation>(8, 0x2) {
+class PlayerSequenceBlock : RenderingBlock<Player, Render.Sequence>(8, 0x2) {
 
-    override fun build(actor: Player, render: Render.Animation): ByteReadPacket = buildPacket {
+    override fun build(actor: Player, render: Render.Sequence): ByteReadPacket = buildPacket {
         writeShortAdd(render.id.toShort())
         writeByteNegate(render.delay.toByte())
     }

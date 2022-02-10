@@ -7,8 +7,8 @@ import kotlin.script.templates.standard.ScriptTemplateWithArgs
 
 private val logger = InlineLogger()
 
-val gameScriptModule = module {
-    single(createdAtStart = true) { loadGameScripts() }
+val gameScriptModule = module(createdAtStart = true) {
+    single { loadGameScripts() }
 }
 
 fun loadGameScripts() {
