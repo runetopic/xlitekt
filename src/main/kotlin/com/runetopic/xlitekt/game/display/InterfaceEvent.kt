@@ -2,7 +2,7 @@ package com.runetopic.xlitekt.game.display
 
 enum class InterfaceEvent(val value: Int) {
     CONTINUE(1 shl 0),
-    ClICK_OPTION_1(1 shl 1),
+    CLICK_OPTION_1(1 shl 1),
     CLICK_OPTION_2(1 shl 2),
     CLICK_OPTION_3(1 shl 3),
     CLICK_OPTION_4(1 shl 4),
