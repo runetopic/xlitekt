@@ -1,6 +1,7 @@
 package com.runetopic.xlitekt.game.actor.player
 
 import com.runetopic.xlitekt.game.actor.Actor
+import com.runetopic.xlitekt.game.actor.player.`var`.VarsManager
 import com.runetopic.xlitekt.game.actor.render.Render
 import com.runetopic.xlitekt.game.display.InterfaceManager
 import com.runetopic.xlitekt.game.tile.Tile
@@ -24,6 +25,7 @@ class Player(
 
     val viewport = Viewport(this)
     val interfaceManager = InterfaceManager(this)
+    val varsManager = VarsManager(this)
 
     fun login() {
         this.previousTile = this.tile

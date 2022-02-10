@@ -1,5 +1,6 @@
 package com.runetopic.xlitekt.cache
 
+import com.github.michaelbull.logging.InlineLogger
 import com.runetopic.cache.store.Js5Store
 import com.runetopic.cryptography.huffman.Huffman
 import com.runetopic.xlitekt.cache.Cache.loadProviders
@@ -20,13 +21,17 @@ val cacheModule = module(createdAtStart = true) {
     single { Huffman(get<Js5Store>().index(indexId = 10).group(groupName = "huffman").file(0).data) }
     single { loadProviders() }
 }
+private val logger = InlineLogger()
 
 object Cache {
     val providers = mapOf<KClass<*>, EntryTypeProvider<*>>(
         VarBitEntryType::class to VarBitEntryTypeProvider()
     )
 
-    fun loadProviders() = providers.values.forEach(EntryTypeProvider<*>::load)
+    fun loadProviders() {
+        providers.values.forEach { it.load() }
+        logger.debug { "Finished loading ${providers.size} cache providers with ${providers.values.sumOf { it.size() }} total entries." }
+    }
 
     inline fun <reified T> entryType(id: Int): T? = providers[T::class]?.entryType(id) as T?
 }
