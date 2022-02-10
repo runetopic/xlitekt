@@ -4,12 +4,12 @@ import com.runetopic.xlitekt.game.display.InterfaceEvent.CLICK_OPTION_1
 import com.runetopic.xlitekt.game.display.InterfaceId
 import com.runetopic.xlitekt.game.display.InterfaceListener.Companion.buildInterfaceListener
 import com.runetopic.xlitekt.plugin.koin.inject
-import com.runetopic.xlitekt.util.resource.Sequence
-import com.runetopic.xlitekt.util.resource.SpotAnimation
+import com.runetopic.xlitekt.util.resource.Sequences
+import com.runetopic.xlitekt.util.resource.SpotAnimations
 import org.koin.core.qualifier.named
 
-private val sequences by inject<List<Sequence>>(named("sequences"))
-private val spotAnimations by inject<List<SpotAnimation>>(named("spotanimations"))
+private val sequences by inject<Sequences>(named("sequences"))
+private val spotAnimations by inject<SpotAnimations>(named("spotanimations"))
 
 private enum class Emotes(
     val slotId: Int,
@@ -75,9 +75,9 @@ buildInterfaceListener(InterfaceId.EMOTES) {
 
     onClick {
         val emote = enumValues<Emotes>().find { it.slotId == this.slotId } ?: return@onClick
-        val sequence = sequences.find { it.name == emote.emoteName } ?: return@onClick
+        val sequence = sequences[emote.emoteName] ?: return@onClick
         // Not every emote has a spot animation associated with it.
-        val spotAnimation = spotAnimations.find { it.name == emote.emoteName }
+        val spotAnimation = spotAnimations[emote.emoteName]
 
         player.apply {
             animate(sequence.id)
