@@ -11,6 +11,7 @@ import com.runetopic.xlitekt.network.packet.assembler.IfSetColorPacketAssembler
 import com.runetopic.xlitekt.network.packet.assembler.IfSetEventsPacketAssembler
 import com.runetopic.xlitekt.network.packet.assembler.IfSetHiddenPacketAssembler
 import com.runetopic.xlitekt.network.packet.assembler.IfSetTextPacketAssembler
+import com.runetopic.xlitekt.network.packet.assembler.LogoutPacketAssembler
 import com.runetopic.xlitekt.network.packet.assembler.MessageGamePacketAssembler
 import com.runetopic.xlitekt.network.packet.assembler.MidiSongPacketAssembler
 import com.runetopic.xlitekt.network.packet.assembler.MiniMapTogglePacketAssembler
@@ -67,6 +68,7 @@ object RegisteredPackets {
         IfSetHiddenPacket::class to IfSetHiddenPacketAssembler(),
         IfSetTextPacket::class to IfSetTextPacketAssembler(),
         ForceLogoutPacket::class to ForceLogoutPacketAssembler(),
+        LogoutPacket::class to LogoutPacketAssembler(),
         HintArrowPacket::class to HintArrowPacketAssembler(),
         MessageGamePacket::class to MessageGamePacketAssembler(),
         MidiSongPacket::class to MidiSongPacketAssembler(),
