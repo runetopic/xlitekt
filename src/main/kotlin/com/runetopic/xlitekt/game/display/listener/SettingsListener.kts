@@ -21,7 +21,7 @@ buildInterfaceListener(InterfaceId.SETTINGS) {
     }
 
     onClick(layoutDropDownChildId) {
-        val layout = Layout.values().firstOrNull { it.id == slotId - 1 } ?: return@onClick
+        val layout = enumValues<Layout>().find { it.id == slotId - 1 } ?: return@onClick
         if (layout == Layout.FIXED || layout == Layout.RESIZABLE) {
             clientScript(clientModeCS2Id, listOf(layout.id))
         }
