@@ -11,6 +11,7 @@ import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
+import kotlin.time.measureTime
 
 val gameModule = module(createdAtStart = true) {
     single(named("mapsquares")) { loadAllMapSquares() }
@@ -23,12 +24,13 @@ val gameModule = module(createdAtStart = true) {
 
 class Game {
     private val logger = InlineLogger()
-    private val service = Executors.newScheduledThreadPool(1)
+    private val service = Executors.newSingleThreadScheduledExecutor()
     private val world by inject<World>()
 
     fun start() {
         service.scheduleAtFixedRate({
-            world.process()
+            val time = measureTime { world.process() }
+            logger.debug { "Main game loop took $time to finish." }
         }, 0, 600, TimeUnit.MILLISECONDS)
     }
 
