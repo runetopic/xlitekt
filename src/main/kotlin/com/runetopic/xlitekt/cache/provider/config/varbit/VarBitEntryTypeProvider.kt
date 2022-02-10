@@ -10,13 +10,12 @@ class VarBitEntryTypeProvider : EntryTypeProvider<VarBitEntryType>() {
     private val logger = InlineLogger()
 
     override fun load() {
-        logger.info { "Loading entries" }
         js5Store
             .index(CONFIG_INDEX)
             .group(VARBIT_GROUP_ID)
             .files()
             .map(::loadEntryType)
-        logger.info { "Finished loading entries" }
+        logger.info { "Finished loading ${entries.size} VarBitEntry types." }
     }
 
     private fun loadEntryType(file: File) {
