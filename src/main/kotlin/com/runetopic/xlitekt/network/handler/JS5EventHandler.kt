@@ -25,9 +25,9 @@ class JS5EventHandler : EventHandler<ReadEvent.JS5ReadEvent, WriteEvent.JS5Write
                 val indexId = event.indexId
                 val groupId = event.groupId
                 val requestingChecksums = indexId == 0xff && groupId == 0xff
-                val buffer = ByteBuffer.wrap(if (requestingChecksums) store.checksumsWithoutRSA() else store.groupReferenceTable(indexId, groupId))
+                val buffer = ByteBuffer.wrap(if (requestingChecksums) checksums else store.groupReferenceTable(indexId, groupId))
                 val compression = if (requestingChecksums) 0 else buffer.get().toInt() and 0xff
-                val size = if (requestingChecksums) store.checksumsWithoutRSA().size else buffer.int
+                val size = if (requestingChecksums) checksums.size else buffer.int
                 WriteEvent.JS5WriteEvent(indexId, groupId, compression, size, buffer)
             }
             JS5_ENCRYPTION_OPCODE -> { WriteEvent.JS5WriteEvent() } // TODO this does need to return something so we can handle the encryption value properly
@@ -38,5 +38,9 @@ class JS5EventHandler : EventHandler<ReadEvent.JS5ReadEvent, WriteEvent.JS5Write
             }
             else -> throw IllegalStateException("Unhandled Js5 Opcode in event handler. Opcode=${event.opcode}")
         }
+    }
+
+    private companion object {
+        val checksums = inject<Js5Store>().value.checksumsWithoutRSA()
     }
 }

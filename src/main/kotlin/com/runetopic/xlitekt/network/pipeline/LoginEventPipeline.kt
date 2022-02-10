@@ -92,6 +92,7 @@ class LoginEventPipeline : EventPipeline<ReadEvent.LoginReadEvent, WriteEvent.Lo
 
                 rsaBlock.readByte() // Unknown byte #3
                 val password = rsaBlock.readStringCp1252NullTerminated()
+                rsaBlock.release()
                 val xtea = ByteArray(client.readChannel.availableForRead)
                 client.readChannel.readAvailable(xtea, 0, xtea.size)
                 val xteaBlock = ByteReadPacket(xtea.fromXTEA(32, clientKeys))
@@ -141,6 +142,8 @@ class LoginEventPipeline : EventPipeline<ReadEvent.LoginReadEvent, WriteEvent.Lo
                 clientCRCs[20] = xteaBlock.readIntLittleEndian()
                 clientCRCs[0] = xteaBlock.readIntLittleEndian()
                 clientCRCs[16] = cacheCRCs[16] // This is -1 from the client.
+
+                xteaBlock.release()
 
                 if (!isValidCacheCRCs(clientCRCs)) {
                     logger.debug { "Bad Session. Client and cache crc are mismatched." }
