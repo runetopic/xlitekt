@@ -21,5 +21,3 @@ sealed class IfEvent(open val player: Player) : Event {
         val itemId: Int
     ) : IfEvent(player)
 }
-
-

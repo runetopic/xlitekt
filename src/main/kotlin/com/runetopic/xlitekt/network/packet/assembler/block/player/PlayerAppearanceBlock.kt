@@ -4,7 +4,6 @@ import com.runetopic.xlitekt.game.actor.player.Player
 import com.runetopic.xlitekt.game.actor.render.Render
 import com.runetopic.xlitekt.network.packet.assembler.block.RenderingBlock
 import com.runetopic.xlitekt.network.packet.assembler.block.player.kit.BodyPartColor
-import com.runetopic.xlitekt.network.packet.assembler.block.player.kit.BodyPartCompanion
 import com.runetopic.xlitekt.network.packet.assembler.block.player.kit.PlayerIdentityKit
 import com.runetopic.xlitekt.util.ext.writeBytesAdd
 import com.runetopic.xlitekt.util.ext.writeStringCp1252NullTerminated
@@ -25,7 +24,7 @@ class PlayerAppearanceBlock : RenderingBlock<Player, Render.Appearance>(5, 0x1) 
             writeByte(render.skullIcon.toByte())
             writeByte(render.headIcon.toByte())
             if (render.transform != -1) writeTransmogrification(render) else writeIdentityKit(render)
-            colour(this, render.bodyPartColors.entries)
+            colour(render.bodyPartColors.entries)
             animate(render)
             writeStringCp1252NullTerminated(actor.username)
             writeByte(126) // Combat level
@@ -38,7 +37,7 @@ class PlayerAppearanceBlock : RenderingBlock<Player, Render.Appearance>(5, 0x1) 
 
     private fun BytePacketBuilder.animate(render: Render.Appearance) {
         if (render.transform == -1) {
-            intArrayOf(0x328, 0x337, 0x333, 0x334, 0x335, 0x336, 0x338).forEach { writeShort(it.toShort()) }
+            intArrayOf(808, 823, 819, 820, 821, 822, 824).forEach { writeShort(it.toShort()) }
         } else {
             // TODO load npc defs for walking and stand anims for transmog.
         }
@@ -49,19 +48,18 @@ class PlayerAppearanceBlock : RenderingBlock<Player, Render.Appearance>(5, 0x1) 
         writeShort(render.transform.toShort())
     }
 
-    private fun BytePacketBuilder.writeIdentityKit(render: Render.Appearance) = PlayerIdentityKit.values()
+    private fun BytePacketBuilder.writeIdentityKit(render: Render.Appearance) = enumValues<PlayerIdentityKit>()
         .sortedWith(compareBy { it.info.index })
         .forEach {
+            // TODO We will need to add support for the item worn in the specific body slot.
             it.info.build(
                 this,
-                BodyPartCompanion(
-                    render.gender,
-                    render.bodyParts.getOrDefault(it.bodyPart, 0)
-                )
+                render.gender,
+                render.bodyParts.getOrDefault(it.bodyPart, 0)
             )
         }
 
-    private fun colour(builder: BytePacketBuilder, colours: Set<Map.Entry<BodyPartColor, Int>>) = colours
+    private fun BytePacketBuilder.colour(colours: Set<Map.Entry<BodyPartColor, Int>>) = colours
         .sortedWith(compareBy { it.key.id })
-        .forEach { builder.writeByte(it.value.toByte()) }
+        .forEach { writeByte(it.value.toByte()) }
 }

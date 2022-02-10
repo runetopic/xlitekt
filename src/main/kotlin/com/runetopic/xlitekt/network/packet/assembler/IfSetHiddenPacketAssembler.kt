@@ -3,6 +3,7 @@ package com.runetopic.xlitekt.network.packet.assembler
 import com.runetopic.xlitekt.network.packet.IfSetHiddenPacket
 import com.runetopic.xlitekt.util.ext.toByte
 import com.runetopic.xlitekt.util.ext.writeIntV1
+import io.ktor.utils.io.core.buildPacket
 
 /**
  * @author Tyler Telis

@@ -1,6 +1,7 @@
 package com.runetopic.xlitekt.network.packet.assembler
 
 import com.runetopic.xlitekt.network.packet.SetMapFlagPacket
+import io.ktor.utils.io.core.buildPacket
 
 /**
  * @author Tyler Telis

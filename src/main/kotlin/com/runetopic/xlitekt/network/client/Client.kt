@@ -101,7 +101,7 @@ class Client(
     fun writePacket(message: Packet) = runBlocking {
         val assembler = assemblers[message::class] ?: return@runBlocking disconnect("Unhandled message found when trying to write packet. Message was $message.")
         try {
-            eventPipeline.write(this@Client, WriteEvent.GameWriteEvent(assembler.opcode, assembler.size, assembler.assemblePacket(message).build()))
+            eventPipeline.write(this@Client, WriteEvent.GameWriteEvent(assembler.opcode, assembler.size, assembler.assemblePacket(message)))
         } catch (exception: Exception) {
             // This function is used by multiple threads, so we try catch like this.
             // The main client thread will already handle disconnecting if applicable.
