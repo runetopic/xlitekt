@@ -35,10 +35,10 @@ class NPCInfoPacketAssembler(
         val blocks = buildPacket {}
 
         withBitAccess {
-            packet.player.viewport.let { viewport ->
-                writeBits(8, viewport.localNPCs.size)
-                highDefinition(viewport, blocks)
-                lowDefinition(viewport, blocks)
+            packet.player.viewport.let {
+                writeBits(8, it.localNPCs.size)
+                highDefinition(it, blocks)
+                lowDefinition(it, blocks)
             }
 
             if (blocks.size > 0) {
@@ -81,13 +81,13 @@ class NPCInfoPacketAssembler(
         viewport: Viewport,
         blocks: BytePacketBuilder
     ) {
-        viewport.localNPCs.forEach { npc ->
-            if (!npc.tile.withinDistance(viewport.player, if (extendedViewport) EXTENDED_VIEWPORT_DISTANCE else NORMAL_VIEWPORT_DISTANCE)) {
+        viewport.localNPCs.forEach {
+            if (!it.tile.withinDistance(viewport.player, if (extendedViewport) EXTENDED_VIEWPORT_DISTANCE else NORMAL_VIEWPORT_DISTANCE)) {
                 removeNPC()
                 return@forEach
             }
-            val updating = processHighDefinitionNPC(npc)
-            if (updating) encodePendingBlocks(npc, blocks)
+            val updating = processHighDefinitionNPC(it)
+            if (updating) encodePendingBlocks(it, blocks)
         }
     }
 
@@ -110,13 +110,12 @@ class NPCInfoPacketAssembler(
     }
 
     private fun encodePendingBlocks(npc: NPC, blocks: BytePacketBuilder) {
-        val updates = npc.pendingUpdates().map { mapToBlock(it) }.sortedWith(compareBy { it.second.index }).toMap()
-        var mask = 0x0
-        updates.forEach { mask = mask or it.value.mask }
-        if (mask >= 0xff) { mask = mask or 0x4 }
-        blocks.writeByte(mask.toByte())
-        if (mask >= 0xff) { blocks.writeByte((mask shr 8).toByte()) }
-        updates.forEach { blocks.writePacket(it.value.build(npc, it.key)) }
+        npc.pendingUpdates().map { it to renderingBlockMap[it::class]!! }.sortedWith(compareBy { it.second.index }).toMap().let { updates ->
+            val mask = updates.map { it.value.mask }.sum().let { if (it >= 0xff) it or 0x4 else it }
+            blocks.writeByte(mask.toByte())
+            if (mask >= 0xff) { blocks.writeByte((mask shr 8).toByte()) }
+            updates.forEach { blocks.writePacket(it.value.build(npc, it.key)) }
+        }
     }
 
     private fun BitAccess.removeNPC() {
@@ -124,22 +123,21 @@ class NPCInfoPacketAssembler(
         writeBits(2, 3)
     }
 
-    private fun mapToBlock(it: Render) = when (it) {
-        is Render.Sequence -> it to NPCSequenceBlock()
-        is Render.NPCCustomLevel -> it to NPCCustomLevelBlock()
-        is Render.FaceActor -> it to NPCFaceActorBlock()
-        is Render.FaceTile -> it to NPCFaceTileBlock()
-        is Render.ForceMovement -> it to NPCForceMovementBlock()
-        is Render.HitDamage -> it to NPCHitDamageBlock()
-        is Render.Recolor -> it to NPCRecolorBlock()
-        is Render.OverheadChat -> it to NPCOverheadChatBlock()
-        is Render.SpotAnimation -> it to NPCSpotAnimationBlock()
-        is Render.NPCTransmogrification -> it to NPCTransmogrificationBlock()
-        else -> throw IllegalStateException("Unhandled npc block in NpcInfo. Block was $it")
-    }
-
     private companion object {
         const val EXTENDED_VIEWPORT_DISTANCE = 126
         const val NORMAL_VIEWPORT_DISTANCE = 14
+
+        val renderingBlockMap = mapOf(
+            Render.Sequence::class to NPCSequenceBlock(),
+            Render.NPCCustomLevel::class to NPCCustomLevelBlock(),
+            Render.FaceActor::class to NPCFaceActorBlock(),
+            Render.FaceTile::class to NPCFaceTileBlock(),
+            Render.ForceMovement::class to NPCForceMovementBlock(),
+            Render.HitDamage::class to NPCHitDamageBlock(),
+            Render.Recolor::class to NPCRecolorBlock(),
+            Render.OverheadChat::class to NPCOverheadChatBlock(),
+            Render.SpotAnimation::class to NPCSpotAnimationBlock(),
+            Render.NPCTransmogrification::class to NPCTransmogrificationBlock()
+        )
     }
 }

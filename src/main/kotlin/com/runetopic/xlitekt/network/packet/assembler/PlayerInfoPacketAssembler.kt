@@ -248,33 +248,33 @@ class PlayerInfoPacketAssembler : PacketAssembler<PlayerInfoPacket>(opcode = 80,
 
     private fun encodePendingBlocks(forceOtherUpdate: Boolean, other: Player, blocks: BytePacketBuilder) {
         if (forceOtherUpdate) other.refreshAppearance(other.appearance)
-        val updates = other.pendingUpdates().map { mapToBlock(it) }.sortedWith(compareBy { it.second.index }).toMap()
-        var mask = 0x0
-        updates.forEach { mask = mask or it.value.mask }
-        if (mask >= 0xff) { mask = mask or 0x10 }
-        blocks.writeByte(mask.toByte())
-        if (mask >= 0xff) { blocks.writeByte((mask shr 8).toByte()) }
-        updates.forEach { blocks.writePacket(it.value.build(other, it.key)) }
-    }
-
-    private fun mapToBlock(it: Render) = when (it) {
-        is Render.Appearance -> it to PlayerAppearanceBlock()
-        is Render.Sequence -> it to PlayerSequenceBlock()
-        is Render.UsernameOverride -> it to PlayerUsernameOverrideBlock()
-        is Render.FaceActor -> it to PlayerFaceActorBlock()
-        is Render.FaceDirection -> it to PlayerFaceDirectionBlock()
-        is Render.MovementType -> it to PlayerMovementTypeBlock()
-        is Render.ForceMovement -> it to PlayerForceMovementBlock()
-        is Render.HitDamage -> it to PlayerHitDamageBlock()
-        is Render.OverheadChat -> it to PlayerOverheadChatBlock()
-        is Render.PublicChat -> it to PlayerPublicChatBlock()
-        is Render.Recolor -> it to PlayerRecolorBlock()
-        is Render.SpotAnimation -> it to PlayerSpotAnimationBlock()
-        is Render.TemporaryMovementType -> it to PlayerTemporaryMovementTypeBlock()
-        else -> throw IllegalStateException("Unhandled player block in PlayerInfo. Block was $it")
+        other.pendingUpdates().map { it to renderingBlockMap[it::class]!! }.sortedWith(compareBy { it.second.index }).toMap().let { updates ->
+            val mask = updates.map { it.value.mask }.sum().let { if (it >= 0xff) it or 0x10 else it }
+            blocks.writeByte(mask.toByte())
+            if (mask >= 0xff) { blocks.writeByte((mask shr 8).toByte()) }
+            updates.forEach { blocks.writePacket(it.value.build(other, it.key)) }
+        }
     }
 
     private fun shouldUpdate(other: Player?): Boolean = other?.hasPendingUpdate() ?: false
     private fun shouldAdd(player: Player, other: Player?): Boolean = (other != null && other != player && other.tile.withinDistance(player))
     private fun shouldRemove(player: Player, other: Player?): Boolean = (other == null || !other.tile.withinDistance(player) || !world.players.contains(other))
+
+    private companion object {
+        val renderingBlockMap = mapOf(
+            Render.Appearance::class to PlayerAppearanceBlock(),
+            Render.Sequence::class to PlayerSequenceBlock(),
+            Render.UsernameOverride::class to PlayerUsernameOverrideBlock(),
+            Render.FaceActor::class to PlayerFaceActorBlock(),
+            Render.FaceDirection::class to PlayerFaceDirectionBlock(),
+            Render.MovementType::class to PlayerMovementTypeBlock(),
+            Render.ForceMovement::class to PlayerForceMovementBlock(),
+            Render.HitDamage::class to PlayerHitDamageBlock(),
+            Render.OverheadChat::class to PlayerOverheadChatBlock(),
+            Render.PublicChat::class to PlayerPublicChatBlock(),
+            Render.Recolor::class to PlayerRecolorBlock(),
+            Render.SpotAnimation::class to PlayerSpotAnimationBlock(),
+            Render.TemporaryMovementType::class to PlayerTemporaryMovementTypeBlock()
+        )
+    }
 }
