@@ -15,12 +15,12 @@ class ActorRenderer {
     fun hasPendingUpdate(): Boolean = pendingUpdates.isNotEmpty()
     fun clearUpdates() = pendingUpdates.clear()
 
-    fun animate(animation: Render.Animation) {
-        pendingUpdates += animation
+    fun sequence(sequenceId: Int, delay: Int) {
+        pendingUpdates += Render.Sequence(sequenceId, delay)
     }
 
-    fun customOptions(string1: String, string2: String, string3: String) {
-        pendingUpdates += Render.UsernameOverride(string1, string2, string3)
+    fun customOptions(prefix: String, infix: String, suffix: String) {
+        pendingUpdates += Render.UsernameOverride(prefix, infix, suffix)
     }
 
     fun appearance(appearance: Render.Appearance): Render.Appearance {
@@ -58,8 +58,8 @@ class ActorRenderer {
         pendingUpdates += recolor
     }
 
-    fun spotAnimation(spotAnimation: Render.SpotAnimation) {
-        pendingUpdates += spotAnimation
+    fun spotAnimation(id: Int, speed: Int, height: Int, rotation: Int) {
+        pendingUpdates += Render.SpotAnimation(id, speed, height, rotation)
     }
 
     fun transmog(id: Int) {
@@ -78,7 +78,7 @@ class ActorRenderer {
         pendingUpdates += Render.PublicChat(message, packedEffects)
     }
 
-    fun faceDirection(direction: Render.FaceDirection) {
-        pendingUpdates += direction
+    fun faceDirection(direction: Int) {
+        pendingUpdates += Render.FaceDirection(direction)
     }
 }

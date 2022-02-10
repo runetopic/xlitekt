@@ -259,7 +259,7 @@ class PlayerInfoPacketAssembler : PacketAssembler<PlayerInfoPacket>(opcode = 80,
 
     private fun mapToBlock(it: Render) = when (it) {
         is Render.Appearance -> it to PlayerAppearanceBlock()
-        is Render.Animation -> it to PlayerSequenceBlock()
+        is Render.Sequence -> it to PlayerSequenceBlock()
         is Render.UsernameOverride -> it to PlayerUsernameOverrideBlock()
         is Render.FaceActor -> it to PlayerFaceActorBlock()
         is Render.FaceDirection -> it to PlayerFaceDirectionBlock()

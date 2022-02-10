@@ -22,7 +22,7 @@ import org.koin.dsl.module
 import java.net.InetSocketAddress
 import java.util.concurrent.Executors
 
-val networkModule = module {
+val networkModule = module(createdAtStart = true) {
     single { HandshakeEventPipeline() }
     single { HandshakeEventHandler() }
     single { JS5EventPipeline() }

@@ -11,12 +11,10 @@ import java.util.EnumMap
  * @author Tyler Telis
  */
 sealed class Render {
-    data class Animation(
+    data class Sequence(
         val id: Int,
         val delay: Int
-    ) : Render() {
-        constructor(id: Int) : this(id, 0)
-    }
+    ) : Render()
 
     data class UsernameOverride(
         val prefix: String,
@@ -30,9 +28,6 @@ sealed class Render {
         val height: Int,
         val rotation: Int
     ) : Render() {
-        constructor(id: Int) : this(id, 0, 0, 0)
-        constructor(id: Int, height: Int) : this(id, 0, height, 0)
-        constructor(id: Int, speed: Int, height: Int) : this(id, speed, height, 0)
         fun packedMetaData(): Int = speed and 0xffff or (height shl 16) // TODO rotation is used?
     }
 

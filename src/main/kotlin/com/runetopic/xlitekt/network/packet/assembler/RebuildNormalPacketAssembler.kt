@@ -7,13 +7,14 @@ import com.runetopic.xlitekt.util.resource.MapSquare
 import io.ktor.utils.io.core.writeInt
 import io.ktor.utils.io.core.writeShort
 import io.ktor.utils.io.core.writeShortLittleEndian
+import org.koin.core.qualifier.named
 
 /**
  * @author Tyler Telis
  */
 class RebuildNormalPacketAssembler : PacketAssembler<RebuildNormalPacket>(opcode = 54, size = -2) {
 
-    private val mapSquares by inject<List<MapSquare>>()
+    private val mapSquares by inject<List<MapSquare>>(named("mapsquares"))
 
     override fun assemblePacket(packet: RebuildNormalPacket) = buildPacket {
         if (packet.update) {

@@ -10,8 +10,8 @@ import io.ktor.utils.io.core.buildPacket
 /**
  * @author Tyler Telis
  */
-class NPCSequenceBlock : RenderingBlock<NPC, Render.Animation>(6, 0x40) {
-    override fun build(actor: NPC, render: Render.Animation) = buildPacket {
+class NPCSequenceBlock : RenderingBlock<NPC, Render.Sequence>(6, 0x40) {
+    override fun build(actor: NPC, render: Render.Sequence) = buildPacket {
         writeShortLittleEndianAdd(render.id.toShort())
         writeByteSubtract(render.delay.toByte())
     }
