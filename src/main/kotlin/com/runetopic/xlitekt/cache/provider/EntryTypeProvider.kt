@@ -4,10 +4,11 @@ import com.runetopic.cache.store.Js5Store
 import com.runetopic.xlitekt.plugin.koin.inject
 
 abstract class EntryTypeProvider<T : EntryType> {
-    protected val entries: MutableSet<T> = mutableSetOf()
+    protected val entries = mutableSetOf<T>()
     protected val js5Store by inject<Js5Store>()
 
-    abstract fun load()
+    abstract fun load(): Unit
+    abstract fun loadEntryType(data: ByteArray, type: T)
 
     fun entryType(id: Int): T? = entries.find { it.id == id }
 
