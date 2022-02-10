@@ -21,6 +21,7 @@ import com.runetopic.xlitekt.util.ext.BitAccess
 import com.runetopic.xlitekt.util.ext.toInt
 import com.runetopic.xlitekt.util.ext.withBitAccess
 import io.ktor.utils.io.core.BytePacketBuilder
+import io.ktor.utils.io.core.buildPacket
 
 /**
  * @author Tyler Telis
@@ -32,7 +33,7 @@ class NPCInfoPacketAssembler(
     private val world by inject<World>()
 
     override fun assemblePacket(packet: NPCInfoPacket) = buildPacket {
-        val blocks = buildPacket {}
+        val blocks = BytePacketBuilder()
 
         withBitAccess {
             packet.player.viewport.let {
@@ -47,6 +48,7 @@ class NPCInfoPacketAssembler(
         }
 
         writePacket(blocks.build())
+        blocks.release()
     }
 
     private fun BitAccess.lowDefinition(

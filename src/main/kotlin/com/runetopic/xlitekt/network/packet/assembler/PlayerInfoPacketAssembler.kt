@@ -24,6 +24,7 @@ import com.runetopic.xlitekt.util.ext.toInt
 import com.runetopic.xlitekt.util.ext.toIntInv
 import com.runetopic.xlitekt.util.ext.withBitAccess
 import io.ktor.utils.io.core.BytePacketBuilder
+import io.ktor.utils.io.core.buildPacket
 import kotlin.math.abs
 
 /**
@@ -35,13 +36,14 @@ class PlayerInfoPacketAssembler : PacketAssembler<PlayerInfoPacket>(opcode = 80,
     private val world by inject<World>()
 
     override fun assemblePacket(packet: PlayerInfoPacket) = buildPacket {
-        val blocks = buildPacket { }
+        val blocks = BytePacketBuilder()
         packet.player.let {
             highDefinition(it, blocks, true)
             highDefinition(it, blocks, false)
             lowDefinition(it, blocks, true)
             lowDefinition(it, blocks, false)
             writePacket(blocks.build())
+            blocks.release()
             it.viewport.shift()
         }
     }

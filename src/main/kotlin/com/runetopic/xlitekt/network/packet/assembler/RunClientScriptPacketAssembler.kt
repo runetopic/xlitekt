@@ -4,6 +4,7 @@ import com.runetopic.xlitekt.game.container.Container
 import com.runetopic.xlitekt.game.item.Item
 import com.runetopic.xlitekt.network.packet.RunClientScriptPacket
 import com.runetopic.xlitekt.util.ext.writeStringCp1252NullTerminated
+import io.ktor.utils.io.core.buildPacket
 import io.ktor.utils.io.core.writeInt
 
 /**

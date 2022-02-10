@@ -24,7 +24,7 @@ class PlayerAppearanceBlock : RenderingBlock<Player, Render.Appearance>(5, 0x1) 
             writeByte(render.skullIcon.toByte())
             writeByte(render.headIcon.toByte())
             if (render.transform != -1) writeTransmogrification(render) else writeIdentityKit(render)
-            colour(this, render.bodyPartColors.entries)
+            colour(render.bodyPartColors.entries)
             animate(render)
             writeStringCp1252NullTerminated(actor.username)
             writeByte(126) // Combat level
@@ -48,7 +48,7 @@ class PlayerAppearanceBlock : RenderingBlock<Player, Render.Appearance>(5, 0x1) 
         writeShort(render.transform.toShort())
     }
 
-    private fun BytePacketBuilder.writeIdentityKit(render: Render.Appearance) = PlayerIdentityKit.values()
+    private fun BytePacketBuilder.writeIdentityKit(render: Render.Appearance) = enumValues<PlayerIdentityKit>()
         .sortedWith(compareBy { it.info.index })
         .forEach {
             // TODO We will need to add support for the item worn in the specific body slot.
@@ -59,7 +59,7 @@ class PlayerAppearanceBlock : RenderingBlock<Player, Render.Appearance>(5, 0x1) 
             )
         }
 
-    private fun colour(builder: BytePacketBuilder, colours: Set<Map.Entry<BodyPartColor, Int>>) = colours
+    private fun BytePacketBuilder.colour(colours: Set<Map.Entry<BodyPartColor, Int>>) = colours
         .sortedWith(compareBy { it.key.id })
-        .forEach { builder.writeByte(it.value.toByte()) }
+        .forEach { writeByte(it.value.toByte()) }
 }

@@ -4,6 +4,7 @@ import com.runetopic.xlitekt.network.packet.MessageGamePacket
 import com.runetopic.xlitekt.util.ext.toByte
 import com.runetopic.xlitekt.util.ext.writeSmart
 import com.runetopic.xlitekt.util.ext.writeStringCp1252NullTerminated
+import io.ktor.utils.io.core.buildPacket
 
 /**
  * @author Tyler Telis
