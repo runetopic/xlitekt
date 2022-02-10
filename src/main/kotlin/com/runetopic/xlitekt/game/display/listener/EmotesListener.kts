@@ -6,10 +6,9 @@ import com.runetopic.xlitekt.game.display.InterfaceListener.Companion.buildInter
 import com.runetopic.xlitekt.plugin.koin.inject
 import com.runetopic.xlitekt.util.resource.Sequences
 import com.runetopic.xlitekt.util.resource.SpotAnimations
-import org.koin.core.qualifier.named
 
-private val sequences by inject<Sequences>(named("sequences"))
-private val spotAnimations by inject<SpotAnimations>(named("spotanimations"))
+private val sequences by inject<Sequences>()
+private val spotAnimations by inject<SpotAnimations>()
 
 private enum class Emotes(
     val slotId: Int,

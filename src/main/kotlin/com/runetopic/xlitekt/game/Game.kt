@@ -17,10 +17,10 @@ import kotlin.time.measureTime
 
 val gameModule = module(createdAtStart = true) {
     single(named("mapsquares")) { loadAllMapSquares() }
-    single(named("sequences")) { loadAllSequences() }
-    single(named("spotanimations")) { loadAllSpotAnimations() }
-    single(named("varps")) { loadAllVarps() }
-    single(named("varbits")) { loadAllVarBits() }
+    single { loadAllSequences() }
+    single { loadAllSpotAnimations() }
+    single { loadAllVarps() }
+    single { loadAllVarBits() }
     single { World() }
     single { Game() }
     single { EventBus() }
