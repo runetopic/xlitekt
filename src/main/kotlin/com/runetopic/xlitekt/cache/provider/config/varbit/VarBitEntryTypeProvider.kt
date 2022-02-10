@@ -14,13 +14,11 @@ class VarBitEntryTypeProvider : EntryTypeProvider<VarBitEntryType>() {
             .index(CONFIG_INDEX)
             .group(VARBIT_GROUP_ID)
             .files()
-            .forEach { loadEntryType(it.data, VarBitEntryType(it.id)) }
+            .forEach { loadEntryType(ByteReadPacket(it.data), VarBitEntryType(it.id)) }
         logger.info { "Finished loading ${entries.size} VarBitEntry types." }
     }
 
-    override fun loadEntryType(data: ByteArray, type: VarBitEntryType) {
-        val buffer = ByteReadPacket(data)
-
+    override fun loadEntryType(buffer: ByteReadPacket, type: VarBitEntryType) {
         while (true) {
             when (buffer.readUByte().toInt()) {
                 0 -> break
