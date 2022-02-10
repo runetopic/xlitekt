@@ -6,7 +6,6 @@ import com.runetopic.xlitekt.game.display.InterfaceListener.Companion.buildInter
 import com.runetopic.xlitekt.plugin.koin.inject
 import com.runetopic.xlitekt.util.resource.Sequence
 import com.runetopic.xlitekt.util.resource.SpotAnimation
-import io.ktor.util.valuesOf
 import org.koin.core.qualifier.named
 
 private val sequences by inject<List<Sequence>>(named("sequences"))

@@ -31,14 +31,14 @@ abstract class Actor(
     fun faceActor(index: Int) = renderer.faceActor(index)
     fun faceDirection(direction: Int) = renderer.faceDirection(direction)
     // fun forceMove(forceMovement: Render.ForceMovement) = renderer.forceMove(forceMovement)
-    fun hasPendingUpdate() = renderer.hasPendingUpdate()
     fun overheadChat(text: String) = renderer.overheadChat(text)
-    fun pendingUpdates() = renderer.pendingUpdates
     // fun recolor(recolor: Render.Recolor) = renderer.recolor(recolor)
     fun spotAnimate(id: Int, speed: Int = 0, height: Int = 0, rotation: Int = 0) = renderer.spotAnimation(id, speed, height, rotation)
     fun transmog(id: Int) = renderer.transmog(id)
     fun setTemporaryMovementType(id: Int) = renderer.temporaryMovementType(id)
 
+    fun hasPendingUpdate() = renderer.hasPendingUpdate()
+    fun pendingUpdates() = renderer.pendingUpdates
     fun reset() {
         renderer.clearUpdates()
     }
