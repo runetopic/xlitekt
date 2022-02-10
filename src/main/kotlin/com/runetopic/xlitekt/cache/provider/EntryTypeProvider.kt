@@ -7,7 +7,7 @@ abstract class EntryTypeProvider<T : EntryType> {
     protected val entries = mutableSetOf<T>()
     protected val js5Store by inject<Js5Store>()
 
-    abstract fun load(): Unit
+    abstract fun load()
     abstract fun loadEntryType(data: ByteArray, type: T)
 
     fun entryType(id: Int): T? = entries.find { it.id == id }

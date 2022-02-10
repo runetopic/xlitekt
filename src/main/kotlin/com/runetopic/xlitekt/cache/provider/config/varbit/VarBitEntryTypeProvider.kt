@@ -22,7 +22,7 @@ class VarBitEntryTypeProvider : EntryTypeProvider<VarBitEntryType>() {
         val buffer = ByteReadPacket(data)
 
         while (true) {
-            when (buffer.readByte().toInt() and 0xff) {
+            when (buffer.readUByte().toInt()) {
                 0 -> break
                 1 -> {
                     type.index = buffer.readUShort().toInt()
