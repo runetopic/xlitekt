@@ -3,7 +3,8 @@ package com.runetopic.xlitekt.cache.provider.config.varbit
 import com.github.michaelbull.logging.InlineLogger
 import com.runetopic.xlitekt.cache.provider.EntryTypeProvider
 import io.ktor.utils.io.core.ByteReadPacket
-import io.ktor.utils.io.core.readShort
+import io.ktor.utils.io.core.readUByte
+import io.ktor.utils.io.core.readUShort
 
 class VarBitEntryTypeProvider : EntryTypeProvider<VarBitEntryType>() {
     private val logger = InlineLogger()
@@ -24,9 +25,9 @@ class VarBitEntryTypeProvider : EntryTypeProvider<VarBitEntryType>() {
             when (buffer.readByte().toInt() and 0xff) {
                 0 -> break
                 1 -> {
-                    type.index = buffer.readShort().toInt() and 0xffff
-                    type.leastSignificantBit = buffer.readByte().toInt() and 0xff
-                    type.mostSignificantBit = buffer.readByte().toInt() and 0xff
+                    type.index = buffer.readUShort().toInt()
+                    type.leastSignificantBit = buffer.readUByte().toInt()
+                    type.mostSignificantBit = buffer.readUByte().toInt()
                 }
             }
         }
