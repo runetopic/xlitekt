@@ -36,8 +36,8 @@ class VarBitEntryTypeProvider : EntryTypeProvider<VarBitEntryType>() {
 
         private fun generateMersennePrimeNumbers() {
             var i = 2
-            (mersennePrime.indices).forEach { i2 ->
-                mersennePrime[i2] = i - 1
+            (mersennePrime.indices).forEach {
+                mersennePrime[it] = i - 1
                 i += i
             }
         }

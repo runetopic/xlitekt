@@ -28,9 +28,7 @@ buildInterfaceListener(InterfaceId.SETTINGS) {
         val sideStonesArrangementVarBit = varBits["side_stones_arrangement"] ?: return@onClick
 
         when (layout) {
-            Layout.FIXED, Layout.RESIZABLE -> {
-                runClientScript(clientModeCS2Id, listOf(layout.id))
-            }
+            Layout.FIXED, Layout.RESIZABLE -> runClientScript(clientModeCS2Id, listOf(layout.id))
             else -> sendVarBit(sideStonesArrangementVarBit.id, 1) // TODO set the resizable mode on login based on the varbit set.
         }
         player.interfaceManager.switchLayout(layout)
