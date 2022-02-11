@@ -29,8 +29,8 @@ object Cache {
     )
 
     fun loadProviders() {
-        providers.values.forEach { it.load() }
-        logger.debug { "Finished loading ${providers.size} cache providers with ${providers.values.sumOf { it.size() }} total entries." }
+        providers.values.forEach(EntryTypeProvider<*>::load)
+        logger.debug { "Finished loading ${providers.size} cache providers with ${providers.values.sumOf(EntryTypeProvider<*>::size)} total entries." }
     }
 
     inline fun <reified T> entryType(id: Int): T? = providers[T::class]?.entryType(id) as T?

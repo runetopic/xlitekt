@@ -35,7 +35,7 @@ class Viewport(
         }
     }
 
-    fun shift() {
+    fun update() {
         localIndexesSize = 0
         externalIndexesSize = 0
         (1 until MAX_PLAYERS).forEach {

@@ -24,7 +24,7 @@ value class Tile(val coordinates: Int) {
 
 fun Tile.withinDistance(other: Player, distance: Int = 14): Boolean {
     if (other.tile.plane != plane) return false
-    val deltaX: Int = other.tile.x - x
-    val deltaY: Int = other.tile.z - z
+    val deltaX = other.tile.x - x
+    val deltaY = other.tile.z - z
     return deltaX <= distance && deltaX >= -distance && deltaY <= distance && deltaY >= -distance
 }

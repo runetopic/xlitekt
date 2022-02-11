@@ -3,20 +3,20 @@ package com.runetopic.xlitekt.util.ext
 import io.ktor.utils.io.core.BytePacketBuilder
 import io.ktor.utils.io.core.writeFully
 import io.ktor.utils.io.core.writeShort
+import io.ktor.utils.io.core.writeShortLittleEndian
 
 fun BytePacketBuilder.writeStringCp1252NullTerminated(value: String) {
-    value.chars().forEach { writeByte(it.toByte()) }
+    value.toByteArray().forEach(::writeByte)
     writeByte(0)
 }
 
 fun BytePacketBuilder.writeBytesAdd(bytes: ByteArray) {
-    bytes.forEach { writeByteAdd(it) }
+    bytes.forEach(::writeByteAdd)
 }
 
 fun BytePacketBuilder.writeMedium(value: Int) {
     writeByte((value shr 16).toByte())
-    writeByte((value shr 8).toByte())
-    writeByte(value.toByte())
+    writeShort(value.toShort())
 }
 
 fun BytePacketBuilder.writeSmart(value: Int) {
@@ -38,8 +38,7 @@ fun BytePacketBuilder.writeShortLittleEndianAdd(value: Short) {
 }
 
 fun BytePacketBuilder.writeIntV1(value: Int) {
-    writeByte((value shr 8).toByte())
-    writeByte(value.toByte())
+    writeShort(value.toShort())
     writeByte((value shr 24).toByte())
     writeByte((value shr 16).toByte())
 }
@@ -47,8 +46,7 @@ fun BytePacketBuilder.writeIntV1(value: Int) {
 fun BytePacketBuilder.writeIntV2(value: Int) {
     writeByte((value shr 16).toByte())
     writeByte((value shr 24).toByte())
-    writeByte(value.toByte())
-    writeByte((value shr 8).toByte())
+    writeShortLittleEndian(value.toShort())
 }
 
 fun BytePacketBuilder.withBitAccess(block: BitAccess.() -> Unit) {
@@ -98,9 +96,7 @@ class BitAccess {
         private val BIT_MASKS = IntArray(32)
 
         init {
-            for (i in BIT_MASKS.indices) {
-                BIT_MASKS[i] = (1 shl i) - 1
-            }
+            BIT_MASKS.indices.forEach { BIT_MASKS[it] = (1 shl it) - 1 }
         }
     }
 }

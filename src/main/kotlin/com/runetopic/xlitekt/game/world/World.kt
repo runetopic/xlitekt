@@ -15,9 +15,7 @@ class World {
             it.client.writePacket(PlayerInfoPacket(it))
             it.client.writePacket(NPCInfoPacket(it))
         }
-        parallelStream().forEach {
-            it.reset()
-        }
+        parallelStream().forEach(Player::reset)
     }
 
     companion object {

@@ -37,7 +37,7 @@ class PlayerAppearanceBlock : RenderingBlock<Player, Render.Appearance>(5, 0x1) 
 
     private fun BytePacketBuilder.animate(render: Render.Appearance) {
         if (render.transform == -1) {
-            intArrayOf(808, 823, 819, 820, 821, 822, 824).forEach { writeShort(it.toShort()) }
+            shortArrayOf(808, 823, 819, 820, 821, 822, 824).forEach(::writeShort)
         } else {
             // TODO load npc defs for walking and stand anims for transmog.
         }
