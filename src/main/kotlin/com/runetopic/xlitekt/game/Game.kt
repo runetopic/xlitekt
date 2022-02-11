@@ -34,7 +34,7 @@ class Game {
         service.scheduleAtFixedRate({
             val time = measureTime(world::process)
             logger.debug { "Main game loop took $time to finish." }
-        }, 0, 600, TimeUnit.MILLISECONDS)
+        }, 600, 600, TimeUnit.MILLISECONDS)
     }
 
     fun shutdownGracefully() {
