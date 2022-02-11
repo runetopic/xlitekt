@@ -51,7 +51,7 @@ class Client(
         player?.logout()
         connected = false
         socket.close()
-        logger.info { "Client disconnected for reason={$reason}." }
+        logger.debug { "Client disconnected for reason={$reason}." }
     }
 
     fun setIsaacCiphers(clientCipher: ISAAC, serverCipher: ISAAC) {

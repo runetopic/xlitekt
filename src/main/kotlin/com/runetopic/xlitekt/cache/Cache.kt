@@ -32,7 +32,8 @@ object Cache {
     )
 
     fun loadProviders() {
-        providers.values.forEach(EntryTypeProvider<*>::load)
+        // Use parallelStream() because some of these loaders can be pretty big. This is just to reduce server startup time.
+        providers.values.parallelStream().forEach(EntryTypeProvider<*>::load)
         logger.debug { "Finished loading ${providers.size} cache providers with ${providers.values.sumOf(EntryTypeProvider<*>::size)} total entries." }
     }
 

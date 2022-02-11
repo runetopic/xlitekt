@@ -10,6 +10,9 @@ import com.runetopic.xlitekt.network.event.ReadEvent
 import com.runetopic.xlitekt.network.event.WriteEvent
 import com.runetopic.xlitekt.plugin.koin.inject
 
+/**
+ * @author Jordan Abraham
+ */
 class LoginEventHandler : EventHandler<ReadEvent.LoginReadEvent, WriteEvent.LoginWriteEvent> {
 
     private val world by inject<World>()
