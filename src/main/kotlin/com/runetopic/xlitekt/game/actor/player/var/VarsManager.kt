@@ -25,6 +25,16 @@ class VarsManager(
         vars.forEach { sendVar(it, true, true) }
     }
 
+    private fun setDefaults() {
+        // TODO this should be set in the KTS files whenever we emit on onLogin event.
+        // TODO i can probably store the actual string that we want to set and pull from during content.
+        // So we can do like player.varManager.sendVarp("special_attack_energy", 100)
+        val specialAttackEnergyVarp = injectedVarps["special_attack_energy"] ?: return
+        vars[specialAttackEnergyVarp.id] = 100 * 10
+        val screenBrightness = injectedVarps["screen_brightness"] ?: return
+        vars[screenBrightness.id] = 0
+    }
+
     private fun sendVar(entry: Map.Entry<Int, Int>, saveVar: Boolean, onLogin: Boolean) {
         sendVar(VarType.VAR_PLAYER, entry, saveVar, onLogin)
     }
@@ -59,16 +69,6 @@ class VarsManager(
         } else {
             player.client.writePacket(VarpSmallPacket(id, value))
         }
-    }
-
-    private fun setDefaults() {
-        // TODO this should be set in the KTS files whenever we emit on onLogin event.
-        // TODO i can probably store the actual string that we want to set and pull from during content.
-        // So we can do like player.varManager.sendVarp("special_attack_energy", 100)
-        val specialAttackEnergyVarp = injectedVarps["special_attack_energy"] ?: return
-        vars[specialAttackEnergyVarp.id] = 100 * 10
-        val screenBrightness = injectedVarps["screen_brightness"] ?: return
-        vars[screenBrightness.id] = 0
     }
 
     fun varpValue(id: Int) = vars.getOrDefault(id, 0)
