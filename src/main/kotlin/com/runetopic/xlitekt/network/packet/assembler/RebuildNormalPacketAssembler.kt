@@ -29,13 +29,12 @@ class RebuildNormalPacketAssembler : PacketAssembler<RebuildNormalPacket>(opcode
         writeShortLittleEndian(chunkZ.toShort())
 
         var size = 0
-
         val xteas = buildPacket {
-            for (x in (chunkX - 6) / 8..(chunkX + 6) / 8) {
-                for (y in (chunkZ - 6) / 8..(chunkZ + 6) / 8) {
+            ((chunkX - 6) / 8..(chunkX + 6) / 8).forEach { x ->
+                ((chunkZ - 6) / 8..(chunkZ + 6) / 8).forEach { y ->
                     val regionId = y + (x shl 8)
                     val xteaKeys = mapSquares.find { it.regionId == regionId }?.keys ?: listOf(0, 0, 0, 0)
-                    xteaKeys.forEach { writeInt(it) }
+                    xteaKeys.forEach(::writeInt)
                     ++size
                 }
             }
