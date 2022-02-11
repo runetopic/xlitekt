@@ -117,8 +117,6 @@ class Client(
     }
 
     suspend fun readPacket(opcode: Int, packet: ByteReadPacket) {
-        if (opcode == 12) return
-
         val player = player ?: return disconnect("Player is not established when attempting to read and handle packet. Opcode was $opcode.")
         val disassembler = disassemblers.firstOrNull { it.opcode == opcode } ?: return logger.info { "Unhandled packet opcode when looking for decoder. Opcode was $opcode." }
         val disassembledPacket = disassembler.disassemblePacket(packet)

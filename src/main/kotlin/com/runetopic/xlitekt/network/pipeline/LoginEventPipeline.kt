@@ -17,15 +17,17 @@ import com.runetopic.xlitekt.util.ext.readIntV2
 import com.runetopic.xlitekt.util.ext.readMedium
 import com.runetopic.xlitekt.util.ext.readStringCp1252NullCircumfixed
 import com.runetopic.xlitekt.util.ext.readStringCp1252NullTerminated
+import com.runetopic.xlitekt.util.ext.toBoolean
 import io.ktor.application.ApplicationEnvironment
 import io.ktor.utils.io.core.ByteReadPacket
 import io.ktor.utils.io.core.readInt
 import io.ktor.utils.io.core.readIntLittleEndian
 import io.ktor.utils.io.core.readLong
 import io.ktor.utils.io.core.readShort
+import io.ktor.utils.io.core.readUByte
+import io.ktor.utils.io.core.readUShort
 import kotlinx.coroutines.withTimeout
 import java.math.BigInteger
-import java.nio.ByteBuffer
 
 /**
  * @author Tyler Telis
@@ -63,12 +65,10 @@ class LoginEventPipeline : EventPipeline<ReadEvent.LoginReadEvent, WriteEvent.Lo
                 }
 
                 val rsaBlock = ByteReadPacket(
-                    ByteBuffer.wrap(
-                        BigInteger(rsa).modPow(
-                            BigInteger(environment.config.property("game.rsa.exponent").getString()),
-                            BigInteger(environment.config.property("game.rsa.modulus").getString())
-                        ).toByteArray()
-                    )
+                    BigInteger(rsa).modPow(
+                        BigInteger(environment.config.property("game.rsa.exponent").getString()),
+                        BigInteger(environment.config.property("game.rsa.modulus").getString())
+                    ).toByteArray()
                 )
 
                 if (!isValidLoginRSA(rsaBlock)) {
@@ -99,8 +99,8 @@ class LoginEventPipeline : EventPipeline<ReadEvent.LoginReadEvent, WriteEvent.Lo
                 val username = xteaBlock.readStringCp1252NullTerminated()
                 val clientSettings = xteaBlock.readByte().toInt()
                 val clientResizeable = (clientSettings shr 1) == 1
-                val clientWidth = xteaBlock.readShort().toInt() and 0xffff
-                val clientHeight = xteaBlock.readShort().toInt() and 0xffff
+                val clientWidth = xteaBlock.readUShort().toInt()
+                val clientHeight = xteaBlock.readUShort().toInt()
                 xteaBlock.discard(24)
 
                 val token = xteaBlock.readStringCp1252NullTerminated()
@@ -112,7 +112,7 @@ class LoginEventPipeline : EventPipeline<ReadEvent.LoginReadEvent, WriteEvent.Lo
 
                 xteaBlock.readInt() // Unknown Int #1
                 readMachineInformation(xteaBlock)
-                val clientType = xteaBlock.readByte().toInt() and 0xff
+                val clientType = xteaBlock.readUByte().toInt()
                 val cacheCRCs = IntArray(21) { store.index(it).crc } // TODO make the cache library expose # of indexes available
                 val clientCRCs = IntArray(21) { -1 }
 
@@ -253,7 +253,7 @@ class LoginEventPipeline : EventPipeline<ReadEvent.LoginReadEvent, WriteEvent.Lo
         return true
     }
 
-    private fun isValidLoginRSA(buffer: ByteReadPacket) = buffer.readByte().toInt() and 0xff == 1
+    private fun isValidLoginRSA(buffer: ByteReadPacket) = buffer.readByte().toInt().toBoolean()
 
     private fun isValidAuthenticationType(rsaBlock: ByteReadPacket): Boolean {
         when (val authenticationType = rsaBlock.readByte().toInt()) {

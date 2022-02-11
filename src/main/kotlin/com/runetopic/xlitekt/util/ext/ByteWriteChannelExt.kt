@@ -2,6 +2,7 @@ package com.runetopic.xlitekt.util.ext
 
 import com.runetopic.cryptography.isaac.ISAAC
 import io.ktor.utils.io.ByteWriteChannel
+import java.lang.IllegalArgumentException
 
 suspend fun ByteWriteChannel.writePacketOpcode(isaac: ISAAC, opcode: Int) {
     if (opcode > Byte.MAX_VALUE) {
@@ -10,9 +11,8 @@ suspend fun ByteWriteChannel.writePacketOpcode(isaac: ISAAC, opcode: Int) {
     writeByte((0xff and opcode + isaac.getNext()).toByte())
 }
 
-suspend fun ByteWriteChannel.writePacketSize(input: Int, size: Long) {
-    when (input) {
-        -1 -> writeByte(size.toByte())
-        -2 -> writeShort(size.toShort())
-    }
+suspend fun ByteWriteChannel.writePacketSize(input: Int, size: Long) = when (input) {
+    -1 -> writeByte(size.toByte())
+    -2 -> writeShort(size.toShort())
+    else -> throw IllegalArgumentException("Attempting to write a packet with size failed. Size was $size.")
 }

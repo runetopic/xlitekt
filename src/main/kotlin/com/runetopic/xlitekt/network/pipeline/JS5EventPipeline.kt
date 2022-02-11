@@ -43,22 +43,22 @@ class JS5EventPipeline : EventPipeline<ReadEvent.JS5ReadEvent, WriteEvent.JS5Wri
         val compression = event.compression
         val size = event.size
 
-        client.writeChannel.let {
-            it.writeByte(event.indexId.toByte())
-            it.writeShort(event.groupId.toShort())
-            it.writeByte(compression.toByte())
-            it.writeInt(size)
+        client.writeChannel.apply {
+            writeByte(event.indexId.toByte())
+            writeShort(event.groupId.toShort())
+            writeByte(compression.toByte())
+            writeInt(size)
 
             var writeOffset = 8
-            repeat(if (compression != 0) size + 4 else size) { value ->
+            repeat(if (compression != 0) size + 4 else size) {
                 if (writeOffset % 512 == 0) {
-                    it.writeByte(0xff.toByte())
+                    writeByte(0xff.toByte())
                     writeOffset = 1
                 }
-                it.writeByte(event.bytes[value + event.bytes.position()])
+                writeByte(event.bytes[it + event.bytes.position()])
                 writeOffset++
             }
-            it.flush()
+            flush()
         }
     }
 }

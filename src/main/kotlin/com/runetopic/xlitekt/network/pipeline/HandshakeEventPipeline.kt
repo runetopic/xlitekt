@@ -45,9 +45,9 @@ class HandshakeEventPipeline : EventPipeline<ReadEvent.HandshakeReadEvent, Write
                 client.useEventHandler(inject<JS5EventHandler>())
             }
             HANDSHAKE_LOGIN_OPCODE -> {
-                client.writeChannel.let {
-                    it.writeLong(client.seed)
-                    it.flush()
+                client.writeChannel.apply {
+                    writeLong(client.seed)
+                    flush()
                 }
                 client.useEventPipeline(inject<LoginEventPipeline>())
                 client.useEventHandler(inject<LoginEventHandler>())
