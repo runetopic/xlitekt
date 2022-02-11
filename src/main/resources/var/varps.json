@@ -1,5 +1,9 @@
 [
   {
+    "id": 166,
+    "name": "screen_brightness"
+  },
+  {
     "id": 300,
     "name": "special_attack_energy"
   }

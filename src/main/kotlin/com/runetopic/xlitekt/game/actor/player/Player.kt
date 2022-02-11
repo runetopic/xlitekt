@@ -32,6 +32,7 @@ class Player(
         client.writePacket(RebuildNormalPacket(viewport, tile, true))
         refreshAppearance()
         interfaceManager.login()
+        varsManager.login()
         // Set the player online here, so they start processing by the main game loop.
         online = true
     }
