@@ -5,6 +5,8 @@ import com.runetopic.cache.store.Js5Store
 import com.runetopic.cryptography.huffman.Huffman
 import com.runetopic.xlitekt.cache.Cache.loadProviders
 import com.runetopic.xlitekt.cache.provider.EntryTypeProvider
+import com.runetopic.xlitekt.cache.provider.`interface`.InterfaceEntryType
+import com.runetopic.xlitekt.cache.provider.`interface`.InterfaceEntryTypeProvider
 import com.runetopic.xlitekt.cache.provider.config.varbit.VarBitEntryType
 import com.runetopic.xlitekt.cache.provider.config.varbit.VarBitEntryTypeProvider
 import io.ktor.application.ApplicationEnvironment
@@ -25,7 +27,8 @@ private val logger = InlineLogger()
 
 object Cache {
     val providers = mapOf<KClass<*>, EntryTypeProvider<*>>(
-        VarBitEntryType::class to VarBitEntryTypeProvider()
+        VarBitEntryType::class to VarBitEntryTypeProvider(),
+        InterfaceEntryType::class to InterfaceEntryTypeProvider()
     )
 
     fun loadProviders() {

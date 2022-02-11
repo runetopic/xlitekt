@@ -1,3 +1,3 @@
 package com.runetopic.xlitekt.cache.provider
 
-abstract class EntryType(open var id: Int)
+abstract class EntryType(open val id: Int)
