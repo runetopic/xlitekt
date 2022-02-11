@@ -22,7 +22,7 @@ class VarsManager(
         setDefaults()
         if (vars.isEmpty()) return
 
-        vars.forEach { sendVar(it, true, true) }
+        vars.forEach { sendVar(it.key, it.value, true, true) }
     }
 
     private fun setDefaults() {
@@ -35,14 +35,15 @@ class VarsManager(
         vars[screenBrightness.id] = 0
     }
 
-    private fun sendVar(entry: Map.Entry<Int, Int>, saveVar: Boolean, onLogin: Boolean) {
-        sendVar(VarType.VAR_PLAYER, entry, saveVar, onLogin)
+    private fun sendVar(id: Int, value: Int, saveVar: Boolean = false, onLogin: Boolean = false) {
+        sendVar(VarType.VAR_PLAYER, id, value, saveVar, onLogin)
     }
 
-    private fun sendVar(varType: VarType, entry: Map.Entry<Int, Int>, saveVar: Boolean, onLogin: Boolean) {
-        val id = entry.key
-        val value = entry.value
+    fun sendVarBit(id: Int, value: Int, save: Boolean = false, onLogin: Boolean = false) {
+        sendVar(VarType.VAR_BIT, id, value, save, true)
+    }
 
+    private fun sendVar(varType: VarType, id: Int, value: Int, saveVar: Boolean, onLogin: Boolean) {
         when (varType) {
             VarType.VAR_PLAYER -> {
                 if (onLogin || vars[id] != value) vars[id] = value

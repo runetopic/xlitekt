@@ -35,7 +35,8 @@ class InterfaceListener(
         )
     }
 
-    fun IfEvent.clientScript(scriptId: Int, parameters: List<Any>) = player.interfaceManager.apply { clientScript(scriptId, parameters) }
+    fun IfEvent.sendVarBit(id: Int, value: Int) = player.varsManager.sendVarBit(id, value)
+    fun IfEvent.runClientScript(scriptId: Int, parameters: List<Any>) = player.interfaceManager.apply { clientScript(scriptId, parameters) }
 
     companion object {
         fun buildInterfaceListener(interfaceId: Int, function: InterfaceListener.() -> Unit) = function.invoke(InterfaceListener(interfaceId))

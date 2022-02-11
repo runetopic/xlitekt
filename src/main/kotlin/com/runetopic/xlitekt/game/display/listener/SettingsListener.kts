@@ -4,9 +4,12 @@ import com.runetopic.xlitekt.game.display.InterfaceEvent.CLICK_OPTION_1
 import com.runetopic.xlitekt.game.display.InterfaceId
 import com.runetopic.xlitekt.game.display.InterfaceListener.Companion.buildInterfaceListener
 import com.runetopic.xlitekt.game.display.Layout
+import com.runetopic.xlitekt.plugin.koin.inject
+import com.runetopic.xlitekt.util.resource.VarBits
 
 private val layoutDropDownChildId = 84
 private val clientModeCS2Id = 3998
+private val varBits by inject<VarBits>()
 
 buildInterfaceListener(InterfaceId.SETTINGS) {
     onOpen {
@@ -22,8 +25,13 @@ buildInterfaceListener(InterfaceId.SETTINGS) {
 
     onClick(layoutDropDownChildId) {
         val layout = enumValues<Layout>().find { it.id == slotId - 1 } ?: return@onClick
-        if (layout == Layout.FIXED || layout == Layout.RESIZABLE) {
-            clientScript(clientModeCS2Id, listOf(layout.id))
+        val sideStonesArrangementVarBit = varBits["side_stones_arrangement"] ?: return@onClick
+
+        when (layout) {
+            Layout.FIXED, Layout.RESIZABLE -> {
+                runClientScript(clientModeCS2Id, listOf(layout.id))
+            }
+            else -> sendVarBit(sideStonesArrangementVarBit.id, 1) // TODO set the resizable mode on login based on the varbit set.
         }
         player.interfaceManager.switchLayout(layout)
     }

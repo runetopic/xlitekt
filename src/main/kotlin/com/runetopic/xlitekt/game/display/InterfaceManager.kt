@@ -13,6 +13,7 @@ import com.runetopic.xlitekt.network.packet.RunClientScriptPacket
 import com.runetopic.xlitekt.network.packet.VarpSmallPacket
 import com.runetopic.xlitekt.plugin.koin.inject
 import com.runetopic.xlitekt.util.ext.packInterface
+import java.awt.Window
 
 /**
  * @author Tyler Telis
