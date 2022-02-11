@@ -5,10 +5,10 @@ import com.runetopic.cache.store.Js5Store
 import com.runetopic.cryptography.huffman.Huffman
 import com.runetopic.xlitekt.cache.Cache.loadProviders
 import com.runetopic.xlitekt.cache.provider.EntryTypeProvider
-import com.runetopic.xlitekt.cache.provider.`interface`.InterfaceEntryType
-import com.runetopic.xlitekt.cache.provider.`interface`.InterfaceEntryTypeProvider
 import com.runetopic.xlitekt.cache.provider.config.varbit.VarBitEntryType
 import com.runetopic.xlitekt.cache.provider.config.varbit.VarBitEntryTypeProvider
+import com.runetopic.xlitekt.cache.provider.ui.InterfaceEntryType
+import com.runetopic.xlitekt.cache.provider.ui.InterfaceEntryTypeProvider
 import io.ktor.application.ApplicationEnvironment
 import org.koin.dsl.module
 import java.nio.file.Path

@@ -1,9 +1,9 @@
-package com.runetopic.xlitekt.game.display.listener
+package com.runetopic.xlitekt.plugin.script.ui
 
-import com.runetopic.xlitekt.game.display.InterfaceEvent.CLICK_OPTION_1
-import com.runetopic.xlitekt.game.display.InterfaceId
-import com.runetopic.xlitekt.game.display.InterfaceListener.Companion.buildInterfaceListener
-import com.runetopic.xlitekt.game.display.Layout
+import com.runetopic.xlitekt.game.ui.InterfaceEvent.CLICK_OPTION_1
+import com.runetopic.xlitekt.game.ui.InterfaceId
+import com.runetopic.xlitekt.game.ui.InterfaceListener.Companion.buildInterfaceListener
+import com.runetopic.xlitekt.game.ui.Layout
 import com.runetopic.xlitekt.plugin.koin.inject
 import com.runetopic.xlitekt.util.resource.VarBits
 

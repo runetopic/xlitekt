@@ -1,4 +1,4 @@
-package com.runetopic.xlitekt.cache.provider.`interface`
+package com.runetopic.xlitekt.cache.provider.ui
 
 import com.runetopic.xlitekt.cache.provider.EntryType
 

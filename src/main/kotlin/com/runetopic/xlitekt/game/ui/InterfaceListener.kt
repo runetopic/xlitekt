@@ -1,4 +1,4 @@
-package com.runetopic.xlitekt.game.display
+package com.runetopic.xlitekt.game.ui
 
 import com.runetopic.xlitekt.game.event.impl.IfEvent
 import com.runetopic.xlitekt.util.hook.onEvent

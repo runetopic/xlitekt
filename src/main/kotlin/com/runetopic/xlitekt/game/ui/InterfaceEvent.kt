@@ -1,4 +1,4 @@
-package com.runetopic.xlitekt.game.display
+package com.runetopic.xlitekt.game.ui
 
 enum class InterfaceEvent(val value: Int) {
     CONTINUE(1 shl 0),

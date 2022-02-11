@@ -2,7 +2,7 @@ package com.runetopic.xlitekt.network.packet.handler
 
 import com.github.michaelbull.logging.InlineLogger
 import com.runetopic.xlitekt.cache.Cache.entryType
-import com.runetopic.xlitekt.cache.provider.`interface`.InterfaceEntryType
+import com.runetopic.xlitekt.cache.provider.ui.InterfaceEntryType
 import com.runetopic.xlitekt.game.actor.player.Player
 import com.runetopic.xlitekt.game.event.EventBus
 import com.runetopic.xlitekt.game.event.impl.IfEvent
