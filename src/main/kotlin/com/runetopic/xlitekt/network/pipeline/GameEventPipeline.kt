@@ -19,7 +19,7 @@ import kotlinx.coroutines.withTimeout
 class GameEventPipeline : EventPipeline<ReadEvent.GameReadEvent, WriteEvent.GameWriteEvent> {
 
     private val environment by inject<ApplicationEnvironment>()
-    private val sizes = environment.config.property("game.packet.sizes").getList().map { it.toInt() }
+    private val sizes = environment.config.property("game.packet.sizes").getList().map(String::toInt)
     private val timeout = environment.config.property("network.timeout").getString().toLong()
     private val logger = InlineLogger()
 

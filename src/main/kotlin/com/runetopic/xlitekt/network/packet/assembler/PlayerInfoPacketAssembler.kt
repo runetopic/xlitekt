@@ -44,7 +44,7 @@ class PlayerInfoPacketAssembler : PacketAssembler<PlayerInfoPacket>(opcode = 80,
             lowDefinition(it, blocks, false)
             writePacket(blocks.build())
             blocks.release()
-            it.viewport.shift()
+            it.viewport.update()
         }
     }
 

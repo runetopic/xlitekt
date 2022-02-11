@@ -7,9 +7,6 @@ import com.runetopic.xlitekt.plugin.koin.inject
 import com.runetopic.xlitekt.util.resource.Sequences
 import com.runetopic.xlitekt.util.resource.SpotAnimations
 
-private val sequences by inject<Sequences>()
-private val spotAnimations by inject<SpotAnimations>()
-
 private enum class Emotes(
     val slotId: Int,
     val emoteName: String
@@ -66,6 +63,9 @@ private enum class Emotes(
     // TODO Explore.
     // TODO Relic unlock.
 }
+
+private val sequences by inject<Sequences>()
+private val spotAnimations by inject<SpotAnimations>()
 
 buildInterfaceListener(InterfaceId.EMOTES) {
     onOpen {
