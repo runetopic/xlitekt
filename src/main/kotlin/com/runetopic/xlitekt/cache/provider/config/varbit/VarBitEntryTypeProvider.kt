@@ -6,7 +6,9 @@ import io.ktor.utils.io.core.readUByte
 import io.ktor.utils.io.core.readUShort
 
 class VarBitEntryTypeProvider : EntryTypeProvider<VarBitEntryType>() {
+
     override fun load(): List<VarBitEntryType> {
+        generateMersennePrimeNumbers()
         return js5Store
             .index(CONFIG_INDEX)
             .group(VARBIT_GROUP_ID)
@@ -27,5 +29,17 @@ class VarBitEntryTypeProvider : EntryTypeProvider<VarBitEntryType>() {
         }
 
         return type
+    }
+
+    companion object {
+        val mersennePrime = IntArray(32)
+
+        private fun generateMersennePrimeNumbers() {
+            var i = 2
+            (mersennePrime.indices).forEach { i2 ->
+                mersennePrime[i2] = i - 1
+                i += i
+            }
+        }
     }
 }
