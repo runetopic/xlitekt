@@ -1,6 +1,7 @@
 package com.runetopic.xlitekt.cache.provider.ui
 
 import com.runetopic.xlitekt.cache.provider.EntryTypeProvider
+import com.runetopic.xlitekt.util.ext.packInterface
 import com.runetopic.xlitekt.util.ext.readMedium
 import com.runetopic.xlitekt.util.ext.readStringCp1252NullTerminated
 import com.runetopic.xlitekt.util.ext.toBoolean
@@ -15,10 +16,13 @@ import io.ktor.utils.io.core.readUShort
  */
 class InterfaceEntryTypeProvider : EntryTypeProvider<InterfaceEntryType>() {
 
-    override fun load(): List<InterfaceEntryType> = buildList {
-        store.index(INTERFACE_INDEX).groups().forEach { group ->
-            group.files().forEach {
-                add(loadEntryType(ByteReadPacket(it.data), InterfaceEntryType(group.id shl 16 or it.id, isModern = it.data[0].toInt() == -1)))
+    override fun load(): List<InterfaceEntryType> {
+        return store.index(INTERFACE_INDEX).groups().flatMap { group ->
+            group.files().map {
+                loadEntryType(
+                    ByteReadPacket(it.data),
+                    InterfaceEntryType(id = group.id.packInterface(it.id), isModern = it.data[0].toInt() == -1)
+                )
             }
         }
     }

@@ -4,11 +4,12 @@ import com.github.michaelbull.logging.InlineLogger
 import com.runetopic.xlitekt.game.event.EventBus
 import com.runetopic.xlitekt.game.world.World
 import com.runetopic.xlitekt.plugin.koin.inject
-import com.runetopic.xlitekt.util.resource.mapSquaresResource
-import com.runetopic.xlitekt.util.resource.sequencesResource
-import com.runetopic.xlitekt.util.resource.spotAnimationsResource
-import com.runetopic.xlitekt.util.resource.varBitsResource
-import com.runetopic.xlitekt.util.resource.varpsResource
+import com.runetopic.xlitekt.util.resource.Resource.ifInfoResource
+import com.runetopic.xlitekt.util.resource.Resource.mapSquaresResource
+import com.runetopic.xlitekt.util.resource.Resource.sequencesResource
+import com.runetopic.xlitekt.util.resource.Resource.spotAnimationsResource
+import com.runetopic.xlitekt.util.resource.Resource.varBitsResource
+import com.runetopic.xlitekt.util.resource.Resource.varpsResource
 import org.koin.dsl.module
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
@@ -20,6 +21,7 @@ val gameModule = module(createdAtStart = true) {
     single { spotAnimationsResource() }
     single { varpsResource() }
     single { varBitsResource() }
+    single { ifInfoResource() }
     single { World() }
     single { Game() }
     single { EventBus() }

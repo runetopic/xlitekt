@@ -6,47 +6,21 @@ import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.decodeFromStream
 
 class MapSquares(list: List<MapSquare>) : ArrayList<MapSquare>(list)
-class Sequences(list: List<Sequence>) : HashMap<String, Sequence>(list.associateBy(Sequence::name))
-class SpotAnimations(list: List<SpotAnimation>) : HashMap<String, SpotAnimation>(list.associateBy(SpotAnimation::name))
-class Varps(list: List<VarPlayer>) : HashMap<String, VarPlayer>(list.associateBy(VarPlayer::name))
-class VarBits(list: List<VarBit>) : HashMap<String, VarBit>(list.associateBy(VarBit::name))
+class Sequences(list: Map<String, Sequence>) : HashMap<String, Sequence>(list)
+class SpotAnimations(list: Map<String, SpotAnimation>) : HashMap<String, SpotAnimation>(list)
+class Varps(list: Map<String, VarPlayer>) : HashMap<String, VarPlayer>(list)
+class VarBits(list: Map<String, VarBit>) : HashMap<String, VarBit>(list)
+class IfInfoMap(list: Map<String, IfInfo>) : HashMap<String, IfInfo>(list)
 
-fun mapSquaresResource(): MapSquares = MapSquares(
-    Json.decodeFromStream(
-        MapSquare::class.java.getResourceAsStream(
-            inject<ApplicationEnvironment>().value.config.property("game.resources.xteas").getString()
-        )!!
-    )
-)
+object Resource {
+    fun mapSquaresResource(): MapSquares = MapSquares(loadResource("game.resources.xteas"))
+    fun sequencesResource(): Sequences = Sequences(loadResource<List<Sequence>>("game.resources.sequences").associateBy(Sequence::name))
+    fun spotAnimationsResource(): SpotAnimations = SpotAnimations(loadResource<List<SpotAnimation>>("game.resources.spot_animations").associateBy(SpotAnimation::name))
+    fun varpsResource(): Varps = Varps(loadResource<List<VarPlayer>>("game.resources.varps").associateBy(VarPlayer::name))
+    fun varBitsResource(): VarBits = VarBits(loadResource<List<VarBit>>("game.resources.varbits").associateBy(VarBit::name))
+    fun ifInfoResource(): IfInfoMap = IfInfoMap(loadResource<List<IfInfo>>("game.resources.if_info").associateBy(IfInfo::name))
 
-fun sequencesResource(): Sequences = Sequences(
-    Json.decodeFromStream(
-        Sequence::class.java.getResourceAsStream(
-            inject<ApplicationEnvironment>().value.config.property("game.resources.sequences").getString()
-        )!!
-    )
-)
+    private inline fun <reified T> loadResource(path: String): T =
+        Json.decodeFromStream(Resource::class.java.getResourceAsStream(inject<ApplicationEnvironment>().value.config.property(path).getString())!!)
+}
 
-fun spotAnimationsResource(): SpotAnimations = SpotAnimations(
-    Json.decodeFromStream(
-        SpotAnimation::class.java.getResourceAsStream(
-            inject<ApplicationEnvironment>().value.config.property("game.resources.spotanimations").getString()
-        )!!
-    )
-)
-
-fun varpsResource(): Varps = Varps(
-    Json.decodeFromStream(
-        VarBit::class.java.getResourceAsStream(
-            inject<ApplicationEnvironment>().value.config.property("game.resources.varps").getString()
-        )!!
-    )
-)
-
-fun varBitsResource(): VarBits = VarBits(
-    Json.decodeFromStream(
-        VarBit::class.java.getResourceAsStream(
-            inject<ApplicationEnvironment>().value.config.property("game.resources.varbits").getString()
-        )!!
-    )
-)
