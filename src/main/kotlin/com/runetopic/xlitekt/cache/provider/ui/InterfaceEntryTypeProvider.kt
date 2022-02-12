@@ -1,6 +1,7 @@
 package com.runetopic.xlitekt.cache.provider.ui
 
 import com.runetopic.xlitekt.cache.provider.EntryTypeProvider
+import com.runetopic.xlitekt.util.ext.packInterface
 import com.runetopic.xlitekt.util.ext.readMedium
 import com.runetopic.xlitekt.util.ext.readStringCp1252NullTerminated
 import com.runetopic.xlitekt.util.ext.toBoolean
@@ -15,13 +16,17 @@ import io.ktor.utils.io.core.readUShort
  */
 class InterfaceEntryTypeProvider : EntryTypeProvider<InterfaceEntryType>() {
 
-    override fun load(): List<InterfaceEntryType> = buildList {
-        store.index(INTERFACE_INDEX).groups().forEach { group ->
-            group.files().forEach {
-                add(loadEntryType(ByteReadPacket(it.data), InterfaceEntryType(group.id shl 16 or it.id, isModern = it.data[0].toInt() == -1)))
+    override fun load(): List<InterfaceEntryType> = store
+        .index(INTERFACE_INDEX)
+        .groups()
+        .flatMap { group ->
+            group.files().map {
+                loadEntryType(
+                    ByteReadPacket(it.data),
+                    InterfaceEntryType(group.id.packInterface(it.id), isModern = it.data[0].toInt() == -1)
+                )
             }
         }
-    }
 
     override fun loadEntryType(buffer: ByteReadPacket, type: InterfaceEntryType): InterfaceEntryType {
         buffer.apply { if (type.isModern) decodeModern(type) else decodeLegacy(type) }
@@ -111,6 +116,7 @@ class InterfaceEntryTypeProvider : EntryTypeProvider<InterfaceEntryType>() {
         type.isScrollBar = readUByte().toInt().toBoolean()
         type.spellActionName = readStringCp1252NullTerminated()
         discard(remaining) // Discard the remaining buffer for the listeners.
+        assert(remaining.toInt() == 0)
         release()
     }
 
@@ -126,47 +132,77 @@ class InterfaceEntryTypeProvider : EntryTypeProvider<InterfaceEntryType>() {
         type.parentId = readUShort().toInt().let { if (it == 65535) -1 else it + type.id and -65536 }
         type.mouseOverRedirect = readUShort().toInt().let { if (it == 65535) -1 else it }
 
-        val cs1ComparisonsSize = readUByte().toInt()
-        repeat(cs1ComparisonsSize) {
+        repeat(readUByte().toInt()) { // cs1 comparisons/values.
             discard(3) // Discard the cs1 comparisons and values.
         }
 
-        val cs1InstructionsSize = readUByte().toInt()
-        repeat(cs1InstructionsSize) {
+        repeat(readUByte().toInt()) { // cs1 instructions.
             repeat(readUShort().toInt()) {
                 discard(2) // Discard the cs1 instructions values.
             }
         }
 
-        if (type.type == 0) {
-            type.scrollHeight = readUShort().toInt()
-            type.isHidden = readUByte().toInt().toBoolean()
-        }
+        when (type.type) {
+            0 -> {
+                type.scrollHeight = readUShort().toInt()
+                type.isHidden = readUByte().toInt().toBoolean()
+            }
+            1 -> discard(3) // Unused.
+            2 -> {
+                type.itemIds = List(type.rawWidth * type.rawHeight) { 0 }
+                type.itemQuantities = List(type.rawWidth * type.rawHeight) { 0 }
+                discard(4) // Discard flags.
+                type.paddingX = readUByte().toInt()
+                type.paddingY = readUByte().toInt()
 
-        if (type.type == 1) {
-            discard(3) // Unused.
-        }
+                repeat(20) {
+                    if (readUByte().toInt() == 1) {
+                        discard(8) // Discard inventory sprites and offsets.
+                    }
+                }
 
-        if (type.type == 2) {
-            type.itemIds = List(type.rawWidth * type.rawHeight) { 0 }
-            type.itemQuantities = List(type.rawWidth * type.rawHeight) { 0 }
-            discard(4) // Dicard flags.
-            type.paddingX = readUByte().toInt()
-            type.paddingY = readUByte().toInt()
+                repeat(5) {
+                    readStringCp1252NullTerminated() // Discard item actions.
+                }
 
-            repeat(20) {
-                if (readUByte().toInt() == 1) {
-                    discard(8) // Discard inventory sprites and offsets.
+                type.spellActionName = readStringCp1252NullTerminated()
+                type.spellName = readStringCp1252NullTerminated()
+                discard(2) // Discard flags.
+            }
+            3 -> type.fill = readUByte().toInt().toBoolean()
+            5 -> {
+                type.spriteId2 = readInt()
+                type.spriteId = readInt()
+            }
+            6 -> {
+                type.modelType = 1
+                type.modelId = readUShort().toInt().let { if (it == 65535) -1 else it }
+
+                type.modelType2 = 1
+                type.modelId2 = readUShort().toInt().let { if (it == 65535) -1 else it }
+
+                type.sequenceId = readUShort().toInt().let { if (it == 65535) -1 else it }
+                type.sequenceId2 = readUShort().toInt().let { if (it == 65535) -1 else it }
+                type.modelZoom = readUShort().toInt()
+                type.modelAngleX = readUShort().toInt()
+                type.modelAngleY = readUShort().toInt()
+            }
+            7 -> {
+                type.itemIds = List(type.rawWidth * type.rawHeight) { 0 }
+                type.itemQuantities = List(type.rawWidth * type.rawHeight) { 0 }
+                type.textXAlignment = readUByte().toInt()
+                type.fontId = readUShort().toInt().let { if (it == 65535) -1 else it }
+                type.textShadowed = readUByte().toInt().toBoolean()
+                type.color = readInt()
+                type.paddingX = readShort().toInt()
+                type.paddingY = readShort().toInt()
+                discard(1) // Discard flags.
+
+                repeat(5) {
+                    readStringCp1252NullTerminated() // Discard item actions.
                 }
             }
-
-            repeat(5) {
-                readStringCp1252NullTerminated() // Discard item actions.
-            }
-        }
-
-        if (type.type == 3) {
-            type.fill = readUByte().toInt().toBoolean()
+            8 -> type.text = readStringCp1252NullTerminated()
         }
 
         if (type.type == 4 || type.type == 1) {
@@ -175,80 +211,41 @@ class InterfaceEntryTypeProvider : EntryTypeProvider<InterfaceEntryType>() {
             type.textLineHeight = readUByte().toInt()
             type.fontId = readUShort().toInt().let { if (it == 65535) -1 else it }
             type.textShadowed = readUByte().toInt().toBoolean()
-        }
-
-        if (type.type == 4) {
-            type.text = readStringCp1252NullTerminated()
-            type.text2 = readStringCp1252NullTerminated()
+            if (type.type == 4) {
+                type.text = readStringCp1252NullTerminated()
+                type.text2 = readStringCp1252NullTerminated()
+            }
         }
 
         if (type.type == 1 || type.type == 3 || type.type == 4) {
             type.color = readInt()
-        }
-
-        if (type.type == 3 || type.type == 4) {
-            type.color2 = readInt()
-            type.mouseOverColor = readInt()
-            type.mouseOverColor2 = readInt()
-        }
-
-        if (type.type == 5) {
-            type.spriteId2 = readInt()
-            type.spriteId = readInt()
-        }
-
-        if (type.type == 6) {
-            type.modelType = 1
-            type.modelId = readUShort().toInt().let { if (it == 65535) -1 else it }
-
-            type.modelType2 = 1
-            type.modelId2 = readUShort().toInt().let { if (it == 65535) -1 else it }
-
-            type.sequenceId = readUShort().toInt().let { if (it == 65535) -1 else it }
-            type.sequenceId2 = readUShort().toInt().let { if (it == 65535) -1 else it }
-            type.modelZoom = readUShort().toInt()
-            type.modelAngleX = readUShort().toInt()
-            type.modelAngleY = readUShort().toInt()
-        }
-
-        if (type.type == 7) {
-            type.itemIds = List(type.rawWidth * type.rawHeight) { 0 }
-            type.itemQuantities = List(type.rawWidth * type.rawHeight) { 0 }
-            type.textXAlignment = readUByte().toInt()
-            type.fontId = readUShort().toInt().let { if (it == 65535) -1 else it }
-            type.textShadowed = readUByte().toInt().toBoolean()
-            type.color = readInt()
-            type.paddingX = readShort().toInt()
-            type.paddingY = readShort().toInt()
-            discard(1) // Discard flags.
-
-            repeat(5) {
-                readStringCp1252NullTerminated() // Discard item actions.
+            if (type.type != 1) {
+                type.color2 = readInt()
+                type.mouseOverColor = readInt()
+                type.mouseOverColor2 = readInt()
             }
         }
 
-        if (type.type == 8) {
-            type.text = readStringCp1252NullTerminated()
-        }
-
-        if (type.buttonType == 2 || type.type == 2) {
-            type.spellActionName = readStringCp1252NullTerminated()
-            type.spellName = readStringCp1252NullTerminated()
-            discard(2) // Discard flags.
-        }
-
-        if (type.buttonType == 1 || type.buttonType == 4 || type.buttonType == 5 || type.buttonType == 6) {
-            type.buttonText = readStringCp1252NullTerminated()
-            if (type.buttonText.isEmpty()) {
-                type.buttonText = when (type.buttonType) {
-                    1 -> "Ok"
-                    4 -> "Select"
-                    5 -> "Select"
-                    6 -> "Continue"
-                    else -> throw IllegalArgumentException("Could not set text for button type ${type.buttonType}.")
+        when (type.buttonType) {
+            2 -> {
+                type.spellActionName = readStringCp1252NullTerminated()
+                type.spellName = readStringCp1252NullTerminated()
+                discard(2) // Discard flags.
+            }
+            1, 4, 5, 6 -> {
+                type.buttonText = readStringCp1252NullTerminated()
+                if (type.buttonText.isEmpty()) {
+                    type.buttonText = when (type.buttonType) {
+                        1 -> "Ok"
+                        4 -> "Select"
+                        5 -> "Select"
+                        6 -> "Continue"
+                        else -> throw IllegalArgumentException("Could not set text for button type ${type.buttonType}.")
+                    }
                 }
             }
         }
+        assert(remaining.toInt() == 0)
         release()
     }
 }

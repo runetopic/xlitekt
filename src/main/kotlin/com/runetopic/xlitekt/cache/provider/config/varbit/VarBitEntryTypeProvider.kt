@@ -11,7 +11,7 @@ class VarBitEntryTypeProvider : EntryTypeProvider<VarBitEntryType>() {
         generateMersennePrimeNumbers()
         return store
             .index(CONFIG_INDEX)
-            .group(VARBIT_GROUP_ID)
+            .group(VARBIT_CONFIG)
             .files()
             .map { loadEntryType(ByteReadPacket(it.data), VarBitEntryType(it.id)) }
     }
