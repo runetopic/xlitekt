@@ -236,8 +236,7 @@ class InterfaceEntryTypeProvider : EntryTypeProvider<InterfaceEntryType>() {
                 if (type.buttonText.isEmpty()) {
                     type.buttonText = when (type.buttonType) {
                         1 -> "Ok"
-                        4 -> "Select"
-                        5 -> "Select"
+                        4, 5 -> "Select"
                         6 -> "Continue"
                         else -> throw IllegalArgumentException("Could not set text for button type ${type.buttonType}.")
                     }
