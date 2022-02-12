@@ -6,7 +6,7 @@ import io.ktor.utils.io.core.ByteReadPacket
 
 abstract class EntryTypeProvider<T : EntryType> {
     private val entries: List<T> get() = load()
-    protected val js5Store by inject<Js5Store>()
+    protected val store by inject<Js5Store>()
 
     abstract fun load(): List<T>
     abstract fun loadEntryType(buffer: ByteReadPacket, type: T): T
@@ -16,6 +16,7 @@ abstract class EntryTypeProvider<T : EntryType> {
 
     companion object {
         const val CONFIG_INDEX = 2
+        const val INTERFACE_INDEX = 3
         const val VARBIT_GROUP_ID = 14
     }
 }

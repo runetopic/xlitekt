@@ -1,10 +1,10 @@
 package com.runetopic.xlitekt.game.actor.player
 
 import com.runetopic.xlitekt.game.actor.Actor
-import com.runetopic.xlitekt.game.actor.player.`var`.VarsManager
 import com.runetopic.xlitekt.game.actor.render.Render
-import com.runetopic.xlitekt.game.display.InterfaceManager
 import com.runetopic.xlitekt.game.tile.Tile
+import com.runetopic.xlitekt.game.ui.InterfaceManager
+import com.runetopic.xlitekt.game.varp.VarsManager
 import com.runetopic.xlitekt.game.world.World
 import com.runetopic.xlitekt.network.client.Client
 import com.runetopic.xlitekt.network.packet.RebuildNormalPacket

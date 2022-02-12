@@ -4,6 +4,7 @@ import com.runetopic.xlitekt.cache.cacheModule
 import com.runetopic.xlitekt.game.gameModule
 import com.runetopic.xlitekt.network.networkModule
 import io.ktor.application.Application
+import io.ktor.application.log
 import org.koin.core.parameter.ParametersDefinition
 import org.koin.core.qualifier.Qualifier
 import org.koin.dsl.module
@@ -20,6 +21,7 @@ fun Application.installKoin() {
         networkModule,
         gameModule,
     )
+    log.debug("Installed koin modules.")
 }
 
 inline fun <reified T : Any> inject(

@@ -1,6 +1,6 @@
 package com.runetopic.xlitekt.network.packet
 
-import com.runetopic.xlitekt.game.actor.player.friend.Friend
+import com.runetopic.xlitekt.game.social.friend.Friend
 
 /**
  * @author Tyler Telis

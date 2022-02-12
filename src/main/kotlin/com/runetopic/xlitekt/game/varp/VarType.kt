@@ -1,4 +1,4 @@
-package com.runetopic.xlitekt.game.actor.player.`var`
+package com.runetopic.xlitekt.game.varp
 
 enum class VarType {
     VAR_PLAYER,

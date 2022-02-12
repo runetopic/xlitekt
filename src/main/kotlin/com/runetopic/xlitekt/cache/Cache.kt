@@ -7,6 +7,8 @@ import com.runetopic.xlitekt.cache.Cache.loadProviders
 import com.runetopic.xlitekt.cache.provider.EntryTypeProvider
 import com.runetopic.xlitekt.cache.provider.config.varbit.VarBitEntryType
 import com.runetopic.xlitekt.cache.provider.config.varbit.VarBitEntryTypeProvider
+import com.runetopic.xlitekt.cache.provider.ui.InterfaceEntryType
+import com.runetopic.xlitekt.cache.provider.ui.InterfaceEntryTypeProvider
 import io.ktor.application.ApplicationEnvironment
 import org.koin.dsl.module
 import java.nio.file.Path
@@ -25,11 +27,13 @@ private val logger = InlineLogger()
 
 object Cache {
     val providers = mapOf<KClass<*>, EntryTypeProvider<*>>(
-        VarBitEntryType::class to VarBitEntryTypeProvider()
+        VarBitEntryType::class to VarBitEntryTypeProvider(),
+        InterfaceEntryType::class to InterfaceEntryTypeProvider()
     )
 
     fun loadProviders() {
-        providers.values.forEach(EntryTypeProvider<*>::load)
+        // Use parallelStream() because some of these loaders can be pretty big. This is just to reduce server startup time.
+        providers.values.parallelStream().forEach(EntryTypeProvider<*>::load)
         logger.debug { "Finished loading ${providers.size} cache providers with ${providers.values.sumOf(EntryTypeProvider<*>::size)} total entries." }
     }
 

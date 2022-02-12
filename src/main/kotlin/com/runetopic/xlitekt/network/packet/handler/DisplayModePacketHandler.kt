@@ -1,7 +1,7 @@
 package com.runetopic.xlitekt.network.packet.handler
 
 import com.runetopic.xlitekt.game.actor.player.Player
-import com.runetopic.xlitekt.game.display.Layout
+import com.runetopic.xlitekt.game.ui.Layout
 import com.runetopic.xlitekt.network.packet.DisplayModePacket
 
 /**

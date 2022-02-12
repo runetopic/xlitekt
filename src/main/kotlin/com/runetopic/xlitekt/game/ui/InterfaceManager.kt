@@ -1,4 +1,4 @@
-package com.runetopic.xlitekt.game.display
+package com.runetopic.xlitekt.game.ui
 
 import com.runetopic.xlitekt.game.actor.player.Player
 import com.runetopic.xlitekt.game.event.EventBus
@@ -13,7 +13,6 @@ import com.runetopic.xlitekt.network.packet.RunClientScriptPacket
 import com.runetopic.xlitekt.network.packet.VarpSmallPacket
 import com.runetopic.xlitekt.plugin.koin.inject
 import com.runetopic.xlitekt.util.ext.packInterface
-import java.awt.Window
 
 /**
  * @author Tyler Telis

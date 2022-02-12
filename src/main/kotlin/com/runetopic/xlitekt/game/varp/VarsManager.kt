@@ -1,4 +1,4 @@
-package com.runetopic.xlitekt.game.actor.player.`var`
+package com.runetopic.xlitekt.game.varp
 
 import com.runetopic.xlitekt.cache.Cache.entryType
 import com.runetopic.xlitekt.cache.provider.config.varbit.VarBitEntryType

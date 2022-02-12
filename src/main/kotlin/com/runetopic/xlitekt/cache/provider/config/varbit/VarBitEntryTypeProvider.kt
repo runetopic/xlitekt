@@ -9,7 +9,7 @@ class VarBitEntryTypeProvider : EntryTypeProvider<VarBitEntryType>() {
 
     override fun load(): List<VarBitEntryType> {
         generateMersennePrimeNumbers()
-        return js5Store
+        return store
             .index(CONFIG_INDEX)
             .group(VARBIT_GROUP_ID)
             .files()
@@ -27,7 +27,7 @@ class VarBitEntryTypeProvider : EntryTypeProvider<VarBitEntryType>() {
                 }
             }
         }
-
+        buffer.release()
         return type
     }
 
