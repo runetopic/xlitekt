@@ -9,4 +9,4 @@ data class MapSquare(
     val regionId: Int,
     @SerialName("key")
     val keys: List<Int>
-) : ArrayList<MapSquare>()
+)
