@@ -5,22 +5,24 @@ import com.runetopic.xlitekt.util.hook.onEvent
 
 /**
  * @author Tyler Telis
+ * @author Jordan Abraham
  */
-class InterfaceListener(
-    private val interfaceId: Int
+@JvmInline
+value class InterfaceListener(
+    val interfaceId: Int
 ) {
-    fun onClick(function: (IfEvent.IfButtonClickEvent).() -> Unit) =
+    inline fun onClick(crossinline function: (IfEvent.IfButtonClickEvent).() -> Unit) =
         onEvent<IfEvent.IfButtonClickEvent>()
             .filter { interfaceId == this@InterfaceListener.interfaceId }
             .use { function.invoke(this) }
 
-    fun onClick(childId: Int, function: (IfEvent.IfButtonClickEvent).() -> Unit) =
+    inline fun onClick(childId: Int, crossinline function: (IfEvent.IfButtonClickEvent).() -> Unit) =
         onEvent<IfEvent.IfButtonClickEvent>()
             .filter { this.interfaceId == this@InterfaceListener.interfaceId }
             .filter { this.childId == childId }
             .use { function.invoke(this) }
 
-    fun onOpen(function: (IfEvent.IfOpenEvent).() -> Unit) =
+    inline fun onOpen(crossinline function: (IfEvent.IfOpenEvent).() -> Unit) =
         onEvent<IfEvent.IfOpenEvent>()
             .filter { interfaceId == this@InterfaceListener.interfaceId }
             .use { function.invoke(this) }
@@ -39,6 +41,6 @@ class InterfaceListener(
     fun IfEvent.runClientScript(scriptId: Int, parameters: List<Any>) = player.interfaceManager.apply { clientScript(scriptId, parameters) }
 
     companion object {
-        fun buildInterfaceListener(interfaceId: Int, function: InterfaceListener.() -> Unit) = function.invoke(InterfaceListener(interfaceId))
+        inline fun buildInterfaceListener(interfaceId: Int, function: InterfaceListener.() -> Unit) = function.invoke(InterfaceListener(interfaceId))
     }
 }
