@@ -44,7 +44,7 @@ class ObjEntryTypeProvider : EntryTypeProvider<ObjEntryType>() {
             }
             26 -> type.femaleModel1 = readUShort().toInt()
             in 30..34 -> type.groundActions = type.groundActions.toMutableList().apply {
-                this[opcode - 30] = readStringCp1252NullTerminated().let { if (it == "hidden") "null" else it }
+                this[opcode - 30] = readStringCp1252NullTerminated().let { if (it.equals("Hidden", true)) "null" else it }
             }
             in 35..39 -> type.inventoryActions = type.inventoryActions.toMutableList().apply {
                 this[opcode - 35] = readStringCp1252NullTerminated()
