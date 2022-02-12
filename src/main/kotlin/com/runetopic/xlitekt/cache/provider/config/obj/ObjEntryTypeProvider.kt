@@ -6,6 +6,7 @@ import io.ktor.utils.io.core.ByteReadPacket
 import io.ktor.utils.io.core.readInt
 import io.ktor.utils.io.core.readUByte
 import io.ktor.utils.io.core.readUShort
+import java.lang.IllegalArgumentException
 
 /**
  * @author Jordan Abraham
@@ -19,9 +20,9 @@ class ObjEntryTypeProvider : EntryTypeProvider<ObjEntryType>() {
         .map { ByteReadPacket(it.data).loadEntryType(ObjEntryType(it.id)) }
         .toHashSet()
 
-    override fun ByteReadPacket.loadEntryType(type: ObjEntryType): ObjEntryType {
-        do when (val opcode = readUByte().toInt()) {
-            0 -> break
+    override tailrec fun ByteReadPacket.loadEntryType(type: ObjEntryType): ObjEntryType {
+        when (val opcode = readUByte().toInt()) {
+            0 -> { assertEmptyAndRelease(); return type }
             1 -> type.model = readUShort().toInt()
             2 -> type.name = readStringCp1252NullTerminated()
             4 -> type.zoom2d = readUShort().toInt()
@@ -79,8 +80,8 @@ class ObjEntryTypeProvider : EntryTypeProvider<ObjEntryType>() {
             148 -> type.placeholder = readUShort().toInt()
             149 -> type.placeholderTemplate = readUShort().toInt()
             249 -> type.params = readStringIntParameters()
-        } while (true)
-        assertEmptyThenRelease()
-        return type
+            else -> throw IllegalArgumentException("Missing opcode $opcode.")
+        }
+        return loadEntryType(type)
     }
 }

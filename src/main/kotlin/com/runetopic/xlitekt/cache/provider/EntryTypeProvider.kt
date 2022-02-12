@@ -26,7 +26,7 @@ abstract class EntryTypeProvider<T : EntryType> {
         }
     }
 
-    fun ByteReadPacket.assertEmptyThenRelease() {
+    fun ByteReadPacket.assertEmptyAndRelease() {
         if (remaining.toInt() != 0) throw IllegalStateException("The remaining buffer is not empty.")
         else release()
     }

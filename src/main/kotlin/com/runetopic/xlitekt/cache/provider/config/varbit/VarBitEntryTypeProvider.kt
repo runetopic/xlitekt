@@ -4,6 +4,7 @@ import com.runetopic.xlitekt.cache.provider.EntryTypeProvider
 import io.ktor.utils.io.core.ByteReadPacket
 import io.ktor.utils.io.core.readUByte
 import io.ktor.utils.io.core.readUShort
+import java.lang.IllegalArgumentException
 
 class VarBitEntryTypeProvider : EntryTypeProvider<VarBitEntryType>() {
 
@@ -16,17 +17,17 @@ class VarBitEntryTypeProvider : EntryTypeProvider<VarBitEntryType>() {
         .map { ByteReadPacket(it.data).loadEntryType(VarBitEntryType(it.id)) }
         .toHashSet()
 
-    override fun ByteReadPacket.loadEntryType(type: VarBitEntryType): VarBitEntryType {
-        do when (readUByte().toInt()) {
-            0 -> break
+    override tailrec fun ByteReadPacket.loadEntryType(type: VarBitEntryType): VarBitEntryType {
+        when (val opcode = readUByte().toInt()) {
+            0 -> { assertEmptyAndRelease(); return type }
             1 -> {
                 type.index = readUShort().toInt()
                 type.leastSignificantBit = readUByte().toInt()
                 type.mostSignificantBit = readUByte().toInt()
             }
-        } while (true)
-        assertEmptyThenRelease()
-        return type
+            else -> throw IllegalArgumentException("Missing opcode $opcode.")
+        }
+        return loadEntryType(type)
     }
 
     companion object {
