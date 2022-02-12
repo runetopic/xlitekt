@@ -15,8 +15,11 @@ abstract class EntryTypeProvider<T : EntryType> {
     fun entryType(id: Int): T? = entries.find { it.id == id }
 
     companion object {
+        // Indexes.
         const val CONFIG_INDEX = 2
         const val INTERFACE_INDEX = 3
-        const val VARBIT_GROUP_ID = 14
+
+        // Config groups.
+        const val VARBIT_CONFIG = 14
     }
 }
