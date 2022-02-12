@@ -7,27 +7,25 @@ import io.ktor.utils.io.core.readUShort
 
 class VarBitEntryTypeProvider : EntryTypeProvider<VarBitEntryType>() {
 
-    override fun load(): List<VarBitEntryType> {
-        generateMersennePrimeNumbers()
-        return store
-            .index(CONFIG_INDEX)
-            .group(VARBIT_CONFIG)
-            .files()
-            .map { loadEntryType(ByteReadPacket(it.data), VarBitEntryType(it.id)) }
-    }
+    init { generateMersennePrimeNumbers() }
 
-    override fun loadEntryType(buffer: ByteReadPacket, type: VarBitEntryType): VarBitEntryType {
-        while (true) {
-            when (buffer.readUByte().toInt()) {
-                0 -> break
-                1 -> {
-                    type.index = buffer.readUShort().toInt()
-                    type.leastSignificantBit = buffer.readUByte().toInt()
-                    type.mostSignificantBit = buffer.readUByte().toInt()
-                }
+    override fun load(): Set<VarBitEntryType> = store
+        .index(CONFIG_INDEX)
+        .group(VARBIT_CONFIG)
+        .files()
+        .map { ByteReadPacket(it.data).loadEntryType(VarBitEntryType(it.id)) }
+        .toHashSet()
+
+    override fun ByteReadPacket.loadEntryType(type: VarBitEntryType): VarBitEntryType {
+        do when (readUByte().toInt()) {
+            0 -> break
+            1 -> {
+                type.index = readUShort().toInt()
+                type.leastSignificantBit = readUByte().toInt()
+                type.mostSignificantBit = readUByte().toInt()
             }
-        }
-        buffer.release()
+        } while (true)
+        assertEmptyThenRelease()
         return type
     }
 

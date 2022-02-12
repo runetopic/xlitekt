@@ -16,20 +16,18 @@ import io.ktor.utils.io.core.readUShort
  */
 class InterfaceEntryTypeProvider : EntryTypeProvider<InterfaceEntryType>() {
 
-    override fun load(): List<InterfaceEntryType> = store
+    override fun load(): Set<InterfaceEntryType> = store
         .index(INTERFACE_INDEX)
         .groups()
         .flatMap { group ->
             group.files().map {
-                loadEntryType(
-                    ByteReadPacket(it.data),
-                    InterfaceEntryType(group.id.packInterface(it.id), isModern = it.data[0].toInt() == -1)
-                )
+                ByteReadPacket(it.data).loadEntryType(InterfaceEntryType(group.id.packInterface(it.id), isModern = it.data[0].toInt() == -1))
             }
         }
+        .toHashSet()
 
-    override fun loadEntryType(buffer: ByteReadPacket, type: InterfaceEntryType): InterfaceEntryType {
-        buffer.apply { if (type.isModern) decodeModern(type) else decodeLegacy(type) }
+    override fun ByteReadPacket.loadEntryType(type: InterfaceEntryType): InterfaceEntryType {
+        if (type.isModern) decodeModern(type) else decodeLegacy(type)
         return type
     }
 
@@ -116,8 +114,7 @@ class InterfaceEntryTypeProvider : EntryTypeProvider<InterfaceEntryType>() {
         type.isScrollBar = readUByte().toInt().toBoolean()
         type.spellActionName = readStringCp1252NullTerminated()
         discard(remaining) // Discard the remaining buffer for the listeners.
-        assert(remaining.toInt() == 0)
-        release()
+        assertEmptyThenRelease()
     }
 
     private fun ByteReadPacket.decodeLegacy(type: InterfaceEntryType) {
@@ -243,7 +240,6 @@ class InterfaceEntryTypeProvider : EntryTypeProvider<InterfaceEntryType>() {
                 }
             }
         }
-        assert(remaining.toInt() == 0)
-        release()
+        assertEmptyThenRelease()
     }
 }

@@ -4,7 +4,10 @@ import com.github.michaelbull.logging.InlineLogger
 import com.runetopic.cache.store.Js5Store
 import com.runetopic.cryptography.huffman.Huffman
 import com.runetopic.xlitekt.cache.Cache.loadProviders
+import com.runetopic.xlitekt.cache.provider.EntryType
 import com.runetopic.xlitekt.cache.provider.EntryTypeProvider
+import com.runetopic.xlitekt.cache.provider.config.obj.ObjEntryType
+import com.runetopic.xlitekt.cache.provider.config.obj.ObjEntryTypeProvider
 import com.runetopic.xlitekt.cache.provider.config.varbit.VarBitEntryType
 import com.runetopic.xlitekt.cache.provider.config.varbit.VarBitEntryTypeProvider
 import com.runetopic.xlitekt.cache.provider.ui.InterfaceEntryType
@@ -12,7 +15,6 @@ import com.runetopic.xlitekt.cache.provider.ui.InterfaceEntryTypeProvider
 import io.ktor.application.ApplicationEnvironment
 import org.koin.dsl.module
 import java.nio.file.Path
-import kotlin.reflect.KClass
 
 /**
  * @author Jordan Abraham
@@ -26,9 +28,10 @@ val cacheModule = module(createdAtStart = true) {
 private val logger = InlineLogger()
 
 object Cache {
-    val providers = mapOf<KClass<*>, EntryTypeProvider<*>>(
+    val providers = mapOf(
         VarBitEntryType::class to VarBitEntryTypeProvider(),
-        InterfaceEntryType::class to InterfaceEntryTypeProvider()
+        InterfaceEntryType::class to InterfaceEntryTypeProvider(),
+        ObjEntryType::class to ObjEntryTypeProvider()
     )
 
     fun loadProviders() {
@@ -37,5 +40,5 @@ object Cache {
         logger.debug { "Finished loading ${providers.size} cache providers with ${providers.values.sumOf(EntryTypeProvider<*>::size)} total entries." }
     }
 
-    inline fun <reified T> entryType(id: Int): T? = providers[T::class]?.entryType(id) as T?
+    inline fun <reified T : EntryType> entryType(id: Int): T? = providers[T::class]?.entryType(id) as T?
 }
