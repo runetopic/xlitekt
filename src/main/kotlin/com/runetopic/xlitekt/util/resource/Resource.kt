@@ -23,4 +23,3 @@ object Resource {
     private inline fun <reified T> loadResource(path: String): T =
         Json.decodeFromStream(Resource::class.java.getResourceAsStream(inject<ApplicationEnvironment>().value.config.property(path).getString())!!)
 }
-

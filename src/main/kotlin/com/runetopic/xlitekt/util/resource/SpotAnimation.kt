@@ -1,6 +1,5 @@
 package com.runetopic.xlitekt.util.resource
 
-import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 /**
@@ -8,8 +7,6 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 data class SpotAnimation(
-    @SerialName("name")
     val name: String,
-    @SerialName("id")
     val id: Int
 )
