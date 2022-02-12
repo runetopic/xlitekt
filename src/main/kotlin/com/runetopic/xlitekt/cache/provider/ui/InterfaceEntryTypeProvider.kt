@@ -205,19 +205,18 @@ class InterfaceEntryTypeProvider : EntryTypeProvider<InterfaceEntryType>() {
             8 -> type.text = readStringCp1252NullTerminated()
         }
 
-        if (type.type == 4 || type.type == 1) {
-            type.textXAlignment = readUByte().toInt()
-            type.textYAlignment = readUByte().toInt()
-            type.textLineHeight = readUByte().toInt()
-            type.fontId = readUShort().toInt().let { if (it == 65535) -1 else it }
-            type.textShadowed = readUByte().toInt().toBoolean()
-            if (type.type == 4) {
-                type.text = readStringCp1252NullTerminated()
-                type.text2 = readStringCp1252NullTerminated()
-            }
-        }
-
         if (type.type == 1 || type.type == 3 || type.type == 4) {
+            if (type.type != 3) {
+                type.textXAlignment = readUByte().toInt()
+                type.textYAlignment = readUByte().toInt()
+                type.textLineHeight = readUByte().toInt()
+                type.fontId = readUShort().toInt().let { if (it == 65535) -1 else it }
+                type.textShadowed = readUByte().toInt().toBoolean()
+                if (type.type == 4) {
+                    type.text = readStringCp1252NullTerminated()
+                    type.text2 = readStringCp1252NullTerminated()
+                }
+            }
             type.color = readInt()
             if (type.type != 1) {
                 type.color2 = readInt()
