@@ -10,7 +10,7 @@ import io.ktor.utils.io.core.readInt
 import io.ktor.utils.io.core.readUByte
 
 abstract class EntryTypeProvider<T : EntryType> {
-    private inline val entries: Set<T> get() = load()
+    private val entries by lazy(::load)
     protected val store by inject<Js5Store>()
 
     abstract fun load(): Set<T>
