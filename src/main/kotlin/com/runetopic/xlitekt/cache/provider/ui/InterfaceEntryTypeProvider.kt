@@ -43,7 +43,7 @@ class InterfaceEntryTypeProvider : EntryTypeProvider<InterfaceEntryType>() {
         type.heightAlignment = readByte().toInt()
         type.xAlignment = readByte().toInt()
         type.yAlignment = readByte().toInt()
-        type.parentId = readUShort().toInt().let { if (it == 0xffff) -1 else it + type.id and -65536 }
+        type.parentId = readUShort().toInt().let { if (it == 0xffff) -1 else it + type.id and 0xffff.inv() }
         type.isHidden = readUByte().toInt().toBoolean()
 
         when (type.type) {
@@ -126,7 +126,7 @@ class InterfaceEntryTypeProvider : EntryTypeProvider<InterfaceEntryType>() {
         type.rawWidth = readUShort().toInt()
         type.rawHeight = readUShort().toInt()
         type.transparencyTop = readUByte().toInt()
-        type.parentId = readUShort().toInt().let { if (it == 0xffff) -1 else it + type.id and -65536 }
+        type.parentId = readUShort().toInt().let { if (it == 0xffff) -1 else it + type.id and 0xffff.inv() }
         type.mouseOverRedirect = readUShort().toInt().let { if (it == 0xffff) -1 else it }
 
         repeat(readUByte().toInt()) { // cs1 comparisons/values.
