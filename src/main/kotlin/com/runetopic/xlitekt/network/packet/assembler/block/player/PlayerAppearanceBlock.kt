@@ -35,12 +35,10 @@ class PlayerAppearanceBlock : RenderingBlock<Player, Render.Appearance>(5, 0x1) 
         writeBytesAdd(data.readBytes())
     }
 
-    private fun BytePacketBuilder.animate(render: Render.Appearance) {
-        if (render.transform == -1) {
-            shortArrayOf(808, 823, 819, 820, 821, 822, 824).forEach(::writeShort)
-        } else {
-            // TODO load npc defs for walking and stand anims for transmog.
-        }
+    private fun BytePacketBuilder.animate(render: Render.Appearance) = if (render.transform == -1) {
+        shortArrayOf(808, 823, 819, 820, 821, 822, 824).forEach(::writeShort)
+    } else {
+        // TODO load npc defs for walking and stand anims for transmog.
     }
 
     private fun BytePacketBuilder.writeTransmogrification(render: Render.Appearance) {
@@ -49,17 +47,11 @@ class PlayerAppearanceBlock : RenderingBlock<Player, Render.Appearance>(5, 0x1) 
     }
 
     private fun BytePacketBuilder.writeIdentityKit(render: Render.Appearance) = enumValues<PlayerIdentityKit>()
-        .sortedWith(compareBy { it.info.index })
+        .sortedBy { it.info.index }
         .forEach {
             // TODO We will need to add support for the item worn in the specific body slot.
-            it.info.build(
-                this,
-                render.gender,
-                render.bodyParts.getOrDefault(it.bodyPart, 0)
-            )
+            it.info.build(this, render.gender, render.bodyParts.getOrDefault(it.bodyPart, 0))
         }
 
-    private fun BytePacketBuilder.colour(colours: Set<Map.Entry<BodyPartColor, Int>>) = colours
-        .sortedWith(compareBy { it.key.id })
-        .forEach { writeByte(it.value.toByte()) }
+    private fun BytePacketBuilder.colour(colours: Set<Map.Entry<BodyPartColor, Int>>) = colours.sortedBy { it.key.id }.forEach { writeByte(it.value.toByte()) }
 }

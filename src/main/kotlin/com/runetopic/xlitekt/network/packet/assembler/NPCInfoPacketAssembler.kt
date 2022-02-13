@@ -22,6 +22,7 @@ import com.runetopic.xlitekt.util.ext.toInt
 import com.runetopic.xlitekt.util.ext.withBitAccess
 import io.ktor.utils.io.core.BytePacketBuilder
 import io.ktor.utils.io.core.buildPacket
+import io.ktor.utils.io.core.writeShortLittleEndian
 
 /**
  * @author Tyler Telis
@@ -51,10 +52,7 @@ class NPCInfoPacketAssembler(
         blocks.release()
     }
 
-    private fun BitAccess.lowDefinition(
-        viewport: Viewport,
-        blocks: BytePacketBuilder
-    ) {
+    private fun BitAccess.lowDefinition(viewport: Viewport, blocks: BytePacketBuilder) {
         world.npcs.filterNotNull().forEach { // TODO iterate visible map regions to display all npcs when we do region support.
             if (viewport.localNPCs.contains(it)) return@forEach
             writeBits(15, it.index)
@@ -75,25 +73,23 @@ class NPCInfoPacketAssembler(
             writeBits(14, it.id)
             writeBits(if (extendedViewport) 8 else 5, x)
             viewport.localNPCs.add(it)
-            if (it.hasPendingUpdate()) encodePendingBlocks(it, blocks)
+            if (it.hasPendingUpdate()) blocks.encodePendingBlocks(it)
         }
     }
 
-    private fun BitAccess.highDefinition(
-        viewport: Viewport,
-        blocks: BytePacketBuilder
-    ) {
+    private fun BitAccess.highDefinition(viewport: Viewport, blocks: BytePacketBuilder) {
         viewport.localNPCs.forEach {
             if (!it.tile.withinDistance(viewport.player, if (extendedViewport) EXTENDED_VIEWPORT_DISTANCE else NORMAL_VIEWPORT_DISTANCE)) {
                 removeNPC()
                 return@forEach
             }
             val updating = processHighDefinitionNPC(it)
-            if (updating) encodePendingBlocks(it, blocks)
+            if (updating) blocks.encodePendingBlocks(it)
         }
     }
 
     private fun BitAccess.processHighDefinitionNPC(npc: NPC): Boolean {
+        // TODO Extract this out into an enum or something instead of passing around a bunch of booleans.
         val needsWalkUpdate = false
         val needsUpdate = npc.hasPendingUpdate()
         writeBits(1, needsUpdate.toInt())
@@ -111,13 +107,11 @@ class NPCInfoPacketAssembler(
         return needsUpdate
     }
 
-    private fun encodePendingBlocks(npc: NPC, blocks: BytePacketBuilder) {
-        npc.pendingUpdates().map { it to renderingBlockMap[it::class]!! }.sortedWith(compareBy { it.second.index }).toMap().let { updates ->
-            val mask = updates.map { it.value.mask }.sum().let { if (it >= 0xff) it or 0x4 else it }
-            blocks.writeByte(mask.toByte())
-            if (mask >= 0xff) { blocks.writeByte((mask shr 8).toByte()) }
-            updates.forEach { blocks.writePacket(it.value.build(npc, it.key)) }
-        }
+    private fun BytePacketBuilder.encodePendingBlocks(npc: NPC) {
+        val blocks = npc.pendingUpdates().map { it to renderingBlockMap[it::class]!! }.sortedBy { it.second.index }.toMap()
+        val mask = blocks.map { it.value.mask }.sum().let { if (it > 0xff) it or 0x4 else it }
+        if (mask > 0xff) writeShortLittleEndian(mask.toShort()) else writeByte(mask.toByte())
+        blocks.forEach { writePacket(it.value.build(npc, it.key)) }
     }
 
     private fun BitAccess.removeNPC() {

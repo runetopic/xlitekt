@@ -4,6 +4,7 @@ import com.github.michaelbull.logging.InlineLogger
 import com.runetopic.xlitekt.network.client.Client
 import com.runetopic.xlitekt.network.event.ReadEvent
 import com.runetopic.xlitekt.network.event.WriteEvent
+import com.runetopic.xlitekt.network.packet.RegisteredPackets
 import com.runetopic.xlitekt.plugin.koin.inject
 import com.runetopic.xlitekt.util.ext.readPacketOpcode
 import com.runetopic.xlitekt.util.ext.readPacketSize
@@ -22,6 +23,12 @@ class GameEventPipeline : EventPipeline<ReadEvent.GameReadEvent, WriteEvent.Game
     private val sizes = environment.config.property("game.packet.sizes").getList().map(String::toInt)
     private val timeout = environment.config.property("network.timeout").getString().toLong()
     private val logger = InlineLogger()
+
+    init {
+        logger.debug { "Loaded ${RegisteredPackets.assemblers.size} packet assemblers." }
+        logger.debug { "Loaded ${RegisteredPackets.disassemblers.size} packet disassemblers." }
+        logger.debug { "Loaded ${RegisteredPackets.handlers.size} packet disassembler handlers." }
+    }
 
     override suspend fun read(client: Client): ReadEvent.GameReadEvent? {
         if (client.readChannel.availableForRead <= 0) {
