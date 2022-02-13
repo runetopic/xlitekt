@@ -6,6 +6,8 @@ import com.runetopic.cryptography.huffman.Huffman
 import com.runetopic.xlitekt.cache.Cache.loadProviders
 import com.runetopic.xlitekt.cache.provider.EntryType
 import com.runetopic.xlitekt.cache.provider.EntryTypeProvider
+import com.runetopic.xlitekt.cache.provider.config.npc.NPCEntryType
+import com.runetopic.xlitekt.cache.provider.config.npc.NPCEntryTypeProvider
 import com.runetopic.xlitekt.cache.provider.config.obj.ObjEntryType
 import com.runetopic.xlitekt.cache.provider.config.obj.ObjEntryTypeProvider
 import com.runetopic.xlitekt.cache.provider.config.varbit.VarBitEntryType
@@ -31,7 +33,8 @@ object Cache {
     val providers = mapOf(
         VarBitEntryType::class to VarBitEntryTypeProvider(),
         InterfaceEntryType::class to InterfaceEntryTypeProvider(),
-        ObjEntryType::class to ObjEntryTypeProvider()
+        ObjEntryType::class to ObjEntryTypeProvider(),
+        NPCEntryType::class to NPCEntryTypeProvider()
     )
 
     fun loadProviders() {
