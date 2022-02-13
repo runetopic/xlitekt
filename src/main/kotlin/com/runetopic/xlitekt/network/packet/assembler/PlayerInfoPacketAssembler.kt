@@ -34,10 +34,6 @@ import kotlin.math.abs
  */
 class PlayerInfoPacketAssembler : PacketAssembler<PlayerInfoPacket>(opcode = 80, size = -2) {
 
-    init {
-        println("hello")
-    }
-
     private val world by inject<World>()
 
     override fun assemblePacket(packet: PlayerInfoPacket) = buildPacket {
