@@ -100,12 +100,9 @@ class InterfaceEntryTypeProvider : EntryTypeProvider<InterfaceEntryType>() {
         type.flags = readMedium()
         type.dataText = readStringCp1252NullTerminated()
 
-        val actionsSize = readUByte().toInt()
-        if (actionsSize > 0) {
-            type.actions = buildList {
-                repeat(actionsSize) {
-                    add(readStringCp1252NullTerminated())
-                }
+        type.actions = buildList {
+            repeat(readUByte().toInt()) {
+                add(readStringCp1252NullTerminated())
             }
         }
 

@@ -22,12 +22,9 @@ class NPCEntryTypeProvider : EntryTypeProvider<NPCEntryType>() {
     override tailrec fun ByteReadPacket.loadEntryType(type: NPCEntryType): NPCEntryType {
         when (val opcode = readUByte().toInt()) {
             0 -> { assertEmptyAndRelease(); return type }
-            1 -> {
-                val size = readUByte().toInt()
-                type.models = buildList {
-                    repeat(size) {
-                        add(readUShort().toInt())
-                    }
+            1 -> type.models = buildList {
+                repeat(readUByte().toInt()) {
+                    add(readUShort().toInt())
                 }
             }
             2 -> type.name = readStringCp1252NullTerminated()
@@ -68,9 +65,8 @@ class NPCEntryTypeProvider : EntryTypeProvider<NPCEntryType>() {
                 type.transformVarbit = readUShort().toInt().let { if (it == 0xffff) -1 else it }
                 type.transformVarp = readUShort().toInt().let { if (it == 0xffff) -1 else it }
                 val prime = if (opcode == 106) -1 else readUShort().toInt().let { if (it == 0xffff) -1 else it }
-                val size = readUByte().toInt()
                 type.transforms = buildList {
-                    repeat(size + 1) {
+                    repeat(readUByte().toInt() + 1) {
                         add(readUShort().toInt().let { if (it == 0xffff) -1 else it })
                     }
                     add(prime)
