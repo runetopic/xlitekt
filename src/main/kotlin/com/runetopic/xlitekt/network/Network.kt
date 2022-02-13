@@ -54,6 +54,7 @@ class Network {
                 socket.openReadChannel(),
                 socket.openWriteChannel()
             )
+            // TODO It's possible we can't use this Dispatcher if there are hundreds of players connected.
             launch(Dispatchers.IO) { client.start() }
         }
     }

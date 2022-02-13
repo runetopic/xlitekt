@@ -52,20 +52,20 @@ class PlayerInfoPacketAssembler : PacketAssembler<PlayerInfoPacket>(opcode = 80,
     private fun BytePacketBuilder.highDefinition(player: Player, blocks: BytePacketBuilder, nsn: Boolean) {
         var skip = 0
         val viewport = player.viewport
-        repeat(viewport.localIndexesSize) {
-            val index = viewport.localIndexes[it]
-            if (nsn == (0x1 and viewport.nsnFlags[index] != 0)) return@repeat
-            if (skip > 0) {
-                viewport.nsnFlags[index] = viewport.nsnFlags[index] or 2
-                skip--
-                return@repeat
-            }
-            val other = viewport.localPlayers[index]
-            // TODO Extract this out into an enum or something instead of passing around a bunch of booleans.
-            val removing = shouldRemove(player, other)
-            val updating = shouldUpdate(other)
-            val active = removing || updating
-            withBitAccess {
+        withBitAccess {
+            repeat(viewport.localIndexesSize) {
+                val index = viewport.localIndexes[it]
+                if (nsn == (0x1 and viewport.nsnFlags[index] != 0)) return@repeat
+                if (skip > 0) {
+                    viewport.nsnFlags[index] = viewport.nsnFlags[index] or 2
+                    skip--
+                    return@repeat
+                }
+                val other = viewport.localPlayers[index]
+                // TODO Extract this out into an enum or something instead of passing around a bunch of booleans.
+                val removing = shouldRemove(player, other)
+                val updating = shouldUpdate(other)
+                val active = removing || updating
                 writeBit(active)
                 if (active.not()) {
                     skip += skip(player, true, it, nsn)
@@ -106,18 +106,18 @@ class PlayerInfoPacketAssembler : PacketAssembler<PlayerInfoPacket>(opcode = 80,
         var skip = 0
 
         val viewport = player.viewport
-        repeat(viewport.externalIndexesSize) {
-            val index = viewport.externalIndexes[it]
-            if (nsn == (0x1 and viewport.nsnFlags[index] == 0)) return@repeat
-            if (skip > 0) {
-                viewport.nsnFlags[index] = viewport.nsnFlags[index] or 2
-                skip--
-                return@repeat
-            }
-            val other = world.players[index]
-            // TODO Extract this out into an enum or something instead of passing around a bunch of booleans.
-            val adding = shouldAdd(player, other)
-            withBitAccess {
+        withBitAccess {
+            repeat(viewport.externalIndexesSize) {
+                val index = viewport.externalIndexes[it]
+                if (nsn == (0x1 and viewport.nsnFlags[index] == 0)) return@repeat
+                if (skip > 0) {
+                    viewport.nsnFlags[index] = viewport.nsnFlags[index] or 2
+                    skip--
+                    return@repeat
+                }
+                val other = world.players[index]
+                // TODO Extract this out into an enum or something instead of passing around a bunch of booleans.
+                val adding = shouldAdd(player, other)
                 writeBit(adding)
                 if (adding.not()) {
                     skip += skip(player, false, it, nsn)
