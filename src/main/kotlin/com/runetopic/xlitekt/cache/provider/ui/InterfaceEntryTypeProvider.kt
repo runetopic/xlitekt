@@ -43,7 +43,7 @@ class InterfaceEntryTypeProvider : EntryTypeProvider<InterfaceEntryType>() {
         type.heightAlignment = readByte().toInt()
         type.xAlignment = readByte().toInt()
         type.yAlignment = readByte().toInt()
-        type.parentId = readUShort().toInt().let { if (it == 65535) -1 else it + type.id and -65536 }
+        type.parentId = readUShort().toInt().let { if (it == 0xffff) -1 else it + type.id and -65536 }
         type.isHidden = readUByte().toInt().toBoolean()
 
         when (type.type) {
@@ -58,7 +58,7 @@ class InterfaceEntryTypeProvider : EntryTypeProvider<InterfaceEntryType>() {
                 type.transparencyTop = readUByte().toInt()
             }
             4 -> {
-                type.fontId = readUShort().toInt().let { if (it == 65535) -1 else it }
+                type.fontId = readUShort().toInt().let { if (it == 0xffff) -1 else it }
                 type.text = readStringCp1252NullTerminated()
                 type.textLineHeight = readUByte().toInt()
                 type.textXAlignment = readUByte().toInt()
@@ -78,14 +78,14 @@ class InterfaceEntryTypeProvider : EntryTypeProvider<InterfaceEntryType>() {
             }
             6 -> {
                 type.modelType = 1
-                type.modelId = readUShort().toInt().let { if (it == 65535) -1 else it }
+                type.modelId = readUShort().toInt().let { if (it == 0xffff) -1 else it }
                 type.modelOffsetX = readShort().toInt()
                 type.modelOffsetY = readShort().toInt()
                 type.modelAngleX = readUShort().toInt()
                 type.modelAngleY = readUShort().toInt()
                 type.modelAngleZ = readUShort().toInt()
                 type.modelZoom = readUShort().toInt()
-                type.sequenceId = readUShort().toInt().let { if (it == 65535) -1 else it }
+                type.sequenceId = readUShort().toInt().let { if (it == 0xffff) -1 else it }
                 type.modelOrthog = readUByte().toInt().toBoolean()
                 discard(2) // Unused.
                 if (type.widthAlignment != 0) type.field3280 = readUShort().toInt()
@@ -126,8 +126,8 @@ class InterfaceEntryTypeProvider : EntryTypeProvider<InterfaceEntryType>() {
         type.rawWidth = readUShort().toInt()
         type.rawHeight = readUShort().toInt()
         type.transparencyTop = readUByte().toInt()
-        type.parentId = readUShort().toInt().let { if (it == 65535) -1 else it + type.id and -65536 }
-        type.mouseOverRedirect = readUShort().toInt().let { if (it == 65535) -1 else it }
+        type.parentId = readUShort().toInt().let { if (it == 0xffff) -1 else it + type.id and -65536 }
+        type.mouseOverRedirect = readUShort().toInt().let { if (it == 0xffff) -1 else it }
 
         repeat(readUByte().toInt()) { // cs1 comparisons/values.
             discard(3) // Discard the cs1 comparisons and values.
@@ -173,13 +173,13 @@ class InterfaceEntryTypeProvider : EntryTypeProvider<InterfaceEntryType>() {
             }
             6 -> {
                 type.modelType = 1
-                type.modelId = readUShort().toInt().let { if (it == 65535) -1 else it }
+                type.modelId = readUShort().toInt().let { if (it == 0xffff) -1 else it }
 
                 type.modelType2 = 1
-                type.modelId2 = readUShort().toInt().let { if (it == 65535) -1 else it }
+                type.modelId2 = readUShort().toInt().let { if (it == 0xffff) -1 else it }
 
-                type.sequenceId = readUShort().toInt().let { if (it == 65535) -1 else it }
-                type.sequenceId2 = readUShort().toInt().let { if (it == 65535) -1 else it }
+                type.sequenceId = readUShort().toInt().let { if (it == 0xffff) -1 else it }
+                type.sequenceId2 = readUShort().toInt().let { if (it == 0xffff) -1 else it }
                 type.modelZoom = readUShort().toInt()
                 type.modelAngleX = readUShort().toInt()
                 type.modelAngleY = readUShort().toInt()
@@ -188,7 +188,7 @@ class InterfaceEntryTypeProvider : EntryTypeProvider<InterfaceEntryType>() {
                 type.itemIds = List(type.rawWidth * type.rawHeight) { 0 }
                 type.itemQuantities = List(type.rawWidth * type.rawHeight) { 0 }
                 type.textXAlignment = readUByte().toInt()
-                type.fontId = readUShort().toInt().let { if (it == 65535) -1 else it }
+                type.fontId = readUShort().toInt().let { if (it == 0xffff) -1 else it }
                 type.textShadowed = readUByte().toInt().toBoolean()
                 type.color = readInt()
                 type.paddingX = readShort().toInt()
@@ -207,7 +207,7 @@ class InterfaceEntryTypeProvider : EntryTypeProvider<InterfaceEntryType>() {
                 type.textXAlignment = readUByte().toInt()
                 type.textYAlignment = readUByte().toInt()
                 type.textLineHeight = readUByte().toInt()
-                type.fontId = readUShort().toInt().let { if (it == 65535) -1 else it }
+                type.fontId = readUShort().toInt().let { if (it == 0xffff) -1 else it }
                 type.textShadowed = readUByte().toInt().toBoolean()
                 if (type.type == 4) {
                     type.text = readStringCp1252NullTerminated()
