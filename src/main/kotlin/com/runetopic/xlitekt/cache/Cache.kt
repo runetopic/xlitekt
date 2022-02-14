@@ -38,8 +38,14 @@ object Cache {
     )
 
     fun loadProviders() {
-        logger.debug { "Finished loading ${providers.size} cache providers with ${providers.values.sumOf(EntryTypeProvider<*, *>::size)} total entries." }
+        logger.debug { "Loading ${providers.size} cache providers with ${providers.values.sumOf(EntryTypeProvider<*>::size)} total entries." }
+        // Objs have a post loading process for notes, un-notes and placeholders.
+        post<ObjEntryType, ObjEntryTypeProvider>()
     }
 
     inline fun <reified T : EntryType> entryType(id: Int): T? = providers[T::class]?.entryType(id) as T?
+
+    private inline fun <reified T : EntryType, reified R : EntryTypeProvider<T>> post() = (providers[T::class] as R).apply {
+        entries.values.forEach { it.postLoadEntryType() }
+    }
 }

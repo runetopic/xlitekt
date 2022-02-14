@@ -12,7 +12,7 @@ import java.lang.IllegalArgumentException
 /**
  * @author Jordan Abraham
  */
-class NPCEntryTypeProvider : EntryTypeProvider<Int, NPCEntryType>() {
+class NPCEntryTypeProvider : EntryTypeProvider<NPCEntryType>() {
 
     override fun load(): Map<Int, NPCEntryType> = store
         .index(CONFIG_INDEX)
