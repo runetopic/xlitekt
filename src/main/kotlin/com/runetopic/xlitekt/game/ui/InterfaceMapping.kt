@@ -23,20 +23,25 @@ object InterfaceMapping {
         UserInterface.MusicPlayer,
         UserInterface.Skills,
         UserInterface.WornEquipment,
+        UserInterface.EquipmentBonuses,
         UserInterface.Friends,
         UserInterface.Prayer,
         UserInterface.CombatOptions,
         UserInterface.CharacterSummary,
         UserInterface.UnknownOverlay,
         UserInterface.ChatChannel
-    ).associateBy(UserInterface::id)
+    ).associateBy { it.interfaceInfo.id }
 
     fun interfaceInfo(name: String): InterfaceInfo = interfaceInfoMap[name] ?: throw RuntimeException("Interface $name is not currently registered in the system.")
 
-    val interfaceListeners = mutableMapOf<KClass<*>, UserInterfaceListener.() -> Unit>()
+    val interfaceListeners = mutableMapOf<KClass<*>, UserInterfaceListener>()
 
     @Suppress("UNCHECKED_CAST")
     inline fun <reified T : UserInterface> buildInterfaceListener(noinline function: UserInterfaceListener.() -> Unit) {
-        interfaceListeners[T::class] = function
+        val listener = UserInterfaceListener()
+        interfaceListeners[T::class] = listener
+        function.invoke(listener)
     }
+
+    fun interfaceListener(element: UserInterface): UserInterfaceListener? = interfaceListeners[element::class]
 }

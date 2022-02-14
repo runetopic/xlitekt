@@ -1,5 +1,14 @@
 [
   {
+    "id": 84,
+    "name": "equipment_bonuses",
+    "destination": {
+      "fixedChildId": 23,
+      "resizableChildId": 15,
+      "resizableModernChildId": 15
+    }
+  },
+  {
     "id": 109,
     "name": "account_management",
     "destination": {

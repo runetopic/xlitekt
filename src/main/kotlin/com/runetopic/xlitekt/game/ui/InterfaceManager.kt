@@ -2,7 +2,7 @@ package com.runetopic.xlitekt.game.ui
 
 import com.runetopic.xlitekt.game.actor.player.Player
 import com.runetopic.xlitekt.game.ui.InterfaceMapping.interfaceInfo
-import com.runetopic.xlitekt.game.ui.InterfaceMapping.interfaceListeners
+import com.runetopic.xlitekt.game.ui.InterfaceMapping.interfaceListener
 import com.runetopic.xlitekt.network.packet.IfOpenSubPacket
 import com.runetopic.xlitekt.network.packet.IfOpenTopPacket
 import com.runetopic.xlitekt.network.packet.IfSetEventsPacket
@@ -18,42 +18,36 @@ class InterfaceManager(
     private val player: Player
 ) {
     var currentInterfaceLayout = InterfaceLayout.FIXED
-
-    private val open = mutableListOf<UserInterface>()
+    val interfaces = mutableListOf<UserInterface>()
 
     fun login() {
         openTop(currentInterfaceLayout.interfaceId)
-        gameInterfaces.forEach { open += it }
+        gameInterfaces.forEach(::openInterface)
         player.client.writePacket(VarpSmallPacket(1737, -1)) // TODO TEMP until i write a var system
         message("Welcome to Xlitekt.")
     }
 
     private fun openTop(id: Int) = player.client.writePacket(IfOpenTopPacket(interfaceId = id))
 
-    operator fun MutableCollection<in UserInterface>.plusAssign(element: UserInterface) {
-        this.add(element)
-        openSub(element)
-    }
+    fun openInterface(userInterface: UserInterface) {
+        interfaces += userInterface
 
-    private fun openSub(element: UserInterface) {
-        val interfaceInfo = interfaceInfo(element.name)
+        val interfaceInfo = interfaceInfo(userInterface.name)
         val childId = interfaceInfo.destination.childIdForLayout(currentInterfaceLayout)
-
-        interfaceListeners[element::class]?.invoke(element)
-
-        element.onOpenEvent?.invoke(
-            UserInterfaceEvent.OpenEvent(
-                player = player,
-                interfaceId = interfaceInfo.id,
-                childId = childId
-            )
-        )
 
         player.client.writePacket(
             IfOpenSubPacket(
                 interfaceId = interfaceInfo.id,
                 toPackedInterface = currentInterfaceLayout.interfaceId.packInterface(childId),
                 alwaysOpen = true
+            )
+        )
+
+        interfaceListener(userInterface)?.open(
+            UserInterfaceEvent.OpenEvent(
+                player = player,
+                interfaceId = interfaceInfo.id,
+                childId = childId
             )
         )
     }

@@ -11,11 +11,12 @@ sealed class UserInterfaceEvent {
 
     data class ButtonClickEvent(
         val player: Player,
+        val index: Int,
         val interfaceId: Int,
         val childId: Int,
         val option: Int,
         val slotId: Int,
         val itemId: Int,
-        val actions: String
+        val action: String
     ) : UserInterfaceEvent()
 }
