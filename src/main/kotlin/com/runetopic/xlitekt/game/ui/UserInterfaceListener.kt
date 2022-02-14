@@ -4,7 +4,7 @@ package com.runetopic.xlitekt.game.ui
  * @author Tyler Telis
  */
 abstract class UserInterfaceListener {
-    private val components get() = mutableMapOf<Int, UserInterfaceEvent.ButtonClickEvent.() -> Unit>()
+    private val components = mutableMapOf<Int, UserInterfaceEvent.ButtonClickEvent.() -> Unit>()
     var onOpenEvent: (UserInterfaceEvent.OpenEvent.() -> Unit)? = null
     var onClickEvent: (UserInterfaceEvent.ButtonClickEvent.() -> Unit)? = null
 
