@@ -6,7 +6,7 @@ import io.ktor.utils.io.core.readUByte
 import io.ktor.utils.io.core.readUShort
 import java.lang.IllegalArgumentException
 
-class VarBitEntryTypeProvider : EntryTypeProvider<Int, VarBitEntryType>() {
+class VarBitEntryTypeProvider : EntryTypeProvider<VarBitEntryType>() {
 
     init { generateMersennePrimeNumbers() }
 

@@ -14,7 +14,7 @@ import io.ktor.utils.io.core.readUShort
 /**
  * @author Jordan Abraham
  */
-class InterfaceEntryTypeProvider : EntryTypeProvider<Int, InterfaceEntryType>() {
+class InterfaceEntryTypeProvider : EntryTypeProvider<InterfaceEntryType>() {
 
     override fun load(): Map<Int, InterfaceEntryType> = store
         .index(INTERFACE_INDEX)

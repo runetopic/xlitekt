@@ -9,15 +9,16 @@ import io.ktor.utils.io.core.ByteReadPacket
 import io.ktor.utils.io.core.readInt
 import io.ktor.utils.io.core.readUByte
 
-abstract class EntryTypeProvider<T, R : EntryType> {
-    private val entries by lazy(::load)
+abstract class EntryTypeProvider<R : EntryType> {
+    internal val entries by lazy(::load)
     protected val store by inject<Js5Store>()
 
-    abstract fun load(): Map<T, R>
+    abstract fun load(): Map<Int, R>
     abstract fun ByteReadPacket.loadEntryType(type: R): R
+    open fun R.postLoadEntryType() {}
 
     fun size() = entries.size
-    fun entryType(id: T): R? = entries[id]
+    fun entryType(id: Int): R? = entries[id]
 
     fun ByteReadPacket.readStringIntParameters(): Map<Int, Any> = buildMap {
         repeat(readUByte().toInt()) {

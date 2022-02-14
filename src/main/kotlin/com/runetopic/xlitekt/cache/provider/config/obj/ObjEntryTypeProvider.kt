@@ -6,12 +6,11 @@ import io.ktor.utils.io.core.ByteReadPacket
 import io.ktor.utils.io.core.readInt
 import io.ktor.utils.io.core.readUByte
 import io.ktor.utils.io.core.readUShort
-import java.lang.IllegalArgumentException
 
 /**
  * @author Jordan Abraham
  */
-class ObjEntryTypeProvider : EntryTypeProvider<Int, ObjEntryType>() {
+class ObjEntryTypeProvider : EntryTypeProvider<ObjEntryType>() {
 
     override fun load(): Map<Int, ObjEntryType> = store
         .index(CONFIG_INDEX)
@@ -83,5 +82,96 @@ class ObjEntryTypeProvider : EntryTypeProvider<Int, ObjEntryType>() {
             else -> throw IllegalArgumentException("Missing opcode $opcode.")
         }
         return loadEntryType(type)
+    }
+
+    override fun ObjEntryType.postLoadEntryType() {
+        if (noteTemplate != -1) {
+            entries[noteTemplate]?.let { noteTemplate ->
+                entries[note]?.let { note ->
+                    toNote(noteTemplate, note)
+                }
+            }
+        }
+        if (notedId != -1) {
+            entries[notedId]?.let { noted ->
+                entries[unnotedId]?.let { unnoted ->
+                    toUnnoted(noted, unnoted)
+                }
+            }
+        }
+        if (placeholderTemplate != -1) {
+            entries[placeholderTemplate]?.let { placeholderTemplate ->
+                entries[placeholder]?.let { placeholder ->
+                    toPlaceholder(placeholderTemplate, placeholder)
+                }
+            }
+        }
+    }
+
+    private fun ObjEntryType.toNote(noteTemplate: ObjEntryType, note: ObjEntryType) {
+        model = noteTemplate.model
+        zoom2d = noteTemplate.zoom2d
+        xan2d = noteTemplate.xan2d
+        yan2d = noteTemplate.yan2d
+        zan2d = noteTemplate.zan2d
+        offsetX2d = noteTemplate.offsetX2d
+        offsetY2d = noteTemplate.offsetY2d
+        // Skip recolor.
+        // Skip retexture.
+        name = note.name
+        isMembersOnly = note.isMembersOnly
+        price = note.price
+        isStackable = 1
+    }
+
+    private fun ObjEntryType.toUnnoted(noted: ObjEntryType, unnoted: ObjEntryType) {
+        model = noted.model
+        zoom2d = noted.zoom2d
+        xan2d = noted.xan2d
+        yan2d = noted.yan2d
+        zan2d = noted.zan2d
+        offsetX2d = noted.offsetX2d
+        offsetY2d = noted.offsetY2d
+        // Skip recolor.
+        // Skip retexture.
+        name = unnoted.name
+        isMembersOnly = unnoted.isMembersOnly
+        isStackable = unnoted.isStackable
+        maleModel = unnoted.maleModel
+        maleModel1 = unnoted.maleModel1
+        maleModel2 = unnoted.maleModel2
+        femaleModel = unnoted.femaleModel
+        femaleModel1 = unnoted.femaleModel1
+        femaleModel2 = unnoted.femaleModel2
+        maleHeadModel = unnoted.maleHeadModel
+        maleHeadModel2 = unnoted.maleHeadModel2
+        femaleHeadModel = unnoted.femaleHeadModel
+        femaleHeadModel2 = unnoted.femaleHeadModel2
+        team = unnoted.team
+        groundActions = unnoted.groundActions
+        inventoryActions = buildList {
+            repeat(3) {
+                add(unnoted.inventoryActions[it])
+            }
+            add("Discard")
+        }
+        price = 0
+    }
+
+    private fun ObjEntryType.toPlaceholder(placeholderTemplate: ObjEntryType, placeholder: ObjEntryType) {
+        model = placeholderTemplate.model
+        zoom2d = placeholderTemplate.zoom2d
+        xan2d = placeholderTemplate.xan2d
+        yan2d = placeholderTemplate.yan2d
+        zan2d = placeholderTemplate.zan2d
+        offsetX2d = placeholderTemplate.offsetX2d
+        offsetY2d = placeholderTemplate.offsetY2d
+        // Skip recolor.
+        // Skip retexture.
+        isStackable = placeholderTemplate.isStackable
+        name = placeholder.name
+        price = 0
+        isMembersOnly = false
+        isTradable = false
     }
 }
