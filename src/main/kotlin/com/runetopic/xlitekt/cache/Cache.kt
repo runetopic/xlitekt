@@ -6,6 +6,8 @@ import com.runetopic.cryptography.huffman.Huffman
 import com.runetopic.xlitekt.cache.Cache.loadProviders
 import com.runetopic.xlitekt.cache.provider.EntryType
 import com.runetopic.xlitekt.cache.provider.EntryTypeProvider
+import com.runetopic.xlitekt.cache.provider.config.loc.LocEntryType
+import com.runetopic.xlitekt.cache.provider.config.loc.LocEntryTypeProvider
 import com.runetopic.xlitekt.cache.provider.config.npc.NPCEntryType
 import com.runetopic.xlitekt.cache.provider.config.npc.NPCEntryTypeProvider
 import com.runetopic.xlitekt.cache.provider.config.obj.ObjEntryType
@@ -34,7 +36,8 @@ object Cache {
         VarBitEntryType::class to VarBitEntryTypeProvider(),
         InterfaceEntryType::class to InterfaceEntryTypeProvider(),
         ObjEntryType::class to ObjEntryTypeProvider(),
-        NPCEntryType::class to NPCEntryTypeProvider()
+        NPCEntryType::class to NPCEntryTypeProvider(),
+        LocEntryType::class to LocEntryTypeProvider()
     )
 
     fun loadProviders() {

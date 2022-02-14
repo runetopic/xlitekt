@@ -38,6 +38,7 @@ abstract class EntryTypeProvider<R : EntryType> {
         const val INTERFACE_INDEX = 3
 
         // Config groups.
+        const val LOC_CONFIG = 6
         const val NPC_CONFIG = 9
         const val OBJ_CONFIG = 10
         const val VARBIT_CONFIG = 14
