@@ -13,7 +13,7 @@
     "name": "settings",
     "destination": {
       "fixedChildId": 90,
-      "resizableChildId": 85,
+      "resizableChildId": 86,
       "resizableModernChildId": 83
     }
   },

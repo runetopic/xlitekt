@@ -1,8 +1,8 @@
 package com.runetopic.xlitekt.plugin.script.ui
 
 import com.runetopic.xlitekt.game.ui.InterfaceEvent.CLICK_OPTION_1
-import com.runetopic.xlitekt.game.ui.InterfaceId
-import com.runetopic.xlitekt.game.ui.InterfaceListener.Companion.buildInterfaceListener
+import com.runetopic.xlitekt.game.ui.InterfaceMapping.buildInterfaceListener
+import com.runetopic.xlitekt.game.ui.UserInterface
 import com.runetopic.xlitekt.plugin.koin.inject
 import com.runetopic.xlitekt.util.resource.Sequences
 import com.runetopic.xlitekt.util.resource.SpotAnimations
@@ -67,7 +67,7 @@ private enum class Emotes(
 private val sequences by inject<Sequences>()
 private val spotAnimations by inject<SpotAnimations>()
 
-buildInterfaceListener(InterfaceId.EMOTES) {
+buildInterfaceListener<UserInterface.Emotes> {
     onOpen {
         event(childId = 1, slots = 0..50, events = CLICK_OPTION_1)
     }

@@ -6,16 +6,16 @@ import io.ktor.utils.io.core.readUByte
 import io.ktor.utils.io.core.readUShort
 import java.lang.IllegalArgumentException
 
-class VarBitEntryTypeProvider : EntryTypeProvider<VarBitEntryType>() {
+class VarBitEntryTypeProvider : EntryTypeProvider<Int, VarBitEntryType>() {
 
     init { generateMersennePrimeNumbers() }
 
-    override fun load(): Set<VarBitEntryType> = store
+    override fun load(): Map<Int, VarBitEntryType> = store
         .index(CONFIG_INDEX)
         .group(VARBIT_CONFIG)
         .files()
         .map { ByteReadPacket(it.data).loadEntryType(VarBitEntryType(it.id)) }
-        .toHashSet()
+        .associateBy { it.id }
 
     override tailrec fun ByteReadPacket.loadEntryType(type: VarBitEntryType): VarBitEntryType {
         when (val opcode = readUByte().toInt()) {

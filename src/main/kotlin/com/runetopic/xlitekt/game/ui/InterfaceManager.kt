@@ -1,17 +1,14 @@
 package com.runetopic.xlitekt.game.ui
 
 import com.runetopic.xlitekt.game.actor.player.Player
-import com.runetopic.xlitekt.game.event.EventBus
-import com.runetopic.xlitekt.game.event.impl.IfEvent
-import com.runetopic.xlitekt.network.packet.IfCloseSubPacket
-import com.runetopic.xlitekt.network.packet.IfMoveSubPacket
+import com.runetopic.xlitekt.game.ui.InterfaceMapping.interfaceInfo
+import com.runetopic.xlitekt.game.ui.InterfaceMapping.interfaceListeners
 import com.runetopic.xlitekt.network.packet.IfOpenSubPacket
 import com.runetopic.xlitekt.network.packet.IfOpenTopPacket
 import com.runetopic.xlitekt.network.packet.IfSetEventsPacket
 import com.runetopic.xlitekt.network.packet.MessageGamePacket
 import com.runetopic.xlitekt.network.packet.RunClientScriptPacket
 import com.runetopic.xlitekt.network.packet.VarpSmallPacket
-import com.runetopic.xlitekt.plugin.koin.inject
 import com.runetopic.xlitekt.util.ext.packInterface
 
 /**
@@ -20,110 +17,52 @@ import com.runetopic.xlitekt.util.ext.packInterface
 class InterfaceManager(
     private val player: Player
 ) {
-    private val open = mutableMapOf<Int, Int>()
-    private val eventBus by inject<EventBus>()
+    var currentInterfaceLayout = InterfaceLayout.FIXED
 
-    var currentLayout = Layout.FIXED
+    private val open = mutableListOf<UserInterface>()
 
     fun login() {
+        openTop(currentInterfaceLayout.interfaceId)
+        gameInterfaces.forEach { open += it }
         player.client.writePacket(VarpSmallPacket(1737, -1)) // TODO TEMP until i write a var system
-        sendLayout()
         message("Welcome to Xlitekt.")
     }
 
-    private fun sendLayout() {
-        openTop(currentLayout.interfaceId)
-        InterfaceInfo.values().forEach {
-            val interfaceId = it.interfaceId
-            if (interfaceId == -1) return@forEach
-            val componentId = it.childIdForLayout(currentLayout)
-            if (componentId == -1) return@forEach
-            openSub(it.interfaceId, componentId, true)
-        }
+    private fun openTop(id: Int) = player.client.writePacket(IfOpenTopPacket(interfaceId = id))
+
+    operator fun MutableCollection<in UserInterface>.plusAssign(element: UserInterface) {
+        this.add(element)
+        openSub(element)
     }
 
-    fun switchLayout(mode: Layout) {
-        if (mode == currentLayout) return
+    private fun openSub(element: UserInterface) {
+        val interfaceInfo = interfaceInfo(element.name)
+        val childId = interfaceInfo.destination.childIdForLayout(currentInterfaceLayout)
 
-        closeTop(currentLayout.interfaceId)
+        interfaceListeners[element::class]?.invoke(element)
 
-        val previousLayout = this.currentLayout
-        this.currentLayout = mode
-
-        openTop(currentLayout.interfaceId)
-
-        InterfaceInfo.values().forEach {
-            val fromInterfaceId = previousLayout.interfaceId
-            val fromChildId = it.childIdForLayout(previousLayout)
-            if (fromChildId == -1) return@forEach
-            val toInterfaceId = mode.interfaceId
-            val toChildId = it.childIdForLayout(mode)
-            if (toChildId == -1) return@forEach
-            if (moveSub(fromInterfaceId, fromChildId, toInterfaceId, toChildId)) open.remove(fromInterfaceId)
-        }
-    }
-
-    private fun moveSub(fromInterfaceId: Int, fromChildId: Int, toInterfaceId: Int, toChildId: Int): Boolean {
-        val packedFromInterface = fromInterfaceId.packInterface(fromChildId)
-        val packedToInterface = toInterfaceId.packInterface(toChildId)
-        if (open.containsKey(packedFromInterface)) {
-            open(packedToInterface, open[packedFromInterface]!!)
-            player.client.writePacket(IfMoveSubPacket(packedFromInterface, packedToInterface))
-            return true
-        }
-        return false
-    }
-
-    private fun open(packed: Int, interfaceId: Int): Boolean {
-        if (open.containsKey(packed)) return false
-        open[packed] = interfaceId
-        return true
-    }
-
-    private fun openTop(interfaceId: Int) {
-        val packed = interfaceId.packInterface()
-        if (open(packed, interfaceId)) {
-            eventBus.notify(IfEvent.IfOpenEvent(player, interfaceId, 0, true))
-            player.client.writePacket(IfOpenTopPacket(interfaceId))
-        }
-    }
-
-    fun closeTop(interfaceId: Int) {
-        val packed = interfaceId.packInterface()
-        if (open.containsKey(packed)) {
-            closeSub(packed)
-        }
-    }
-
-    private fun openSub(interfaceId: Int, childId: Int, alwaysOpen: Boolean) {
-        val packed = currentLayout.interfaceId.packInterface(childId)
-        if (open(packed, interfaceId)) {
-            eventBus.notify(
-                IfEvent.IfOpenEvent(
-                    player,
-                    interfaceId,
-                    childId,
-                    alwaysOpen
-                )
+        element.onOpenEvent?.invoke(
+            UserInterfaceEvent.OpenEvent(
+                player = player,
+                interfaceId = interfaceInfo.id,
+                childId = childId
             )
-            player.client.writePacket(
-                IfOpenSubPacket(
-                    interfaceId,
-                    packed,
-                    alwaysOpen
-                )
-            )
-        }
-    }
+        )
 
-    private fun closeSub(packedInterface: Int) {
-        open.remove(packedInterface)
-        player.client.writePacket(IfCloseSubPacket(packedInterface))
+        player.client.writePacket(
+            IfOpenSubPacket(
+                interfaceId = interfaceInfo.id,
+                toPackedInterface = currentInterfaceLayout.interfaceId.packInterface(childId),
+                alwaysOpen = true
+            )
+        )
     }
 
     fun message(message: String) {
         player.client.writePacket(MessageGamePacket(0, message, false))
     }
+
+    fun runClientScript(scriptId: Int, parameters: List<Any>) = player.client.writePacket(RunClientScriptPacket(scriptId, parameters))
 
     fun interfaceEvents(interfaceId: Int, childId: Int, fromSlot: Int, toSlot: Int, events: InterfaceEvent) {
         player.client.writePacket(
@@ -137,5 +76,25 @@ class InterfaceManager(
         )
     }
 
-    fun clientScript(scriptId: Int, parameters: List<Any>) = player.client.writePacket(RunClientScriptPacket(scriptId, parameters))
+    private companion object {
+        val gameInterfaces = setOf(
+            UserInterface.AccountManagement,
+            UserInterface.Settings,
+            UserInterface.Inventory,
+            UserInterface.MiniMap,
+            UserInterface.ChatBox,
+            UserInterface.Logout,
+            UserInterface.Emotes,
+            UserInterface.Magic,
+            UserInterface.MusicPlayer,
+            UserInterface.Skills,
+            UserInterface.WornEquipment,
+            UserInterface.Friends,
+            UserInterface.Prayer,
+            UserInterface.CombatOptions,
+            UserInterface.CharacterSummary,
+            UserInterface.UnknownOverlay,
+            UserInterface.ChatChannel
+        )
+    }
 }

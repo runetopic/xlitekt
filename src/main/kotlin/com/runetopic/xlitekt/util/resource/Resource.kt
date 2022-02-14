@@ -10,7 +10,7 @@ class Sequences(list: Map<String, Sequence>) : HashMap<String, Sequence>(list)
 class SpotAnimations(list: Map<String, SpotAnimation>) : HashMap<String, SpotAnimation>(list)
 class Varps(list: Map<String, VarPlayer>) : HashMap<String, VarPlayer>(list)
 class VarBits(list: Map<String, VarBit>) : HashMap<String, VarBit>(list)
-class IfInfoMap(list: Map<String, IfInfo>) : HashMap<String, IfInfo>(list)
+class InterfaceInfoMap(list: Map<String, InterfaceInfo>) : HashMap<String, InterfaceInfo>(list)
 
 object Resource {
     fun mapSquaresResource(): MapSquares = MapSquares(loadResource("game.resources.xteas"))
@@ -18,7 +18,7 @@ object Resource {
     fun spotAnimationsResource(): SpotAnimations = SpotAnimations(loadResource<List<SpotAnimation>>("game.resources.spot_animations").associateBy(SpotAnimation::name))
     fun varpsResource(): Varps = Varps(loadResource<List<VarPlayer>>("game.resources.varps").associateBy(VarPlayer::name))
     fun varBitsResource(): VarBits = VarBits(loadResource<List<VarBit>>("game.resources.varbits").associateBy(VarBit::name))
-    fun ifInfoResource(): IfInfoMap = IfInfoMap(loadResource<List<IfInfo>>("game.resources.if_info").associateBy(IfInfo::name))
+    fun interaceInfoResource(): InterfaceInfoMap = InterfaceInfoMap(loadResource<List<InterfaceInfo>>("game.resources.interface_info").associateBy(InterfaceInfo::name))
 
     private inline fun <reified T> loadResource(path: String): T =
         Json.decodeFromStream(Resource::class.java.getResourceAsStream(inject<ApplicationEnvironment>().value.config.property(path).getString())!!)

@@ -1,7 +1,7 @@
 package com.runetopic.xlitekt.network.packet.handler
 
 import com.runetopic.xlitekt.game.actor.player.Player
-import com.runetopic.xlitekt.game.ui.Layout
+import com.runetopic.xlitekt.game.ui.InterfaceLayout
 import com.runetopic.xlitekt.network.packet.DisplayModePacket
 
 /**
@@ -10,8 +10,8 @@ import com.runetopic.xlitekt.network.packet.DisplayModePacket
 class DisplayModePacketHandler : PacketHandler<DisplayModePacket> {
 
     override suspend fun handlePacket(player: Player, packet: DisplayModePacket) {
-        val layout = Layout.values().find { it.id == packet.displayMode }
+        val interfaceLayout = InterfaceLayout.values().find { it.id == packet.displayMode }
             ?: throw IllegalStateException("Unhandled display mode sent from client. Mode=${packet.displayMode} Width=${packet.width} Height=${packet.height}")
-        player.interfaceManager.switchLayout(layout)
+//        player.interfaceManager.switchLayout(layout)
     }
 }

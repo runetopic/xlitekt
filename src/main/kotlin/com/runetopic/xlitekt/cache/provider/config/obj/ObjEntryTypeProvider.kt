@@ -11,14 +11,14 @@ import java.lang.IllegalArgumentException
 /**
  * @author Jordan Abraham
  */
-class ObjEntryTypeProvider : EntryTypeProvider<ObjEntryType>() {
+class ObjEntryTypeProvider : EntryTypeProvider<Int, ObjEntryType>() {
 
-    override fun load(): Set<ObjEntryType> = store
+    override fun load(): Map<Int, ObjEntryType> = store
         .index(CONFIG_INDEX)
         .group(OBJ_CONFIG)
         .files()
         .map { ByteReadPacket(it.data).loadEntryType(ObjEntryType(it.id)) }
-        .toHashSet()
+        .associateBy { it.id }
 
     override tailrec fun ByteReadPacket.loadEntryType(type: ObjEntryType): ObjEntryType {
         when (val opcode = readUByte().toInt()) {

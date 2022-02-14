@@ -14,9 +14,9 @@ import io.ktor.utils.io.core.readUShort
 /**
  * @author Jordan Abraham
  */
-class InterfaceEntryTypeProvider : EntryTypeProvider<InterfaceEntryType>() {
+class InterfaceEntryTypeProvider : EntryTypeProvider<Int, InterfaceEntryType>() {
 
-    override fun load(): Set<InterfaceEntryType> = store
+    override fun load(): Map<Int, InterfaceEntryType> = store
         .index(INTERFACE_INDEX)
         .groups()
         .flatMap { group ->
@@ -24,7 +24,7 @@ class InterfaceEntryTypeProvider : EntryTypeProvider<InterfaceEntryType>() {
                 ByteReadPacket(it.data).loadEntryType(InterfaceEntryType(group.id.packInterface(it.id), isModern = it.data[0].toInt() == -1))
             }
         }
-        .toHashSet()
+        .associateBy { it.id }
 
     override fun ByteReadPacket.loadEntryType(type: InterfaceEntryType): InterfaceEntryType = type.apply {
         if (isModern) decodeModern(type) else decodeLegacy(type)

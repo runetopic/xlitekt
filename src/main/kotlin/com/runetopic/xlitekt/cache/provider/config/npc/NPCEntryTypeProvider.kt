@@ -1,6 +1,8 @@
 package com.runetopic.xlitekt.cache.provider.config.npc
 
 import com.runetopic.xlitekt.cache.provider.EntryTypeProvider
+import com.runetopic.xlitekt.cache.provider.EntryTypeProvider.Companion.CONFIG_INDEX
+import com.runetopic.xlitekt.cache.provider.EntryTypeProvider.Companion.NPC_CONFIG
 import com.runetopic.xlitekt.util.ext.readStringCp1252NullTerminated
 import io.ktor.utils.io.core.ByteReadPacket
 import io.ktor.utils.io.core.readUByte
@@ -10,14 +12,14 @@ import java.lang.IllegalArgumentException
 /**
  * @author Jordan Abraham
  */
-class NPCEntryTypeProvider : EntryTypeProvider<NPCEntryType>() {
+class NPCEntryTypeProvider : EntryTypeProvider<Int, NPCEntryType>() {
 
-    override fun load(): Set<NPCEntryType> = store
+    override fun load(): Map<Int, NPCEntryType> = store
         .index(CONFIG_INDEX)
         .group(NPC_CONFIG)
         .files()
         .map { ByteReadPacket(it.data).loadEntryType(NPCEntryType(it.id)) }
-        .toHashSet()
+        .associateBy { it.id }
 
     override tailrec fun ByteReadPacket.loadEntryType(type: NPCEntryType): NPCEntryType {
         when (val opcode = readUByte().toInt()) {

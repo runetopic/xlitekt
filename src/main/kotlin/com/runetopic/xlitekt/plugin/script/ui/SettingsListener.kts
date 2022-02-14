@@ -1,9 +1,9 @@
 package com.runetopic.xlitekt.plugin.script.ui
 
 import com.runetopic.xlitekt.game.ui.InterfaceEvent.CLICK_OPTION_1
-import com.runetopic.xlitekt.game.ui.InterfaceId
-import com.runetopic.xlitekt.game.ui.InterfaceListener.Companion.buildInterfaceListener
-import com.runetopic.xlitekt.game.ui.Layout
+import com.runetopic.xlitekt.game.ui.InterfaceMapping.buildInterfaceListener
+import com.runetopic.xlitekt.game.ui.InterfaceLayout
+import com.runetopic.xlitekt.game.ui.UserInterface
 import com.runetopic.xlitekt.plugin.koin.inject
 import com.runetopic.xlitekt.util.resource.VarBits
 
@@ -11,7 +11,7 @@ private val layoutDropDownChildId = 84
 private val clientModeCS2Id = 3998
 private val varBits by inject<VarBits>()
 
-buildInterfaceListener(InterfaceId.SETTINGS) {
+buildInterfaceListener<UserInterface.Settings> {
     onOpen {
         event(childId = 41, slots = 0..21, events = CLICK_OPTION_1)
         event(childId = 55, slots = 0..21, events = CLICK_OPTION_1)
@@ -24,13 +24,13 @@ buildInterfaceListener(InterfaceId.SETTINGS) {
     }
 
     onClick(layoutDropDownChildId) {
-        val layout = enumValues<Layout>().find { it.id == slotId - 1 } ?: return@onClick
+        val interfaceLayout = enumValues<InterfaceLayout>().find { it.id == slotId - 1 } ?: return@onClick
         val sideStonesArrangementVarBit = varBits["side_stones_arrangement"] ?: return@onClick
 
-        when (layout) {
-            Layout.FIXED, Layout.RESIZABLE -> runClientScript(clientModeCS2Id, listOf(layout.id))
-            else -> sendVarBit(sideStonesArrangementVarBit.id, 1) // TODO set the resizable mode on login based on the varbit set.
+        when (interfaceLayout) {
+            InterfaceLayout.FIXED, InterfaceLayout.RESIZABLE -> player.interfaceManager.runClientScript(clientModeCS2Id, listOf(interfaceLayout.id))
+             // TODO set the resizable mode on login based on the varbit set.
         }
-        player.interfaceManager.switchLayout(layout)
+//        player.interfaceManager.switchLayout(layout) // TODO Redo this since ive rebuilt the system
     }
 }
