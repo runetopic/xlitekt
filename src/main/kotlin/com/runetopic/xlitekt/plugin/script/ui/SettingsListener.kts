@@ -1,8 +1,8 @@
 package com.runetopic.xlitekt.plugin.script.ui
 
 import com.runetopic.xlitekt.game.ui.InterfaceEvent.CLICK_OPTION_1
-import com.runetopic.xlitekt.game.ui.InterfaceMapping.buildInterfaceListener
 import com.runetopic.xlitekt.game.ui.InterfaceLayout
+import com.runetopic.xlitekt.game.ui.InterfaceMapping.buildInterfaceListener
 import com.runetopic.xlitekt.game.ui.UserInterface
 import com.runetopic.xlitekt.plugin.koin.inject
 import com.runetopic.xlitekt.util.resource.VarBits
@@ -29,7 +29,7 @@ buildInterfaceListener<UserInterface.Settings> {
 
         when (interfaceLayout) {
             InterfaceLayout.FIXED, InterfaceLayout.RESIZABLE -> player.interfaceManager.runClientScript(clientModeCS2Id, listOf(interfaceLayout.id))
-             // TODO set the resizable mode on login based on the varbit set.
+            // TODO set the resizable mode on login based on the varbit set.
         }
 //        player.interfaceManager.switchLayout(layout) // TODO Redo this since ive rebuilt the system
     }

@@ -4,7 +4,7 @@ import com.github.michaelbull.logging.InlineLogger
 import com.runetopic.xlitekt.game.event.EventBus
 import com.runetopic.xlitekt.game.world.World
 import com.runetopic.xlitekt.plugin.koin.inject
-import com.runetopic.xlitekt.util.resource.Resource.interaceInfoResource
+import com.runetopic.xlitekt.util.resource.Resource.interfaceInfoResource
 import com.runetopic.xlitekt.util.resource.Resource.mapSquaresResource
 import com.runetopic.xlitekt.util.resource.Resource.sequencesResource
 import com.runetopic.xlitekt.util.resource.Resource.spotAnimationsResource
@@ -21,7 +21,7 @@ val gameModule = module(createdAtStart = true) {
     single { spotAnimationsResource() }
     single { varpsResource() }
     single { varBitsResource() }
-    single { interaceInfoResource() }
+    single { interfaceInfoResource() }
     single { World() }
     single { Game() }
     single { EventBus() }

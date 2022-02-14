@@ -18,7 +18,7 @@ object Resource {
     fun spotAnimationsResource(): SpotAnimations = SpotAnimations(loadResource<List<SpotAnimation>>("game.resources.spot_animations").associateBy(SpotAnimation::name))
     fun varpsResource(): Varps = Varps(loadResource<List<VarPlayer>>("game.resources.varps").associateBy(VarPlayer::name))
     fun varBitsResource(): VarBits = VarBits(loadResource<List<VarBit>>("game.resources.varbits").associateBy(VarBit::name))
-    fun interaceInfoResource(): InterfaceInfoMap = InterfaceInfoMap(loadResource<List<InterfaceInfo>>("game.resources.interface_info").associateBy(InterfaceInfo::name))
+    fun interfaceInfoResource(): InterfaceInfoMap = InterfaceInfoMap(loadResource<List<InterfaceInfo>>("game.resources.interface_info").associateBy(InterfaceInfo::name))
 
     private inline fun <reified T> loadResource(path: String): T =
         Json.decodeFromStream(Resource::class.java.getResourceAsStream(inject<ApplicationEnvironment>().value.config.property(path).getString())!!)
