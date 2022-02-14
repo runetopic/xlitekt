@@ -39,11 +39,4 @@ object InterfaceMapping {
     inline fun <reified T : UserInterface> buildInterfaceListener(noinline function: UserInterfaceListener.() -> Unit) {
         interfaceListeners[T::class] = function
     }
-
-    fun test() {
-        buildInterfaceListener<UserInterface.Settings> {
-            onClick(84) {
-            }
-        }
-    }
 }
