@@ -27,7 +27,7 @@ class Player(
     val interfaceManager = InterfaceManager(this)
     val varsManager = VarsManager(this)
 
-    fun login() {
+    suspend fun login() {
         this.previousTile = this.tile
         client.writePacket(RebuildNormalPacket(viewport, tile, true))
         refreshAppearance()

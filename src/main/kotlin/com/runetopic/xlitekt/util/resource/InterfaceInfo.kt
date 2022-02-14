@@ -16,15 +16,13 @@ data class InterfaceInfo(
     data class IfDestination(
         val fixedChildId: Int,
         val resizableChildId: Int,
-        val resizableModernChildId: Int,
-        val fullScreenChildId: Int = -1
+        val resizableModernChildId: Int
     ) {
         fun childIdForLayout(currentInterfaceLayout: InterfaceLayout): Int {
             return when (currentInterfaceLayout) {
                 InterfaceLayout.FIXED -> fixedChildId
                 InterfaceLayout.RESIZABLE -> resizableChildId
                 InterfaceLayout.RESIZABLE_MODERN -> resizableModernChildId
-                InterfaceLayout.FULL_SCREEN -> fullScreenChildId
             }
         }
     }

@@ -12,6 +12,6 @@ class DisplayModePacketHandler : PacketHandler<DisplayModePacket> {
     override suspend fun handlePacket(player: Player, packet: DisplayModePacket) {
         val interfaceLayout = InterfaceLayout.values().find { it.id == packet.displayMode }
             ?: throw IllegalStateException("Unhandled display mode sent from client. Mode=${packet.displayMode} Width=${packet.width} Height=${packet.height}")
-//        player.interfaceManager.switchLayout(layout)
+        player.interfaceManager.switchLayout(interfaceLayout)
     }
 }

@@ -1,5 +1,7 @@
 package com.runetopic.xlitekt.game.ui
 
+import kotlinx.coroutines.runBlocking
+
 /**
  * @author Tyler Telis
  */
@@ -35,13 +37,15 @@ class UserInterfaceListener {
         this.actions[event.action]?.invoke(event)
     }
 
-    fun UserInterfaceEvent.OpenEvent.event(childId: Int, slots: IntRange, events: InterfaceEvent) = player.interfaceManager.apply {
-        interfaceEvents(
-            interfaceId,
-            childId = childId,
-            fromSlot = slots.first,
-            toSlot = slots.last,
-            events = events
-        )
+    fun UserInterfaceEvent.OpenEvent.event(childId: Int, slots: IntRange, events: InterfaceEvent) = runBlocking {
+        player.interfaceManager.apply {
+            interfaceEvents(
+                interfaceId,
+                childId = childId,
+                fromSlot = slots.first,
+                toSlot = slots.last,
+                events = events
+            )
+        }
     }
 }

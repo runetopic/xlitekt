@@ -3,6 +3,7 @@ package com.runetopic.xlitekt.game.ui
 import com.runetopic.xlitekt.game.actor.player.Player
 import com.runetopic.xlitekt.game.ui.InterfaceMapping.interfaceInfo
 import com.runetopic.xlitekt.game.ui.InterfaceMapping.interfaceListener
+import com.runetopic.xlitekt.network.packet.IfMoveSubPacket
 import com.runetopic.xlitekt.network.packet.IfOpenSubPacket
 import com.runetopic.xlitekt.network.packet.IfOpenTopPacket
 import com.runetopic.xlitekt.network.packet.IfSetEventsPacket
@@ -10,6 +11,7 @@ import com.runetopic.xlitekt.network.packet.MessageGamePacket
 import com.runetopic.xlitekt.network.packet.RunClientScriptPacket
 import com.runetopic.xlitekt.network.packet.VarpSmallPacket
 import com.runetopic.xlitekt.util.ext.packInterface
+import kotlinx.coroutines.runBlocking
 
 /**
  * @author Tyler Telis
@@ -20,16 +22,16 @@ class InterfaceManager(
     var currentInterfaceLayout = InterfaceLayout.FIXED
     private val interfaces = mutableListOf<UserInterface>()
 
-    fun login() {
+    suspend fun login() {
         openTop(currentInterfaceLayout.interfaceId)
-        gameInterfaces.forEach(::openInterface)
+        gameInterfaces.forEach { openInterface(it) }
         player.client.writePacket(VarpSmallPacket(1737, -1)) // TODO TEMP until i write a var system
         message("Welcome to Xlitekt.")
     }
 
     private fun openTop(id: Int) = player.client.writePacket(IfOpenTopPacket(interfaceId = id))
 
-    fun openInterface(userInterface: UserInterface) {
+    fun openInterface(userInterface: UserInterface) = runBlocking {
         interfaces += userInterface
 
         val interfaceInfo = interfaceInfo(userInterface.name)
@@ -52,13 +54,43 @@ class InterfaceManager(
         )
     }
 
-    fun message(message: String) {
+    fun switchLayout(toLayout: InterfaceLayout) {
+        if (toLayout == currentInterfaceLayout) return
+
+        openTop(toLayout.interfaceId)
+        interfaces.clear()
+        gameInterfaces.forEach { moveSub(it, toLayout) }
+        currentInterfaceLayout = toLayout
+    }
+
+    private fun moveSub(userInterface: UserInterface, toLayout: InterfaceLayout) {
+        val interfaceId = userInterface.interfaceInfo.id
+        val fromChildId = userInterface.interfaceInfo.destination.childIdForLayout(currentInterfaceLayout)
+        val toChildId = userInterface.interfaceInfo.destination.childIdForLayout(toLayout)
+        player.client.writePacket(
+            IfMoveSubPacket(
+                fromPackedInterface = currentInterfaceLayout.interfaceId.packInterface(fromChildId),
+                toPackedInterface = toLayout.interfaceId.packInterface(toChildId)
+            )
+        )
+        interfaceListener(userInterface)?.open(
+            UserInterfaceEvent.OpenEvent(
+                player = player,
+                interfaceId = interfaceId,
+                childId = toChildId
+            )
+        )
+    }
+
+    suspend fun message(message: String) {
         player.client.writePacket(MessageGamePacket(0, message, false))
     }
 
-    fun runClientScript(scriptId: Int, parameters: List<Any>) = player.client.writePacket(RunClientScriptPacket(scriptId, parameters))
+    fun runClientScript(scriptId: Int, parameters: List<Any>) = runBlocking {
+        player.client.writePacket(RunClientScriptPacket(scriptId, parameters))
+    }
 
-    fun interfaceEvents(interfaceId: Int, childId: Int, fromSlot: Int, toSlot: Int, events: InterfaceEvent) {
+    fun interfaceEvents(interfaceId: Int, childId: Int, fromSlot: Int, toSlot: Int, events: InterfaceEvent) = runBlocking {
         player.client.writePacket(
             IfSetEventsPacket(
                 interfaceId,
