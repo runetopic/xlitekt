@@ -20,3 +20,6 @@ sealed class UserInterfaceEvent {
         val action: String
     ) : UserInterfaceEvent()
 }
+
+typealias OnClickEvent = UserInterfaceEvent.ButtonClickEvent.() -> Unit
+typealias OnOpenEvent = UserInterfaceEvent.OpenEvent.() -> Unit

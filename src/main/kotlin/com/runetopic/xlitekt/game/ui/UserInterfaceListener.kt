@@ -1,18 +1,15 @@
 package com.runetopic.xlitekt.game.ui
 
-typealias OpenEvent = UserInterfaceEvent.OpenEvent.() -> Unit
-typealias ClickEvent = UserInterfaceEvent.ButtonClickEvent.() -> Unit
-
 /**
  * @author Tyler Telis
  */
 class UserInterfaceListener {
-    private var onOpenEvent: OpenEvent? = null
-    private var onClickEvent: ClickEvent? = null
-    private val childIds = mutableMapOf<Int, ClickEvent>()
-    private val actions = mutableMapOf<String, ClickEvent>()
+    private var onOpenEvent: OnOpenEvent? = null
+    private var onClickEvent: OnClickEvent? = null
+    private val childIds = mutableMapOf<Int, OnClickEvent>()
+    private val actions = mutableMapOf<String, OnClickEvent>()
 
-    fun onOpen(onOpen: OpenEvent) {
+    fun onOpen(onOpen: OnOpenEvent) {
         this.onOpenEvent = onOpen
     }
 
@@ -20,15 +17,15 @@ class UserInterfaceListener {
         this.onOpenEvent?.invoke(openEvent)
     }
 
-    fun onClick(onClickEvent: ClickEvent) {
+    fun onClick(onClickEvent: OnClickEvent) {
         this.onClickEvent = onClickEvent
     }
 
-    fun onClick(childId: Int, function: ClickEvent) {
+    fun onClick(childId: Int, function: OnClickEvent) {
         this.childIds[childId] = function
     }
 
-    fun onClick(action: String, function: ClickEvent) {
+    fun onClick(action: String, function: OnClickEvent) {
         this.actions[action] = function
     }
 
