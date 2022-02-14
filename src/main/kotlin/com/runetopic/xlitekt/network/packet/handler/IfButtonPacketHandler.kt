@@ -5,7 +5,7 @@ import com.runetopic.xlitekt.cache.Cache.entryType
 import com.runetopic.xlitekt.cache.provider.ui.InterfaceEntryType
 import com.runetopic.xlitekt.game.actor.player.Player
 import com.runetopic.xlitekt.game.ui.InterfaceMapping.interfaceListener
-import com.runetopic.xlitekt.game.ui.InterfaceMapping.userInterfaces
+import com.runetopic.xlitekt.game.ui.InterfaceMapping.userInterface
 import com.runetopic.xlitekt.game.ui.UserInterfaceEvent
 import com.runetopic.xlitekt.network.packet.IfButtonPacket
 
@@ -34,7 +34,7 @@ class IfButtonPacketHandler : PacketHandler<IfButtonPacket> {
             itemId = itemId,
             action = entry?.actions?.firstOrNull() ?: "*"
         )
-        val rsInterface = userInterfaces[interfaceId] ?: return logger.debug { "User interface is not registered. Event = $clickEvent" }
+        val rsInterface = userInterface(interfaceId) ?: return logger.debug { "User interface is not registered. Event = $clickEvent" }
         interfaceListener(rsInterface)?.click(clickEvent) ?: return logger.debug { "User interface does not have an associated listener. Event = $clickEvent" }
     }
 }

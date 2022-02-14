@@ -18,7 +18,7 @@ class InterfaceManager(
     private val player: Player
 ) {
     var currentInterfaceLayout = InterfaceLayout.FIXED
-    val interfaces = mutableListOf<UserInterface>()
+    private val interfaces = mutableListOf<UserInterface>()
 
     fun login() {
         openTop(currentInterfaceLayout.interfaceId)

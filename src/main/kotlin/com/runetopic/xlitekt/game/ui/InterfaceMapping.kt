@@ -11,7 +11,7 @@ import kotlin.reflect.KClass
 object InterfaceMapping {
     private val interfaceInfoMap by inject<InterfaceInfoMap>()
 
-    val userInterfaces = listOf(
+    private val userInterfaces = listOf(
         UserInterface.AccountManagement,
         UserInterface.Settings,
         UserInterface.Inventory,
@@ -43,5 +43,6 @@ object InterfaceMapping {
         function.invoke(listener)
     }
 
+    fun userInterface(id: Int): UserInterface? = userInterfaces[id]
     fun interfaceListener(element: UserInterface): UserInterfaceListener? = interfaceListeners[element::class]
 }
