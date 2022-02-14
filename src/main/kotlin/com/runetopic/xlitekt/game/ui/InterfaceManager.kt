@@ -31,7 +31,7 @@ class InterfaceManager(
 
     private fun openTop(id: Int) = player.client.writePacket(IfOpenTopPacket(interfaceId = id))
 
-    fun openInterface(userInterface: UserInterface) = runBlocking {
+    fun openInterface(userInterface: UserInterface) {
         interfaces += userInterface
 
         val interfaceInfo = interfaceInfo(userInterface.name)
