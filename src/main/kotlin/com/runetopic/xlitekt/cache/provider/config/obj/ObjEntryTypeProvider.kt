@@ -18,7 +18,7 @@ class ObjEntryTypeProvider : EntryTypeProvider<Int, ObjEntryType>() {
         .group(OBJ_CONFIG)
         .files()
         .map { ByteReadPacket(it.data).loadEntryType(ObjEntryType(it.id)) }
-        .associateBy { it.id }
+        .associateBy(ObjEntryType::id)
 
     override tailrec fun ByteReadPacket.loadEntryType(type: ObjEntryType): ObjEntryType {
         when (val opcode = readUByte().toInt()) {

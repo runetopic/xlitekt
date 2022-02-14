@@ -3,7 +3,7 @@ package com.runetopic.xlitekt.game.ui
 import com.runetopic.xlitekt.game.ui.InterfaceMapping.interfaceInfo
 
 sealed class UserInterface(val name: String) : UserInterfaceListener() {
-    val id by lazy { interfaceInfo(name).id }
+    val id by lazy(interfaceInfo(name)::id)
 
     object AccountManagement : UserInterface("account_management")
     object Settings : UserInterface("settings")

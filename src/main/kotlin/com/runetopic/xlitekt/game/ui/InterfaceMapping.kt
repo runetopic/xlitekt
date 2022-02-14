@@ -29,7 +29,7 @@ object InterfaceMapping {
         UserInterface.CharacterSummary,
         UserInterface.UnknownOverlay,
         UserInterface.ChatChannel
-    ).associateBy { it.id }
+    ).associateBy(UserInterface::id)
 
     fun interfaceInfo(name: String): InterfaceInfo = interfaceInfoMap[name] ?: throw RuntimeException("Interface $name is not currently registered in the system.")
 

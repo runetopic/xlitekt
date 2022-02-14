@@ -24,7 +24,7 @@ class InterfaceEntryTypeProvider : EntryTypeProvider<Int, InterfaceEntryType>() 
                 ByteReadPacket(it.data).loadEntryType(InterfaceEntryType(group.id.packInterface(it.id), isModern = it.data[0].toInt() == -1))
             }
         }
-        .associateBy { it.id }
+        .associateBy(InterfaceEntryType::id)
 
     override fun ByteReadPacket.loadEntryType(type: InterfaceEntryType): InterfaceEntryType = type.apply {
         if (isModern) decodeModern(type) else decodeLegacy(type)

@@ -19,7 +19,7 @@ class NPCEntryTypeProvider : EntryTypeProvider<Int, NPCEntryType>() {
         .group(NPC_CONFIG)
         .files()
         .map { ByteReadPacket(it.data).loadEntryType(NPCEntryType(it.id)) }
-        .associateBy { it.id }
+        .associateBy(NPCEntryType::id)
 
     override tailrec fun ByteReadPacket.loadEntryType(type: NPCEntryType): NPCEntryType {
         when (val opcode = readUByte().toInt()) {

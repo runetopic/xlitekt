@@ -4,8 +4,8 @@ import com.github.michaelbull.logging.InlineLogger
 import com.runetopic.xlitekt.cache.Cache.entryType
 import com.runetopic.xlitekt.cache.provider.ui.InterfaceEntryType
 import com.runetopic.xlitekt.game.actor.player.Player
-import com.runetopic.xlitekt.game.ui.UserInterfaceEvent
 import com.runetopic.xlitekt.game.ui.InterfaceMapping.userInterfaces
+import com.runetopic.xlitekt.game.ui.UserInterfaceEvent
 import com.runetopic.xlitekt.network.packet.IfButtonPacket
 
 /**

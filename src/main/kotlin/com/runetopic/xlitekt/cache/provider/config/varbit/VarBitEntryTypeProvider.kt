@@ -15,7 +15,7 @@ class VarBitEntryTypeProvider : EntryTypeProvider<Int, VarBitEntryType>() {
         .group(VARBIT_CONFIG)
         .files()
         .map { ByteReadPacket(it.data).loadEntryType(VarBitEntryType(it.id)) }
-        .associateBy { it.id }
+        .associateBy(VarBitEntryType::id)
 
     override tailrec fun ByteReadPacket.loadEntryType(type: VarBitEntryType): VarBitEntryType {
         when (val opcode = readUByte().toInt()) {
