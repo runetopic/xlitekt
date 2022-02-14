@@ -1,28 +1,41 @@
 package com.runetopic.xlitekt.game.ui
 
+typealias OpenEvent = UserInterfaceEvent.OpenEvent.() -> Unit
+typealias ClickEvent = UserInterfaceEvent.ButtonClickEvent.() -> Unit
+
 /**
  * @author Tyler Telis
  */
-abstract class UserInterfaceListener {
-    private val components = mutableMapOf<Int, UserInterfaceEvent.ButtonClickEvent.() -> Unit>()
-    var onOpenEvent: (UserInterfaceEvent.OpenEvent.() -> Unit)? = null
-    var onClickEvent: (UserInterfaceEvent.ButtonClickEvent.() -> Unit)? = null
+class UserInterfaceListener {
+    private var onOpenEvent: OpenEvent? = null
+    private var onClickEvent: ClickEvent? = null
+    private val childIds = mutableMapOf<Int, ClickEvent>()
+    private val actions = mutableMapOf<String, ClickEvent>()
 
-    fun onOpen(function: (UserInterfaceEvent.OpenEvent).() -> Unit) {
-        this.onOpenEvent = function
+    fun onOpen(onOpen: OpenEvent) {
+        this.onOpenEvent = onOpen
     }
 
-    fun onClick(onClickEvent: (UserInterfaceEvent.ButtonClickEvent).() -> Unit) {
+    fun open(openEvent: UserInterfaceEvent.OpenEvent) {
+        this.onOpenEvent?.invoke(openEvent)
+    }
+
+    fun onClick(onClickEvent: ClickEvent) {
         this.onClickEvent = onClickEvent
     }
 
-    fun onClick(childId: Int, function: (UserInterfaceEvent.ButtonClickEvent).() -> Unit) {
-        components[childId] = function
+    fun onClick(childId: Int, function: ClickEvent) {
+        this.childIds[childId] = function
+    }
+
+    fun onClick(action: String, function: ClickEvent) {
+        this.actions[action] = function
     }
 
     fun click(event: UserInterfaceEvent.ButtonClickEvent) {
-        onClickEvent?.invoke(event)
-        components[event.childId]?.invoke(event)
+        this.onClickEvent?.invoke(event)
+        this.childIds[event.childId]?.invoke(event)
+        this.actions[event.action]?.invoke(event)
     }
 
     fun UserInterfaceEvent.OpenEvent.event(childId: Int, slots: IntRange, events: InterfaceEvent) = player.interfaceManager.apply {

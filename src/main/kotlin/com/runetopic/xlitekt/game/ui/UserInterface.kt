@@ -2,8 +2,8 @@ package com.runetopic.xlitekt.game.ui
 
 import com.runetopic.xlitekt.game.ui.InterfaceMapping.interfaceInfo
 
-sealed class UserInterface(val name: String) : UserInterfaceListener() {
-    val id by lazy(interfaceInfo(name)::id)
+sealed class UserInterface(val name: String) {
+    val interfaceInfo by lazy { interfaceInfo(name) }
 
     object AccountManagement : UserInterface("account_management")
     object Settings : UserInterface("settings")
@@ -16,6 +16,7 @@ sealed class UserInterface(val name: String) : UserInterfaceListener() {
     object MusicPlayer : UserInterface("music_player")
     object Skills : UserInterface("skills")
     object WornEquipment : UserInterface("worn_equipment")
+    object EquipmentBonuses : UserInterface("equipment_bonuses")
     object Friends : UserInterface("friends")
     object Prayer : UserInterface("prayer")
     object CombatOptions : UserInterface("combat_options")
