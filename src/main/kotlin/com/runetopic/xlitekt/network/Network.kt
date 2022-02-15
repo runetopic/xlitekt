@@ -14,7 +14,6 @@ import io.ktor.network.selector.ActorSelectorManager
 import io.ktor.network.sockets.aSocket
 import io.ktor.network.sockets.openReadChannel
 import io.ktor.network.sockets.openWriteChannel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.asCoroutineDispatcher
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -54,7 +53,7 @@ class Network {
                 socket.openReadChannel(),
                 socket.openWriteChannel()
             )
-            launch(Dispatchers.IO) { client.start() }
+            launch { client.start() }
         }
     }
 

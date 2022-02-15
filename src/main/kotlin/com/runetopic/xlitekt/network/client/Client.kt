@@ -72,7 +72,7 @@ class Client(
                     val readEvent = it.read(this) ?: return disconnect("Read event returned null.")
                     val writeEvent = handler.handleEvent(this, readEvent)
                     if (!it.instanceOf(GameEventPipeline::class) && writeEvent == null) return disconnect("Event handler returned null for $it.")
-                    if (!it.instanceOf(GameEventPipeline::class)) it.write(this@Client, writeEvent!!)
+                    if (!it.instanceOf(GameEventPipeline::class)) it.write(this, writeEvent!!)
                 }
             } catch (exception: Exception) {
                 when {
@@ -94,10 +94,14 @@ class Client(
         writeByte(response.toByte())
     }.flush()
 
-    fun writePacket(message: Packet) = runBlocking(Dispatchers.IO) {
-        val assembler = assemblers[message::class] ?: return@runBlocking disconnect("Unhandled message found when trying to write packet. Message was $message.")
+    fun writePacket(packet: Packet) = runBlocking(Dispatchers.IO) {
+        write(packet)
+    }
+
+    suspend fun write(packet: Packet) {
+        val assembler = assemblers[packet::class] ?: return disconnect("Unhandled message found when trying to write packet. Message was $packet.")
         try {
-            eventPipeline.write(this@Client, WriteEvent.GameWriteEvent(assembler.opcode, assembler.size, assembler.assemblePacket(message)))
+            eventPipeline.write(this@Client, WriteEvent.GameWriteEvent(assembler.opcode, assembler.size, assembler.assemblePacket(packet)))
         } catch (exception: Exception) {
             // This function is used by multiple threads, so we try catch like this.
             // The main client thread will already handle disconnecting if applicable.

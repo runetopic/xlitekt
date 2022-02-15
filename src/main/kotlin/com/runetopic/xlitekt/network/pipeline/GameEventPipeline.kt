@@ -49,6 +49,5 @@ class GameEventPipeline : EventPipeline<ReadEvent.GameReadEvent, WriteEvent.Game
             }
             writePacket(event.payload)
         }.flush()
-        event.payload.release()
     }
 }
