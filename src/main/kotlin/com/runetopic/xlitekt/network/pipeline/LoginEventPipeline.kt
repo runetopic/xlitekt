@@ -28,6 +28,7 @@ import io.ktor.utils.io.core.readUByte
 import io.ktor.utils.io.core.readUShort
 import kotlinx.coroutines.withTimeout
 import java.math.BigInteger
+import kotlinx.coroutines.delay
 
 /**
  * @author Tyler Telis
@@ -188,6 +189,7 @@ class LoginEventPipeline : EventPipeline<ReadEvent.LoginReadEvent, WriteEvent.Lo
             client.useEventPipeline(inject<GameEventPipeline>())
             client.useEventHandler(inject<GameEventHandler>())
 
+            delay(1000)
             player.login(client)
         }
     }
