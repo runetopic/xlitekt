@@ -17,15 +17,16 @@ class LoginEventHandler : EventHandler<ReadEvent.LoginReadEvent, WriteEvent.Logi
 
     private val world by inject<World>()
 
-    override suspend fun handleEvent(client: Client, event: ReadEvent.LoginReadEvent): WriteEvent.LoginWriteEvent {
+    override suspend fun handleEvent(client: Client, event: ReadEvent.LoginReadEvent): WriteEvent.LoginWriteEvent? {
         client.setIsaacCiphers(
             event.clientKeys.toIntArray().toISAAC(),
             event.serverKeys.toIntArray().toISAAC()
         )
-        val player = Player(client, event.username)
-        player.interfaceManager.currentInterfaceLayout = if (event.clientResizeable) InterfaceLayout.RESIZABLE else InterfaceLayout.FIXED
-        client.player = player
-        world.players.add(player)
-        return WriteEvent.LoginWriteEvent(LOGIN_SUCCESS_OPCODE)
+        Player(event.username).run {
+            interfaceManager.currentInterfaceLayout = if (event.clientResizeable) InterfaceLayout.RESIZABLE else InterfaceLayout.FIXED
+            client.player = this
+            world.players.add(this)
+        }.also { if (it) return WriteEvent.LoginWriteEvent(LOGIN_SUCCESS_OPCODE) }
+        return null
     }
 }

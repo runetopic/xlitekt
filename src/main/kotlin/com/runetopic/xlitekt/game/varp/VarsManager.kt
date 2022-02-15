@@ -66,9 +66,9 @@ class VarsManager(
 
     private fun sendVarp(id: Int, value: Int) {
         if (value < Byte.MIN_VALUE || value > Byte.MAX_VALUE) {
-            player.client.writePacket(VarpLargePacket(id, value))
+            player.client?.writePacket(VarpLargePacket(id, value))
         } else {
-            player.client.writePacket(VarpSmallPacket(id, value))
+            player.client?.writePacket(VarpSmallPacket(id, value))
         }
     }
 

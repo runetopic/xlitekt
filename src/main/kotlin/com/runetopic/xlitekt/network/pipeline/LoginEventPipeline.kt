@@ -175,21 +175,20 @@ class LoginEventPipeline : EventPipeline<ReadEvent.LoginReadEvent, WriteEvent.Lo
         if (event.response == LOGIN_SUCCESS_OPCODE) {
             val player = client.player ?: return client.disconnect("Login write event does not have an established player.")
 
-            client.writeChannel.let {
-                it.writeByte(11)
-                it.writeByte(0)
-                it.writeInt(0)
-                it.writeByte(player.rights.toByte())
-                it.writeByte(0)
-                it.writeShort(player.index.toShort())
-                it.writeByte(0)
-                it.flush()
-            }
+            client.writeChannel.apply {
+                writeByte(11)
+                writeByte(0)
+                writeInt(0)
+                writeByte(player.rights.toByte())
+                writeByte(0)
+                writeShort(player.index.toShort())
+                writeByte(0)
+            }.flush()
 
             client.useEventPipeline(inject<GameEventPipeline>())
             client.useEventHandler(inject<GameEventHandler>())
 
-            player.login()
+            player.login(client)
         }
     }
 

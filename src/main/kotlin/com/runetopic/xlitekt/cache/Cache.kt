@@ -48,7 +48,7 @@ object Cache {
 
     inline fun <reified T : EntryType> entryType(id: Int): T? = providers[T::class]?.entryType(id) as T?
 
-    private inline fun <reified T : EntryType, reified R : EntryTypeProvider<T>> post() = (providers[T::class] as R).apply {
+    private inline fun <reified T : EntryType, reified R : EntryTypeProvider<T>> post() = (providers[T::class] as R).run {
         entries.values.forEach { it.postLoadEntryType() }
     }
 }

@@ -24,9 +24,9 @@ class PlayerPublicChatBlock : RenderingBlock<Player, Render.PublicChat>(7, 0x20)
         writeByteNegate(actor.rights.toByte())
         writeByteAdd(0) // Auto chat
         val compressed = ByteArray(256)
-        val length = render.message.toHuffman(huffman, compressed)
-        writeByte((length + 1).toByte())
+        val compressedLength = render.message.toHuffman(huffman, compressed)
+        writeByte((compressedLength + 1).toByte())
         writeSmart(render.message.length)
-        writeFully(compressed, 0, length)
+        writeFully(compressed, 0, compressedLength)
     }
 }

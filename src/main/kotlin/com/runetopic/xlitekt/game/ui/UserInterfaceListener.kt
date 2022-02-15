@@ -35,7 +35,7 @@ class UserInterfaceListener {
         this.actions[event.action]?.invoke(event)
     }
 
-    fun UserInterfaceEvent.OpenEvent.event(childId: Int, slots: IntRange, events: InterfaceEvent) = player.interfaceManager.apply {
+    fun UserInterfaceEvent.OpenEvent.event(childId: Int, slots: IntRange, events: InterfaceEvent) = player.interfaceManager.run {
         interfaceEvents(
             interfaceId,
             childId = childId,

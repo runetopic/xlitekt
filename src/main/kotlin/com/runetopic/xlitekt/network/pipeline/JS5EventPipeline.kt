@@ -58,7 +58,6 @@ class JS5EventPipeline : EventPipeline<ReadEvent.JS5ReadEvent, WriteEvent.JS5Wri
                 writeByte(event.bytes[it + event.bytes.position()])
                 writeOffset++
             }
-            flush()
-        }
+        }.flush()
     }
 }

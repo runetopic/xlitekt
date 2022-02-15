@@ -48,8 +48,7 @@ class GameEventPipeline : EventPipeline<ReadEvent.GameReadEvent, WriteEvent.Game
                 writePacketSize(event.size, event.payload.remaining)
             }
             writePacket(event.payload)
-            flush()
-        }
+        }.flush()
         event.payload.release()
     }
 }

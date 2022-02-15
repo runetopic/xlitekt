@@ -47,8 +47,8 @@ class HandshakeEventPipeline : EventPipeline<ReadEvent.HandshakeReadEvent, Write
             HANDSHAKE_LOGIN_OPCODE -> {
                 client.writeChannel.apply {
                     writeLong(client.seed)
-                    flush()
-                }
+                }.flush()
+
                 client.useEventPipeline(inject<LoginEventPipeline>())
                 client.useEventHandler(inject<LoginEventHandler>())
             }

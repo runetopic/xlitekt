@@ -15,9 +15,10 @@ import com.runetopic.xlitekt.plugin.koin.inject
  * @author Tyler Telis
  */
 class Player(
-    val client: Client,
     val username: String,
 ) : Actor(Tile(3222, 3222)) {
+    var client: Client? = null
+
     var appearance = Render.Appearance(Render.Appearance.Gender.MALE, -1, -1, -1, false)
 
     var rights = 2
@@ -27,8 +28,9 @@ class Player(
     val interfaceManager = InterfaceManager(this)
     val varsManager = VarsManager(this)
 
-    fun login() {
-        this.previousTile = this.tile
+    fun login(client: Client) {
+        this.client = client
+        previousTile = tile
         client.writePacket(RebuildNormalPacket(viewport, tile, true))
         refreshAppearance()
         interfaceManager.login()

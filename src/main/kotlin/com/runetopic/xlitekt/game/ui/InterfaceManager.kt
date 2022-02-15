@@ -23,11 +23,11 @@ class InterfaceManager(
     fun login() {
         openTop(currentInterfaceLayout.interfaceId)
         gameInterfaces.forEach(::openInterface)
-        player.client.writePacket(VarpSmallPacket(1737, -1)) // TODO TEMP until i write a var system
+        player.client?.writePacket(VarpSmallPacket(1737, -1)) // TODO TEMP until i write a var system
         message("Welcome to Xlitekt.")
     }
 
-    private fun openTop(id: Int) = player.client.writePacket(IfOpenTopPacket(interfaceId = id))
+    private fun openTop(id: Int) = player.client?.writePacket(IfOpenTopPacket(interfaceId = id))
 
     fun openInterface(userInterface: UserInterface) {
         interfaces += userInterface
@@ -35,7 +35,7 @@ class InterfaceManager(
         val interfaceInfo = interfaceInfo(userInterface.name)
         val childId = interfaceInfo.destination.childIdForLayout(currentInterfaceLayout)
 
-        player.client.writePacket(
+        player.client?.writePacket(
             IfOpenSubPacket(
                 interfaceId = interfaceInfo.id,
                 toPackedInterface = currentInterfaceLayout.interfaceId.packInterface(childId),
@@ -53,13 +53,13 @@ class InterfaceManager(
     }
 
     fun message(message: String) {
-        player.client.writePacket(MessageGamePacket(0, message, false))
+        player.client?.writePacket(MessageGamePacket(0, message, false))
     }
 
-    fun runClientScript(scriptId: Int, parameters: List<Any>) = player.client.writePacket(RunClientScriptPacket(scriptId, parameters))
+    fun runClientScript(scriptId: Int, parameters: List<Any>) = player.client?.writePacket(RunClientScriptPacket(scriptId, parameters))
 
     fun interfaceEvents(interfaceId: Int, childId: Int, fromSlot: Int, toSlot: Int, events: InterfaceEvent) {
-        player.client.writePacket(
+        player.client?.writePacket(
             IfSetEventsPacket(
                 interfaceId,
                 childId,

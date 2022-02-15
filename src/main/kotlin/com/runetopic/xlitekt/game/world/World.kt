@@ -10,10 +10,10 @@ class World {
     val players = PlayerList(MAX_PLAYERS)
     val npcs = NPCList(MAX_NPCs)
 
-    fun process() = players.filterNotNull().filter(Player::online).apply {
+    fun process() = players.filterNotNull().filter(Player::online).run {
         parallelStream().forEach {
-            it.client.writePacket(PlayerInfoPacket(it))
-            it.client.writePacket(NPCInfoPacket(it))
+            it.client?.writePacket(PlayerInfoPacket(it))
+            it.client?.writePacket(NPCInfoPacket(it))
         }
         parallelStream().forEach(Player::reset)
     }

@@ -21,6 +21,7 @@ import io.ktor.utils.io.ByteReadChannel
 import io.ktor.utils.io.ByteWriteChannel
 import io.ktor.utils.io.ClosedWriteChannelException
 import io.ktor.utils.io.core.ByteReadPacket
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.TimeoutCancellationException
 import kotlinx.coroutines.channels.ClosedReceiveChannelException
 import kotlinx.coroutines.runBlocking
@@ -66,16 +67,12 @@ class Client(
     suspend fun start() {
         while (connected) {
             try {
-                if (eventPipeline.instanceOf(GameEventPipeline::class)) {
-                    eventPipeline.read(this)?.let {
-                        eventHandler.handleEvent(this, it)
-                    }
-                } else {
-                    eventPipeline.read(this)?.let { read ->
-                        eventHandler.handleEvent(this, read)?.let { write ->
-                            eventPipeline.write(this, write)
-                        } ?: disconnect("Event handler returned null for $eventHandler.")
-                    } ?: disconnect("Read event returned null for $eventPipeline.")
+                val handler = eventHandler // Capture it.
+                eventPipeline.let {
+                    val readEvent = it.read(this) ?: return disconnect("Read event returned null.")
+                    val writeEvent = handler.handleEvent(this, readEvent)
+                    if (!it.instanceOf(GameEventPipeline::class) && writeEvent == null) return disconnect("Event handler returned null for $it.")
+                    if (!it.instanceOf(GameEventPipeline::class)) it.write(this@Client, writeEvent!!)
                 }
             } catch (exception: Exception) {
                 when {
@@ -93,12 +90,11 @@ class Client(
         }
     }
 
-    suspend fun writeResponse(response: Int) {
-        writeChannel.writeByte(response.toByte())
-        writeChannel.flush()
-    }
+    suspend fun writeResponse(response: Int) = writeChannel.apply {
+        writeByte(response.toByte())
+    }.flush()
 
-    fun writePacket(message: Packet) = runBlocking {
+    fun writePacket(message: Packet) = runBlocking(Dispatchers.IO) {
         val assembler = assemblers[message::class] ?: return@runBlocking disconnect("Unhandled message found when trying to write packet. Message was $message.")
         try {
             eventPipeline.write(this@Client, WriteEvent.GameWriteEvent(assembler.opcode, assembler.size, assembler.assemblePacket(message)))
