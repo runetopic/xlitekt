@@ -49,7 +49,6 @@ class NPCInfoPacketAssembler(
         }
 
         writePacket(blocks.build())
-        blocks.release()
     }
 
     private fun BitAccess.lowDefinition(viewport: Viewport, blocks: BytePacketBuilder) {
