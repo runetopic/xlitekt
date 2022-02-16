@@ -12,6 +12,8 @@ import com.runetopic.xlitekt.cache.provider.config.npc.NPCEntryType
 import com.runetopic.xlitekt.cache.provider.config.npc.NPCEntryTypeProvider
 import com.runetopic.xlitekt.cache.provider.config.obj.ObjEntryType
 import com.runetopic.xlitekt.cache.provider.config.obj.ObjEntryTypeProvider
+import com.runetopic.xlitekt.cache.provider.config.sequence.SequenceEntryType
+import com.runetopic.xlitekt.cache.provider.config.sequence.SequenceEntryTypeProvider
 import com.runetopic.xlitekt.cache.provider.config.varbit.VarBitEntryType
 import com.runetopic.xlitekt.cache.provider.config.varbit.VarBitEntryTypeProvider
 import com.runetopic.xlitekt.cache.provider.ui.InterfaceEntryType
@@ -38,7 +40,8 @@ object Cache {
         InterfaceEntryType::class to InterfaceEntryTypeProvider(),
         ObjEntryType::class to ObjEntryTypeProvider(),
         NPCEntryType::class to NPCEntryTypeProvider(),
-        LocEntryType::class to LocEntryTypeProvider()
+        LocEntryType::class to LocEntryTypeProvider(),
+        SequenceEntryType::class to SequenceEntryTypeProvider()
     )
 
     fun loadProviders() {
