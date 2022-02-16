@@ -3,9 +3,9 @@
     "id": 84,
     "name": "equipment_bonuses",
     "destination": {
-      "fixedChildId": 23,
-      "resizableChildId": 15,
-      "resizableModernChildId": 15
+      "fixedChildId": 40,
+      "resizableChildId": 16,
+      "resizableModernChildId": 16
     }
   },
   {
