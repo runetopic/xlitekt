@@ -12,27 +12,6 @@ import kotlin.reflect.KClass
 object InterfaceMapping {
     private val interfaceInfoMap by inject<InterfaceInfoMap>()
 
-    private val userInterfaces = listOf(
-        UserInterface.AccountManagement,
-        UserInterface.Settings,
-        UserInterface.Inventory,
-        UserInterface.MiniMap,
-        UserInterface.ChatBox,
-        UserInterface.Logout,
-        UserInterface.Emotes,
-        UserInterface.Magic,
-        UserInterface.MusicPlayer,
-        UserInterface.Skills,
-        UserInterface.WornEquipment,
-        UserInterface.EquipmentBonuses,
-        UserInterface.Friends,
-        UserInterface.Prayer,
-        UserInterface.CombatOptions,
-        UserInterface.CharacterSummary,
-        UserInterface.UnknownOverlay,
-        UserInterface.ChatChannel
-    ).associateBy { it.interfaceInfo.id }
-
     fun interfaceInfo(name: String): InterfaceInfo = interfaceInfoMap[name] ?: throw RuntimeException("Interface $name is not currently registered in the system.")
 
     val interfaceListeners = mutableMapOf<KClass<*>, UserInterfaceListener.() -> Unit>()
@@ -41,9 +20,9 @@ object InterfaceMapping {
         interfaceListeners[T::class] = listener
     }
 
-    fun addInterfaceListener(element: UserInterface, player: Player): UserInterfaceListener {
-        val listener = UserInterfaceListener(player, element)
-        interfaceListeners[element::class]?.invoke(listener)
+    fun addInterfaceListener(userInterface: UserInterface, player: Player): UserInterfaceListener {
+        val listener = UserInterfaceListener(player, userInterface)
+        interfaceListeners[userInterface::class]?.invoke(listener)
         return listener
     }
 }
