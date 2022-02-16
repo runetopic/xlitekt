@@ -2,13 +2,11 @@ package com.runetopic.xlitekt.game.ui
 
 sealed class UserInterfaceEvent {
     data class OpenEvent(
-        val interfaceId: Int,
-        //val childId: Int
+        val interfaceId: Int
     ) : UserInterfaceEvent()
 
     data class CloseEvent(
-        val interfaceId: Int,
-        //val childId: Int
+        val interfaceId: Int
     ) : UserInterfaceEvent()
 
     data class ButtonClickEvent(
