@@ -24,7 +24,7 @@ class InterfaceManager(
 
     fun login() {
         openTop(currentInterfaceLayout.interfaceId)
-        gameTabs.forEach(::openInterface)
+        gameInterfaces.forEach(::openInterface)
         player.client?.writePacket(VarpSmallPacket(1737, -1)) // TODO TEMP until i write a var system
         message("Welcome to Xlitekt.")
     }
@@ -79,7 +79,7 @@ class InterfaceManager(
         if (toLayout == currentInterfaceLayout) return
         openTop(toLayout.interfaceId)
         interfaces.clear()
-        gameTabs.forEach { moveSub(it, toLayout) }
+        gameInterfaces.forEach { moveSub(it, toLayout) }
         currentInterfaceLayout = toLayout
     }
 
@@ -113,7 +113,7 @@ class InterfaceManager(
     fun closeLastInterface() = closeInterface(interfaces.last())
 
     private companion object {
-        val gameTabs = setOf(
+        val gameInterfaces = setOf(
             UserInterface.AccountManagement,
             UserInterface.Settings,
             UserInterface.Inventory,
