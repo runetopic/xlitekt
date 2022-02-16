@@ -3,7 +3,6 @@ package com.runetopic.xlitekt.plugin.script.ui
 import com.runetopic.xlitekt.game.ui.InterfaceEvent.CLICK_OPTION_1
 import com.runetopic.xlitekt.game.ui.InterfaceMapping.buildInterfaceListener
 import com.runetopic.xlitekt.game.ui.UserInterface
-import com.runetopic.xlitekt.game.ui.event
 import com.runetopic.xlitekt.plugin.koin.inject
 import com.runetopic.xlitekt.shared.resource.Sequences
 import com.runetopic.xlitekt.shared.resource.SpotAnimations
@@ -70,7 +69,7 @@ private val spotAnimations by inject<SpotAnimations>()
 
 buildInterfaceListener<UserInterface.Emotes> {
     onOpen {
-        event(childId = 1, slots = 0..50, events = CLICK_OPTION_1)
+        setEvent(childId = 1, slots = 0..50, event = CLICK_OPTION_1)
     }
 
     onClick {

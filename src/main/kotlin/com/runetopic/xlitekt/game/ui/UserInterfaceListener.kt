@@ -1,14 +1,22 @@
 package com.runetopic.xlitekt.game.ui
 
+import com.runetopic.xlitekt.game.actor.player.Player
+import com.runetopic.xlitekt.shared.packInterface
+
 /**
  * @author Tyler Telis
  */
-class UserInterfaceListener {
+class UserInterfaceListener(
+    val player: Player,
+    val userInterface: UserInterface
+) {
     private var onOpenEvent: OnOpenEvent? = null
     private var onCloseEvent: OnCloseEvent? = null
     private var onButtonClickEvent: OnButtonClickEvent? = null
-    private val childIds = mutableMapOf<Int, OnButtonClickEvent>()
+    private val children = mutableMapOf<Int, OnButtonClickEvent>()
     private val actions = mutableMapOf<String, OnButtonClickEvent>()
+    private val texts = mutableMapOf<Int, String>()
+    private val events = mutableMapOf<Int, UserInterfaceEvent.IfEvent>()
 
     fun onOpen(onOpenEvent: OnOpenEvent) {
         this.onOpenEvent = onOpenEvent
@@ -16,10 +24,12 @@ class UserInterfaceListener {
 
     fun open(onOpenEvent: UserInterfaceEvent.OpenEvent) {
         this.onOpenEvent?.invoke(onOpenEvent)
+        this.texts.forEach { player.interfaceManager.setText(it.key, it.value) }
+        this.events.forEach { player.interfaceManager.setEvent(it.key, it.value) }
     }
 
     fun onClose(onCloseEvent: OnCloseEvent) {
-        this.onCloseEvent = this.onCloseEvent
+        this.onCloseEvent = onCloseEvent
     }
 
     fun close(closeEvent: UserInterfaceEvent.CloseEvent) {
@@ -28,7 +38,7 @@ class UserInterfaceListener {
 
     fun click(buttonClickEvent: UserInterfaceEvent.ButtonClickEvent) {
         this.onButtonClickEvent?.invoke(buttonClickEvent)
-        this.childIds[buttonClickEvent.childId]?.invoke(buttonClickEvent)
+        this.children[buttonClickEvent.childId]?.invoke(buttonClickEvent)
         this.actions[buttonClickEvent.action]?.invoke(buttonClickEvent)
     }
 
@@ -37,10 +47,18 @@ class UserInterfaceListener {
     }
 
     fun onClick(childId: Int, onButtonClickEvent: OnButtonClickEvent) {
-        this.childIds[childId] = onButtonClickEvent
+        this.children[childId] = onButtonClickEvent
     }
 
     fun onClick(action: String, onButtonClickEvent: OnButtonClickEvent) {
         this.actions[action] = onButtonClickEvent
+    }
+
+    fun UserInterfaceEvent.OpenEvent.setText(childId: Int, text: String) {
+        texts[interfaceId.packInterface(childId)] = text
+    }
+
+    fun UserInterfaceEvent.OpenEvent.setEvent(childId: Int, slots: IntRange, event: InterfaceEvent) {
+        events[interfaceId.packInterface(childId)] = UserInterfaceEvent.IfEvent(slots, event)
     }
 }

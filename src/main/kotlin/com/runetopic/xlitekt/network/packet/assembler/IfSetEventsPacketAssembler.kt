@@ -1,7 +1,6 @@
 package com.runetopic.xlitekt.network.packet.assembler
 
 import com.runetopic.xlitekt.network.packet.IfSetEventsPacket
-import com.runetopic.xlitekt.shared.buffer.packInterface
 import com.runetopic.xlitekt.shared.buffer.writeIntV2
 import io.ktor.utils.io.core.buildPacket
 import io.ktor.utils.io.core.writeInt
@@ -15,6 +14,6 @@ class IfSetEventsPacketAssembler : PacketAssembler<IfSetEventsPacket>(opcode = 7
         writeIntV2(packet.events)
         writeShortLittleEndian(packet.fromSlot.toShort())
         writeShortLittleEndian(packet.toSlot.toShort())
-        writeInt(packet.interfaceId.packInterface(packet.childId))
+        writeInt(packet.packedInterface)
     }
 }

@@ -1,7 +1,7 @@
 package com.runetopic.xlitekt.network.packet.assembler
 
 import com.runetopic.xlitekt.network.packet.SetPlayerOpPacket
-import com.runetopic.xlitekt.shared.buffer.toByte
+import com.runetopic.xlitekt.shared.toByte
 import com.runetopic.xlitekt.shared.buffer.writeByteAdd
 import com.runetopic.xlitekt.shared.buffer.writeStringCp1252NullTerminated
 import io.ktor.utils.io.core.buildPacket

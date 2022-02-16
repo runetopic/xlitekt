@@ -1,16 +1,18 @@
 package com.runetopic.xlitekt.game.ui
 
 import com.runetopic.xlitekt.game.actor.player.Player
+import com.runetopic.xlitekt.game.ui.InterfaceMapping.addInterfaceListener
 import com.runetopic.xlitekt.game.ui.InterfaceMapping.interfaceInfo
-import com.runetopic.xlitekt.game.ui.InterfaceMapping.interfaceListener
 import com.runetopic.xlitekt.network.packet.IfCloseSubPacket
 import com.runetopic.xlitekt.network.packet.IfMoveSubPacket
 import com.runetopic.xlitekt.network.packet.IfOpenSubPacket
 import com.runetopic.xlitekt.network.packet.IfOpenTopPacket
+import com.runetopic.xlitekt.network.packet.IfSetEventsPacket
+import com.runetopic.xlitekt.network.packet.IfSetTextPacket
 import com.runetopic.xlitekt.network.packet.MessageGamePacket
 import com.runetopic.xlitekt.network.packet.RunClientScriptPacket
 import com.runetopic.xlitekt.network.packet.VarpSmallPacket
-import com.runetopic.xlitekt.shared.buffer.packInterface
+import com.runetopic.xlitekt.shared.packInterface
 import kotlinx.coroutines.runBlocking
 
 /**
@@ -22,6 +24,8 @@ class InterfaceManager(
     var currentInterfaceLayout = InterfaceLayout.FIXED
     private val interfaces = mutableListOf<UserInterface>()
 
+    var listeners = mutableListOf<UserInterfaceListener>()
+
     fun login() {
         openTop(currentInterfaceLayout.interfaceId)
         gameInterfaces.forEach(::openInterface)
@@ -31,46 +35,46 @@ class InterfaceManager(
 
     private fun openTop(id: Int) = player.client?.writePacket(IfOpenTopPacket(interfaceId = id))
 
-    fun openInterface(userInterface: UserInterface) {
-        interfaces += userInterface
+    fun openInterface(userInterface: UserInterface) = userInterface.let {
+        interfaces += it
 
-        val interfaceInfo = interfaceInfo(userInterface.name)
-        val childId = interfaceInfo.destination.childIdForLayout(currentInterfaceLayout)
+        val childId = it.interfaceInfo.destination.childIdForLayout(currentInterfaceLayout)
 
         player.client?.writePacket(
             IfOpenSubPacket(
-                interfaceId = interfaceInfo.id,
+                interfaceId = it.interfaceInfo.id,
                 toPackedInterface = currentInterfaceLayout.interfaceId.packInterface(childId),
                 alwaysOpen = true
             )
         )
+        addInterfaceListener(it, player)
+    }.run {
+        listeners += this
 
-        interfaceListener(userInterface)?.open(
+        open(
             UserInterfaceEvent.OpenEvent(
-                player = player,
-                interfaceId = interfaceInfo.id,
-                childId = childId
+                interfaceId = userInterface.interfaceInfo.id,
             )
         )
     }
 
-    fun closeInterface(userInterface: UserInterface) {
-        interfaces -= userInterface
+    fun closeInterface(userInterface: UserInterface) = userInterface.let {
+        interfaces -= it
 
-        val interfaceInfo = userInterface.interfaceInfo
-        val childId = interfaceInfo.destination.childIdForLayout(currentInterfaceLayout)
+        val childId = it.interfaceInfo.destination.childIdForLayout(currentInterfaceLayout)
 
         player.client?.writePacket(
             IfCloseSubPacket(
                 packedInterface = currentInterfaceLayout.interfaceId.packInterface(childId)
             )
         )
+        listeners.find { l -> l.userInterface == it }
+    }?.run {
+        listeners.removeAt(listeners.indexOf(this))
 
-        interfaceListener(userInterface)?.close(
+        close(
             UserInterfaceEvent.CloseEvent(
-                player = player,
-                interfaceId = interfaceInfo.id,
-                childId = childId
+                interfaceId = userInterface.interfaceInfo.id,
             )
         )
     }
@@ -83,21 +87,20 @@ class InterfaceManager(
         currentInterfaceLayout = toLayout
     }
 
-    private fun moveSub(userInterface: UserInterface, toLayout: InterfaceLayout) {
-        val interfaceId = userInterface.interfaceInfo.id
-        val fromChildId = userInterface.interfaceInfo.destination.childIdForLayout(currentInterfaceLayout)
-        val toChildId = userInterface.interfaceInfo.destination.childIdForLayout(toLayout)
+    private fun moveSub(userInterface: UserInterface, toLayout: InterfaceLayout) = userInterface.let {
+        val fromChildId = it.interfaceInfo.destination.childIdForLayout(currentInterfaceLayout)
+        val toChildId = it.interfaceInfo.destination.childIdForLayout(toLayout)
         player.client?.writePacket(
             IfMoveSubPacket(
                 fromPackedInterface = currentInterfaceLayout.interfaceId.packInterface(fromChildId),
                 toPackedInterface = toLayout.interfaceId.packInterface(toChildId)
             )
         )
-        interfaceListener(userInterface)?.open(
+        listeners.find { l -> l.userInterface == it }
+    }?.run {
+        open(
             UserInterfaceEvent.OpenEvent(
-                player = player,
-                interfaceId = interfaceId,
-                childId = toChildId
+                interfaceId = userInterface.interfaceInfo.id,
             )
         )
     }
@@ -110,7 +113,25 @@ class InterfaceManager(
         player.client?.writePacket(RunClientScriptPacket(scriptId, parameters))
     }
 
-    fun closeLastInterface() = closeInterface(interfaces.last())
+    fun closeLastInterface(): Unit = closeInterface(interfaces.last()) ?: throw IllegalStateException("Couldn't close last interface. ${interfaces.last()}") // oh cause now were returning a unit u can return a unit but its nullable yeah but the handler doesnt want a unit
+
+    fun setText(packedInterface: Int, text: String) {
+        player.client?.writePacket(
+            IfSetTextPacket(
+                packedInterface = packedInterface,
+                text = text
+            )
+        )
+    }
+
+    fun setEvent(packedInterface: Int, ifEvent: UserInterfaceEvent.IfEvent) = player.client?.writePacket(
+        IfSetEventsPacket(
+            packedInterface,
+            ifEvent.slots.first,
+            ifEvent.slots.last,
+            ifEvent.event.value
+        )
+    )
 
     private companion object {
         val gameInterfaces = setOf(

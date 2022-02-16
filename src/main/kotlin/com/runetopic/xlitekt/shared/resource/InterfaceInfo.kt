@@ -18,12 +18,10 @@ data class InterfaceInfo(
         val resizableChildId: Int,
         val resizableModernChildId: Int
     ) {
-        fun childIdForLayout(currentInterfaceLayout: InterfaceLayout): Int {
-            return when (currentInterfaceLayout) {
-                InterfaceLayout.FIXED -> fixedChildId
-                InterfaceLayout.RESIZABLE -> resizableChildId
-                InterfaceLayout.RESIZABLE_MODERN -> resizableModernChildId
-            }
+        fun childIdForLayout(currentInterfaceLayout: InterfaceLayout): Int = when (currentInterfaceLayout) {
+            InterfaceLayout.FIXED -> fixedChildId
+            InterfaceLayout.RESIZABLE -> resizableChildId
+            InterfaceLayout.RESIZABLE_MODERN -> resizableModernChildId
         }
     }
 }

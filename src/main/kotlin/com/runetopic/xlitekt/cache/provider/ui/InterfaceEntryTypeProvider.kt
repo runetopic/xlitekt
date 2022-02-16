@@ -1,10 +1,10 @@
 package com.runetopic.xlitekt.cache.provider.ui
 
 import com.runetopic.xlitekt.cache.provider.EntryTypeProvider
-import com.runetopic.xlitekt.shared.buffer.packInterface
+import com.runetopic.xlitekt.shared.packInterface
 import com.runetopic.xlitekt.shared.buffer.readUMedium
 import com.runetopic.xlitekt.shared.buffer.readStringCp1252NullTerminated
-import com.runetopic.xlitekt.shared.buffer.toBoolean
+import com.runetopic.xlitekt.shared.toBoolean
 import io.ktor.utils.io.core.ByteReadPacket
 import io.ktor.utils.io.core.readInt
 import io.ktor.utils.io.core.readShort

@@ -3,9 +3,8 @@ package com.runetopic.xlitekt.plugin.script.ui
 import com.runetopic.xlitekt.game.ui.InterfaceMapping.buildInterfaceListener
 import com.runetopic.xlitekt.game.ui.UserInterface
 
-buildInterfaceListener<UserInterface.WornEquipment> {
-    onClick("View equipment stats") {
-        player.interfaceManager.openInterface(UserInterface.EquipmentBonuses)
+buildInterfaceListener<UserInterface.EquipmentBonuses> {
+    onOpen {
+        setText(24, "Stab +")
     }
 }
-

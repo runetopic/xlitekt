@@ -27,6 +27,7 @@ import com.runetopic.xlitekt.network.client.ClientResponseOpcode.HANDSHAKE_SUCCE
 import com.runetopic.xlitekt.network.client.ClientResponseOpcode.LOGIN_SUCCESS_OPCODE
 import com.runetopic.xlitekt.network.packet.RegisteredPackets.disassemblers
 import com.runetopic.xlitekt.network.packet.RegisteredPackets.handlers
+import com.runetopic.xlitekt.shared.toBoolean
 import io.ktor.utils.io.core.ByteReadPacket
 import io.ktor.utils.io.core.readInt
 import io.ktor.utils.io.core.readIntLittleEndian

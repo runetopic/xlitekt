@@ -21,8 +21,8 @@ import com.runetopic.xlitekt.network.packet.assembler.block.player.PlayerTempora
 import com.runetopic.xlitekt.network.packet.assembler.block.player.PlayerUsernameOverrideBlock
 import com.runetopic.xlitekt.plugin.koin.inject
 import com.runetopic.xlitekt.shared.buffer.BitAccess
-import com.runetopic.xlitekt.shared.buffer.toInt
-import com.runetopic.xlitekt.shared.buffer.toIntInv
+import com.runetopic.xlitekt.shared.toInt
+import com.runetopic.xlitekt.shared.toIntInv
 import com.runetopic.xlitekt.shared.buffer.withBitAccess
 import io.ktor.utils.io.core.BytePacketBuilder
 import io.ktor.utils.io.core.buildPacket

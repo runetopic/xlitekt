@@ -4,7 +4,7 @@ import com.runetopic.cache.store.Js5Store
 import com.runetopic.xlitekt.plugin.koin.inject
 import com.runetopic.xlitekt.shared.buffer.readUMedium
 import com.runetopic.xlitekt.shared.buffer.readStringCp1252NullTerminated
-import com.runetopic.xlitekt.shared.buffer.toBoolean
+import com.runetopic.xlitekt.shared.toBoolean
 import io.ktor.utils.io.core.ByteReadPacket
 import io.ktor.utils.io.core.readInt
 import io.ktor.utils.io.core.readUByte
