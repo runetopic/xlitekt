@@ -41,15 +41,9 @@ object InterfaceMapping {
         interfaceListeners[T::class] = listener
     }
 
-    fun userInterface(id: Int): UserInterface? = userInterfaces[id]
-
     fun addInterfaceListener(element: UserInterface, player: Player): UserInterfaceListener {
         val listener = UserInterfaceListener(player, element)
         interfaceListeners[element::class]?.invoke(listener)
         return listener
-    }
-
-    fun interfaceListener(element: UserInterface): (UserInterfaceListener.() -> Unit)? {
-        return interfaceListeners[element::class]
     }
 }
