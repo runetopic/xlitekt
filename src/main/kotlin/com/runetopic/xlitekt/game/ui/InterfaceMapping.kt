@@ -37,7 +37,6 @@ object InterfaceMapping {
 
     val interfaceListeners = mutableMapOf<KClass<*>, UserInterfaceListener.() -> Unit>()
 
-    @Suppress("UNCHECKED_CAST")
     inline fun <reified T : UserInterface> buildInterfaceListener(noinline listener: UserInterfaceListener.() -> Unit) {
         interfaceListeners[T::class] = listener
     }
