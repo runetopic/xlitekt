@@ -63,7 +63,7 @@ class Client(
     }
 
     fun writePacket(packet: Packet) = runBlocking(Dispatcher.GAME) {
-        val assembler = assemblers[packet::class] ?: return@runBlocking disconnect("Unhandled message found when trying to write packet. Message was $packet.")
+        val assembler = assemblers[packet::class] ?: return@runBlocking disconnect("Unhandled packet found when trying to write. Packet was $packet.")
         poolToWriteChannel(assembler.opcode, assembler.size, assembler.assemblePacket(packet))
     }
 
