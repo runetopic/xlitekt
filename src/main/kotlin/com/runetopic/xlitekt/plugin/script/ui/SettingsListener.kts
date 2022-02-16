@@ -4,6 +4,7 @@ import com.runetopic.xlitekt.game.ui.InterfaceEvent.CLICK_OPTION_1
 import com.runetopic.xlitekt.game.ui.InterfaceLayout
 import com.runetopic.xlitekt.game.ui.InterfaceMapping.buildInterfaceListener
 import com.runetopic.xlitekt.game.ui.UserInterface
+import com.runetopic.xlitekt.game.ui.event
 import com.runetopic.xlitekt.shared.buffer.toInt
 
 private val layoutDropDownChildId = 84

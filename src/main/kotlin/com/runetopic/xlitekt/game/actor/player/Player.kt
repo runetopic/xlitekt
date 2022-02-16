@@ -2,6 +2,8 @@ package com.runetopic.xlitekt.game.actor.player
 
 import com.runetopic.xlitekt.game.actor.Actor
 import com.runetopic.xlitekt.game.actor.render.Render
+import com.runetopic.xlitekt.game.event.EventBus
+import com.runetopic.xlitekt.game.event.impl.Events
 import com.runetopic.xlitekt.game.tile.Tile
 import com.runetopic.xlitekt.game.ui.InterfaceManager
 import com.runetopic.xlitekt.game.varp.VarsManager
@@ -17,6 +19,7 @@ import com.runetopic.xlitekt.plugin.koin.inject
 class Player(
     val username: String,
 ) : Actor(Tile(3222, 3222)) {
+    private val eventBus by inject<EventBus>()
     var client: Client? = null
 
     var appearance = Render.Appearance(Render.Appearance.Gender.MALE, -1, -1, -1, false)
@@ -37,6 +40,7 @@ class Player(
         varsManager.login()
         // Set the player online here, so they start processing by the main game loop.
         online = true
+        eventBus.notify(Events.OnLoginEvent(this))
     }
 
     fun logout() {
