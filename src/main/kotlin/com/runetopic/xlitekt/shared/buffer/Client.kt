@@ -309,10 +309,10 @@ private suspend fun Client.readPackets(player: Player) = try {
     handleException(exception)
 }
 
-internal suspend fun Client.writePacket(opcode: Int, size: Int, buffer: ByteReadPacket) = writeChannel.apply {
+suspend fun Client.poolToWriteChannel(opcode: Int, size: Int, packet: ByteReadPacket) = writeChannel.apply {
     writePacketOpcode(serverCipher!!, opcode)
     if (size == -1 || size == -2) {
-        writePacketSize(size, buffer.remaining)
+        writePacketSize(size, packet.remaining)
     }
-    writePacket(buffer)
+    writePacket(packet)
 }

@@ -9,7 +9,7 @@ import com.runetopic.xlitekt.network.packet.Packet
 import com.runetopic.xlitekt.network.packet.RegisteredPackets.assemblers
 import com.runetopic.xlitekt.plugin.koin.inject
 import com.runetopic.xlitekt.shared.Dispatcher
-import com.runetopic.xlitekt.shared.buffer.writePacket
+import com.runetopic.xlitekt.shared.buffer.poolToWriteChannel
 import io.ktor.application.ApplicationEnvironment
 import io.ktor.network.sockets.Socket
 import io.ktor.util.reflect.instanceOf
@@ -44,8 +44,7 @@ class Client(
 
     internal fun setIsaacCiphers(clientCipher: ISAAC, serverCipher: ISAAC) {
         if (this.clientCipher != null || this.serverCipher != null) {
-            disconnect("Client or server cipher is already set.")
-            return
+            return disconnect("Client or server cipher is already set.")
         }
         this.clientCipher = clientCipher
         this.serverCipher = serverCipher
@@ -63,12 +62,9 @@ class Client(
         }
     }
 
-    fun writePacket(packet: Packet) {
-        val assembler = assemblers[packet::class] ?: return disconnect("Unhandled message found when trying to write packet. Message was $packet.")
-        val payload = assembler.assemblePacket(packet)
-        runBlocking(Dispatcher.GAME) {
-            writePacket(assembler.opcode, assembler.size, payload)
-        }
+    fun writePacket(packet: Packet) = runBlocking(Dispatcher.GAME) {
+        val assembler = assemblers[packet::class] ?: return@runBlocking disconnect("Unhandled message found when trying to write packet. Message was $packet.")
+        poolToWriteChannel(assembler.opcode, assembler.size, assembler.assemblePacket(packet))
     }
 
     companion object {

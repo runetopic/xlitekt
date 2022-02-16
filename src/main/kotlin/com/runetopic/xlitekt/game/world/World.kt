@@ -3,6 +3,7 @@ package com.runetopic.xlitekt.game.world
 import com.runetopic.xlitekt.game.actor.NPCList
 import com.runetopic.xlitekt.game.actor.PlayerList
 import com.runetopic.xlitekt.game.actor.player.Player
+import com.runetopic.xlitekt.network.packet.NPCInfoPacket
 import com.runetopic.xlitekt.network.packet.PlayerInfoPacket
 import com.runetopic.xlitekt.shared.Dispatcher
 import kotlinx.coroutines.launch
@@ -15,9 +16,11 @@ class World {
     fun process() = runBlocking(Dispatcher.GAME) {
         launch(Dispatcher.UPDATE) {
             val players = players.filterNotNull().filter(Player::online)
-            players.parallelStream().forEach {
-                it.client?.writePacket(PlayerInfoPacket(it))
-                it.client?.writeChannel?.flush()
+            players.parallelStream().forEach { player ->
+                player.client?.apply {
+                    writePacket(PlayerInfoPacket(player))
+                    writePacket(NPCInfoPacket(player))
+                }?.writeChannel?.flush()
             }
             players.parallelStream().forEach(Player::reset)
         }

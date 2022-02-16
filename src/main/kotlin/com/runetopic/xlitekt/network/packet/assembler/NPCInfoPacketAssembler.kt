@@ -35,7 +35,6 @@ class NPCInfoPacketAssembler(
 
     override fun assemblePacket(packet: NPCInfoPacket) = buildPacket {
         val blocks = BytePacketBuilder()
-
         withBitAccess {
             packet.player.viewport.let {
                 writeBits(8, it.localNPCs.size)
@@ -47,7 +46,6 @@ class NPCInfoPacketAssembler(
                 writeBits(15, Short.MAX_VALUE.toInt())
             }
         }
-
         writePacket(blocks.build())
     }
 
