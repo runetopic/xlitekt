@@ -1,4 +1,4 @@
-package com.runetopic.xlitekt.util.resource
+package com.runetopic.xlitekt.shared.resource
 
 import kotlinx.serialization.Serializable
 
@@ -6,7 +6,7 @@ import kotlinx.serialization.Serializable
  * @author Jordan Abraham
  */
 @Serializable
-data class Sequence(
+data class SpotAnimation(
     val name: String,
     val id: Int
 )

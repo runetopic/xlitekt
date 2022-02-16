@@ -29,6 +29,7 @@ val cacheModule = module(createdAtStart = true) {
     single { Huffman(get<Js5Store>().index(indexId = 10).group(groupName = "huffman").file(0).data) }
     single { loadProviders() }
 }
+
 private val logger = InlineLogger()
 
 object Cache {

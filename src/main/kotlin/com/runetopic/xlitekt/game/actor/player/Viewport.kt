@@ -4,7 +4,7 @@ import com.runetopic.xlitekt.game.actor.npc.NPC
 import com.runetopic.xlitekt.game.world.World
 import com.runetopic.xlitekt.game.world.World.Companion.MAX_PLAYERS
 import com.runetopic.xlitekt.plugin.koin.inject
-import com.runetopic.xlitekt.util.ext.withBitAccess
+import com.runetopic.xlitekt.shared.buffer.withBitAccess
 import io.ktor.utils.io.core.BytePacketBuilder
 import java.util.LinkedList
 

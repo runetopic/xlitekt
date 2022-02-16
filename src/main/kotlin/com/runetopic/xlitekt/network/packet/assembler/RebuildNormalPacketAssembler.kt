@@ -2,8 +2,8 @@ package com.runetopic.xlitekt.network.packet.assembler
 
 import com.runetopic.xlitekt.network.packet.RebuildNormalPacket
 import com.runetopic.xlitekt.plugin.koin.inject
-import com.runetopic.xlitekt.util.ext.writeShortAdd
-import com.runetopic.xlitekt.util.resource.MapSquares
+import com.runetopic.xlitekt.shared.buffer.writeShortAdd
+import com.runetopic.xlitekt.shared.resource.MapSquares
 import io.ktor.utils.io.core.buildPacket
 import io.ktor.utils.io.core.writeInt
 import io.ktor.utils.io.core.writeShort

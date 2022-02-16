@@ -1,4 +1,4 @@
-package com.runetopic.xlitekt.util.hook
+package com.runetopic.xlitekt.shared.hook
 
 import com.runetopic.xlitekt.game.event.Event
 import com.runetopic.xlitekt.game.event.EventBuilder

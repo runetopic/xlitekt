@@ -7,7 +7,7 @@ import com.runetopic.xlitekt.game.actor.player.Player
 import com.runetopic.xlitekt.network.packet.VarpLargePacket
 import com.runetopic.xlitekt.network.packet.VarpSmallPacket
 import com.runetopic.xlitekt.plugin.koin.inject
-import com.runetopic.xlitekt.util.resource.Varps
+import com.runetopic.xlitekt.shared.resource.Varps
 
 class VarsManager(
     val player: Player

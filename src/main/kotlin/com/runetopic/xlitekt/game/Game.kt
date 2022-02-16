@@ -4,12 +4,12 @@ import com.github.michaelbull.logging.InlineLogger
 import com.runetopic.xlitekt.game.event.EventBus
 import com.runetopic.xlitekt.game.world.World
 import com.runetopic.xlitekt.plugin.koin.inject
-import com.runetopic.xlitekt.util.resource.Resource.interfaceInfoResource
-import com.runetopic.xlitekt.util.resource.Resource.mapSquaresResource
-import com.runetopic.xlitekt.util.resource.Resource.sequencesResource
-import com.runetopic.xlitekt.util.resource.Resource.spotAnimationsResource
-import com.runetopic.xlitekt.util.resource.Resource.varBitsResource
-import com.runetopic.xlitekt.util.resource.Resource.varpsResource
+import com.runetopic.xlitekt.shared.resource.Resource.interfaceInfoResource
+import com.runetopic.xlitekt.shared.resource.Resource.mapSquaresResource
+import com.runetopic.xlitekt.shared.resource.Resource.sequencesResource
+import com.runetopic.xlitekt.shared.resource.Resource.spotAnimationsResource
+import com.runetopic.xlitekt.shared.resource.Resource.varBitsResource
+import com.runetopic.xlitekt.shared.resource.Resource.varpsResource
 import org.koin.dsl.module
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
@@ -36,7 +36,7 @@ class Game {
         service.scheduleAtFixedRate({
             val time = measureTime(world::process)
             logger.debug { "Main game loop took $time to finish." }
-        }, 600, 600, TimeUnit.MILLISECONDS)
+        }, 0, 600, TimeUnit.MILLISECONDS)
     }
 
     fun shutdownGracefully() {

@@ -2,9 +2,9 @@ package com.runetopic.xlitekt.cache.provider
 
 import com.runetopic.cache.store.Js5Store
 import com.runetopic.xlitekt.plugin.koin.inject
-import com.runetopic.xlitekt.util.ext.readMedium
-import com.runetopic.xlitekt.util.ext.readStringCp1252NullTerminated
-import com.runetopic.xlitekt.util.ext.toBoolean
+import com.runetopic.xlitekt.shared.buffer.readUMedium
+import com.runetopic.xlitekt.shared.buffer.readStringCp1252NullTerminated
+import com.runetopic.xlitekt.shared.buffer.toBoolean
 import io.ktor.utils.io.core.ByteReadPacket
 import io.ktor.utils.io.core.readInt
 import io.ktor.utils.io.core.readUByte
@@ -23,7 +23,7 @@ abstract class EntryTypeProvider<R : EntryType> {
     fun ByteReadPacket.readStringIntParameters(): Map<Int, Any> = buildMap {
         repeat(readUByte().toInt()) {
             val usingString = readUByte().toInt().toBoolean()
-            put(readMedium(), if (usingString) readStringCp1252NullTerminated() else readInt())
+            put(readUMedium(), if (usingString) readStringCp1252NullTerminated() else readInt())
         }
     }
 

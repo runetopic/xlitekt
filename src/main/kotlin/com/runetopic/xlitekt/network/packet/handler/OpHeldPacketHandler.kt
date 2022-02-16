@@ -11,7 +11,7 @@ class OpHeldPacketHandler : PacketHandler<OpHeldPacket> {
 
     private val logger = InlineLogger()
 
-    override suspend fun handlePacket(player: Player, packet: OpHeldPacket) {
+    override fun handlePacket(player: Player, packet: OpHeldPacket) {
         val index = packet.index
         val fromPackedInterface = packet.fromPackedInterface
         val fromInterfaceId = fromPackedInterface shr 16

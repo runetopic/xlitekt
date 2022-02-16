@@ -1,4 +1,4 @@
-package com.runetopic.xlitekt.util.ext
+package com.runetopic.xlitekt.shared.buffer
 
 import io.ktor.utils.io.core.BytePacketBuilder
 import io.ktor.utils.io.core.writeFully

@@ -1,7 +1,7 @@
 package com.runetopic.xlitekt.network.packet.assembler
 
 import com.runetopic.xlitekt.network.packet.UpdatePublicChatStatusPacket
-import com.runetopic.xlitekt.util.ext.writeByteNegate
+import com.runetopic.xlitekt.shared.buffer.writeByteNegate
 import io.ktor.utils.io.core.buildPacket
 
 /**

@@ -1,4 +1,4 @@
-package com.runetopic.xlitekt.util.resource
+package com.runetopic.xlitekt.shared.resource
 
 import com.runetopic.xlitekt.game.ui.InterfaceLayout
 import kotlinx.serialization.Serializable

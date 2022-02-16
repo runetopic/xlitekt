@@ -20,10 +20,10 @@ import com.runetopic.xlitekt.network.packet.assembler.block.player.PlayerSpotAni
 import com.runetopic.xlitekt.network.packet.assembler.block.player.PlayerTemporaryMovementTypeBlock
 import com.runetopic.xlitekt.network.packet.assembler.block.player.PlayerUsernameOverrideBlock
 import com.runetopic.xlitekt.plugin.koin.inject
-import com.runetopic.xlitekt.util.ext.BitAccess
-import com.runetopic.xlitekt.util.ext.toInt
-import com.runetopic.xlitekt.util.ext.toIntInv
-import com.runetopic.xlitekt.util.ext.withBitAccess
+import com.runetopic.xlitekt.shared.buffer.BitAccess
+import com.runetopic.xlitekt.shared.buffer.toInt
+import com.runetopic.xlitekt.shared.buffer.toIntInv
+import com.runetopic.xlitekt.shared.buffer.withBitAccess
 import io.ktor.utils.io.core.BytePacketBuilder
 import io.ktor.utils.io.core.buildPacket
 import io.ktor.utils.io.core.writeShortLittleEndian
@@ -46,7 +46,6 @@ class PlayerInfoPacketAssembler : PacketAssembler<PlayerInfoPacket>(opcode = 80,
             lowDefinition(it, blocks, false)
         }.update()
         writePacket(blocks.build())
-        blocks.release()
     }
 
     private fun BytePacketBuilder.highDefinition(viewport: Viewport, blocks: BytePacketBuilder, nsn: Boolean) {

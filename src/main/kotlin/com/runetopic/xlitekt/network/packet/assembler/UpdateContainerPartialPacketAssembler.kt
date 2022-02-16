@@ -1,7 +1,7 @@
 package com.runetopic.xlitekt.network.packet.assembler
 
 import com.runetopic.xlitekt.network.packet.UpdateContainerPartialPacket
-import com.runetopic.xlitekt.util.ext.writeSmart
+import com.runetopic.xlitekt.shared.buffer.writeSmart
 import io.ktor.utils.io.core.buildPacket
 import io.ktor.utils.io.core.writeInt
 import io.ktor.utils.io.core.writeShort

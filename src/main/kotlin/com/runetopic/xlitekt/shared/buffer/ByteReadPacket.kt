@@ -1,4 +1,4 @@
-package com.runetopic.xlitekt.util.ext
+package com.runetopic.xlitekt.shared.buffer
 
 import io.ktor.utils.io.core.ByteReadPacket
 import io.ktor.utils.io.core.readUByte
@@ -25,7 +25,7 @@ fun ByteReadPacket.readUByteSubtract(): Int = readUByte().toInt() - 128
 fun ByteReadPacket.readUShortLittleEndian(): Int = readUByte().toInt() + (readUByte().toInt() shl 8)
 fun ByteReadPacket.readUShortLittleEndianSubtract(): Int = readUByteSubtract() + (readUByte().toInt() shl 8)
 
-fun ByteReadPacket.readMedium(): Int = (readUByte().toInt() shl 16) + (readUByte().toInt() shl 8) + readUByte().toInt()
+fun ByteReadPacket.readUMedium(): Int = (readUByte().toInt() shl 16) + readUShort().toInt()
 
 fun ByteReadPacket.readIntV1(): Int = readUShort().toInt() + (readUByte().toInt() shl 24) + (readUByte().toInt() shl 16)
 fun ByteReadPacket.readIntV2(): Int = (readUByte().toInt() shl 16) + (readUByte().toInt() shl 24) + readUShortLittleEndian()

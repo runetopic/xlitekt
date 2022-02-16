@@ -1,4 +1,4 @@
-package com.runetopic.xlitekt.util.ext
+package com.runetopic.xlitekt.shared.buffer
 
 /**
  * @author Jordan Abraham

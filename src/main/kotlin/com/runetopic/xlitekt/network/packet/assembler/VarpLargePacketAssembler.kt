@@ -1,8 +1,8 @@
 package com.runetopic.xlitekt.network.packet.assembler
 
 import com.runetopic.xlitekt.network.packet.VarpLargePacket
-import com.runetopic.xlitekt.util.ext.writeIntV1
-import com.runetopic.xlitekt.util.ext.writeShortLittleEndianAdd
+import com.runetopic.xlitekt.shared.buffer.writeIntV1
+import com.runetopic.xlitekt.shared.buffer.writeShortLittleEndianAdd
 import io.ktor.utils.io.core.buildPacket
 
 /**

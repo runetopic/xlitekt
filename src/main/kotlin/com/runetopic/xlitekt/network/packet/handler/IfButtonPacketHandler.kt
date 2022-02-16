@@ -17,7 +17,7 @@ class IfButtonPacketHandler : PacketHandler<IfButtonPacket> {
 
     private val logger = InlineLogger()
 
-    override suspend fun handlePacket(player: Player, packet: IfButtonPacket) {
+    override fun handlePacket(player: Player, packet: IfButtonPacket) {
         val index = packet.index
         val interfaceId = packet.packedInterface shr 16
         val childId = packet.packedInterface and 0xffff

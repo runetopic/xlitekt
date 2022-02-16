@@ -2,18 +2,12 @@ package com.runetopic.xlitekt.network
 
 import com.github.michaelbull.logging.InlineLogger
 import com.runetopic.xlitekt.network.client.Client
-import com.runetopic.xlitekt.network.handler.GameEventHandler
-import com.runetopic.xlitekt.network.handler.HandshakeEventHandler
-import com.runetopic.xlitekt.network.handler.JS5EventHandler
-import com.runetopic.xlitekt.network.handler.LoginEventHandler
-import com.runetopic.xlitekt.network.pipeline.GameEventPipeline
-import com.runetopic.xlitekt.network.pipeline.HandshakeEventPipeline
-import com.runetopic.xlitekt.network.pipeline.JS5EventPipeline
-import com.runetopic.xlitekt.network.pipeline.LoginEventPipeline
+import com.runetopic.xlitekt.shared.buffer.readHandshake
 import io.ktor.network.selector.ActorSelectorManager
 import io.ktor.network.sockets.aSocket
 import io.ktor.network.sockets.openReadChannel
 import io.ktor.network.sockets.openWriteChannel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.asCoroutineDispatcher
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -22,14 +16,6 @@ import java.net.InetSocketAddress
 import java.util.concurrent.Executors
 
 val networkModule = module(createdAtStart = true) {
-    single { HandshakeEventPipeline() }
-    single { HandshakeEventHandler() }
-    single { JS5EventPipeline() }
-    single { JS5EventHandler() }
-    single { LoginEventPipeline() }
-    single { LoginEventHandler() }
-    single { GameEventPipeline() }
-    single { GameEventHandler() }
     single { Network() }
 }
 
@@ -53,7 +39,7 @@ class Network {
                 socket.openReadChannel(),
                 socket.openWriteChannel()
             )
-            launch { client.start() }
+            launch(Dispatchers.IO) { client.readHandshake() }
         }
     }
 

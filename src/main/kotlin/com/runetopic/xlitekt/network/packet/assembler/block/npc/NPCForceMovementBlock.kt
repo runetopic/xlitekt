@@ -3,8 +3,8 @@ package com.runetopic.xlitekt.network.packet.assembler.block.npc
 import com.runetopic.xlitekt.game.actor.npc.NPC
 import com.runetopic.xlitekt.game.actor.render.Render
 import com.runetopic.xlitekt.network.packet.assembler.block.RenderingBlock
-import com.runetopic.xlitekt.util.ext.writeByteNegate
-import com.runetopic.xlitekt.util.ext.writeShortLittleEndianAdd
+import com.runetopic.xlitekt.shared.buffer.writeByteNegate
+import com.runetopic.xlitekt.shared.buffer.writeShortLittleEndianAdd
 import io.ktor.utils.io.core.buildPacket
 import io.ktor.utils.io.core.writeShort
 

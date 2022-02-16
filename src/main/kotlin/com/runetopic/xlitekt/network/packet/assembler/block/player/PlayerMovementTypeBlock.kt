@@ -3,8 +3,8 @@ package com.runetopic.xlitekt.network.packet.assembler.block.player
 import com.runetopic.xlitekt.game.actor.player.Player
 import com.runetopic.xlitekt.game.actor.render.Render
 import com.runetopic.xlitekt.network.packet.assembler.block.RenderingBlock
-import com.runetopic.xlitekt.util.ext.toByte
-import com.runetopic.xlitekt.util.ext.writeByteAdd
+import com.runetopic.xlitekt.shared.buffer.toByte
+import com.runetopic.xlitekt.shared.buffer.writeByteAdd
 import io.ktor.utils.io.core.buildPacket
 
 class PlayerMovementTypeBlock : RenderingBlock<Player, Render.MovementType>(9, 0x400) {

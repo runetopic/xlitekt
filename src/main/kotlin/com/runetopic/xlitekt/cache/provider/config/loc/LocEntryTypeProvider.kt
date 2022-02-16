@@ -1,7 +1,7 @@
 package com.runetopic.xlitekt.cache.provider.config.loc
 
 import com.runetopic.xlitekt.cache.provider.EntryTypeProvider
-import com.runetopic.xlitekt.util.ext.readStringCp1252NullTerminated
+import com.runetopic.xlitekt.shared.buffer.readStringCp1252NullTerminated
 import io.ktor.utils.io.core.ByteReadPacket
 import io.ktor.utils.io.core.readShort
 import io.ktor.utils.io.core.readUByte

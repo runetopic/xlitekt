@@ -1,8 +1,8 @@
 package com.runetopic.xlitekt.game.ui
 
 import com.runetopic.xlitekt.plugin.koin.inject
-import com.runetopic.xlitekt.util.resource.InterfaceInfo
-import com.runetopic.xlitekt.util.resource.InterfaceInfoMap
+import com.runetopic.xlitekt.shared.resource.InterfaceInfo
+import com.runetopic.xlitekt.shared.resource.InterfaceInfoMap
 import kotlin.reflect.KClass
 
 /**

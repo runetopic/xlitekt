@@ -1,10 +1,10 @@
 package com.runetopic.xlitekt.cache.provider.ui
 
 import com.runetopic.xlitekt.cache.provider.EntryTypeProvider
-import com.runetopic.xlitekt.util.ext.packInterface
-import com.runetopic.xlitekt.util.ext.readMedium
-import com.runetopic.xlitekt.util.ext.readStringCp1252NullTerminated
-import com.runetopic.xlitekt.util.ext.toBoolean
+import com.runetopic.xlitekt.shared.buffer.packInterface
+import com.runetopic.xlitekt.shared.buffer.readUMedium
+import com.runetopic.xlitekt.shared.buffer.readStringCp1252NullTerminated
+import com.runetopic.xlitekt.shared.buffer.toBoolean
 import io.ktor.utils.io.core.ByteReadPacket
 import io.ktor.utils.io.core.readInt
 import io.ktor.utils.io.core.readShort
@@ -97,7 +97,7 @@ class InterfaceEntryTypeProvider : EntryTypeProvider<InterfaceEntryType>() {
                 type.field3359 = readUByte().toInt().toBoolean()
             }
         }
-        type.flags = readMedium()
+        type.flags = readUMedium()
         type.dataText = readStringCp1252NullTerminated()
 
         type.actions = buildList {

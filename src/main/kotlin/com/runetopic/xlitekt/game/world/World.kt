@@ -3,19 +3,24 @@ package com.runetopic.xlitekt.game.world
 import com.runetopic.xlitekt.game.actor.NPCList
 import com.runetopic.xlitekt.game.actor.PlayerList
 import com.runetopic.xlitekt.game.actor.player.Player
-import com.runetopic.xlitekt.network.packet.NPCInfoPacket
 import com.runetopic.xlitekt.network.packet.PlayerInfoPacket
+import com.runetopic.xlitekt.shared.Dispatcher
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 class World {
     val players = PlayerList(MAX_PLAYERS)
     val npcs = NPCList(MAX_NPCs)
 
-    fun process() = players.filterNotNull().filter(Player::online).run {
-        parallelStream().forEach {
-            it.client?.writePacket(PlayerInfoPacket(it))
-            it.client?.writePacket(NPCInfoPacket(it))
+    fun process() = runBlocking(Dispatcher.GAME) {
+        launch(Dispatcher.UPDATE) {
+            val players = players.filterNotNull().filter(Player::online)
+            players.parallelStream().forEach {
+                it.client?.writePacket(PlayerInfoPacket(it))
+                it.client?.writeChannel?.flush()
+            }
+            players.parallelStream().forEach(Player::reset)
         }
-        parallelStream().forEach(Player::reset)
     }
 
     companion object {

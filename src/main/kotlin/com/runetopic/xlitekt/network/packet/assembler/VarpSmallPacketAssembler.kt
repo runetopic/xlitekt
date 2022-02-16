@@ -1,7 +1,7 @@
 package com.runetopic.xlitekt.network.packet.assembler
 
 import com.runetopic.xlitekt.network.packet.VarpSmallPacket
-import com.runetopic.xlitekt.util.ext.writeByteAdd
+import com.runetopic.xlitekt.shared.buffer.writeByteAdd
 import io.ktor.utils.io.core.buildPacket
 import io.ktor.utils.io.core.writeShort
 

@@ -1,8 +1,8 @@
 package com.runetopic.xlitekt.network.packet.assembler
 
 import com.runetopic.xlitekt.network.packet.UpdateStatPacket
-import com.runetopic.xlitekt.util.ext.writeByteSubtract
-import com.runetopic.xlitekt.util.ext.writeIntV1
+import com.runetopic.xlitekt.shared.buffer.writeByteSubtract
+import com.runetopic.xlitekt.shared.buffer.writeIntV1
 import io.ktor.utils.io.core.buildPacket
 
 /**

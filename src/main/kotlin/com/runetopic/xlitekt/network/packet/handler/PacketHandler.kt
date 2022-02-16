@@ -7,5 +7,5 @@ import com.runetopic.xlitekt.network.packet.Packet
  * @author Jordan Abraham
  */
 interface PacketHandler<out P : Packet> {
-    suspend fun handlePacket(player: Player, packet: @UnsafeVariance P)
+    fun handlePacket(player: Player, packet: @UnsafeVariance P)
 }

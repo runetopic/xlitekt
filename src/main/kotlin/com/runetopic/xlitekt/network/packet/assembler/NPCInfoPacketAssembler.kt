@@ -17,9 +17,9 @@ import com.runetopic.xlitekt.network.packet.assembler.block.npc.NPCSequenceBlock
 import com.runetopic.xlitekt.network.packet.assembler.block.npc.NPCSpotAnimationBlock
 import com.runetopic.xlitekt.network.packet.assembler.block.npc.NPCTransmogrificationBlock
 import com.runetopic.xlitekt.plugin.koin.inject
-import com.runetopic.xlitekt.util.ext.BitAccess
-import com.runetopic.xlitekt.util.ext.toInt
-import com.runetopic.xlitekt.util.ext.withBitAccess
+import com.runetopic.xlitekt.shared.buffer.BitAccess
+import com.runetopic.xlitekt.shared.buffer.toInt
+import com.runetopic.xlitekt.shared.buffer.withBitAccess
 import io.ktor.utils.io.core.BytePacketBuilder
 import io.ktor.utils.io.core.buildPacket
 import io.ktor.utils.io.core.writeShortLittleEndian

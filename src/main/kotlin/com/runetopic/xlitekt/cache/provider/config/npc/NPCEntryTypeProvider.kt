@@ -1,9 +1,7 @@
 package com.runetopic.xlitekt.cache.provider.config.npc
 
 import com.runetopic.xlitekt.cache.provider.EntryTypeProvider
-import com.runetopic.xlitekt.cache.provider.EntryTypeProvider.Companion.CONFIG_INDEX
-import com.runetopic.xlitekt.cache.provider.EntryTypeProvider.Companion.NPC_CONFIG
-import com.runetopic.xlitekt.util.ext.readStringCp1252NullTerminated
+import com.runetopic.xlitekt.shared.buffer.readStringCp1252NullTerminated
 import io.ktor.utils.io.core.ByteReadPacket
 import io.ktor.utils.io.core.readUByte
 import io.ktor.utils.io.core.readUShort

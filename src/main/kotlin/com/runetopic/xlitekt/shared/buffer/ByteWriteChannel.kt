@@ -1,8 +1,7 @@
-package com.runetopic.xlitekt.util.ext
+package com.runetopic.xlitekt.shared.buffer
 
 import com.runetopic.cryptography.isaac.ISAAC
 import io.ktor.utils.io.ByteWriteChannel
-import java.lang.IllegalArgumentException
 
 suspend fun ByteWriteChannel.writePacketOpcode(isaac: ISAAC, opcode: Int) {
     if (opcode > Byte.MAX_VALUE) {

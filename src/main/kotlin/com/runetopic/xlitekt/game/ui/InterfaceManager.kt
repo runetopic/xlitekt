@@ -10,7 +10,7 @@ import com.runetopic.xlitekt.network.packet.IfSetEventsPacket
 import com.runetopic.xlitekt.network.packet.MessageGamePacket
 import com.runetopic.xlitekt.network.packet.RunClientScriptPacket
 import com.runetopic.xlitekt.network.packet.VarpSmallPacket
-import com.runetopic.xlitekt.util.ext.packInterface
+import com.runetopic.xlitekt.shared.buffer.packInterface
 import kotlinx.coroutines.runBlocking
 
 /**

@@ -5,8 +5,8 @@ import com.runetopic.xlitekt.game.actor.render.Render
 import com.runetopic.xlitekt.network.packet.assembler.block.RenderingBlock
 import com.runetopic.xlitekt.network.packet.assembler.block.player.kit.BodyPartColor
 import com.runetopic.xlitekt.network.packet.assembler.block.player.kit.PlayerIdentityKit
-import com.runetopic.xlitekt.util.ext.writeBytesAdd
-import com.runetopic.xlitekt.util.ext.writeStringCp1252NullTerminated
+import com.runetopic.xlitekt.shared.buffer.writeBytesAdd
+import com.runetopic.xlitekt.shared.buffer.writeStringCp1252NullTerminated
 import io.ktor.utils.io.core.BytePacketBuilder
 import io.ktor.utils.io.core.ByteReadPacket
 import io.ktor.utils.io.core.buildPacket

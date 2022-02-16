@@ -1,8 +1,8 @@
 package com.runetopic.xlitekt.network.packet.disassembler
 
 import com.runetopic.xlitekt.network.packet.OpHeldPacket
-import com.runetopic.xlitekt.util.ext.readIntV2
-import com.runetopic.xlitekt.util.ext.readUShortLittleEndianSubtract
+import com.runetopic.xlitekt.shared.buffer.readIntV2
+import com.runetopic.xlitekt.shared.buffer.readUShortLittleEndianSubtract
 import io.ktor.utils.io.core.ByteReadPacket
 import io.ktor.utils.io.core.readUShort
 
