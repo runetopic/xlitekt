@@ -74,7 +74,7 @@ private suspend fun Client.writeHandshake(opcode: Int, version: Int) {
 
 private suspend fun Client.readJS5File() = try {
     while (true) {
-        withTimeout(10_000) {
+        withTimeout(30_000) {
             when (val opcode = readChannel.readByte().toInt()) {
                 JS5_HIGH_PRIORITY_OPCODE, JS5_LOW_PRIORITY_OPCODE -> {
                     val uid = readChannel.readUMedium()
