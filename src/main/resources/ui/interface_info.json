@@ -2,164 +2,91 @@
   {
     "id": 84,
     "name": "equipment_bonuses",
-    "destination": {
-      "fixedChildId": 40,
-      "resizableChildId": 16,
-      "resizableModernChildId": 16
-    }
+    "resizableChildId": 16
   },
   {
     "id": 109,
     "name": "account_management",
-    "destination": {
-      "fixedChildId": 87,
-      "resizableChildId": 83,
-      "resizableModernChildId": 80
-    }
+    "resizableChildId": 83
   },
   {
     "id": 116,
     "name": "settings",
-    "destination": {
-      "fixedChildId": 90,
-      "resizableChildId": 86,
-      "resizableModernChildId": 83
-    }
+    "resizableChildId": 86
   },
   {
     "id": 149,
     "name": "inventory",
-    "destination": {
-      "fixedChildId": 82,
-      "resizableChildId": 78,
-      "resizableModernChildId": 75
-    }
+    "resizableChildId": 78
   },
   {
     "id": 160,
     "name": "mini_map",
-    "destination": {
-      "fixedChildId": 24,
-      "resizableChildId": 32,
-      "resizableModernChildId": 32
-    }
+    "resizableChildId": 32
   },
   {
     "id": 162,
     "name": "chat_box",
-    "destination": {
-      "fixedChildId": 10,
-      "resizableChildId": 94,
-      "resizableModernChildId": 91
-    }
+    "resizableChildId": 94
   },
   {
     "id": 182,
     "name": "logout",
-    "destination": {
-      "fixedChildId": 89,
-      "resizableChildId": 85,
-      "resizableModernChildId": 82
-    }
+    "resizableChildId": 85
   },
   {
     "id": 216,
     "name": "emotes",
-    "destination": {
-      "fixedChildId": 91,
-      "resizableChildId": 87,
-      "resizableModernChildId": 84
-    }
+    "resizableChildId": 87
   },
   {
     "id": 218,
     "name": "magic",
-    "destination": {
-      "fixedChildId": 85,
-      "resizableChildId": 81,
-      "resizableModernChildId": 78
-    }
+    "resizableChildId": 81
   },
   {
     "id": 239,
     "name": "music_player",
-    "destination": {
-      "fixedChildId": 92,
-      "resizableChildId": 88,
-      "resizableModernChildId": 85
-    }
+    "resizableChildId": 88
   },
   {
     "id": 320,
     "name": "skills",
-    "destination": {
-      "fixedChildId": 80,
-      "resizableChildId": 76,
-      "resizableModernChildId": 73
-    }
+    "resizableChildId": 76
   },
   {
     "id": 387,
     "name": "worn_equipment",
-    "destination": {
-      "fixedChildId": 83,
-      "resizableChildId": 79,
-      "resizableModernChildId": 76
-    }
+    "resizableChildId": 79
   },
   {
     "id": 429,
     "name": "friends",
-    "destination": {
-      "fixedChildId": 88,
-      "resizableChildId": 84,
-      "resizableModernChildId": 81
-    }
+    "resizableChildId": 84
   },
-
   {
     "id": 541,
     "name": "prayer",
-    "destination": {
-      "fixedChildId": 84,
-      "resizableChildId": 80,
-      "resizableModernChildId": 77
-    }
+    "resizableChildId": 80
   },
   {
     "id": 593,
     "name": "combat_options",
-    "destination": {
-      "fixedChildId": 79,
-      "resizableChildId": 75,
-      "resizableModernChildId": 72
-    }
+    "resizableChildId": 75
   },
   {
     "id": 629,
     "name": "character_summary",
-    "destination": {
-      "fixedChildId": 81,
-      "resizableChildId": 77,
-      "resizableModernChildId": 74
-    }
+    "resizableChildId": 77
   },
   {
     "id": 651,
     "name": "unknown_overlay",
-    "destination": {
-      "fixedChildId": 31,
-      "resizableChildId": 6,
-      "resizableModernChildId": 6
-    }
+    "resizableChildId": 6
   },
   {
     "id": 707,
     "name": "chat_channel",
-    "destination": {
-      "fixedChildId": 86,
-      "resizableChildId": 82,
-      "resizableModernChildId": 79
-    }
+    "resizableChildId": 82
   }
 ]

@@ -1,8 +1,9 @@
 package com.runetopic.xlitekt.game.ui
 
+import com.runetopic.xlitekt.cache.Cache.entryType
+import com.runetopic.xlitekt.cache.provider.config.enum.EnumEntryType
 import com.runetopic.xlitekt.game.actor.player.Player
 import com.runetopic.xlitekt.game.ui.InterfaceMapping.addInterfaceListener
-import com.runetopic.xlitekt.game.ui.InterfaceMapping.interfaceInfo
 import com.runetopic.xlitekt.network.packet.IfCloseSubPacket
 import com.runetopic.xlitekt.network.packet.IfMoveSubPacket
 import com.runetopic.xlitekt.network.packet.IfOpenSubPacket
@@ -38,12 +39,10 @@ class InterfaceManager(
     fun openInterface(userInterface: UserInterface) = userInterface.let {
         interfaces += it
 
-        val childId = it.interfaceInfo.destination.childIdForLayout(currentInterfaceLayout)
-
         player.client?.writePacket(
             IfOpenSubPacket(
                 interfaceId = it.interfaceInfo.id,
-                toPackedInterface = currentInterfaceLayout.interfaceId.packInterface(childId),
+                toPackedInterface = currentInterfaceLayout.interfaceId.packInterface(userInterface.childId(currentInterfaceLayout)),
                 alwaysOpen = true
             )
         )
@@ -58,10 +57,17 @@ class InterfaceManager(
         )
     }
 
+    private fun UserInterface.childId(layout: InterfaceLayout): Int =
+        entryType<EnumEntryType>(layout.enumId)
+            ?.params
+            ?.entries
+            ?.find { it.key == InterfaceLayout.RESIZABLE.interfaceId.packInterface(interfaceInfo.resizableChildId) }
+            ?.value as Int and 0xffff
+
     fun closeInterface(userInterface: UserInterface) = userInterface.let {
         interfaces -= it
 
-        val childId = it.interfaceInfo.destination.childIdForLayout(currentInterfaceLayout)
+        val childId = userInterface.childId(currentInterfaceLayout)
 
         player.client?.writePacket(
             IfCloseSubPacket(
@@ -88,12 +94,10 @@ class InterfaceManager(
     }
 
     private fun moveSub(userInterface: UserInterface, toLayout: InterfaceLayout) = userInterface.let {
-        val fromChildId = it.interfaceInfo.destination.childIdForLayout(currentInterfaceLayout)
-        val toChildId = it.interfaceInfo.destination.childIdForLayout(toLayout)
         player.client?.writePacket(
             IfMoveSubPacket(
-                fromPackedInterface = currentInterfaceLayout.interfaceId.packInterface(fromChildId),
-                toPackedInterface = toLayout.interfaceId.packInterface(toChildId)
+                fromPackedInterface = currentInterfaceLayout.interfaceId.packInterface(userInterface.childId(currentInterfaceLayout)),
+                toPackedInterface = toLayout.interfaceId.packInterface(userInterface.childId(toLayout))
             )
         )
         listeners.find { l -> l.userInterface == it }

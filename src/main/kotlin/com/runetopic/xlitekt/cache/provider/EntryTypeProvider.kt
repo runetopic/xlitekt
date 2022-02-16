@@ -2,8 +2,8 @@ package com.runetopic.xlitekt.cache.provider
 
 import com.runetopic.cache.store.Js5Store
 import com.runetopic.xlitekt.plugin.koin.inject
-import com.runetopic.xlitekt.shared.buffer.readUMedium
 import com.runetopic.xlitekt.shared.buffer.readStringCp1252NullTerminated
+import com.runetopic.xlitekt.shared.buffer.readUMedium
 import com.runetopic.xlitekt.shared.toBoolean
 import io.ktor.utils.io.core.ByteReadPacket
 import io.ktor.utils.io.core.readInt
@@ -39,6 +39,7 @@ abstract class EntryTypeProvider<R : EntryType> {
 
         // Config groups.
         const val LOC_CONFIG = 6
+        const val ENUM_CONFIG = 8
         const val NPC_CONFIG = 9
         const val OBJ_CONFIG = 10
         const val SEQUENCE_CONFIG = 12
