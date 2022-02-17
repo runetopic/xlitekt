@@ -37,6 +37,6 @@ sealed class UserInterfaceEvent {
 }
 
 typealias OnButtonClickEvent = UserInterfaceEvent.ButtonClickEvent.() -> Unit
-typealias OnInitEvent = UserInterfaceEvent.OpenEvent.() -> Unit
-typealias OnBeforeOpenEvent = UserInterfaceEvent.InitEvent.() -> Unit
+typealias OnOpenEvent = UserInterfaceEvent.OpenEvent.() -> Unit
+typealias OnInitEvent = UserInterfaceEvent.InitEvent.() -> Unit
 typealias OnCloseEvent = UserInterfaceEvent.CloseEvent.() -> Unit
