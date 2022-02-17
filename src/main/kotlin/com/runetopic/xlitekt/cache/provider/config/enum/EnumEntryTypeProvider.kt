@@ -29,25 +29,21 @@ class EnumEntryTypeProvider : EntryTypeProvider<EnumEntryType>() {
             4 -> type.defaultInt = readInt()
             5 -> {
                 val size = readUShort().toInt()
-                val keys = mutableListOf<Int>()
-                val values = mutableListOf<String>()
-                repeat(size) {
-                    keys.add(readInt())
-                    values.add(readStringCp1252NullTerminated())
+                type.params = buildMap {
+                    repeat(size) {
+                        put(readInt(), readStringCp1252NullTerminated())
+                    }
                 }
                 type.size = size
-                type.params = keys.mapIndexed { index, it -> it to values[index] }.toMap()
             }
             6 -> {
                 val size = readUShort().toInt()
-                val keys = mutableListOf<Int>()
-                val values = mutableListOf<Int>()
-                repeat(size) {
-                    keys.add(readInt())
-                    values.add(readInt())
+                type.params = buildMap {
+                    repeat(size) {
+                        put(readInt(), readInt())
+                    }
                 }
                 type.size = size
-                type.params = keys.mapIndexed { index, it -> it to values[index] }.toMap()
             }
             else -> throw IllegalArgumentException("Missing opcode $opcode.")
         }
