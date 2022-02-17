@@ -30,7 +30,7 @@ class InterfaceManager(
 
     fun login() {
         openTop(currentInterfaceLayout.interfaceId)
-        gameInterfaces.forEach { openInterface(it, -1) }
+        gameInterfaces.forEach { it.interfaceInfo.resizableChildId?.let { childId -> openInterface(it, childId) } }
         player.write(VarpSmallPacket(1737, -1)) // TODO TEMP until i write a var system
         message("Welcome to Xlitekt.")
     }
