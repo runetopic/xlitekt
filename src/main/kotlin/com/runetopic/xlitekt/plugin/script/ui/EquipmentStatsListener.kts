@@ -17,6 +17,5 @@ onInterface<UserInterface.EquipmentStats> {
 
     onClose {
         interfaces.closeInventory()
-        message("Closing inventory for equipment.")
     }
 }
