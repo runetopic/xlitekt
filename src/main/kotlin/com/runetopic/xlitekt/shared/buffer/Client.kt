@@ -248,11 +248,8 @@ private suspend fun Client.readLogin() {
                 return disconnect("Bad Session. Client and cache crc are mismatched.")
             }
             val serverKeys = IntArray(clientKeys.size) { clientKeys[it] + 50 }
+            setIsaacCiphers(clientKeys.toISAAC(), serverKeys.toISAAC())
 
-            setIsaacCiphers(
-                clientKeys.toISAAC(),
-                serverKeys.toISAAC()
-            )
             Player(username).let {
                 it.interfaces.currentInterfaceLayout = if (clientResizeable) InterfaceLayout.RESIZABLE else InterfaceLayout.FIXED
                 player = it
