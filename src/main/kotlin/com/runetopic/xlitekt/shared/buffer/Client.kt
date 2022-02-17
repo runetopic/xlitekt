@@ -250,8 +250,8 @@ private suspend fun Client.readLogin() {
             val serverKeys = IntArray(clientKeys.size) { clientKeys[it] + 50 }
 
             setIsaacCiphers(
-                clientKeys.toList().toIntArray().toISAAC(),
-                serverKeys.toList().toIntArray().toISAAC()
+                clientKeys.toISAAC(),
+                serverKeys.toISAAC()
             )
             Player(username).let {
                 it.interfaces.currentInterfaceLayout = if (clientResizeable) InterfaceLayout.RESIZABLE else InterfaceLayout.FIXED
