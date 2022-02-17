@@ -77,11 +77,4 @@ class UserInterfaceListener(
             item
         )
     }
-
-    fun UserInterfaceEvent.OpenEvent.setItems(containerKey: Int, interfaceId: Int, item: List<Item?>) {
-        items[containerKey] = UserInterfaceEvent.ContainerUpdateFullEvent(
-            interfaceId,
-            item
-        )
-    }
 }
