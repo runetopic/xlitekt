@@ -26,8 +26,8 @@ onInterface<UserInterface.Settings> {
     onClick(layoutDropDownChildId) {
         val interfaceLayout = enumValues<InterfaceLayout>().find { layout -> layout.id == it.slotId } ?: return@onClick
         varsManager.sendVarBit(4607, (it.slotId == 3).toInt())
-        player.script(clientModeCS2Id, listOf(it.slotId - 1))
-        player.script(interfaceScalingCS2Id, listOf(0))
+        script(clientModeCS2Id, listOf(it.slotId - 1))
+        script(interfaceScalingCS2Id, listOf(0))
         interfaces.switchLayout(interfaceLayout)
     }
 }

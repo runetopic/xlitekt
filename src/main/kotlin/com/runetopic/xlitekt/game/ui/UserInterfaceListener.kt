@@ -8,7 +8,7 @@ import com.runetopic.xlitekt.shared.packInterface
  * @author Tyler Telis
  */
 class UserInterfaceListener(
-    val player: Player,
+    private val player: Player,
     val userInterface: UserInterface
 ) {
     private var onInitEvent: OnInitEvent? = null
