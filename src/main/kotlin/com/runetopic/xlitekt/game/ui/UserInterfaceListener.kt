@@ -1,6 +1,7 @@
 package com.runetopic.xlitekt.game.ui
 
 import com.runetopic.xlitekt.game.actor.player.Player
+import com.runetopic.xlitekt.game.item.Item
 import com.runetopic.xlitekt.shared.packInterface
 
 /**
@@ -16,6 +17,7 @@ class UserInterfaceListener(
     private val children = mutableMapOf<Int, OnButtonClickEvent>()
     private val actions = mutableMapOf<String, OnButtonClickEvent>()
     private val texts = mutableMapOf<Int, String>()
+    private val items = mutableMapOf<Int, UserInterfaceEvent.ContainerUpdateFullEvent>()
     private val events = mutableMapOf<Int, UserInterfaceEvent.IfEvent>()
 
     fun onOpen(onOpenEvent: OnOpenEvent) {
@@ -26,6 +28,13 @@ class UserInterfaceListener(
         this.onOpenEvent?.invoke(onOpenEvent)
         this.texts.forEach { player.interfaceManager.setText(it.key, it.value) }
         this.events.forEach { player.interfaceManager.setEvent(it.key, it.value) }
+        this.items.forEach {
+            player.interfaceManager.setContainerUpdateFull(
+                interfaceId = it.value.interfaceId,
+                containerKey = it.key,
+                items = it.value.items
+            )
+        }
     }
 
     fun onClose(onCloseEvent: OnCloseEvent) {
@@ -60,5 +69,19 @@ class UserInterfaceListener(
 
     fun UserInterfaceEvent.OpenEvent.setEvent(childId: Int, slots: IntRange, event: InterfaceEvent) {
         events[interfaceId.packInterface(childId)] = UserInterfaceEvent.IfEvent(slots, event)
+    }
+
+    fun UserInterfaceEvent.OpenEvent.setItems(containerKey: Int, item: List<Item?>) {
+        items[containerKey] = UserInterfaceEvent.ContainerUpdateFullEvent(
+            interfaceId = -1,
+            item
+        )
+    }
+
+    fun UserInterfaceEvent.OpenEvent.setItems(containerKey: Int, interfaceId: Int, item: List<Item?>) {
+        items[containerKey] = UserInterfaceEvent.ContainerUpdateFullEvent(
+            interfaceId,
+            item
+        )
     }
 }

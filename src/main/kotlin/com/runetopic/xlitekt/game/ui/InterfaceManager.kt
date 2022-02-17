@@ -3,6 +3,7 @@ package com.runetopic.xlitekt.game.ui
 import com.runetopic.xlitekt.cache.Cache.entryType
 import com.runetopic.xlitekt.cache.provider.config.enum.EnumEntryType
 import com.runetopic.xlitekt.game.actor.player.Player
+import com.runetopic.xlitekt.game.item.Item
 import com.runetopic.xlitekt.game.ui.InterfaceMapping.addInterfaceListener
 import com.runetopic.xlitekt.network.packet.IfCloseSubPacket
 import com.runetopic.xlitekt.network.packet.IfMoveSubPacket
@@ -12,6 +13,7 @@ import com.runetopic.xlitekt.network.packet.IfSetEventsPacket
 import com.runetopic.xlitekt.network.packet.IfSetTextPacket
 import com.runetopic.xlitekt.network.packet.MessageGamePacket
 import com.runetopic.xlitekt.network.packet.RunClientScriptPacket
+import com.runetopic.xlitekt.network.packet.UpdateContainerFullPacket
 import com.runetopic.xlitekt.network.packet.VarpSmallPacket
 import com.runetopic.xlitekt.shared.packInterface
 
@@ -68,6 +70,16 @@ class InterfaceManager(
             event = ifEvent.event.value
         )
     )
+
+    fun setContainerUpdateFull(containerKey: Int, interfaceId: Int, childId: Int = 65536, items: List<Item?>) {
+        player.client?.writePacket(
+            UpdateContainerFullPacket(
+                packedInterface = interfaceId.packInterface(childId),
+                containerKey = containerKey,
+                items = items
+            )
+        )
+    }
 
     private fun openTop(id: Int) = player.client?.writePacket(IfOpenTopPacket(interfaceId = id))
 

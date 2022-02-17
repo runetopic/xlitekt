@@ -1,5 +1,7 @@
 package com.runetopic.xlitekt.game.ui
 
+import com.runetopic.xlitekt.game.item.Item
+
 sealed class UserInterfaceEvent {
     data class OpenEvent(
         val interfaceId: Int
@@ -22,6 +24,11 @@ sealed class UserInterfaceEvent {
     data class IfEvent(
         val slots: IntRange,
         val event: InterfaceEvent
+    ) : UserInterfaceEvent()
+
+    data class ContainerUpdateFullEvent(
+        val interfaceId: Int,
+        val items: List<Item?>
     ) : UserInterfaceEvent()
 }
 
