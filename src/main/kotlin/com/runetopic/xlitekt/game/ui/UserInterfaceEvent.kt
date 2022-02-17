@@ -35,4 +35,3 @@ sealed class UserInterfaceEvent {
 typealias OnButtonClickEvent = UserInterfaceEvent.ButtonClickEvent.() -> Unit
 typealias OnOpenEvent = UserInterfaceEvent.OpenEvent.() -> Unit
 typealias OnCloseEvent = UserInterfaceEvent.CloseEvent.() -> Unit
-

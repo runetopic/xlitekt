@@ -11,18 +11,17 @@ import kotlin.reflect.KClass
  */
 object InterfaceMapping {
     private val interfaceInfoMap by inject<InterfaceInfoMap>()
+    val map = mutableMapOf<KClass<*>, UserInterfaceListener.() -> Unit>()
 
     fun interfaceInfo(name: String): InterfaceInfo = interfaceInfoMap[name] ?: throw RuntimeException("Interface $name is not currently registered in the system.")
 
-    val interfaceListeners = mutableMapOf<KClass<*>, UserInterfaceListener.() -> Unit>()
-
-    inline fun <reified T : UserInterface> buildInterfaceListener(noinline listener: UserInterfaceListener.() -> Unit) {
-        interfaceListeners[T::class] = listener
-    }
-
     fun addInterfaceListener(userInterface: UserInterface, player: Player): UserInterfaceListener {
         val listener = UserInterfaceListener(player, userInterface)
-        interfaceListeners[userInterface::class]?.invoke(listener)
+        map[userInterface::class]?.invoke(listener)
         return listener
     }
+}
+
+inline fun <reified T : UserInterface> onInterface(noinline listener: UserInterfaceListener.() -> Unit) {
+    InterfaceMapping.map[T::class] = listener
 }

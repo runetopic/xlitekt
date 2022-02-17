@@ -16,11 +16,10 @@ class World {
     fun process() = runBlocking(Dispatcher.GAME) {
         launch(Dispatcher.UPDATE) {
             val players = players.filterNotNull().filter(Player::online)
-            players.parallelStream().forEach { player ->
-                player.client?.apply {
-                    writePacket(PlayerInfoPacket(player))
-                    writePacket(NPCInfoPacket(player))
-                }?.writeChannel?.flush()
+            players.parallelStream().forEach {
+                it.write(PlayerInfoPacket(it))
+                it.write(NPCInfoPacket(it))
+                it.flushPool()
             }
             players.parallelStream().forEach(Player::reset)
         }

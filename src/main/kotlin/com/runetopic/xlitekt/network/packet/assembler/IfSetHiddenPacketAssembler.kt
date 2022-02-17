@@ -1,8 +1,8 @@
 package com.runetopic.xlitekt.network.packet.assembler
 
 import com.runetopic.xlitekt.network.packet.IfSetHiddenPacket
-import com.runetopic.xlitekt.shared.toByte
 import com.runetopic.xlitekt.shared.buffer.writeIntV1
+import com.runetopic.xlitekt.shared.toByte
 import io.ktor.utils.io.core.buildPacket
 
 /**

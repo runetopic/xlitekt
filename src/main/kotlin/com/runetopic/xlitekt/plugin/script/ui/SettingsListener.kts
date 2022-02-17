@@ -2,15 +2,15 @@ package com.runetopic.xlitekt.plugin.script.ui
 
 import com.runetopic.xlitekt.game.ui.InterfaceEvent.CLICK_OPTION_1
 import com.runetopic.xlitekt.game.ui.InterfaceLayout
-import com.runetopic.xlitekt.game.ui.InterfaceMapping.buildInterfaceListener
 import com.runetopic.xlitekt.game.ui.UserInterface
+import com.runetopic.xlitekt.game.ui.onInterface
 import com.runetopic.xlitekt.shared.toInt
 
 private val layoutDropDownChildId = 84
 private val clientModeCS2Id = 3998
 private val interfaceScalingCS2Id = 2358
 
-buildInterfaceListener<UserInterface.Settings> {
+onInterface<UserInterface.Settings> {
     onOpen {
         setEvent(childId = 41, slots = 0..21, event = CLICK_OPTION_1)
         setEvent(childId = 55, slots = 0..21, event = CLICK_OPTION_1)

@@ -9,6 +9,7 @@ import com.runetopic.xlitekt.game.ui.InterfaceManager
 import com.runetopic.xlitekt.game.varp.VarsManager
 import com.runetopic.xlitekt.game.world.World
 import com.runetopic.xlitekt.network.client.Client
+import com.runetopic.xlitekt.network.packet.Packet
 import com.runetopic.xlitekt.network.packet.RebuildNormalPacket
 import com.runetopic.xlitekt.plugin.koin.inject
 
@@ -20,21 +21,24 @@ class Player(
     val username: String,
 ) : Actor(Tile(3222, 3222)) {
     private val eventBus by inject<EventBus>()
-    var client: Client? = null
+    private var client: Client? = null
+
+    val viewport = Viewport(this)
+    val interfaceManager = InterfaceManager(this)
+    val varsManager = VarsManager(this)
 
     var appearance = Render.Appearance(Render.Appearance.Gender.MALE, -1, -1, -1, false)
 
     var rights = 2
     var online = false
 
-    val viewport = Viewport(this)
-    val interfaceManager = InterfaceManager(this)
-    val varsManager = VarsManager(this)
+    override fun totalHitpoints(): Int = 100
+    override fun currentHitpoints(): Int = 100
 
     fun login(client: Client) {
         this.client = client
         previousTile = tile
-        client.writePacket(RebuildNormalPacket(viewport, tile, true))
+        write(RebuildNormalPacket(viewport, tile, true))
         refreshAppearance()
         interfaceManager.login()
         varsManager.login()
@@ -54,6 +58,6 @@ class Player(
         return this.appearance
     }
 
-    override fun totalHitpoints(): Int = 100
-    override fun currentHitpoints(): Int = 100
+    fun write(packet: Packet) = client?.writePacket(packet)
+    fun flushPool() = client?.writeChannel?.flush()
 }

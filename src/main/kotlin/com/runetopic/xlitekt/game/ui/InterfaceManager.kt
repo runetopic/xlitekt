@@ -31,7 +31,7 @@ class InterfaceManager(
     fun login() {
         openTop(currentInterfaceLayout.interfaceId)
         gameInterfaces.forEach(::openInterface)
-        player.client?.writePacket(VarpSmallPacket(1737, -1)) // TODO TEMP until i write a var system
+        player.write(VarpSmallPacket(1737, -1)) // TODO TEMP until i write a var system
         message("Welcome to Xlitekt.")
     }
 
@@ -44,25 +44,25 @@ class InterfaceManager(
     }
 
     fun message(message: String) { // TODO Move this to a social thing.
-        player.client?.writePacket(MessageGamePacket(0, message, false))
+        player.write(MessageGamePacket(0, message, false))
     }
 
     fun runClientScript(scriptId: Int, parameters: List<Any>) { // TODO Move this somewhere else not rlly interface related.
-        player.client?.writePacket(RunClientScriptPacket(scriptId, parameters))
+        player.write(RunClientScriptPacket(scriptId, parameters))
     }
 
     fun closeModal() = interfaces.find { (it.interfaceInfo.resizableChildId ?: MODAL_CHILD).enumChildForLayout(currentInterfaceLayout) == MODAL_CHILD.enumChildForLayout(currentInterfaceLayout) }?.run {
         closeInterface(this)
     }
 
-    fun setText(packedInterface: Int, text: String) = player.client?.writePacket(
+    fun setText(packedInterface: Int, text: String) = player.write(
         IfSetTextPacket(
             packedInterface = packedInterface,
             text = text
         )
     )
 
-    fun setEvent(packedInterface: Int, ifEvent: UserInterfaceEvent.IfEvent) = player.client?.writePacket(
+    fun setEvent(packedInterface: Int, ifEvent: UserInterfaceEvent.IfEvent) = player.write(
         IfSetEventsPacket(
             packedInterface = packedInterface,
             fromSlot = ifEvent.slots.first,
@@ -72,7 +72,7 @@ class InterfaceManager(
     )
 
     fun setContainerUpdateFull(containerKey: Int, interfaceId: Int, childId: Int = 65536, items: List<Item?>) {
-        player.client?.writePacket(
+        player.write(
             UpdateContainerFullPacket(
                 packedInterface = interfaceId.packInterface(childId),
                 containerKey = containerKey,
@@ -81,7 +81,7 @@ class InterfaceManager(
         )
     }
 
-    private fun openTop(id: Int) = player.client?.writePacket(IfOpenTopPacket(interfaceId = id))
+    private fun openTop(id: Int) = player.write(IfOpenTopPacket(interfaceId = id))
 
     fun openModal(userInterface: UserInterface) {
         if (modalOpen()) closeModal()
@@ -94,7 +94,7 @@ class InterfaceManager(
         val childId = derivedChildId.enumChildForLayout(
             currentInterfaceLayout
         )
-        player.client?.writePacket(
+        player.write(
             IfOpenSubPacket(
                 interfaceId = it.interfaceInfo.id,
                 toPackedInterface = currentInterfaceLayout.interfaceId.packInterface(childId),
@@ -119,7 +119,7 @@ class InterfaceManager(
     private fun closeInterface(userInterface: UserInterface) = userInterface.let {
         interfaces -= it
 
-        player.client?.writePacket(
+        player.write(
             IfCloseSubPacket(
                 packedInterface = currentInterfaceLayout.interfaceId.packInterface((it.interfaceInfo.resizableChildId ?: MODAL_CHILD).enumChildForLayout(currentInterfaceLayout))
             )
@@ -138,7 +138,7 @@ class InterfaceManager(
         val derivedChildId = (it.interfaceInfo.resizableChildId ?: MODAL_CHILD)
         val fromChildId = derivedChildId.enumChildForLayout(currentInterfaceLayout)
         val toChildId = derivedChildId.enumChildForLayout(toLayout)
-        player.client?.writePacket(
+        player.write(
             IfMoveSubPacket(
                 fromPackedInterface = currentInterfaceLayout.interfaceId.packInterface(fromChildId),
                 toPackedInterface = toLayout.interfaceId.packInterface(toChildId)

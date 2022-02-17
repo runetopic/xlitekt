@@ -6,6 +6,7 @@ import com.runetopic.xlitekt.game.actor.player.Player
 import com.runetopic.xlitekt.game.ui.InterfaceLayout
 import com.runetopic.xlitekt.network.client.Client
 import com.runetopic.xlitekt.network.client.Client.Companion.checksums
+import com.runetopic.xlitekt.network.client.Client.Companion.disassemblers
 import com.runetopic.xlitekt.network.client.Client.Companion.majorBuild
 import com.runetopic.xlitekt.network.client.Client.Companion.minorBuild
 import com.runetopic.xlitekt.network.client.Client.Companion.rsaExponent
@@ -25,8 +26,8 @@ import com.runetopic.xlitekt.network.client.ClientResponseOpcode.BAD_SESSION_OPC
 import com.runetopic.xlitekt.network.client.ClientResponseOpcode.CLIENT_OUTDATED_OPCODE
 import com.runetopic.xlitekt.network.client.ClientResponseOpcode.HANDSHAKE_SUCCESS_OPCODE
 import com.runetopic.xlitekt.network.client.ClientResponseOpcode.LOGIN_SUCCESS_OPCODE
-import com.runetopic.xlitekt.network.packet.RegisteredPackets.disassemblers
-import com.runetopic.xlitekt.network.packet.RegisteredPackets.handlers
+import com.runetopic.xlitekt.network.packet.disassembler.handler.PacketHandlerEvent
+import com.runetopic.xlitekt.network.packet.disassembler.handler.PacketHandlerMapping
 import com.runetopic.xlitekt.shared.toBoolean
 import io.ktor.utils.io.core.ByteReadPacket
 import io.ktor.utils.io.core.readInt
@@ -299,12 +300,12 @@ private suspend fun Client.readPackets(player: Player) = try {
             continue
         }
         val disassembled = disassembler.disassemblePacket(packet)
-        val handler = handlers[disassembled::class]
-        if (handler == null) {
-            logger.debug { "No packet handler found for disassembled packet. Opcode was $opcode." }
+        val listener = PacketHandlerMapping.map[disassembled::class]
+        if (listener == null) {
+            logger.debug { "No packet listener found for disassembled packet. Opcode was $opcode." }
             continue
         }
-        handler.handlePacket(player, disassembled)
+        listener.invoke(PacketHandlerEvent(player, disassembled))
     }
 } catch (exception: Exception) {
     handleException(exception)
@@ -316,4 +317,5 @@ suspend fun Client.poolToWriteChannel(opcode: Int, size: Int, packet: ByteReadPa
         writePacketSize(size, packet.remaining)
     }
     writePacket(packet)
+    // The pool gets flushed to the client on tick.
 }

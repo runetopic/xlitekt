@@ -1,9 +1,9 @@
 package com.runetopic.xlitekt.plugin.script.ui
 
-import com.runetopic.xlitekt.game.ui.InterfaceMapping.buildInterfaceListener
 import com.runetopic.xlitekt.game.ui.UserInterface
+import com.runetopic.xlitekt.game.ui.onInterface
 
-buildInterfaceListener<UserInterface.EquipmentStats> {
+onInterface<UserInterface.EquipmentStats> {
     onOpen {
         setText(24, "Stab +")
     }
