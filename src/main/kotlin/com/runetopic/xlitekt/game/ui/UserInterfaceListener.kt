@@ -11,7 +11,8 @@ class UserInterfaceListener(
     val player: Player,
     val userInterface: UserInterface
 ) {
-    private var onOpenEvent: OnOpenEvent? = null
+    private var beforeOpenEvent: OnBeforeOpenEvent? = null
+    private var onInitEvent: OnInitEvent? = null
     private var onCloseEvent: OnCloseEvent? = null
     private var onButtonClickEvent: OnButtonClickEvent? = null
     private val children = mutableMapOf<Int, OnButtonClickEvent>()
@@ -20,12 +21,20 @@ class UserInterfaceListener(
     private val items = mutableMapOf<Int, UserInterfaceEvent.ContainerUpdateFullEvent>()
     private val events = mutableMapOf<Int, UserInterfaceEvent.IfEvent>()
 
-    fun onOpen(onOpenEvent: OnOpenEvent) {
-        this.onOpenEvent = onOpenEvent
+    fun onOpen(onInitEvent: OnInitEvent) {
+        this.onInitEvent = onInitEvent
     }
 
-    fun open(onOpenEvent: UserInterfaceEvent.OpenEvent) {
-        this.onOpenEvent?.invoke(onOpenEvent)
+    fun onInit(beforeOpenEvent: OnBeforeOpenEvent) {
+        this.beforeOpenEvent = beforeOpenEvent
+    }
+
+    fun init(initEvent: UserInterfaceEvent.InitEvent) {
+        this.beforeOpenEvent?.invoke(initEvent)
+    }
+
+    fun open(openEvent: UserInterfaceEvent.OpenEvent) {
+        this.onInitEvent?.invoke(openEvent)
         this.texts.forEach { player.interfaceManager.setText(it.key, it.value) }
         this.events.forEach { player.interfaceManager.setEvent(it.key, it.value) }
         this.items.forEach {

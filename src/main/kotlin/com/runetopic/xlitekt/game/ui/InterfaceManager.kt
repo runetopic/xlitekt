@@ -96,22 +96,32 @@ class InterfaceManager(
         openInterface(userInterface, INVENTORY_CHILD_ID)
     }
 
-    private fun openInterface(userInterface: UserInterface, derivedChildId: Int) = userInterface.let {
-        interfaces += it
+    private fun openInterface(userInterface: UserInterface, derivedChildId: Int) = userInterface.apply {
+        interfaces += this
+
         val childId = derivedChildId.enumChildForLayout(
             currentInterfaceLayout
         )
+
+        val listener = addInterfaceListener(this, player)
+
+        listeners += listener
+
+        listener.init(
+            UserInterfaceEvent.InitEvent(
+                interfaceId = userInterface.interfaceInfo.id,
+            )
+        )
+
         player.write(
             IfOpenSubPacket(
-                interfaceId = it.interfaceInfo.id,
+                interfaceId = interfaceInfo.id,
                 toPackedInterface = currentInterfaceLayout.interfaceId.packInterface(childId),
                 alwaysOpen = true
             )
         )
-        addInterfaceListener(it, player)
-    }.run {
-        listeners += this
-        open(
+
+        listener.open(
             UserInterfaceEvent.OpenEvent(
                 interfaceId = userInterface.interfaceInfo.id,
             )
@@ -128,37 +138,45 @@ class InterfaceManager(
         derivedChildId.enumChildForLayout(currentInterfaceLayout) == 73.enumChildForLayout(currentInterfaceLayout)
     } != null
 
-    private fun closeInterface(userInterface: UserInterface, childId: Int) = userInterface.let {
-        interfaces -= it
+    private fun closeInterface(userInterface: UserInterface, childId: Int) = userInterface.apply {
+        interfaces -= this
 
         player.write(
             IfCloseSubPacket(
-                packedInterface = currentInterfaceLayout.interfaceId.packInterface((it.interfaceInfo.resizableChildId ?: childId).enumChildForLayout(currentInterfaceLayout))
+                packedInterface = currentInterfaceLayout.interfaceId.packInterface(childId.enumChildForLayout(currentInterfaceLayout))
             )
         )
-        listeners.find { listener -> listener.userInterface == it }
-    }?.run {
-        listeners.removeAt(listeners.indexOf(this))
-        close(
-            UserInterfaceEvent.CloseEvent(
+
+        listeners.find { listener -> listener.userInterface == this }?.apply {
+            close(
+                UserInterfaceEvent.CloseEvent(
+                    interfaceId = userInterface.interfaceInfo.id,
+                )
+            )
+
+            listeners.removeAt(listeners.indexOf(this))
+        }
+    }
+
+    private fun moveSub(userInterface: UserInterface, toLayout: InterfaceLayout) = userInterface.apply {
+        val derivedChildId = userInterface.interfaceInfo.resizableChildId ?: throw IllegalStateException("Could not move sub interface $userInterface. Resizable child id not configured properly. Check interface_info.json.")
+        val fromChildId = derivedChildId.enumChildForLayout(currentInterfaceLayout)
+        val toChildId = derivedChildId.enumChildForLayout(toLayout)
+        val listener = listeners.find { listener -> listener.userInterface == this }
+
+        listener?.init(
+            UserInterfaceEvent.InitEvent(
                 interfaceId = userInterface.interfaceInfo.id,
             )
         )
-    }
 
-    private fun moveSub(userInterface: UserInterface, toLayout: InterfaceLayout) = userInterface.let {
-        val derivedChildId = (it.interfaceInfo.resizableChildId ?: MODAL_CHILD_ID)
-        val fromChildId = derivedChildId.enumChildForLayout(currentInterfaceLayout)
-        val toChildId = derivedChildId.enumChildForLayout(toLayout)
         player.write(
             IfMoveSubPacket(
                 fromPackedInterface = currentInterfaceLayout.interfaceId.packInterface(fromChildId),
                 toPackedInterface = toLayout.interfaceId.packInterface(toChildId)
             )
         )
-        listeners.find { listener -> listener.userInterface == it }
-    }?.run {
-        open(
+        listener?.open(
             UserInterfaceEvent.OpenEvent(
                 interfaceId = userInterface.interfaceInfo.id,
             )

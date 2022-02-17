@@ -3,6 +3,10 @@ package com.runetopic.xlitekt.game.ui
 import com.runetopic.xlitekt.game.item.Item
 
 sealed class UserInterfaceEvent {
+    data class InitEvent(
+        val interfaceId: Int
+    ) : UserInterfaceEvent()
+
     data class OpenEvent(
         val interfaceId: Int
     ) : UserInterfaceEvent()
@@ -33,5 +37,6 @@ sealed class UserInterfaceEvent {
 }
 
 typealias OnButtonClickEvent = UserInterfaceEvent.ButtonClickEvent.() -> Unit
-typealias OnOpenEvent = UserInterfaceEvent.OpenEvent.() -> Unit
+typealias OnInitEvent = UserInterfaceEvent.OpenEvent.() -> Unit
+typealias OnBeforeOpenEvent = UserInterfaceEvent.InitEvent.() -> Unit
 typealias OnCloseEvent = UserInterfaceEvent.CloseEvent.() -> Unit
