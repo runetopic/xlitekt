@@ -1,6 +1,5 @@
 package com.runetopic.xlitekt.plugin.script.ui
 
-import com.runetopic.xlitekt.game.actor.player.message
 import com.runetopic.xlitekt.game.actor.player.script
 import com.runetopic.xlitekt.game.ui.UserInterface
 import com.runetopic.xlitekt.game.ui.onInterface
