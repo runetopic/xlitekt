@@ -10,18 +10,14 @@ fun BytePacketBuilder.writeStringCp1252NullTerminated(value: String) {
     writeByte(0)
 }
 
-fun BytePacketBuilder.writeBytesAdd(bytes: ByteArray) {
-    bytes.forEach(::writeByteAdd)
-}
+fun BytePacketBuilder.writeBytesAdd(bytes: ByteArray) = bytes.forEach(::writeByteAdd)
 
 fun BytePacketBuilder.writeMedium(value: Int) {
     writeByte((value shr 16).toByte())
     writeShort(value.toShort())
 }
 
-fun BytePacketBuilder.writeSmart(value: Int) {
-    if (value > 128) writeShort(value.toShort()) else writeByte(value.toByte())
-}
+fun BytePacketBuilder.writeSmart(value: Int) = if (value > 128) writeShort(value.toShort()) else writeByte(value.toByte())
 
 fun BytePacketBuilder.writeByteNegate(value: Byte) = writeByte((0 - value).toByte())
 fun BytePacketBuilder.writeByteSubtract(value: Byte) = writeByte((128 - value).toByte())
