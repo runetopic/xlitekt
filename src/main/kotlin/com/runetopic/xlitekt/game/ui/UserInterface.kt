@@ -18,6 +18,7 @@ sealed class UserInterface(val name: String) {
     object Skills : UserInterface("skills")
     object WornEquipment : UserInterface("worn_equipment")
     object EquipmentStats : UserInterface("equipment_stats")
+    object EquipmentInventory : UserInterface("equipment_inventory")
     object Friends : UserInterface("friends")
     object Prayer : UserInterface("prayer")
     object GuidePrices : UserInterface("guide_prices")

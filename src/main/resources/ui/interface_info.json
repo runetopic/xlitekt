@@ -8,6 +8,10 @@
     "name": "equipment_stats"
   },
   {
+    "id": 85,
+    "name": "equipment_inventory"
+  },
+  {
     "id": 109,
     "name": "account_management",
     "resizableChildId": 83

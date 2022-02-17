@@ -30,7 +30,7 @@ class InterfaceManager(
 
     fun login() {
         openTop(currentInterfaceLayout.interfaceId)
-        gameInterfaces.forEach(::openInterface)
+        gameInterfaces.forEach { openInterface(it, -1) }
         player.write(VarpSmallPacket(1737, -1)) // TODO TEMP until i write a var system
         message("Welcome to Xlitekt.")
     }
@@ -51,8 +51,12 @@ class InterfaceManager(
         player.write(RunClientScriptPacket(scriptId, parameters))
     }
 
-    fun closeModal() = interfaces.find { (it.interfaceInfo.resizableChildId ?: MODAL_CHILD).enumChildForLayout(currentInterfaceLayout) == MODAL_CHILD.enumChildForLayout(currentInterfaceLayout) }?.run {
-        closeInterface(this)
+    fun closeModal() = interfaces.find { (it.interfaceInfo.resizableChildId ?: MODAL_CHILD_ID).enumChildForLayout(currentInterfaceLayout) == MODAL_CHILD_ID.enumChildForLayout(currentInterfaceLayout) }?.run {
+        closeInterface(this, MODAL_CHILD_ID)
+    }
+
+    fun closeInventory() = interfaces.find { (it.interfaceInfo.resizableChildId ?: INVENTORY_CHILD_ID).enumChildForLayout(currentInterfaceLayout) == INVENTORY_CHILD_ID.enumChildForLayout(currentInterfaceLayout) }?.run {
+        closeInterface(this, INVENTORY_CHILD_ID)
     }
 
     fun setText(packedInterface: Int, text: String) = player.write(
@@ -85,12 +89,16 @@ class InterfaceManager(
 
     fun openModal(userInterface: UserInterface) {
         if (modalOpen()) closeModal()
-        openInterface(userInterface)
+        openInterface(userInterface, MODAL_CHILD_ID)
     }
 
-    private fun openInterface(userInterface: UserInterface) = userInterface.let {
+    fun openInventory(userInterface: UserInterface) {
+        openInterface(userInterface, INVENTORY_CHILD_ID)
+    }
+
+    private fun openInterface(userInterface: UserInterface, resizableChildId: Int) = userInterface.let {
         interfaces += it
-        val derivedChildId = (it.interfaceInfo.resizableChildId ?: MODAL_CHILD)
+        val derivedChildId = (it.interfaceInfo.resizableChildId ?: resizableChildId)
         val childId = derivedChildId.enumChildForLayout(
             currentInterfaceLayout
         )
@@ -112,16 +120,21 @@ class InterfaceManager(
     }
 
     private fun modalOpen(): Boolean = interfaces.find {
-        val derivedChildId = (it.interfaceInfo.resizableChildId ?: MODAL_CHILD)
-        derivedChildId.enumChildForLayout(currentInterfaceLayout) == MODAL_CHILD.enumChildForLayout(currentInterfaceLayout)
+        val derivedChildId = (it.interfaceInfo.resizableChildId ?: MODAL_CHILD_ID)
+        derivedChildId.enumChildForLayout(currentInterfaceLayout) == MODAL_CHILD_ID.enumChildForLayout(currentInterfaceLayout)
     } != null
 
-    private fun closeInterface(userInterface: UserInterface) = userInterface.let {
+    private fun inventoryOpen(): Boolean = interfaces.find {
+        val derivedChildId = (it.interfaceInfo.resizableChildId ?: 73)
+        derivedChildId.enumChildForLayout(currentInterfaceLayout) == 73.enumChildForLayout(currentInterfaceLayout)
+    } != null
+
+    private fun closeInterface(userInterface: UserInterface, childId: Int) = userInterface.let {
         interfaces -= it
 
         player.write(
             IfCloseSubPacket(
-                packedInterface = currentInterfaceLayout.interfaceId.packInterface((it.interfaceInfo.resizableChildId ?: MODAL_CHILD).enumChildForLayout(currentInterfaceLayout))
+                packedInterface = currentInterfaceLayout.interfaceId.packInterface((it.interfaceInfo.resizableChildId ?: childId).enumChildForLayout(currentInterfaceLayout))
             )
         )
         listeners.find { listener -> listener.userInterface == it }
@@ -135,7 +148,7 @@ class InterfaceManager(
     }
 
     private fun moveSub(userInterface: UserInterface, toLayout: InterfaceLayout) = userInterface.let {
-        val derivedChildId = (it.interfaceInfo.resizableChildId ?: MODAL_CHILD)
+        val derivedChildId = (it.interfaceInfo.resizableChildId ?: MODAL_CHILD_ID)
         val fromChildId = derivedChildId.enumChildForLayout(currentInterfaceLayout)
         val toChildId = derivedChildId.enumChildForLayout(toLayout)
         player.write(
@@ -181,6 +194,7 @@ class InterfaceManager(
             UserInterface.ChatChannel
         )
 
-        const val MODAL_CHILD = 16
+        const val MODAL_CHILD_ID = 16
+        const val INVENTORY_CHILD_ID = 73
     }
 }
