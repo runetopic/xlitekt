@@ -96,9 +96,8 @@ class InterfaceManager(
         openInterface(userInterface, INVENTORY_CHILD_ID)
     }
 
-    private fun openInterface(userInterface: UserInterface, resizableChildId: Int) = userInterface.let {
+    private fun openInterface(userInterface: UserInterface, derivedChildId: Int) = userInterface.let {
         interfaces += it
-        val derivedChildId = (it.interfaceInfo.resizableChildId ?: resizableChildId)
         val childId = derivedChildId.enumChildForLayout(
             currentInterfaceLayout
         )
