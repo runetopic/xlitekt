@@ -6,7 +6,7 @@ import com.runetopic.xlitekt.game.ui.InterfaceMapping.buildInterfaceListener
 import com.runetopic.xlitekt.game.ui.UserInterface
 
 private val equipmentContainerKey = 94
-private val equipmentSize = 94
+private val equipmentSize = 15
 
 buildInterfaceListener<UserInterface.WornEquipment> {
     onOpen {
