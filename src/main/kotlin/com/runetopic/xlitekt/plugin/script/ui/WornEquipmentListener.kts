@@ -5,7 +5,11 @@ import com.runetopic.xlitekt.game.ui.UserInterface
 
 buildInterfaceListener<UserInterface.WornEquipment> {
     onClick("View equipment stats") {
-        player.interfaceManager.openInterface(UserInterface.EquipmentBonuses)
+        player.interfaceManager.openInterface(UserInterface.EquipmentStats)
+    }
+
+    onClick("View guide prices") {
+        player.interfaceManager.openInterface(UserInterface.GuidePrices)
     }
 }
 

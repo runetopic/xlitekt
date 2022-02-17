@@ -7,5 +7,5 @@ data class IfSetEventsPacket(
     val packedInterface: Int,
     val fromSlot: Int,
     val toSlot: Int,
-    val events: Int
+    val event: Int
 ) : Packet

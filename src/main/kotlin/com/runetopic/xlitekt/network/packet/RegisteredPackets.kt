@@ -34,7 +34,7 @@ import com.runetopic.xlitekt.network.packet.assembler.UpdateStatAssembler
 import com.runetopic.xlitekt.network.packet.assembler.UpdateWeightPacketAssembler
 import com.runetopic.xlitekt.network.packet.assembler.VarpLargePacketAssembler
 import com.runetopic.xlitekt.network.packet.assembler.VarpSmallPacketAssembler
-import com.runetopic.xlitekt.network.packet.disassembler.ClosedInterfacePacketDisassembler
+import com.runetopic.xlitekt.network.packet.disassembler.CloseModalPacketDisassembler
 import com.runetopic.xlitekt.network.packet.disassembler.DisplayModePacketDisassembler
 import com.runetopic.xlitekt.network.packet.disassembler.IfButton10PacketDisassembler
 import com.runetopic.xlitekt.network.packet.disassembler.IfButton1PacketDisassembler
@@ -48,7 +48,7 @@ import com.runetopic.xlitekt.network.packet.disassembler.IfButton8PacketDisassem
 import com.runetopic.xlitekt.network.packet.disassembler.IfButton9PacketDisassembler
 import com.runetopic.xlitekt.network.packet.disassembler.OpHeld5PacketDisassembler
 import com.runetopic.xlitekt.network.packet.disassembler.OpObj6PacketDisassembler
-import com.runetopic.xlitekt.network.packet.handler.ClosedInterfacePacketHandler
+import com.runetopic.xlitekt.network.packet.handler.CloseModalPacketHandler
 import com.runetopic.xlitekt.network.packet.handler.DisplayModePacketHandler
 import com.runetopic.xlitekt.network.packet.handler.IfButtonPacketHandler
 import com.runetopic.xlitekt.network.packet.handler.OpHeldPacketHandler
@@ -100,7 +100,7 @@ object RegisteredPackets {
     val disassemblers = setOf(
         DisplayModePacketDisassembler(),
 
-        ClosedInterfacePacketDisassembler(),
+        CloseModalPacketDisassembler(),
 
         IfButton1PacketDisassembler(),
         IfButton2PacketDisassembler(),
@@ -120,7 +120,7 @@ object RegisteredPackets {
 
     val handlers = mapOf(
         DisplayModePacket::class to DisplayModePacketHandler(),
-        ClosedInterfacePacket::class to ClosedInterfacePacketHandler(),
+        CloseModalPacket::class to CloseModalPacketHandler(),
         IfButtonPacket::class to IfButtonPacketHandler(),
         OpObjPacket::class to OpObjPacketHandler(),
         OpHeldPacket::class to OpHeldPacketHandler()

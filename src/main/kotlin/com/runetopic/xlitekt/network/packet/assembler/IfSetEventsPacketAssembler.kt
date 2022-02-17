@@ -11,7 +11,7 @@ import io.ktor.utils.io.core.writeShortLittleEndian
  */
 class IfSetEventsPacketAssembler : PacketAssembler<IfSetEventsPacket>(opcode = 76, size = 12) {
     override fun assemblePacket(packet: IfSetEventsPacket) = buildPacket {
-        writeIntV2(packet.events)
+        writeIntV2(packet.event)
         writeShortLittleEndian(packet.fromSlot.toShort())
         writeShortLittleEndian(packet.toSlot.toShort())
         writeInt(packet.packedInterface)
