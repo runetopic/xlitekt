@@ -23,10 +23,6 @@ class UserInterfaceListener(
 
     fun onOpen(onOpenEvent: OnOpenEvent) {
         this.onOpenEvent = onOpenEvent
-
-        fun setEvent(childId: Int, slots: IntRange, event: InterfaceEvent) {
-            events[userInterface.interfaceInfo.id.packInterface(childId)] = UserInterfaceEvent.IfEvent(slots, event)
-        }
     }
 
     fun onInit(onInitEvent: OnInitEvent) {
