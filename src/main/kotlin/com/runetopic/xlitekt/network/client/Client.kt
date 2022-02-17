@@ -88,6 +88,7 @@ import com.runetopic.xlitekt.network.packet.disassembler.IfButton8PacketDisassem
 import com.runetopic.xlitekt.network.packet.disassembler.IfButton9PacketDisassembler
 import com.runetopic.xlitekt.network.packet.disassembler.OpHeld5PacketDisassembler
 import com.runetopic.xlitekt.network.packet.disassembler.OpObj6PacketDisassembler
+import com.runetopic.xlitekt.network.packet.disassembler.PublicChatPacketDisassembler
 import com.runetopic.xlitekt.network.packet.disassembler.WindowStatusPacketDisassembler
 import com.runetopic.xlitekt.plugin.koin.inject
 import com.runetopic.xlitekt.shared.Dispatcher
@@ -219,7 +220,9 @@ class Client(
 
             OpObj6PacketDisassembler(),
 
-            OpHeld5PacketDisassembler()
+            OpHeld5PacketDisassembler(),
+
+            PublicChatPacketDisassembler()
         )
     }
 }

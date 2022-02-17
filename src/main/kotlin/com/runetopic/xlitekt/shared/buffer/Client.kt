@@ -295,7 +295,7 @@ private suspend fun Client.readPackets(player: Player) = try {
             logger.debug { "No packet disassembler found for packet opcode $opcode." }
             continue
         }
-        if (disassembler.size != size) {
+        if (disassembler.size != -1 && disassembler.size != size) {
             logger.debug { "Packet disassembler size is not equal to the packet array size. Disassembler size was ${disassembler.size} and found size was $size." }
             continue
         }
