@@ -7,5 +7,5 @@ import com.runetopic.xlitekt.network.packet.disassembler.handler.onPacket
  * @author Jordan Abraham
  */
 onPacket<CloseModalPacket> {
-    player.interfaceManager.closeModal()
+    player.interfaces.closeModal()
 }

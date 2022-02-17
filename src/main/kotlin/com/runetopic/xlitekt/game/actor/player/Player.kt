@@ -5,12 +5,14 @@ import com.runetopic.xlitekt.game.actor.render.Render
 import com.runetopic.xlitekt.game.event.EventBus
 import com.runetopic.xlitekt.game.event.impl.Events
 import com.runetopic.xlitekt.game.tile.Tile
-import com.runetopic.xlitekt.game.ui.InterfaceManager
+import com.runetopic.xlitekt.game.ui.Interfaces
 import com.runetopic.xlitekt.game.varp.VarsManager
 import com.runetopic.xlitekt.game.world.World
 import com.runetopic.xlitekt.network.client.Client
+import com.runetopic.xlitekt.network.packet.MessageGamePacket
 import com.runetopic.xlitekt.network.packet.Packet
 import com.runetopic.xlitekt.network.packet.RebuildNormalPacket
+import com.runetopic.xlitekt.network.packet.RunClientScriptPacket
 import com.runetopic.xlitekt.plugin.koin.inject
 
 /**
@@ -24,7 +26,7 @@ class Player(
     private var client: Client? = null
 
     val viewport = Viewport(this)
-    val interfaceManager = InterfaceManager(this)
+    val interfaces = Interfaces(this)
     val varsManager = VarsManager(this)
 
     var appearance = Render.Appearance(Render.Appearance.Gender.MALE, -1, -1, -1, false)
@@ -40,7 +42,7 @@ class Player(
         previousTile = tile
         write(RebuildNormalPacket(viewport, tile, true))
         refreshAppearance()
-        interfaceManager.login()
+        interfaces.login()
         varsManager.login()
         // Set the player online here, so they start processing by the main game loop.
         online = true
@@ -61,3 +63,6 @@ class Player(
     fun write(packet: Packet) = client?.writePacket(packet)
     fun flushPool() = client?.writeChannel?.flush()
 }
+
+fun Player.message(message: String) = write(MessageGamePacket(0, message, false)) // TODO build messaging system
+fun Player.script(scriptId: Int, parameters: List<Any>) = write(RunClientScriptPacket(scriptId, parameters))

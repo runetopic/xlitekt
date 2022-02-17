@@ -1,15 +1,18 @@
 [
   {
     "id": 4,
-    "name": "items_kept_on_death"
+    "name": "items_kept_on_death",
+    "resizableChildId": 16
   },
   {
     "id": 84,
-    "name": "equipment_stats"
+    "name": "equipment_stats",
+    "resizableChildId": 16
   },
   {
     "id": 85,
-    "name": "equipment_inventory"
+    "name": "equipment_inventory",
+    "resizableChildId": 73
   },
   {
     "id": 109,
@@ -73,7 +76,8 @@
   },
   {
     "id": 464,
-    "name": "guide_prices"
+    "name": "guide_prices",
+    "resizableChildId": 16
   },
   {
     "id": 541,

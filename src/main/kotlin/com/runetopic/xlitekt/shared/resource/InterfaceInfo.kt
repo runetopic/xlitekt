@@ -9,5 +9,5 @@ import kotlinx.serialization.Serializable
 data class InterfaceInfo(
     val id: Int,
     val name: String,
-    val resizableChildId: Int? = null,
+    val resizableChildId: Int
 )

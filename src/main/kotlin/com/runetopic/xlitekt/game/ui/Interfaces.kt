@@ -3,6 +3,7 @@ package com.runetopic.xlitekt.game.ui
 import com.runetopic.xlitekt.cache.Cache.entryType
 import com.runetopic.xlitekt.cache.provider.config.enum.EnumEntryType
 import com.runetopic.xlitekt.game.actor.player.Player
+import com.runetopic.xlitekt.game.actor.player.message
 import com.runetopic.xlitekt.game.item.Item
 import com.runetopic.xlitekt.game.ui.InterfaceMapping.addInterfaceListener
 import com.runetopic.xlitekt.network.packet.IfCloseSubPacket
@@ -11,8 +12,6 @@ import com.runetopic.xlitekt.network.packet.IfOpenSubPacket
 import com.runetopic.xlitekt.network.packet.IfOpenTopPacket
 import com.runetopic.xlitekt.network.packet.IfSetEventsPacket
 import com.runetopic.xlitekt.network.packet.IfSetTextPacket
-import com.runetopic.xlitekt.network.packet.MessageGamePacket
-import com.runetopic.xlitekt.network.packet.RunClientScriptPacket
 import com.runetopic.xlitekt.network.packet.UpdateContainerFullPacket
 import com.runetopic.xlitekt.network.packet.VarpSmallPacket
 import com.runetopic.xlitekt.shared.packInterface
@@ -20,19 +19,47 @@ import com.runetopic.xlitekt.shared.packInterface
 /**
  * @author Tyler Telis
  */
-class InterfaceManager(
-    private val player: Player
-) {
-    private val interfaces = mutableListOf<UserInterface>()
+class Interfaces(
+    private val player: Player,
+    private val interfaces: MutableList<UserInterface> = mutableListOf()
+) : MutableList<UserInterface> by interfaces {
     val listeners = mutableListOf<UserInterfaceListener>()
 
     var currentInterfaceLayout = InterfaceLayout.FIXED
 
     fun login() {
         openTop(currentInterfaceLayout.interfaceId)
-        gameInterfaces.forEach { it.interfaceInfo.resizableChildId?.let { childId -> openInterface(it, childId) } }
+        gameInterfaces.forEach(::openInterface)
         player.write(VarpSmallPacket(1737, -1)) // TODO TEMP until i write a var system
-        message("Welcome to Xlitekt.")
+        player.message("Welcome to Xlitekt.")
+    }
+
+    fun closeModal() {
+        val openModal = interfaces.findLast { it.interfaceInfo.resizableChildId == MODAL_CHILD_ID } ?: return
+        this -= openModal
+    }
+
+    fun closeInventory() {
+        val openInventory = interfaces.findLast { it.interfaceInfo.resizableChildId == INVENTORY_CHILD_ID } ?: return
+        this -= openInventory
+    }
+
+    private fun modalOpen() = interfaces.findLast { it.interfaceInfo.resizableChildId == MODAL_CHILD_ID } != null
+    private fun inventoryOpen() = interfaces.findLast { it.interfaceInfo.resizableChildId == INVENTORY_CHILD_ID } != null
+
+    private fun UserInterface.isModal() = interfaceInfo.resizableChildId == MODAL_CHILD_ID
+    private fun UserInterface.isInventory() = interfaceInfo.resizableChildId == INVENTORY_CHILD_ID
+
+    operator fun plusAssign(userInterface: UserInterface) {
+        if (modalOpen() && userInterface.isModal()) closeModal()
+        if (inventoryOpen() && userInterface.isInventory()) closeInventory()
+        this.add(userInterface)
+        openInterface(userInterface)
+    }
+
+    operator fun minusAssign(userInterface: UserInterface) {
+        this.remove(userInterface)
+        closeInterface(userInterface)
     }
 
     fun switchLayout(toLayout: InterfaceLayout) {
@@ -41,22 +68,6 @@ class InterfaceManager(
         if (modalOpen()) closeModal()
         gameInterfaces.forEach { moveSub(it, toLayout) }
         currentInterfaceLayout = toLayout
-    }
-
-    fun message(message: String) { // TODO Move this to a social thing.
-        player.write(MessageGamePacket(0, message, false))
-    }
-
-    fun runClientScript(scriptId: Int, parameters: List<Any>) { // TODO Move this somewhere else not rlly interface related.
-        player.write(RunClientScriptPacket(scriptId, parameters))
-    }
-
-    fun closeModal() = interfaces.find { (it.interfaceInfo.resizableChildId ?: MODAL_CHILD_ID).enumChildForLayout(currentInterfaceLayout) == MODAL_CHILD_ID.enumChildForLayout(currentInterfaceLayout) }?.run {
-        closeInterface(this, MODAL_CHILD_ID)
-    }
-
-    fun closeInventory() = interfaces.find { (it.interfaceInfo.resizableChildId ?: INVENTORY_CHILD_ID).enumChildForLayout(currentInterfaceLayout) == INVENTORY_CHILD_ID.enumChildForLayout(currentInterfaceLayout) }?.run {
-        closeInterface(this, INVENTORY_CHILD_ID)
     }
 
     fun setText(packedInterface: Int, text: String) = player.write(
@@ -87,18 +98,10 @@ class InterfaceManager(
 
     private fun openTop(id: Int) = player.write(IfOpenTopPacket(interfaceId = id))
 
-    fun openModal(userInterface: UserInterface) {
-        if (modalOpen()) closeModal()
-        openInterface(userInterface, MODAL_CHILD_ID)
-    }
+    private fun openInterface(userInterface: UserInterface) = userInterface.apply {
+        interfaces.add(userInterface)
 
-    fun openInventory(userInterface: UserInterface) {
-        openInterface(userInterface, INVENTORY_CHILD_ID)
-    }
-
-    private fun openInterface(userInterface: UserInterface, derivedChildId: Int) = userInterface.apply {
-        interfaces += this
-
+        val derivedChildId = userInterface.interfaceInfo.resizableChildId
         val childId = derivedChildId.enumChildForLayout(
             currentInterfaceLayout
         )
@@ -128,18 +131,10 @@ class InterfaceManager(
         )
     }
 
-    private fun modalOpen(): Boolean = interfaces.find {
-        val derivedChildId = (it.interfaceInfo.resizableChildId ?: MODAL_CHILD_ID)
-        derivedChildId.enumChildForLayout(currentInterfaceLayout) == MODAL_CHILD_ID.enumChildForLayout(currentInterfaceLayout)
-    } != null
+    private fun closeInterface(userInterface: UserInterface) = userInterface.apply {
+        interfaces.remove(userInterface)
 
-    private fun inventoryOpen(): Boolean = interfaces.find {
-        val derivedChildId = (it.interfaceInfo.resizableChildId ?: 73)
-        derivedChildId.enumChildForLayout(currentInterfaceLayout) == 73.enumChildForLayout(currentInterfaceLayout)
-    } != null
-
-    private fun closeInterface(userInterface: UserInterface, childId: Int) = userInterface.apply {
-        interfaces -= this
+        val childId = userInterface.interfaceInfo.resizableChildId
 
         player.write(
             IfCloseSubPacket(
@@ -147,19 +142,19 @@ class InterfaceManager(
             )
         )
 
-        listeners.find { listener -> listener.userInterface == this }?.apply {
-            close(
-                UserInterfaceEvent.CloseEvent(
-                    interfaceId = userInterface.interfaceInfo.id,
-                )
-            )
+        val listener = listeners.find { listener -> listener.userInterface == this } ?: return@apply
 
-            listeners.removeAt(listeners.indexOf(this))
-        }
+        listener.close(
+            UserInterfaceEvent.CloseEvent(
+                interfaceId = userInterface.interfaceInfo.id,
+            )
+        )
+
+        listeners.remove(listener)
     }
 
     private fun moveSub(userInterface: UserInterface, toLayout: InterfaceLayout) = userInterface.apply {
-        val derivedChildId = userInterface.interfaceInfo.resizableChildId ?: throw IllegalStateException("Could not move sub interface $userInterface. Resizable child id not configured properly. Check interface_info.json.")
+        val derivedChildId = userInterface.interfaceInfo.resizableChildId
         val fromChildId = derivedChildId.enumChildForLayout(currentInterfaceLayout)
         val toChildId = derivedChildId.enumChildForLayout(toLayout)
         val listener = listeners.find { listener -> listener.userInterface == this }
@@ -215,3 +210,4 @@ class InterfaceManager(
         const val INVENTORY_CHILD_ID = 73
     }
 }
+

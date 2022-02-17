@@ -28,6 +28,6 @@ onPacket<IfButtonPacket> {
         itemId = itemId,
         action = entry?.actions?.firstOrNull() ?: "*"
     )
-    val listener = player.interfaceManager.listeners.find { it.userInterface.interfaceInfo.id == interfaceId }
+    val listener = player.interfaces.listeners.find { it.userInterface.interfaceInfo.id == interfaceId }
     listener?.click(clickEvent) ?: logger.debug { "User interface does not have an associated listener. Event = $clickEvent" }
 }

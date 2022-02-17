@@ -254,7 +254,7 @@ private suspend fun Client.readLogin() {
                 serverKeys.toList().toIntArray().toISAAC()
             )
             Player(username).let {
-                it.interfaceManager.currentInterfaceLayout = if (clientResizeable) InterfaceLayout.RESIZABLE else InterfaceLayout.FIXED
+                it.interfaces.currentInterfaceLayout = if (clientResizeable) InterfaceLayout.RESIZABLE else InterfaceLayout.FIXED
                 player = it
                 world.players.add(it)
             }.also { if (it) writeLogin(LOGIN_SUCCESS_OPCODE) else writeLogin(BAD_SESSION_OPCODE) }

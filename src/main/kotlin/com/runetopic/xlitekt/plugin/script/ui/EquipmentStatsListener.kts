@@ -1,19 +1,22 @@
 package com.runetopic.xlitekt.plugin.script.ui
 
+import com.runetopic.xlitekt.game.actor.player.message
+import com.runetopic.xlitekt.game.actor.player.script
 import com.runetopic.xlitekt.game.ui.UserInterface
 import com.runetopic.xlitekt.game.ui.onInterface
 
 onInterface<UserInterface.EquipmentStats> {
     onInit {
-        player.interfaceManager.runClientScript(917, listOf(-1, -1))
+        script(917, listOf(-1, -1))
     }
 
     onOpen {
         setText(24, "Stab +")
-        player.interfaceManager.openInventory(UserInterface.EquipmentInventory)
+        interfaces += UserInterface.EquipmentInventory
     }
 
     onClose {
-        player.interfaceManager.closeInventory()
+        interfaces.closeInventory()
+        message("Closing inventory for equipment.")
     }
 }

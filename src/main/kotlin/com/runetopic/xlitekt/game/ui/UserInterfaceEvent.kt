@@ -1,5 +1,6 @@
 package com.runetopic.xlitekt.game.ui
 
+import com.runetopic.xlitekt.game.actor.player.Player
 import com.runetopic.xlitekt.game.item.Item
 
 sealed class UserInterfaceEvent {
@@ -36,7 +37,7 @@ sealed class UserInterfaceEvent {
     ) : UserInterfaceEvent()
 }
 
-typealias OnButtonClickEvent = UserInterfaceEvent.ButtonClickEvent.() -> Unit
-typealias OnOpenEvent = UserInterfaceEvent.OpenEvent.() -> Unit
-typealias OnInitEvent = UserInterfaceEvent.InitEvent.() -> Unit
-typealias OnCloseEvent = UserInterfaceEvent.CloseEvent.() -> Unit
+typealias OnButtonClickEvent = (Player).(UserInterfaceEvent.ButtonClickEvent) -> Unit
+typealias OnOpenEvent = (Player).(UserInterfaceEvent.OpenEvent) -> Unit
+typealias OnInitEvent = (Player).(UserInterfaceEvent.InitEvent) -> Unit
+typealias OnCloseEvent = (Player).(UserInterfaceEvent.CloseEvent) -> Unit

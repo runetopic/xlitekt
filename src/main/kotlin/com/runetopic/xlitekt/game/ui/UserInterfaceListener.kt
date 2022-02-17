@@ -23,6 +23,10 @@ class UserInterfaceListener(
 
     fun onOpen(onOpenEvent: OnOpenEvent) {
         this.onOpenEvent = onOpenEvent
+
+        fun setEvent(childId: Int, slots: IntRange, event: InterfaceEvent) {
+            events[userInterface.interfaceInfo.id.packInterface(childId)] = UserInterfaceEvent.IfEvent(slots, event)
+        }
     }
 
     fun onInit(onInitEvent: OnInitEvent) {
@@ -30,15 +34,15 @@ class UserInterfaceListener(
     }
 
     fun init(initEvent: UserInterfaceEvent.InitEvent) {
-        this.onInitEvent?.invoke(initEvent)
+        this.onInitEvent?.invoke(player, initEvent)
     }
 
     fun open(openEvent: UserInterfaceEvent.OpenEvent) {
-        this.onOpenEvent?.invoke(openEvent)
-        this.texts.forEach { player.interfaceManager.setText(it.key, it.value) }
-        this.events.forEach { player.interfaceManager.setEvent(it.key, it.value) }
+        this.onOpenEvent?.invoke(player, openEvent)
+        this.texts.forEach { player.interfaces.setText(it.key, it.value) }
+        this.events.forEach { player.interfaces.setEvent(it.key, it.value) }
         this.items.forEach {
-            player.interfaceManager.setContainerUpdateFull(
+            player.interfaces.setContainerUpdateFull(
                 interfaceId = it.value.interfaceId,
                 containerKey = it.key,
                 items = it.value.items
@@ -51,13 +55,13 @@ class UserInterfaceListener(
     }
 
     fun close(closeEvent: UserInterfaceEvent.CloseEvent) {
-        this.onCloseEvent?.invoke(closeEvent)
+        this.onCloseEvent?.invoke(player, closeEvent)
     }
 
     fun click(buttonClickEvent: UserInterfaceEvent.ButtonClickEvent) {
-        this.onButtonClickEvent?.invoke(buttonClickEvent)
-        this.children[buttonClickEvent.childId]?.invoke(buttonClickEvent)
-        this.actions[buttonClickEvent.action]?.invoke(buttonClickEvent)
+        this.onButtonClickEvent?.invoke(player, buttonClickEvent)
+        this.children[buttonClickEvent.childId]?.invoke(player, buttonClickEvent)
+        this.actions[buttonClickEvent.action]?.invoke(player, buttonClickEvent)
     }
 
     fun onClick(onButtonClickEvent: OnButtonClickEvent) {
@@ -72,15 +76,15 @@ class UserInterfaceListener(
         this.actions[action] = onButtonClickEvent
     }
 
-    fun UserInterfaceEvent.OpenEvent.setText(childId: Int, text: String) {
-        texts[interfaceId.packInterface(childId)] = text
+    fun setText(childId: Int, text: String) {
+        texts[userInterface.interfaceInfo.id.packInterface(childId)] = text
     }
 
-    fun UserInterfaceEvent.OpenEvent.setEvent(childId: Int, slots: IntRange, event: InterfaceEvent) {
-        events[interfaceId.packInterface(childId)] = UserInterfaceEvent.IfEvent(slots, event)
+    fun setEvent(childId: Int, slots: IntRange, event: InterfaceEvent) {
+        events[userInterface.interfaceInfo.id.packInterface(childId)] = UserInterfaceEvent.IfEvent(slots, event)
     }
 
-    fun UserInterfaceEvent.OpenEvent.setItems(containerKey: Int, item: List<Item?>) {
+    fun setItems(containerKey: Int, item: List<Item?>) {
         items[containerKey] = UserInterfaceEvent.ContainerUpdateFullEvent(
             interfaceId = -1,
             item

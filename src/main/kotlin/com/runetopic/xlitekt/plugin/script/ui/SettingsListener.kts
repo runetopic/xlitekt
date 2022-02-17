@@ -1,5 +1,6 @@
 package com.runetopic.xlitekt.plugin.script.ui
 
+import com.runetopic.xlitekt.game.actor.player.script
 import com.runetopic.xlitekt.game.ui.InterfaceEvent.CLICK_OPTION_1
 import com.runetopic.xlitekt.game.ui.InterfaceLayout
 import com.runetopic.xlitekt.game.ui.UserInterface
@@ -23,10 +24,10 @@ onInterface<UserInterface.Settings> {
     }
 
     onClick(layoutDropDownChildId) {
-        val interfaceLayout = enumValues<InterfaceLayout>().find { it.id == slotId } ?: return@onClick
-        player.varsManager.sendVarBit(4607, (slotId == 3).toInt())
-        player.interfaceManager.runClientScript(clientModeCS2Id, listOf(slotId - 1))
-        player.interfaceManager.runClientScript(interfaceScalingCS2Id, listOf(0))
-        player.interfaceManager.switchLayout(interfaceLayout)
+        val interfaceLayout = enumValues<InterfaceLayout>().find { layout -> layout.id == it.slotId } ?: return@onClick
+        varsManager.sendVarBit(4607, (it.slotId == 3).toInt())
+        player.script(clientModeCS2Id, listOf(it.slotId - 1))
+        player.script(interfaceScalingCS2Id, listOf(0))
+        interfaces.switchLayout(interfaceLayout)
     }
 }
