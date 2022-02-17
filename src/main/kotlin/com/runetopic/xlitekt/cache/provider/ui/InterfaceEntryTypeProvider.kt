@@ -27,11 +27,11 @@ class InterfaceEntryTypeProvider : EntryTypeProvider<InterfaceEntryType>() {
         .associateBy(InterfaceEntryType::id)
 
     override fun ByteReadPacket.loadEntryType(type: InterfaceEntryType): InterfaceEntryType = type.apply {
-        if (isModern) decodeModern(type) else decodeLegacy(type)
+        if (isModern) decodeModern(this) else decodeLegacy(this)
         assertEmptyAndRelease()
     }
 
-    private fun ByteReadPacket.decodeModern(type: InterfaceEntryType): InterfaceEntryType {
+    private fun ByteReadPacket.decodeModern(type: InterfaceEntryType) {
         discard(1) // Unused.
         type.type = readUByte().toInt()
         type.contentType = readUShort().toInt()
@@ -111,10 +111,9 @@ class InterfaceEntryTypeProvider : EntryTypeProvider<InterfaceEntryType>() {
         type.isScrollBar = readUByte().toInt().toBoolean()
         type.spellActionName = readStringCp1252NullTerminated()
         discard(remaining) // Discard the remaining buffer for the listeners.
-        return type
     }
 
-    private fun ByteReadPacket.decodeLegacy(type: InterfaceEntryType): InterfaceEntryType {
+    private fun ByteReadPacket.decodeLegacy(type: InterfaceEntryType) {
         type.type = readUByte().toInt()
         type.buttonType = readUByte().toInt()
         type.contentType = readUShort().toInt()
@@ -237,6 +236,5 @@ class InterfaceEntryTypeProvider : EntryTypeProvider<InterfaceEntryType>() {
                 }
             }
         }
-        return type
     }
 }
