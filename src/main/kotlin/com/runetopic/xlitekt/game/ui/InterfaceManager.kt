@@ -36,7 +36,7 @@ class InterfaceManager(
     fun switchLayout(toLayout: InterfaceLayout) {
         if (toLayout == currentInterfaceLayout) return
         openTop(toLayout.interfaceId)
-        closeModal()
+        if (modalOpen()) closeModal()
         gameInterfaces.forEach { moveSub(it, toLayout) }
         currentInterfaceLayout = toLayout
     }
