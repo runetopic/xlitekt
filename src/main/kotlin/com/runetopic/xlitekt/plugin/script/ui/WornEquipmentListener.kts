@@ -5,11 +5,16 @@ import com.runetopic.xlitekt.game.ui.UserInterface
 
 buildInterfaceListener<UserInterface.WornEquipment> {
     onClick("View equipment stats") {
-        player.interfaceManager.openInterface(UserInterface.EquipmentStats)
+        player.interfaceManager.openModal(UserInterface.EquipmentStats)
     }
 
     onClick("View guide prices") {
-        player.interfaceManager.openInterface(UserInterface.GuidePrices)
+        player.interfaceManager.openModal(UserInterface.GuidePrices)
     }
-}
 
+    onClick("View items kept on death") {
+        player.interfaceManager.openModal(UserInterface.ItemsKeptOnDeath)
+    }
+
+    onClick("Call follower") { player.interfaceManager.message("You do not have a follower.") }
+}

@@ -71,7 +71,12 @@ class InterfaceManager(
 
     private fun openTop(id: Int) = player.client?.writePacket(IfOpenTopPacket(interfaceId = id))
 
-    fun openInterface(userInterface: UserInterface) = userInterface.let {
+    fun openModal(userInterface: UserInterface) {
+        if (modalOpen()) closeModal()
+        openInterface(userInterface)
+    }
+
+    private fun openInterface(userInterface: UserInterface) = userInterface.let {
         interfaces += it
         val derivedChildId = (it.interfaceInfo.resizableChildId ?: MODAL_CHILD)
         val childId = derivedChildId.enumChildForLayout(
@@ -93,6 +98,11 @@ class InterfaceManager(
             )
         )
     }
+
+    private fun modalOpen(): Boolean = interfaces.find {
+        val derivedChildId = (it.interfaceInfo.resizableChildId ?: MODAL_CHILD)
+        derivedChildId.enumChildForLayout(currentInterfaceLayout) == MODAL_CHILD.enumChildForLayout(currentInterfaceLayout)
+    } != null
 
     private fun closeInterface(userInterface: UserInterface) = userInterface.let {
         interfaces -= it

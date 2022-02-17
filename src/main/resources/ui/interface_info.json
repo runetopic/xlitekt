@@ -1,5 +1,9 @@
 [
   {
+    "id": 4,
+    "name": "items_kept_on_death"
+  },
+  {
     "id": 84,
     "name": "equipment_stats"
   },

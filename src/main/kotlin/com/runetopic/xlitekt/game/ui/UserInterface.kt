@@ -12,6 +12,7 @@ sealed class UserInterface(val name: String) {
     object ChatBox : UserInterface("chat_box")
     object Logout : UserInterface("logout")
     object Emotes : UserInterface("emotes")
+    object ItemsKeptOnDeath : UserInterface("items_kept_on_death")
     object Magic : UserInterface("magic")
     object MusicPlayer : UserInterface("music_player")
     object Skills : UserInterface("skills")
