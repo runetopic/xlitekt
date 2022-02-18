@@ -10,10 +10,13 @@ import io.ktor.utils.io.core.readUShort
  * @author Jordan Abraham
  */
 class OpHeld5PacketDisassembler : PacketDisassembler<OpHeldPacket>(opcode = 43, size = 8) {
-    override fun disassemblePacket(packet: ByteReadPacket): OpHeldPacket {
-        val packedInterface = packet.readIntV2()
-        val slotId = packet.readUShortLittleEndianSubtract()
-        val itemId = packet.readUShort().toInt()
-        return OpHeldPacket(5, packedInterface, slotId, itemId, -1, 0xffff, 0xffff)
-    }
+    override fun disassemblePacket(packet: ByteReadPacket) = OpHeldPacket(
+        index = 5,
+        fromPackedInterface = packet.readIntV2(),
+        fromSlotId = packet.readUShortLittleEndianSubtract(),
+        fromItemId = packet.readUShort().toInt(),
+        toPackedInterface = -1,
+        toSlotId = 0xffff,
+        toItemId = 0xffff
+    )
 }

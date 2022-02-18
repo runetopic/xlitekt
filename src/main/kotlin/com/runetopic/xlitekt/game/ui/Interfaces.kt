@@ -1,6 +1,6 @@
 package com.runetopic.xlitekt.game.ui
 
-import com.runetopic.xlitekt.cache.Cache.entryType
+import com.runetopic.xlitekt.cache.entryType
 import com.runetopic.xlitekt.cache.provider.config.enum.EnumEntryType
 import com.runetopic.xlitekt.game.actor.player.Player
 import com.runetopic.xlitekt.game.actor.player.message

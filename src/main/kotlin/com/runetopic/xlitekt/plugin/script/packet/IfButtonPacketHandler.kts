@@ -1,11 +1,13 @@
 package com.runetopic.xlitekt.plugin.script.packet
 
 import com.github.michaelbull.logging.InlineLogger
-import com.runetopic.xlitekt.cache.Cache
+import com.runetopic.xlitekt.cache.entryType
 import com.runetopic.xlitekt.cache.provider.ui.InterfaceEntryType
 import com.runetopic.xlitekt.game.ui.UserInterfaceEvent
 import com.runetopic.xlitekt.network.packet.IfButtonPacket
 import com.runetopic.xlitekt.network.packet.disassembler.handler.onPacket
+import com.runetopic.xlitekt.shared.packedToChildId
+import com.runetopic.xlitekt.shared.packedToInterfaceId
 
 /**
  * @author Jordan Abraham
@@ -14,11 +16,11 @@ private val logger = InlineLogger()
 
 onPacket<IfButtonPacket> {
     val index = packet.index
-    val interfaceId = packet.packedInterface shr 16
-    val childId = packet.packedInterface and 0xffff
+    val interfaceId = packet.packedInterface.packedToInterfaceId()
+    val childId = packet.packedInterface.packedToChildId()
     val slotId = packet.slotId
     val itemId = packet.itemId
-    val entry = Cache.entryType<InterfaceEntryType>(packet.packedInterface)
+    val entry = entryType<InterfaceEntryType>(packet.packedInterface)
     val clickEvent = UserInterfaceEvent.ButtonClickEvent(
         index = index,
         interfaceId = interfaceId,

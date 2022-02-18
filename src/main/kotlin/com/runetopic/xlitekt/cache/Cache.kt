@@ -34,9 +34,9 @@ val cacheModule = module(createdAtStart = true) {
     single { loadProviders() }
 }
 
-private val logger = InlineLogger()
-
 object Cache {
+    private val logger = InlineLogger()
+
     val providers = mapOf(
         VarBitEntryType::class to VarBitEntryTypeProvider(),
         InterfaceEntryType::class to InterfaceEntryTypeProvider(),
@@ -53,9 +53,9 @@ object Cache {
         post<ObjEntryType, ObjEntryTypeProvider>()
     }
 
-    inline fun <reified T : EntryType> entryType(id: Int): T? = providers[T::class]?.entryType(id) as T?
-
     private inline fun <reified T : EntryType, reified R : EntryTypeProvider<T>> post() = (providers[T::class] as R).run {
         entries.values.forEach { it.postLoadEntryType() }
     }
 }
+
+inline fun <reified T : EntryType> entryType(id: Int): T? = Cache.providers[T::class]?.entryType(id) as T?

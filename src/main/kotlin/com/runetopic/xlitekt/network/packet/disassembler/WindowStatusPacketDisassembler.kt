@@ -8,10 +8,9 @@ import io.ktor.utils.io.core.readUShort
  * @author Tyler Telis
  */
 class WindowStatusPacketDisassembler : PacketDisassembler<WindowStatusPacket>(opcode = 48, size = 5) {
-    override fun disassemblePacket(packet: ByteReadPacket): WindowStatusPacket {
-        val status = packet.readByte().toInt()
-        val width = packet.readUShort().toInt()
-        val height = packet.readUShort().toInt()
-        return WindowStatusPacket(status, width, height)
-    }
+    override fun disassemblePacket(packet: ByteReadPacket) = WindowStatusPacket(
+        displayMode = packet.readByte().toInt(),
+        width = packet.readUShort().toInt(),
+        height = packet.readUShort().toInt()
+    )
 }

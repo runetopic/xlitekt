@@ -9,10 +9,10 @@ import io.ktor.utils.io.core.readUShort
  * @author Jordan Abraham
  */
 class IfButton7PacketDisassembler : PacketDisassembler<IfButtonPacket>(opcode = 20, size = 8) {
-    override fun disassemblePacket(packet: ByteReadPacket): IfButtonPacket {
-        val packedInterface = packet.readInt()
-        val slotId = packet.readUShort().toInt()
-        val itemId = packet.readUShort().toInt()
-        return IfButtonPacket(7, packedInterface, slotId, itemId)
-    }
+    override fun disassemblePacket(packet: ByteReadPacket) = IfButtonPacket(
+        index = 7,
+        packedInterface = packet.readInt(),
+        slotId = packet.readUShort().toInt(),
+        itemId = packet.readUShort().toInt()
+    )
 }

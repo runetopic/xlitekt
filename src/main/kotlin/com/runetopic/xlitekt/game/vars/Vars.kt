@@ -1,13 +1,13 @@
 package com.runetopic.xlitekt.game.vars
 
-import com.runetopic.xlitekt.cache.Cache.entryType
+import com.runetopic.xlitekt.cache.entryType
 import com.runetopic.xlitekt.cache.provider.config.varbit.VarBitEntryType
 import com.runetopic.xlitekt.cache.provider.config.varbit.VarBitEntryTypeProvider.Companion.mersennePrime
 import com.runetopic.xlitekt.game.actor.player.Player
 import com.runetopic.xlitekt.game.actor.player.sendVarp
 
 class Vars(
-    val player: Player,
+    private val player: Player,
     private val vars: MutableMap<Var, Int> = mutableMapOf()
 ) : MutableMap<Var, Int> by vars {
 

@@ -7,12 +7,11 @@ import io.ktor.utils.io.core.readBytes
 import io.ktor.utils.io.core.readUByte
 
 class PublicChatPacketDisassembler : PacketDisassembler<PublicChatPacket>(opcode = 95, size = -1) {
-    override fun disassemblePacket(packet: ByteReadPacket): PublicChatPacket {
-        packet.readUByte()
-        val color = packet.readUByte().toInt()
-        val effect = packet.readUByte().toInt()
-        val length = packet.readSmart()
-        val data = packet.readBytes()
-        return PublicChatPacket(color, effect, length, data)
-    }
+    override fun disassemblePacket(packet: ByteReadPacket) = PublicChatPacket(
+        unknown = packet.readUByte().toInt(),
+        color = packet.readUByte().toInt(),
+        effect = packet.readUByte().toInt(),
+        size = packet.readSmart(),
+        data = packet.readBytes()
+    )
 }
