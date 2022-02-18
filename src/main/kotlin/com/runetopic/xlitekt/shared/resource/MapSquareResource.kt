@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class MapSquare(
+data class MapSquareResource(
     @SerialName("mapsquare")
     val regionId: Int,
     @SerialName("key")

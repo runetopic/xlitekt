@@ -6,7 +6,7 @@ import kotlinx.serialization.Serializable
  * @author Tyler Telis
  */
 @Serializable
-data class VarBit(
+data class VarInfoResource(
     val id: Int,
     val name: String
 )

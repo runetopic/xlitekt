@@ -5,6 +5,7 @@ import com.runetopic.xlitekt.game.ui.InterfaceEvent.CLICK_OPTION_1
 import com.runetopic.xlitekt.game.ui.InterfaceLayout
 import com.runetopic.xlitekt.game.ui.UserInterface
 import com.runetopic.xlitekt.game.ui.onInterface
+import com.runetopic.xlitekt.game.varp.VarBit
 import com.runetopic.xlitekt.shared.toInt
 
 private val layoutDropDownChildId = 84
@@ -25,7 +26,7 @@ onInterface<UserInterface.Settings> {
 
     onClick(layoutDropDownChildId) {
         val interfaceLayout = enumValues<InterfaceLayout>().find { layout -> layout.id == it.slotId } ?: return@onClick
-        varsManager.sendVarBit(4607, (it.slotId == 3).toInt())
+        vars += VarBit.SideStonesArrangement((it.slotId == 3).toInt())
         script(clientModeCS2Id, listOf(it.slotId - 1))
         script(interfaceScalingCS2Id, listOf(0))
         interfaces.switchLayout(interfaceLayout)

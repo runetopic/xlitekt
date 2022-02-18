@@ -6,7 +6,7 @@ import com.runetopic.xlitekt.game.event.EventBus
 import com.runetopic.xlitekt.game.event.impl.Events
 import com.runetopic.xlitekt.game.tile.Tile
 import com.runetopic.xlitekt.game.ui.Interfaces
-import com.runetopic.xlitekt.game.varp.VarsManager
+import com.runetopic.xlitekt.game.varp.Vars
 import com.runetopic.xlitekt.game.world.World
 import com.runetopic.xlitekt.network.client.Client
 import com.runetopic.xlitekt.network.packet.MessageGamePacket
@@ -27,7 +27,7 @@ class Player(
 
     val viewport = Viewport(this)
     val interfaces = Interfaces(this)
-    val varsManager = VarsManager(this)
+    val vars = Vars(this)
 
     var appearance = Render.Appearance(Render.Appearance.Gender.MALE, -1, -1, -1, false)
 
@@ -43,7 +43,7 @@ class Player(
         write(RebuildNormalPacket(viewport, tile, true))
         refreshAppearance()
         interfaces.login()
-        varsManager.login()
+        vars.login()
         // Set the player online here, so they start processing by the main game loop.
         online = true
         eventBus.notify(Events.OnLoginEvent(this))

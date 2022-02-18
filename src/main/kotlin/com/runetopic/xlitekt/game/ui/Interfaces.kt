@@ -171,6 +171,7 @@ class Interfaces(
                 toPackedInterface = toLayout.interfaceId.packInterface(toChildId)
             )
         )
+
         listener?.open(
             UserInterfaceEvent.OpenEvent(
                 interfaceId = userInterface.interfaceInfo.id,
@@ -210,4 +211,3 @@ class Interfaces(
         const val INVENTORY_CHILD_ID = 73
     }
 }
-

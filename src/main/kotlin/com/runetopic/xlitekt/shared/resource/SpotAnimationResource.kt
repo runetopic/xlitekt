@@ -6,7 +6,7 @@ import kotlinx.serialization.Serializable
  * @author Jordan Abraham
  */
 @Serializable
-data class Sequence(
+data class SpotAnimationResource(
     val name: String,
     val id: Int
 )

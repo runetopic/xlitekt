@@ -6,7 +6,7 @@ import kotlinx.serialization.Serializable
  * @author Tyler Telis
  */
 @Serializable
-data class InterfaceInfo(
+data class InterfaceInfoResource(
     val id: Int,
     val name: String,
     val resizableChildId: Int
