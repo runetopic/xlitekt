@@ -41,6 +41,7 @@ dependencyResolutionManagement {
             plugin("jvm", "org.jetbrains.kotlin.jvm").version("1.6.10")
             plugin("serialization", "org.jetbrains.kotlin.plugin.serialization").version("1.6.10")
             plugin("shadowjar", "com.github.johnrengelman.shadow").version("7.0.0")
+            plugin("versions", "com.github.ben-manes.versions").version("0.42.0")
         }
     }
 }

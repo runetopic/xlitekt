@@ -6,6 +6,7 @@ plugins {
     alias(deps.plugins.jvm)
     alias(deps.plugins.serialization)
     alias(deps.plugins.shadowjar)
+    alias(deps.plugins.versions)
 }
 
 group = "com.runetopic.xlite"
