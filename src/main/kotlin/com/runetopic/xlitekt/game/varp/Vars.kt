@@ -13,14 +13,9 @@ class Vars(
 ) : MutableMap<Int, Var> by vars {
 
     fun login() {
-        setDefaults()
         if (vars.isEmpty()) return
 
         vars.forEach { send(element = it.value) }
-    }
-
-    private fun setDefaults() {
-        this += VarPlayer.SpecialAttackEnergy(100 * 10)
     }
 
     operator fun plusAssign(element: Var) {
