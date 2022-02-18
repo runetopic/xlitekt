@@ -74,5 +74,3 @@ fun Player.sendVarp(id: Int, value: Int) = if (value < Byte.MIN_VALUE || value >
 
 fun Player.message(message: String) = write(MessageGamePacket(0, message, false)) // TODO build messaging system
 fun Player.script(scriptId: Int, parameters: List<Any>) = write(RunClientScriptPacket(scriptId, parameters))
-
-

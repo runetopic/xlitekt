@@ -28,10 +28,10 @@ class Interfaces(
     var currentInterfaceLayout = InterfaceLayout.FIXED
 
     fun login() {
+        player.message("Welcome to Xlitekt.")
         openTop(currentInterfaceLayout.interfaceId)
         gameInterfaces.forEach(::openInterface)
         player.write(VarpSmallPacket(1737, -1)) // TODO TEMP until i write a var system
-        player.message("Welcome to Xlitekt.")
     }
 
     fun closeModal() {

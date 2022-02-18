@@ -12,8 +12,8 @@ class Vars(
 ) : MutableMap<Var, Int> by vars {
 
     fun login() {
-        if (vars.isEmpty()) return
-        vars.forEach { send(it.key, it.value) }
+        if (isEmpty()) return
+        forEach { send(it.key, it.value) }
     }
 
     private fun send(element: Var, value: Int) {
@@ -33,13 +33,13 @@ class Vars(
     ): Int {
         val mask = mersennePrime[entryType.mostSignificantBit - entryType.leastSignificantBit] shl entryType.leastSignificantBit
         val maskValue = if (value < 0 || value > mask) 0 else value
-        return (vars[element] ?: 0) and mask.inv() or maskValue shl entryType.leastSignificantBit and mask
+        return (this[element] ?: 0) and mask.inv() or maskValue shl entryType.leastSignificantBit and mask
     }
 }
 
 fun Player.setVar(element: Var, value: Int) {
-    this.vars[element] = value
+    vars[element] = value
     sendVarp(element.info.id, value)
 }
 
-fun Player.varValue(element: Var): Int = this.vars[element] ?: 0
+fun Player.varValue(element: Var): Int = vars[element] ?: 0
