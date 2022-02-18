@@ -3,10 +3,9 @@ package com.runetopic.xlitekt.plugin.script.ui
 import com.runetopic.xlitekt.game.ui.UserInterface
 import com.runetopic.xlitekt.game.ui.onInterface
 import com.runetopic.xlitekt.game.vars.VarPlayer
-import com.runetopic.xlitekt.game.vars.setVar
 
 onInterface<UserInterface.CombatOptions> {
     onInit {
-        setVar(VarPlayer.SpecialAttackEnergy, 100 * 10)
+        vars.set(VarPlayer.SpecialAttackEnergy, 100 * 10)
     }
 }

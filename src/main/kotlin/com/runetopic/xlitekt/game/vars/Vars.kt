@@ -13,10 +13,11 @@ class Vars(
 
     fun login() {
         if (isEmpty()) return
-        forEach { send(it.key, it.value) }
+        forEach { set(it.key, it.value) }
     }
 
-    private fun send(element: Var, value: Int) {
+    fun set(element: Var, value: Int) {
+        vars[element] = value
         when (element.varType) {
             VarType.VAR_PLAYER -> player.sendVarp(element.info.id, value)
             VarType.VAR_BIT -> {
@@ -25,6 +26,8 @@ class Vars(
             }
         }
     }
+
+    fun value(element: Var): Int = vars[element] ?: 0
 
     private fun value(
         entryType: VarBitEntryType,
@@ -36,10 +39,3 @@ class Vars(
         return (this[element] ?: 0) and mask.inv() or maskValue shl entryType.leastSignificantBit and mask
     }
 }
-
-fun Player.setVar(element: Var, value: Int) {
-    vars[element] = value
-    sendVarp(element.info.id, value)
-}
-
-fun Player.varValue(element: Var): Int = vars[element] ?: 0
