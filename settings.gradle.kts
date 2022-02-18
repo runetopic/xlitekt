@@ -8,6 +8,7 @@ dependencyResolutionManagement {
 
     versionCatalogs {
         create("deps") {
+            version("kotlin", "1.6.10")
             version("ktor", "1.6.7")
             version("koin", "3.1.5")
             version("slf4j", "1.7.32")
@@ -15,9 +16,9 @@ dependencyResolutionManagement {
             version("cryptography", "1.0.10-SNAPSHOT")
             version("kotlinx", "1.3.2")
             version("kotlin-inline-logger", "1.0.4")
-            version("kotlin-reflect", "1.6.10")
             version("classgraph", "4.8.139")
-            version("kts", "1.6.10")
+            version("shadowjar", "7.1.2")
+            version("versions", "0.42.0")
 
             library("ktor-server-netty", "io.ktor", "ktor-server-netty").versionRef("ktor")
             library("koin-core", "io.insert-koin", "koin-core").versionRef("koin")
@@ -26,9 +27,9 @@ dependencyResolutionManagement {
             library("cache", "com.runetopic.cache", "cache").versionRef("cache")
             library("cryptography", "com.runetopic.cryptography", "cryptography").versionRef("cryptography")
             library("classgraph", "io.github.classgraph", "classgraph").versionRef("classgraph")
-            library("kscripting", "org.jetbrains.kotlin", "kotlin-scripting-common").versionRef("kts")
-            library("kruntime", "org.jetbrains.kotlin", "kotlin-script-runtime").versionRef("kts")
-            library("kotlin-reflect", "org.jetbrains.kotlin", "kotlin-reflect").versionRef("kotlin-reflect")
+            library("kscripting", "org.jetbrains.kotlin", "kotlin-scripting-common").versionRef("kotlin")
+            library("kruntime", "org.jetbrains.kotlin", "kotlin-script-runtime").versionRef("kotlin")
+            library("kotlin-reflect", "org.jetbrains.kotlin", "kotlin-reflect").versionRef("kotlin")
             library("kotlinx-serialization-json", "org.jetbrains.kotlinx", "kotlinx-serialization-json").versionRef("kotlinx")
             library("kotlin-inline-logger", "com.michael-bull.kotlin-inline-logger", "kotlin-inline-logger").versionRef("kotlin-inline-logger")
 
@@ -38,10 +39,10 @@ dependencyResolutionManagement {
             bundle("runetopic", listOf("cache", "cryptography"))
             bundle("logger", listOf("kotlin-inline-logger", "slf4j-simple"))
 
-            plugin("jvm", "org.jetbrains.kotlin.jvm").version("1.6.10")
-            plugin("serialization", "org.jetbrains.kotlin.plugin.serialization").version("1.6.10")
-            plugin("shadowjar", "com.github.johnrengelman.shadow").version("7.1.2")
-            plugin("versions", "com.github.ben-manes.versions").version("0.42.0")
+            plugin("jvm", "org.jetbrains.kotlin.jvm").versionRef("kotlin")
+            plugin("serialization", "org.jetbrains.kotlin.plugin.serialization").versionRef("kotlin")
+            plugin("shadowjar", "com.github.johnrengelman.shadow").versionRef("shadowjar")
+            plugin("versions", "com.github.ben-manes.versions").versionRef("versions")
         }
     }
 }
