@@ -35,19 +35,23 @@ class Interfaces(
     }
 
     fun closeModal() {
-        val openModal = findLast { it.interfaceInfo.resizableChildId == MODAL_CHILD_ID } ?: return
+        val openModal = currentModal() ?: return
         this -= openModal
     }
 
     fun closeInventory() {
-        val openInventory = findLast { it.interfaceInfo.resizableChildId == INVENTORY_CHILD_ID } ?: return
+        val openInventory = currentInventory() ?: return
         this -= openInventory
     }
 
-    private fun modalOpen() = findLast { it.interfaceInfo.resizableChildId == MODAL_CHILD_ID } != null
-    private fun inventoryOpen() = findLast { it.interfaceInfo.resizableChildId == INVENTORY_CHILD_ID } != null
+    private fun modalOpen() = currentModal() != null
 
-    private fun UserInterface.isModal() = interfaceInfo.resizableChildId == MODAL_CHILD_ID
+    private fun currentModal() = findLast { it.interfaceInfo.resizableChildId == MODAL_CHILD_ID || it.interfaceInfo.resizableChildId == MODAL_CHILD_ID_EXTENDED }
+    private fun inventoryOpen() = currentInventory() != null
+
+    private fun currentInventory() = findLast { it.interfaceInfo.resizableChildId == INVENTORY_CHILD_ID }
+
+    private fun UserInterface.isModal() = interfaceInfo.resizableChildId == MODAL_CHILD_ID || interfaceInfo.resizableChildId == MODAL_CHILD_ID_EXTENDED
     private fun UserInterface.isInventory() = interfaceInfo.resizableChildId == INVENTORY_CHILD_ID
 
     operator fun plusAssign(userInterface: UserInterface) {
@@ -65,9 +69,18 @@ class Interfaces(
     fun switchLayout(toLayout: InterfaceLayout) {
         if (toLayout == currentInterfaceLayout) return
         openTop(toLayout.interfaceId)
-        if (modalOpen()) closeModal()
-        gameInterfaces.forEach { moveSub(it, toLayout) }
-        currentInterfaceLayout = toLayout
+        val switch = {
+            closeModal()
+            gameInterfaces.forEach { moveSub(it, toLayout) }
+            currentInterfaceLayout = toLayout
+        }
+        when (currentModal()) {
+            UserInterface.AdvancedSettings -> {
+                switch()
+                openInterface(UserInterface.AdvancedSettings)
+            }
+            else -> switch()
+        }
     }
 
     fun setText(packedInterface: Int, text: String) = player.write(
@@ -208,6 +221,7 @@ class Interfaces(
         )
 
         const val MODAL_CHILD_ID = 16
+        const val MODAL_CHILD_ID_EXTENDED = 17
         const val INVENTORY_CHILD_ID = 73
     }
 }

@@ -11,7 +11,7 @@ class PublicChatPacketDisassembler : PacketDisassembler<PublicChatPacket>(opcode
         unknown = packet.readUByte().toInt(),
         color = packet.readUByte().toInt(),
         effect = packet.readUByte().toInt(),
-        size = packet.readSmart(),
+        length = packet.readSmart(),
         data = packet.readBytes()
     )
 }
