@@ -4,7 +4,7 @@ data class PublicChatPacket(
     val unknown: Int,
     val color: Int,
     val effect: Int,
-    val size: Int,
+    val length: Int,
     val data: ByteArray
 ) : Packet {
     override fun equals(other: Any?): Boolean {
@@ -16,7 +16,7 @@ data class PublicChatPacket(
         if (unknown != other.unknown) return false
         if (color != other.color) return false
         if (effect != other.effect) return false
-        if (size != other.size) return false
+        if (length != other.length) return false
         if (!data.contentEquals(other.data)) return false
 
         return true
@@ -26,7 +26,7 @@ data class PublicChatPacket(
         var result = unknown
         result = 31 * result + color
         result = 31 * result + effect
-        result = 31 * result + size.hashCode()
+        result = 31 * result + length.hashCode()
         result = 31 * result + data.contentHashCode()
         return result
     }
