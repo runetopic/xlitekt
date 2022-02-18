@@ -16,7 +16,7 @@ dependencyResolutionManagement {
             version("kotlinx", "1.3.2")
             version("kotlin-inline-logger", "1.0.4")
             version("kotlin-reflect", "1.6.10")
-            version("classgraph", "4.8.138")
+            version("classgraph", "4.8.139")
             version("kts", "1.6.10")
 
             library("ktor-server-netty", "io.ktor", "ktor-server-netty").versionRef("ktor")
@@ -40,7 +40,7 @@ dependencyResolutionManagement {
 
             plugin("jvm", "org.jetbrains.kotlin.jvm").version("1.6.10")
             plugin("serialization", "org.jetbrains.kotlin.plugin.serialization").version("1.6.10")
-            plugin("shadowjar", "com.github.johnrengelman.shadow").version("7.0.0")
+            plugin("shadowjar", "com.github.johnrengelman.shadow").version("7.1.2")
             plugin("versions", "com.github.ben-manes.versions").version("0.42.0")
         }
     }
