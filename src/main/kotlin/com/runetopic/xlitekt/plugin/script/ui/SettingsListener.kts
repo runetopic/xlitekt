@@ -31,4 +31,8 @@ onInterface<UserInterface.Settings> {
         script(interfaceScalingCS2Id, listOf(0))
         interfaces.switchLayout(interfaceLayout)
     }
+
+    onClick("All Settings") {
+        interfaces += UserInterface.AdvancedSettings
+    }
 }

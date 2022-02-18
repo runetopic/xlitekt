@@ -25,6 +25,11 @@
     "resizableChildId": 86
   },
   {
+    "id": 134,
+    "name": "advanced_settings",
+    "resizableChildId": 17
+  },
+  {
     "id": 149,
     "name": "inventory",
     "resizableChildId": 78
