@@ -35,17 +35,17 @@ class Interfaces(
     }
 
     fun closeModal() {
-        val openModal = interfaces.findLast { it.interfaceInfo.resizableChildId == MODAL_CHILD_ID } ?: return
+        val openModal = findLast { it.interfaceInfo.resizableChildId == MODAL_CHILD_ID } ?: return
         this -= openModal
     }
 
     fun closeInventory() {
-        val openInventory = interfaces.findLast { it.interfaceInfo.resizableChildId == INVENTORY_CHILD_ID } ?: return
+        val openInventory = findLast { it.interfaceInfo.resizableChildId == INVENTORY_CHILD_ID } ?: return
         this -= openInventory
     }
 
-    private fun modalOpen() = interfaces.findLast { it.interfaceInfo.resizableChildId == MODAL_CHILD_ID } != null
-    private fun inventoryOpen() = interfaces.findLast { it.interfaceInfo.resizableChildId == INVENTORY_CHILD_ID } != null
+    private fun modalOpen() = findLast { it.interfaceInfo.resizableChildId == MODAL_CHILD_ID } != null
+    private fun inventoryOpen() = findLast { it.interfaceInfo.resizableChildId == INVENTORY_CHILD_ID } != null
 
     private fun UserInterface.isModal() = interfaceInfo.resizableChildId == MODAL_CHILD_ID
     private fun UserInterface.isInventory() = interfaceInfo.resizableChildId == INVENTORY_CHILD_ID
@@ -99,7 +99,7 @@ class Interfaces(
     private fun openTop(id: Int) = player.write(IfOpenTopPacket(interfaceId = id))
 
     private fun openInterface(userInterface: UserInterface) = userInterface.apply {
-        interfaces.add(userInterface)
+        add(userInterface)
 
         val derivedChildId = userInterface.interfaceInfo.resizableChildId
         val childId = derivedChildId.enumChildForLayout(
@@ -132,7 +132,7 @@ class Interfaces(
     }
 
     private fun closeInterface(userInterface: UserInterface) = userInterface.apply {
-        interfaces.remove(userInterface)
+        remove(userInterface)
 
         val childId = userInterface.interfaceInfo.resizableChildId
 
