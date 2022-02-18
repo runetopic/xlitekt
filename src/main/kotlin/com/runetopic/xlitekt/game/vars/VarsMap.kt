@@ -1,11 +1,11 @@
-package com.runetopic.xlitekt.game.varp
+package com.runetopic.xlitekt.game.vars
 
 import com.runetopic.xlitekt.plugin.koin.inject
 import com.runetopic.xlitekt.shared.resource.VarBits
 import com.runetopic.xlitekt.shared.resource.VarInfoResource
 import com.runetopic.xlitekt.shared.resource.Varps
 
-object VarMapping {
+object VarsMap {
     private val varpInfo by inject<Varps>()
     private val varBitInfo by inject<VarBits>()
 

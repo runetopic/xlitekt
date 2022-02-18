@@ -6,13 +6,15 @@ import com.runetopic.xlitekt.game.event.EventBus
 import com.runetopic.xlitekt.game.event.impl.Events
 import com.runetopic.xlitekt.game.tile.Tile
 import com.runetopic.xlitekt.game.ui.Interfaces
-import com.runetopic.xlitekt.game.varp.Vars
+import com.runetopic.xlitekt.game.vars.Vars
 import com.runetopic.xlitekt.game.world.World
 import com.runetopic.xlitekt.network.client.Client
 import com.runetopic.xlitekt.network.packet.MessageGamePacket
 import com.runetopic.xlitekt.network.packet.Packet
 import com.runetopic.xlitekt.network.packet.RebuildNormalPacket
 import com.runetopic.xlitekt.network.packet.RunClientScriptPacket
+import com.runetopic.xlitekt.network.packet.VarpLargePacket
+import com.runetopic.xlitekt.network.packet.VarpSmallPacket
 import com.runetopic.xlitekt.plugin.koin.inject
 
 /**
@@ -64,5 +66,13 @@ class Player(
     fun flushPool() = client?.writeChannel?.flush()
 }
 
+fun Player.sendVarp(id: Int, value: Int) = if (value < Byte.MIN_VALUE || value > Byte.MAX_VALUE) {
+    write(VarpLargePacket(id, value))
+} else {
+    write(VarpSmallPacket(id, value))
+}
+
 fun Player.message(message: String) = write(MessageGamePacket(0, message, false)) // TODO build messaging system
 fun Player.script(scriptId: Int, parameters: List<Any>) = write(RunClientScriptPacket(scriptId, parameters))
+
+

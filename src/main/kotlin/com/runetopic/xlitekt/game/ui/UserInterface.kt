@@ -1,6 +1,6 @@
 package com.runetopic.xlitekt.game.ui
 
-import com.runetopic.xlitekt.game.ui.InterfaceMapping.interfaceInfo
+import com.runetopic.xlitekt.game.ui.InterfaceMap.interfaceInfo
 
 sealed class UserInterface(val name: String) {
     val interfaceInfo by lazy { interfaceInfo(name) }

@@ -9,7 +9,7 @@ import kotlin.reflect.KClass
 /**
  * @author Tyler Telis
  */
-object InterfaceMapping {
+object InterfaceMap {
     private val interfaceInfoMap by inject<InterfaceInfoMap>()
     val map = mutableMapOf<KClass<*>, UserInterfaceListener.() -> Unit>()
 
@@ -23,5 +23,5 @@ object InterfaceMapping {
 }
 
 inline fun <reified T : UserInterface> onInterface(noinline listener: UserInterfaceListener.() -> Unit) {
-    InterfaceMapping.map[T::class] = listener
+    InterfaceMap.map[T::class] = listener
 }
