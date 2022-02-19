@@ -14,7 +14,7 @@ class World {
     val npcs = NPCList(MAX_NPCs)
 
     fun process() = runBlocking(Dispatcher.GAME) {
-        launch(Dispatcher.UPDATE) {
+        val job = launch(Dispatcher.UPDATE) {
             val players = players.filterNotNull().filter(Player::online)
             players.parallelStream().forEach {
                 it.write(PlayerInfoPacket(it))
@@ -23,6 +23,7 @@ class World {
             }
             players.parallelStream().forEach(Player::reset)
         }
+        job.join()
     }
 
     companion object {
