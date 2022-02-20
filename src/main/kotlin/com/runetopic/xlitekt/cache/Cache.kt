@@ -18,6 +18,8 @@ import com.runetopic.xlitekt.cache.provider.config.sequence.SequenceEntryType
 import com.runetopic.xlitekt.cache.provider.config.sequence.SequenceEntryTypeProvider
 import com.runetopic.xlitekt.cache.provider.config.varbit.VarBitEntryType
 import com.runetopic.xlitekt.cache.provider.config.varbit.VarBitEntryTypeProvider
+import com.runetopic.xlitekt.cache.provider.map.MapEntryType
+import com.runetopic.xlitekt.cache.provider.map.MapEntryTypeProvider
 import com.runetopic.xlitekt.cache.provider.ui.InterfaceEntryType
 import com.runetopic.xlitekt.cache.provider.ui.InterfaceEntryTypeProvider
 import io.ktor.application.ApplicationEnvironment
@@ -43,6 +45,7 @@ object Cache {
         EnumEntryType::class to EnumEntryTypeProvider(),
         ObjEntryType::class to ObjEntryTypeProvider(),
         NPCEntryType::class to NPCEntryTypeProvider(),
+        MapEntryType::class to MapEntryTypeProvider(),
         LocEntryType::class to LocEntryTypeProvider(),
         SequenceEntryType::class to SequenceEntryTypeProvider()
     )

@@ -36,6 +36,7 @@ abstract class EntryTypeProvider<R : EntryType> {
         // Indexes.
         const val CONFIG_INDEX = 2
         const val INTERFACE_INDEX = 3
+        const val MAP_INDEX = 5
 
         // Config groups.
         const val LOC_CONFIG = 6
