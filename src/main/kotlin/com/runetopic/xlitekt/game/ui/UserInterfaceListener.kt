@@ -11,7 +11,7 @@ class UserInterfaceListener(
     private val player: Player,
     val userInterface: UserInterface
 ) {
-    private var onInitEvent: OnInitEvent? = null
+    private var onCreateEvent: OnCreateEvent? = null
     private var onOpenEvent: OnOpenEvent? = null
     private var onCloseEvent: OnCloseEvent? = null
     private var onButtonClickEvent: OnButtonClickEvent? = null
@@ -25,12 +25,12 @@ class UserInterfaceListener(
         this.onOpenEvent = onOpenEvent
     }
 
-    fun onInit(onInitEvent: OnInitEvent) {
-        this.onInitEvent = onInitEvent
+    fun onCreate(onCreateEvent: OnCreateEvent) {
+        this.onCreateEvent = onCreateEvent
     }
 
-    fun init(initEvent: UserInterfaceEvent.InitEvent) {
-        this.onInitEvent?.invoke(player, initEvent)
+    fun init(createEvent: UserInterfaceEvent.CreateEvent) {
+        this.onCreateEvent?.invoke(player, createEvent)
     }
 
     fun open(openEvent: UserInterfaceEvent.OpenEvent) {

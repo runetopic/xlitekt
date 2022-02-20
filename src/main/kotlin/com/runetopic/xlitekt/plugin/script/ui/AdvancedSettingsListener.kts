@@ -14,11 +14,6 @@ private val closeSettingsChildId = 4
  * @author Jordan Abraham
  */
 onInterface<UserInterface.AdvancedSettings> {
-    onInit {
-        // Varbit(id = 9657, value = 0)
-        // Varbit(id = 9656, value = 4)
-        // Varbit(id = 9658, value = 1)
-    }
     onOpen {
         setEvent(21, 0..147, InterfaceEvent.CLICK_OPTION_1)
         setEvent(23, 0..7, InterfaceEvent.CLICK_OPTION_1)

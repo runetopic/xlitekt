@@ -5,7 +5,7 @@ import com.runetopic.xlitekt.game.ui.UserInterface
 import com.runetopic.xlitekt.game.ui.onInterface
 
 onInterface<UserInterface.EquipmentStats> {
-    onInit {
+    onCreate {
         script(917, listOf(-1, -1))
     }
 
