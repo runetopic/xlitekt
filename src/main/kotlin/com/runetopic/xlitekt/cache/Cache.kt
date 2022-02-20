@@ -8,6 +8,8 @@ import com.runetopic.xlitekt.cache.provider.EntryType
 import com.runetopic.xlitekt.cache.provider.EntryTypeProvider
 import com.runetopic.xlitekt.cache.provider.config.enum.EnumEntryType
 import com.runetopic.xlitekt.cache.provider.config.enum.EnumEntryTypeProvider
+import com.runetopic.xlitekt.cache.provider.config.hitsplat.HitSplatEntryType
+import com.runetopic.xlitekt.cache.provider.config.hitsplat.HitSplatEntryTypeProvider
 import com.runetopic.xlitekt.cache.provider.config.loc.LocEntryType
 import com.runetopic.xlitekt.cache.provider.config.loc.LocEntryTypeProvider
 import com.runetopic.xlitekt.cache.provider.config.npc.NPCEntryType
@@ -47,7 +49,8 @@ object Cache {
         NPCEntryType::class to NPCEntryTypeProvider(),
         MapEntryType::class to MapEntryTypeProvider(),
         LocEntryType::class to LocEntryTypeProvider(),
-        SequenceEntryType::class to SequenceEntryTypeProvider()
+        SequenceEntryType::class to SequenceEntryTypeProvider(),
+        HitSplatEntryType::class to HitSplatEntryTypeProvider()
     )
 
     fun loadProviders() {
