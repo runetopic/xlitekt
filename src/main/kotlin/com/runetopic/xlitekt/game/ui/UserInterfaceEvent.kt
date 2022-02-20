@@ -20,7 +20,6 @@ sealed class UserInterfaceEvent {
         val index: Int,
         val interfaceId: Int,
         val childId: Int,
-        val option: Int,
         val slotId: Int,
         val itemId: Int,
         val action: String
