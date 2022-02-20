@@ -2,7 +2,6 @@ package com.runetopic.xlitekt.cache.provider.map
 
 import com.github.michaelbull.logging.InlineLogger
 import com.runetopic.xlitekt.cache.provider.EntryTypeProvider
-import com.runetopic.xlitekt.game.zone.Zones
 import io.ktor.utils.io.core.ByteReadPacket
 import io.ktor.utils.io.core.readUByte
 import java.util.concurrent.CountDownLatch
@@ -22,7 +21,7 @@ class MapEntryTypeProvider : EntryTypeProvider<MapEntryType>() {
         var count = 0
 
         val time = measureTimeMillis {
-            val index = Zones.store.index(5)
+            val index = store.index(5)
 
             repeat(VALID_X) { x ->
                 repeat(VALID_Z) { z ->
