@@ -10,13 +10,12 @@ import kotlin.system.measureTimeMillis
 
 class MapEntryTypeProvider : EntryTypeProvider<MapEntryType>() {
     private val logger = InlineLogger()
+    private val latch = CountDownLatch(VALID_X * VALID_X)
+    private val threads = Runtime.getRuntime().availableProcessors()
+    private val pool = Executors.newFixedThreadPool(threads - 2)
 
     override fun load(): Map<Int, MapEntryType> {
         val mapSquares = mutableMapOf<Int, MapEntryType>()
-
-        val latch = CountDownLatch(VALID_X * VALID_X)
-        val threads = Runtime.getRuntime().availableProcessors()
-        val pool = Executors.newFixedThreadPool(threads - 2)
 
         var count = 0
 
@@ -44,7 +43,7 @@ class MapEntryTypeProvider : EntryTypeProvider<MapEntryType>() {
         }
         latch.await()
         pool.shutdown()
-        logger.debug { "Finished loading maps. Count = $count. Took $time ms." }
+        logger.debug { "Finished loading $count maps. Took $time ms." }
         return mapSquares
     }
 
