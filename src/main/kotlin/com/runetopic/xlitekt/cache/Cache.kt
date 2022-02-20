@@ -62,3 +62,4 @@ object Cache {
 }
 
 inline fun <reified T : EntryType> entryType(id: Int): T? = Cache.providers[T::class]?.entryType(id) as T?
+inline fun <reified T : EntryType> entries(): Set<T> = Cache.providers[T::class]?.entries() as Set<T>

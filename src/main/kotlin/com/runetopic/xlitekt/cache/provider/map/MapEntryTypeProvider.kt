@@ -10,7 +10,7 @@ import kotlin.system.measureTimeMillis
 
 class MapEntryTypeProvider : EntryTypeProvider<MapEntryType>() {
     private val logger = InlineLogger()
-    private val latch = CountDownLatch(VALID_X * VALID_X)
+    private val latch = CountDownLatch(VALID_X * VALID_Z)
     private val pool = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors() - 2)
 
     override fun load(): Map<Int, MapEntryType> {
@@ -78,7 +78,7 @@ class MapEntryTypeProvider : EntryTypeProvider<MapEntryType>() {
     }
 
     companion object {
-        const val VALID_X = 256
-        const val VALID_Z = 100
+        const val VALID_X = 100
+        const val VALID_Z = 256
     }
 }
