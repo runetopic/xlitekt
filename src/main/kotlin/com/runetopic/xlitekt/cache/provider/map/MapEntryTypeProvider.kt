@@ -24,8 +24,8 @@ class MapEntryTypeProvider : EntryTypeProvider<MapEntryType>() {
         val time = measureTimeMillis {
             val index = Zones.store.index(5)
 
-            (0..VALID_X).forEach { x ->
-                (0..VALID_Z).forEach { z ->
+            repeat(VALID_X) { x ->
+                repeat(VALID_Z) { z ->
                     val regionId = (x shl 8) or z
 
                     pool.execute {
