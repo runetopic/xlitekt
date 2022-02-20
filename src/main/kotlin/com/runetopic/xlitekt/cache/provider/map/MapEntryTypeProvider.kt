@@ -11,8 +11,7 @@ import kotlin.system.measureTimeMillis
 class MapEntryTypeProvider : EntryTypeProvider<MapEntryType>() {
     private val logger = InlineLogger()
     private val latch = CountDownLatch(VALID_X * VALID_X)
-    private val threads = Runtime.getRuntime().availableProcessors()
-    private val pool = Executors.newFixedThreadPool(threads - 2)
+    private val pool = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors() - 2)
 
     override fun load(): Map<Int, MapEntryType> {
         val mapSquares = mutableMapOf<Int, MapEntryType>()
