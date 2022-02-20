@@ -19,7 +19,7 @@ abstract class EntryTypeProvider<R : EntryType> {
 
     fun size() = entries.size
     fun entryType(id: Int): R? = entries[id]
-    fun entries(): Set<R> = entries.values.toSet()
+    fun entries(): Collection<R> = entries.values
 
     fun ByteReadPacket.readStringIntParameters(): Map<Int, Any> = buildMap {
         repeat(readUByte().toInt()) {

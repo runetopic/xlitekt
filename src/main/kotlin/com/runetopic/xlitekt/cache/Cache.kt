@@ -37,7 +37,7 @@ val cacheModule = module(createdAtStart = true) {
 }
 
 object Cache {
-    private val logger = InlineLogger()
+    val logger = InlineLogger()
 
     val providers = mapOf(
         VarBitEntryType::class to VarBitEntryTypeProvider(),
@@ -62,4 +62,4 @@ object Cache {
 }
 
 inline fun <reified T : EntryType> entryType(id: Int): T? = Cache.providers[T::class]?.entryType(id) as T?
-inline fun <reified T : EntryType> entries(): Set<T> = Cache.providers[T::class]?.entries() as Set<T>
+inline fun <reified T : EntryType> entries(): Collection<T>? = Cache.providers[T::class]?.entries() as Collection<T>?

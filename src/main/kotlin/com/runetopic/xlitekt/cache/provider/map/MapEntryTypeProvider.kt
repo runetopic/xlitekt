@@ -4,6 +4,7 @@ import com.github.michaelbull.logging.InlineLogger
 import com.runetopic.xlitekt.cache.provider.EntryTypeProvider
 import io.ktor.utils.io.core.ByteReadPacket
 import io.ktor.utils.io.core.readUByte
+import java.util.Collections
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.Executors
 import kotlin.system.measureTimeMillis
@@ -14,12 +15,12 @@ class MapEntryTypeProvider : EntryTypeProvider<MapEntryType>() {
     private val pool = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors() - 2)
 
     override fun load(): Map<Int, MapEntryType> {
-        val mapSquares = mutableMapOf<Int, MapEntryType>()
+        val mapSquares = Collections.synchronizedMap<Int, MapEntryType>(mutableMapOf())
 
         var count = 0
 
         val time = measureTimeMillis {
-            val index = store.index(5)
+            val index = store.index(MAP_INDEX)
 
             repeat(VALID_X) { x ->
                 repeat(VALID_Z) { z ->
