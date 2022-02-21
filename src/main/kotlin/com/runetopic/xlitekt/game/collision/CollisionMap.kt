@@ -45,7 +45,7 @@ object CollisionMap {
         val clipType = entry.clipType
         val blockPath = entry.blockPath
         val blockProjectile = entry.blockProjectile
-        val breakRouteFinding = entry.breakrouteFinding
+        val breakRouteFinding = entry.breakRouteFinding
 
         when {
             shape in GameObjectShape.WALL_SHAPES && clipType != 0 -> changeWallCollision(location, rotation, shape, blockProjectile, breakRouteFinding, add)
