@@ -21,8 +21,8 @@ class RebuildNormalPacketAssembler : PacketAssembler<RebuildNormalPacket>(opcode
             packet.viewport.init(this@buildPacket)
         }
 
-        val chunkX = packet.tile.chunkX
-        val chunkZ = packet.tile.chunkZ
+        val chunkX = packet.location.zoneX
+        val chunkZ = packet.location.zoneZ
 
         writeShortAdd(chunkX.toShort())
         writeShortLittleEndian(chunkZ.toShort())

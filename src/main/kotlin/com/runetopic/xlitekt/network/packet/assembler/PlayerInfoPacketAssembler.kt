@@ -3,7 +3,7 @@ package com.runetopic.xlitekt.network.packet.assembler
 import com.runetopic.xlitekt.game.actor.player.Player
 import com.runetopic.xlitekt.game.actor.player.Viewport
 import com.runetopic.xlitekt.game.actor.render.Render
-import com.runetopic.xlitekt.game.tile.withinDistance
+import com.runetopic.xlitekt.game.location.withinDistance
 import com.runetopic.xlitekt.game.world.World
 import com.runetopic.xlitekt.network.packet.PlayerInfoPacket
 import com.runetopic.xlitekt.network.packet.assembler.block.player.PlayerAppearanceBlock
@@ -88,7 +88,7 @@ class PlayerInfoPacketAssembler : PacketAssembler<PlayerInfoPacket>(opcode = 80,
             removing -> { // remove the player
                 // send a position update
                 writeBits(2, 0)
-                viewport.coordinates[index] = other?.previousTile?.regionCoordinates ?: other?.tile?.regionCoordinates ?: 0
+                viewport.coordinates[index] = other?.previousLocation?.regionCoordinates ?: other?.location?.regionCoordinates ?: 0
                 validateCoordinates(viewport, other, index)
                 viewport.localPlayers[index] = null
             }
@@ -136,8 +136,8 @@ class PlayerInfoPacketAssembler : PacketAssembler<PlayerInfoPacket>(opcode = 80,
             // add an external player to start tracking
             writeBits(2, 0)
             validateCoordinates(viewport, other, index)
-            writeBits(13, other.tile.x)
-            writeBits(13, other.tile.z)
+            writeBits(13, other.location.x)
+            writeBits(13, other.location.z)
             // send a force block update
             writeBits(1, 1)
             blocks.encodePendingBlocks(true, other)
@@ -148,7 +148,7 @@ class PlayerInfoPacketAssembler : PacketAssembler<PlayerInfoPacket>(opcode = 80,
 
     private fun BitAccess.validateCoordinates(viewport: Viewport, other: Player?, index: Int) {
         val currentPacked = viewport.coordinates[index]
-        val packed = other?.tile?.regionCoordinates ?: currentPacked
+        val packed = other?.location?.regionCoordinates ?: currentPacked
         val updating = other != null && packed != currentPacked
         writeBits(1, updating.toInt())
         if (updating) {
@@ -249,8 +249,8 @@ class PlayerInfoPacketAssembler : PacketAssembler<PlayerInfoPacket>(opcode = 80,
     }
 
     private fun shouldUpdate(other: Player?): Boolean = other?.hasPendingUpdate() ?: false
-    private fun shouldAdd(viewport: Viewport, other: Player?): Boolean = (other != null && other != viewport.player && other.tile.withinDistance(viewport.player))
-    private fun shouldRemove(viewport: Viewport, other: Player?): Boolean = (other == null || !other.tile.withinDistance(viewport.player) || !world.players.contains(other))
+    private fun shouldAdd(viewport: Viewport, other: Player?): Boolean = (other != null && other != viewport.player && other.location.withinDistance(viewport.player))
+    private fun shouldRemove(viewport: Viewport, other: Player?): Boolean = (other == null || !other.location.withinDistance(viewport.player) || !world.players.contains(other))
 
     private companion object {
         val renderingBlockMap = mapOf(

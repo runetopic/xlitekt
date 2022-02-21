@@ -1,8 +1,5 @@
 package com.runetopic.xlitekt.plugin.script.ui
 
-import com.runetopic.xlitekt.cache.entries
-import com.runetopic.xlitekt.cache.provider.map.MapEntryType
-import com.runetopic.xlitekt.game.actor.player.message
 import com.runetopic.xlitekt.game.ui.InterfaceEvent
 import com.runetopic.xlitekt.game.ui.UserInterface
 import com.runetopic.xlitekt.game.ui.onInterface
@@ -28,8 +25,5 @@ onInterface<UserInterface.AdvancedSettings> {
 
     onClick(childId = closeSettingsChildId) {
         interfaces -= UserInterface.AdvancedSettings
-        val maps = entries<MapEntryType>()
-
-        message(maps?.size.toString())
     }
 }

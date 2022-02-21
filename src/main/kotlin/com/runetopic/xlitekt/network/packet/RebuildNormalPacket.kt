@@ -1,13 +1,13 @@
 package com.runetopic.xlitekt.network.packet
 
 import com.runetopic.xlitekt.game.actor.player.Viewport
-import com.runetopic.xlitekt.game.tile.Tile
+import com.runetopic.xlitekt.game.location.Location
 
 /**
  * @author Jordan Abraham
  */
 data class RebuildNormalPacket(
     val viewport: Viewport,
-    val tile: Tile,
+    val location: Location,
     val update: Boolean
 ) : Packet

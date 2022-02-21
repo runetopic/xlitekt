@@ -4,13 +4,13 @@ import com.runetopic.xlitekt.game.actor.render.ActorRenderer
 import com.runetopic.xlitekt.game.actor.render.HitBarType
 import com.runetopic.xlitekt.game.actor.render.HitType
 import com.runetopic.xlitekt.game.actor.render.Render
-import com.runetopic.xlitekt.game.tile.Tile
+import com.runetopic.xlitekt.game.location.Location
 
 abstract class Actor(
-    open var tile: Tile
+    open var location: Location
 ) {
     protected val renderer = ActorRenderer()
-    var previousTile: Tile? = null
+    var previousLocation: Location? = null
     var index = 0
 
     // TODO maybe move the combat stuff out somewhere else

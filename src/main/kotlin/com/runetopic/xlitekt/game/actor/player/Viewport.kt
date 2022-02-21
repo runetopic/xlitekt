@@ -23,12 +23,12 @@ class Viewport(
     private val world by inject<World>()
 
     fun init(builder: BytePacketBuilder) = builder.withBitAccess {
-        writeBits(30, player.tile.coordinates)
+        writeBits(30, player.location.packedCoordinates)
         localPlayers[player.index] = player
         localIndexes[localIndexesSize++] = player.index
         (1 until MAX_PLAYERS).forEach {
             if (it == player.index) return@forEach
-            val otherRegionCoordinates = world.players[it]?.tile?.regionCoordinates ?: 0
+            val otherRegionCoordinates = world.players[it]?.location?.regionCoordinates ?: 0
             writeBits(18, otherRegionCoordinates)
             coordinates[it] = otherRegionCoordinates
             externalIndexes[externalIndexesSize++] = it

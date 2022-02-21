@@ -1,7 +1,7 @@
 package com.runetopic.xlitekt.game.actor.render
 
 import com.runetopic.xlitekt.game.actor.Actor
-import com.runetopic.xlitekt.game.tile.Tile
+import com.runetopic.xlitekt.game.location.Location
 
 /**
  * @author Tyler Telis
@@ -32,8 +32,8 @@ class ActorRenderer {
         pendingUpdates += Render.FaceActor(index)
     }
 
-    fun faceTile(tile: Tile) {
-        pendingUpdates += Render.FaceTile(tile)
+    fun faceTile(location: Location) {
+        pendingUpdates += Render.FaceTile(location)
     }
 
     fun forceMove(forceMovement: Render.ForceMovement) {

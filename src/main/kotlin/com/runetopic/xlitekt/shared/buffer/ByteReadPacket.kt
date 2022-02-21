@@ -1,7 +1,6 @@
 package com.runetopic.xlitekt.shared.buffer
 
 import io.ktor.utils.io.core.ByteReadPacket
-import io.ktor.utils.io.core.readShort
 import io.ktor.utils.io.core.readUByte
 import io.ktor.utils.io.core.readUShort
 
@@ -31,4 +30,18 @@ fun ByteReadPacket.readUMedium() = (readUByte().toInt() shl 16) + readUShort().t
 fun ByteReadPacket.readIntV1() = readUShort().toInt() + (readUByte().toInt() shl 24) + (readUByte().toInt() shl 16)
 fun ByteReadPacket.readIntV2() = (readUByte().toInt() shl 16) + (readUByte().toInt() shl 24) + readUShortLittleEndian()
 
-fun ByteReadPacket.readSmart() = if (tryPeek() < 128) readByte().toInt() else readShort() - (Short.MAX_VALUE + 1)
+fun ByteReadPacket.readSmart() = if (tryPeek() < 128) readUByte().toInt() else readUShort().toInt() - ((Short.MAX_VALUE + 1))
+
+fun ByteReadPacket.readIncrSmallSmart(): Int {
+    var offset = 0
+    var increment: Int
+    increment = readSmart()
+    while (increment == 32767) {
+        offset += 32767
+        increment = readSmart()
+    }
+    offset += increment
+    return offset
+}
+
+fun ByteReadPacket.readUnsignedShortSmart(): Int = if (tryPeek() < 128) readUByte().toInt() else readUShort().toInt() - 0x8000
