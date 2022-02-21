@@ -5,8 +5,11 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class MapSquareResource(
-    @SerialName("mapsquare")
-    val regionId: Int,
-    @SerialName("key")
-    val keys: List<Int>
+    val archive: Int,
+    val group: Int,
+    @SerialName("name_hash")
+    val nameHash: Int,
+    val name: String,
+    val mapsquare: Int,
+    val key: List<Int>
 )

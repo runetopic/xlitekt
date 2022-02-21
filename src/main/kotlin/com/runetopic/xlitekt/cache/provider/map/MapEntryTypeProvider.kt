@@ -20,7 +20,7 @@ import java.util.Collections
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.Executors
 import kotlin.experimental.and
-import kotlin.system.measureTimeMillis
+import kotlin.time.measureTime
 
 /**
  * @author Tyler Telis
@@ -33,13 +33,12 @@ class MapEntryTypeProvider : EntryTypeProvider<MapSquareEntryType>() {
 
     override fun load(): Map<Int, MapSquareEntryType> {
         val mapSquares = Collections.synchronizedMap<Int, MapSquareEntryType>(mutableMapOf())
-
         var count = 0
         var missingXteasCount = 0
 
-        val time = measureTimeMillis {
-            val index = store.index(MAP_INDEX)
+        val index = store.index(MAP_INDEX)
 
+        val time = measureTime {
             repeat(VALID_X) { x ->
                 repeat(VALID_Z) { z ->
                     val regionId = (x shl 8) or z
@@ -53,25 +52,29 @@ class MapEntryTypeProvider : EntryTypeProvider<MapSquareEntryType>() {
                             return@execute
                         }
 
-                        val xteas = xteas.find { it.regionId == regionId }?.keys?.toIntArray() ?: run {
+                        val xteas = xteas.find { it.mapsquare == regionId }?.key?.toIntArray() ?: run {
                             latch.countDown()
                             missingXteasCount++
                             return@execute
                         }
 
-                        val mapSquare = ByteReadPacket(mapData.decompress()).loadEntryType(MapSquareEntryType(regionId, x, z))
-                        ByteReadPacket(locData.decompress(xteas)).loadMapEntryLocations(mapSquare)
-
-                        mapSquares[regionId] = mapSquare
-                        count++
-                        latch.countDown()
+                        try {
+                            val mapSquare = ByteReadPacket(mapData.decompress()).loadEntryType(MapSquareEntryType(regionId, x, z))
+                            ByteReadPacket(locData.decompress(xteas)).loadMapEntryLocations(mapSquare)
+                            mapSquares[regionId] = mapSquare
+                        } catch (exception: Exception) {
+                            logger.error(exception) { "Failed to decompress maps." }
+                        } finally {
+                            count++
+                            latch.countDown()
+                        }
                     }
                 }
             }
         }
         latch.await()
         pool.shutdown()
-        logger.debug { "Finished loading $count maps in $time ms. $missingXteasCount were missing xteas." }
+        logger.debug { "Took $time to finish. Loaded $count maps. (Missing $missingXteasCount.)" }
         return mapSquares
     }
 

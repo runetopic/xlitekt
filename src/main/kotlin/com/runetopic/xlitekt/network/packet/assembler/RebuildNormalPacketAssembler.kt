@@ -32,7 +32,7 @@ class RebuildNormalPacketAssembler : PacketAssembler<RebuildNormalPacket>(opcode
             ((zoneX - 6) / 8..(zoneX + 6) / 8).forEach { x ->
                 ((zoneZ - 6) / 8..(zoneZ + 6) / 8).forEach { y ->
                     val regionId = y + (x shl 8)
-                    val xteaKeys = mapSquares.find { it.regionId == regionId }?.keys ?: listOf(0, 0, 0, 0)
+                    val xteaKeys = mapSquares.find { it.mapsquare == regionId }?.key ?: listOf(0, 0, 0, 0)
                     xteaKeys.forEach(::writeInt)
                     ++size
                 }
