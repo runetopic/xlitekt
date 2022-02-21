@@ -13,8 +13,8 @@ import io.ktor.utils.io.core.writeShortLittleEndian
  */
 class NPCFaceTileBlock : RenderingBlock<NPC, Render.FaceTile>(1, 0x8) {
     override fun build(actor: NPC, render: Render.FaceTile) = buildPacket {
-        writeShortLittleEndian(((render.tile.x shl 1) + 1).toShort())
-        writeShortLittleEndianAdd(((render.tile.z shl 1) + 1).toShort())
+        writeShortLittleEndian(((render.location.x shl 1) + 1).toShort())
+        writeShortLittleEndianAdd(((render.location.z shl 1) + 1).toShort())
         writeByteSubtract(0) // 1 == instant look = 0 is delayed look
     }
 }

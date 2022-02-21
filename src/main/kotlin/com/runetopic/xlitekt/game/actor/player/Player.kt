@@ -4,7 +4,7 @@ import com.runetopic.xlitekt.game.actor.Actor
 import com.runetopic.xlitekt.game.actor.render.Render
 import com.runetopic.xlitekt.game.event.EventBus
 import com.runetopic.xlitekt.game.event.impl.Events
-import com.runetopic.xlitekt.game.tile.Tile
+import com.runetopic.xlitekt.game.location.Location
 import com.runetopic.xlitekt.game.ui.Interfaces
 import com.runetopic.xlitekt.game.vars.Vars
 import com.runetopic.xlitekt.game.world.World
@@ -23,7 +23,7 @@ import com.runetopic.xlitekt.plugin.koin.inject
  */
 class Player(
     val username: String,
-) : Actor(Tile(3222, 3222)) {
+) : Actor(Location(3222, 3222)) {
     private val eventBus by inject<EventBus>()
     private var client: Client? = null
 
@@ -41,8 +41,8 @@ class Player(
 
     fun login(client: Client) {
         this.client = client
-        previousTile = tile
-        write(RebuildNormalPacket(viewport, tile, true))
+        previousLocation = location
+        write(RebuildNormalPacket(viewport, location, true))
         refreshAppearance()
         interfaces.login()
         vars.login()

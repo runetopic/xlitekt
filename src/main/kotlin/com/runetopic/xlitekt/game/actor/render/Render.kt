@@ -1,7 +1,7 @@
 package com.runetopic.xlitekt.game.actor.render
 
 import com.runetopic.xlitekt.game.actor.Actor
-import com.runetopic.xlitekt.game.tile.Tile
+import com.runetopic.xlitekt.game.location.Location
 import com.runetopic.xlitekt.network.packet.assembler.block.player.kit.BodyPart
 import com.runetopic.xlitekt.network.packet.assembler.block.player.kit.BodyPartColor
 import java.util.EnumMap
@@ -58,13 +58,13 @@ sealed class Render {
     ) : Render()
 
     data class ForceMovement(
-        val firstTile: Tile,
-        val secondTile: Tile?,
+        val firstLocation: Location,
+        val secondLocation: Location?,
         val firstDelay: Int = 0,
         val secondDelay: Int = 0,
         val rotation: Int = 0
     ) : Render() {
-        constructor(firstTile: Tile, delay: Int, rotation: Int) : this(firstTile, null, delay, 0, rotation)
+        constructor(firstLocation: Location, delay: Int, rotation: Int) : this(firstLocation, null, delay, 0, rotation)
     }
 
     data class OverheadChat(
@@ -72,7 +72,7 @@ sealed class Render {
     ) : Render()
 
     data class FaceTile(
-        val tile: Tile
+        val location: Location
     ) : Render()
 
     data class NPCCustomLevel(

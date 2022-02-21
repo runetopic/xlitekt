@@ -20,8 +20,8 @@ import com.runetopic.xlitekt.cache.provider.config.sequence.SequenceEntryType
 import com.runetopic.xlitekt.cache.provider.config.sequence.SequenceEntryTypeProvider
 import com.runetopic.xlitekt.cache.provider.config.varbit.VarBitEntryType
 import com.runetopic.xlitekt.cache.provider.config.varbit.VarBitEntryTypeProvider
-import com.runetopic.xlitekt.cache.provider.map.MapEntryType
 import com.runetopic.xlitekt.cache.provider.map.MapEntryTypeProvider
+import com.runetopic.xlitekt.cache.provider.map.MapSquareEntryType
 import com.runetopic.xlitekt.cache.provider.ui.InterfaceEntryType
 import com.runetopic.xlitekt.cache.provider.ui.InterfaceEntryTypeProvider
 import io.ktor.application.ApplicationEnvironment
@@ -33,13 +33,18 @@ import java.nio.file.Path
  * @author Tyler Telis
  */
 val cacheModule = module(createdAtStart = true) {
-    single { Js5Store(path = Path.of(inject<ApplicationEnvironment>().value.config.property("game.cache.path").getString()), parallel = true) }
+    single {
+        Js5Store(
+            path = Path.of(inject<ApplicationEnvironment>().value.config.property("game.cache.path").getString()),
+            parallel = true
+        )
+    }
     single { Huffman(get<Js5Store>().index(indexId = 10).group(groupName = "huffman").file(0).data) }
     single { loadProviders() }
 }
 
 object Cache {
-    val logger = InlineLogger()
+    private val logger = InlineLogger()
 
     val providers = mapOf(
         VarBitEntryType::class to VarBitEntryTypeProvider(),
@@ -47,8 +52,8 @@ object Cache {
         EnumEntryType::class to EnumEntryTypeProvider(),
         ObjEntryType::class to ObjEntryTypeProvider(),
         NPCEntryType::class to NPCEntryTypeProvider(),
-        MapEntryType::class to MapEntryTypeProvider(),
         LocEntryType::class to LocEntryTypeProvider(),
+        MapSquareEntryType::class to MapEntryTypeProvider(),
         SequenceEntryType::class to SequenceEntryTypeProvider(),
         HitSplatEntryType::class to HitSplatEntryTypeProvider()
     )
@@ -65,4 +70,4 @@ object Cache {
 }
 
 inline fun <reified T : EntryType> entryType(id: Int): T? = Cache.providers[T::class]?.entryType(id) as T?
-inline fun <reified T : EntryType> entries(): Collection<T>? = Cache.providers[T::class]?.entries() as Collection<T>?
+inline fun <reified T : EntryType> entries(): Collection<T> = Cache.providers[T::class]?.entries() as Collection<T>

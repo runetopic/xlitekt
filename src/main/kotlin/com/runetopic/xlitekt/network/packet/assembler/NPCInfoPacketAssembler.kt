@@ -3,7 +3,7 @@ package com.runetopic.xlitekt.network.packet.assembler
 import com.runetopic.xlitekt.game.actor.npc.NPC
 import com.runetopic.xlitekt.game.actor.player.Viewport
 import com.runetopic.xlitekt.game.actor.render.Render
-import com.runetopic.xlitekt.game.tile.withinDistance
+import com.runetopic.xlitekt.game.location.withinDistance
 import com.runetopic.xlitekt.game.world.World
 import com.runetopic.xlitekt.network.packet.NPCInfoPacket
 import com.runetopic.xlitekt.network.packet.assembler.block.npc.NPCCustomLevelBlock
@@ -54,8 +54,8 @@ class NPCInfoPacketAssembler(
             if (viewport.localNPCs.contains(it)) return@forEach
             writeBits(15, it.index)
             writeBits(1, 0) // if 1 == 1 read 32 bits they just don't use it atm. Looks like they're working on something
-            var x = it.tile.x - viewport.player.tile.x
-            var z = it.tile.z - viewport.player.tile.z
+            var x = it.location.x - viewport.player.location.x
+            var z = it.location.z - viewport.player.location.z
             if (extendedViewport) {
                 if (x < 127) x += 256
                 if (z < 127) z += 256
@@ -76,7 +76,7 @@ class NPCInfoPacketAssembler(
 
     private fun BitAccess.highDefinition(viewport: Viewport, blocks: BytePacketBuilder) {
         viewport.localNPCs.forEach {
-            if (!it.tile.withinDistance(viewport.player, if (extendedViewport) EXTENDED_VIEWPORT_DISTANCE else NORMAL_VIEWPORT_DISTANCE)) {
+            if (!it.location.withinDistance(viewport.player, if (extendedViewport) EXTENDED_VIEWPORT_DISTANCE else NORMAL_VIEWPORT_DISTANCE)) {
                 removeNPC()
                 return@forEach
             }
