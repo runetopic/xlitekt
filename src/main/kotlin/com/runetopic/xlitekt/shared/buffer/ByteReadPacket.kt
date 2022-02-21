@@ -35,8 +35,8 @@ fun ByteReadPacket.readIncrSmallSmart(): Int {
     var offset = 0
     var increment: Int
     increment = readUShortSmart()
-    while (increment == 32767) {
-        offset += 32767
+    while (increment == Short.MAX_VALUE.toInt()) {
+        offset += Short.MAX_VALUE.toInt()
         increment = readUShortSmart()
     }
     offset += increment
