@@ -6,6 +6,10 @@ import com.runetopic.xlitekt.cache.provider.config.varbit.VarBitEntryTypeProvide
 import com.runetopic.xlitekt.game.actor.player.Player
 import com.runetopic.xlitekt.game.actor.player.sendVarp
 
+/**
+ * @author Tyler Telis
+ * @author Jordan Abraham
+ */
 class Vars(
     private val player: Player,
     private val vars: MutableMap<Var, Int> = mutableMapOf()
@@ -16,26 +20,33 @@ class Vars(
         forEach { set(it.key, it.value) }
     }
 
-    fun set(element: Var, value: Int) {
-        vars[element] = value
-        when (element.varType) {
-            VarType.VAR_PLAYER -> player.sendVarp(element.info.id, value)
+    override fun put(key: Var, value: Int): Int {
+        vars[key] = value
+        when (key.varType) {
+            VarType.VAR_PLAYER -> {
+                player.sendVarp(key.info.id, value)
+                return value
+            }
             VarType.VAR_BIT -> {
-                val varBitEntry = entryType<VarBitEntryType>(element.info.id) ?: return
-                player.sendVarp(varBitEntry.index, value(varBitEntry, element, value))
+                entryType<VarBitEntryType>(key.info.id)?.run {
+                    val varpValue = value(this, key, value)
+                    player.sendVarp(index, varpValue)
+                    return varpValue
+                }
             }
         }
+        return -1
     }
 
-    fun value(element: Var): Int = vars[element] ?: 0
+    fun flip(key: Var) = put(key, if (this[key] == 1) 0 else 1)
 
     private fun value(
         entryType: VarBitEntryType,
-        element: Var,
+        key: Var,
         value: Int
     ): Int {
         val mask = mersennePrime[entryType.mostSignificantBit - entryType.leastSignificantBit] shl entryType.leastSignificantBit
         val maskValue = if (value < 0 || value > mask) 0 else value
-        return (this[element] ?: 0) and mask.inv() or maskValue shl entryType.leastSignificantBit and mask
+        return (this[key] ?: 0) and mask.inv() or maskValue shl entryType.leastSignificantBit and mask
     }
 }

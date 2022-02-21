@@ -6,6 +6,6 @@ import com.runetopic.xlitekt.game.vars.VarPlayer
 
 onInterface<UserInterface.CombatOptions> {
     onCreate {
-        vars.set(VarPlayer.SpecialAttackEnergy, 100 * 10)
+        vars[VarPlayer.SpecialAttackEnergy] = 100 * 10
     }
 }

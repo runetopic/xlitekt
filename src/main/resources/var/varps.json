@@ -4,7 +4,23 @@
     "name": "screen_brightness"
   },
   {
+    "id": 170,
+    "name": "single_mouse_button_mode"
+  },
+  {
+    "id": 171,
+    "name": "chat_effects"
+  },
+  {
+    "id": 287,
+    "name": "split_friends_private_chat"
+  },
+  {
     "id": 300,
     "name": "special_attack_energy"
+  },
+  {
+    "id": 1074,
+    "name": "profanity_filter"
   }
 ]
