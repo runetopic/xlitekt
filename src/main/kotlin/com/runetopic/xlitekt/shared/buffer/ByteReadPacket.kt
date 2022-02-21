@@ -43,7 +43,6 @@ fun ByteReadPacket.readIncrSmallSmart(): Int {
     return offset
 }
 
-fun ByteReadPacket.readUnsignedShortSmart(): Int = if (tryPeek() < 128) readUByte().toInt() else readUShort().toInt() - 0x8000
 fun ByteReadPacket.readUShortSmart() = if (tryPeek() < 128) readUByte().toInt() else readUShort().toInt() - (Short.MAX_VALUE + 1)
 fun ByteReadPacket.readUIntSmart() = if (tryPeek() < 0) readInt() and Integer.MAX_VALUE else readUShort().toShort().let { if (it == Short.MAX_VALUE) -1 else it }.toInt()
 

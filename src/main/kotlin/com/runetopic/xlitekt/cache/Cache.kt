@@ -52,8 +52,8 @@ object Cache {
         EnumEntryType::class to EnumEntryTypeProvider(),
         ObjEntryType::class to ObjEntryTypeProvider(),
         NPCEntryType::class to NPCEntryTypeProvider(),
-        MapSquareEntryType::class to MapEntryTypeProvider(),
         LocEntryType::class to LocEntryTypeProvider(),
+        MapSquareEntryType::class to MapEntryTypeProvider(),
         SequenceEntryType::class to SequenceEntryTypeProvider(),
         HitSplatEntryType::class to HitSplatEntryTypeProvider()
     )

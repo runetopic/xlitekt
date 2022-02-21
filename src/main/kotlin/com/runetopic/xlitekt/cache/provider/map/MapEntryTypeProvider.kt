@@ -7,7 +7,7 @@ import com.runetopic.xlitekt.game.location.Location
 import com.runetopic.xlitekt.game.zone.ZoneFlags
 import com.runetopic.xlitekt.plugin.koin.inject
 import com.runetopic.xlitekt.shared.buffer.readIncrSmallSmart
-import com.runetopic.xlitekt.shared.buffer.readUnsignedShortSmart
+import com.runetopic.xlitekt.shared.buffer.readUShortSmart
 import com.runetopic.xlitekt.shared.resource.MapSquares
 import io.ktor.utils.io.core.ByteReadPacket
 import io.ktor.utils.io.core.readUByte
@@ -30,6 +30,7 @@ class MapEntryTypeProvider : EntryTypeProvider<MapSquareEntryType>() {
         val mapSquares = Collections.synchronizedMap<Int, MapSquareEntryType>(mutableMapOf())
 
         var count = 0
+        var missingXteasCount = 0
 
         val time = measureTimeMillis {
             val index = store.index(MAP_INDEX)
@@ -49,6 +50,7 @@ class MapEntryTypeProvider : EntryTypeProvider<MapSquareEntryType>() {
 
                         val xteas = xteas.find { it.regionId == regionId }?.keys?.toIntArray() ?: run {
                             latch.countDown()
+                            missingXteasCount++
                             return@execute
                         }
 
@@ -64,7 +66,7 @@ class MapEntryTypeProvider : EntryTypeProvider<MapSquareEntryType>() {
         }
         latch.await()
         pool.shutdown()
-        logger.debug { "Finished loading $count maps. Took $time ms." }
+        logger.debug { "Finished loading $count maps in $time ms. $missingXteasCount were missing xteas." }
         return mapSquares
     }
 
@@ -77,6 +79,11 @@ class MapEntryTypeProvider : EntryTypeProvider<MapSquareEntryType>() {
             }
         }
 
+        applyCollisionMap(type)
+        return type
+    }
+
+    private fun applyCollisionMap(type: MapSquareEntryType) {
         repeat(PLANES) { plane ->
             repeat(SIZE) { x ->
                 repeat(SIZE) { z ->
@@ -96,7 +103,6 @@ class MapEntryTypeProvider : EntryTypeProvider<MapSquareEntryType>() {
                 }
             }
         }
-        return type
     }
 
     private tailrec fun ByteReadPacket.decodeCollision(
@@ -126,19 +132,19 @@ class MapEntryTypeProvider : EntryTypeProvider<MapSquareEntryType>() {
 
             if (offset == 0) return
 
-            var packed = 0
+            var packedCoordinates = 0
 
             objectId += offset
 
             while (canRead()) {
-                val diff = readUnsignedShortSmart()
+                val diff = readUShortSmart()
 
                 if (diff == 0) return
 
-                packed += diff - 1
+                packedCoordinates += diff - 1
                 val attributes = readUByte().toInt()
-                val localX = (packed shr 6) and 0x3f
-                val localZ = packed and 0x3f
+                val localX = (packedCoordinates shr 6) and 0x3f
+                val localZ = packedCoordinates and 0x3f
 
                 val shape = attributes shr 2
                 val rotation = attributes and 0x3
