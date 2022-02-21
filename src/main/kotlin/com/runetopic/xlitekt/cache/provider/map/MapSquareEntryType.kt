@@ -1,8 +1,8 @@
 package com.runetopic.xlitekt.cache.provider.map
 
 import com.runetopic.xlitekt.cache.provider.EntryType
-import com.runetopic.xlitekt.cache.provider.map.MapEntryTypeProvider.Companion.PLANES
-import com.runetopic.xlitekt.cache.provider.map.MapEntryTypeProvider.Companion.SIZE
+import com.runetopic.xlitekt.cache.provider.map.MapEntryTypeProvider.Companion.LEVELS
+import com.runetopic.xlitekt.cache.provider.map.MapEntryTypeProvider.Companion.MAP_SIZE
 
 /**
  * @author Tyler Telis
@@ -11,7 +11,7 @@ data class MapSquareEntryType(
     override val id: Int,
     val regionX: Int,
     val regionZ: Int,
-    var collision: Array<Array<ByteArray>> = Array(PLANES) { Array(SIZE) { ByteArray(SIZE) } }
+    var collision: Array<Array<ByteArray>> = Array(LEVELS) { Array(MAP_SIZE) { ByteArray(MAP_SIZE) } }
 ) : EntryType(id) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

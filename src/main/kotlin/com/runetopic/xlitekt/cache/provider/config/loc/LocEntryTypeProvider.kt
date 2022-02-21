@@ -30,13 +30,13 @@ class LocEntryTypeProvider : EntryTypeProvider<LocEntryType>() {
             5 -> repeat(readUByte().toInt()) {
                 discard(2) // Discard models/modelIds.
             }
-            14 -> type.sizeX = readUByte().toInt()
-            15 -> type.sizeY = readUByte().toInt()
+            14 -> type.width = readUByte().toInt()
+            15 -> type.height = readUByte().toInt()
             17 -> {
                 type.interactType = 0
-                type.boolean1 = false
+                type.blockPath = false
             }
-            18 -> type.boolean1 = false
+            18 -> type.blockPath = false
             19 -> type.int1 = readUByte().toInt()
             21 -> type.clipType = 0
             22 -> type.nonFlatShading = true

@@ -2,9 +2,13 @@ package com.runetopic.xlitekt.cache.provider.map
 
 import com.github.michaelbull.logging.InlineLogger
 import com.runetopic.cache.codec.decompress
+import com.runetopic.xlitekt.cache.entryType
 import com.runetopic.xlitekt.cache.provider.EntryTypeProvider
+import com.runetopic.xlitekt.cache.provider.config.loc.LocEntryType
 import com.runetopic.xlitekt.game.collision.CollisionFlag.FLOOR
+import com.runetopic.xlitekt.game.collision.CollisionMap
 import com.runetopic.xlitekt.game.location.Location
+import com.runetopic.xlitekt.game.obj.GameObject
 import com.runetopic.xlitekt.game.zone.ZoneFlags
 import com.runetopic.xlitekt.plugin.koin.inject
 import com.runetopic.xlitekt.shared.buffer.readIncrSmallSmart
@@ -72,10 +76,10 @@ class MapEntryTypeProvider : EntryTypeProvider<MapSquareEntryType>() {
     }
 
     override fun ByteReadPacket.loadEntryType(type: MapSquareEntryType): MapSquareEntryType {
-        repeat(PLANES) { plane ->
-            repeat(SIZE) { x ->
-                repeat(SIZE) { z ->
-                    decodeCollision(type, plane, x, z)
+        repeat(LEVELS) { level ->
+            repeat(MAP_SIZE) { x ->
+                repeat(MAP_SIZE) { z ->
+                    decodeCollision(type, level, x, z)
                 }
             }
         }
@@ -85,21 +89,21 @@ class MapEntryTypeProvider : EntryTypeProvider<MapSquareEntryType>() {
     }
 
     private fun applyCollisionMap(type: MapSquareEntryType) {
-        repeat(PLANES) { plane ->
-            repeat(SIZE) { x ->
-                repeat(SIZE) { z ->
+        repeat(LEVELS) { level ->
+            repeat(MAP_SIZE) { x ->
+                repeat(MAP_SIZE) { z ->
                     run {
-                        if ((type.collision[plane][x][z] and BLOCKED_TILE_BIT) != BLOCKED_TILE_BIT) return@run
+                        if ((type.collision[level][x][z] and BLOCKED_TILE_BIT) != BLOCKED_TILE_BIT) return@run
 
-                        val actualPlane = if ((type.collision[1][x][z] and BRIDGE_TILE_BIT) == BRIDGE_TILE_BIT) plane - 1 else plane
+                        val actualLevel = if ((type.collision[1][x][z] and BRIDGE_TILE_BIT) == BRIDGE_TILE_BIT) level - 1 else level
 
-                        if (actualPlane < 0) return@run
+                        if (actualLevel < 0) return@run
 
                         val baseX = type.regionX shl 6
                         val baseZ = type.regionZ shl 6
-                        val location = Location(baseX + x, baseZ + z, actualPlane)
+                        val location = Location(baseX + x, baseZ + z, actualLevel)
                         // TODO build zones and set collision there using this location
-                        ZoneFlags.add(x and 0x7, z and 0x7, plane, FLOOR)
+                        ZoneFlags.add(location.x, location.z, level, FLOOR)
                     }
                 }
             }
@@ -108,7 +112,7 @@ class MapEntryTypeProvider : EntryTypeProvider<MapSquareEntryType>() {
 
     private tailrec fun ByteReadPacket.decodeCollision(
         map: MapSquareEntryType,
-        plane: Int,
+        level: Int,
         x: Int,
         z: Int
     ) {
@@ -118,10 +122,10 @@ class MapEntryTypeProvider : EntryTypeProvider<MapSquareEntryType>() {
                 discard(1)
                 return
             }
-            in 50..81 -> map.collision[plane][x][z] = ((opcode - 49).toByte())
+            in 50..81 -> map.collision[level][x][z] = ((opcode - 49).toByte())
         }
 
-        return decodeCollision(map, plane, x, z)
+        return decodeCollision(map, level, x, z)
     }
 
     private fun ByteReadPacket.loadMapEntryLocations(type: MapSquareEntryType) {
@@ -148,19 +152,20 @@ class MapEntryTypeProvider : EntryTypeProvider<MapSquareEntryType>() {
 
                 val shape = attributes shr 2
                 val rotation = attributes and 0x3
-                var plane = (attributes shr 12) and 0x3
+                var level = (attributes shr 12) and 0x3
 
-                if ((type.collision[plane][localX][localZ] and BLOCKED_TILE_BIT) == BLOCKED_TILE_BIT) {
-                    plane--
+                if ((type.collision[level][localX][localZ] and BLOCKED_TILE_BIT) == BLOCKED_TILE_BIT) {
+                    level--
                 }
 
-                if (plane < 0) return
-
-                logger.debug { "ObjectId = $objectId Shape = $shape Rotation = $rotation" }
+                if (level < 0) return
 
                 val baseX = type.regionX shl 6
                 val baseZ = type.regionZ shl 6
-                val location = Location(baseX + localX, baseZ + localZ, plane)
+                val location = Location(baseX + localX, baseZ + localZ, level)
+                val entry = entryType<LocEntryType>(objectId) ?: return logger.debug { "LocEntryType was not found. Ignoring objectId=$objectId" }
+                val gameObject = GameObject(entry, location, shape, rotation)
+                CollisionMap.addObjectCollision(gameObject)
             }
         }
     }
@@ -172,7 +177,7 @@ class MapEntryTypeProvider : EntryTypeProvider<MapSquareEntryType>() {
         const val VALID_X = 100
         const val VALID_Z = 256
 
-        const val PLANES = 4
-        const val SIZE = 64
+        const val LEVELS = 4
+        const val MAP_SIZE = 64
     }
 }

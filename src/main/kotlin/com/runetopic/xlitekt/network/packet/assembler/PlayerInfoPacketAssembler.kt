@@ -158,22 +158,22 @@ class PlayerInfoPacketAssembler : PacketAssembler<PlayerInfoPacket>(opcode = 80,
     }
 
     private fun BitAccess.updateCoordinates(lastCoordinates: Int, currentCoordinates: Int) {
-        val lastPlane = lastCoordinates shr 16
+        val previousLevel = lastCoordinates shr 16
         val lastRegionX = lastCoordinates shr 8
         val lastRegionZ = lastCoordinates and 0xff
 
-        val currentPlane = currentCoordinates shr 16
+        val currentLevel = currentCoordinates shr 16
         val currentRegionX = currentCoordinates shr 8
         val currentRegionZ = currentCoordinates and 0xff
 
-        val deltaPlane = currentPlane - lastPlane
+        val deltaLevel = currentLevel - previousLevel
         val deltaX = currentRegionX - lastRegionX
         val deltaZ = currentRegionZ - lastRegionZ
 
         when {
             lastRegionX == currentRegionX && lastRegionZ == currentRegionZ -> {
                 writeBits(2, 1)
-                writeBits(2, deltaPlane)
+                writeBits(2, deltaLevel)
             }
             abs(currentRegionX - lastRegionX) <= 1 && abs(currentRegionZ - lastRegionZ) <= 1 -> {
                 // TODO Extract this directional stuff out.
@@ -188,11 +188,11 @@ class PlayerInfoPacketAssembler : PacketAssembler<PlayerInfoPacket>(opcode = 80,
                     else -> 6
                 }
                 writeBits(2, 2)
-                writeBits(5, (deltaPlane shl 3) + (opcode and 0x7))
+                writeBits(5, (deltaLevel shl 3) + (opcode and 0x7))
             }
             else -> {
                 writeBits(2, 3)
-                writeBits(18, (deltaZ and 0xff) + (deltaX and 0xff shl 8) + (deltaPlane shl 16))
+                writeBits(18, (deltaZ and 0xff) + (deltaX and 0xff shl 8) + (deltaLevel shl 16))
             }
         }
     }
