@@ -1,5 +1,8 @@
 package com.runetopic.xlitekt.game.obj
 
+/**
+ * Kris
+ */
 object GameObjectShape {
 
     const val WALL = 0

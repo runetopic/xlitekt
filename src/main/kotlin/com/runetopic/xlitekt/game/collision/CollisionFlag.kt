@@ -1,5 +1,8 @@
 package com.runetopic.xlitekt.game.collision
 
+/**
+ * @author Kris
+ */
 object CollisionFlag {
 
     const val WALL_NORTH_WEST: Int = 0x1

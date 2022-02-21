@@ -1,5 +1,8 @@
 package com.runetopic.xlitekt.game.location
 
+/**
+ * @author Kris
+ */
 @JvmInline
 value class ZoneLocation(val packedCoordinates: Int) {
     constructor(x: Int, y: Int, z: Int = 0) : this((x and 0x7FF) or ((y and 0x7FF) shl 11) or ((z and 0x3) shl 22))
