@@ -3,6 +3,7 @@ package com.runetopic.xlitekt.cache.provider.map
 import com.github.michaelbull.logging.InlineLogger
 import com.runetopic.cache.codec.decompress
 import com.runetopic.xlitekt.cache.provider.EntryTypeProvider
+import com.runetopic.xlitekt.game.collision.CollisionFlag.FLOOR
 import com.runetopic.xlitekt.game.location.Location
 import com.runetopic.xlitekt.game.zone.ZoneFlags
 import com.runetopic.xlitekt.plugin.koin.inject
@@ -98,7 +99,7 @@ class MapEntryTypeProvider : EntryTypeProvider<MapSquareEntryType>() {
                         val baseZ = type.regionZ shl 6
                         val location = Location(baseX + x, baseZ + z, actualPlane)
                         // TODO build zones and set collision there using this location
-                        ZoneFlags.add(x and 0x7, z and 0x7, plane, 262144)
+                        ZoneFlags.add(x and 0x7, z and 0x7, plane, FLOOR)
                     }
                 }
             }
