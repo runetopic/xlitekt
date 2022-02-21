@@ -21,16 +21,16 @@ class RebuildNormalPacketAssembler : PacketAssembler<RebuildNormalPacket>(opcode
             packet.viewport.init(this@buildPacket)
         }
 
-        val chunkX = packet.location.zoneX
-        val chunkZ = packet.location.zoneZ
+        val zoneX = packet.location.zoneX
+        val zoneZ = packet.location.zoneZ
 
-        writeShortAdd(chunkX.toShort())
-        writeShortLittleEndian(chunkZ.toShort())
+        writeShortAdd(zoneX.toShort())
+        writeShortLittleEndian(zoneZ.toShort())
 
         var size = 0
         val xteas = buildPacket {
-            ((chunkX - 6) / 8..(chunkX + 6) / 8).forEach { x ->
-                ((chunkZ - 6) / 8..(chunkZ + 6) / 8).forEach { y ->
+            ((zoneX - 6) / 8..(zoneX + 6) / 8).forEach { x ->
+                ((zoneZ - 6) / 8..(zoneZ + 6) / 8).forEach { y ->
                     val regionId = y + (x shl 8)
                     val xteaKeys = mapSquares.find { it.regionId == regionId }?.keys ?: listOf(0, 0, 0, 0)
                     xteaKeys.forEach(::writeInt)
