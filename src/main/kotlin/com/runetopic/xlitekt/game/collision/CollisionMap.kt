@@ -43,7 +43,6 @@ object CollisionMap {
         val location = obj.location
         val rotation = obj.rotation
         val clipType = entry.clipType
-        val blockPath = entry.blockPath
         val blockProjectile = entry.blockProjectile
         val breakRouteFinding = entry.breakRouteFinding
 
@@ -56,7 +55,7 @@ object CollisionMap {
                     width = entry.height
                     length = entry.width
                 }
-                changeCollision(location, width, length, blockPath, blockProjectile, add)
+                changeCollision(location, width, length, blockProjectile, breakRouteFinding, add)
             }
             shape in GameObjectShape.GROUND_DECOR_SHAPES && clipType == 1 -> changeFloorDecor(location, add)
         }

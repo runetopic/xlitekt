@@ -11,7 +11,6 @@ data class LocEntryType(
     var width: Int = 1,
     var height: Int = 1,
     var interactType: Int = 2,
-    var blockPath: Boolean = true,
     var blockProjectile: Boolean = true,
     var int1: Int = -1,
     var clipType: Int = -1,
