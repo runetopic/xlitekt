@@ -118,8 +118,7 @@ class MapEntryTypeProvider : EntryTypeProvider<MapSquareEntryType>() {
                 discard(1)
                 return
             }
-            in 0..49 -> discard(1)
-            in 0..81 -> map.collision[plane][x][z] = ((opcode - 49).toByte())
+            in 50..81 -> map.collision[plane][x][z] = ((opcode - 49).toByte())
         }
 
         return decodeCollision(map, plane, x, z)
@@ -151,15 +150,17 @@ class MapEntryTypeProvider : EntryTypeProvider<MapSquareEntryType>() {
                 val rotation = attributes and 0x3
                 var plane = (attributes shr 12) and 0x3
 
-                val location = Location(localX, localZ, 1)
-
                 if ((type.collision[plane][localX][localZ] and BLOCKED_TILE_BIT) == BLOCKED_TILE_BIT) {
                     plane--
                 }
 
                 if (plane < 0) return
 
-                logger.debug { "ObjectId = $objectId Location = $location Shape = $shape Rotation = $rotation" }
+                logger.debug { "ObjectId = $objectId Shape = $shape Rotation = $rotation" }
+
+                val baseX = type.regionX shl 6
+                val baseZ = type.regionZ shl 6
+                val location = Location(baseX + localX, baseZ + localZ, plane)
             }
         }
     }
