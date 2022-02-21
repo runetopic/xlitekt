@@ -1,7 +1,7 @@
 package com.runetopic.xlitekt.network.packet.disassembler
 
 import com.runetopic.xlitekt.network.packet.PublicChatPacket
-import com.runetopic.xlitekt.shared.buffer.readSmart
+import com.runetopic.xlitekt.shared.buffer.readUShortSmart
 import io.ktor.utils.io.core.ByteReadPacket
 import io.ktor.utils.io.core.readBytes
 import io.ktor.utils.io.core.readUByte
@@ -11,7 +11,7 @@ class PublicChatPacketDisassembler : PacketDisassembler<PublicChatPacket>(opcode
         unknown = packet.readUByte().toInt(),
         color = packet.readUByte().toInt(),
         effect = packet.readUByte().toInt(),
-        length = packet.readSmart(),
+        length = packet.readUShortSmart(),
         data = packet.readBytes()
     )
 }

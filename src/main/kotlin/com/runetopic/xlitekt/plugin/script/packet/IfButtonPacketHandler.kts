@@ -15,21 +15,16 @@ import com.runetopic.xlitekt.shared.packedToInterfaceId
 private val logger = InlineLogger()
 
 onPacket<IfButtonPacket> {
-    val index = packet.index
     val interfaceId = packet.packedInterface.packedToInterfaceId()
-    val childId = packet.packedInterface.packedToChildId()
-    val slotId = packet.slotId
-    val itemId = packet.itemId
     val entry = entryType<InterfaceEntryType>(packet.packedInterface)
     val clickEvent = UserInterfaceEvent.ButtonClickEvent(
-        index = index,
+        index = packet.index,
         interfaceId = interfaceId,
-        childId = childId,
-        option = childId,
-        slotId = slotId,
-        itemId = itemId,
+        childId = packet.packedInterface.packedToChildId(),
+        slotId = packet.slotId,
+        itemId = packet.itemId,
         action = entry?.actions?.firstOrNull() ?: "*"
     )
-    val listener = player.interfaces.listeners.find { it.userInterface.interfaceInfo.id == interfaceId }
-    listener?.click(clickEvent) ?: logger.debug { "User interface does not have an associated listener. Event = $clickEvent" }
+    logger.debug { "Event = $clickEvent" }
+    player.interfaces.listeners.find { it.userInterface.interfaceInfo.id == interfaceId }?.click(clickEvent)
 }

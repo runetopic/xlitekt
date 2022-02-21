@@ -124,7 +124,7 @@ class Interfaces(
         listeners += listener
 
         listener.init(
-            UserInterfaceEvent.InitEvent(
+            UserInterfaceEvent.CreateEvent(
                 interfaceId = userInterface.interfaceInfo.id,
             )
         )
@@ -173,7 +173,7 @@ class Interfaces(
         val listener = listeners.find { listener -> listener.userInterface == this }
 
         listener?.init(
-            UserInterfaceEvent.InitEvent(
+            UserInterfaceEvent.CreateEvent(
                 interfaceId = userInterface.interfaceInfo.id,
             )
         )
