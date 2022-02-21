@@ -33,7 +33,7 @@ data class LocEntryType(
     var offsetHeight: Int = 0,
     var offsetY: Int = 0,
     var boolean2: Boolean = false,
-    var isSolid: Boolean = false,
+    var breakrouteFinding: Boolean = false,
     var int3: Int = -1,
     var transformVarbit: Int = -1,
     var transformVarp: Int = -1,

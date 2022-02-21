@@ -60,7 +60,7 @@ class MapEntryTypeProvider : EntryTypeProvider<MapSquareEntryType>() {
                         }
 
                         val mapSquare = ByteReadPacket(mapData.decompress()).loadEntryType(MapSquareEntryType(regionId, x, z))
-                        val locations = ByteReadPacket(locData.decompress(xteas)).loadMapEntryLocations(mapSquare)
+                        ByteReadPacket(locData.decompress(xteas)).loadMapEntryLocations(mapSquare)
 
                         mapSquares[regionId] = mapSquare
                         count++
@@ -166,6 +166,8 @@ class MapEntryTypeProvider : EntryTypeProvider<MapSquareEntryType>() {
                 val entry = entryType<LocEntryType>(objectId) ?: return logger.debug { "LocEntryType was not found. Ignoring objectId=$objectId" }
                 val gameObject = GameObject(entry, location, shape, rotation)
                 CollisionMap.addObjectCollision(gameObject)
+
+                // TODO actually spawn the object in a list for operations
             }
         }
     }

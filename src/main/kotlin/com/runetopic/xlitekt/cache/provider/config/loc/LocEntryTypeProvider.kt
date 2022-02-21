@@ -34,9 +34,9 @@ class LocEntryTypeProvider : EntryTypeProvider<LocEntryType>() {
             15 -> type.height = readUByte().toInt()
             17 -> {
                 type.interactType = 0
-                type.blockPath = false
+                type.blockProjectile = false
             }
-            18 -> type.blockPath = false
+            18 -> type.blockProjectile = false
             19 -> type.int1 = readUByte().toInt()
             21 -> type.clipType = 0
             22 -> type.nonFlatShading = true
@@ -67,7 +67,7 @@ class LocEntryTypeProvider : EntryTypeProvider<LocEntryType>() {
             71 -> type.offsetHeight = readShort().toInt()
             72 -> type.offsetY = readShort().toInt()
             73 -> type.boolean2 = true
-            74 -> type.isSolid = true
+            74 -> type.breakrouteFinding = true
             75 -> type.int3 = readUByte().toInt()
             77, 92 -> {
                 type.transformVarbit = readUShort().toInt().let { if (it == 0xffff) -1 else it }
