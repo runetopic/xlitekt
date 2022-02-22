@@ -10,18 +10,22 @@ import io.ktor.server.engine.commandLineEnvironment
 import org.koin.core.context.stopKoin
 import org.koin.ktor.ext.get
 import java.util.TimeZone
+import kotlin.system.measureTimeMillis
 
 private val logger = InlineLogger()
 
 fun main(args: Array<String>) = commandLineEnvironment(args).start()
 
 fun Application.module() {
-    addShutdownHook()
-    logger.info { "Starting XliteKt." }
-    TimeZone.setDefault(TimeZone.getTimeZone("UTC"))
-    installKoin()
-    installKotlinScript()
-    get<Game>().start()
+    val time = measureTimeMillis {
+        addShutdownHook()
+        logger.info { "Starting XliteKt." }
+        TimeZone.setDefault(TimeZone.getTimeZone("UTC"))
+        installKoin()
+        installKotlinScript()
+        get<Game>().start()
+    }
+    logger.debug { "XliteKt launched in $time ms." }
     get<Network>().awaitOnPort(environment.config.property("ktor.deployment.port").getString().toInt())
 }
 

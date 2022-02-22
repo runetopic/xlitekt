@@ -22,9 +22,13 @@ fun ByteReadPacket.readStringCp1252NullCircumfixed() = buildString {
 }
 
 fun ByteReadPacket.readUByteSubtract() = readUByte().toInt() - 128
+fun ByteReadPacket.readUByteAdd() = readUByte().toInt() + 128
+
+fun ByteReadPacket.readUShortAdd() = (readUByte().toInt() shl 8) + readUByteAdd()
 
 fun ByteReadPacket.readUShortLittleEndian() = readUByte().toInt() + (readUByte().toInt() shl 8)
 fun ByteReadPacket.readUShortLittleEndianSubtract() = readUByteSubtract() + (readUByte().toInt() shl 8)
+fun ByteReadPacket.readUShortLittleEndianAdd() = readUByteAdd() + (readUByte().toInt() shl 8)
 
 fun ByteReadPacket.readUMedium() = (readUByte().toInt() shl 16) + readUShort().toInt()
 

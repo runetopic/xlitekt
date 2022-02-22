@@ -1,39 +1,40 @@
 package com.runetopic.xlitekt.game.world.map.collision
 
-import com.runetopic.xlitekt.game.world.map.collision.CollisionFlag.FLOOR_DECORATION
-import com.runetopic.xlitekt.game.world.map.collision.CollisionFlag.OBJECT
-import com.runetopic.xlitekt.game.world.map.collision.CollisionFlag.OBJECT_PROJECTILE_BLOCKER
-import com.runetopic.xlitekt.game.world.map.collision.CollisionFlag.OBJECT_ROUTE_BLOCKER
-import com.runetopic.xlitekt.game.world.map.collision.CollisionFlag.WALL_EAST
-import com.runetopic.xlitekt.game.world.map.collision.CollisionFlag.WALL_EAST_PROJECTILE_BLOCKER
-import com.runetopic.xlitekt.game.world.map.collision.CollisionFlag.WALL_EAST_ROUTE_BLOCKER
-import com.runetopic.xlitekt.game.world.map.collision.CollisionFlag.WALL_NORTH
-import com.runetopic.xlitekt.game.world.map.collision.CollisionFlag.WALL_NORTH_EAST
-import com.runetopic.xlitekt.game.world.map.collision.CollisionFlag.WALL_NORTH_EAST_PROJECTILE_BLOCKER
-import com.runetopic.xlitekt.game.world.map.collision.CollisionFlag.WALL_NORTH_EAST_ROUTE_BLOCKER
-import com.runetopic.xlitekt.game.world.map.collision.CollisionFlag.WALL_NORTH_PROJECTILE_BLOCKER
-import com.runetopic.xlitekt.game.world.map.collision.CollisionFlag.WALL_NORTH_ROUTE_BLOCKER
-import com.runetopic.xlitekt.game.world.map.collision.CollisionFlag.WALL_NORTH_WEST
-import com.runetopic.xlitekt.game.world.map.collision.CollisionFlag.WALL_NORTH_WEST_PROJECTILE_BLOCKER
-import com.runetopic.xlitekt.game.world.map.collision.CollisionFlag.WALL_NORTH_WEST_ROUTE_BLOCKER
-import com.runetopic.xlitekt.game.world.map.collision.CollisionFlag.WALL_SOUTH
-import com.runetopic.xlitekt.game.world.map.collision.CollisionFlag.WALL_SOUTH_EAST
-import com.runetopic.xlitekt.game.world.map.collision.CollisionFlag.WALL_SOUTH_EAST_PROJECTILE_BLOCKER
-import com.runetopic.xlitekt.game.world.map.collision.CollisionFlag.WALL_SOUTH_EAST_ROUTE_BLOCKER
-import com.runetopic.xlitekt.game.world.map.collision.CollisionFlag.WALL_SOUTH_PROJECTILE_BLOCKER
-import com.runetopic.xlitekt.game.world.map.collision.CollisionFlag.WALL_SOUTH_ROUTE_BLOCKER
-import com.runetopic.xlitekt.game.world.map.collision.CollisionFlag.WALL_SOUTH_WEST
-import com.runetopic.xlitekt.game.world.map.collision.CollisionFlag.WALL_SOUTH_WEST_PROJECTILE_BLOCKER
-import com.runetopic.xlitekt.game.world.map.collision.CollisionFlag.WALL_SOUTH_WEST_ROUTE_BLOCKER
-import com.runetopic.xlitekt.game.world.map.collision.CollisionFlag.WALL_WEST
-import com.runetopic.xlitekt.game.world.map.collision.CollisionFlag.WALL_WEST_PROJECTILE_BLOCKER
-import com.runetopic.xlitekt.game.world.map.collision.CollisionFlag.WALL_WEST_ROUTE_BLOCKER
 import com.runetopic.xlitekt.game.world.map.location.Location
 import com.runetopic.xlitekt.game.world.map.obj.GameObject
 import com.runetopic.xlitekt.game.world.map.obj.GameObjectShape
 import com.runetopic.xlitekt.game.world.map.zone.ZoneFlags
+import org.rsmod.pathfinder.flag.CollisionFlag.FLOOR_DECORATION
+import org.rsmod.pathfinder.flag.CollisionFlag.OBJECT
+import org.rsmod.pathfinder.flag.CollisionFlag.OBJECT_PROJECTILE_BLOCKER
+import org.rsmod.pathfinder.flag.CollisionFlag.OBJECT_ROUTE_BLOCKER
+import org.rsmod.pathfinder.flag.CollisionFlag.WALL_EAST
+import org.rsmod.pathfinder.flag.CollisionFlag.WALL_EAST_PROJECTILE_BLOCKER
+import org.rsmod.pathfinder.flag.CollisionFlag.WALL_EAST_ROUTE_BLOCKER
+import org.rsmod.pathfinder.flag.CollisionFlag.WALL_NORTH
+import org.rsmod.pathfinder.flag.CollisionFlag.WALL_NORTH_EAST
+import org.rsmod.pathfinder.flag.CollisionFlag.WALL_NORTH_EAST_PROJECTILE_BLOCKER
+import org.rsmod.pathfinder.flag.CollisionFlag.WALL_NORTH_EAST_ROUTE_BLOCKER
+import org.rsmod.pathfinder.flag.CollisionFlag.WALL_NORTH_PROJECTILE_BLOCKER
+import org.rsmod.pathfinder.flag.CollisionFlag.WALL_NORTH_ROUTE_BLOCKER
+import org.rsmod.pathfinder.flag.CollisionFlag.WALL_NORTH_WEST
+import org.rsmod.pathfinder.flag.CollisionFlag.WALL_NORTH_WEST_PROJECTILE_BLOCKER
+import org.rsmod.pathfinder.flag.CollisionFlag.WALL_NORTH_WEST_ROUTE_BLOCKER
+import org.rsmod.pathfinder.flag.CollisionFlag.WALL_SOUTH
+import org.rsmod.pathfinder.flag.CollisionFlag.WALL_SOUTH_EAST
+import org.rsmod.pathfinder.flag.CollisionFlag.WALL_SOUTH_EAST_PROJECTILE_BLOCKER
+import org.rsmod.pathfinder.flag.CollisionFlag.WALL_SOUTH_EAST_ROUTE_BLOCKER
+import org.rsmod.pathfinder.flag.CollisionFlag.WALL_SOUTH_PROJECTILE_BLOCKER
+import org.rsmod.pathfinder.flag.CollisionFlag.WALL_SOUTH_ROUTE_BLOCKER
+import org.rsmod.pathfinder.flag.CollisionFlag.WALL_SOUTH_WEST
+import org.rsmod.pathfinder.flag.CollisionFlag.WALL_SOUTH_WEST_PROJECTILE_BLOCKER
+import org.rsmod.pathfinder.flag.CollisionFlag.WALL_SOUTH_WEST_ROUTE_BLOCKER
+import org.rsmod.pathfinder.flag.CollisionFlag.WALL_WEST
+import org.rsmod.pathfinder.flag.CollisionFlag.WALL_WEST_PROJECTILE_BLOCKER
+import org.rsmod.pathfinder.flag.CollisionFlag.WALL_WEST_ROUTE_BLOCKER
 
 object CollisionMap {
+    fun collisionFlag(location: Location) = ZoneFlags[location]
     fun addObjectCollision(obj: GameObject) = changeCollision(obj, true)
     fun removeObjectCollision(obj: GameObject) = changeCollision(obj, false)
 
@@ -47,7 +48,14 @@ object CollisionMap {
         val breakRouteFinding = entry.breakRouteFinding
 
         when {
-            shape in GameObjectShape.WALL_SHAPES && clipType != 0 -> changeWallCollision(location, rotation, shape, blockProjectile, !breakRouteFinding, add)
+            shape in GameObjectShape.WALL_SHAPES && clipType != 0 -> changeWallCollision(
+                location,
+                rotation,
+                shape,
+                blockProjectile,
+                !breakRouteFinding,
+                add
+            )
             shape in GameObjectShape.NORMAL_SHAPES && clipType != 0 -> {
                 var width = entry.width
                 var length = entry.height

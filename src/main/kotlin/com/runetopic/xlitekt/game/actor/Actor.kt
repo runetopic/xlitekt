@@ -1,5 +1,7 @@
 package com.runetopic.xlitekt.game.actor
 
+import com.runetopic.xlitekt.game.actor.movement.Movement
+import com.runetopic.xlitekt.game.actor.movement.MovementSpeed
 import com.runetopic.xlitekt.game.actor.render.ActorRenderer
 import com.runetopic.xlitekt.game.actor.render.HitBarType
 import com.runetopic.xlitekt.game.actor.render.HitType
@@ -10,12 +12,17 @@ abstract class Actor(
     open var location: Location
 ) {
     protected val renderer = ActorRenderer()
+
     var previousLocation: Location? = null
     var index = 0
+
+    var movementSpeed = MovementSpeed.WALK
 
     // TODO maybe move the combat stuff out somewhere else
     val nextHits = mutableListOf<Render.HitDamage>()
     val nextHitBars = mutableListOf<HitBarType>()
+
+    val movement get() = Movement(this)
 
     abstract fun totalHitpoints(): Int
     abstract fun currentHitpoints(): Int

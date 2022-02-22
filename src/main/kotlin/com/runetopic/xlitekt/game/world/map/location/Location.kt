@@ -1,5 +1,6 @@
 package com.runetopic.xlitekt.game.world.map.location
 
+import com.runetopic.xlitekt.game.actor.movement.Direction
 import com.runetopic.xlitekt.game.actor.player.Player
 import com.runetopic.xlitekt.game.actor.player.serializer.LocationSerializer
 import kotlinx.serialization.Serializable
@@ -32,8 +33,25 @@ value class Location(val packedCoordinates: Int) {
         level = level + levelOffset
     )
 
+    fun transform(direction: Direction) = transform(direction.x, direction.y)
+
     override fun toString(): String =
         "Location(packedCoordinates=$packedCoordinates, x=$x, z=$z, level=$level, zoneX=$zoneX, zoneZ=$zoneZ, zoneId=$zoneId, regionX=$regionX, regionZ=$regionZ, regionId=$regionId)"
+}
+
+fun Location.direction(end: Location): Direction {
+    val diffX = end.x - x
+    val diffY = end.z - z
+    return when {
+        diffX > 0 && diffY > 0 -> Direction.NorthEast
+        diffX > 0 && diffY == 0 -> Direction.East
+        diffX > 0 && diffY < 0 -> Direction.SouthEast
+        diffX < 0 && diffY > 0 -> Direction.NorthWest
+        diffX < 0 && diffY == 0 -> Direction.West
+        diffX < 0 && diffY < 0 -> Direction.SouthWest
+        diffX == 0 && diffY > 0 -> Direction.North
+        else -> Direction.South
+    }
 }
 
 fun Location.withinDistance(other: Player, distance: Int = 14): Boolean {

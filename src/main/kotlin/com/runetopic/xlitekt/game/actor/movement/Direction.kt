@@ -1,7 +1,5 @@
 package com.runetopic.xlitekt.game.actor.movement
 
-import com.runetopic.xlitekt.game.world.map.location.Location
-
 private const val NEUTRAL_UNIT = 0
 private const val POSITIVE_UNIT = 1
 private const val NEGATIVE_UNIT = -1
@@ -18,5 +16,3 @@ sealed class Direction(val x: Int = NEUTRAL_UNIT, val y: Int = NEUTRAL_UNIT) {
 
     override fun toString(): String = javaClass.simpleName
 }
-
-fun Location.translate(direction: Direction) = transform(direction.x, direction.y)

@@ -5,7 +5,6 @@ import com.runetopic.cache.codec.decompress
 import com.runetopic.xlitekt.cache.entryType
 import com.runetopic.xlitekt.cache.provider.EntryTypeProvider
 import com.runetopic.xlitekt.cache.provider.config.loc.LocEntryType
-import com.runetopic.xlitekt.game.world.map.collision.CollisionFlag.FLOOR
 import com.runetopic.xlitekt.game.world.map.collision.CollisionMap
 import com.runetopic.xlitekt.game.world.map.location.Location
 import com.runetopic.xlitekt.game.world.map.obj.GameObject
@@ -16,6 +15,7 @@ import com.runetopic.xlitekt.shared.buffer.readUShortSmart
 import com.runetopic.xlitekt.shared.resource.MapSquares
 import io.ktor.utils.io.core.ByteReadPacket
 import io.ktor.utils.io.core.readUByte
+import org.rsmod.pathfinder.flag.CollisionFlag.FLOOR
 import java.util.Collections
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.Executors
