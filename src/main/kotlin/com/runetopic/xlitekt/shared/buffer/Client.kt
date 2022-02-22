@@ -38,8 +38,13 @@ import io.ktor.utils.io.core.readUByte
 import io.ktor.utils.io.core.readUShort
 import io.ktor.utils.io.readPacket
 import kotlinx.coroutines.withTimeout
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.decodeFromStream
 import java.math.BigInteger
 import java.nio.ByteBuffer
+import java.nio.file.Path
+import kotlin.io.path.exists
+import kotlin.io.path.inputStream
 
 /**
  * @author Jordan Abraham
@@ -250,9 +255,12 @@ private suspend fun Client.readLogin() {
             val serverKeys = IntArray(clientKeys.size) { clientKeys[it] + 50 }
             setIsaacCiphers(clientKeys.toISAAC(), serverKeys.toISAAC())
 
-            Player(username).let {
+            val path = Path.of("./accounts/$username.json")
+            val player = if (path.exists()) Json.decodeFromStream(path.inputStream()) else Player(username)
+
+            player.let {
                 it.interfaces.currentInterfaceLayout = if (clientResizeable) InterfaceLayout.RESIZABLE else InterfaceLayout.FIXED
-                player = it
+                this.player = it
                 world.players.add(it)
             }.also { if (it) writeLogin(LOGIN_SUCCESS_OPCODE) else writeLogin(BAD_SESSION_OPCODE) }
         }

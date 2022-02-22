@@ -26,7 +26,7 @@ onInterface<UserInterface.Settings> {
 
     onClick(layoutDropDownChildId) {
         val interfaceLayout = enumValues<InterfaceLayout>().find { layout -> layout.id == it.slotId } ?: return@onClick
-        vars.set(VarBit.SideStonesArrangement, (it.slotId == 3).toInt())
+        vars[VarBit.SideStonesArrangement] = (it.slotId == 3).toInt()
         script(clientModeCS2Id, listOf(it.slotId - 1))
         script(interfaceScalingCS2Id, listOf(0))
         interfaces.switchLayout(interfaceLayout)
