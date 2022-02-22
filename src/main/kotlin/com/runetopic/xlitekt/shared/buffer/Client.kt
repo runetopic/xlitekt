@@ -3,6 +3,7 @@ package com.runetopic.xlitekt.shared.buffer
 import com.runetopic.cryptography.fromXTEA
 import com.runetopic.cryptography.toISAAC
 import com.runetopic.xlitekt.game.actor.player.Player
+import com.runetopic.xlitekt.game.actor.player.PlayerDecoder
 import com.runetopic.xlitekt.game.ui.InterfaceLayout
 import com.runetopic.xlitekt.network.client.Client
 import com.runetopic.xlitekt.network.client.Client.Companion.checksums
@@ -38,13 +39,8 @@ import io.ktor.utils.io.core.readUByte
 import io.ktor.utils.io.core.readUShort
 import io.ktor.utils.io.readPacket
 import kotlinx.coroutines.withTimeout
-import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.decodeFromStream
 import java.math.BigInteger
 import java.nio.ByteBuffer
-import java.nio.file.Path
-import kotlin.io.path.exists
-import kotlin.io.path.inputStream
 
 /**
  * @author Jordan Abraham
@@ -255,10 +251,7 @@ private suspend fun Client.readLogin() {
             val serverKeys = IntArray(clientKeys.size) { clientKeys[it] + 50 }
             setIsaacCiphers(clientKeys.toISAAC(), serverKeys.toISAAC())
 
-            val path = Path.of("./accounts/$username.json")
-            val player = if (path.exists()) Json.decodeFromStream(path.inputStream()) else Player(username)
-
-            player.let {
+            PlayerDecoder.decodeFromJson(username).let {
                 it.interfaces.currentInterfaceLayout = if (clientResizeable) InterfaceLayout.RESIZABLE else InterfaceLayout.FIXED
                 this.player = it
                 world.players.add(it)
