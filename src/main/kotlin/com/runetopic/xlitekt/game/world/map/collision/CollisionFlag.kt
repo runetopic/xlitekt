@@ -1,4 +1,4 @@
-package com.runetopic.xlitekt.game.collision
+package com.runetopic.xlitekt.game.world.map.collision
 
 /**
  * @author Kris

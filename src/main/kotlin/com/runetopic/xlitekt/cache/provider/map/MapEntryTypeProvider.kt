@@ -5,11 +5,11 @@ import com.runetopic.cache.codec.decompress
 import com.runetopic.xlitekt.cache.entryType
 import com.runetopic.xlitekt.cache.provider.EntryTypeProvider
 import com.runetopic.xlitekt.cache.provider.config.loc.LocEntryType
-import com.runetopic.xlitekt.game.collision.CollisionFlag.FLOOR
-import com.runetopic.xlitekt.game.collision.CollisionMap
-import com.runetopic.xlitekt.game.location.Location
-import com.runetopic.xlitekt.game.obj.GameObject
-import com.runetopic.xlitekt.game.zone.ZoneFlags
+import com.runetopic.xlitekt.game.world.map.collision.CollisionFlag.FLOOR
+import com.runetopic.xlitekt.game.world.map.collision.CollisionMap
+import com.runetopic.xlitekt.game.world.map.location.Location
+import com.runetopic.xlitekt.game.world.map.obj.GameObject
+import com.runetopic.xlitekt.game.world.map.zone.ZoneFlags
 import com.runetopic.xlitekt.plugin.koin.inject
 import com.runetopic.xlitekt.shared.buffer.readIncrSmallSmart
 import com.runetopic.xlitekt.shared.buffer.readUShortSmart

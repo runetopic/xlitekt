@@ -1,4 +1,4 @@
-package com.runetopic.xlitekt.game.location
+package com.runetopic.xlitekt.game.world.map.location
 
 /**
  * @author Kris

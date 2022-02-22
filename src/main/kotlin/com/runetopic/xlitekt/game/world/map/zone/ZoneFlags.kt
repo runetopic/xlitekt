@@ -1,7 +1,7 @@
-package com.runetopic.xlitekt.game.zone
+package com.runetopic.xlitekt.game.world.map.zone
 
-import com.runetopic.xlitekt.game.location.Location
-import com.runetopic.xlitekt.game.location.ZoneLocation
+import com.runetopic.xlitekt.game.world.map.location.Location
+import com.runetopic.xlitekt.game.world.map.location.ZoneLocation
 
 /**
  * @author Kris | 09/02/2022

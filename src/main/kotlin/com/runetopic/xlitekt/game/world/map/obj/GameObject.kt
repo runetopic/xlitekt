@@ -1,7 +1,7 @@
-package com.runetopic.xlitekt.game.obj
+package com.runetopic.xlitekt.game.world.map.obj
 
 import com.runetopic.xlitekt.cache.provider.config.loc.LocEntryType
-import com.runetopic.xlitekt.game.location.Location
+import com.runetopic.xlitekt.game.world.map.location.Location
 
 data class GameObject(
     val entry: LocEntryType,

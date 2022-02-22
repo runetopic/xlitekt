@@ -1,13 +1,14 @@
 package com.runetopic.xlitekt.game.actor.player
 
 import com.runetopic.xlitekt.game.actor.Actor
+import com.runetopic.xlitekt.game.actor.player.serializer.PlayerSerializer
 import com.runetopic.xlitekt.game.actor.render.Render
 import com.runetopic.xlitekt.game.event.EventBus
 import com.runetopic.xlitekt.game.event.impl.Events
-import com.runetopic.xlitekt.game.location.Location
 import com.runetopic.xlitekt.game.ui.Interfaces
 import com.runetopic.xlitekt.game.vars.Vars
 import com.runetopic.xlitekt.game.world.World
+import com.runetopic.xlitekt.game.world.map.location.Location
 import com.runetopic.xlitekt.network.client.Client
 import com.runetopic.xlitekt.network.packet.LogoutPacket
 import com.runetopic.xlitekt.network.packet.MessageGamePacket
@@ -20,7 +21,12 @@ import com.runetopic.xlitekt.plugin.koin.inject
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.encodeToStream
-import java.io.FileOutputStream
+import java.nio.file.Files.createDirectories
+import java.nio.file.Files.notExists
+import java.nio.file.Path
+import kotlin.io.path.createDirectories
+import kotlin.io.path.notExists
+import kotlin.io.path.outputStream
 
 /**
  * @author Jordan Abraham
@@ -62,7 +68,12 @@ class Player(
         flushPool()
         online = false
         inject<World>().value.players.remove(this)
-        Json.encodeToStream(this, FileOutputStream("./accounts/$username.json"))
+
+        Path.of("./accounts/").apply {
+            if (notExists()) createDirectories()
+        }.also {
+            Json.encodeToStream(this, Path.of("$it/$username.json").outputStream())
+        }
     }
 
     // TODO build appearance manager for changing gender and appearance related stuff
