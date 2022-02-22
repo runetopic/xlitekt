@@ -18,6 +18,7 @@ class PlayerSerializer : KSerializer<Player> {
     override val descriptor: SerialDescriptor
         get() = buildClassSerialDescriptor("player") {
             element<String>("username")
+            element<String>("password")
             element<Int>("rights")
             element<Location>("location")
             element<Map<Int, Int>>("vars")
@@ -25,21 +26,26 @@ class PlayerSerializer : KSerializer<Player> {
 
     override fun deserialize(decoder: Decoder): Player = decoder.decodeStructure(descriptor) {
         val username = decodeStringElement(descriptor, decodeElementIndex(descriptor))
+        val password = decodeStringElement(descriptor, decodeElementIndex(descriptor))
         val rights = decodeIntElement(descriptor, decodeElementIndex(descriptor))
         val location = decodeSerializableElement(descriptor, decodeElementIndex(descriptor), LocationSerializer())
         val vars = decodeSerializableElement(descriptor, decodeElementIndex(descriptor), VarsSerializer())
 
-        val player = Player(username)
-        player.rights = rights
-        player.location = location
+        val player = Player(
+            username = username,
+            password = password,
+            rights = rights,
+            location = location
+        )
         player.vars.putAll(vars)
         return player
     }
 
     override fun serialize(encoder: Encoder, value: Player) = encoder.encodeStructure(descriptor) {
         encodeStringElement(descriptor, 0, value.username)
-        encodeIntElement(descriptor, 1, value.rights)
-        encodeSerializableElement(descriptor, 2, LocationSerializer(), value.location)
-        encodeSerializableElement(descriptor, 3, VarsSerializer(), value.vars as Map<Int, Int>)
+        encodeStringElement(descriptor, 1, value.password)
+        encodeIntElement(descriptor, 2, value.rights)
+        encodeSerializableElement(descriptor, 3, LocationSerializer(), value.location)
+        encodeSerializableElement(descriptor, 4, VarsSerializer(), value.vars as Map<Int, Int>)
     }
 }

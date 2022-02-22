@@ -28,7 +28,10 @@ import kotlinx.serialization.Serializable
 @Serializable(with = PlayerSerializer::class)
 class Player(
     val username: String,
-) : Actor(Location(3222, 3222)) {
+    val password: String,
+    val rights: Int = 0,
+    override var location: Location = Location(3222, 3222),
+) : Actor(location) {
     private val eventBus by inject<EventBus>()
     private var client: Client? = null
 
@@ -38,7 +41,6 @@ class Player(
 
     var appearance = Render.Appearance(Render.Appearance.Gender.MALE, -1, -1, -1, false)
 
-    var rights = 2
     var online = false
 
     override fun totalHitpoints(): Int = 100
