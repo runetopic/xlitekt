@@ -1,9 +1,11 @@
 package com.runetopic.xlitekt.game.actor.render
 
 import com.runetopic.xlitekt.game.actor.Actor
+import com.runetopic.xlitekt.game.actor.player.serializer.AppearanceSerializer
 import com.runetopic.xlitekt.game.world.map.location.Location
 import com.runetopic.xlitekt.network.packet.assembler.block.player.kit.BodyPart
 import com.runetopic.xlitekt.network.packet.assembler.block.player.kit.BodyPartColor
+import kotlinx.serialization.Serializable
 import java.util.EnumMap
 
 /**
@@ -94,15 +96,16 @@ sealed class Render {
 
     data class TemporaryMovementType(val id: Int) : Render()
 
-    data class Appearance(
-        val gender: Gender = Gender.MALE,
-        val headIcon: Int,
-        val skullIcon: Int,
-        val transform: Int,
-        val hidden: Boolean
-    ) : Render() {
+    @Serializable(with = AppearanceSerializer::class)
+    class Appearance : Render() {
         val bodyParts = EnumMap<BodyPart, Int>(BodyPart::class.java)
         val bodyPartColors = EnumMap<BodyPartColor, Int>(BodyPartColor::class.java)
+
+        var gender: Gender = Gender.MALE
+        var headIcon: Int = -1
+        var skullIcon: Int = -1
+        var transform: Int = -1
+        var hidden: Boolean = false
 
         init {
             bodyParts[BodyPart.HEAD] = 0

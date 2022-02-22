@@ -12,6 +12,9 @@ import kotlin.io.path.inputStream
 object PlayerDecoder {
     fun decodeFromJson(username: String, password: String): Player {
         val path = Path.of("./players/$username.json")
-        return if (path.exists()) Json.decodeFromStream(path.inputStream()) else Player(username, password)
+        return if (path.exists()) Json.decodeFromStream(path.inputStream()) else Player(
+            username = username,
+            password = password
+        )
     }
 }

@@ -27,19 +27,18 @@ import kotlinx.serialization.Serializable
  */
 @Serializable(with = PlayerSerializer::class)
 class Player(
+    override var location: Location = Location(3222, 3222),
     val username: String,
     val password: String,
     val rights: Int = 0,
-    override var location: Location = Location(3222, 3222),
+    val appearance: Render.Appearance = Render.Appearance()
 ) : Actor(location) {
-    private val eventBus by inject<EventBus>()
-    private var client: Client? = null
-
     val viewport = Viewport(this)
     val interfaces = Interfaces(this)
     val vars = Vars(this)
 
-    var appearance = Render.Appearance(Render.Appearance.Gender.MALE, -1, -1, -1, false)
+    private val eventBus by inject<EventBus>()
+    private var client: Client? = null
 
     var online = false
 
@@ -50,7 +49,7 @@ class Player(
         this.client = client
         previousLocation = location
         write(RebuildNormalPacket(viewport, location, true))
-        refreshAppearance()
+        updateAppearance()
         interfaces.login()
         vars.login()
         // Set the player online here, so they start processing by the main game loop.
@@ -66,11 +65,7 @@ class Player(
         encodeToJson()
     }
 
-    // TODO build appearance manager for changing gender and appearance related stuff
-    fun refreshAppearance(appearance: Render.Appearance = this.appearance): Render.Appearance {
-        this.appearance = renderer.appearance(appearance)
-        return this.appearance
-    }
+    fun updateAppearance() = renderer.appearance(appearance)
 
     fun write(packet: Packet) = client?.writePacket(packet)
     fun flushPool() = client?.writeChannel?.flush()

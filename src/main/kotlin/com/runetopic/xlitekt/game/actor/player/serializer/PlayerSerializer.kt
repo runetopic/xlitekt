@@ -1,8 +1,11 @@
 package com.runetopic.xlitekt.game.actor.player.serializer
 
 import com.runetopic.xlitekt.game.actor.player.Player
+import com.runetopic.xlitekt.game.actor.render.Render
 import com.runetopic.xlitekt.game.world.map.location.Location
 import kotlinx.serialization.KSerializer
+import kotlinx.serialization.builtins.MapSerializer
+import kotlinx.serialization.builtins.serializer
 import kotlinx.serialization.descriptors.SerialDescriptor
 import kotlinx.serialization.descriptors.buildClassSerialDescriptor
 import kotlinx.serialization.descriptors.element
@@ -22,6 +25,7 @@ class PlayerSerializer : KSerializer<Player> {
             element<Int>("rights")
             element<Location>("location")
             element<Map<Int, Int>>("vars")
+            element<Render.Appearance>("appearance")
         }
 
     override fun deserialize(decoder: Decoder): Player = decoder.decodeStructure(descriptor) {
@@ -29,13 +33,15 @@ class PlayerSerializer : KSerializer<Player> {
         val password = decodeStringElement(descriptor, decodeElementIndex(descriptor))
         val rights = decodeIntElement(descriptor, decodeElementIndex(descriptor))
         val location = decodeSerializableElement(descriptor, decodeElementIndex(descriptor), LocationSerializer())
-        val vars = decodeSerializableElement(descriptor, decodeElementIndex(descriptor), VarsSerializer())
+        val vars = decodeSerializableElement(descriptor, decodeElementIndex(descriptor), MapSerializer(Int.serializer(), Int.serializer()))
+        val appearance = decodeSerializableElement(descriptor, decodeElementIndex(descriptor), AppearanceSerializer())
 
         val player = Player(
+            location = location,
             username = username,
             password = password,
             rights = rights,
-            location = location
+            appearance = appearance
         )
         player.vars.putAll(vars)
         return player
@@ -46,6 +52,7 @@ class PlayerSerializer : KSerializer<Player> {
         encodeStringElement(descriptor, 1, value.password)
         encodeIntElement(descriptor, 2, value.rights)
         encodeSerializableElement(descriptor, 3, LocationSerializer(), value.location)
-        encodeSerializableElement(descriptor, 4, VarsSerializer(), value.vars as Map<Int, Int>)
+        encodeSerializableElement(descriptor, 4, MapSerializer(Int.serializer(), Int.serializer()), value.vars)
+        encodeSerializableElement(descriptor, 5, AppearanceSerializer(), value.appearance)
     }
 }
