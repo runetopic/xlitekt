@@ -9,6 +9,7 @@ import com.runetopic.xlitekt.game.ui.Interfaces
 import com.runetopic.xlitekt.game.vars.Vars
 import com.runetopic.xlitekt.game.world.World
 import com.runetopic.xlitekt.network.client.Client
+import com.runetopic.xlitekt.network.packet.LogoutPacket
 import com.runetopic.xlitekt.network.packet.MessageGamePacket
 import com.runetopic.xlitekt.network.packet.Packet
 import com.runetopic.xlitekt.network.packet.RebuildNormalPacket
@@ -16,11 +17,16 @@ import com.runetopic.xlitekt.network.packet.RunClientScriptPacket
 import com.runetopic.xlitekt.network.packet.VarpLargePacket
 import com.runetopic.xlitekt.network.packet.VarpSmallPacket
 import com.runetopic.xlitekt.plugin.koin.inject
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.encodeToStream
+import java.io.FileOutputStream
 
 /**
  * @author Jordan Abraham
  * @author Tyler Telis
  */
+@Serializable(with = PlayerSerializer::class)
 class Player(
     val username: String,
 ) : Actor(Location(3222, 3222)) {
@@ -52,8 +58,11 @@ class Player(
     }
 
     fun logout() {
+        write(LogoutPacket(0))
+        flushPool()
         online = false
         inject<World>().value.players.remove(this)
+        Json.encodeToStream(this, FileOutputStream("./accounts/$username.json"))
     }
 
     // TODO build appearance manager for changing gender and appearance related stuff
