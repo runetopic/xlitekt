@@ -21,6 +21,8 @@ value class Location(val packedCoordinates: Int) {
     val regionId: Int get() = (regionX shl 8) or regionZ
     val regionCoordinates: Int get() = z shr 13 or (x shr 13 shl 8) or (level shl 16)
 
+    fun toZoneLocation(): ZoneLocation = ZoneLocation(x shr 3, z shr 3, z)
+
     fun transform(xOffset: Int, yOffset: Int, levelOffset: Int = 0) = Location(
         x = x + xOffset,
         z = z + yOffset,
@@ -37,5 +39,3 @@ fun Location.withinDistance(other: Player, distance: Int = 14): Boolean {
     val deltaZ = other.location.z - z
     return deltaX <= distance && deltaX >= -distance && deltaZ <= distance && deltaZ >= -distance
 }
-
-fun Location.toZoneLocation(): ZoneLocation = ZoneLocation(x shr 3, z shr 3, z)

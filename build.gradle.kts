@@ -20,6 +20,7 @@ dependencies {
     implementation(kotlin("stdlib"))
     implementation(deps.bundles.kts)
     implementation(deps.classgraph)
+    implementation(deps.pathfinder)
     implementation(deps.bundles.ktor)
     implementation(deps.bundles.koin)
     implementation(deps.bundles.runetopic)

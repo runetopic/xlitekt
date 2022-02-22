@@ -4,6 +4,7 @@ enableFeaturePreview("VERSION_CATALOGS")
 
 dependencyResolutionManagement {
     repositories(RepositoryHandler::mavenCentral)
+    repositories(RepositoryHandler::mavenLocal)
     repositories { maven { url = uri("https://s01.oss.sonatype.org/content/repositories/snapshots/") } }
 
     versionCatalogs {
@@ -19,6 +20,7 @@ dependencyResolutionManagement {
             version("classgraph", "4.8.139")
             version("shadowjar", "7.1.2")
             version("versions", "0.42.0")
+            version("pathfinder", "2.0.3")
 
             library("ktor-server-netty", "io.ktor", "ktor-server-netty").versionRef("ktor")
             library("koin-core", "io.insert-koin", "koin-core").versionRef("koin")
@@ -26,6 +28,7 @@ dependencyResolutionManagement {
             library("slf4j-simple", "org.slf4j", "slf4j-simple").versionRef("slf4j")
             library("cache", "com.runetopic.cache", "cache").versionRef("cache")
             library("cryptography", "com.runetopic.cryptography", "cryptography").versionRef("cryptography")
+            library("pathfinder", "io.blurite", "pathfinder").versionRef("pathfinder")
             library("classgraph", "io.github.classgraph", "classgraph").versionRef("classgraph")
             library("kscripting", "org.jetbrains.kotlin", "kotlin-scripting-common").versionRef("kotlin")
             library("kruntime", "org.jetbrains.kotlin", "kotlin-script-runtime").versionRef("kotlin")

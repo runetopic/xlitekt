@@ -47,7 +47,7 @@ object CollisionMap {
         val breakRouteFinding = entry.breakRouteFinding
 
         when {
-            shape in GameObjectShape.WALL_SHAPES && clipType != 0 -> changeWallCollision(location, rotation, shape, blockProjectile, breakRouteFinding, add)
+            shape in GameObjectShape.WALL_SHAPES && clipType != 0 -> changeWallCollision(location, rotation, shape, blockProjectile, !breakRouteFinding, add)
             shape in GameObjectShape.NORMAL_SHAPES && clipType != 0 -> {
                 var width = entry.width
                 var length = entry.height
@@ -55,7 +55,7 @@ object CollisionMap {
                     width = entry.height
                     length = entry.width
                 }
-                changeCollision(location, width, length, blockProjectile, breakRouteFinding, add)
+                changeCollision(location, width, length, blockProjectile, !breakRouteFinding, add)
             }
             shape in GameObjectShape.GROUND_DECOR_SHAPES && clipType == 1 -> changeFloorDecor(location, add)
         }
