@@ -4,7 +4,7 @@ import com.runetopic.xlitekt.game.actor.render.ActorRenderer
 import com.runetopic.xlitekt.game.actor.render.HitBarType
 import com.runetopic.xlitekt.game.actor.render.HitType
 import com.runetopic.xlitekt.game.actor.render.Render
-import com.runetopic.xlitekt.game.location.Location
+import com.runetopic.xlitekt.game.world.map.location.Location
 
 abstract class Actor(
     open var location: Location

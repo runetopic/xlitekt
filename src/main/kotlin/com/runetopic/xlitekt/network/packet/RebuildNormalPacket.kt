@@ -1,7 +1,7 @@
 package com.runetopic.xlitekt.network.packet
 
 import com.runetopic.xlitekt.game.actor.player.Viewport
-import com.runetopic.xlitekt.game.location.Location
+import com.runetopic.xlitekt.game.world.map.location.Location
 
 /**
  * @author Jordan Abraham

@@ -1,4 +1,4 @@
-package com.runetopic.xlitekt.game.obj
+package com.runetopic.xlitekt.game.world.map.obj
 
 /**
  * Kris

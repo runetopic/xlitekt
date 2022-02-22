@@ -3,8 +3,8 @@ package com.runetopic.xlitekt.network.packet.assembler
 import com.runetopic.xlitekt.game.actor.npc.NPC
 import com.runetopic.xlitekt.game.actor.player.Viewport
 import com.runetopic.xlitekt.game.actor.render.Render
-import com.runetopic.xlitekt.game.location.withinDistance
 import com.runetopic.xlitekt.game.world.World
+import com.runetopic.xlitekt.game.world.map.location.withinDistance
 import com.runetopic.xlitekt.network.packet.NPCInfoPacket
 import com.runetopic.xlitekt.network.packet.assembler.block.npc.NPCCustomLevelBlock
 import com.runetopic.xlitekt.network.packet.assembler.block.npc.NPCFaceActorBlock

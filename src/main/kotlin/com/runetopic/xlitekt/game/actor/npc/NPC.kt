@@ -1,7 +1,7 @@
 package com.runetopic.xlitekt.game.actor.npc
 
 import com.runetopic.xlitekt.game.actor.Actor
-import com.runetopic.xlitekt.game.location.Location
+import com.runetopic.xlitekt.game.world.map.location.Location
 
 class NPC(
     val id: Int,

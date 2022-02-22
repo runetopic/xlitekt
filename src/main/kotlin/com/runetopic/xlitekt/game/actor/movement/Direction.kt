@@ -1,6 +1,6 @@
 package com.runetopic.xlitekt.game.actor.movement
 
-import com.runetopic.xlitekt.game.location.Location
+import com.runetopic.xlitekt.game.world.map.location.Location
 
 private const val NEUTRAL_UNIT = 0
 private const val POSITIVE_UNIT = 1

@@ -9,3 +9,4 @@ src/main/resources/application.conf
 /src/test/resources/application.conf
 /cache/main_file_cache.*
 !.gitkeep
+/players/

@@ -1,7 +1,7 @@
 package com.runetopic.xlitekt.game.actor.render
 
 import com.runetopic.xlitekt.game.actor.Actor
-import com.runetopic.xlitekt.game.location.Location
+import com.runetopic.xlitekt.game.world.map.location.Location
 import com.runetopic.xlitekt.network.packet.assembler.block.player.kit.BodyPart
 import com.runetopic.xlitekt.network.packet.assembler.block.player.kit.BodyPartColor
 import java.util.EnumMap

@@ -1,13 +1,15 @@
 package com.runetopic.xlitekt.game.actor.player
 
 import com.runetopic.xlitekt.game.actor.Actor
+import com.runetopic.xlitekt.game.actor.player.PlayerEncoder.encodeToJson
+import com.runetopic.xlitekt.game.actor.player.serializer.PlayerSerializer
 import com.runetopic.xlitekt.game.actor.render.Render
 import com.runetopic.xlitekt.game.event.EventBus
 import com.runetopic.xlitekt.game.event.impl.Events
-import com.runetopic.xlitekt.game.location.Location
 import com.runetopic.xlitekt.game.ui.Interfaces
 import com.runetopic.xlitekt.game.vars.Vars
 import com.runetopic.xlitekt.game.world.World
+import com.runetopic.xlitekt.game.world.map.location.Location
 import com.runetopic.xlitekt.network.client.Client
 import com.runetopic.xlitekt.network.packet.LogoutPacket
 import com.runetopic.xlitekt.network.packet.MessageGamePacket
@@ -18,9 +20,6 @@ import com.runetopic.xlitekt.network.packet.VarpLargePacket
 import com.runetopic.xlitekt.network.packet.VarpSmallPacket
 import com.runetopic.xlitekt.plugin.koin.inject
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.encodeToStream
-import java.io.FileOutputStream
 
 /**
  * @author Jordan Abraham
@@ -29,7 +28,10 @@ import java.io.FileOutputStream
 @Serializable(with = PlayerSerializer::class)
 class Player(
     val username: String,
-) : Actor(Location(3222, 3222)) {
+    val password: String,
+    val rights: Int = 0,
+    override var location: Location = Location(3222, 3222),
+) : Actor(location) {
     private val eventBus by inject<EventBus>()
     private var client: Client? = null
 
@@ -39,7 +41,6 @@ class Player(
 
     var appearance = Render.Appearance(Render.Appearance.Gender.MALE, -1, -1, -1, false)
 
-    var rights = 2
     var online = false
 
     override fun totalHitpoints(): Int = 100
@@ -62,7 +63,7 @@ class Player(
         flushPool()
         online = false
         inject<World>().value.players.remove(this)
-        Json.encodeToStream(this, FileOutputStream("./accounts/$username.json"))
+        encodeToJson()
     }
 
     // TODO build appearance manager for changing gender and appearance related stuff

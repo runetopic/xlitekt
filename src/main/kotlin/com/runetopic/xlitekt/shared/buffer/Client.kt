@@ -3,6 +3,7 @@ package com.runetopic.xlitekt.shared.buffer
 import com.runetopic.cryptography.fromXTEA
 import com.runetopic.cryptography.toISAAC
 import com.runetopic.xlitekt.game.actor.player.Player
+import com.runetopic.xlitekt.game.actor.player.PlayerDecoder
 import com.runetopic.xlitekt.game.ui.InterfaceLayout
 import com.runetopic.xlitekt.network.client.Client
 import com.runetopic.xlitekt.network.client.Client.Companion.checksums
@@ -250,9 +251,9 @@ private suspend fun Client.readLogin() {
             val serverKeys = IntArray(clientKeys.size) { clientKeys[it] + 50 }
             setIsaacCiphers(clientKeys.toISAAC(), serverKeys.toISAAC())
 
-            Player(username).let {
+            PlayerDecoder.decodeFromJson(username, password).let {
                 it.interfaces.currentInterfaceLayout = if (clientResizeable) InterfaceLayout.RESIZABLE else InterfaceLayout.FIXED
-                player = it
+                this.player = it
                 world.players.add(it)
             }.also { if (it) writeLogin(LOGIN_SUCCESS_OPCODE) else writeLogin(BAD_SESSION_OPCODE) }
         }

@@ -1,7 +1,10 @@
-package com.runetopic.xlitekt.game.location
+package com.runetopic.xlitekt.game.world.map.location
 
 import com.runetopic.xlitekt.game.actor.player.Player
+import com.runetopic.xlitekt.game.actor.player.serializer.LocationSerializer
+import kotlinx.serialization.Serializable
 
+@Serializable(with = LocationSerializer::class)
 @JvmInline
 value class Location(val packedCoordinates: Int) {
     constructor(
