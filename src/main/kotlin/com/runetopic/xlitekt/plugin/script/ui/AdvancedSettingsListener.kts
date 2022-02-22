@@ -9,7 +9,8 @@ import com.runetopic.xlitekt.game.vars.VarPlayer
 import com.runetopic.xlitekt.game.vars.Vars
 
 private val closeSettingsChildId = 4
-private val optionsChildId = 19
+private val firstLayerChildId = 19
+private val secondLayerChildId = 21
 private val categoriesChildId = 23
 
 /**
@@ -44,7 +45,7 @@ onInterface<UserInterface.AdvancedSettings> {
         }
     }
 
-    onClick(childId = optionsChildId) {
+    onClick(childId = firstLayerChildId) {
         enumValues<Categories>().find { category -> category.id == vars[VarBit.AdvancedSettingsCategory] }?.run {
             when (this) {
                 Categories.ACTIVITIES -> it.onActivitiesClick(vars = this@onClick.vars)
@@ -89,10 +90,10 @@ fun UserInterfaceEvent.ButtonClickEvent.onControlsClick(vars: Vars) {
 
 fun UserInterfaceEvent.ButtonClickEvent.onDisplayClick(vars: Vars) {
     when (childId) {
-        19 -> when (slotId) {
+        firstLayerChildId -> when (slotId) {
             5 -> vars.flip(VarBit.ScrollWheelChangesZoomDistance)
         }
-        21 -> when (slotId) {
+        secondLayerChildId -> when (slotId) {
             0, 5, 10, 15, 20 -> {
                 vars[VarPlayer.ScreenBrightness] = slotId / 5
             }
