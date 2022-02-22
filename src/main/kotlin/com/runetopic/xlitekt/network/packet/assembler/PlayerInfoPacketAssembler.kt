@@ -241,7 +241,7 @@ class PlayerInfoPacketAssembler : PacketAssembler<PlayerInfoPacket>(opcode = 80,
     }
 
     private fun BytePacketBuilder.encodePendingBlocks(forceOtherUpdate: Boolean, other: Player) {
-        if (forceOtherUpdate) other.refreshAppearance(other.appearance)
+        if (forceOtherUpdate) other.updateAppearance()
         val blocks = other.pendingUpdates().map { it to renderingBlockMap[it::class]!! }.sortedBy { it.second.index }.toMap()
         val mask = blocks.map { it.value.mask }.sum().let { if (it > 0xff) it or 0x10 else it }
         if (mask > 0xff) writeShortLittleEndian(mask.toShort()) else writeByte(mask.toByte())
