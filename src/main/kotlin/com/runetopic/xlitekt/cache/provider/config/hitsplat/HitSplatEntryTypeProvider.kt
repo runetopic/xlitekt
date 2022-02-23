@@ -26,18 +26,18 @@ class HitSplatEntryTypeProvider : EntryTypeProvider<HitSplatEntryType>() {
             0 -> { assertEmptyAndRelease(); return type }
             1 -> type.fontId = readUIntSmart()
             2 -> type.textColor = readUMedium()
-            3 -> type.spriteId1 = readUIntSmart()
+            3 -> type.leftSpriteId = readUIntSmart()
             4 -> type.spriteId2 = readUIntSmart()
-            5 -> type.spriteId3 = readUIntSmart()
-            6 -> type.spriteId4 = readUIntSmart()
-            7 -> type.field1929 = readShort().toInt()
-            8 -> type.field1942 = readStringCp1252NullCircumfixed()
-            9 -> type.field1934 = readUShort().toInt()
-            10 -> type.field1940 = readShort().toInt()
-            11 -> type.field1943 = 0
-            12 -> type.field1946 = readUByte().toInt()
-            13 -> type.field1944 = readShort().toInt()
-            14 -> type.field1943 = readUShort().toInt()
+            5 -> type.backgroundSprite = readUIntSmart()
+            6 -> type.rightSpriteId = readUIntSmart()
+            7 -> type.scrollToOffsetX = readShort().toInt()
+            8 -> type.stringFormat = readStringCp1252NullCircumfixed()
+            9 -> type.displayCycles = readUShort().toInt()
+            10 -> type.scrollToOffsetY = readShort().toInt()
+            11 -> type.fadeStartCycle = 0
+            12 -> type.useDamage = readUByte().toInt()
+            13 -> type.textOffsetY = readShort().toInt()
+            14 -> type.fadeStartCycle = readUShort().toInt()
             17, 18 -> {
                 type.transformVarbit = readUShort().toInt().let { if (it == 0xffff) -1 else it }
                 type.transformVarp = readUShort().toInt().let { if (it == 0xffff) -1 else it }
