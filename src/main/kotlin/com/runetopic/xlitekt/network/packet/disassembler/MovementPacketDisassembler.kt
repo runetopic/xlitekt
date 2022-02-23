@@ -7,11 +7,9 @@ import io.ktor.utils.io.core.ByteReadPacket
 import io.ktor.utils.io.core.readUByte
 
 class MovementPacketDisassembler : PacketDisassembler<MovementPacket>(opcode = 57, size = -1) {
-    override fun disassemblePacket(packet: ByteReadPacket): MovementPacket {
-        return MovementPacket(
-            movementType = packet.readUByte().toInt(),
-            destinationX = packet.readUShortLittleEndianAdd(),
-            destinationZ = packet.readUShortAdd(),
-        )
-    }
+    override fun disassemblePacket(packet: ByteReadPacket): MovementPacket = MovementPacket(
+        movementType = packet.readUByte().toInt(),
+        destinationX = packet.readUShortLittleEndianAdd(),
+        destinationZ = packet.readUShortAdd(),
+    )
 }
