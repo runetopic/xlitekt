@@ -6,8 +6,8 @@ import io.ktor.utils.io.core.buildPacket
 /**
  * @author Tyler Telis
  */
-class UpdateRunEnergyAssembler : PacketAssembler<UpdateRunEnergyPacket>(opcode = 59, size = -1) {
+class UpdateRunEnergyAssembler : PacketAssembler<UpdateRunEnergyPacket>(opcode = 59, size = 1) {
     override fun assemblePacket(packet: UpdateRunEnergyPacket) = buildPacket {
-        writeByte((packet.energy / 100).toInt().toByte())
+        writeByte((packet.energy).toInt().toByte())
     }
 }

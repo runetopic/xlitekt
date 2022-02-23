@@ -26,6 +26,7 @@ class PlayerSerializer : KSerializer<Player> {
             element<Location>("location")
             element<Map<Int, Int>>("vars")
             element<Render.Appearance>("appearance")
+            element<Float>("runEnergy")
         }
 
     override fun deserialize(decoder: Decoder): Player = decoder.decodeStructure(descriptor) {
@@ -35,11 +36,13 @@ class PlayerSerializer : KSerializer<Player> {
         val location = decodeSerializableElement(descriptor, decodeElementIndex(descriptor), LocationSerializer())
         val vars = decodeSerializableElement(descriptor, decodeElementIndex(descriptor), MapSerializer(Int.serializer(), Int.serializer()))
         val appearance = decodeSerializableElement(descriptor, decodeElementIndex(descriptor), AppearanceSerializer())
+        val runEnergy = decodeFloatElement(descriptor, decodeElementIndex(descriptor))
 
         val player = Player(
             location = location,
             username = username,
             password = password,
+            runEnergy = runEnergy,
             rights = rights,
             appearance = appearance
         )
@@ -54,5 +57,6 @@ class PlayerSerializer : KSerializer<Player> {
         encodeSerializableElement(descriptor, 3, LocationSerializer(), value.location)
         encodeSerializableElement(descriptor, 4, MapSerializer(Int.serializer(), Int.serializer()), value.vars)
         encodeSerializableElement(descriptor, 5, AppearanceSerializer(), value.appearance)
+        encodeFloatElement(descriptor, 6, value.runEnergy)
     }
 }

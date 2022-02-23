@@ -16,6 +16,7 @@ import com.runetopic.xlitekt.network.packet.MessageGamePacket
 import com.runetopic.xlitekt.network.packet.Packet
 import com.runetopic.xlitekt.network.packet.RebuildNormalPacket
 import com.runetopic.xlitekt.network.packet.RunClientScriptPacket
+import com.runetopic.xlitekt.network.packet.UpdateRunEnergyPacket
 import com.runetopic.xlitekt.network.packet.VarpLargePacket
 import com.runetopic.xlitekt.network.packet.VarpSmallPacket
 import com.runetopic.xlitekt.plugin.koin.inject
@@ -32,6 +33,7 @@ class Player(
     val username: String,
     val password: String,
     val rights: Int = 0,
+    var runEnergy: Float = 10_000f,
     val appearance: Render.Appearance = Render.Appearance()
 ) : Actor(location) {
     val viewport = Viewport(this)
@@ -53,6 +55,7 @@ class Player(
         updateAppearance()
         interfaces.login()
         vars.login()
+        sendUpdateRunEnergy()
         // Set the player online here, so they start processing by the main game loop.
         online = true
         eventBus.notify(Events.OnLoginEvent(this))
@@ -80,3 +83,4 @@ fun Player.sendVarp(id: Int, value: Int) = if (value < Byte.MIN_VALUE || value >
 
 fun Player.message(message: String) = write(MessageGamePacket(0, message, false)) // TODO build messaging system
 fun Player.script(scriptId: Int, parameters: List<Any>) = write(RunClientScriptPacket(scriptId, parameters))
+fun Player.sendUpdateRunEnergy() = write(UpdateRunEnergyPacket(runEnergy / 100))
