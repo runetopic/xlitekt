@@ -27,8 +27,10 @@ import com.runetopic.xlitekt.network.client.ClientResponseOpcode.BAD_SESSION_OPC
 import com.runetopic.xlitekt.network.client.ClientResponseOpcode.CLIENT_OUTDATED_OPCODE
 import com.runetopic.xlitekt.network.client.ClientResponseOpcode.HANDSHAKE_SUCCESS_OPCODE
 import com.runetopic.xlitekt.network.client.ClientResponseOpcode.LOGIN_SUCCESS_OPCODE
+import com.runetopic.xlitekt.network.packet.Packet
 import com.runetopic.xlitekt.network.packet.disassembler.handler.PacketHandlerEvent
 import com.runetopic.xlitekt.network.packet.disassembler.handler.PacketHandlerMapping
+import com.runetopic.xlitekt.shared.Dispatcher
 import com.runetopic.xlitekt.shared.toBoolean
 import io.ktor.utils.io.core.ByteReadPacket
 import io.ktor.utils.io.core.readInt
@@ -41,6 +43,7 @@ import io.ktor.utils.io.readPacket
 import kotlinx.coroutines.withTimeout
 import java.math.BigInteger
 import java.nio.ByteBuffer
+import kotlinx.coroutines.runBlocking
 
 /**
  * @author Jordan Abraham
@@ -307,6 +310,13 @@ private suspend fun Client.readPackets(player: Player) = try {
     }
 } catch (exception: Exception) {
     handleException(exception)
+}
+
+fun Client.writePacket(packet: Packet) {
+    val assembler = Client.assemblers[packet::class] ?: return disconnect("Unhandled packet found when trying to write. Packet was $packet.")
+    runBlocking(Dispatcher.GAME) {
+        poolToWriteChannel(assembler.opcode, assembler.size, assembler.assemblePacket(packet))
+    }
 }
 
 suspend fun Client.poolToWriteChannel(opcode: Int, size: Int, packet: ByteReadPacket) = writeChannel.apply {

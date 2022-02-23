@@ -23,7 +23,6 @@ import com.runetopic.xlitekt.network.packet.MiniMapTogglePacket
 import com.runetopic.xlitekt.network.packet.NPCInfoExtendedViewportPacket
 import com.runetopic.xlitekt.network.packet.NPCInfoPacket
 import com.runetopic.xlitekt.network.packet.NoTimeoutPacket
-import com.runetopic.xlitekt.network.packet.Packet
 import com.runetopic.xlitekt.network.packet.PlayerInfoPacket
 import com.runetopic.xlitekt.network.packet.RebuildNormalPacket
 import com.runetopic.xlitekt.network.packet.RunClientScriptPacket
@@ -92,8 +91,6 @@ import com.runetopic.xlitekt.network.packet.disassembler.OpObj6PacketDisassemble
 import com.runetopic.xlitekt.network.packet.disassembler.PublicChatPacketDisassembler
 import com.runetopic.xlitekt.network.packet.disassembler.WindowStatusPacketDisassembler
 import com.runetopic.xlitekt.plugin.koin.inject
-import com.runetopic.xlitekt.shared.Dispatcher
-import com.runetopic.xlitekt.shared.buffer.poolToWriteChannel
 import io.ktor.application.ApplicationEnvironment
 import io.ktor.network.sockets.Socket
 import io.ktor.util.reflect.instanceOf
@@ -102,7 +99,6 @@ import io.ktor.utils.io.ByteWriteChannel
 import io.ktor.utils.io.ClosedWriteChannelException
 import kotlinx.coroutines.TimeoutCancellationException
 import kotlinx.coroutines.channels.ClosedReceiveChannelException
-import kotlinx.coroutines.runBlocking
 import java.io.IOException
 import java.net.SocketException
 
@@ -144,11 +140,6 @@ class Client(
             logger.error(exception) { "Exception caught during client IO Events." }
             disconnect(exception.message.toString())
         }
-    }
-
-    fun writePacket(packet: Packet) = runBlocking(Dispatcher.GAME) {
-        val assembler = assemblers[packet::class] ?: return@runBlocking disconnect("Unhandled packet found when trying to write. Packet was $packet.")
-        poolToWriteChannel(assembler.opcode, assembler.size, assembler.assemblePacket(packet))
     }
 
     companion object {
