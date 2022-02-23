@@ -86,6 +86,7 @@ import com.runetopic.xlitekt.network.packet.disassembler.IfButton6PacketDisassem
 import com.runetopic.xlitekt.network.packet.disassembler.IfButton7PacketDisassembler
 import com.runetopic.xlitekt.network.packet.disassembler.IfButton8PacketDisassembler
 import com.runetopic.xlitekt.network.packet.disassembler.IfButton9PacketDisassembler
+import com.runetopic.xlitekt.network.packet.disassembler.MovementPacketDisassembler
 import com.runetopic.xlitekt.network.packet.disassembler.OpHeld5PacketDisassembler
 import com.runetopic.xlitekt.network.packet.disassembler.OpObj6PacketDisassembler
 import com.runetopic.xlitekt.network.packet.disassembler.PublicChatPacketDisassembler
@@ -218,8 +219,9 @@ class Client(
             IfButton9PacketDisassembler(),
             IfButton10PacketDisassembler(),
 
-            OpObj6PacketDisassembler(),
+            MovementPacketDisassembler(),
 
+            OpObj6PacketDisassembler(),
             OpHeld5PacketDisassembler(),
 
             PublicChatPacketDisassembler()

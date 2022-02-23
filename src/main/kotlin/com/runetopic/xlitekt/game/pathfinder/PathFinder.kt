@@ -18,10 +18,19 @@ import org.rsmod.pathfinder.flag.CollisionFlag.BLOCK_WEST
 
 private const val SIZE = 128
 
+const val DEFAULT_SRC_SIZE = 1
+const val DEFAULT_DEST_WIDTH = 0
+const val DEFAULT_DEST_HEIGHT = 0
+const val DEFAULT_MAX_TURNS = 24
+const val DEFAULT_OBJ_ROT = 10
+const val DEFAULT_OBJ_SHAPE = -1
+const val DEFAULT_MOVE_NEAR_FLAG = true
+const val DEFAULT_ACCESS_BITMASK = 0
+
 // TODO: when everything is working multi thread pathfinding potentially (might not be worth it)
 val pathFinder = SmartPathFinder(
     searchMapSize = SIZE,
-    useRouteBlockerFlags = true,
+    useRouteBlockerFlags = false,
     flags = ZoneFlags.flags,
     defaultFlag = 0
 )
