@@ -219,7 +219,7 @@ private suspend fun Client.readLogin() {
             xteaBlock.readInt()
             xteaBlock.readStringCp1252NullCircumfixed()
             val clientType = xteaBlock.readUByte().toInt()
-            val cacheCRCs = IntArray(21) { store.index(it).crc } // TODO make the cache library expose # of indexes available
+            val cacheCRCs = IntArray(store.validIndexCount()) { store.index(it).crc }
             val clientCRCs = IntArray(21) { -1 }
             if (xteaBlock.readInt() != 0 || xteaBlock.readInt() != 0) {
                 writeResponse(BAD_SESSION_OPCODE)
