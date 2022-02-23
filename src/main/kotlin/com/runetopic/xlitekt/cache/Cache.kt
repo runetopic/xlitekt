@@ -6,6 +6,7 @@ import com.runetopic.cryptography.huffman.Huffman
 import com.runetopic.xlitekt.cache.Cache.loadProviders
 import com.runetopic.xlitekt.cache.provider.EntryType
 import com.runetopic.xlitekt.cache.provider.EntryTypeProvider
+import com.runetopic.xlitekt.cache.provider.EntryTypeProvider.Companion.MAP_INDEX
 import com.runetopic.xlitekt.cache.provider.config.enum.EnumEntryType
 import com.runetopic.xlitekt.cache.provider.config.enum.EnumEntryTypeProvider
 import com.runetopic.xlitekt.cache.provider.config.hitbar.HitBarEntryType
@@ -40,7 +41,8 @@ val cacheModule = module(createdAtStart = true) {
     single {
         Js5Store(
             path = Path.of(inject<ApplicationEnvironment>().value.config.property("game.cache.path").getString()),
-            parallel = true
+            parallel = true,
+            decompressionIndexExclusions = intArrayOf(MAP_INDEX)
         )
     }
     single { Huffman(get<Js5Store>().index(indexId = 10).group(groupName = "huffman").file(0).data) }
