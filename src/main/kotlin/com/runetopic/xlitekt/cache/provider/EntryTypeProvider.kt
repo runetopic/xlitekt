@@ -44,6 +44,7 @@ abstract class EntryTypeProvider<R : EntryType> {
         const val ENUM_CONFIG = 8
         const val NPC_CONFIG = 9
         const val OBJ_CONFIG = 10
+        const val PARAM_CONFIG = 11
         const val SEQUENCE_CONFIG = 12
         const val VARBIT_CONFIG = 14
         const val HITSPLAT_CONFIG = 32

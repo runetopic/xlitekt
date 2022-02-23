@@ -1,6 +1,7 @@
 package com.runetopic.xlitekt.cache.provider.config.enum
 
 import com.runetopic.xlitekt.cache.provider.EntryTypeProvider
+import com.runetopic.xlitekt.cache.provider.config.ScriptType
 import com.runetopic.xlitekt.shared.buffer.readStringCp1252NullTerminated
 import io.ktor.utils.io.core.ByteReadPacket
 import io.ktor.utils.io.core.readInt
@@ -20,10 +21,10 @@ class EnumEntryTypeProvider : EntryTypeProvider<EnumEntryType>() {
         when (val opcode = readUByte().toInt()) {
             0 -> { assertEmptyAndRelease(); return type }
             1 -> readUByte().toInt().toChar().apply {
-                type.keyType = enumValues<EnumVarType>().find { it.key == this }
+                type.keyType = enumValues<ScriptType>().find { it.key == this }
             }
             2 -> readUByte().toInt().toChar().apply {
-                type.valType = enumValues<EnumVarType>().find { it.key == this }
+                type.valType = enumValues<ScriptType>().find { it.key == this }
             }
             3 -> type.defaultString = readStringCp1252NullTerminated()
             4 -> type.defaultInt = readInt()
