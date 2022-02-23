@@ -40,10 +40,10 @@ import io.ktor.utils.io.core.readShort
 import io.ktor.utils.io.core.readUByte
 import io.ktor.utils.io.core.readUShort
 import io.ktor.utils.io.readPacket
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withTimeout
 import java.math.BigInteger
 import java.nio.ByteBuffer
-import kotlinx.coroutines.runBlocking
 
 /**
  * @author Jordan Abraham
