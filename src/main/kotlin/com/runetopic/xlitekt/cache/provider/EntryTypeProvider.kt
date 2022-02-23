@@ -48,5 +48,6 @@ abstract class EntryTypeProvider<R : EntryType> {
         const val SEQUENCE_CONFIG = 12
         const val VARBIT_CONFIG = 14
         const val HITSPLAT_CONFIG = 32
+        const val HITBAR_CONFIG = 33
     }
 }

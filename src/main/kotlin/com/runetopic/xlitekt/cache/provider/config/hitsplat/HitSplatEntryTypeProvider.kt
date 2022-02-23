@@ -8,6 +8,7 @@ import io.ktor.utils.io.core.ByteReadPacket
 import io.ktor.utils.io.core.readShort
 import io.ktor.utils.io.core.readUByte
 import io.ktor.utils.io.core.readUShort
+import java.lang.IllegalArgumentException
 
 /**
  * @author Jordan Abraham
@@ -49,6 +50,7 @@ class HitSplatEntryTypeProvider : EntryTypeProvider<HitSplatEntryType>() {
                     add(prime)
                 }
             }
+            else -> throw IllegalArgumentException("Missing opcode $opcode.")
         }
         return loadEntryType(type)
     }
