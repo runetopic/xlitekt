@@ -20,8 +20,6 @@ class Viewport(
     var localIndexesSize: Int = 0
     var externalIndexesSize: Int = 0
 
-    private val world by inject<World>()
-
     fun init(builder: BytePacketBuilder) = builder.withBitAccess {
         writeBits(30, player.location.packedCoordinates)
         localPlayers[player.index] = player
@@ -73,5 +71,9 @@ class Viewport(
         result = 31 * result + localIndexesSize
         result = 31 * result + externalIndexesSize
         return result
+    }
+
+    private companion object {
+        val world by inject<World>()
     }
 }
