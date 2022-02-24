@@ -5,12 +5,13 @@ import com.runetopic.xlitekt.game.actor.player.Player
 import com.runetopic.xlitekt.game.world.World
 import com.runetopic.xlitekt.network.packet.NPCInfoPacket
 import com.runetopic.xlitekt.network.packet.PlayerInfoPacket
+import com.runetopic.xlitekt.network.packet.assembler.PlayerInfoPacketAssembler
 import com.runetopic.xlitekt.plugin.koin.inject
-import java.util.concurrent.CountDownLatch
-import java.util.concurrent.Executors
-import java.util.concurrent.TimeUnit
-import kotlin.time.measureTime
+import io.ktor.utils.io.core.BytePacketBuilder
+import io.ktor.utils.io.core.ByteReadPacket
+import io.ktor.utils.io.core.writeShortLittleEndian
 import kotlinx.coroutines.Runnable
+import kotlin.time.measureTime
 
 /**
  * @author Jordan Abraham
@@ -19,35 +20,28 @@ class EntitySynchronizer : Runnable {
 
     private val logger = InlineLogger()
     private val world by inject<World>()
-    private val pool = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors())
 
     override fun run() {
+        val players = world.players.filterNotNull().filter(Player::online)
 
         val time = measureTime {
-            val players = world.players.filterNotNull().filter(Player::online)
-            println(players.size)
-            val updates = players.associateWith { it.pendingUpdates().toList() }
-            val latch = CountDownLatch(players.size)
-
-            players.forEach {
-                pool.execute {
-                    it.write(PlayerInfoPacket(it, updates[it] ?: emptyList()))
-                    it.write(NPCInfoPacket(it))
-                    latch.countDown()
-                }
+            val pending = players.associateWith { it.pendingUpdates().toList() }
+            val updates = mutableMapOf<Player, ByteReadPacket>()
+            players.parallelStream().forEach { player ->
+                val builder = BytePacketBuilder()
+                val blocks = pending[player]?.map { it to PlayerInfoPacketAssembler.renderingBlockMap[it::class]!! }?.sortedBy { it.second.index }?.toMap() ?: emptyMap()
+                val mask = blocks.map { it.value.mask }.sum().let { if (it > 0xff) it or 0x10 else it }
+                if (mask > 0xff) builder.writeShortLittleEndian(mask.toShort()) else builder.writeByte(mask.toByte())
+                blocks.forEach { builder.writePacket(it.value.build(player, it.key)) }
+                updates[player] = builder.build()
             }
-            latch.await(600, TimeUnit.MILLISECONDS)
-            players.forEach {
-                pool.execute(it::flushPool)
+            players.parallelStream().forEach {
+                it.write(PlayerInfoPacket(it, updates))
+                it.write(NPCInfoPacket(it))
+                it.flushPool()
             }
-            players.filter{ !it.nextTick }.forEach(Player::reset)
-//            players.parallelStream().forEach {
-//                it.write(PlayerInfoPacket(it))
-//                it.write(NPCInfoPacket(it))
-//                it.flushPool()
-//            }
-//            players.parallelStream().forEach(Player::reset)
+            players.forEach(Player::reset)
         }
-        logger.debug { "Synchronization took $time." }
+        logger.debug { "Synchronization took $time for ${players.size} players." }
     }
 }

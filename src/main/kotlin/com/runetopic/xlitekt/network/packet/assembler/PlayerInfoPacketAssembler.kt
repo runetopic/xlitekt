@@ -22,11 +22,13 @@ import com.runetopic.xlitekt.network.packet.assembler.block.player.PlayerUsernam
 import com.runetopic.xlitekt.plugin.koin.inject
 import com.runetopic.xlitekt.shared.buffer.BitAccess
 import com.runetopic.xlitekt.shared.buffer.withBitAccess
+import com.runetopic.xlitekt.shared.buffer.writeBytes
 import com.runetopic.xlitekt.shared.toInt
 import com.runetopic.xlitekt.shared.toIntInv
 import io.ktor.utils.io.core.BytePacketBuilder
+import io.ktor.utils.io.core.ByteReadPacket
 import io.ktor.utils.io.core.buildPacket
-import io.ktor.utils.io.core.writeShortLittleEndian
+import io.ktor.utils.io.core.readBytes
 import kotlin.math.abs
 
 /**
@@ -43,13 +45,13 @@ class PlayerInfoPacketAssembler : PacketAssembler<PlayerInfoPacket>(opcode = 80,
         packet.player.viewport.also {
             highDefinition(it, blocks, updates, true)
             highDefinition(it, blocks, updates, false)
-            lowDefinition(it, blocks, updates, true)
-            lowDefinition(it, blocks, updates, false)
+            lowDefinition(it, blocks, true)
+            lowDefinition(it, blocks, false)
         }.update()
         writePacket(blocks.build())
     }
 
-    private fun BytePacketBuilder.highDefinition(viewport: Viewport, blocks: BytePacketBuilder, updates: List<Render>, nsn: Boolean) {
+    private fun BytePacketBuilder.highDefinition(viewport: Viewport, blocks: BytePacketBuilder, updates: Map<Player, ByteReadPacket>, nsn: Boolean) {
         var skip = 0
         withBitAccess {
             repeat(viewport.localIndexesSize) {
@@ -63,7 +65,7 @@ class PlayerInfoPacketAssembler : PacketAssembler<PlayerInfoPacket>(opcode = 80,
                 val other = viewport.localPlayers[index]
                 // TODO Extract this out into an enum or something instead of passing around a bunch of booleans.
                 val removing = shouldRemove(viewport, other)
-                val updating = shouldUpdate(other)
+                val updating = updates[other] != null
                 val active = removing || updating
                 writeBit(active)
                 if (active.not()) {
@@ -83,7 +85,7 @@ class PlayerInfoPacketAssembler : PacketAssembler<PlayerInfoPacket>(opcode = 80,
         other: Player?,
         updating: Boolean,
         blocks: BytePacketBuilder,
-        updates: List<Render>
+        builders: Map<Player, ByteReadPacket>
     ) {
         writeBits(1, removing.toIntInv())
         when {
@@ -97,12 +99,12 @@ class PlayerInfoPacketAssembler : PacketAssembler<PlayerInfoPacket>(opcode = 80,
             updating -> {
                 // send a block update
                 writeBits(2, 0)
-                blocks.encodePendingBlocks(false, other!!, updates)
+                builders[other!!]?.let { blocks.writeBytes(it.copy().readBytes()) }
             }
         }
     }
 
-    private fun BytePacketBuilder.lowDefinition(viewport: Viewport, blocks: BytePacketBuilder, updates: List<Render>, nsn: Boolean) {
+    private fun BytePacketBuilder.lowDefinition(viewport: Viewport, blocks: BytePacketBuilder, nsn: Boolean) {
         var skip = 0
         withBitAccess {
             repeat(viewport.externalIndexesSize) {
@@ -121,7 +123,7 @@ class PlayerInfoPacketAssembler : PacketAssembler<PlayerInfoPacket>(opcode = 80,
                     skip += skip(viewport, false, it, nsn)
                     viewport.nsnFlags[index] = viewport.nsnFlags[index] or 2
                 } else {
-                    processLowDefinitionPlayer(adding, viewport, other!!, index, blocks, updates)
+                    processLowDefinitionPlayer(adding, viewport, other!!, index, blocks)
                 }
             }
         }
@@ -132,8 +134,7 @@ class PlayerInfoPacketAssembler : PacketAssembler<PlayerInfoPacket>(opcode = 80,
         viewport: Viewport,
         other: Player,
         index: Int,
-        blocks: BytePacketBuilder,
-        updates: List<Render>
+        blocks: BytePacketBuilder
     ) {
         if (adding) {
             // add an external player to start tracking
@@ -143,7 +144,12 @@ class PlayerInfoPacketAssembler : PacketAssembler<PlayerInfoPacket>(opcode = 80,
             writeBits(13, other.location.z)
             // send a force block update
             writeBits(1, 1)
-            blocks.encodePendingBlocks(true, other, updates)
+
+            // Send appearance.
+            val appearanceBlock = renderingBlockMap[Render.Appearance::class]!!
+            blocks.writeByte(appearanceBlock.mask.toByte())
+            blocks.writeBytes(appearanceBlock.build(other, other.appearance).readBytes())
+
             viewport.localPlayers[other.index] = other
             viewport.nsnFlags[index] = viewport.nsnFlags[index] or 2
         }
@@ -243,22 +249,10 @@ class PlayerInfoPacketAssembler : PacketAssembler<PlayerInfoPacket>(opcode = 80,
         return count
     }
 
-    private fun BytePacketBuilder.encodePendingBlocks(forceOtherUpdate: Boolean, other: Player, updates: List<Render>) {
-        if (forceOtherUpdate) {
-            other.updateAppearance()
-            other.nextTick = true
-        }
-        val blocks = updates.map { it to renderingBlockMap[it::class]!! }.sortedBy { it.second.index }.toMap()
-        val mask = blocks.map { it.value.mask }.sum().let { if (it > 0xff) it or 0x10 else it }
-        if (mask > 0xff) writeShortLittleEndian(mask.toShort()) else writeByte(mask.toByte())
-        blocks.forEach { writePacket(it.value.build(other, it.key)) }
-    }
-
-    private fun shouldUpdate(other: Player?): Boolean = other?.hasPendingUpdate() ?: false
     private fun shouldAdd(viewport: Viewport, other: Player?): Boolean = (other != null && other != viewport.player && other.location.withinDistance(viewport.player))
     private fun shouldRemove(viewport: Viewport, other: Player?): Boolean = (other == null || !other.location.withinDistance(viewport.player) || !world.players.contains(other))
 
-    private companion object {
+    companion object {
         val renderingBlockMap = mapOf(
             Render.Appearance::class to PlayerAppearanceBlock(),
             Render.Sequence::class to PlayerSequenceBlock(),

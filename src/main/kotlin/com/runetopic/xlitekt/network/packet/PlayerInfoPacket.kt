@@ -1,7 +1,7 @@
 package com.runetopic.xlitekt.network.packet
 
 import com.runetopic.xlitekt.game.actor.player.Player
-import com.runetopic.xlitekt.game.actor.render.Render
+import io.ktor.utils.io.core.ByteReadPacket
 
 /**
  * @author Jordan Abraham
@@ -9,5 +9,5 @@ import com.runetopic.xlitekt.game.actor.render.Render
  */
 data class PlayerInfoPacket(
     val player: Player,
-    val updates: List<Render>
+    val updates: Map<Player, ByteReadPacket>
 ) : Packet

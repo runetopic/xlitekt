@@ -10,6 +10,7 @@ fun BytePacketBuilder.writeStringCp1252NullTerminated(value: String) {
     writeByte(0)
 }
 
+fun BytePacketBuilder.writeBytes(bytes: ByteArray) = bytes.forEach(::writeByte)
 fun BytePacketBuilder.writeBytesAdd(bytes: ByteArray) = bytes.forEach(::writeByteAdd)
 
 fun BytePacketBuilder.writeMedium(value: Int) {
