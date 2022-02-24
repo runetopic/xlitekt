@@ -1,7 +1,5 @@
 rootProject.name = "xlitekt"
 
-enableFeaturePreview("VERSION_CATALOGS")
-
 dependencyResolutionManagement {
     repositories(RepositoryHandler::mavenCentral)
     repositories { maven { url = uri("https://jitpack.io") } }
