@@ -44,13 +44,14 @@ import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withTimeout
 import java.math.BigInteger
 import java.nio.ByteBuffer
+import kotlinx.coroutines.Dispatchers
 
 /**
  * @author Jordan Abraham
  */
-private suspend fun Client.writeResponse(response: Int) = writeChannel.apply { writeByte(response.toByte()) }.flush()
+private suspend fun Client.writeResponse(response: Int) = writeChannel!!.apply { writeByte(response.toByte()) }.flush()
 
-suspend fun Client.readHandshake() = when (val opcode = readChannel.readByte().toInt()) {
+suspend fun Client.readHandshake() = when (val opcode = readChannel!!.readByte().toInt()) {
     HANDSHAKE_JS5_OPCODE -> writeHandshake(opcode, readChannel.readInt())
     HANDSHAKE_LOGIN_OPCODE -> writeHandshake(opcode, -1)
     else -> throw IllegalStateException("Unhandled opcode found during client/server handshake. Opcode=$opcode")
@@ -69,7 +70,7 @@ private suspend fun Client.writeHandshake(opcode: Int, version: Int) {
     when (opcode) {
         HANDSHAKE_JS5_OPCODE -> readJS5File()
         HANDSHAKE_LOGIN_OPCODE -> {
-            writeChannel.apply {
+            writeChannel!!.apply {
                 writeLong(seed)
             }.flush()
             readLogin()
@@ -80,7 +81,7 @@ private suspend fun Client.writeHandshake(opcode: Int, version: Int) {
 private suspend fun Client.readJS5File() = try {
     while (true) {
         withTimeout(30_000) {
-            when (val opcode = readChannel.readByte().toInt()) {
+            when (val opcode = readChannel!!.readByte().toInt()) {
                 JS5_HIGH_PRIORITY_OPCODE, JS5_LOW_PRIORITY_OPCODE -> {
                     val uid = readChannel.readUMedium()
                     val indexId = uid shr 16
@@ -103,7 +104,7 @@ private suspend fun Client.readJS5File() = try {
     handleException(exception)
 }
 
-private suspend fun Client.writeJS5File(indexId: Int, groupId: Int, compression: Int, size: Int, buffer: ByteBuffer) = writeChannel.apply {
+private suspend fun Client.writeJS5File(indexId: Int, groupId: Int, compression: Int, size: Int, buffer: ByteBuffer) = writeChannel!!.apply {
     writeByte(indexId.toByte())
     writeShort(groupId.toShort())
     writeByte(compression.toByte())
@@ -121,7 +122,7 @@ private suspend fun Client.writeJS5File(indexId: Int, groupId: Int, compression:
 }.flush()
 
 private suspend fun Client.readLogin() {
-    val opcode = readChannel.readByte().toInt() and 0xff
+    val opcode = readChannel!!.readByte().toInt() and 0xff
 
     val size = readChannel.readShort().toInt() and 0xffff
     val availableBytes = readChannel.availableForRead
@@ -270,7 +271,7 @@ private suspend fun Client.writeLogin(response: Int) {
     }
     val player = player ?: return disconnect("Login write event does not have an established player.")
 
-    writeChannel.apply {
+    writeChannel!!.apply {
         writeByte(11)
         writeByte(0)
         writeInt(0)
@@ -286,7 +287,7 @@ private suspend fun Client.writeLogin(response: Int) {
 
 private suspend fun Client.readPackets(player: Player) = try {
     while (true) {
-        val opcode = readChannel.readPacketOpcode(clientCipher!!)
+        val opcode = readChannel!!.readPacketOpcode(clientCipher!!)
         if (opcode < 0 || opcode >= sizes.size) continue
         val size = readChannel.readPacketSize(sizes[opcode])
         // Take the bytes from the read channel before doing any checks.
@@ -314,12 +315,12 @@ private suspend fun Client.readPackets(player: Player) = try {
 
 fun Client.writePacket(packet: Packet) {
     val assembler = Client.assemblers[packet::class] ?: return disconnect("Unhandled packet found when trying to write. Packet was $packet.")
-    runBlocking(Dispatcher.GAME) {
+    runBlocking {
         poolToWriteChannel(assembler.opcode, assembler.size, assembler.assemblePacket(packet))
     }
 }
 
-suspend fun Client.poolToWriteChannel(opcode: Int, size: Int, packet: ByteReadPacket) = writeChannel.apply {
+suspend fun Client.poolToWriteChannel(opcode: Int, size: Int, packet: ByteReadPacket) = writeChannel?.apply {
     writePacketOpcode(serverCipher!!, opcode)
     if (size == -1 || size == -2) {
         writePacketSize(size, packet.remaining)

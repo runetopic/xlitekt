@@ -38,17 +38,18 @@ class PlayerInfoPacketAssembler : PacketAssembler<PlayerInfoPacket>(opcode = 80,
     private val world by inject<World>()
 
     override fun assemblePacket(packet: PlayerInfoPacket) = buildPacket {
+        val updates = packet.updates
         val blocks = BytePacketBuilder()
         packet.player.viewport.also {
-            highDefinition(it, blocks, true)
-            highDefinition(it, blocks, false)
-            lowDefinition(it, blocks, true)
-            lowDefinition(it, blocks, false)
+            highDefinition(it, blocks, updates, true)
+            highDefinition(it, blocks, updates, false)
+            lowDefinition(it, blocks, updates, true)
+            lowDefinition(it, blocks, updates, false)
         }.update()
         writePacket(blocks.build())
     }
 
-    private fun BytePacketBuilder.highDefinition(viewport: Viewport, blocks: BytePacketBuilder, nsn: Boolean) {
+    private fun BytePacketBuilder.highDefinition(viewport: Viewport, blocks: BytePacketBuilder, updates: List<Render>, nsn: Boolean) {
         var skip = 0
         withBitAccess {
             repeat(viewport.localIndexesSize) {
@@ -69,7 +70,7 @@ class PlayerInfoPacketAssembler : PacketAssembler<PlayerInfoPacket>(opcode = 80,
                     skip += skip(viewport, true, it, nsn)
                     viewport.nsnFlags[index] = viewport.nsnFlags[index] or 2
                 } else {
-                    processHighDefinitionPlayer(removing, viewport, index, other, updating, blocks)
+                    processHighDefinitionPlayer(removing, viewport, index, other, updating, blocks, updates)
                 }
             }
         }
@@ -81,7 +82,8 @@ class PlayerInfoPacketAssembler : PacketAssembler<PlayerInfoPacket>(opcode = 80,
         index: Int,
         other: Player?,
         updating: Boolean,
-        blocks: BytePacketBuilder
+        blocks: BytePacketBuilder,
+        updates: List<Render>
     ) {
         writeBits(1, removing.toIntInv())
         when {
@@ -95,12 +97,12 @@ class PlayerInfoPacketAssembler : PacketAssembler<PlayerInfoPacket>(opcode = 80,
             updating -> {
                 // send a block update
                 writeBits(2, 0)
-                blocks.encodePendingBlocks(false, other!!)
+                blocks.encodePendingBlocks(false, other!!, updates)
             }
         }
     }
 
-    private fun BytePacketBuilder.lowDefinition(viewport: Viewport, blocks: BytePacketBuilder, nsn: Boolean) {
+    private fun BytePacketBuilder.lowDefinition(viewport: Viewport, blocks: BytePacketBuilder, updates: List<Render>, nsn: Boolean) {
         var skip = 0
         withBitAccess {
             repeat(viewport.externalIndexesSize) {
@@ -119,7 +121,7 @@ class PlayerInfoPacketAssembler : PacketAssembler<PlayerInfoPacket>(opcode = 80,
                     skip += skip(viewport, false, it, nsn)
                     viewport.nsnFlags[index] = viewport.nsnFlags[index] or 2
                 } else {
-                    processLowDefinitionPlayer(adding, viewport, other!!, index, blocks)
+                    processLowDefinitionPlayer(adding, viewport, other!!, index, blocks, updates)
                 }
             }
         }
@@ -130,7 +132,8 @@ class PlayerInfoPacketAssembler : PacketAssembler<PlayerInfoPacket>(opcode = 80,
         viewport: Viewport,
         other: Player,
         index: Int,
-        blocks: BytePacketBuilder
+        blocks: BytePacketBuilder,
+        updates: List<Render>
     ) {
         if (adding) {
             // add an external player to start tracking
@@ -140,7 +143,7 @@ class PlayerInfoPacketAssembler : PacketAssembler<PlayerInfoPacket>(opcode = 80,
             writeBits(13, other.location.z)
             // send a force block update
             writeBits(1, 1)
-            blocks.encodePendingBlocks(true, other)
+            blocks.encodePendingBlocks(true, other, updates)
             viewport.localPlayers[other.index] = other
             viewport.nsnFlags[index] = viewport.nsnFlags[index] or 2
         }
@@ -240,9 +243,12 @@ class PlayerInfoPacketAssembler : PacketAssembler<PlayerInfoPacket>(opcode = 80,
         return count
     }
 
-    private fun BytePacketBuilder.encodePendingBlocks(forceOtherUpdate: Boolean, other: Player) {
-        if (forceOtherUpdate) other.updateAppearance()
-        val blocks = other.pendingUpdates().map { it to renderingBlockMap[it::class]!! }.sortedBy { it.second.index }.toMap()
+    private fun BytePacketBuilder.encodePendingBlocks(forceOtherUpdate: Boolean, other: Player, updates: List<Render>) {
+        if (forceOtherUpdate) {
+            other.updateAppearance()
+            other.nextTick = true
+        }
+        val blocks = updates.map { it to renderingBlockMap[it::class]!! }.sortedBy { it.second.index }.toMap()
         val mask = blocks.map { it.value.mask }.sum().let { if (it > 0xff) it or 0x10 else it }
         if (mask > 0xff) writeShortLittleEndian(mask.toShort()) else writeByte(mask.toByte())
         blocks.forEach { writePacket(it.value.build(other, it.key)) }

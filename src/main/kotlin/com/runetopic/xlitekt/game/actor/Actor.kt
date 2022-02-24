@@ -15,6 +15,7 @@ abstract class Actor(
 
     var previousLocation: Location? = null
     var index = 0
+    var nextTick = false
 
     var movementSpeed = MovementSpeed.WALK
 

@@ -106,9 +106,9 @@ import java.net.SocketException
  * @author Jordan Abraham
  */
 class Client(
-    private val socket: Socket,
-    val readChannel: ByteReadChannel,
-    val writeChannel: ByteWriteChannel
+    private val socket: Socket? = null,
+    val readChannel: ByteReadChannel? = null,
+    val writeChannel: ByteWriteChannel? = null
 ) {
     val logger = InlineLogger()
     val seed = ((Math.random() * 99999999.0).toLong() shl 32) + (Math.random() * 99999999.0).toLong()
@@ -118,7 +118,7 @@ class Client(
 
     fun disconnect(reason: String) {
         player?.logout()
-        socket.close()
+        socket?.close()
         logger.debug { "Client disconnected for reason={$reason}." }
     }
 

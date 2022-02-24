@@ -3,6 +3,8 @@ package com.runetopic.xlitekt.game
 import com.github.michaelbull.logging.InlineLogger
 import com.runetopic.xlitekt.game.event.EventBus
 import com.runetopic.xlitekt.game.world.World
+import com.runetopic.xlitekt.game.world.engine.LoopTask
+import com.runetopic.xlitekt.network.client.Client.Companion.world
 import com.runetopic.xlitekt.plugin.koin.inject
 import com.runetopic.xlitekt.shared.resource.Resource.interfaceInfoResource
 import com.runetopic.xlitekt.shared.resource.Resource.mapSquaresResource
@@ -29,18 +31,22 @@ val gameModule = module(createdAtStart = true) {
 
 class Game {
     private val logger = InlineLogger()
-    private val service = Executors.newSingleThreadScheduledExecutor()
-    private val world by inject<World>()
+    private val loop = LoopTask()
+
+//    private val service = Executors.newSingleThreadScheduledExecutor()
+//    private val world by inject<World>()
 
     fun start() {
-        service.scheduleAtFixedRate({
-            val time = measureTime(world::process)
-            logger.debug { "Main game loop took $time to finish." }
-        }, 0, 600, TimeUnit.MILLISECONDS)
+        loop.start()
+//        service.scheduleAtFixedRate({
+//            val time = measureTime(world::process)
+//            logger.debug { "Main game loop took $time to finish." }
+//        }, 0, 600, TimeUnit.MILLISECONDS)
     }
 
     fun shutdownGracefully() {
-        logger.debug { "Shutting down game loop..." }
-        service.shutdown()
+        loop.shutdown()
+//        logger.debug { "Shutting down game loop..." }
+//        service.shutdown()
     }
 }

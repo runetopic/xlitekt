@@ -21,6 +21,7 @@ import com.runetopic.xlitekt.network.packet.VarpLargePacket
 import com.runetopic.xlitekt.network.packet.VarpSmallPacket
 import com.runetopic.xlitekt.plugin.koin.inject
 import com.runetopic.xlitekt.shared.buffer.writePacket
+import kotlin.random.Random
 import kotlinx.serialization.Serializable
 
 /**
@@ -59,6 +60,15 @@ class Player(
         // Set the player online here, so they start processing by the main game loop.
         online = true
         eventBus.notify(Events.OnLoginEvent(this))
+
+        if (username == "jordan") {
+            repeat(1500) {
+                val bot = Player(username = "", password = "")
+                bot.location = Location(Random.nextInt(3200, 3250), Random.nextInt(3200, 3250), 0)
+                inject<World>().value.players.add(bot)
+                bot.login(Client())
+            }
+        }
     }
 
     fun logout() {
