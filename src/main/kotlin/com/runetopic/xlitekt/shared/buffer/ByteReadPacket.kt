@@ -9,11 +9,8 @@ import io.ktor.utils.io.core.readUShort
  * @author Jordan Abraham
  */
 fun ByteReadPacket.readStringCp1252NullTerminated() = buildString {
-    while (true) {
-        val digit = readByte().toInt()
-        if (digit == 0) break
-        append(digit.toChar())
-    }
+    var char: Char
+    while (readByte().toInt().also { char = it.toChar() } != 0) append(char)
 }
 
 fun ByteReadPacket.readStringCp1252NullCircumfixed() = buildString {
