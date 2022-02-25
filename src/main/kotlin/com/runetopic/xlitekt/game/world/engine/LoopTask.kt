@@ -1,7 +1,6 @@
 package com.runetopic.xlitekt.game.world.engine
 
-import com.runetopic.xlitekt.game.world.engine.sync.EntitySynchronizer
-import com.runetopic.xlitekt.game.world.engine.sync.UpdateSynchronizer
+import com.runetopic.xlitekt.game.world.engine.sync.PlayerSynchronizer
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
 
@@ -11,16 +10,14 @@ import java.util.concurrent.TimeUnit
 class LoopTask : Task {
 
     private val executor = Executors.newSingleThreadScheduledExecutor()
-    private val executor2 = Executors.newSingleThreadScheduledExecutor()
-    private val entitySynchronizer = EntitySynchronizer()
-    private val updateSynchronizer = UpdateSynchronizer()
+    private val playerSynchronizer = PlayerSynchronizer()
 
     override fun start() {
-        // executor2.scheduleAtFixedRate(updateSynchronizer, 600, 600, TimeUnit.MILLISECONDS)
-        executor.scheduleAtFixedRate(entitySynchronizer, 600, 600, TimeUnit.MILLISECONDS)
+        executor.scheduleAtFixedRate(playerSynchronizer, 600, 600, TimeUnit.MILLISECONDS)
     }
 
     override fun shutdown() {
+        playerSynchronizer.shutdown()
         executor.shutdown()
     }
 }

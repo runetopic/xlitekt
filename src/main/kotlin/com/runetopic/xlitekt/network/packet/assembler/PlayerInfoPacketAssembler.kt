@@ -29,6 +29,7 @@ import io.ktor.utils.io.core.BytePacketBuilder
 import io.ktor.utils.io.core.ByteReadPacket
 import io.ktor.utils.io.core.buildPacket
 import io.ktor.utils.io.core.readBytes
+import io.ktor.utils.io.core.writeShortLittleEndian
 import kotlin.math.abs
 
 /**
@@ -268,5 +269,14 @@ class PlayerInfoPacketAssembler : PacketAssembler<PlayerInfoPacket>(opcode = 80,
             Render.SpotAnimation::class to PlayerSpotAnimationBlock(),
             Render.TemporaryMovementType::class to PlayerTemporaryMovementTypeBlock()
         )
+
+        fun List<Render>.pendingUpdatesBlocks(player: Player): ByteReadPacket {
+            val builder = BytePacketBuilder()
+            val blocks = this.map { it to renderingBlockMap[it::class]!! }.sortedBy { it.second.index }.toMap()
+            val mask = blocks.map { it.value.mask }.sum().let { if (it > 0xff) it or 0x10 else it }
+            if (mask > 0xff) builder.writeShortLittleEndian(mask.toShort()) else builder.writeByte(mask.toByte())
+            blocks.forEach { builder.writePacket(it.value.build(player, it.key)) }
+            return builder.build()
+        }
     }
 }

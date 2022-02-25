@@ -30,7 +30,6 @@ import com.runetopic.xlitekt.network.client.ClientResponseOpcode.LOGIN_SUCCESS_O
 import com.runetopic.xlitekt.network.packet.Packet
 import com.runetopic.xlitekt.network.packet.disassembler.handler.PacketHandlerEvent
 import com.runetopic.xlitekt.network.packet.disassembler.handler.PacketHandlerMapping
-import com.runetopic.xlitekt.shared.Dispatcher
 import com.runetopic.xlitekt.shared.toBoolean
 import io.ktor.utils.io.core.ByteReadPacket
 import io.ktor.utils.io.core.readInt
@@ -44,7 +43,6 @@ import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withTimeout
 import java.math.BigInteger
 import java.nio.ByteBuffer
-import kotlinx.coroutines.Dispatchers
 
 /**
  * @author Jordan Abraham

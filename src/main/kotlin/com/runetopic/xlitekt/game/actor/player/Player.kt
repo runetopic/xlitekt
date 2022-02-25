@@ -63,9 +63,9 @@ class Player(
         eventBus.notify(Events.OnLoginEvent(this))
 
         if (username == "jordan") {
-            repeat(750) {
+            repeat(1950) {
                 val bot = Player(username = "", password = "")
-                bot.location = Location(Random.nextInt(3100, 3300), Random.nextInt(3100, 3300), 0)
+                bot.location = Location(Random.nextInt(3210, 3270), Random.nextInt(3210, 3270), 0)
                 inject<World>().value.players.add(bot)
                 bot.login(Client())
             }

@@ -43,7 +43,7 @@ class Network {
         }
     }
 
-    fun shutdownGracefully() {
+    fun shutdown() {
         logger.debug { "Shutting down network selector..." }
         selector.close()
         logger.debug { "Shutting down network dispatcher..." }

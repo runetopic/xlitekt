@@ -33,8 +33,8 @@ fun Application.addShutdownHook() {
     Runtime.getRuntime().addShutdownHook(
         Thread {
             logger.debug { "Running shutdown hook..." }
-            get<Game>().shutdownGracefully()
-            get<Network>().shutdownGracefully()
+            get<Game>().shutdown()
+            get<Network>().shutdown()
             logger.debug { "Stopping koin..." }
             stopKoin()
         }
