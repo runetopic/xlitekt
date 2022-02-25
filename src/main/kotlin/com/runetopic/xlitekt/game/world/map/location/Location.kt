@@ -60,3 +60,11 @@ fun Location.withinDistance(other: Player, distance: Int = 14): Boolean {
     val deltaZ = other.location.z - z
     return deltaX <= distance && deltaX >= -distance && deltaZ <= distance && deltaZ >= -distance
 }
+
+fun Location.withinDistance(other: Location?, distance: Int = 14): Boolean {
+    if (other == null) return false
+    if (other.level != level) return false
+    val deltaX = other.x - x
+    val deltaZ = other.z - z
+    return deltaX <= distance && deltaX >= -distance && deltaZ <= distance && deltaZ >= -distance
+}

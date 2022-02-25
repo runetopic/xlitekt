@@ -23,8 +23,6 @@ import com.runetopic.xlitekt.plugin.koin.inject
 import com.runetopic.xlitekt.shared.buffer.BitAccess
 import com.runetopic.xlitekt.shared.buffer.withBitAccess
 import com.runetopic.xlitekt.shared.buffer.writeBytes
-import com.runetopic.xlitekt.shared.toInt
-import com.runetopic.xlitekt.shared.toIntInv
 import io.ktor.utils.io.core.BytePacketBuilder
 import io.ktor.utils.io.core.ByteReadPacket
 import io.ktor.utils.io.core.buildPacket
@@ -52,29 +50,36 @@ class PlayerInfoPacketAssembler : PacketAssembler<PlayerInfoPacket>(opcode = 80,
         writePacket(blocks.build())
     }
 
-    private fun BytePacketBuilder.highDefinition(viewport: Viewport, blocks: BytePacketBuilder, updates: Map<Player, ByteReadPacket>, nsn: Boolean) {
-        var skip = 0
+    private fun BytePacketBuilder.highDefinition(
+        viewport: Viewport,
+        blocks: BytePacketBuilder,
+        updates: Map<Player, ByteReadPacket>,
+        nsn: Boolean
+    ) {
+        var skip = -1
         withBitAccess {
             repeat(viewport.localIndexesSize) {
                 val index = viewport.localIndexes[it]
                 if (nsn == (0x1 and viewport.nsnFlags[index] != 0)) return@repeat
-                if (skip > 0) {
-                    viewport.nsnFlags[index] = viewport.nsnFlags[index] or 2
-                    skip--
-                    return@repeat
-                }
                 val other = viewport.localPlayers[index]
                 // TODO Extract this out into an enum or something instead of passing around a bunch of booleans.
                 val removing = shouldRemove(viewport, other)
                 val updating = updates[other] != null
                 val active = removing || updating
-                writeBit(active)
-                if (active.not()) {
-                    skip += skip(viewport, true, it, nsn)
+                if (!active) {
                     viewport.nsnFlags[index] = viewport.nsnFlags[index] or 2
-                } else {
-                    processHighDefinitionPlayer(removing, viewport, index, other, updating, blocks, updates)
+                    skip++
+                    return@repeat
                 }
+                if (skip > -1) {
+                    writeSkip(skip)
+                    skip = -1
+                }
+                writeBit(true)
+                processHighDefinitionPlayer(removing, viewport, index, other, updating, blocks, updates)
+            }
+            if (skip > -1) {
+                writeSkip(skip)
             }
         }
     }
@@ -86,9 +91,9 @@ class PlayerInfoPacketAssembler : PacketAssembler<PlayerInfoPacket>(opcode = 80,
         other: Player?,
         updating: Boolean,
         blocks: BytePacketBuilder,
-        builders: Map<Player, ByteReadPacket>
+        updates: Map<Player, ByteReadPacket>
     ) {
-        writeBits(1, removing.toIntInv())
+        writeBit(!removing)
         when {
             removing -> { // remove the player
                 // send a position update
@@ -100,32 +105,38 @@ class PlayerInfoPacketAssembler : PacketAssembler<PlayerInfoPacket>(opcode = 80,
             updating -> {
                 // send a block update
                 writeBits(2, 0)
-                builders[other!!]?.let { blocks.writeBytes(it.copy().readBytes()) }
+                blocks.writeBytes(updates[other]!!.copy().readBytes())
             }
         }
     }
 
-    private fun BytePacketBuilder.lowDefinition(viewport: Viewport, blocks: BytePacketBuilder, nsn: Boolean) {
-        var skip = 0
+    private fun BytePacketBuilder.lowDefinition(
+        viewport: Viewport,
+        blocks: BytePacketBuilder,
+        nsn: Boolean
+    ) {
+        var skip = -1
         withBitAccess {
             repeat(viewport.externalIndexesSize) {
                 val index = viewport.externalIndexes[it]
                 if (nsn == (0x1 and viewport.nsnFlags[index] == 0)) return@repeat
-                if (skip > 0) {
-                    viewport.nsnFlags[index] = viewport.nsnFlags[index] or 2
-                    skip--
-                    return@repeat
-                }
                 val other = world.players[index]
                 // TODO Extract this out into an enum or something instead of passing around a bunch of booleans.
                 val adding = shouldAdd(viewport, other)
-                writeBit(adding)
-                if (adding.not()) {
-                    skip += skip(viewport, false, it, nsn)
+                if (!adding) {
                     viewport.nsnFlags[index] = viewport.nsnFlags[index] or 2
-                } else {
-                    processLowDefinitionPlayer(adding, viewport, other!!, index, blocks)
+                    skip++
+                    return@repeat
                 }
+                if (skip > -1) {
+                    writeSkip(skip)
+                    skip = -1
+                }
+                writeBit(true)
+                processLowDefinitionPlayer(adding, viewport, other!!, index, blocks)
+            }
+            if (skip > -1) {
+                writeSkip(skip)
             }
         }
     }
@@ -144,12 +155,12 @@ class PlayerInfoPacketAssembler : PacketAssembler<PlayerInfoPacket>(opcode = 80,
             writeBits(13, other.location.x)
             writeBits(13, other.location.z)
             // send a force block update
-            writeBits(1, 1)
+            writeBit(true)
 
             // Send appearance.
             val appearanceBlock = renderingBlockMap[Render.Appearance::class]!!
             blocks.writeByte(appearanceBlock.mask.toByte())
-            blocks.writeBytes(appearanceBlock.build(other, other.appearance).readBytes())
+            blocks.writeBytes(appearanceBlock.build(other, other.appearance).copy().readBytes())
 
             viewport.localPlayers[other.index] = other
             viewport.nsnFlags[index] = viewport.nsnFlags[index] or 2
@@ -160,7 +171,7 @@ class PlayerInfoPacketAssembler : PacketAssembler<PlayerInfoPacket>(opcode = 80,
         val currentPacked = viewport.coordinates[index]
         val packed = other?.location?.regionCoordinates ?: currentPacked
         val updating = other != null && packed != currentPacked
-        writeBits(1, updating.toInt())
+        writeBit(updating)
         if (updating) {
             updateCoordinates(currentPacked, packed)
             viewport.coordinates[index] = packed
@@ -207,31 +218,8 @@ class PlayerInfoPacketAssembler : PacketAssembler<PlayerInfoPacket>(opcode = 80,
         }
     }
 
-    private fun BitAccess.skip(
-        viewport: Viewport,
-        local: Boolean,
-        offset: Int,
-        nsn: Boolean
-    ): Int {
-        var count = 0
-        if (local) {
-            for (index in offset + 1 until viewport.localIndexesSize) {
-                val localIndex = viewport.localIndexes[index]
-                if (nsn == (0x1 and viewport.nsnFlags[localIndex] != 0)) continue
-                val localPlayer = viewport.localPlayers[localIndex]
-                if (shouldRemove(viewport, localPlayer) || (localPlayer != null && localPlayer.hasPendingUpdate())) break
-                count++
-            }
-        } else {
-            for (index in offset + 1 until viewport.externalIndexesSize) {
-                val externalIndex = viewport.externalIndexes[index]
-                if (nsn == (0x1 and viewport.nsnFlags[externalIndex] == 0)) continue
-                val externalPlayer = world.players[externalIndex]
-                if (shouldAdd(viewport, externalPlayer)) break
-                count++
-            }
-        }
-
+    private fun BitAccess.writeSkip(count: Int) {
+        writeBit(false)
         when {
             count == 0 -> writeBits(2, 0)
             count < 32 -> {
@@ -247,7 +235,6 @@ class PlayerInfoPacketAssembler : PacketAssembler<PlayerInfoPacket>(opcode = 80,
                 writeBits(11, count)
             }
         }
-        return count
     }
 
     private fun shouldAdd(viewport: Viewport, other: Player?): Boolean = (other != null && other != viewport.player && other.location.withinDistance(viewport.player))
@@ -270,13 +257,11 @@ class PlayerInfoPacketAssembler : PacketAssembler<PlayerInfoPacket>(opcode = 80,
             Render.TemporaryMovementType::class to PlayerTemporaryMovementTypeBlock()
         )
 
-        fun List<Render>.pendingUpdatesBlocks(player: Player): ByteReadPacket {
-            val builder = BytePacketBuilder()
-            val blocks = this.map { it to renderingBlockMap[it::class]!! }.sortedBy { it.second.index }.toMap()
+        fun List<Render>.pendingUpdatesBlocks(player: Player) = buildPacket {
+            val blocks = this@pendingUpdatesBlocks.map { it to renderingBlockMap[it::class]!! }.sortedBy { it.second.index }.toMap()
             val mask = blocks.map { it.value.mask }.sum().let { if (it > 0xff) it or 0x10 else it }
-            if (mask > 0xff) builder.writeShortLittleEndian(mask.toShort()) else builder.writeByte(mask.toByte())
-            blocks.forEach { builder.writePacket(it.value.build(player, it.key)) }
-            return builder.build()
+            if (mask > 0xff) writeShortLittleEndian(mask.toShort()) else writeByte(mask.toByte())
+            blocks.forEach { writePacket(it.value.build(player, it.key)) }
         }
     }
 }

@@ -21,9 +21,8 @@ import com.runetopic.xlitekt.network.packet.VarpLargePacket
 import com.runetopic.xlitekt.network.packet.VarpSmallPacket
 import com.runetopic.xlitekt.plugin.koin.inject
 import com.runetopic.xlitekt.shared.buffer.writePacket
-import kotlin.concurrent.fixedRateTimer
-import kotlin.random.Random
 import kotlinx.serialization.Serializable
+import kotlin.random.Random
 
 /**
  * @author Jordan Abraham
@@ -63,9 +62,9 @@ class Player(
         eventBus.notify(Events.OnLoginEvent(this))
 
         if (username == "jordan") {
-            repeat(1950) {
+            repeat(2000) {
                 val bot = Player(username = "", password = "")
-                bot.location = Location(Random.nextInt(3210, 3270), Random.nextInt(3210, 3270), 0)
+                bot.location = Location(Random.nextInt(3210, 3260), Random.nextInt(3210, 3260), 0)
                 inject<World>().value.players.add(bot)
                 bot.login(Client())
             }

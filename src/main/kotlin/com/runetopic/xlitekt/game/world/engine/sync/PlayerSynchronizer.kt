@@ -8,10 +8,10 @@ import com.runetopic.xlitekt.network.packet.PlayerInfoPacket
 import com.runetopic.xlitekt.network.packet.assembler.PlayerInfoPacketAssembler.Companion.pendingUpdatesBlocks
 import com.runetopic.xlitekt.plugin.koin.inject
 import io.ktor.utils.io.core.ByteReadPacket
+import kotlinx.coroutines.Runnable
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.Executors
 import kotlin.time.measureTime
-import kotlinx.coroutines.Runnable
 
 /**
  * @author Jordan Abraham
@@ -28,26 +28,26 @@ class PlayerSynchronizer : Runnable {
         val time = measureTime {
             val pending = players.associateWith { it.pendingUpdates().toList() }
             val updates = mutableMapOf<Player, ByteReadPacket>()
-            val preLatch = CountDownLatch(players.size)
+            val updateLatch = CountDownLatch(players.size)
             players.forEach {
                 pool.execute {
                     pending[it]?.pendingUpdatesBlocks(it)?.run {
                         updates[it] = this
                     }
-                    preLatch.countDown()
+                    updateLatch.countDown()
                 }
             }
-            preLatch.await()
-            val mainLatch = CountDownLatch(players.size)
+            updateLatch.await()
+            val syncLatch = CountDownLatch(players.size)
             players.forEach {
                 pool.execute {
                     it.write(PlayerInfoPacket(it, updates))
                     it.write(NPCInfoPacket(it))
                     it.flushPool()
-                    mainLatch.countDown()
+                    syncLatch.countDown()
                 }
             }
-            mainLatch.await()
+            syncLatch.await()
             players.forEach(Player::reset)
         }
         logger.debug { "Synchronization took $time for ${players.size} players." }
