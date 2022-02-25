@@ -4,6 +4,7 @@ import com.runetopic.xlitekt.game.actor.player.Player
 import com.runetopic.xlitekt.game.actor.player.Viewport
 import com.runetopic.xlitekt.game.actor.render.Render
 import com.runetopic.xlitekt.game.world.World
+import com.runetopic.xlitekt.game.world.map.location.Location
 import com.runetopic.xlitekt.game.world.map.location.withinDistance
 import com.runetopic.xlitekt.network.packet.PlayerInfoPacket
 import com.runetopic.xlitekt.network.packet.assembler.block.player.PlayerAppearanceBlock
@@ -40,12 +41,13 @@ class PlayerInfoPacketAssembler : PacketAssembler<PlayerInfoPacket>(opcode = 80,
 
     override fun assemblePacket(packet: PlayerInfoPacket) = buildPacket {
         val updates = packet.updates
+        val locations = packet.locations
         val blocks = BytePacketBuilder()
         packet.player.viewport.also {
-            highDefinition(it, blocks, updates, true)
-            highDefinition(it, blocks, updates, false)
-            lowDefinition(it, blocks, true)
-            lowDefinition(it, blocks, false)
+            highDefinition(it, blocks, updates, locations, true)
+            highDefinition(it, blocks, updates, locations, false)
+            lowDefinition(it, blocks, locations, true)
+            lowDefinition(it, blocks, locations, false)
         }.update()
         writePacket(blocks.build())
     }
@@ -54,6 +56,7 @@ class PlayerInfoPacketAssembler : PacketAssembler<PlayerInfoPacket>(opcode = 80,
         viewport: Viewport,
         blocks: BytePacketBuilder,
         updates: Map<Player, ByteReadPacket>,
+        locations: Map<Player, Location>,
         nsn: Boolean
     ) {
         var skip = -1
@@ -63,7 +66,7 @@ class PlayerInfoPacketAssembler : PacketAssembler<PlayerInfoPacket>(opcode = 80,
                 if (nsn == (0x1 and viewport.nsnFlags[index] != 0)) return@repeat
                 val other = viewport.localPlayers[index]
                 // TODO Extract this out into an enum or something instead of passing around a bunch of booleans.
-                val removing = shouldRemove(viewport, other)
+                val removing = shouldRemove(viewport, locations[other])
                 val updating = updates[other] != null
                 val active = removing || updating
                 if (!active) {
@@ -98,7 +101,7 @@ class PlayerInfoPacketAssembler : PacketAssembler<PlayerInfoPacket>(opcode = 80,
             removing -> { // remove the player
                 // send a position update
                 writeBits(2, 0)
-                viewport.coordinates[index] = other?.previousLocation?.regionCoordinates ?: other?.location?.regionCoordinates ?: 0
+                viewport.coordinates[index] = 0
                 validateCoordinates(viewport, other, index)
                 viewport.localPlayers[index] = null
             }
@@ -113,6 +116,7 @@ class PlayerInfoPacketAssembler : PacketAssembler<PlayerInfoPacket>(opcode = 80,
     private fun BytePacketBuilder.lowDefinition(
         viewport: Viewport,
         blocks: BytePacketBuilder,
+        locations: Map<Player, Location>,
         nsn: Boolean
     ) {
         var skip = -1
@@ -122,7 +126,7 @@ class PlayerInfoPacketAssembler : PacketAssembler<PlayerInfoPacket>(opcode = 80,
                 if (nsn == (0x1 and viewport.nsnFlags[index] == 0)) return@repeat
                 val other = world.players[index]
                 // TODO Extract this out into an enum or something instead of passing around a bunch of booleans.
-                val adding = shouldAdd(viewport, other)
+                val adding = shouldAdd(viewport, locations[other])
                 if (!adding) {
                     viewport.nsnFlags[index] = viewport.nsnFlags[index] or 2
                     skip++
@@ -237,8 +241,8 @@ class PlayerInfoPacketAssembler : PacketAssembler<PlayerInfoPacket>(opcode = 80,
         }
     }
 
-    private fun shouldAdd(viewport: Viewport, other: Player?): Boolean = (other != null && other != viewport.player && other.location.withinDistance(viewport.player))
-    private fun shouldRemove(viewport: Viewport, other: Player?): Boolean = (other == null || !other.location.withinDistance(viewport.player) || !world.players.contains(other))
+    private fun shouldAdd(viewport: Viewport, other: Location?): Boolean = (other != null/* && other != viewport.player*/ && other.withinDistance(viewport.player))
+    private fun shouldRemove(viewport: Viewport, other: Location?): Boolean = (other == null || !other.withinDistance(viewport.player)/* || !world.players.contains(other)*/)
 
     companion object {
         val renderingBlockMap = mapOf(

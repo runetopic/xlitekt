@@ -38,10 +38,11 @@ class PlayerSynchronizer : Runnable {
                 }
             }
             updateLatch.await()
+            val locations = players.associateWith(Player::location)
             val syncLatch = CountDownLatch(players.size)
             players.forEach {
                 pool.execute {
-                    it.write(PlayerInfoPacket(it, updates))
+                    it.write(PlayerInfoPacket(it, updates, locations))
                     it.write(NPCInfoPacket(it))
                     it.flushPool()
                     syncLatch.countDown()

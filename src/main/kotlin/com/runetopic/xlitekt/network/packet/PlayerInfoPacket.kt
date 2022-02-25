@@ -1,6 +1,7 @@
 package com.runetopic.xlitekt.network.packet
 
 import com.runetopic.xlitekt.game.actor.player.Player
+import com.runetopic.xlitekt.game.world.map.location.Location
 import io.ktor.utils.io.core.ByteReadPacket
 
 /**
@@ -9,5 +10,6 @@ import io.ktor.utils.io.core.ByteReadPacket
  */
 data class PlayerInfoPacket(
     val player: Player,
-    val updates: Map<Player, ByteReadPacket>
+    val updates: Map<Player, ByteReadPacket>,
+    val locations: Map<Player, Location>
 ) : Packet
