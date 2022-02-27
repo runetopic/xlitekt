@@ -48,7 +48,7 @@ val playerBlocks = mapOf(
     Render.TemporaryMovementType::class to PlayerTemporaryMovementTypeBlock()
 )
 
-val renderingBlockMap = mapOf(
+val npcBlocks = mapOf(
     Render.Sequence::class to NPCSequenceBlock(),
     Render.NPCCustomLevel::class to NPCCustomLevelBlock(),
     Render.FaceActor::class to NPCFaceActorBlock(),
@@ -69,7 +69,7 @@ fun List<Render>.buildPlayerUpdateBlocks(player: Player) = buildPacket {
 }
 
 fun BytePacketBuilder.buildNPCUpdateBlocks(npc: NPC) {
-    val blocks = npc.pendingUpdates().map { it to renderingBlockMap[it::class]!! }.sortedBy { it.second.index }.toMap()
+    val blocks = npc.pendingUpdates().map { it to npcBlocks[it::class]!! }.sortedBy { it.second.index }.toMap()
     val mask = blocks.map { it.value.mask }.sum().let { if (it > 0xff) it or 0x4 else it }
     if (mask > 0xff) writeShortLittleEndian(mask.toShort()) else writeByte(mask.toByte())
     blocks.forEach { writePacket(it.value.build(npc, it.key)) }
