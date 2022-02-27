@@ -1,0 +1,20 @@
+package xlitekt.plugin.ui
+
+import xlitekt.game.actor.player.script
+import xlitekt.game.ui.UserInterface
+import xlitekt.game.ui.onInterface
+
+onInterface<UserInterface.EquipmentStats> {
+    onCreate {
+        script(917, listOf(-1, -1))
+    }
+
+    onOpen {
+        setText(24, "Stab +")
+        interfaces += UserInterface.EquipmentInventory
+    }
+
+    onClose {
+        interfaces.closeInventory()
+    }
+}

@@ -47,3 +47,9 @@ dependencyResolutionManagement {
         }
     }
 }
+include("cache")
+include("shared")
+include("game")
+include("network")
+include("plugin")
+include("application")
