@@ -34,8 +34,9 @@ val cacheModule = module(createdAtStart = true) {
     single { InterfaceEntryTypeProvider() }
     single { EnumEntryTypeProvider() }
     single {
-        val objs = ObjEntryTypeProvider()
-        objs.entries().forEach(objs::postLoadEntryType)
+        ObjEntryTypeProvider().apply {
+            entries().forEach(::postLoadEntryType)
+        }
     }
     single { NPCEntryTypeProvider() }
     single { LocEntryTypeProvider() }
