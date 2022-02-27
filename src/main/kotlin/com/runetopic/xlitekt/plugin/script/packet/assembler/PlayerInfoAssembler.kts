@@ -30,7 +30,7 @@ onPacketAssembler<PlayerInfoPacket>(opcode = 80, size = -2) {
             lowDefinition(it, blocks, locations, true)
             lowDefinition(it, blocks, locations, false)
         }.update()
-        writePacket(blocks.build())
+        writeBytes(blocks.build().readBytes())
     }
 }
 
@@ -48,7 +48,7 @@ fun BytePacketBuilder.highDefinition(
             if (nsn == (0x1 and viewport.nsnFlags[index] != 0)) return@repeat
             val other = viewport.localPlayers[index]
             // TODO Extract this out into an enum or something instead of passing around a bunch of booleans.
-            val removing = shouldRemove(viewport, locations[other])
+            val removing = shouldRemove(locations[viewport.player], locations[other])
             val updating = updates[other] != null
             val active = removing || updating
             if (!active) {
@@ -108,7 +108,7 @@ fun BytePacketBuilder.lowDefinition(
             if (nsn == (0x1 and viewport.nsnFlags[index] == 0)) return@repeat
             val other = world.players[index]
             // TODO Extract this out into an enum or something instead of passing around a bunch of booleans.
-            val adding = shouldAdd(viewport, locations[other])
+            val adding = shouldAdd(locations[viewport.player], locations[other])
             if (!adding) {
                 viewport.nsnFlags[index] = viewport.nsnFlags[index] or 2
                 skip++
@@ -119,7 +119,7 @@ fun BytePacketBuilder.lowDefinition(
                 skip = -1
             }
             writeBit(true)
-            processLowDefinitionPlayer(adding, viewport, other!!, index, blocks)
+            processLowDefinitionPlayer(viewport, other!!, index, blocks)
         }
         if (skip > -1) {
             writeSkip(skip)
@@ -128,29 +128,26 @@ fun BytePacketBuilder.lowDefinition(
 }
 
 fun BitAccess.processLowDefinitionPlayer(
-    adding: Boolean,
     viewport: Viewport,
     other: Player,
     index: Int,
     blocks: BytePacketBuilder
 ) {
-    if (adding) {
-        // add an external player to start tracking
-        writeBits(2, 0)
-        validateCoordinates(viewport, other, index)
-        writeBits(13, other.location.x)
-        writeBits(13, other.location.z)
-        // send a force block update
-        writeBit(true)
+    // add an external player to start tracking
+    writeBits(2, 0)
+    validateCoordinates(viewport, other, index)
+    writeBits(13, other.location.x)
+    writeBits(13, other.location.z)
+    // send a force block update
+    writeBit(true)
 
-        // Send appearance.
-        val appearanceBlock = playerBlocks[Render.Appearance::class]!!
-        blocks.writeByte(appearanceBlock.mask.toByte())
-        blocks.writeBytes(appearanceBlock.build(other, other.appearance).copy().readBytes())
+    // Send appearance.
+    val appearanceBlock = playerBlocks[Render.Appearance::class]!!
+    blocks.writeByte(appearanceBlock.mask.toByte())
+    blocks.writeBytes(appearanceBlock.build(other, other.appearance).copy().readBytes())
 
-        viewport.localPlayers[other.index] = other
-        viewport.nsnFlags[index] = viewport.nsnFlags[index] or 2
-    }
+    viewport.localPlayers[other.index] = other
+    viewport.nsnFlags[index] = viewport.nsnFlags[index] or 2
 }
 
 fun BitAccess.validateCoordinates(viewport: Viewport, other: Player?, index: Int) {
@@ -223,5 +220,5 @@ fun BitAccess.writeSkip(count: Int) {
     }
 }
 
-fun shouldAdd(viewport: Viewport, other: Location?): Boolean = (other != null/* && other != viewport.player*/ && other.withinDistance(viewport.player))
-fun shouldRemove(viewport: Viewport, other: Location?): Boolean = (other == null || !other.withinDistance(viewport.player)/* || !world.players.contains(other)*/)
+fun shouldAdd(us: Location?, other: Location?): Boolean = (us != null && other != null/* && other != viewport.player*/ && other.withinDistance(us))
+fun shouldRemove(us: Location?, other: Location?): Boolean = us != null && (other == null || !other.withinDistance(us)/* || !world.players.contains(other)*/)
