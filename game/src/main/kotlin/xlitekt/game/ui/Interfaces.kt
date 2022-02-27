@@ -5,6 +5,9 @@ import xlitekt.cache.provider.config.enum.EnumEntryType
 import xlitekt.game.actor.player.Player
 import xlitekt.game.actor.player.message
 import xlitekt.game.item.Item
+import xlitekt.game.packet.IfMoveSubPacket
+import xlitekt.game.packet.IfOpenSubPacket
+import xlitekt.game.packet.IfOpenTopPacket
 import xlitekt.game.packet.UpdateContainerFullPacket
 import xlitekt.game.packet.VarpSmallPacket
 import xlitekt.game.ui.InterfaceMap.addInterfaceListener
@@ -103,7 +106,7 @@ class Interfaces(
         )
     }
 
-    private fun openTop(id: Int) = player.write(xlitekt.game.packet.IfOpenTopPacket(interfaceId = id))
+    private fun openTop(id: Int) = player.write(IfOpenTopPacket(interfaceId = id))
 
     private fun openInterface(userInterface: UserInterface) = userInterface.apply {
         add(userInterface)
@@ -124,7 +127,7 @@ class Interfaces(
         )
 
         player.write(
-            xlitekt.game.packet.IfOpenSubPacket(
+            IfOpenSubPacket(
                 interfaceId = interfaceInfo.id,
                 toPackedInterface = currentInterfaceLayout.interfaceId.packInterface(childId),
                 alwaysOpen = true
@@ -173,7 +176,7 @@ class Interfaces(
         )
 
         player.write(
-            xlitekt.game.packet.IfMoveSubPacket(
+            IfMoveSubPacket(
                 fromPackedInterface = currentInterfaceLayout.interfaceId.packInterface(fromChildId),
                 toPackedInterface = toLayout.interfaceId.packInterface(toChildId)
             )

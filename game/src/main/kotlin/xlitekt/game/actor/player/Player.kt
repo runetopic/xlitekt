@@ -5,7 +5,7 @@ import xlitekt.game.actor.Actor
 import xlitekt.game.actor.player.PlayerEncoder.encodeToJson
 import xlitekt.game.actor.player.serializer.PlayerSerializer
 import xlitekt.game.actor.render.Render
-import xlitekt.game.event.EventBus
+import xlitekt.game.packet.MessageGamePacket
 import xlitekt.game.packet.Packet
 import xlitekt.game.packet.RebuildNormalPacket
 import xlitekt.game.packet.RunClientScriptPacket
@@ -18,6 +18,7 @@ import xlitekt.game.world.World
 import xlitekt.game.world.map.location.Location
 import xlitekt.shared.inject
 import kotlin.random.Random
+import xlitekt.game.packet.LogoutPacket
 
 /**
  * @author Jordan Abraham
@@ -36,7 +37,6 @@ class Player(
     val interfaces = Interfaces(this)
     val vars = Vars(this)
 
-    private val eventBus by inject<EventBus>()
     private var client: Client? = null
 
     var online = false
@@ -68,7 +68,7 @@ class Player(
 
     fun logout() {
         if (!online) return
-        write(xlitekt.game.packet.LogoutPacket(0))
+        write(LogoutPacket(0))
         flushPool()
         online = false
         inject<World>().value.players.remove(this)
@@ -87,6 +87,6 @@ fun Player.sendVarp(id: Int, value: Int) = if (value < Byte.MIN_VALUE || value >
     write(VarpSmallPacket(id, value))
 }
 
-fun Player.message(message: String) = write(xlitekt.game.packet.MessageGamePacket(0, message, false)) // TODO build messaging system
+fun Player.message(message: String) = write(MessageGamePacket(0, message, false)) // TODO build messaging system
 fun Player.script(scriptId: Int, parameters: List<Any>) = write(RunClientScriptPacket(scriptId, parameters))
 fun Player.sendUpdateRunEnergy() = write(UpdateRunEnergyPacket(runEnergy / 100))
