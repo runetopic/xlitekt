@@ -58,5 +58,5 @@ class PlayerSynchronizer : Runnable {
         pool.shutdown()
     }
 
-    fun CountDownLatch.await(start: Long) = await(600 - TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - start), TimeUnit.MILLISECONDS)
+    private fun CountDownLatch.await(start: Long) = await(600 - TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - start), TimeUnit.MILLISECONDS)
 }

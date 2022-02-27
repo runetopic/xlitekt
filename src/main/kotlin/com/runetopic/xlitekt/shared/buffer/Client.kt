@@ -291,7 +291,7 @@ private suspend fun Client.readPackets(player: Player) = try {
         val size = readChannel.readPacketSize(sizes[opcode])
         // Take the bytes from the read channel before doing any checks.
         val packet = readChannel.readPacket(size)
-        val disassembler = PacketDisassemblerListener.listeners.entries.firstOrNull { it.value.opcode == opcode }
+        val disassembler = PacketDisassemblerListener.listeners.entries.firstOrNull { it.key == opcode }
         if (disassembler == null) {
             logger.debug { "No packet disassembler found for packet opcode $opcode." }
             continue
