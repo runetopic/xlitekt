@@ -1,10 +1,11 @@
 package xlitekt.game.vars
 
-import xlitekt.cache.entryType
 import xlitekt.cache.provider.config.varbit.VarBitEntryType
+import xlitekt.cache.provider.config.varbit.VarBitEntryTypeProvider
 import xlitekt.cache.provider.config.varbit.VarBitEntryTypeProvider.Companion.mersennePrime
 import xlitekt.game.actor.player.Player
 import xlitekt.game.actor.player.sendVarp
+import xlitekt.shared.inject
 
 /**
  * @author Tyler Telis
@@ -27,7 +28,7 @@ class Vars(
             value
         }
         VarType.VAR_BIT -> {
-            entryType<VarBitEntryType>(key.info.id)?.run {
+            varbits.entryType(key.info.id)?.run {
                 val parentValue = toVarpParent(this, value)
                 vars[index] = parentValue
                 player.sendVarp(index, parentValue)
@@ -38,7 +39,7 @@ class Vars(
 
     operator fun get(key: Var): Int = when (key.varType) {
         VarType.VAR_PLAYER -> vars[key.info.id] ?: -1
-        VarType.VAR_BIT -> entryType<VarBitEntryType>(key.info.id)?.let(::fromVarpParent) ?: -1
+        VarType.VAR_BIT -> varbits.entryType(key.info.id)?.let(::fromVarpParent) ?: -1
     }
 
     fun flip(key: Var) = if (get(key) == 0) set(key, 1) else set(key, 0)
@@ -51,5 +52,9 @@ class Vars(
     private fun toVarpParent(entryType: VarBitEntryType, value: Int): Int {
         val prime = mersennePrime[entryType.mostSignificantBit - entryType.leastSignificantBit] shl entryType.leastSignificantBit
         return (vars[entryType.index] ?: 0) and prime.inv() or (if (value < 0 || value > prime) 0 else value) shl entryType.leastSignificantBit and prime
+    }
+
+    private companion object {
+        val varbits by inject<VarBitEntryTypeProvider>()
     }
 }

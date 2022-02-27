@@ -1,7 +1,6 @@
 package xlitekt.game.ui
 
-import xlitekt.cache.entryType
-import xlitekt.cache.provider.config.enum.EnumEntryType
+import xlitekt.cache.provider.config.enum.EnumEntryTypeProvider
 import xlitekt.game.actor.player.Player
 import xlitekt.game.actor.player.message
 import xlitekt.game.item.Item
@@ -11,6 +10,7 @@ import xlitekt.game.packet.IfOpenTopPacket
 import xlitekt.game.packet.UpdateContainerFullPacket
 import xlitekt.game.packet.VarpSmallPacket
 import xlitekt.game.ui.InterfaceMap.addInterfaceListener
+import xlitekt.shared.inject
 import xlitekt.shared.packInterface
 
 /**
@@ -190,7 +190,7 @@ class Interfaces(
     }
 
     private fun Int.enumChildForLayout(layout: InterfaceLayout): Int =
-        entryType<EnumEntryType>(layout.enumId)
+        enums.entryType(layout.enumId)
             ?.params
             ?.entries
             ?.find { it.key == InterfaceLayout.RESIZABLE.interfaceId.packInterface(this) }
@@ -220,5 +220,7 @@ class Interfaces(
         const val MODAL_CHILD_ID = 16
         const val MODAL_CHILD_ID_EXTENDED = 17
         const val INVENTORY_CHILD_ID = 73
+
+        val enums by inject<EnumEntryTypeProvider>()
     }
 }

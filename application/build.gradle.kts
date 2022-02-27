@@ -13,4 +13,5 @@ dependencies {
     implementation(project(":game"))
     implementation(project(":network"))
     implementation(project(":plugin"))
+    implementation(project(":shared"))
 }

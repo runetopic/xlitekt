@@ -15,7 +15,7 @@ abstract class EntryTypeProvider<R : EntryType> {
 
     abstract fun load(): Map<Int, R>
     abstract fun ByteReadPacket.loadEntryType(type: R): R
-    open fun R.postLoadEntryType() {}
+    open fun postLoadEntryType(type: R) {}
 
     fun size() = entries.size
     fun entryType(id: Int): R? = entries[id]

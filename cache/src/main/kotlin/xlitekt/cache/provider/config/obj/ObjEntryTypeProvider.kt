@@ -84,25 +84,25 @@ class ObjEntryTypeProvider : EntryTypeProvider<ObjEntryType>() {
         return loadEntryType(type)
     }
 
-    override fun ObjEntryType.postLoadEntryType() {
-        if (noteTemplate != -1) {
-            entries[noteTemplate]?.let { noteTemplate ->
-                entries[note]?.let { note ->
-                    toNote(noteTemplate, note)
+    override fun postLoadEntryType(type: ObjEntryType) {
+        if (type.noteTemplate != -1) {
+            entries[type.noteTemplate]?.let { noteTemplate ->
+                entries[type.note]?.let { note ->
+                    type.toNote(noteTemplate, note)
                 }
             }
         }
-        if (notedId != -1) {
-            entries[notedId]?.let { noted ->
-                entries[unnotedId]?.let { unnoted ->
-                    toUnnoted(noted, unnoted)
+        if (type.notedId != -1) {
+            entries[type.notedId]?.let { noted ->
+                entries[type.unnotedId]?.let { unnoted ->
+                    type.toUnnoted(noted, unnoted)
                 }
             }
         }
-        if (placeholderTemplate != -1) {
-            entries[placeholderTemplate]?.let { placeholderTemplate ->
-                entries[placeholder]?.let { placeholder ->
-                    toPlaceholder(placeholderTemplate, placeholder)
+        if (type.placeholderTemplate != -1) {
+            entries[type.placeholderTemplate]?.let { placeholderTemplate ->
+                entries[type.placeholder]?.let { placeholder ->
+                    type.toPlaceholder(placeholderTemplate, placeholder)
                 }
             }
         }

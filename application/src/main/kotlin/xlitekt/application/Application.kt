@@ -14,6 +14,7 @@ import xlitekt.game.Game
 import xlitekt.game.gameModule
 import xlitekt.network.Network
 import xlitekt.network.networkModule
+import xlitekt.shared.sharedModule
 import java.util.TimeZone
 import kotlin.script.templates.standard.ScriptTemplateWithArgs
 import kotlin.system.measureTimeMillis
@@ -36,19 +37,19 @@ fun Application.module() {
     }
     logger.info {
         "\n" +
-            "                                                                                                           \n" +
-            "                 .---.                                                  .-''-.                             \n" +
-            "                 |   |.--.               __.....__                    .' .-.  )                            \n" +
-            "                 |   ||__|           .-''         '.                 / .'  / /                             \n" +
-            "                 |   |.--.     .|   /     .-''\"'-.  `.              (_/   / /               .-''` ''-.     \n" +
-            "   ____     _____|   ||  |   .' |_ /     /________\\   \\                  / /              .'          '.   \n" +
-            "  `.   \\  .'    /|   ||  | .'     ||                  |                 / /              /              `  \n" +
-            "    `.  `'    .' |   ||  |'--.  .-'\\    .-------------'                . '              '                ' \n" +
-            "      '.    .'   |   ||  |   |  |   \\    '-.____...---.               / /    _.-'),.--. |         .-.    | \n" +
-            "      .'     `.  |   ||__|   |  |    `.             .'              .' '  _.'.-''//    \\.        |   |   . \n" +
-            "    .'  .'`.   `.'---'       |  '.'    `''-...... -'               /  /.-'_.'    \\\\    / .       '._.'  /  \n" +
-            "  .'   /    `.   `.          |   /                                /    _.'        `'--'   '._         .'   \n" +
-            " '----'       '----'         `'-'                                ( _.-'                      '-....-'`     \n"
+            "                                                                             \n" +
+            "                 .---.                                                       \n" +
+            "                 |   |.--.               __.....__          .                \n" +
+            "                 |   ||__|           .-''         '.      .'|                \n" +
+            "                 |   |.--.     .|   /     .-''\"'-.  `.  .'  |           .|   \n" +
+            "   ____     _____|   ||  |   .' |_ /     /________\\   \\<    |         .' |_  \n" +
+            "  `.   \\  .'    /|   ||  | .'     ||                  | |   | ____  .'     | \n" +
+            "    `.  `'    .' |   ||  |'--.  .-'\\    .-------------' |   | \\ .' '--.  .-' \n" +
+            "      '.    .'   |   ||  |   |  |   \\    '-.____...---. |   |/  .     |  |   \n" +
+            "      .'     `.  |   ||__|   |  |    `.             .'  |    \\  \\    |  |   \n" +
+            "    .'  .'`.   `.'---'       |  '.'    `''-...... -'    |   |  \\  \\   |  '.' \n" +
+            "  .'   /    `.   `.          |   /                      '    \\  \\  \\  |   /  \n" +
+            " '----'       '----'         `'-'                      '------'  '---'`'-'   \n"
     }
     logger.debug { "XliteKt launched in $time ms." }
     get<Network>().awaitOnPort(environment.config.property("ktor.deployment.port").getString().toInt())
@@ -58,8 +59,9 @@ fun Application.installKoin() {
     modules(
         module { single { this@installKoin.environment } },
         cacheModule,
-        networkModule,
         gameModule,
+        networkModule,
+        sharedModule
     )
     log.debug("Installed koin modules.")
 }

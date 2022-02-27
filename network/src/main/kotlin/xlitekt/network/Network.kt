@@ -5,19 +5,14 @@ import io.ktor.network.selector.ActorSelectorManager
 import io.ktor.network.sockets.aSocket
 import io.ktor.network.sockets.openReadChannel
 import io.ktor.network.sockets.openWriteChannel
+import java.net.InetSocketAddress
+import java.util.concurrent.Executors
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.asCoroutineDispatcher
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-import org.koin.dsl.module
 import xlitekt.game.actor.player.Client
 import xlitekt.network.client.readHandshake
-import java.net.InetSocketAddress
-import java.util.concurrent.Executors
-
-val networkModule = module(createdAtStart = true) {
-    single { Network() }
-}
 
 /**
  * @author Jordan Abraham
@@ -29,7 +24,7 @@ class Network {
 
     fun awaitOnPort(port: Int) = runBlocking {
         val server = aSocket(selector).tcp().bind(InetSocketAddress(port))
-        logger.info { "Network is now accepting connections." }
+        logger.info { "Now accepting connections." }
 
         while (true) {
             val socket = server.accept()
