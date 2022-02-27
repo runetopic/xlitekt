@@ -7,7 +7,6 @@ import io.ktor.utils.io.core.ByteReadPacket
  * @author Jordan Abraham
  */
 data class PacketDisassembler(
-    val opcode: Int,
     val size: Int,
     val packet: ByteReadPacket.() -> Packet
 )

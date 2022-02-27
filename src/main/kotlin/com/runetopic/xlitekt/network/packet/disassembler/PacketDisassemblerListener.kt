@@ -11,5 +11,5 @@ object PacketDisassemblerListener {
 }
 
 inline fun <reified T : Packet> onPacketDisassembler(opcode: Int, size: Int, noinline packet: ByteReadPacket.() -> T) {
-    PacketDisassemblerListener.listeners[opcode] = PacketDisassembler(opcode, size, packet)
+    PacketDisassemblerListener.listeners[opcode] = PacketDisassembler(size, packet)
 }
