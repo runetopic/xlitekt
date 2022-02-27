@@ -2,9 +2,9 @@ package com.runetopic.xlitekt.game.actor.render
 
 import com.runetopic.xlitekt.game.actor.Actor
 import com.runetopic.xlitekt.game.actor.player.serializer.AppearanceSerializer
+import com.runetopic.xlitekt.game.actor.render.block.player.kit.BodyPart
+import com.runetopic.xlitekt.game.actor.render.block.player.kit.BodyPartColor
 import com.runetopic.xlitekt.game.world.map.location.Location
-import com.runetopic.xlitekt.network.packet.assembler.block.player.kit.BodyPart
-import com.runetopic.xlitekt.network.packet.assembler.block.player.kit.BodyPartColor
 import kotlinx.serialization.Serializable
 import java.util.EnumMap
 

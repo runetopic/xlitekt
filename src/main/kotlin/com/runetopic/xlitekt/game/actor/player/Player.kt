@@ -72,6 +72,7 @@ class Player(
     }
 
     fun logout() {
+        if (!online) return
         write(LogoutPacket(0))
         flushPool()
         online = false

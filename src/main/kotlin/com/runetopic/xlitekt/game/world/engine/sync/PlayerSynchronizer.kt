@@ -2,10 +2,10 @@ package com.runetopic.xlitekt.game.world.engine.sync
 
 import com.github.michaelbull.logging.InlineLogger
 import com.runetopic.xlitekt.game.actor.player.Player
+import com.runetopic.xlitekt.game.actor.render.block.buildPlayerUpdateBlocks
 import com.runetopic.xlitekt.game.world.World
 import com.runetopic.xlitekt.network.packet.NPCInfoPacket
 import com.runetopic.xlitekt.network.packet.PlayerInfoPacket
-import com.runetopic.xlitekt.network.packet.assembler.PlayerInfoPacketAssembler.Companion.pendingUpdatesBlocks
 import com.runetopic.xlitekt.plugin.koin.inject
 import io.ktor.utils.io.core.ByteReadPacket
 import kotlinx.coroutines.Runnable
@@ -31,7 +31,7 @@ class PlayerSynchronizer : Runnable {
             val updateLatch = CountDownLatch(players.size)
             players.forEach {
                 pool.execute {
-                    pending[it]?.pendingUpdatesBlocks(it)?.run {
+                    pending[it]?.buildPlayerUpdateBlocks(it)?.run {
                         updates[it] = this
                     }
                     updateLatch.countDown()
@@ -42,8 +42,9 @@ class PlayerSynchronizer : Runnable {
             val syncLatch = CountDownLatch(players.size)
             players.forEach {
                 pool.execute {
-                    it.write(PlayerInfoPacket(it, updates, locations))
-                    it.write(NPCInfoPacket(it))
+                    val viewport = it.viewport
+                    it.write(PlayerInfoPacket(viewport, updates, locations))
+                    it.write(NPCInfoPacket(viewport))
                     it.flushPool()
                     syncLatch.countDown()
                 }

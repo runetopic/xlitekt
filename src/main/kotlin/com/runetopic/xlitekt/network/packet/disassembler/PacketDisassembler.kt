@@ -6,6 +6,8 @@ import io.ktor.utils.io.core.ByteReadPacket
 /**
  * @author Jordan Abraham
  */
-abstract class PacketDisassembler<out P : Packet>(val opcode: Int, val size: Int) {
-    abstract fun disassemblePacket(packet: ByteReadPacket): @UnsafeVariance P
-}
+data class PacketDisassembler(
+    val opcode: Int,
+    val size: Int,
+    val packet: ByteReadPacket.() -> Packet
+)

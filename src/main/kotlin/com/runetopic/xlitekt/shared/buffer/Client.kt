@@ -7,7 +7,6 @@ import com.runetopic.xlitekt.game.actor.player.PlayerDecoder
 import com.runetopic.xlitekt.game.ui.InterfaceLayout
 import com.runetopic.xlitekt.network.client.Client
 import com.runetopic.xlitekt.network.client.Client.Companion.checksums
-import com.runetopic.xlitekt.network.client.Client.Companion.disassemblers
 import com.runetopic.xlitekt.network.client.Client.Companion.majorBuild
 import com.runetopic.xlitekt.network.client.Client.Companion.minorBuild
 import com.runetopic.xlitekt.network.client.Client.Companion.rsaExponent
@@ -28,8 +27,10 @@ import com.runetopic.xlitekt.network.client.ClientResponseOpcode.CLIENT_OUTDATED
 import com.runetopic.xlitekt.network.client.ClientResponseOpcode.HANDSHAKE_SUCCESS_OPCODE
 import com.runetopic.xlitekt.network.client.ClientResponseOpcode.LOGIN_SUCCESS_OPCODE
 import com.runetopic.xlitekt.network.packet.Packet
-import com.runetopic.xlitekt.network.packet.disassembler.handler.PacketHandlerEvent
-import com.runetopic.xlitekt.network.packet.disassembler.handler.PacketHandlerMapping
+import com.runetopic.xlitekt.network.packet.assembler.PacketAssemblerListener
+import com.runetopic.xlitekt.network.packet.disassembler.PacketDisassemblerListener
+import com.runetopic.xlitekt.network.packet.disassembler.handler.PacketHandler
+import com.runetopic.xlitekt.network.packet.disassembler.handler.PacketHandlerListener
 import com.runetopic.xlitekt.shared.toBoolean
 import io.ktor.utils.io.core.ByteReadPacket
 import io.ktor.utils.io.core.readInt
@@ -290,31 +291,35 @@ private suspend fun Client.readPackets(player: Player) = try {
         val size = readChannel.readPacketSize(sizes[opcode])
         // Take the bytes from the read channel before doing any checks.
         val packet = readChannel.readPacket(size)
-        val disassembler = disassemblers.firstOrNull { it.opcode == opcode }
+        val disassembler = PacketDisassemblerListener.listeners.entries.firstOrNull { it.value.opcode == opcode }
         if (disassembler == null) {
             logger.debug { "No packet disassembler found for packet opcode $opcode." }
             continue
         }
-        if (disassembler.size != -1 && disassembler.size != size) {
-            logger.debug { "Packet disassembler size is not equal to the packet array size. Disassembler size was ${disassembler.size} and found size was $size." }
+        if (disassembler.value.size != -1 && disassembler.value.size != size) {
+            logger.debug { "Packet disassembler size is not equal to the packet array size. Disassembler size was ${disassembler.value.size} and found size was $size." }
             continue
         }
-        val disassembled = disassembler.disassemblePacket(packet)
-        val listener = PacketHandlerMapping.map[disassembled::class]
-        if (listener == null) {
-            logger.debug { "No packet listener found for disassembled packet. Opcode was $opcode." }
+        val disassembled = PacketDisassemblerListener.listeners[disassembler.key]?.packet?.invoke(packet)
+        if (disassembled == null) {
+            logger.debug { "Disassembled packet returned null. Opcode was $opcode." }
             continue
         }
-        listener.invoke(PacketHandlerEvent(player, disassembled))
+        val handler = PacketHandlerListener.listeners[disassembled::class]
+        if (handler == null) {
+            logger.debug { "No packet handler found for disassembled packet. Opcode was $opcode." }
+            continue
+        }
+        handler.invoke(PacketHandler(player, disassembled))
     }
 } catch (exception: Exception) {
     handleException(exception)
 }
 
 fun Client.writePacket(packet: Packet) {
-    val assembler = Client.assemblers[packet::class] ?: return disconnect("Unhandled packet found when trying to write. Packet was $packet.")
+    val assembler = PacketAssemblerListener.listeners[packet::class] ?: return disconnect("Unhandled packet found when trying to write. Packet was $packet.")
     runBlocking {
-        poolToWriteChannel(assembler.opcode, assembler.size, assembler.assemblePacket(packet))
+        poolToWriteChannel(assembler.opcode, assembler.size, assembler.packet.invoke(packet))
     }
 }
 

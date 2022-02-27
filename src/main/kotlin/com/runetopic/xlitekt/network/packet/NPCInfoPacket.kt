@@ -1,10 +1,10 @@
 package com.runetopic.xlitekt.network.packet
 
-import com.runetopic.xlitekt.game.actor.player.Player
+import com.runetopic.xlitekt.game.actor.player.Viewport
 
 /**
- * @author Tyler Telis
+ * @author Jordan Abraham
  */
-open class NPCInfoPacket(
-    open val player: Player
+data class NPCInfoPacket(
+    val viewport: Viewport
 ) : Packet

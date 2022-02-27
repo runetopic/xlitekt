@@ -2,8 +2,8 @@ package com.runetopic.xlitekt.game.actor.player.serializer
 
 import com.runetopic.xlitekt.game.actor.render.Render
 import com.runetopic.xlitekt.game.actor.render.Render.Appearance.Gender
-import com.runetopic.xlitekt.network.packet.assembler.block.player.kit.BodyPart
-import com.runetopic.xlitekt.network.packet.assembler.block.player.kit.BodyPartColor
+import com.runetopic.xlitekt.game.actor.render.block.player.kit.BodyPart
+import com.runetopic.xlitekt.game.actor.render.block.player.kit.BodyPartColor
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.builtins.MapSerializer
 import kotlinx.serialization.builtins.serializer
