@@ -19,6 +19,7 @@ import xlitekt.cache.provider.ui.InterfaceEntryTypeProvider
 import java.nio.file.Path
 import xlitekt.cache.provider.config.inv.InvEntryTypeProvider
 import xlitekt.cache.provider.config.kit.KitEntryTypeProvider
+import xlitekt.cache.provider.config.spotanimation.SpotAnimationEntryTypeProvider
 import xlitekt.cache.provider.config.struct.StructEntryTypeProvider
 
 /**
@@ -51,4 +52,5 @@ val cacheModule = module(createdAtStart = true) {
     single { StructEntryTypeProvider() }
     single { KitEntryTypeProvider() }
     single { InvEntryTypeProvider() }
+    single { SpotAnimationEntryTypeProvider() }
 }
