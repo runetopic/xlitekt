@@ -5,14 +5,14 @@ import io.ktor.network.selector.ActorSelectorManager
 import io.ktor.network.sockets.aSocket
 import io.ktor.network.sockets.openReadChannel
 import io.ktor.network.sockets.openWriteChannel
-import java.net.InetSocketAddress
-import java.util.concurrent.Executors
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.asCoroutineDispatcher
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import xlitekt.game.actor.player.Client
 import xlitekt.network.client.readHandshake
+import java.net.InetSocketAddress
+import java.util.concurrent.Executors
 
 /**
  * @author Jordan Abraham

@@ -3,8 +3,8 @@ package xlitekt.cache.provider.config.spotanimation
 import io.ktor.utils.io.core.ByteReadPacket
 import io.ktor.utils.io.core.readUByte
 import io.ktor.utils.io.core.readUShort
-import java.lang.IllegalArgumentException
 import xlitekt.cache.provider.EntryTypeProvider
+import java.lang.IllegalArgumentException
 
 /**
  * @author Jordan Abraham

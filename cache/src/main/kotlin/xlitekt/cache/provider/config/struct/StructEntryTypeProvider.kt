@@ -2,8 +2,8 @@ package xlitekt.cache.provider.config.struct
 
 import io.ktor.utils.io.core.ByteReadPacket
 import io.ktor.utils.io.core.readUByte
-import java.lang.IllegalArgumentException
 import xlitekt.cache.provider.EntryTypeProvider
+import java.lang.IllegalArgumentException
 
 /**
  * @author Jordan Abraham

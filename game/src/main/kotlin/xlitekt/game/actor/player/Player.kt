@@ -5,6 +5,7 @@ import xlitekt.game.actor.Actor
 import xlitekt.game.actor.player.PlayerEncoder.encodeToJson
 import xlitekt.game.actor.player.serializer.PlayerSerializer
 import xlitekt.game.actor.render.Render
+import xlitekt.game.packet.LogoutPacket
 import xlitekt.game.packet.MessageGamePacket
 import xlitekt.game.packet.Packet
 import xlitekt.game.packet.RebuildNormalPacket
@@ -18,7 +19,6 @@ import xlitekt.game.world.World
 import xlitekt.game.world.map.location.Location
 import xlitekt.shared.inject
 import kotlin.random.Random
-import xlitekt.game.packet.LogoutPacket
 
 /**
  * @author Jordan Abraham
