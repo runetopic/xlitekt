@@ -21,6 +21,7 @@ import xlitekt.cache.provider.config.inv.InvEntryTypeProvider
 import xlitekt.cache.provider.config.kit.KitEntryTypeProvider
 import xlitekt.cache.provider.config.spotanimation.SpotAnimationEntryTypeProvider
 import xlitekt.cache.provider.config.struct.StructEntryTypeProvider
+import xlitekt.cache.provider.config.varp.VarpEntryTypeProvider
 
 /**
  * @author Jordan Abraham
@@ -53,4 +54,5 @@ val cacheModule = module(createdAtStart = true) {
     single { KitEntryTypeProvider() }
     single { InvEntryTypeProvider() }
     single { SpotAnimationEntryTypeProvider() }
+    single { VarpEntryTypeProvider() }
 }
