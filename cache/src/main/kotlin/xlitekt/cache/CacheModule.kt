@@ -17,6 +17,7 @@ import xlitekt.cache.provider.config.varbit.VarBitEntryTypeProvider
 import xlitekt.cache.provider.map.MapEntryTypeProvider
 import xlitekt.cache.provider.ui.InterfaceEntryTypeProvider
 import java.nio.file.Path
+import xlitekt.cache.provider.config.kit.KitEntryTypeProvider
 import xlitekt.cache.provider.config.struct.StructEntryTypeProvider
 
 /**
@@ -47,4 +48,5 @@ val cacheModule = module(createdAtStart = true) {
     single { ParamEntryTypeProvider() }
     single { HitBarEntryTypeProvider() }
     single { StructEntryTypeProvider() }
+    single { KitEntryTypeProvider() }
 }
