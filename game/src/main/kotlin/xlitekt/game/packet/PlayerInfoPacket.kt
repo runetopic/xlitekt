@@ -12,5 +12,6 @@ import xlitekt.game.world.map.location.Location
 data class PlayerInfoPacket(
     val viewport: Viewport,
     val updates: Map<Player, ByteReadPacket>,
-    val locations: Map<Player, Location>
+    val locations: Map<Player, Location>,
+    val movements: MutableMap<Player, Boolean>
 ) : Packet

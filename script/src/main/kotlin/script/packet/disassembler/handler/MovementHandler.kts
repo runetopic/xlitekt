@@ -14,14 +14,15 @@ import xlitekt.game.pathfinder.DEFAULT_OBJ_ROT
 import xlitekt.game.pathfinder.DEFAULT_OBJ_SHAPE
 import xlitekt.game.pathfinder.DEFAULT_SRC_SIZE
 import xlitekt.game.pathfinder.pathFinder
+import xlitekt.game.world.map.location.Location
 
 
 onPacketHandler<MovementPacket> {
     val path = pathFinder.findPath(
         srcX = player.location.x,
         srcY = player.location.z,
-        destX = this.packet.destinationX,
-        destY = this.packet.destinationZ,
+        destX = packet.destinationX,
+        destY = packet.destinationZ,
         z = player.location.level,
         srcSize = DEFAULT_SRC_SIZE,
         destWidth = DEFAULT_DEST_WIDTH,
@@ -35,5 +36,9 @@ onPacketHandler<MovementPacket> {
         reachStrategy = DefaultReachStrategy
     )
 
+// idk something like that but i really have no clue how his pfing shit works
+    player.movement.reset()
+    println(path.coords)
+    player.movement.addAll(path.coords.map { Location(it.x, it.y) })
     player.message("Coords $path")
 }

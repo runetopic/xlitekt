@@ -28,17 +28,20 @@ class PlayerSynchronizer : Runnable {
         val players = world.players.filterNotNull().filter(Player::online)
 
         if (tick % 4 == 0) {
-            players.forEach { it.animate(411) }
+            // players.forEach { it.animate(411) }
         }
 
         val pending = players.associateWith { it.pendingUpdates().toList() }
         val updates = mutableMapOf<Player, ByteReadPacket>()
+        val movements = mutableMapOf<Player, Boolean>()
         val updateLatch = CountDownLatch(players.size)
         players.forEach {
             pool.execute {
                 pending[it]?.buildPlayerUpdateBlocks(it)?.run {
                     updates[it] = this
                 }
+                it.movement.process()
+                movements[it] = it.movement.currentWalkStep != null
                 updateLatch.countDown()
             }
         }
@@ -48,7 +51,7 @@ class PlayerSynchronizer : Runnable {
         players.forEach {
             pool.execute {
                 val viewport = it.viewport
-                it.write(PlayerInfoPacket(viewport, updates, locations))
+                it.write(PlayerInfoPacket(viewport, updates, locations, movements))
                 it.write(NPCInfoPacket(viewport))
                 it.flushPool()
                 syncLatch.countDown()

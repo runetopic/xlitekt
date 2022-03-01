@@ -54,6 +54,7 @@ class Player(
         sendUpdateRunEnergy()
         // Set the player online here, so they start processing by the main game loop.
         online = true
+
         // eventBus.notify(Events.OnLoginEvent(this))
 
         if (username == "jordan") {

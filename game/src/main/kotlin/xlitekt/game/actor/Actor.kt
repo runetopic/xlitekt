@@ -1,5 +1,6 @@
 package xlitekt.game.actor
 
+import xlitekt.game.actor.movement.Direction
 import xlitekt.game.actor.movement.Movement
 import xlitekt.game.actor.movement.MovementSpeed
 import xlitekt.game.actor.render.ActorRenderer
@@ -15,15 +16,15 @@ abstract class Actor(
 
     var previousLocation: Location? = null
     var index = 0
-    var nextTick = false
 
     var movementSpeed = MovementSpeed.WALK
+    var movementDirection: Direction = Direction.South
 
     // TODO maybe move the combat stuff out somewhere else
     val nextHits = mutableListOf<Render.HitDamage>()
     val nextHitBars = mutableListOf<HitBarType>()
 
-    val movement get() = Movement(this)
+    val movement by lazy { Movement(this) }
 
     abstract fun totalHitpoints(): Int
     abstract fun currentHitpoints(): Int
