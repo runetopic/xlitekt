@@ -11,8 +11,19 @@ data class MapSquareEntryType(
     override val id: Int,
     val regionX: Int,
     val regionZ: Int,
-    var collision: Array<Array<ByteArray>> = Array(LEVELS) { Array(MAP_SIZE) { ByteArray(MAP_SIZE) } }
+    var collision: Array<Array<ByteArray>> = Array(LEVELS) { Array(MAP_SIZE) { ByteArray(MAP_SIZE) } },
+    val locations: Array<Array<Array<MapSquareLocation?>>> = Array(LEVELS) { Array(MAP_SIZE) { Array(MAP_SIZE) { null } } }
 ) : EntryType(id) {
+
+    data class MapSquareLocation(
+        val id: Int,
+        val x: Int,
+        val z: Int,
+        val level: Int,
+        val shape: Int,
+        val rotation: Int
+    )
+
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
@@ -23,6 +34,7 @@ data class MapSquareEntryType(
         if (regionX != other.regionX) return false
         if (regionZ != other.regionZ) return false
         if (!collision.contentDeepEquals(other.collision)) return false
+        if (!locations.contentDeepEquals(other.locations)) return false
 
         return true
     }

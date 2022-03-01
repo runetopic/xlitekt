@@ -32,13 +32,13 @@ class MapEntryTypeProvider : EntryTypeProvider<MapSquareEntryType>() {
         val index = store.index(MAP_INDEX)
 
         val time = measureTime {
-            repeat(VALID_X) { x ->
-                repeat(VALID_Z) { z ->
-                    val regionId = (x shl 8) or z
+            repeat(VALID_X) { regionX ->
+                repeat(VALID_Z) { regionZ ->
+                    val regionId = (regionX shl 8) or regionZ
 
                     pool.execute {
-                        val mapData = index.group("m${x}_$z").data
-                        val locData = index.group("l${x}_$z").data
+                        val mapData = index.group("m${regionX}_$regionZ").data
+                        val locData = index.group("l${regionX}_$regionZ").data
 
                         if (mapData.isEmpty() || locData.isEmpty()) {
                             latch.countDown()
@@ -52,7 +52,7 @@ class MapEntryTypeProvider : EntryTypeProvider<MapSquareEntryType>() {
                         }
 
                         try {
-                            val mapSquare = ByteReadPacket(mapData.decompress()).loadEntryType(MapSquareEntryType(regionId, x, z))
+                            val mapSquare = ByteReadPacket(mapData.decompress()).loadEntryType(MapSquareEntryType(regionId, regionX, regionZ))
                             ByteReadPacket(locData.decompress(xteas)).loadMapEntryLocations(mapSquare)
                             mapSquares[regionId] = mapSquare
                         } catch (exception: Exception) {
@@ -80,30 +80,7 @@ class MapEntryTypeProvider : EntryTypeProvider<MapSquareEntryType>() {
             }
         }
 
-        applyCollisionMap(type)
         return type
-    }
-
-    private fun applyCollisionMap(type: MapSquareEntryType) {
-        repeat(LEVELS) { level ->
-            repeat(MAP_SIZE) { x ->
-                repeat(MAP_SIZE) { z ->
-                    run {
-                        if ((type.collision[level][x][z] and BLOCKED_TILE_BIT) != BLOCKED_TILE_BIT) return@run
-
-                        val actualLevel = if ((type.collision[1][x][z] and BRIDGE_TILE_BIT) == BRIDGE_TILE_BIT) level - 1 else level
-
-                        if (actualLevel < 0) return@run
-
-                        val baseX = type.regionX shl 6
-                        val baseZ = type.regionZ shl 6
-//                        val location = Location(baseX + x, baseZ + z, actualLevel)
-//                        // TODO build zones and set collision there using this location
-//                        ZoneFlags.add(location.x, location.z, level, FLOOR)
-                    }
-                }
-            }
-        }
     }
 
     private tailrec fun ByteReadPacket.decodeCollision(
@@ -156,14 +133,14 @@ class MapEntryTypeProvider : EntryTypeProvider<MapSquareEntryType>() {
 
                 if (level < 0) return
 
-                val baseX = type.regionX shl 6
-                val baseZ = type.regionZ shl 6
-//                val location = Location(baseX + localX, baseZ + localZ, level)
-//                val entry = entryType(objectId) ?: return logger.debug { "LocEntryType was not found. Ignoring objectId=$objectId" }
-//                val gameObject = GameObject(entry, location, shape, rotation)
-//                CollisionMap.addObjectCollision(gameObject)
-
-                // TODO actually spawn the object in a list for operations
+                type.locations[level][localX][localZ] = MapSquareEntryType.MapSquareLocation(
+                    id = objectId,
+                    x = localX,
+                    z = localZ,
+                    level = level,
+                    shape = shape,
+                    rotation = rotation
+                )
             }
         }
     }
