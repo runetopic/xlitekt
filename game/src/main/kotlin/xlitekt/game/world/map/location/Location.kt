@@ -41,38 +41,17 @@ value class Location(val packedCoordinates: Int) : Comparable<Location> {
     override fun compareTo(other: Location): Int = if (x != other.x || z != other.z) 0 else 1
 }
 
-
 fun Location.direction(end: Location): Direction {
     val diffX = end.x - x
     val diffY = end.z - z
     return when {
-//        deltaX == -1 && deltaY == -1 -> Direction.SouthWest
-//        deltaX == 1 && deltaY == -1 -> Direction.NorthWest
-//        deltaX == -1 && deltaY == 1 -> Direction.SouthEast
-//        deltaX == 1 && deltaY == 1 -> Direction.NorthEast
-//        deltaY == -1 -> Direction.West
-//        deltaX == -1 -> Direction.South
-//        deltaX == 1 -> Direction.North
-//        else -> Direction.East // y == 1
-
-//        diffX > 0 && diffY > 0 -> Direction.NorthEast
-//        diffX > 0 && diffY == 0 -> Direction.East
-//        diffX > 0 && diffY < 0 -> Direction.SouthEast
-//        diffX < 0 && diffY > 0 -> Direction.NorthWest
-//        diffX < 0 && diffY == 0 -> Direction.West
-//        diffX < 0 && diffY < 0 -> Direction.SouthWest
-//        diffX == 0 && diffY > 0 -> Direction.North
-//        else -> Direction.South
-
-        // north/south = x ++ / x --
-        // west/east = y -- / y ++
         diffX > 0 && diffY > 0 -> Direction.NorthEast
-        diffX > 0 && diffY < 0 -> Direction.NorthWest
-        diffX < 0 && diffY > 0 -> Direction.SouthEast
+        diffX > 0 && diffY == 0 -> Direction.East
+        diffX > 0 && diffY < 0 -> Direction.SouthEast
+        diffX < 0 && diffY > 0 -> Direction.NorthWest
+        diffX < 0 && diffY == 0 -> Direction.West
         diffX < 0 && diffY < 0 -> Direction.SouthWest
-        diffY > 0 -> Direction.East
-        diffY < 0 -> Direction.West
-        diffX > 0 -> Direction.North
+        diffX == 0 && diffY > 0 -> Direction.North
         else -> Direction.South
     }
 }

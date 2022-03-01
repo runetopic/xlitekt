@@ -36,9 +36,8 @@ onPacketHandler<MovementPacket> {
         reachStrategy = DefaultReachStrategy
     )
 
-// idk something like that but i really have no clue how his pfing shit works
     player.movement.reset()
     println(path.coords)
-    player.movement.addAll(path.coords.map { Location(it.x, it.y) })
+    player.movement.addAll(path.coords.map { Location(it.x, it.y, player.location.level) })
     player.message("Coords $path")
 }

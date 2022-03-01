@@ -307,7 +307,7 @@ object CollisionMap {
             GameObjectShape.UNFINISHED_WALL -> {
                 when (rotation) {
                     0 -> {
-                        addCollisionFlag(location, WALL_WEST or WALL_NORTH, add)
+                        addCollisionFlag(location, WALL_NORTH  or WALL_WEST, add)
                         addCollisionFlag(location.transform(-1, 0), WALL_EAST, add)
                         addCollisionFlag(location.transform(0, 1), WALL_SOUTH, add)
                     }
@@ -317,7 +317,7 @@ object CollisionMap {
                         addCollisionFlag(location.transform(1, 0), WALL_WEST, add)
                     }
                     2 -> {
-                        addCollisionFlag(location, WALL_EAST or WALL_SOUTH, add)
+                        addCollisionFlag(location, WALL_SOUTH or WALL_EAST, add)
                         addCollisionFlag(location.transform(1, 0), WALL_WEST, add)
                         addCollisionFlag(location.transform(0, -1), WALL_NORTH, add)
                     }

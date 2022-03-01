@@ -72,33 +72,23 @@ class MapEntryTypeProvider : EntryTypeProvider<MapSquareEntryType>() {
     }
 
     override fun ByteReadPacket.loadEntryType(type: MapSquareEntryType): MapSquareEntryType {
-        repeat(LEVELS) { level ->
-            repeat(MAP_SIZE) { x ->
-                repeat(MAP_SIZE) { z ->
-                    decodeCollision(type, level, x, z)
+        for (level in 0 until 4) {
+            for (x in 0 until 64) {
+                for (z in 0 until 64) {
+                    while (true) {
+                        when (val opcode = readUByte().toInt()) {
+                            0 -> break
+                            1 -> { // Tile height
+                                discard(1)
+                                break
+                            }
+                            in 50..81 -> type.collision[level][x][z] = ((opcode - 49).toByte())
+                        }
+                    }
                 }
             }
         }
-
         return type
-    }
-
-    private tailrec fun ByteReadPacket.decodeCollision(
-        map: MapSquareEntryType,
-        level: Int,
-        x: Int,
-        z: Int
-    ) {
-        when (val opcode = readUByte().toInt()) {
-            0 -> return
-            1 -> { // Tile height
-                discard(1)
-                return
-            }
-            in 50..81 -> map.collision[level][x][z] = ((opcode - 49).toByte())
-        }
-
-        return decodeCollision(map, level, x, z)
     }
 
     private fun ByteReadPacket.loadMapEntryLocations(type: MapSquareEntryType) {

@@ -9,7 +9,6 @@ data class GameObject(
     val shape: Int,
     val rotation: Int
 ) {
-
     val id: Int get() = entry.id
     val name: String get() = entry.name
 

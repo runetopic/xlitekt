@@ -13,7 +13,7 @@ import xlitekt.shared.buffer.readUShortLittleEndianAdd
 onPacketDisassembler(opcode = 57, size = -1) {
     MovementPacket(
         movementType = readUByte().toInt(),
-        destinationX = readUShortLittleEndianAdd(),
-        destinationZ = readUShortAdd()
+        destinationZ = readUShortLittleEndianAdd(),
+        destinationX = readUShortAdd()
     )
 }
