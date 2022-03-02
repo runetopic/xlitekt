@@ -72,9 +72,9 @@ class MapEntryTypeProvider : EntryTypeProvider<MapSquareEntryType>() {
     }
 
     override fun ByteReadPacket.loadEntryType(type: MapSquareEntryType): MapSquareEntryType {
-        for (level in 0 until 4) {
-            for (x in 0 until 64) {
-                for (z in 0 until 64) {
+        for (level in 0 until LEVELS) {
+            for (x in 0 until MAP_SIZE) {
+                for (z in 0 until MAP_SIZE) {
                     while (true) {
                         when (val opcode = readUByte().toInt()) {
                             0 -> break
@@ -93,43 +93,36 @@ class MapEntryTypeProvider : EntryTypeProvider<MapSquareEntryType>() {
 
     private fun ByteReadPacket.loadMapEntryLocations(type: MapSquareEntryType) {
         var objectId = -1
+        var offset: Int
 
-        while (canRead()) {
-            val offset = readIncrSmallSmart()
-
-            if (offset == 0) return
-
-            var packedCoordinates = 0
-
+        while (readIncrSmallSmart().also { offset = it } != 0) {
             objectId += offset
-
-            while (canRead()) {
-                val diff = readUShortSmart()
-
-                if (diff == 0) return
-
-                packedCoordinates += diff - 1
-                val attributes = readUByte().toInt()
-                val localX = (packedCoordinates shr 6) and 0x3f
+            var packedCoordinates = 0
+            var locOffset: Int
+            while (readUShortSmart().also { locOffset = it } != 0) {
+                packedCoordinates += locOffset - 1
+                val localX = packedCoordinates shr 6 and 0x3f
                 val localZ = packedCoordinates and 0x3f
-
+                var level = packedCoordinates shr 12
+                val attributes = readUByte().toInt()
                 val shape = attributes shr 2
                 val rotation = attributes and 0x3
-                var level = (attributes shr 12) and 0x3
 
-                if ((type.collision[level][localX][localZ] and BLOCKED_TILE_BIT) == BLOCKED_TILE_BIT) {
+                if (type.collision[1][localX][localZ].toInt() and 2 == 2) {
                     level--
                 }
 
-                if (level < 0) return
+                if (level < 0) continue
 
-                type.locations[level][localX][localZ] = MapSquareEntryType.MapSquareLocation(
-                    id = objectId,
-                    x = localX,
-                    z = localZ,
-                    level = level,
-                    shape = shape,
-                    rotation = rotation
+                type.locations[level][localX][localZ].add(
+                    MapSquareEntryType.MapSquareLocation(
+                        id = objectId,
+                        x = localX,
+                        z = localZ,
+                        level = level,
+                        shape = shape,
+                        rotation = rotation
+                    )
                 )
             }
         }

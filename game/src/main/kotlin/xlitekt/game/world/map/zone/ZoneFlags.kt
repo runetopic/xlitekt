@@ -25,13 +25,13 @@ object ZoneFlags {
         flags[zoneLocation.packedCoordinates] = null
     }
 
-    inline operator fun set(location: Location, flag: Int) = set(location.x, location.z, location.z, flag)
+    inline operator fun set(location: Location, flag: Int) = set(location.x, location.z, location.level, flag)
 
     inline operator fun set(x: Int, y: Int, z: Int, flag: Int) {
         alloc(ZoneLocation(x shr 3, y shr 3, z))[zoneLocal(x, y)] = flag
     }
 
-    inline fun add(location: Location, flag: Int) = add(location.x, location.z, location.z, flag)
+    inline fun add(location: Location, flag: Int) = add(location.x, location.z, location.level, flag)
 
     inline fun add(x: Int, y: Int, z: Int, flag: Int) {
         val flags = alloc(ZoneLocation(x shr 3, y shr 3, z))
@@ -40,7 +40,7 @@ object ZoneFlags {
         flags[index] = cur or flag
     }
 
-    inline fun remove(location: Location, flag: Int) = remove(location.x, location.z, location.z, flag)
+    inline fun remove(location: Location, flag: Int) = remove(location.x, location.z, location.level, flag)
 
     inline fun remove(x: Int, y: Int, z: Int, flag: Int) {
         val flags = alloc(ZoneLocation(x shr 3, y shr 3, z))
@@ -49,7 +49,7 @@ object ZoneFlags {
         flags[index] = cur and flag.inv()
     }
 
-    inline operator fun get(location: Location): Int = get(location.x, location.z, location.z)
+    inline operator fun get(location: Location): Int = get(location.x, location.z, location.level)
 
     inline operator fun get(x: Int, y: Int, z: Int, default: Int = 0): Int {
         val zoneLocation = ZoneLocation(x shr 3, y shr 3, z)

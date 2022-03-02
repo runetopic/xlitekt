@@ -60,7 +60,7 @@ class PlayerSynchronizer : Runnable {
         syncLatch.await(start)
         players.forEach(Player::reset)
         tick++
-        logger.debug { "Synchronization took ${TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - start)}ms for ${players.size} players." }
+//        logger.debug { "Synchronization took ${TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - start)}ms for ${players.size} players." }
     }
 
     fun shutdown() {

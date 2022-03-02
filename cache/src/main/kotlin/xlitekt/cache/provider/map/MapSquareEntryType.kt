@@ -12,7 +12,7 @@ data class MapSquareEntryType(
     val regionX: Int,
     val regionZ: Int,
     var collision: Array<Array<ByteArray>> = Array(LEVELS) { Array(MAP_SIZE) { ByteArray(MAP_SIZE) } },
-    val locations: Array<Array<Array<MapSquareLocation?>>> = Array(LEVELS) { Array(MAP_SIZE) { Array(MAP_SIZE) { null } } }
+    val locations: Array<Array<Array<MutableList<MapSquareLocation>>>> = Array(LEVELS) { Array(MAP_SIZE) { Array(MAP_SIZE) { mutableListOf() } } }
 ) : EntryType(id) {
 
     data class MapSquareLocation(

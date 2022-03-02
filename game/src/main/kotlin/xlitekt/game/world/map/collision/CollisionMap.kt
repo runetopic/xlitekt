@@ -1,5 +1,6 @@
 package xlitekt.game.world.map.collision
 
+import org.rsmod.pathfinder.flag.CollisionFlag.FLOOR
 import org.rsmod.pathfinder.flag.CollisionFlag.FLOOR_DECORATION
 import org.rsmod.pathfinder.flag.CollisionFlag.OBJECT
 import org.rsmod.pathfinder.flag.CollisionFlag.OBJECT_PROJECTILE_BLOCKER
@@ -35,41 +36,45 @@ import xlitekt.game.world.map.zone.ZoneFlags
 
 object CollisionMap {
     fun collisionFlag(location: Location) = ZoneFlags[location]
-    fun addObjectCollision(obj: GameObject) = changeCollision(obj, true)
-    fun removeObjectCollision(obj: GameObject) = changeCollision(obj, false)
+    fun addObjectCollision(obj: GameObject) = changeNormalCollision(obj, true)
+    fun removeObjectCollision(obj: GameObject) = changeNormalCollision(obj, false)
 
-    private fun changeCollision(obj: GameObject, add: Boolean) {
+    private fun changeNormalCollision(obj: GameObject, add: Boolean) {
         val entry = obj.entry
         val shape = obj.shape
         val location = obj.location
         val rotation = obj.rotation
-        val clipType = entry.clipType
+        val interactType = entry.interactType
         val blockProjectile = entry.blockProjectile
         val breakRouteFinding = entry.breakRouteFinding
 
         when {
-            shape in GameObjectShape.WALL_SHAPES && clipType != 0 -> changeWallCollision(
-                location,
-                rotation,
-                shape,
-                blockProjectile,
-                !breakRouteFinding,
-                add
-            )
-            shape in GameObjectShape.NORMAL_SHAPES && clipType != 0 -> {
+            shape in GameObjectShape.WALL_SHAPES && interactType != 0 -> {
+                changeWallCollision(
+                    location,
+                    rotation,
+                    shape,
+                    blockProjectile,
+                    !breakRouteFinding,
+                    add
+                )
+            }
+            shape in GameObjectShape.NORMAL_SHAPES && interactType != 0 -> {
                 var width = entry.width
                 var length = entry.height
                 if (rotation == 1 || rotation == 3) {
                     width = entry.height
                     length = entry.width
                 }
-                changeCollision(location, width, length, blockProjectile, !breakRouteFinding, add)
+                changeNormalCollision(location, width, length, blockProjectile, !breakRouteFinding, add)
             }
-            shape in GameObjectShape.GROUND_DECOR_SHAPES && clipType == 1 -> changeFloorDecor(location, add)
+            shape in GameObjectShape.GROUND_DECOR_SHAPES && interactType == 1 -> {
+                changeFloorDecor(location, add)
+            }
         }
     }
 
-    private fun changeCollision(
+    private fun changeNormalCollision(
         location: Location,
         width: Int,
         length: Int,
@@ -177,6 +182,7 @@ object CollisionMap {
         breakRouteFinding: Boolean,
         add: Boolean
     ) {
+
         changeWallCollision(location, rotation, shape, add)
         if (blockProjectile) changeWallProjectileCollision(location, rotation, shape, add)
         if (breakRouteFinding) changeWallRouteFinding(location, rotation, shape, add)
@@ -307,7 +313,7 @@ object CollisionMap {
             GameObjectShape.UNFINISHED_WALL -> {
                 when (rotation) {
                     0 -> {
-                        addCollisionFlag(location, WALL_NORTH  or WALL_WEST, add)
+                        addCollisionFlag(location, WALL_NORTH or WALL_WEST, add)
                         addCollisionFlag(location.transform(-1, 0), WALL_EAST, add)
                         addCollisionFlag(location.transform(0, 1), WALL_SOUTH, add)
                     }
@@ -337,4 +343,6 @@ object CollisionMap {
         add -> ZoneFlags.add(coords, mask)
         else -> ZoneFlags.remove(coords, mask)
     }
+
+    fun addFloorCollision(location: Location) = addCollisionFlag(location, FLOOR, true)
 }
