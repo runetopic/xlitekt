@@ -49,5 +49,6 @@ abstract class Actor(
     fun pendingUpdates() = renderer.pendingUpdates
     fun reset() {
         renderer.clearUpdates()
+        movement.hasStep = false
     }
 }

@@ -56,7 +56,7 @@ class Player(
         online = true
 
         if (username == "jordan") {
-            repeat(1999) {
+            repeat(500) {
                 val bot = Player(username = "", password = "")
                 bot.location = Location(Random.nextInt(3210, 3260), Random.nextInt(3210, 3260), 0)
                 inject<World>().value.players.add(bot)

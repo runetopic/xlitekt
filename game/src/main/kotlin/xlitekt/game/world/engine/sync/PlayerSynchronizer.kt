@@ -12,7 +12,6 @@ import xlitekt.shared.inject
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
-import xlitekt.game.actor.movement.Movement
 
 /**
  * @author Jordan Abraham
@@ -27,17 +26,19 @@ class PlayerSynchronizer : Runnable {
     override fun run() {
         val start = System.nanoTime()
         val players = world.players.filterNotNull().filter(Player::online)
+
+        players.parallelStream().forEach { it.movement.process() }
+
         val pending = players.associateWith { it.pendingUpdates().toList() }
         val updates = mutableMapOf<Player, ByteReadPacket>()
-        val movements = mutableMapOf<Player, Movement>()
+        val movements = mutableMapOf<Player, Boolean>()
         val updateLatch = CountDownLatch(players.size)
         players.forEach {
             pool.execute {
+                movements[it] = it.movement.hasStep
                 pending[it]?.buildPlayerUpdateBlocks(it)?.run {
                     updates[it] = this
                 }
-                it.movement.process()
-                movements[it] = it.movement
                 updateLatch.countDown()
             }
         }

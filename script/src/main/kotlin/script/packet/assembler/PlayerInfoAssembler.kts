@@ -41,7 +41,7 @@ fun BytePacketBuilder.highDefinition(
     blocks: BytePacketBuilder,
     updates: Map<Player, ByteReadPacket>,
     locations: Map<Player, Location>,
-    movements: Map<Player, Movement>,
+    movements: Map<Player, Boolean>,
     nsn: Boolean
 ) {
     var skip = -1
@@ -53,7 +53,7 @@ fun BytePacketBuilder.highDefinition(
             // TODO Do something about this boolean mess.
             val removing = shouldRemove(locations[viewport.player], locations[other])
             val updating = updates[other] != null
-            val moving = (movements[other]?.currentWalkStep != null)
+            val moving = movements[other] ?: false
             val active = removing || updating || moving
             if (other == null || !active) {
                 viewport.nsnFlags[index] = viewport.nsnFlags[index] or 2
@@ -74,8 +74,7 @@ fun BytePacketBuilder.highDefinition(
                 other,
                 blocks,
                 updates[other],
-                locations[other],
-                movements[other]
+                locations[other]
             )
         }
         if (skip > -1) {
@@ -93,8 +92,7 @@ fun BitAccess.processHighDefinitionPlayer(
     other: Player,
     blocks: BytePacketBuilder,
     updates: ByteReadPacket?,
-    otherLocation: Location?,
-    movement: Movement?
+    otherLocation: Location?
 ) {
     when {
         removing -> { // remove the player
@@ -108,7 +106,8 @@ fun BitAccess.processHighDefinitionPlayer(
         moving -> {
             writeBit(updating)
             writeBits(2, 1) // Walking
-            writeBits(3, movement?.movementDirection?.opcode() ?: 0)
+            writeBits(3, other.movement.movementDirection.opcode())
+            println(other.movement.movementDirection)
             if (updating) {
                 // TODO We can cache appearances here if we really want to.
                 blocks.writeBytes(updates!!.copy().readBytes())
