@@ -49,11 +49,11 @@ class Movement(
         val waypointX = waypoint.x
         val waypointZ = waypoint.z
         val xSign = (waypointX - currentX).sign
-        val ySign = (waypointZ - currentZ).sign
+        val zSign = (waypointZ - currentZ).sign
         var count = 0
         while (currentX != waypointX || currentZ != waypointZ) {
             currentX += xSign
-            currentZ += ySign
+            currentZ += zSign
             steps.add(Location(currentX, currentZ))
             if (++count > 25) break
         }
