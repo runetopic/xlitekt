@@ -26,11 +26,6 @@ class PlayerSynchronizer : Runnable {
     override fun run() {
         val start = System.nanoTime()
         val players = world.players.filterNotNull().filter(Player::online)
-
-        if (tick % 4 == 0) {
-            // players.forEach { it.animate(411) }
-        }
-
         val pending = players.associateWith { it.pendingUpdates().toList() }
         val updates = mutableMapOf<Player, ByteReadPacket>()
         val movements = mutableMapOf<Player, Boolean>()
@@ -59,8 +54,8 @@ class PlayerSynchronizer : Runnable {
         }
         syncLatch.await(start)
         players.forEach(Player::reset)
+        logger.debug { "Synchronization took ${TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - start)}ms for ${players.size} players." }
         tick++
-//        logger.debug { "Synchronization took ${TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - start)}ms for ${players.size} players." }
     }
 
     fun shutdown() {

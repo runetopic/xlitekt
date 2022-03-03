@@ -12,7 +12,7 @@ class Viewport(
     val player: Player,
 ) {
     val nsnFlags = IntArray(MAX_PLAYERS)
-    val coordinates = IntArray(MAX_PLAYERS)
+    val locations = IntArray(MAX_PLAYERS)
     val localIndexes = IntArray(MAX_PLAYERS)
     val externalIndexes = IntArray(MAX_PLAYERS)
     val localPlayers = Array<Player?>(MAX_PLAYERS) { null }
@@ -21,14 +21,14 @@ class Viewport(
     var externalIndexesSize: Int = 0
 
     fun init(builder: BytePacketBuilder) = builder.withBitAccess {
-        writeBits(30, player.location.packedCoordinates)
+        writeBits(30, player.location.packedLocation)
         localPlayers[player.index] = player
         localIndexes[localIndexesSize++] = player.index
         (1 until MAX_PLAYERS).forEach {
             if (it == player.index) return@forEach
-            val otherRegionCoordinates = world.players[it]?.location?.regionCoordinates ?: 0
+            val otherRegionCoordinates = world.players[it]?.location?.regionLocation ?: 0
             writeBits(18, otherRegionCoordinates)
-            coordinates[it] = otherRegionCoordinates
+            locations[it] = otherRegionCoordinates
             externalIndexes[externalIndexesSize++] = it
         }
     }
@@ -52,7 +52,7 @@ class Viewport(
         other as Viewport
 
         if (!nsnFlags.contentEquals(other.nsnFlags)) return false
-        if (!coordinates.contentEquals(other.coordinates)) return false
+        if (!locations.contentEquals(other.locations)) return false
         if (!localIndexes.contentEquals(other.localIndexes)) return false
         if (!externalIndexes.contentEquals(other.externalIndexes)) return false
         if (!localPlayers.contentEquals(other.localPlayers)) return false
@@ -64,7 +64,7 @@ class Viewport(
 
     override fun hashCode(): Int {
         var result = nsnFlags.contentHashCode()
-        result = 31 * result + coordinates.contentHashCode()
+        result = 31 * result + locations.contentHashCode()
         result = 31 * result + localIndexes.contentHashCode()
         result = 31 * result + externalIndexes.contentHashCode()
         result = 31 * result + localPlayers.contentHashCode()

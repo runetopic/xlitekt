@@ -55,10 +55,8 @@ class Player(
         // Set the player online here, so they start processing by the main game loop.
         online = true
 
-        // eventBus.notify(Events.OnLoginEvent(this))
-
         if (username == "jordan") {
-            repeat(2000) {
+            repeat(1999) {
                 val bot = Player(username = "", password = "")
                 bot.location = Location(Random.nextInt(3210, 3260), Random.nextInt(3210, 3260), 0)
                 inject<World>().value.players.add(bot)

@@ -18,12 +18,25 @@ sealed class Direction(val x: Int = NEUTRAL_UNIT, val y: Int = NEUTRAL_UNIT) {
 
     fun opcode(): Int = when (this) {
         is SouthWest -> 0
-        is SouthEast -> 2
-        is NorthWest -> 5
-        is NorthEast -> 7
         is South -> 1
+        is SouthEast -> 2
         is West -> 3
         is East -> 4
+        is NorthWest -> 5
         is North -> 6
+        is NorthEast -> 7
+    }
+
+    companion object {
+        fun fromDeltaXZ(deltaX: Int, deltaZ: Int): Direction = when {
+            deltaX > 0 && deltaZ > 0 -> NorthEast
+            deltaX > 0 && deltaZ < 0 -> SouthEast
+            deltaX < 0 && deltaZ > 0 -> NorthWest
+            deltaX < 0 && deltaZ < 0 -> SouthWest
+            deltaX < 0 -> West
+            deltaX > 0 -> East
+            deltaZ > 0 -> North
+            else -> South
+        }
     }
 }

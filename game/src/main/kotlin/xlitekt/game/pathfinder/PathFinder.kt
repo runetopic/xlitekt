@@ -1,6 +1,5 @@
 package xlitekt.game.pathfinder
 
-import org.rsmod.pathfinder.SmartPathFinder
 import org.rsmod.pathfinder.collision.CollisionStrategies
 import org.rsmod.pathfinder.flag.CollisionFlag.BLOCK_EAST
 import org.rsmod.pathfinder.flag.CollisionFlag.BLOCK_NORTH
@@ -14,7 +13,6 @@ import xlitekt.game.actor.Actor
 import xlitekt.game.actor.movement.Direction
 import xlitekt.game.world.map.collision.CollisionMap.collisionFlag
 import xlitekt.game.world.map.location.Location
-import xlitekt.game.world.map.zone.ZoneFlags
 
 private const val SIZE = 128
 
@@ -26,14 +24,6 @@ const val DEFAULT_OBJ_ROT = 10
 const val DEFAULT_OBJ_SHAPE = -1
 const val DEFAULT_MOVE_NEAR_FLAG = true
 const val DEFAULT_ACCESS_BITMASK = 0
-
-// TODO: when everything is working multi thread pathfinding potentially (might not be worth it)
-val pathFinder = SmartPathFinder(
-    searchMapSize = SIZE,
-    useRouteBlockerFlags = false,
-    flags = ZoneFlags.flags,
-    defaultFlag = 0
-)
 
 fun Actor.canTransverse(location: Location, direction: Direction): Boolean {
     val destination = location.transform(direction)
