@@ -44,6 +44,7 @@ abstract class Actor(
     fun spotAnimate(id: Int, speed: Int = 0, height: Int = 0, rotation: Int = 0) = renderer.spotAnimation(id, speed, height, rotation)
     fun transmog(id: Int) = renderer.transmog(id)
     fun setTemporaryMovementType(id: Int) = renderer.temporaryMovementType(id)
+    fun movementType(running: Boolean) = renderer.movementType(running)
 
     fun hasPendingUpdate() = renderer.hasPendingUpdate()
     fun pendingUpdates() = renderer.pendingUpdates

@@ -5,7 +5,6 @@ import io.ktor.utils.io.core.ByteReadPacket
 import io.ktor.utils.io.core.buildPacket
 import io.ktor.utils.io.core.readBytes
 import xlitekt.game.actor.movement.Direction
-import xlitekt.game.actor.movement.Movement
 import xlitekt.game.actor.player.Client.Companion.world
 import xlitekt.game.actor.player.Player
 import xlitekt.game.actor.player.Viewport
@@ -27,8 +26,8 @@ onPacketAssembler<PlayerInfoPacket>(opcode = 80, size = -2) {
     buildPacket {
         val blocks = BytePacketBuilder()
         viewport.also {
-            highDefinition(it, blocks, updates, locations, movements, true)
-            highDefinition(it, blocks, updates, locations, movements, false)
+            highDefinition(it, blocks, updates, locations, true)
+            highDefinition(it, blocks, updates, locations, false)
             lowDefinition(it, blocks, locations, true)
             lowDefinition(it, blocks, locations, false)
         }.update()
@@ -41,7 +40,6 @@ fun BytePacketBuilder.highDefinition(
     blocks: BytePacketBuilder,
     updates: Map<Player, ByteReadPacket>,
     locations: Map<Player, Location>,
-    movements: Map<Player, Boolean>,
     nsn: Boolean
 ) {
     var skip = -1
@@ -53,8 +51,8 @@ fun BytePacketBuilder.highDefinition(
             // TODO Do something about this boolean mess.
             val removing = shouldRemove(locations[viewport.player], locations[other])
             val updating = updates[other] != null
-            val moving = movements[other] ?: false
-            val active = removing || updating || moving
+            val moving = other?.movement?.hasStep ?: false
+            val active = removing || moving || updating
             if (other == null || !active) {
                 viewport.nsnFlags[index] = viewport.nsnFlags[index] or 2
                 skip++
@@ -107,7 +105,6 @@ fun BitAccess.processHighDefinitionPlayer(
             writeBit(updating)
             writeBits(2, 1) // Walking
             writeBits(3, other.movement.movementDirection.opcode())
-            println(other.movement.movementDirection)
             if (updating) {
                 // TODO We can cache appearances here if we really want to.
                 blocks.writeBytes(updates!!.copy().readBytes())

@@ -49,6 +49,7 @@ class Player(
         previousLocation = location
         write(RebuildNormalPacket(viewport, location, true))
         updateAppearance()
+        movementType(false)
         interfaces.login()
         vars.login()
         sendUpdateRunEnergy()
@@ -56,7 +57,7 @@ class Player(
         online = true
 
         if (username == "jordan") {
-            repeat(500) {
+            repeat(1999) {
                 val bot = Player(username = "", password = "")
                 bot.location = Location(Random.nextInt(3210, 3260), Random.nextInt(3210, 3260), 0)
                 inject<World>().value.players.add(bot)
