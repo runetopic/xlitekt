@@ -17,7 +17,6 @@ class LoopTask : Task {
     }
 
     override fun shutdown() {
-        playerSynchronizer.shutdown()
         executor.shutdown()
     }
 }

@@ -70,6 +70,7 @@ class Client(
     }
 
     suspend fun poolToWriteChannel(opcode: Int, size: Int, packet: ByteReadPacket) = writeChannel?.apply {
+        // This write channel is null checked because bot client can use this.
         writePacketOpcode(serverCipher!!, opcode)
         if (size == -1 || size == -2) {
             writePacketSize(size, packet.remaining)

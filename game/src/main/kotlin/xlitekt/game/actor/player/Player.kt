@@ -18,7 +18,6 @@ import xlitekt.game.vars.Vars
 import xlitekt.game.world.World
 import xlitekt.game.world.map.location.Location
 import xlitekt.shared.inject
-import kotlin.random.Random
 
 /**
  * @author Jordan Abraham
@@ -55,15 +54,6 @@ class Player(
         sendUpdateRunEnergy()
         // Set the player online here, so they start processing by the main game loop.
         online = true
-
-        if (username == "jordan") {
-            repeat(1999) {
-                val bot = Player(username = "", password = "")
-                bot.location = Location(Random.nextInt(3210, 3260), Random.nextInt(3210, 3260), 0)
-                inject<World>().value.players.add(bot)
-                bot.login(Client())
-            }
-        }
     }
 
     fun logout() {

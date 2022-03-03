@@ -24,21 +24,18 @@ class Movement(
 ) : Queue<Location> by waypoints {
     private var currentMovementStep: MovementStep? = null
 
-    fun process() {
-        currentMovementStep = null
+    fun process(): MovementStep? {
         val location = actor.location
         actor.previousLocation = location
         if (waypoints.isNotEmpty() && steps.isEmpty()) queueStepsToWaypoint()
-        if (steps.isEmpty()) return
+        if (steps.isEmpty()) return null
         currentMovementStep = steps.poll().let {
             MovementStep(it, location.directionTo(it))
         }.also {
             actor.location = it.location
         }
+        return currentMovementStep
     }
-
-    fun hasMovementStep() = currentMovementStep != null
-    fun movementStepDirection() = currentMovementStep?.direction
 
     private fun queueStepsToWaypoint() {
         steps.clear()
@@ -62,6 +59,11 @@ class Movement(
     fun reset() {
         waypoints.clear()
         steps.clear()
+        actor.location = currentMovementStep?.location ?: actor.location
+        clearWalkStep()
+    }
+
+    fun clearWalkStep() {
         currentMovementStep = null
     }
 }

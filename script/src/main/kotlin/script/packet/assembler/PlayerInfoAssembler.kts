@@ -5,6 +5,7 @@ import io.ktor.utils.io.core.ByteReadPacket
 import io.ktor.utils.io.core.buildPacket
 import io.ktor.utils.io.core.readBytes
 import xlitekt.game.actor.movement.Direction
+import xlitekt.game.actor.movement.MovementStep
 import xlitekt.game.actor.player.Client.Companion.world
 import xlitekt.game.actor.player.Player
 import xlitekt.game.actor.player.Viewport
@@ -26,8 +27,8 @@ onPacketAssembler<PlayerInfoPacket>(opcode = 80, size = -2) {
     buildPacket {
         val blocks = BytePacketBuilder()
         viewport.also {
-            highDefinition(it, blocks, updates, locations, true)
-            highDefinition(it, blocks, updates, locations, false)
+            highDefinition(it, blocks, updates, locations, steps, true)
+            highDefinition(it, blocks, updates, locations, steps, false)
             lowDefinition(it, blocks, locations, true)
             lowDefinition(it, blocks, locations, false)
         }.update()
@@ -40,6 +41,7 @@ fun BytePacketBuilder.highDefinition(
     blocks: BytePacketBuilder,
     updates: Map<Player, ByteReadPacket>,
     locations: Map<Player, Location>,
+    steps: Map<Player, MovementStep?>,
     nsn: Boolean
 ) {
     var skip = -1
@@ -51,7 +53,7 @@ fun BytePacketBuilder.highDefinition(
             // TODO Do something about this boolean mess.
             val removing = shouldRemove(locations[viewport.player], locations[other])
             val updating = updates[other] != null
-            val moving = other?.movement?.hasMovementStep() ?: false
+            val moving = steps[other] != null
             val active = removing || moving || updating
             if (other == null || !active) {
                 viewport.nsnFlags[index] = viewport.nsnFlags[index] or 2
@@ -72,7 +74,8 @@ fun BytePacketBuilder.highDefinition(
                 other,
                 blocks,
                 updates[other],
-                locations[other]
+                locations[other],
+                steps[other]
             )
         }
         if (skip > -1) {
@@ -90,7 +93,8 @@ fun BitAccess.processHighDefinitionPlayer(
     other: Player,
     blocks: BytePacketBuilder,
     updates: ByteReadPacket?,
-    otherLocation: Location?
+    otherLocation: Location?,
+    movementStep: MovementStep?
 ) {
     when {
         removing -> { // remove the player
@@ -104,7 +108,7 @@ fun BitAccess.processHighDefinitionPlayer(
         moving -> {
             writeBit(updating)
             writeBits(2, 1) // Walking
-            writeBits(3, other.movement.movementStepDirection()?.opcode() ?: 0)
+            writeBits(3, movementStep!!.direction.opcode())
             if (updating) {
                 // TODO We can cache appearances here if we really want to.
                 blocks.writeBytes(updates!!.copy().readBytes())

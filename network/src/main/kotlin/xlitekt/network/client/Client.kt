@@ -54,10 +54,13 @@ import java.nio.ByteBuffer
  */
 private suspend fun Client.writeResponse(response: Int) = writeChannel!!.apply { writeByte(response.toByte()) }.flush()
 
-suspend fun Client.readHandshake() = when (val opcode = readChannel!!.readByte().toInt()) {
-    HANDSHAKE_JS5_OPCODE -> writeHandshake(opcode, readChannel!!.readInt())
-    HANDSHAKE_LOGIN_OPCODE -> writeHandshake(opcode, -1)
-    else -> throw IllegalStateException("Unhandled opcode found during client/server handshake. Opcode=$opcode")
+suspend fun Client.readHandshake() {
+    val readChannel = readChannel ?: return
+    when (val opcode = readChannel.readByte().toInt()) {
+        HANDSHAKE_JS5_OPCODE -> writeHandshake(opcode, readChannel.readInt())
+        HANDSHAKE_LOGIN_OPCODE -> writeHandshake(opcode, -1)
+        else -> throw IllegalStateException("Unhandled opcode found during client/server handshake. Opcode=$opcode")
+    }
 }
 
 private suspend fun Client.writeHandshake(opcode: Int, version: Int) {
@@ -84,9 +87,10 @@ private suspend fun Client.writeHandshake(opcode: Int, version: Int) {
 private suspend fun Client.readJS5File() = try {
     while (true) {
         withTimeout(30_000) {
-            when (val opcode = readChannel!!.readByte().toInt()) {
+            val readChannel = readChannel ?: return@withTimeout
+            when (val opcode = readChannel.readByte().toInt()) {
                 JS5_HIGH_PRIORITY_OPCODE, JS5_LOW_PRIORITY_OPCODE -> {
-                    val uid = readChannel!!.readUMedium()
+                    val uid = readChannel.readUMedium()
                     val indexId = uid shr 16
                     val groupId = uid and 0xffff
                     val masterRequest = indexId == 0xff && groupId == 0xff
@@ -97,8 +101,8 @@ private suspend fun Client.readJS5File() = try {
                         writeJS5File(indexId, groupId, compression, size, this)
                     }
                 }
-                JS5_ENCRYPTION_OPCODE -> readChannel!!.discard(3) // TODO
-                JS5_LOGGED_IN_OPCODE, JS5_SWITCH_OPCODE -> readChannel!!.discard(3) // TODO
+                JS5_ENCRYPTION_OPCODE -> readChannel.discard(3) // TODO
+                JS5_LOGGED_IN_OPCODE, JS5_SWITCH_OPCODE -> readChannel.discard(3) // TODO
                 else -> throw IllegalStateException("Unhandled Js5 opcode. Opcode=$opcode")
             }
         }
@@ -125,34 +129,36 @@ private suspend fun Client.writeJS5File(indexId: Int, groupId: Int, compression:
 }.flush()
 
 private suspend fun Client.readLogin() {
-    val opcode = readChannel!!.readByte().toInt() and 0xff
+    val readChannel = readChannel ?: return
 
-    val size = readChannel!!.readShort().toInt() and 0xffff
-    val availableBytes = readChannel!!.availableForRead
+    val opcode = readChannel.readByte().toInt() and 0xff
+
+    val size = readChannel.readShort().toInt() and 0xffff
+    val availableBytes = readChannel.availableForRead
     if (size != availableBytes) {
         writeResponse(BAD_SESSION_OPCODE)
         return disconnect("Bad session. Size Read=$size Available bytes=$availableBytes")
     }
 
-    val majorVersion = readChannel!!.readInt()
+    val majorVersion = readChannel.readInt()
     if (majorVersion != majorBuild) {
         writeResponse(CLIENT_OUTDATED_OPCODE)
         return disconnect("Client outdated. Major Version=$majorVersion")
     }
 
-    val minorVersion = readChannel!!.readInt()
+    val minorVersion = readChannel.readInt()
     if (minorVersion != minorBuild) {
         writeResponse(CLIENT_OUTDATED_OPCODE)
         return disconnect("Client outdated. Minor Version=$majorVersion")
     }
 
-    readChannel!!.discard(1) // Unknown byte #1
-    readChannel!!.discard(1) // Unknown byte #2
+    readChannel.discard(1) // Unknown byte #1
+    readChannel.discard(1) // Unknown byte #2
 
     when (opcode) {
         LOGIN_NORMAL_OPCODE -> {
-            val rsa = ByteArray(readChannel!!.readShort().toInt() and 0xffff)
-            if (readChannel!!.readAvailable(rsa, 0, rsa.size) != rsa.size) {
+            val rsa = ByteArray(readChannel.readShort().toInt() and 0xffff)
+            if (readChannel.readAvailable(rsa, 0, rsa.size) != rsa.size) {
                 writeResponse(BAD_SESSION_OPCODE)
                 return disconnect("Bad session.")
             }
@@ -179,8 +185,8 @@ private suspend fun Client.readLogin() {
             rsaBlock.discard(1) // Unknown byte #3
             val password = rsaBlock.readStringCp1252NullTerminated()
             rsaBlock.release()
-            val xtea = ByteArray(readChannel!!.availableForRead)
-            readChannel!!.readAvailable(xtea, 0, xtea.size)
+            val xtea = ByteArray(readChannel.availableForRead)
+            readChannel.readAvailable(xtea, 0, xtea.size)
             val xteaBlock = ByteReadPacket(xtea.fromXTEA(32, clientKeys))
             val username = xteaBlock.readStringCp1252NullTerminated()
             val clientSettings = xteaBlock.readByte().toInt()
@@ -264,6 +270,7 @@ private suspend fun Client.readLogin() {
                 world.players.add(it)
             }.also { if (it) writeLogin(LOGIN_SUCCESS_OPCODE) else writeLogin(BAD_SESSION_OPCODE) }
         }
+        else -> throw IllegalStateException("Unhandled login opcode $opcode")
     }
 }
 
@@ -290,11 +297,12 @@ private suspend fun Client.writeLogin(response: Int) {
 
 private suspend fun Client.readPackets(player: Player) = try {
     while (true) {
-        val opcode = readChannel!!.readPacketOpcode(clientCipher!!)
+        val readChannel = readChannel ?: break
+        val opcode = readChannel.readPacketOpcode(clientCipher!!)
         if (opcode < 0 || opcode >= sizes.size) continue
-        val size = readChannel!!.readPacketSize(sizes[opcode])
+        val size = readChannel.readPacketSize(sizes[opcode])
         // Take the bytes from the read channel before doing any checks.
-        val packet = readChannel!!.readPacket(size)
+        val packet = readChannel.readPacket(size)
         val disassembler = PacketDisassemblerListener.listeners.entries.firstOrNull { it.key == opcode }
         if (disassembler == null) {
             logger.debug { "No packet disassembler found for packet opcode $opcode." }

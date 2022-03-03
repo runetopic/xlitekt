@@ -47,7 +47,9 @@ abstract class Actor(
 
     fun hasPendingUpdate() = renderer.hasPendingUpdate()
     fun pendingUpdates() = renderer.pendingUpdates
+
     fun reset() {
         renderer.clearUpdates()
+        movement.clearWalkStep()
     }
 }
