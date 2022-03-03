@@ -1,6 +1,7 @@
 package xlitekt.game.packet
 
 import io.ktor.utils.io.core.ByteReadPacket
+import xlitekt.game.actor.movement.Movement
 import xlitekt.game.actor.player.Player
 import xlitekt.game.actor.player.Viewport
 import xlitekt.game.world.map.location.Location
@@ -13,5 +14,5 @@ data class PlayerInfoPacket(
     val viewport: Viewport,
     val updates: Map<Player, ByteReadPacket>,
     val locations: Map<Player, Location>,
-    val movements: MutableMap<Player, Boolean>
+    val movements: MutableMap<Player, Movement>
 ) : Packet

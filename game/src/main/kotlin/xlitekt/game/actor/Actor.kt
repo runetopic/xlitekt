@@ -18,7 +18,6 @@ abstract class Actor(
     var index = 0
 
     var movementSpeed = MovementSpeed.WALK
-    var movementDirection: Direction = Direction.South
 
     // TODO maybe move the combat stuff out somewhere else
     val nextHits = mutableListOf<Render.HitDamage>()

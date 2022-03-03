@@ -2,9 +2,9 @@ package xlitekt.game.actor.movement
 
 import xlitekt.game.actor.Actor
 import xlitekt.game.world.map.location.Location
+import xlitekt.game.world.map.location.directionTo
 import java.util.LinkedList
 import java.util.Queue
-import xlitekt.game.world.map.location.directionTo
 
 enum class MovementSpeed(val stepCount: Int) {
     WALK(1),
@@ -21,8 +21,8 @@ class Movement(
     private val path: Queue<Location> = LinkedList(),
     var currentWalkStep: WalkStep? = null
 ) : Queue<Location> by path {
+    var movementDirection: Direction = Direction.South
 
-    @Synchronized
     fun process() {
         val location = actor.location
         if (location.compareTo(currentWalkStep?.location ?: location) == 1) {
@@ -32,15 +32,14 @@ class Movement(
             path.poll()?.let {
                 val direction = location.directionTo(it)
                 currentWalkStep = WalkStep(it, direction)
-                actor.movementDirection = direction
+                movementDirection = direction
             }
         }
         if (currentWalkStep != null) {
-            actor.location = location.transform(actor.movementDirection)
+            actor.location = location.transform(movementDirection)
         }
     }
 
-    @Synchronized
     fun reset() {
         currentWalkStep = null
         path.clear()
