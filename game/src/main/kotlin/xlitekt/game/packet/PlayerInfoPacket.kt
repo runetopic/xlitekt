@@ -1,7 +1,6 @@
 package xlitekt.game.packet
 
 import io.ktor.utils.io.core.ByteReadPacket
-import xlitekt.game.actor.movement.Movement
 import xlitekt.game.actor.player.Player
 import xlitekt.game.actor.player.Viewport
 import xlitekt.game.world.map.location.Location

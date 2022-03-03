@@ -12,53 +12,56 @@ enum class MovementSpeed(val stepCount: Int) {
     RUN(2)
 }
 
-data class Waypoint(
+data class MovementStep(
     val location: Location,
     val direction: Direction
 )
 
 class Movement(
     private val actor: Actor,
-    private val path: Queue<Location> = LinkedBlockingQueue(),
+    private val waypoints: Queue<Location> = LinkedBlockingQueue(),
     private val steps: Queue<Location> = LinkedBlockingQueue()
-) : Queue<Location> by path {
-    var movementDirection: Direction = Direction.South
-    var hasStep = false
+) : Queue<Location> by waypoints {
+    private var currentMovementStep: MovementStep? = null
 
     fun process() {
+        currentMovementStep = null
         val location = actor.location
         actor.previousLocation = location
-        if (steps.isEmpty()) append()
-        val nextStep = steps.poll()
-        if (nextStep != null) {
-            hasStep = true
-            movementDirection = actor.location.directionTo(nextStep)
-            actor.location = nextStep
+        if (waypoints.isNotEmpty() && steps.isEmpty()) queueStepsToWaypoint()
+        if (steps.isEmpty()) return
+        currentMovementStep = steps.poll().let {
+            MovementStep(it, location.directionTo(it))
+        }.also {
+            actor.location = it.location
         }
     }
 
-    private fun append() {
-        if (path.isEmpty()) return
+    fun hasMovementStep() = currentMovementStep != null
+    fun movementStepDirection() = currentMovementStep?.direction
+
+    private fun queueStepsToWaypoint() {
         steps.clear()
-        val step = path.poll()
-        val last = actor.location
-        var curX = last.x
-        var curY = last.z
-        val destX = step.x
-        val destY = step.z
-        val xSign = (destX - curX).sign
-        val ySign = (destY - curY).sign
+        val waypoint = waypoints.poll()
+        val location = actor.location
+        var currentX = location.x
+        var currentZ = location.z
+        val waypointX = waypoint.x
+        val waypointZ = waypoint.z
+        val xSign = (waypointX - currentX).sign
+        val ySign = (waypointZ - currentZ).sign
         var count = 0
-        while (curX != destX || curY != destY) {
-            curX += xSign
-            curY += ySign
-            steps.add(Location(curX, curY))
+        while (currentX != waypointX || currentZ != waypointZ) {
+            currentX += xSign
+            currentZ += ySign
+            steps.add(Location(currentX, currentZ))
             if (++count > 25) break
         }
     }
 
     fun reset() {
-        path.clear()
+        waypoints.clear()
         steps.clear()
+        currentMovementStep = null
     }
 }

@@ -1,6 +1,5 @@
 package xlitekt.game.actor
 
-import xlitekt.game.actor.movement.Direction
 import xlitekt.game.actor.movement.Movement
 import xlitekt.game.actor.movement.MovementSpeed
 import xlitekt.game.actor.render.ActorRenderer
@@ -50,6 +49,5 @@ abstract class Actor(
     fun pendingUpdates() = renderer.pendingUpdates
     fun reset() {
         renderer.clearUpdates()
-        movement.hasStep = false
     }
 }
