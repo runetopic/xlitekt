@@ -27,15 +27,15 @@ onPacketAssembler<RebuildNormalPacket>(opcode = 54, size = -2) {
         val zoneX = location.zoneX
         val zoneZ = location.zoneZ
 
-        writeShortAdd(zoneX.toShort())
-        writeShortLittleEndian(zoneZ.toShort())
+        writeShortAdd(zoneZ.toShort())
+        writeShortLittleEndian(zoneX.toShort())
 
         var size = 0
         val xteas = buildPacket {
             ((zoneX - 6) / 8..(zoneX + 6) / 8).forEach { x ->
                 ((zoneZ - 6) / 8..(zoneZ + 6) / 8).forEach { y ->
                     val regionId = y + (x shl 8)
-                    val xteaKeys = mapSquares.find { it.mapsquare == regionId }?.key ?: listOf(0, 0, 0, 0)
+                    val xteaKeys = mapSquares[regionId]?.key ?: listOf(0, 0, 0, 0)
                     xteaKeys.forEach(::writeInt)
                     ++size
                 }

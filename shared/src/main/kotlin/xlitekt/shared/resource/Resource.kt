@@ -5,7 +5,7 @@ import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.decodeFromStream
 import xlitekt.shared.inject
 
-class MapSquares(list: List<MapSquareResource>) : ArrayList<MapSquareResource>(list)
+class MapSquares(list: Map<Int, MapSquareResource>) : HashMap<Int, MapSquareResource>(list)
 class Sequences(list: Map<String, SequenceResource>) : HashMap<String, SequenceResource>(list)
 class SpotAnimations(list: Map<String, SpotAnimationResource>) : HashMap<String, SpotAnimationResource>(list)
 class Varps(list: Map<String, VarInfoResource>) : HashMap<String, VarInfoResource>(list)
@@ -13,7 +13,7 @@ class VarBits(list: Map<String, VarInfoResource>) : HashMap<String, VarInfoResou
 class InterfaceInfoMap(list: Map<String, InterfaceInfoResource>) : HashMap<String, InterfaceInfoResource>(list)
 
 object Resource {
-    fun mapSquaresResource(): MapSquares = MapSquares(loadResource("game.resources.xteas"))
+    fun mapSquaresResource(): MapSquares = MapSquares(loadResource<List<MapSquareResource>>("game.resources.xteas").associateBy(MapSquareResource::mapsquare))
     fun sequencesResource(): Sequences = Sequences(loadResource<List<SequenceResource>>("game.resources.sequences").associateBy(SequenceResource::name))
     fun spotAnimationsResource(): SpotAnimations = SpotAnimations(loadResource<List<SpotAnimationResource>>("game.resources.spot_animations").associateBy(SpotAnimationResource::name))
     fun varpsResource(): Varps = Varps(loadResource<List<VarInfoResource>>("game.resources.varps").associateBy(VarInfoResource::name))

@@ -18,6 +18,7 @@ import xlitekt.game.vars.Vars
 import xlitekt.game.world.World
 import xlitekt.game.world.map.location.Location
 import xlitekt.shared.inject
+import kotlin.math.abs
 
 /**
  * @author Jordan Abraham
@@ -35,6 +36,7 @@ class Player(
     val viewport = Viewport(this)
     val interfaces = Interfaces(this)
     val vars = Vars(this)
+    var lastLoadedLocation: Location? = null
 
     private var client: Client? = null
 
@@ -46,7 +48,7 @@ class Player(
     fun login(client: Client) {
         this.client = client
         previousLocation = location
-        write(RebuildNormalPacket(viewport, location, true))
+        sendRebuildNormal(true)
         updateAppearance()
         movementType(false)
         interfaces.login()
@@ -80,3 +82,17 @@ fun Player.sendVarp(id: Int, value: Int) = if (value < Byte.MIN_VALUE || value >
 fun Player.message(message: String) = write(MessageGamePacket(0, message, false)) // TODO build messaging system
 fun Player.script(scriptId: Int, parameters: List<Any>) = write(RunClientScriptPacket(scriptId, parameters))
 fun Player.sendUpdateRunEnergy() = write(UpdateRunEnergyPacket(runEnergy / 100))
+
+fun Player.shouldRebuildMap(): Boolean {
+    val lastZoneX: Int = lastLoadedLocation?.zoneX ?: return false
+    val lastZoneZ: Int = lastLoadedLocation?.zoneZ ?: return false
+    val zoneX = location.zoneX
+    val zoneZ = location.zoneZ
+    val size = ((104 shr 3) / 2) - 1
+    return abs(lastZoneX - zoneX) >= size || abs(lastZoneZ - zoneZ) >= size
+}
+
+fun Player.sendRebuildNormal(update: Boolean) {
+    write(RebuildNormalPacket(viewport, location, update))
+    lastLoadedLocation = Location(location.packedLocation)
+}

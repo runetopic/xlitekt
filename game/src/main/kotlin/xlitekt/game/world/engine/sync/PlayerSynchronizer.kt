@@ -5,6 +5,8 @@ import io.ktor.utils.io.core.ByteReadPacket
 import kotlinx.coroutines.Runnable
 import xlitekt.game.actor.movement.MovementStep
 import xlitekt.game.actor.player.Player
+import xlitekt.game.actor.player.sendRebuildNormal
+import xlitekt.game.actor.player.shouldRebuildMap
 import xlitekt.game.actor.render.Render
 import xlitekt.game.actor.render.block.buildPlayerUpdateBlocks
 import xlitekt.game.packet.NPCInfoPacket
@@ -48,7 +50,10 @@ class PlayerSynchronizer : Runnable {
         tick++
     }
 
-    private fun Player.processMovement(): MovementStep? = movement.process()
+    private fun Player.processMovement(): MovementStep? = movement.process().also {
+        if (shouldRebuildMap()) sendRebuildNormal(false)
+    }
+
     private fun Player.processUpdateBlocks(pending: Map<Player, List<Render>>): ByteReadPacket? = pending[this]?.buildPlayerUpdateBlocks(this)
     private fun Player.processSync(updates: Map<Player, ByteReadPacket>, locations: Map<Player, Location>, steps: Map<Player, MovementStep?>) {
         write(PlayerInfoPacket(viewport, updates, locations, steps))

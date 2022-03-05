@@ -45,7 +45,7 @@ class MapEntryTypeProvider : EntryTypeProvider<MapSquareEntryType>() {
                             return@execute
                         }
 
-                        val xteas = xteas.find { it.mapsquare == regionId }?.key?.toIntArray() ?: run {
+                        val xteas = xteas[regionId]?.key?.toIntArray() ?: run {
                             latch.countDown()
                             missingXteasCount++
                             return@execute
