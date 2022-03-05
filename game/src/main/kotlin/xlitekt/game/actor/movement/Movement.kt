@@ -25,19 +25,21 @@ class Movement(
     private var currentMovementStep: MovementStep? = null
 
     fun process(): MovementStep? {
+        if (isEmpty() && steps.isEmpty()) return null
+
+        if (steps.isEmpty())
+            queueStepsToWaypoint()
+
         val location = actor.location
         actor.previousLocation = location
-        if (waypoints.isNotEmpty() && steps.isEmpty()) queueStepsToWaypoint()
-        if (steps.isEmpty()) return null
-        currentMovementStep = steps.poll().let {
-            MovementStep(it, location.directionTo(it))
-        }.also {
-            actor.location = it.location
-        }
-        return currentMovementStep
+
+        val nextStep = steps.poll() ?: return null
+        actor.location = nextStep
+        return MovementStep(location, location.directionTo(nextStep))
     }
 
     private fun queueStepsToWaypoint() {
+        if (waypoints.isEmpty()) return
         steps.clear()
         val waypoint = waypoints.poll()
         val location = actor.location
