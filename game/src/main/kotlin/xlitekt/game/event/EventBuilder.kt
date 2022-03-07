@@ -13,7 +13,7 @@ class EventBuilder<T : Event>(
         return this
     }
 
-    fun use(use: (T).() -> Unit) {
+    fun use(use: T.() -> Unit) {
         events.add(EventListener(use, filter))
     }
 }

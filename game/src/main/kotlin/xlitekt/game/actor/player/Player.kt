@@ -5,12 +5,17 @@ import xlitekt.game.actor.Actor
 import xlitekt.game.actor.player.PlayerEncoder.encodeToJson
 import xlitekt.game.actor.player.serializer.PlayerSerializer
 import xlitekt.game.actor.render.Render
+import xlitekt.game.actor.skill.Skill
+import xlitekt.game.actor.skill.Skills
+import xlitekt.game.event.EventBus
+import xlitekt.game.event.impl.Events
 import xlitekt.game.packet.LogoutPacket
 import xlitekt.game.packet.MessageGamePacket
 import xlitekt.game.packet.Packet
 import xlitekt.game.packet.RebuildNormalPacket
 import xlitekt.game.packet.RunClientScriptPacket
 import xlitekt.game.packet.UpdateRunEnergyPacket
+import xlitekt.game.packet.UpdateStatPacket
 import xlitekt.game.packet.VarpLargePacket
 import xlitekt.game.packet.VarpSmallPacket
 import xlitekt.game.ui.Interfaces
@@ -31,6 +36,7 @@ class Player(
     val password: String,
     val rights: Int = 0,
     val appearance: Render.Appearance = Render.Appearance(),
+    val skills: Skills = Skills(),
     var runEnergy: Float = 10_000f
 ) : Actor(location) {
     val viewport = Viewport(this)
@@ -56,6 +62,7 @@ class Player(
         sendUpdateRunEnergy()
         // Set the player online here, so they start processing by the main game loop.
         online = true
+        inject<EventBus>().value.notify(Events.OnLoginEvent(this))
     }
 
     fun logout() {
@@ -77,6 +84,10 @@ fun Player.sendVarp(id: Int, value: Int) = if (value < Byte.MIN_VALUE || value >
     write(VarpLargePacket(id, value))
 } else {
     write(VarpSmallPacket(id, value))
+}
+
+fun Player.updateStat(skill: Skill, level: Int, experience: Double) {
+    write(UpdateStatPacket(skill.id, level, experience))
 }
 
 fun Player.message(message: String) = write(MessageGamePacket(0, message, false)) // TODO build messaging system

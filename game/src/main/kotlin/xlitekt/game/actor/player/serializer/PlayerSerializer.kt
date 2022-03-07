@@ -12,6 +12,7 @@ import kotlinx.serialization.encoding.decodeStructure
 import kotlinx.serialization.encoding.encodeStructure
 import xlitekt.game.actor.player.Player
 import xlitekt.game.actor.render.Render
+import xlitekt.game.actor.skill.Skills
 import xlitekt.game.world.map.location.Location
 
 /**
@@ -27,6 +28,7 @@ class PlayerSerializer : KSerializer<Player> {
             element<Map<Int, Int>>("vars")
             element<Render.Appearance>("appearance")
             element<Float>("runEnergy")
+            element<Skills>("skills")
         }
 
     override fun deserialize(decoder: Decoder): Player = decoder.decodeStructure(descriptor) {
@@ -37,6 +39,7 @@ class PlayerSerializer : KSerializer<Player> {
         val vars = decodeSerializableElement(descriptor, decodeElementIndex(descriptor), MapSerializer(Int.serializer(), Int.serializer()))
         val appearance = decodeSerializableElement(descriptor, decodeElementIndex(descriptor), AppearanceSerializer())
         val runEnergy = decodeFloatElement(descriptor, decodeElementIndex(descriptor))
+        val skills = decodeSerializableElement(descriptor, decodeElementIndex(descriptor), SkillsSerializer())
 
         val player = Player(
             location = location,
@@ -44,7 +47,8 @@ class PlayerSerializer : KSerializer<Player> {
             password = password,
             runEnergy = runEnergy,
             rights = rights,
-            appearance = appearance
+            appearance = appearance,
+            skills = skills
         )
         player.vars.putAll(vars)
         return player
@@ -58,5 +62,6 @@ class PlayerSerializer : KSerializer<Player> {
         encodeSerializableElement(descriptor, 4, MapSerializer(Int.serializer(), Int.serializer()), value.vars)
         encodeSerializableElement(descriptor, 5, AppearanceSerializer(), value.appearance)
         encodeFloatElement(descriptor, 6, value.runEnergy)
+        encodeSerializableElement(descriptor, 7, SkillsSerializer(), value.skills)
     }
 }

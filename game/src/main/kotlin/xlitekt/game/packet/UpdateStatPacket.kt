@@ -4,7 +4,7 @@ package xlitekt.game.packet
  * @author Tyler Telis
  */
 data class UpdateStatPacket(
-    val xp: Double,
-    val level: Int,
     val skillId: Int,
+    val level: Int,
+    val xp: Double,
 ) : Packet
