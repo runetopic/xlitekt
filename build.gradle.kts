@@ -7,6 +7,7 @@ plugins {
     alias(deps.plugins.jvm)
     alias(deps.plugins.shadowjar)
     alias(deps.plugins.versions)
+    alias(deps.plugins.serialization)
 }
 
 group = "com.runetopic.xlite"
@@ -20,6 +21,7 @@ allprojects {
             implementation(deps.bundles.logger)
             implementation(deps.bundles.ktor)
             implementation(deps.bundles.koin)
+            implementation(deps.kotlinx.serialization.json)
         }
     }
 
