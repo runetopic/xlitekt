@@ -12,5 +12,5 @@ data class GameObject(
     val id: Int get() = entry.id
     val name: String get() = entry.name
 
-    override fun toString(): String = "GameObject(entry=$entry, location=$location, shape=$shape, roation=$rotation"
+    override fun toString(): String = "GameObject(entry=$entry, location=$location, shape=$shape, rotation=$rotation"
 }

@@ -11,6 +11,7 @@ import xlitekt.game.world.engine.LoopTask
 import xlitekt.game.world.map.collision.CollisionMap
 import xlitekt.game.world.map.location.Location
 import xlitekt.game.world.map.obj.GameObject
+import xlitekt.game.world.map.zone.ZoneFlags
 import xlitekt.shared.inject
 import kotlin.experimental.and
 
@@ -20,8 +21,8 @@ class Game {
     private val locs by inject<LocEntryTypeProvider>()
 
     fun start() {
-        maps.entries().parallelStream().forEach(::applyCollisionMap)
-
+        maps.entries().forEach(::applyCollisionMap)
+        println("Created ${ZoneFlags.flags.filterNotNull().count()}")
         loop.start()
     }
 
@@ -46,11 +47,13 @@ class Game {
         for (level in 0 until LEVELS) {
             for (x in 0 until MAP_SIZE) {
                 for (z in 0 until MAP_SIZE) {
+                    val baseX = type.regionX shl 6
+                    val baseZ = type.regionZ shl 6
+
+                    val location = Location(x + baseX, z + baseZ, level)
+
                     for (mapLocation in type.locations[level][x][z]) {
                         val entry = locs.entryType(mapLocation.id) ?: continue
-                        val baseX = type.regionX shl 6
-                        val baseZ = type.regionZ shl 6
-                        val location = Location(x + baseX, z + baseZ, mapLocation.level)
                         val gameObject = GameObject(entry, location, mapLocation.shape, mapLocation.rotation)
                         CollisionMap.addObjectCollision(gameObject)
                     }

@@ -12,7 +12,6 @@ import xlitekt.shared.resource.MapSquares
 import java.util.Collections
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.Executors
-import kotlin.experimental.and
 import kotlin.time.measureTime
 
 /**
@@ -40,34 +39,32 @@ class MapEntryTypeProvider : EntryTypeProvider<MapSquareEntryType>() {
                         val mapData = index.group("m${regionX}_$regionZ").data
                         val locData = index.group("l${regionX}_$regionZ").data
 
-                        if (mapData.isEmpty() || locData.isEmpty()) {
+                        if (mapData.isEmpty()) {
                             latch.countDown()
                             return@execute
                         }
 
-                        val xteas = xteas[regionId]?.key?.toIntArray() ?: run {
-                            latch.countDown()
+                        val mapSquare = ByteReadPacket(mapData.decompress()).loadEntryType(MapSquareEntryType(regionId, regionX, regionZ))
+                        mapSquares[regionId] = mapSquare
+                        count++
+
+                        val xteas = xteas[regionId]?.key?.toIntArray() ?: intArrayOf()
+
+                        if (xteas.isEmpty() || locData.isEmpty()) {
                             missingXteasCount++
+                            latch.countDown()
                             return@execute
                         }
 
-                        try {
-                            val mapSquare = ByteReadPacket(mapData.decompress()).loadEntryType(MapSquareEntryType(regionId, regionX, regionZ))
-                            ByteReadPacket(locData.decompress(xteas)).loadMapEntryLocations(mapSquare)
-                            mapSquares[regionId] = mapSquare
-                        } catch (exception: Exception) {
-                            logger.error(exception) { "Failed to decompress maps." }
-                        } finally {
-                            count++
-                            latch.countDown()
-                        }
+                        ByteReadPacket(locData.decompress(xteas)).loadMapEntryLocations(mapSquare)
+                        latch.countDown()
                     }
                 }
             }
         }
         latch.await()
         pool.shutdown()
-        logger.debug { "Took $time to finish. Loaded $count maps. (Missing $missingXteasCount.)" }
+        logger.debug { "Took $time to finish. Loaded $count maps. ($missingXteasCount are missing xteas or landscape data.)" }
         return mapSquares
     }
 

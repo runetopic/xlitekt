@@ -3,6 +3,7 @@ package xlitekt.cache.provider.map
 import xlitekt.cache.provider.EntryType
 import xlitekt.cache.provider.map.MapEntryTypeProvider.Companion.LEVELS
 import xlitekt.cache.provider.map.MapEntryTypeProvider.Companion.MAP_SIZE
+import java.util.Collections
 
 /**
  * @author Tyler Telis
@@ -12,7 +13,15 @@ data class MapSquareEntryType(
     val regionX: Int,
     val regionZ: Int,
     var collision: Array<Array<ByteArray>> = Array(LEVELS) { Array(MAP_SIZE) { ByteArray(MAP_SIZE) } },
-    val locations: Array<Array<Array<MutableList<MapSquareLocation>>>> = Array(LEVELS) { Array(MAP_SIZE) { Array(MAP_SIZE) { mutableListOf() } } }
+    val locations: Array<Array<Array<MutableList<MapSquareLocation>>>> = Array(LEVELS) {
+        Array(MAP_SIZE) {
+            Array(MAP_SIZE) {
+                Collections.synchronizedList(
+                    mutableListOf()
+                )
+            }
+        }
+    }
 ) : EntryType(id) {
 
     data class MapSquareLocation(
