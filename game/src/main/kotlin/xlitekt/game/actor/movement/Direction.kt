@@ -15,14 +15,14 @@ sealed class Direction(val x: Int = NEUTRAL_UNIT, val z: Int = NEUTRAL_UNIT) {
     object SouthEast : Direction(x = POSITIVE_UNIT, z = NEGATIVE_UNIT)
     object SouthWest : Direction(x = NEGATIVE_UNIT, z = NEGATIVE_UNIT)
     object NorthWest : Direction(x = NEGATIVE_UNIT, z = POSITIVE_UNIT)
-    object NorthNorthEast : Direction(x = POSITIVE_UNIT, z = POSITIVE_UNIT + 1)
-    object NorthNorthWest : Direction(x = NEGATIVE_UNIT, z = POSITIVE_UNIT + 1)
-    object WestNorthWest : Direction(x = NEGATIVE_UNIT - 1, z = POSITIVE_UNIT)
-    object WestSouthWest : Direction(x = NEGATIVE_UNIT - 1, z = NEGATIVE_UNIT)
-    object EastNorthEast : Direction(x = POSITIVE_UNIT + 1, z = POSITIVE_UNIT)
-    object EastSouthEast : Direction(x = POSITIVE_UNIT + 1, z = NEGATIVE_UNIT)
-    object SouthSouthEast : Direction(x = POSITIVE_UNIT, z = NEGATIVE_UNIT - 1)
-    object SouthSouthWest : Direction(x = NEGATIVE_UNIT, z = NEGATIVE_UNIT - 1)
+    object NorthNorthEast : Direction(x = POSITIVE_UNIT, z = POSITIVE_UNIT + POSITIVE_UNIT)
+    object NorthNorthWest : Direction(x = NEGATIVE_UNIT, z = POSITIVE_UNIT + POSITIVE_UNIT)
+    object WestNorthWest : Direction(x = NEGATIVE_UNIT + NEGATIVE_UNIT, z = POSITIVE_UNIT)
+    object WestSouthWest : Direction(x = NEGATIVE_UNIT + NEGATIVE_UNIT, z = NEGATIVE_UNIT)
+    object EastNorthEast : Direction(x = POSITIVE_UNIT + POSITIVE_UNIT, z = POSITIVE_UNIT)
+    object EastSouthEast : Direction(x = POSITIVE_UNIT + POSITIVE_UNIT, z = NEGATIVE_UNIT)
+    object SouthSouthEast : Direction(x = POSITIVE_UNIT, z = NEGATIVE_UNIT + NEGATIVE_UNIT)
+    object SouthSouthWest : Direction(x = NEGATIVE_UNIT, z = NEGATIVE_UNIT + NEGATIVE_UNIT)
 
     override fun toString(): String = javaClass.simpleName
 
