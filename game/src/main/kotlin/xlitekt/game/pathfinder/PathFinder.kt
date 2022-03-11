@@ -50,5 +50,6 @@ fun Actor.canTransverse(location: Location, direction: Direction): Boolean {
             strategy.canMove(flag, BLOCK_NORTH_EAST) &&
                 strategy.canMove(flag, BLOCK_EAST) &&
                 strategy.canMove(flag, BLOCK_NORTH)
+        else -> TODO()
     }
 }

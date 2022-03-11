@@ -5,6 +5,7 @@ import io.ktor.utils.io.core.ByteReadPacket
 import io.ktor.utils.io.core.buildPacket
 import io.ktor.utils.io.core.readBytes
 import xlitekt.game.actor.movement.Direction
+import xlitekt.game.actor.movement.MovementSpeed
 import xlitekt.game.actor.movement.MovementStep
 import xlitekt.game.actor.player.Client.Companion.world
 import xlitekt.game.actor.player.Player
@@ -106,9 +107,11 @@ fun BitAccess.processHighDefinitionPlayer(
             viewport.localPlayers[index] = null
         }
         moving -> {
+            val step = movementStep!!
+            val running = step.speed == MovementSpeed.RUN
             writeBit(updating)
-            writeBits(2, 1) // Walking
-            writeBits(3, movementStep!!.direction.opcode())
+            writeBits(2, if (running) 2 else 1)
+            writeBits(if (running) 4 else 3, step.direction.opcode(running))
             if (updating) {
                 // TODO We can cache appearances here if we really want to.
                 blocks.writeBytes(updates!!.copy().readBytes())
@@ -212,7 +215,7 @@ fun BitAccess.writeLocation(previous: Int, current: Int) {
             writeBits(2, deltaLevel)
         }
         abs(currentX - previousX) <= 1 && abs(currentZ - previousZ) <= 1 -> {
-            val opcode = Direction.fromDeltaXZ(deltaX, deltaZ).opcode()
+            val opcode = Direction.directionFromDelta(deltaX, deltaZ).opcode()
             writeBits(2, 2)
             writeBits(5, (deltaLevel shl 3) + (opcode and 0x7))
         }

@@ -8,7 +8,6 @@ import xlitekt.cache.provider.map.MapEntryTypeProvider.Companion.LEVELS
 import xlitekt.cache.provider.map.MapEntryTypeProvider.Companion.MAP_SIZE
 import xlitekt.cache.provider.map.MapSquareEntryType
 import xlitekt.game.actor.npc.NPC
-import xlitekt.game.world.World
 import xlitekt.game.world.engine.LoopTask
 import xlitekt.game.world.map.collision.CollisionMap
 import xlitekt.game.world.map.location.Location
@@ -21,7 +20,6 @@ class Game {
     private val loop = LoopTask()
     private val maps by inject<MapEntryTypeProvider>()
     private val locs by inject<LocEntryTypeProvider>()
-    private val world by inject<World>()
 
     fun start() {
         maps.entries().forEach(::applyCollisionMap)

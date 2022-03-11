@@ -1,7 +1,6 @@
 package xlitekt.game.actor
 
 import xlitekt.game.actor.movement.Movement
-import xlitekt.game.actor.movement.MovementSpeed
 import xlitekt.game.actor.render.ActorRenderer
 import xlitekt.game.actor.render.HitBarType
 import xlitekt.game.actor.render.HitType
@@ -15,8 +14,6 @@ abstract class Actor(
 
     var previousLocation: Location? = null
     var index = 0
-
-    var movementSpeed = MovementSpeed.WALK
 
     // TODO maybe move the combat stuff out somewhere else
     val nextHits = mutableListOf<Render.HitDamage>()
@@ -50,6 +47,5 @@ abstract class Actor(
 
     fun reset() {
         renderer.clearUpdates()
-        movement.clearWalkStep()
     }
 }

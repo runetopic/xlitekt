@@ -29,7 +29,7 @@ value class Location(val packedLocation: Int) : Comparable<Location> {
         level = level + levelOffset
     )
 
-    fun transform(direction: Direction) = transform(direction.x, direction.y)
+    fun transform(direction: Direction) = transform(direction.x, direction.z)
 
     override fun toString(): String =
         "Location(packedCoordinates=$packedLocation, x=$x, z=$z, level=$level, zoneX=$zoneX, zoneZ=$zoneZ, zoneId=$zoneId, regionX=$regionX, regionZ=$regionZ, regionId=$regionId)"
@@ -37,7 +37,7 @@ value class Location(val packedLocation: Int) : Comparable<Location> {
     override fun compareTo(other: Location): Int = if (x != other.x || z != other.z) 0 else 1
 }
 
-fun Location.directionTo(end: Location): Direction = Direction.fromDeltaXZ(end.x - x, end.z - z)
+fun Location.directionTo(end: Location): Direction = Direction.directionFromDelta(end.x - x, end.z - z)
 
 fun Location.withinDistance(other: Player, distance: Int = 14): Boolean {
     if (other.location.level != level) return false
