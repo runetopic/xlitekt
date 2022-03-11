@@ -12,12 +12,13 @@ object ZoneFlags {
     const val ZONE_SIZE = 8 * 8
     val flags: Array<IntArray?> = arrayOfNulls(ZONES)
 
-    inline fun alloc(zoneLocation: ZoneLocation): IntArray {
+    inline fun getOrCreateZone(zoneLocation: ZoneLocation): IntArray {
         val packed = zoneLocation.packedCoordinates
         val current = flags[packed]
         if (current != null) return current
         val new = IntArray(ZONE_SIZE)
         flags[packed] = new
+        Zones.getOrCreateZone(zoneLocation)
         return new
     }
 
@@ -28,13 +29,13 @@ object ZoneFlags {
     inline operator fun set(location: Location, flag: Int) = set(location.x, location.z, location.level, flag)
 
     inline operator fun set(x: Int, y: Int, z: Int, flag: Int) {
-        alloc(ZoneLocation(x shr 3, y shr 3, z))[zoneLocal(x, y)] = flag
+        getOrCreateZone(ZoneLocation(x shr 3, y shr 3, z))[zoneLocal(x, y)] = flag
     }
 
     inline fun add(location: Location, flag: Int) = add(location.x, location.z, location.level, flag)
 
     inline fun add(x: Int, y: Int, z: Int, flag: Int) {
-        val flags = alloc(ZoneLocation(x shr 3, y shr 3, z))
+        val flags = getOrCreateZone(ZoneLocation(x shr 3, y shr 3, z))
         val index = zoneLocal(x, y)
         val cur = flags[index]
         flags[index] = cur or flag
@@ -43,7 +44,7 @@ object ZoneFlags {
     inline fun remove(location: Location, flag: Int) = remove(location.x, location.z, location.level, flag)
 
     inline fun remove(x: Int, y: Int, z: Int, flag: Int) {
-        val flags = alloc(ZoneLocation(x shr 3, y shr 3, z))
+        val flags = getOrCreateZone(ZoneLocation(x shr 3, y shr 3, z))
         val index = zoneLocal(x, y)
         val cur = flags[index]
         flags[index] = cur and flag.inv()

@@ -8,11 +8,7 @@ import xlitekt.game.actor.player.serializer.LocationSerializer
 @Serializable(with = LocationSerializer::class)
 @JvmInline
 value class Location(val packedLocation: Int) : Comparable<Location> {
-    constructor(
-        x: Int = 0,
-        z: Int = 0,
-        level: Int = 0
-    ) : this(z + (x shl 14) + (level shl 28))
+    constructor(x: Int, z: Int, level: Int = 0) : this((z and 0x3FFF) or ((x and 0x3FFF) shl 14) or ((level and 0x3) shl 28))
 
     val x: Int get() = (packedLocation shr 14) and 0x3FFF
     val z: Int get() = packedLocation and 0x3FFF

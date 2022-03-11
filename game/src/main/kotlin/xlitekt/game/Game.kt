@@ -7,11 +7,13 @@ import xlitekt.cache.provider.map.MapEntryTypeProvider.Companion.BRIDGE_TILE_BIT
 import xlitekt.cache.provider.map.MapEntryTypeProvider.Companion.LEVELS
 import xlitekt.cache.provider.map.MapEntryTypeProvider.Companion.MAP_SIZE
 import xlitekt.cache.provider.map.MapSquareEntryType
+import xlitekt.game.actor.npc.NPC
+import xlitekt.game.world.World
 import xlitekt.game.world.engine.LoopTask
 import xlitekt.game.world.map.collision.CollisionMap
 import xlitekt.game.world.map.location.Location
 import xlitekt.game.world.map.obj.GameObject
-import xlitekt.game.world.map.zone.ZoneFlags
+import xlitekt.game.world.map.zone.Zones
 import xlitekt.shared.inject
 import kotlin.experimental.and
 
@@ -19,10 +21,15 @@ class Game {
     private val loop = LoopTask()
     private val maps by inject<MapEntryTypeProvider>()
     private val locs by inject<LocEntryTypeProvider>()
+    private val world by inject<World>()
 
     fun start() {
         maps.entries().forEach(::applyCollisionMap)
-        println("Created ${ZoneFlags.flags.filterNotNull().count()}")
+
+        val location = Location(3222, 3222, 0)
+        Zones[location]?.npcs?.add(NPC(0, location))
+
+        println("Created ${Zones.zones.filterNotNull().size}")
         loop.start()
     }
 
@@ -50,9 +57,8 @@ class Game {
                     val baseX = type.regionX shl 6
                     val baseZ = type.regionZ shl 6
 
-                    val location = Location(x + baseX, z + baseZ, level)
-
                     for (mapLocation in type.locations[level][x][z]) {
+                        val location = Location(mapLocation.x + baseX, mapLocation.z + baseZ, mapLocation.level)
                         val entry = locs.entryType(mapLocation.id) ?: continue
                         val gameObject = GameObject(entry, location, mapLocation.shape, mapLocation.rotation)
                         CollisionMap.addObjectCollision(gameObject)

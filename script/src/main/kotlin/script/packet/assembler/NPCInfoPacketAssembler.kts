@@ -3,12 +3,12 @@ package script.packet.assembler
 import io.ktor.utils.io.core.BytePacketBuilder
 import io.ktor.utils.io.core.buildPacket
 import xlitekt.game.actor.npc.NPC
-import xlitekt.game.actor.player.Client.Companion.world
 import xlitekt.game.actor.player.Viewport
 import xlitekt.game.actor.render.block.buildNPCUpdateBlocks
 import xlitekt.game.packet.NPCInfoPacket
 import xlitekt.game.packet.assembler.onPacketAssembler
 import xlitekt.game.world.map.location.withinDistance
+import xlitekt.game.world.map.zone.Zones
 import xlitekt.shared.buffer.BitAccess
 import xlitekt.shared.buffer.withBitAccess
 import xlitekt.shared.toInt
@@ -36,8 +36,9 @@ onPacketAssembler<NPCInfoPacket>(opcode = 78, size = -2) {
 }
 
 fun BitAccess.lowDefinition(viewport: Viewport, blocks: BytePacketBuilder) {
-    world.npcs.toList().filterNotNull().forEach { // TODO iterate visible map regions to display all npcs when we do region support.
-        if (viewport.localNPCs.contains(it)) return@forEach
+    val zone = Zones[viewport.player.location] ?: return // TODO need to iterate visible zones.
+    zone.npcs.forEach {
+        if (it == null || viewport.localNPCs.contains(it)) return@forEach
         writeBits(15, it.index)
         writeBits(1, 0) // if 1 == 1 read 32 bits they just don't use it atm. Looks like they're working on something
         var x = it.location.x - viewport.player.location.x

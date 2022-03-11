@@ -1,18 +1,22 @@
 package xlitekt.game.world.map.zone
 
-import java.util.Collections
 import xlitekt.game.world.map.location.Location
-
-class Zone
+import xlitekt.game.world.map.location.ZoneLocation
 
 object Zones {
-    val zones: MutableMap<Location, Zone> = Collections.synchronizedMap(mutableMapOf())
+    private const val ZONES = 2048 * 2048 * 4
+    val zones: Array<Zone?> = arrayOfNulls(ZONES)
 
-    fun getOrCreate(location: Location): Zone {
-        val current = zones[location]
-        if (current != null) return current
-        val zone = Zone()
-        zones[location] = zone
-        return zone
+    operator fun get(location: Location): Zone? {
+        val zoneLocation = location.toZoneLocation()
+        return zones[zoneLocation.packedCoordinates]
+    }
+
+    fun getOrCreateZone(location: ZoneLocation): Zone {
+        val currentZone = zones[location.packedCoordinates]
+        if (currentZone != null) return currentZone
+        val newZone = Zone()
+        zones[location.packedCoordinates] = newZone
+        return newZone
     }
 }

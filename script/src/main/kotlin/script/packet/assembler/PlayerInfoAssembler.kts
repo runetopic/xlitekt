@@ -32,7 +32,7 @@ onPacketAssembler<PlayerInfoPacket>(opcode = 80, size = -2) {
             lowDefinition(it, blocks, locations, true)
             lowDefinition(it, blocks, locations, false)
         }.update()
-        writeBytes(blocks.build().readBytes())
+        writePacket(blocks.build())
     }
 }
 
