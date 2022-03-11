@@ -43,7 +43,7 @@ abstract class Actor(
     fun movementType(running: Boolean) = renderer.movementType(running)
 
     fun hasPendingUpdate() = renderer.hasPendingUpdate()
-    fun pendingUpdates() = renderer.pendingUpdates
+    fun pendingUpdates() = renderer.pendingUpdates.values.toList()
 
     fun reset() {
         renderer.clearUpdates()

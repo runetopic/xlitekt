@@ -30,8 +30,8 @@ onPacketAssembler<PlayerInfoPacket>(opcode = 80, size = -2) {
         viewport.also {
             highDefinition(it, blocks, updates, locations, steps, true)
             highDefinition(it, blocks, updates, locations, steps, false)
-            lowDefinition(it, blocks, locations, true)
-            lowDefinition(it, blocks, locations, false)
+            lowDefinition(it, blocks, updates, locations, true)
+            lowDefinition(it, blocks, updates, locations, false)
         }.update()
         writePacket(blocks.build())
     }
@@ -130,6 +130,7 @@ fun BitAccess.processHighDefinitionPlayer(
 fun BytePacketBuilder.lowDefinition(
     viewport: Viewport,
     blocks: BytePacketBuilder,
+    updates: Map<Player, ByteReadPacket>,
     locations: Map<Player, Location>,
     nsn: Boolean
 ) {
@@ -156,7 +157,8 @@ fun BytePacketBuilder.lowDefinition(
                 other,
                 index,
                 blocks,
-                locations[other]!! // This is okay since it is checked above.
+                locations[other]!!, // This is okay since it is checked above.
+                updates[other]
             )
         }
         if (skip > -1) {
@@ -170,7 +172,8 @@ fun BitAccess.processLowDefinitionPlayer(
     other: Player,
     index: Int,
     blocks: BytePacketBuilder,
-    location: Location
+    location: Location,
+    updates: ByteReadPacket?
 ) {
     // add an external player to start tracking
     writeBits(2, 0)
@@ -180,7 +183,6 @@ fun BitAccess.processLowDefinitionPlayer(
     // send a force block update
     writeBit(true)
 
-    // Send appearance.
     val appearanceBlock = playerBlocks[Render.Appearance::class]!!
     blocks.writeByte(appearanceBlock.mask.toByte())
     blocks.writeBytes(appearanceBlock.build(other, other.appearance).copy().readBytes())

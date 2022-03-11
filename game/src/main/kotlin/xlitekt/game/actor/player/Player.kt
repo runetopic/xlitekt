@@ -19,6 +19,7 @@ import xlitekt.game.packet.UpdateStatPacket
 import xlitekt.game.packet.VarpLargePacket
 import xlitekt.game.packet.VarpSmallPacket
 import xlitekt.game.ui.Interfaces
+import xlitekt.game.vars.VarPlayer
 import xlitekt.game.vars.Vars
 import xlitekt.game.world.World
 import xlitekt.game.world.map.location.Location
@@ -60,6 +61,8 @@ class Player(
         interfaces.login()
         vars.login()
         sendUpdateRunEnergy()
+        if (vars[VarPlayer.ToggleRun] == 1) movement.toggleRun()
+
         // Set the player online here, so they start processing by the main game loop.
         online = true
         inject<EventBus>().value.notify(Events.OnLoginEvent(this))

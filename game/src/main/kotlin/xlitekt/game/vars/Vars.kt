@@ -38,8 +38,8 @@ class Vars(
     }
 
     operator fun get(key: Var): Int = when (key.varType) {
-        VarType.VAR_PLAYER -> vars[key.info.id] ?: -1
-        VarType.VAR_BIT -> varbits.entryType(key.info.id)?.let(::fromVarpParent) ?: -1
+        VarType.VAR_PLAYER -> vars[key.info.id] ?: 0
+        VarType.VAR_BIT -> varbits.entryType(key.info.id)?.let(::fromVarpParent) ?: 0
     }
 
     fun flip(key: Var) = if (get(key) == 0) set(key, 1) else set(key, 0)

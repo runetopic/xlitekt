@@ -2,6 +2,7 @@ package xlitekt.game.actor.render
 
 import xlitekt.game.actor.Actor
 import xlitekt.game.world.map.location.Location
+import kotlin.reflect.KClass
 
 /**
  * @author Tyler Telis
@@ -10,75 +11,75 @@ import xlitekt.game.world.map.location.Location
  */
 class ActorRenderer {
 
-    val pendingUpdates = mutableListOf<Render>()
+    val pendingUpdates = mutableMapOf<KClass<*>, Render>()
 
     fun hasPendingUpdate(): Boolean = pendingUpdates.isNotEmpty()
     fun clearUpdates() = pendingUpdates.clear()
 
     fun sequence(sequenceId: Int, delay: Int) {
-        pendingUpdates += Render.Sequence(sequenceId, delay)
+        pendingUpdates[Sequence::class] = Render.Sequence(sequenceId, delay)
     }
 
     fun customOptions(prefix: String, infix: String, suffix: String) {
-        pendingUpdates += Render.UsernameOverride(prefix, infix, suffix)
+        pendingUpdates[Render.UsernameOverride::class] = Render.UsernameOverride(prefix, infix, suffix)
     }
 
     fun appearance(appearance: Render.Appearance): Render.Appearance {
-        pendingUpdates += appearance
+        pendingUpdates[Render.Appearance::class] = appearance
         return appearance
     }
 
     fun faceActor(index: Int) {
-        pendingUpdates += Render.FaceActor(index)
+        pendingUpdates[Render.FaceActor::class] = Render.FaceActor(index)
     }
 
     fun faceTile(location: Location) {
-        pendingUpdates += Render.FaceTile(location)
+        pendingUpdates[Render.FaceTile::class] = Render.FaceTile(location)
     }
 
     fun forceMove(forceMovement: Render.ForceMovement) {
-        pendingUpdates += forceMovement
+        pendingUpdates[Render.ForceMovement::class] = forceMovement
     }
 
     fun hit(source: Actor?, type: HitType, damage: Int, delay: Int): Render.HitDamage {
         val hit = Render.HitDamage(source, type, damage, delay)
-        pendingUpdates += hit
+        pendingUpdates[Render.HitDamage::class] = hit
         return hit
     }
 
     fun overheadChat(text: String) {
-        pendingUpdates += Render.OverheadChat(text)
+        pendingUpdates[Render.OverheadChat::class] = Render.OverheadChat(text)
     }
 
     fun setCustomCombatLevel(level: Int) {
-        pendingUpdates += Render.NPCCustomLevel(level)
+        pendingUpdates[Render.NPCCustomLevel::class] = Render.NPCCustomLevel(level)
     }
 
     fun recolor(recolor: Render.Recolor) {
-        pendingUpdates += recolor
+        pendingUpdates[Render.Recolor::class] = recolor
     }
 
     fun spotAnimation(id: Int, speed: Int, height: Int, rotation: Int) {
-        pendingUpdates += Render.SpotAnimation(id, speed, height, rotation)
+        pendingUpdates[Render.SpotAnimation::class] = Render.SpotAnimation(id, speed, height, rotation)
     }
 
     fun transmog(id: Int) {
-        pendingUpdates += Render.NPCTransmogrification(id)
+        pendingUpdates[Render.NPCTransmogrification::class] = Render.NPCTransmogrification(id)
     }
 
     fun movementType(running: Boolean) {
-        pendingUpdates += Render.MovementType(running)
+        pendingUpdates[Render.MovementType::class] = Render.MovementType(running)
     }
 
     fun temporaryMovementType(id: Int) {
-        pendingUpdates += Render.TemporaryMovementType(id)
+        pendingUpdates[Render.TemporaryMovementType::class] = Render.TemporaryMovementType(id)
     }
 
     fun publicChat(message: String, packedEffects: Int) {
-        pendingUpdates += Render.PublicChat(message, packedEffects)
+        pendingUpdates[Render.PublicChat::class] = Render.PublicChat(message, packedEffects)
     }
 
     fun faceDirection(direction: Int) {
-        pendingUpdates += Render.FaceDirection(direction)
+        pendingUpdates[Render.FaceDirection::class] = Render.FaceDirection(direction)
     }
 }

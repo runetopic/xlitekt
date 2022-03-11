@@ -12,6 +12,10 @@
     "name": "chat_effects"
   },
   {
+    "id": 173,
+    "name": "toggle_run"
+  },
+  {
     "id": 287,
     "name": "split_friends_private_chat"
   },
