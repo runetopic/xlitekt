@@ -10,7 +10,6 @@ class CommandListener(
     var filter: Player.() -> Boolean = { true },
     var use: Player.(List<String>) -> Unit = {},
 ) {
-    var arguments: Any? = null
 
     fun filter(filter: Player.() -> Boolean): CommandListener {
         this.filter = filter
@@ -20,9 +19,5 @@ class CommandListener(
     fun use(function: Player.(List<String>) -> Unit): CommandListener {
         this.use = function
         return this
-    }
-
-    fun setArguments(vararg args: Any) {
-        this.arguments = args
     }
 }
