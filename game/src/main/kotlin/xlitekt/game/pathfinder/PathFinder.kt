@@ -26,7 +26,7 @@ const val DEFAULT_MOVE_NEAR_FLAG = true
 const val DEFAULT_ACCESS_BITMASK = 0
 
 fun Actor.canTransverse(location: Location, direction: Direction): Boolean {
-    val destination = location.transform(direction)
+    val destination = location// .transform(direction)
     val flag = collisionFlag(destination)
     val strategy = CollisionStrategies.Normal
     return when (direction) {

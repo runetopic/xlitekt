@@ -108,7 +108,7 @@ fun BitAccess.processHighDefinitionPlayer(
         }
         moving -> {
             val step = movementStep!!
-            val running = step.speed == MovementSpeed.RUN
+            val running = step.speed == MovementSpeed.RUNNING
             writeBit(updating)
             writeBits(2, if (running) 2 else 1)
             writeBits(if (running) 4 else 3, step.direction.opcode(running))

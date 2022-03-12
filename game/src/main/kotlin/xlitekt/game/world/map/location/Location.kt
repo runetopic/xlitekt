@@ -29,8 +29,6 @@ value class Location(val packedLocation: Int) : Comparable<Location> {
         level = level + levelOffset
     )
 
-    fun transform(direction: Direction) = transform(direction.x, direction.z)
-
     override fun toString(): String =
         "Location(packedCoordinates=$packedLocation, x=$x, z=$z, level=$level, zoneX=$zoneX, zoneZ=$zoneZ, zoneId=$zoneId, regionX=$regionX, regionZ=$regionZ, regionId=$regionId)"
 

@@ -2,27 +2,23 @@ package xlitekt.game.actor.movement
 
 import java.lang.IllegalArgumentException
 
-private const val NEUTRAL_UNIT = 0
-private const val POSITIVE_UNIT = 1
-private const val NEGATIVE_UNIT = -1
-
-sealed class Direction(val x: Int = NEUTRAL_UNIT, val z: Int = NEUTRAL_UNIT) {
-    object North : Direction(z = POSITIVE_UNIT)
-    object East : Direction(x = POSITIVE_UNIT)
-    object South : Direction(z = NEGATIVE_UNIT)
-    object West : Direction(x = NEGATIVE_UNIT)
-    object NorthEast : Direction(x = POSITIVE_UNIT, z = POSITIVE_UNIT)
-    object SouthEast : Direction(x = POSITIVE_UNIT, z = NEGATIVE_UNIT)
-    object SouthWest : Direction(x = NEGATIVE_UNIT, z = NEGATIVE_UNIT)
-    object NorthWest : Direction(x = NEGATIVE_UNIT, z = POSITIVE_UNIT)
-    object NorthNorthEast : Direction(x = POSITIVE_UNIT, z = POSITIVE_UNIT + POSITIVE_UNIT)
-    object NorthNorthWest : Direction(x = NEGATIVE_UNIT, z = POSITIVE_UNIT + POSITIVE_UNIT)
-    object WestNorthWest : Direction(x = NEGATIVE_UNIT + NEGATIVE_UNIT, z = POSITIVE_UNIT)
-    object WestSouthWest : Direction(x = NEGATIVE_UNIT + NEGATIVE_UNIT, z = NEGATIVE_UNIT)
-    object EastNorthEast : Direction(x = POSITIVE_UNIT + POSITIVE_UNIT, z = POSITIVE_UNIT)
-    object EastSouthEast : Direction(x = POSITIVE_UNIT + POSITIVE_UNIT, z = NEGATIVE_UNIT)
-    object SouthSouthEast : Direction(x = POSITIVE_UNIT, z = NEGATIVE_UNIT + NEGATIVE_UNIT)
-    object SouthSouthWest : Direction(x = NEGATIVE_UNIT, z = NEGATIVE_UNIT + NEGATIVE_UNIT)
+sealed class Direction {
+    object North : Direction()
+    object East : Direction()
+    object South : Direction()
+    object West : Direction()
+    object NorthEast : Direction()
+    object SouthEast : Direction()
+    object SouthWest : Direction()
+    object NorthWest : Direction()
+    object NorthNorthEast : Direction()
+    object NorthNorthWest : Direction()
+    object WestNorthWest : Direction()
+    object WestSouthWest : Direction()
+    object EastNorthEast : Direction()
+    object EastSouthEast : Direction()
+    object SouthSouthEast : Direction()
+    object SouthSouthWest : Direction()
 
     override fun toString(): String = javaClass.simpleName
 

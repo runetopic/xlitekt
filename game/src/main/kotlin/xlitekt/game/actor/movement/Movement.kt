@@ -8,71 +8,63 @@ import java.util.Queue
 import java.util.concurrent.LinkedBlockingQueue
 import kotlin.math.sign
 
-enum class MovementSpeed { WALK, RUN }
-
-data class MovementStep(
-    val speed: MovementSpeed,
-    val location: Location,
-    val direction: Direction
-)
-
 class Movement(
     private val actor: Actor,
     private val waypoints: Queue<Location> = LinkedBlockingQueue(),
-    private val steps: Queue<Location> = LinkedBlockingQueue()
 ) : Queue<Location> by waypoints {
-    var previousStep: MovementStep? = null
+    var currentWaypoint: Location? = null
+    private var previousStep: MovementStep? = null
 
-    private var movementSpeed = MovementSpeed.WALK
+    private var movementSpeed = MovementSpeed.WALKING
 
     fun process(): MovementStep? {
-        if (isEmpty() && steps.isEmpty()) return null
-        if (steps.isEmpty()) queueStepsToWaypoint()
-        val previousLocation = actor.location
-        actor.previousLocation = previousLocation
-        val firstStep = steps.poll() ?: return null
-        actor.location = firstStep
-        var speed = MovementSpeed.WALK
-        if (movementSpeed == MovementSpeed.RUN) {
-            when (val secondStep = steps.poll()) {
-                // The player will "walk" on steps that are (steps.size % 3 == 0) so this is for that edge case.
-                null -> if (isEmpty() && previousStep?.location?.withinDistance(firstStep, 1) == false) actor.setTemporaryMovementType(1)
-                else -> {
-                    speed = MovementSpeed.RUN
-                    actor.location = secondStep
-                }
+        if (isEmpty() && currentWaypoint == null) return null
+        if (landed()) currentWaypoint = waypoints.poll() ?: return null
+        val location = actor.location
+        actor.previousLocation = location
+        val queueStep = nextStep()
+        actor.location = queueStep.location
+        return when (queueStep.speed) {
+            MovementSpeed.WALKING -> {
+                if (isEmpty() && previousStep?.location?.withinDistance(queueStep.location, 1) == false) actor.setTemporaryMovementType(1)
+                MovementStep(MovementSpeed.WALKING, location, location.directionTo(actor.location)).also { previousStep = it }
             }
+            MovementSpeed.RUNNING -> MovementStep(MovementSpeed.RUNNING, location, location.directionTo(actor.location)).also { previousStep = it }
         }
-        return MovementStep(speed, previousLocation, previousLocation.directionTo(actor.location)).also { previousStep = it }
     }
 
-    private fun queueStepsToWaypoint() {
-        if (waypoints.isEmpty()) return
-        steps.clear()
-        val waypoint = waypoints.poll()
+    private fun nextStep(): QueueStep {
+        val waypoint = currentWaypoint!!
+        val waypointX = waypoint.x
+        val waypointZ = waypoint.z
         val location = actor.location
         var currentX = location.x
         var currentZ = location.z
-        val waypointX = waypoint.x
-        val waypointZ = waypoint.z
         val xSign = (waypointX - currentX).sign
         val zSign = (waypointZ - currentZ).sign
-        var count = 0
-        while (currentX != waypointX || currentZ != waypointZ) {
-            currentX += xSign
-            currentZ += zSign
-            steps.add(Location(currentX, currentZ))
-            if (++count > 25) break
+        var speed = MovementSpeed.WALKING
+        repeat(movementSpeed.steps) {
+            if (currentX != waypointX || currentZ != waypointZ) {
+                if (it == 1) speed = MovementSpeed.RUNNING
+                currentX += xSign
+                currentZ += zSign
+            }
         }
+        return QueueStep(speed, Location(currentX, currentZ))
+    }
+
+    private fun landed(): Boolean {
+        if (currentWaypoint == null) return true
+        return currentWaypoint!!.x - actor.location.x == 0 && currentWaypoint!!.z - actor.location.z == 0
     }
 
     fun reset() {
         waypoints.clear()
-        steps.clear()
+        currentWaypoint = null
     }
 
     fun toggleRun() {
-        movementSpeed = if (movementSpeed == MovementSpeed.RUN) MovementSpeed.WALK else MovementSpeed.RUN
-        actor.movementType(movementSpeed == MovementSpeed.RUN)
+        movementSpeed = if (movementSpeed == MovementSpeed.RUNNING) MovementSpeed.WALKING else MovementSpeed.RUNNING
+        actor.movementType(movementSpeed == MovementSpeed.RUNNING)
     }
 }
