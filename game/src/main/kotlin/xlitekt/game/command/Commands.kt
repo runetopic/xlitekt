@@ -12,9 +12,13 @@ object Commands {
     operator fun get(input: String) = commands.firstOrNull { it.command == input }
 
     fun execute(input: String, player: Player): Boolean {
-        commands.filter { it.command == input }.forEach { listener ->
+        val command = input.split(" ")
+
+        if (command.isEmpty()) return false
+
+        commands.filter { it.command == command.first() }.forEach { listener ->
             if (!listener.filter(player)) return@forEach
-            listener.use(player)
+            listener.use(player, command.drop(1))
             return true
         }
 

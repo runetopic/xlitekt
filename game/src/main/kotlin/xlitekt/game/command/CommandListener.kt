@@ -8,15 +8,21 @@ import xlitekt.game.actor.player.Player
 class CommandListener(
     val command: String,
     var filter: Player.() -> Boolean = { true },
-    var use: Player.() -> Unit = {}
+    var use: Player.(List<String>) -> Unit = {},
 ) {
+    var arguments: Any? = null
+
     fun filter(filter: Player.() -> Boolean): CommandListener {
         this.filter = filter
         return this
     }
 
-    fun use(function: Player.() -> Unit): CommandListener {
+    fun use(function: Player.(List<String>) -> Unit): CommandListener {
         this.use = function
         return this
+    }
+
+    fun setArguments(vararg args: Any) {
+        this.arguments = args
     }
 }
