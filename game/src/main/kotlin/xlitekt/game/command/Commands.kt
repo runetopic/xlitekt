@@ -9,8 +9,6 @@ import xlitekt.game.actor.player.message
 object Commands {
     private val commands = mutableSetOf<CommandListener>()
 
-    operator fun get(input: String) = commands.firstOrNull { it.command == input }
-
     fun execute(input: String, player: Player): Boolean {
         val command = input.split(" ")
 
