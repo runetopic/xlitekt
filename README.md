@@ -80,13 +80,17 @@ Maps are loaded using the xteas provided from Runestar, which follows this forma
 
 ```json
 [
-  {
-    "mapsquare": 4662,
+ {
+    "archive": 5,
+    "group": 5932,
+    "name_hash": -1153353684,
+    "name": "l44_81",
+    "mapsquare": 11345,
     "key": [
-      327206325,
-      671317497,
-      652416162,
-      -982088476
+      52989138,
+      -933733387,
+      916753309,
+      1765351430
     ]
   }
 ]
