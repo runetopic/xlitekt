@@ -23,34 +23,24 @@ class PlayerSynchronizer : Runnable {
 
     private val logger = InlineLogger()
     private val world by inject<World>()
-    private var tick = 0
 
     override fun run() {
         val start = System.nanoTime()
         val players = world.players.filterNotNull().filter(Player::online)
-
         val steps = mutableMapOf<Player, MovementStep?>()
-        players.forEach {
-            steps[it] = it.processMovement()
-        }
-
         val pending = players.associateWith { it.pendingUpdates().toList() }
         val updates = mutableMapOf<Player, ByteReadPacket>()
-        players.forEach {
-            it.processUpdateBlocks(pending)?.apply { updates[it] = this }
-        }
-
         val locations = players.associateWith(Player::location)
-        players.parallelStream().forEach {
-            it.processSync(updates, locations, steps)
-        }
 
+        players.forEach { steps[it] = it.processMovement() }
+        players.forEach { it.processUpdateBlocks(pending)?.apply { updates[it] = this } }
+        players.parallelStream().forEach { it.processSync(updates, locations, steps) }
         players.forEach(Player::reset)
+
         logger.debug { "Synchronization took ${TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - start)}ms for ${players.size} players." }
-        tick++
     }
 
-    private fun Player.processMovement(): MovementStep? = movement.process().also {
+    private fun Player.processMovement(): MovementStep? = movement.process(location).also {
         if (shouldRebuildMap()) sendRebuildNormal(false)
     }
 

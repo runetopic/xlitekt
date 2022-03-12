@@ -5,7 +5,6 @@ import io.ktor.utils.io.core.ByteReadPacket
 import io.ktor.utils.io.core.buildPacket
 import io.ktor.utils.io.core.readBytes
 import xlitekt.game.actor.movement.Direction
-import xlitekt.game.actor.movement.MovementSpeed
 import xlitekt.game.actor.movement.MovementStep
 import xlitekt.game.actor.player.Client.Companion.world
 import xlitekt.game.actor.player.Player
@@ -108,7 +107,7 @@ fun BitAccess.processHighDefinitionPlayer(
         }
         moving -> {
             val step = movementStep!!
-            val running = step.speed == MovementSpeed.RUNNING
+            val running = step.speed.isRunning()
             writeBit(updating)
             writeBits(2, if (running) 2 else 1)
             writeBits(if (running) 4 else 3, step.direction.opcode(running))

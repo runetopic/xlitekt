@@ -1,59 +1,57 @@
 package xlitekt.game.actor.movement
 
+import java.util.Deque
+import java.util.LinkedList
 import xlitekt.game.actor.Actor
 import xlitekt.game.world.map.location.Location
 import xlitekt.game.world.map.location.directionTo
 import xlitekt.game.world.map.location.withinDistance
-import java.util.Queue
-import java.util.concurrent.LinkedBlockingQueue
 import kotlin.math.sign
 
 class Movement(
     private val actor: Actor,
-    private val waypoints: Queue<Location> = LinkedBlockingQueue(),
-) : Queue<Location> by waypoints {
+    private val waypoints: LinkedList<Location> = LinkedList(),
+) : Deque<Location> by waypoints {
     var currentWaypoint: Location? = null
-    private var previousStep: MovementStep? = null
-
     private var movementSpeed = MovementSpeed.WALKING
 
-    fun process(): MovementStep? {
+    fun process(currentLocation: Location): MovementStep? {
         if (isEmpty() && currentWaypoint == null) return null
-        if (landed()) currentWaypoint = waypoints.poll() ?: return null
-        val location = actor.location
-        actor.previousLocation = location
-        val queueStep = nextStep()
-        actor.location = queueStep.location
-        return when (queueStep.speed) {
-            MovementSpeed.WALKING -> {
-                if (isEmpty() && previousStep?.location?.withinDistance(queueStep.location, 1) == false) actor.setTemporaryMovementType(1)
-                MovementStep(MovementSpeed.WALKING, location, location.directionTo(actor.location)).also { previousStep = it }
+        if (atWaypoint()) currentWaypoint = waypoints.poll() ?: return null
+        val previousLocation = actor.previousLocation
+        actor.previousLocation = currentLocation
+        return nextWaypointStep(currentLocation).run {
+            MovementStep(speed, location, currentLocation.directionTo(location)).also {
+                // This check is for (steps.size % 3 == 0) the player will "walk" on the last step.
+                if (it.speed.isWalking() && isEmpty() && previousLocation?.withinDistance(location, 1) == false) {
+                    actor.temporaryMovementType(MovementSpeed.WALKING.id)
+                }
+                actor.location = location
             }
-            MovementSpeed.RUNNING -> MovementStep(MovementSpeed.RUNNING, location, location.directionTo(actor.location)).also { previousStep = it }
         }
     }
 
-    private fun nextStep(): QueueStep {
+    private fun nextWaypointStep(location: Location): WaypointStep {
         val waypoint = currentWaypoint!!
         val waypointX = waypoint.x
         val waypointZ = waypoint.z
-        val location = actor.location
+        // val location = actor.location
         var currentX = location.x
         var currentZ = location.z
         val xSign = (waypointX - currentX).sign
         val zSign = (waypointZ - currentZ).sign
         var speed = MovementSpeed.WALKING
-        repeat(movementSpeed.steps) {
+        repeat(movementSpeed.id) {
             if (currentX != waypointX || currentZ != waypointZ) {
                 if (it == 1) speed = MovementSpeed.RUNNING
                 currentX += xSign
                 currentZ += zSign
             }
         }
-        return QueueStep(speed, Location(currentX, currentZ))
+        return WaypointStep(speed, Location(currentX, currentZ))
     }
 
-    private fun landed(): Boolean {
+    private fun atWaypoint(): Boolean {
         if (currentWaypoint == null) return true
         return currentWaypoint!!.x - actor.location.x == 0 && currentWaypoint!!.z - actor.location.z == 0
     }
@@ -64,7 +62,7 @@ class Movement(
     }
 
     fun toggleRun() {
-        movementSpeed = if (movementSpeed == MovementSpeed.RUNNING) MovementSpeed.WALKING else MovementSpeed.RUNNING
-        actor.movementType(movementSpeed == MovementSpeed.RUNNING)
+        movementSpeed = if (movementSpeed.isRunning()) MovementSpeed.WALKING else MovementSpeed.RUNNING
+        actor.movementType(movementSpeed.isRunning())
     }
 }

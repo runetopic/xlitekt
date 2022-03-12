@@ -3,6 +3,7 @@ package xlitekt.game.actor.render.block
 import io.ktor.utils.io.core.BytePacketBuilder
 import io.ktor.utils.io.core.ByteReadPacket
 import io.ktor.utils.io.core.buildPacket
+import io.ktor.utils.io.core.readBytes
 import io.ktor.utils.io.core.writeShortLittleEndian
 import xlitekt.game.actor.Actor
 import xlitekt.game.actor.npc.NPC
@@ -31,6 +32,7 @@ import xlitekt.game.actor.render.block.player.PlayerSequenceBlock
 import xlitekt.game.actor.render.block.player.PlayerSpotAnimationBlock
 import xlitekt.game.actor.render.block.player.PlayerTemporaryMovementTypeBlock
 import xlitekt.game.actor.render.block.player.PlayerUsernameOverrideBlock
+import xlitekt.shared.buffer.writeBytes
 
 val playerBlocks = mapOf(
     Render.Appearance::class to PlayerAppearanceBlock(),
@@ -65,14 +67,14 @@ fun List<Render>.buildPlayerUpdateBlocks(player: Player) = buildPacket {
     val blocks = this@buildPlayerUpdateBlocks.map { it to playerBlocks[it::class]!! }.sortedBy { it.second.index }.toMap()
     val mask = blocks.map { it.value.mask }.sum().let { if (it > 0xff) it or 0x10 else it }
     if (mask > 0xff) writeShortLittleEndian(mask.toShort()) else writeByte(mask.toByte())
-    blocks.forEach { writePacket(it.value.build(player, it.key)) }
+    blocks.forEach { writeBytes(it.value.build(player, it.key).copy().readBytes()) }
 }
 
 fun BytePacketBuilder.buildNPCUpdateBlocks(npc: NPC) {
     val blocks = npc.pendingUpdates().map { it to npcBlocks[it::class]!! }.sortedBy { it.second.index }.toMap()
     val mask = blocks.map { it.value.mask }.sum().let { if (it > 0xff) it or 0x4 else it }
     if (mask > 0xff) writeShortLittleEndian(mask.toShort()) else writeByte(mask.toByte())
-    blocks.forEach { writePacket(it.value.build(npc, it.key)) }
+    blocks.forEach { writeBytes(it.value.build(npc, it.key).copy().readBytes()) }
 }
 
 abstract class RenderingBlock<T : Actor, out R : Render>(val index: Int, val mask: Int) {
