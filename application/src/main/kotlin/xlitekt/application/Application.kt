@@ -18,6 +18,7 @@ import xlitekt.shared.sharedModule
 import java.util.TimeZone
 import kotlin.script.templates.standard.ScriptTemplateWithArgs
 import kotlin.system.measureTimeMillis
+import xlitekt.http.HttpServer
 
 /**
  * @author Jordan Abraham
@@ -52,6 +53,7 @@ fun Application.module() {
             " '----'       '----'         `'-'                      '------'  '---'`'-'   \n"
     }
     logger.debug { "XliteKt launched in $time ms." }
+    get<HttpServer>().start()
     get<Network>().awaitOnPort(environment.config.property("ktor.deployment.port").getString().toInt())
 }
 

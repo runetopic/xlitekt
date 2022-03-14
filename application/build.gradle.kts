@@ -11,6 +11,7 @@ dependencies {
     implementation(deps.classgraph)
     implementation(project(":cache"))
     implementation(project(":game"))
+    implementation(project(":http"))
     implementation(project(":network"))
     implementation(project(":script"))
     implementation(project(":shared"))
