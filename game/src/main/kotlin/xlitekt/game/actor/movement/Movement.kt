@@ -1,15 +1,15 @@
 package xlitekt.game.actor.movement
 
 import xlitekt.game.actor.Actor
+import xlitekt.game.actor.player.Player
+import xlitekt.game.actor.player.sendRebuildNormal
+import xlitekt.game.actor.player.shouldRebuildMap
 import xlitekt.game.world.map.location.Location
 import xlitekt.game.world.map.location.directionTo
 import xlitekt.game.world.map.location.withinDistance
 import java.util.Deque
 import java.util.LinkedList
 import kotlin.math.sign
-import xlitekt.game.actor.player.Player
-import xlitekt.game.actor.player.sendRebuildNormal
-import xlitekt.game.actor.player.shouldRebuildMap
 
 class Movement(
     private val actor: Actor,

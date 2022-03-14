@@ -10,7 +10,7 @@ import xlitekt.shared.buffer.readShortLittleEndianAdd
  * @author Jordan Abraham
  * @author Tyler Telis
  */
-onPacketDisassembler(opcode = 57, size = -1) {
+onPacketDisassembler(opcodes = intArrayOf(57, 58), size = -1) {
     MovementPacket(
         movementType = readUByte().toInt(),
         destinationZ = readShortLittleEndianAdd(),
