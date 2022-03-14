@@ -27,8 +27,8 @@ onPacketAssembler<PlayerInfoPacket>(opcode = 80, size = -2) {
     buildPacket {
         val blocks = BytePacketBuilder()
         viewport.also {
-            highDefinition(it, blocks, updates, locations, steps, true)
-            highDefinition(it, blocks, updates, locations, steps, false)
+            highDefinition(it, blocks, updates, previousLocations, locations, steps, teleports, true)
+            highDefinition(it, blocks, updates, previousLocations, locations, steps, teleports, false)
             lowDefinition(it, blocks, updates, locations, true)
             lowDefinition(it, blocks, updates, locations, false)
         }.update()
@@ -40,8 +40,10 @@ fun BytePacketBuilder.highDefinition(
     viewport: Viewport,
     blocks: BytePacketBuilder,
     updates: Map<Player, ByteReadPacket>,
+    previousLocations: Map<Player, Location?>,
     locations: Map<Player, Location>,
     steps: Map<Player, MovementStep?>,
+    teleports: Map<Player, Boolean>,
     nsn: Boolean
 ) {
     var skip = -1
@@ -54,7 +56,8 @@ fun BytePacketBuilder.highDefinition(
             val removing = shouldRemove(locations[viewport.player], locations[other])
             val updating = updates[other] != null
             val moving = steps[other] != null
-            val active = removing || moving || updating
+            val teleporting = teleports[other] == true
+            val active = removing || moving || updating || teleporting
             if (other == null || !active) {
                 viewport.nsnFlags[index] = viewport.nsnFlags[index] or 2
                 skip++
@@ -74,7 +77,9 @@ fun BytePacketBuilder.highDefinition(
                 other,
                 blocks,
                 updates[other],
+                previousLocations[other],
                 locations[other],
+                teleporting,
                 steps[other]
             )
         }
@@ -93,7 +98,9 @@ fun BitAccess.processHighDefinitionPlayer(
     other: Player,
     blocks: BytePacketBuilder,
     updates: ByteReadPacket?,
+    previousLocation: Location?,
     otherLocation: Location?,
+    teleport: Boolean,
     movementStep: MovementStep?
 ) {
     when {
@@ -104,6 +111,32 @@ fun BitAccess.processHighDefinitionPlayer(
             viewport.locations[index] = 0
             updateLocation(viewport, index, otherLocation ?: other.location)
             viewport.localPlayers[index] = null
+        }
+        teleport -> {
+            val currentLocation = otherLocation ?: other.location
+            val previous = previousLocation ?: other.location
+            writeBit(updating)
+            writeBits(2, 3)
+            var xOffset: Int = currentLocation.x - previous.x
+            var yOffset: Int = currentLocation.z - previous.z
+            val planeOffset: Int = currentLocation.level - previous.level
+            if (abs(currentLocation.x - previous.x) <= 14 &&
+                abs(currentLocation.z - previous.z) <= 14
+            ) {
+                writeBits(1, 0)
+                if (xOffset < 0)
+                    xOffset += 32
+                if (yOffset < 0) yOffset += 32
+                writeBits(12, yOffset + (xOffset shl 5) + (planeOffset shl 10))
+            } else {
+                writeBits(1, 1)
+                writeBits(30, (yOffset and 0x3fff) + (xOffset and 0x3fff shl 14) + (planeOffset and 0x3 shl 28))
+            }
+
+            if (updating) {
+                // TODO We can cache appearances here if we really want to.
+                blocks.writeBytes(updates!!.copy().readBytes())
+            }
         }
         moving -> {
             val step = movementStep!!

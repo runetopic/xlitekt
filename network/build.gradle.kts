@@ -5,6 +5,5 @@ plugins {
 
 dependencies {
     implementation(project(":game"))
-    implementation(project(":http"))
     implementation(project(":shared"))
 }

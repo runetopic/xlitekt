@@ -3,8 +3,17 @@ package xlitekt.application
 import com.github.michaelbull.logging.InlineLogger
 import io.github.classgraph.ClassGraph
 import io.ktor.application.Application
+import io.ktor.application.call
 import io.ktor.application.log
+import io.ktor.response.respondBytes
+import io.ktor.routing.get
+import io.ktor.routing.routing
 import io.ktor.server.engine.commandLineEnvironment
+import io.ktor.server.engine.embeddedServer
+import io.ktor.server.netty.Netty
+import java.util.TimeZone
+import kotlin.script.templates.standard.ScriptTemplateWithArgs
+import kotlin.system.measureTimeMillis
 import org.koin.core.context.stopKoin
 import org.koin.dsl.module
 import org.koin.ktor.ext.get
@@ -14,11 +23,9 @@ import xlitekt.game.Game
 import xlitekt.game.gameModule
 import xlitekt.network.Network
 import xlitekt.network.networkModule
+import xlitekt.shared.config.JavaConfig
+import xlitekt.shared.inject
 import xlitekt.shared.sharedModule
-import java.util.TimeZone
-import kotlin.script.templates.standard.ScriptTemplateWithArgs
-import kotlin.system.measureTimeMillis
-import xlitekt.http.HttpServer
 
 /**
  * @author Jordan Abraham
@@ -34,6 +41,7 @@ fun Application.module() {
         TimeZone.setDefault(TimeZone.getTimeZone("UTC"))
         installKoin()
         installKotlinScript()
+        installHttpServer()
         get<Game>().start()
     }
     logger.info {
@@ -53,8 +61,28 @@ fun Application.module() {
             " '----'       '----'         `'-'                      '------'  '---'`'-'   \n"
     }
     logger.debug { "XliteKt launched in $time ms." }
-    get<HttpServer>().start()
     get<Network>().awaitOnPort(environment.config.property("ktor.deployment.port").getString().toInt())
+}
+
+fun Application.installHttpServer() {
+    val javaConfig by inject<JavaConfig>()
+
+    embeddedServer(Netty, port = 8080) {
+        routing {
+            get("/jav_config.ws") {
+                call.respondBytes { javaConfig.fileAsBytes }
+            }
+            get("/gamepack.jar") {
+                call.respondBytes { javaConfig.gamePackAsBytes }
+            }
+            get("/browsercontrol_0.jar") {
+                call.respondBytes { javaConfig.browserControl0 }
+            }
+            get("/browsercontrol_1.jar") {
+                call.respondBytes { javaConfig.browserControl1 }
+            }
+        }
+    }.start(wait = false)
 }
 
 fun Application.installKoin() {

@@ -12,6 +12,8 @@ abstract class Actor(
 ) {
     protected val renderer = ActorRenderer()
 
+    var teleported = false
+    var nextLocation: Location? = null
     var previousLocation: Location? = null
     var index = 0
 

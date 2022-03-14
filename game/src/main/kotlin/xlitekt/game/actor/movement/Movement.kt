@@ -1,12 +1,15 @@
 package xlitekt.game.actor.movement
 
-import java.util.Deque
-import java.util.LinkedList
 import xlitekt.game.actor.Actor
 import xlitekt.game.world.map.location.Location
 import xlitekt.game.world.map.location.directionTo
 import xlitekt.game.world.map.location.withinDistance
+import java.util.Deque
+import java.util.LinkedList
 import kotlin.math.sign
+import xlitekt.game.actor.player.Player
+import xlitekt.game.actor.player.sendRebuildNormal
+import xlitekt.game.actor.player.shouldRebuildMap
 
 class Movement(
     private val actor: Actor,
@@ -16,10 +19,14 @@ class Movement(
     private var movementSpeed = MovementSpeed.WALKING
 
     fun process(currentLocation: Location): MovementStep? {
-        if (isEmpty() && currentWaypoint == null) return null
-        if (atWaypoint()) currentWaypoint = waypoints.poll() ?: return null
         val previousLocation = actor.previousLocation
         actor.previousLocation = currentLocation
+
+        if (processTeleport()) return null
+
+        actor.teleported = false
+        if (isEmpty() && currentWaypoint == null) return null
+        if (atWaypoint()) currentWaypoint = waypoints.poll() ?: return null
         return nextWaypointStep(currentLocation).run {
             MovementStep(speed, location, currentLocation.directionTo(location)).also {
                 // This check is for (steps.size % 3 == 0) the player will "walk" on the last step.
@@ -29,6 +36,19 @@ class Movement(
                 actor.location = location
             }
         }
+    }
+
+    private fun processTeleport(): Boolean {
+        if (actor.nextLocation != null) {
+            actor.teleported = true
+            actor.location = actor.nextLocation!!
+            actor.nextLocation = null
+            actor.temporaryMovementType(MovementSpeed.TELEPORTING.id)
+            reset()
+            if (actor is Player && actor.shouldRebuildMap()) actor.sendRebuildNormal(false)
+            return true
+        }
+        return false
     }
 
     private fun nextWaypointStep(location: Location): WaypointStep {

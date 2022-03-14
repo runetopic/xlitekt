@@ -1,5 +1,6 @@
 package xlitekt.game
 
+import kotlin.experimental.and
 import xlitekt.cache.provider.config.loc.LocEntryTypeProvider
 import xlitekt.cache.provider.map.MapEntryTypeProvider
 import xlitekt.cache.provider.map.MapEntryTypeProvider.Companion.BLOCKED_TILE_BIT
@@ -7,14 +8,11 @@ import xlitekt.cache.provider.map.MapEntryTypeProvider.Companion.BRIDGE_TILE_BIT
 import xlitekt.cache.provider.map.MapEntryTypeProvider.Companion.LEVELS
 import xlitekt.cache.provider.map.MapEntryTypeProvider.Companion.MAP_SIZE
 import xlitekt.cache.provider.map.MapSquareEntryType
-import xlitekt.game.actor.npc.NPC
 import xlitekt.game.world.engine.LoopTask
 import xlitekt.game.world.map.collision.CollisionMap
 import xlitekt.game.world.map.location.Location
 import xlitekt.game.world.map.obj.GameObject
-import xlitekt.game.world.map.zone.Zones
 import xlitekt.shared.inject
-import kotlin.experimental.and
 
 class Game {
     private val loop = LoopTask()
@@ -23,11 +21,6 @@ class Game {
 
     fun start() {
         maps.entries().forEach(::applyCollisionMap)
-
-        val location = Location(3222, 3222, 0)
-        Zones[location]?.npcs?.add(NPC(0, location))
-
-        println("Created ${Zones.zones.filterNotNull().size}")
         loop.start()
     }
 
