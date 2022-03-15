@@ -25,7 +25,6 @@ class Movement(
         }
         if (atWaypoint()) {
             currentWaypoint = waypoints.poll() ?: run {
-                println("Fuck my dick return null 2")
                 return null
             }
         }

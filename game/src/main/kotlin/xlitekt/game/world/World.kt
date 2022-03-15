@@ -5,17 +5,14 @@ import xlitekt.game.actor.PlayerList
 import xlitekt.game.actor.npc.NPC
 import xlitekt.game.world.map.zone.Zones
 
-class World {
-
+class World(
+    val players: PlayerList = PlayerList(MAX_PLAYERS),
+    val npcs: NPCList = NPCList(MAX_NPCs)
+) {
     fun addNPC(npc: NPC) {
         npcs.add(npc)
         Zones[npc.location]?.npcs?.add(npc)
     }
-
-    val players = PlayerList(MAX_PLAYERS)
-    val npcs = NPCList(MAX_NPCs)
-
-    fun npcIndex(npc: NPC) = npcs.indexOf(npc)
 
     companion object {
         const val MAX_PLAYERS = 2048

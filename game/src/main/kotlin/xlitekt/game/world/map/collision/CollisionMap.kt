@@ -29,14 +29,56 @@ import org.rsmod.pathfinder.flag.CollisionFlag.WALL_SOUTH_WEST_ROUTE_BLOCKER
 import org.rsmod.pathfinder.flag.CollisionFlag.WALL_WEST
 import org.rsmod.pathfinder.flag.CollisionFlag.WALL_WEST_PROJECTILE_BLOCKER
 import org.rsmod.pathfinder.flag.CollisionFlag.WALL_WEST_ROUTE_BLOCKER
+import xlitekt.cache.provider.config.loc.LocEntryTypeProvider
+import xlitekt.cache.provider.map.MapEntryTypeProvider
+import xlitekt.cache.provider.map.MapSquareEntryType
 import xlitekt.game.world.map.location.Location
 import xlitekt.game.world.map.obj.GameObject
 import xlitekt.game.world.map.obj.GameObjectShape
 import xlitekt.game.world.map.zone.ZoneFlags
+import xlitekt.shared.inject
+import kotlin.experimental.and
 
 object CollisionMap {
+    private val locs by inject<LocEntryTypeProvider>()
+
+    fun applyCollision(type: MapSquareEntryType) {
+        for (level in 0 until MapEntryTypeProvider.LEVELS) {
+            for (x in 0 until MapEntryTypeProvider.MAP_SIZE) {
+                for (z in 0 until MapEntryTypeProvider.MAP_SIZE) {
+                    if ((type.collision[level][x][z] and MapEntryTypeProvider.BLOCKED_TILE_BIT) != MapEntryTypeProvider.BLOCKED_TILE_BIT) continue
+
+                    val actualLevel = if ((type.collision[1][x][z] and MapEntryTypeProvider.BRIDGE_TILE_BIT) == MapEntryTypeProvider.BRIDGE_TILE_BIT) level - 1 else level
+
+                    if (actualLevel < 0) continue
+
+                    val baseX = type.regionX shl 6
+                    val baseZ = type.regionZ shl 6
+                    val location = Location(x + baseX, z + baseZ, level)
+                    addFloorCollision(location)
+                }
+            }
+        }
+
+        for (level in 0 until MapEntryTypeProvider.LEVELS) {
+            for (x in 0 until MapEntryTypeProvider.MAP_SIZE) {
+                for (z in 0 until MapEntryTypeProvider.MAP_SIZE) {
+                    val baseX = type.regionX shl 6
+                    val baseZ = type.regionZ shl 6
+
+                    for (mapLocation in type.locations[level][x][z]) {
+                        val location = Location(mapLocation.x + baseX, mapLocation.z + baseZ, mapLocation.level)
+                        val entry = locs.entryType(mapLocation.id) ?: continue
+                        val gameObject = GameObject(entry, location, mapLocation.shape, mapLocation.rotation)
+                        addObjectCollision(gameObject)
+                    }
+                }
+            }
+        }
+    }
+
     fun collisionFlag(location: Location) = ZoneFlags[location]
-    fun addObjectCollision(obj: GameObject) = changeNormalCollision(obj, true)
+    private fun addObjectCollision(obj: GameObject) = changeNormalCollision(obj, true)
     fun removeObjectCollision(obj: GameObject) = changeNormalCollision(obj, false)
 
     private fun changeNormalCollision(obj: GameObject, add: Boolean) {
