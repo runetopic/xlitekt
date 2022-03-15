@@ -25,6 +25,8 @@ import xlitekt.game.world.World
 import xlitekt.game.world.map.location.Location
 import xlitekt.shared.inject
 import kotlin.math.abs
+import xlitekt.game.actor.npc.NPC
+import xlitekt.game.world.map.zone.Zones
 
 /**
  * @author Jordan Abraham

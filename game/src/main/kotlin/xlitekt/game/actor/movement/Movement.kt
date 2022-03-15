@@ -1,9 +1,6 @@
 package xlitekt.game.actor.movement
 
 import xlitekt.game.actor.Actor
-import xlitekt.game.actor.player.Player
-import xlitekt.game.actor.player.sendRebuildNormal
-import xlitekt.game.actor.player.shouldRebuildMap
 import xlitekt.game.world.map.location.Location
 import xlitekt.game.world.map.location.directionTo
 import xlitekt.game.world.map.location.withinDistance
@@ -17,45 +14,57 @@ class Movement(
 ) : Deque<Location> by waypoints {
     var currentWaypoint: Location? = null
     private var movementSpeed = MovementSpeed.WALKING
+    private var teleporting = false
 
     fun process(currentLocation: Location): MovementStep? {
         val previousLocation = actor.previousLocation
         actor.previousLocation = currentLocation
-
-        if (processTeleport()) return null
-
-        actor.teleported = false
-        if (isEmpty() && currentWaypoint == null) return null
-        if (atWaypoint()) currentWaypoint = waypoints.poll() ?: return null
+        if (isEmpty() && currentWaypoint == null) {
+            println("RETURN NULL 1")
+            return null
+        }
+        if (atWaypoint()) {
+            currentWaypoint = waypoints.poll() ?: run {
+                println("Fuck my dick return null 2")
+                return null
+            }
+        }
         return nextWaypointStep(currentLocation).run {
-            MovementStep(speed, location, currentLocation.directionTo(location)).also {
-                // This check is for (steps.size % 3 == 0) the player will "walk" on the last step.
-                if (it.speed.isWalking() && isEmpty() && previousLocation?.withinDistance(location, 1) == false) {
-                    actor.temporaryMovementType(MovementSpeed.WALKING.id)
+            MovementStep(
+                speed = speed,
+                location = location,
+                direction = if (speed == MovementSpeed.TELEPORTING) Direction.South else currentLocation.directionTo(location)
+            ).also {
+                when {
+                    it.speed.isTeleporting() -> {
+                        actor.temporaryMovementType(MovementSpeed.TELEPORTING.id)
+                        teleporting = false
+                    }
+                    it.speed.isWalking() && isEmpty() && previousLocation?.withinDistance(location, 1) == false -> {
+                        actor.temporaryMovementType(MovementSpeed.WALKING.id)
+                    }
                 }
                 actor.location = location
             }
         }
     }
 
-    private fun processTeleport(): Boolean {
-        if (actor.nextLocation != null) {
-            actor.teleported = true
-            actor.location = actor.nextLocation!!
-            actor.nextLocation = null
-            actor.temporaryMovementType(MovementSpeed.TELEPORTING.id)
-            reset()
-            if (actor is Player && actor.shouldRebuildMap()) actor.sendRebuildNormal(false)
-            return true
-        }
-        return false
+    fun route(list: List<Location>) {
+        reset()
+        addAll(list)
+    }
+
+    fun route(location: Location, teleport: Boolean = false) {
+        reset()
+        add(location)
+        if (teleport) teleporting = true
     }
 
     private fun nextWaypointStep(location: Location): WaypointStep {
-        val waypoint = currentWaypoint!!
+        val waypoint = currentWaypoint ?: throw IllegalStateException("Current waypoint is null.")
+        if (teleporting) return WaypointStep(MovementSpeed.TELEPORTING, waypoint)
         val waypointX = waypoint.x
         val waypointZ = waypoint.z
-        // val location = actor.location
         var currentX = location.x
         var currentZ = location.z
         val xSign = (waypointX - currentX).sign
@@ -66,12 +75,27 @@ class Movement(
                 if (it == 1) speed = MovementSpeed.RUNNING
                 currentX += xSign
                 currentZ += zSign
+            } else {
+                currentWaypoint = poll()
+                if (currentWaypoint != null) {
+                    val waypoint = currentWaypoint ?: throw IllegalStateException("Current waypoint is null.")
+                    if (teleporting) return WaypointStep(MovementSpeed.TELEPORTING, waypoint)
+                    val waypointX = waypoint.x
+                    val waypointZ = waypoint.z
+                    val xSign = (waypointX - currentX).sign
+                    val zSign = (waypointZ - currentZ).sign
+                    if (currentX != waypointX || currentZ != waypointZ) {
+                        currentX += xSign
+                        currentZ += zSign
+                    }
+                }
             }
         }
         return WaypointStep(speed, Location(currentX, currentZ))
     }
 
     private fun atWaypoint(): Boolean {
+        if (teleporting) return true
         if (currentWaypoint == null) return true
         return currentWaypoint!!.x - actor.location.x == 0 && currentWaypoint!!.z - actor.location.z == 0
     }
@@ -79,6 +103,7 @@ class Movement(
     fun reset() {
         waypoints.clear()
         currentWaypoint = null
+        teleporting = false
     }
 
     fun toggleRun() {

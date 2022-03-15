@@ -1,7 +1,7 @@
 package xlitekt.game.world.map.zone
 
-import xlitekt.game.actor.NPCList
+import xlitekt.game.actor.npc.NPC
 
 class Zone(
-    val npcs: NPCList = NPCList(250)
+    val npcs: MutableList<NPC> = mutableListOf()
 )

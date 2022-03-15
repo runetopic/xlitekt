@@ -25,28 +25,30 @@ class PlayerSynchronizer : Runnable {
     private val world by inject<World>()
 
     override fun run() {
-        val start = System.nanoTime()
-        val players = world.players.filterNotNull().filter(Player::online)
-        val steps = mutableMapOf<Player, MovementStep?>()
-        // Move the player.
-        players.forEach { steps[it] = it.processMovement() }
-        // Collect player locations.
-        val locations = players.associateWith(Player::location)
-        // Collect player previous locations.
-        val previousLocations = players.associateWith(Player::previousLocation)
-        // Collect player teleports.
-        val teleports = players.associateWith(Player::teleported)
-        // Collect player pending block updates.
-        val pending = players.associateWith { it.pendingUpdates().toList() }
-        val updates = mutableMapOf<Player, ByteReadPacket>()
-        // Build the player pending block updates.
-        players.forEach { it.processUpdateBlocks(pending)?.apply { updates[it] = this } }
-        // Sync players.
-        players.parallelStream().forEach { it.processSync(updates, previousLocations, locations, teleports, steps) }
-        // Reset players.
-        players.forEach(Player::reset)
+        try {
+            val start = System.nanoTime()
+            val players = world.players.filterNotNull().filter(Player::online)
+            val steps = mutableMapOf<Player, MovementStep?>()
+            // Move the player.
+            players.forEach { steps[it] = it.processMovement() }
+            // Collect player locations.
+            val locations = players.associateWith(Player::location)
+            // Collect player previous locations.
+            val previousLocations = players.associateWith(Player::previousLocation)
+            // Collect player pending block updates.
+            val pending = players.associateWith { it.pendingUpdates().toList() }
+            val updates = mutableMapOf<Player, ByteReadPacket>()
+            // Build the player pending block updates.
+            players.forEach { it.processUpdateBlocks(pending)?.apply { updates[it] = this } }
+            // Sync players.
+            players.parallelStream().forEach { it.processSync(updates, previousLocations, locations, steps) }
+            // Reset players.
+            players.forEach(Player::reset)
 
-        logger.debug { "Synchronization took ${TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - start)}ms for ${players.size} players." }
+            logger.debug { "Synchronization took ${TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - start)}ms for ${players.size} players." }
+        } catch (e: Exception) {
+            logger.error(e) { "Exception caught during player sync." }
+        }
     }
 
     private fun Player.processMovement(): MovementStep? = movement.process(location).also {
@@ -54,9 +56,9 @@ class PlayerSynchronizer : Runnable {
     }
 
     private fun Player.processUpdateBlocks(pending: Map<Player, List<Render>>): ByteReadPacket? = pending[this]?.buildPlayerUpdateBlocks(this)
-    private fun Player.processSync(updates: Map<Player, ByteReadPacket>, previousLocations: Map<Player, Location?>, locations: Map<Player, Location>, teleports: Map<Player, Boolean>, steps: Map<Player, MovementStep?>) {
-        write(PlayerInfoPacket(viewport, updates, previousLocations, locations, teleports, steps))
-        write(NPCInfoPacket(viewport))
+    private fun Player.processSync(updates: Map<Player, ByteReadPacket>, previousLocations: Map<Player, Location?>, locations: Map<Player, Location>, steps: Map<Player, MovementStep?>) {
+        write(PlayerInfoPacket(viewport, updates, previousLocations, locations, steps))
+        write(NPCInfoPacket(viewport, locations))
         flushPool()
     }
 }

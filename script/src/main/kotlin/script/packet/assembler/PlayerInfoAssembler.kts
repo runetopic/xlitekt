@@ -19,6 +19,7 @@ import xlitekt.shared.buffer.BitAccess
 import xlitekt.shared.buffer.withBitAccess
 import xlitekt.shared.buffer.writeBytes
 import kotlin.math.abs
+import xlitekt.game.actor.movement.MovementSpeed
 
 /**
  * @author Jordan Abraham
@@ -27,8 +28,8 @@ onPacketAssembler<PlayerInfoPacket>(opcode = 80, size = -2) {
     buildPacket {
         val blocks = BytePacketBuilder()
         viewport.also {
-            highDefinition(it, blocks, updates, previousLocations, locations, steps, teleports, true)
-            highDefinition(it, blocks, updates, previousLocations, locations, steps, teleports, false)
+            highDefinition(it, blocks, updates, previousLocations, locations, steps, true)
+            highDefinition(it, blocks, updates, previousLocations, locations, steps, false)
             lowDefinition(it, blocks, updates, locations, true)
             lowDefinition(it, blocks, updates, locations, false)
         }.update()
@@ -43,7 +44,6 @@ fun BytePacketBuilder.highDefinition(
     previousLocations: Map<Player, Location?>,
     locations: Map<Player, Location>,
     steps: Map<Player, MovementStep?>,
-    teleports: Map<Player, Boolean>,
     nsn: Boolean
 ) {
     var skip = -1
@@ -56,7 +56,7 @@ fun BytePacketBuilder.highDefinition(
             val removing = shouldRemove(locations[viewport.player], locations[other])
             val updating = updates[other] != null
             val moving = steps[other] != null
-            val teleporting = teleports[other] == true
+            val teleporting = steps[other]?.speed == MovementSpeed.TELEPORTING
             val active = removing || moving || updating || teleporting
             if (other == null || !active) {
                 viewport.nsnFlags[index] = viewport.nsnFlags[index] or 2
@@ -117,15 +117,14 @@ fun BitAccess.processHighDefinitionPlayer(
             val previous = previousLocation ?: other.location
             writeBit(updating)
             writeBits(2, 3)
-            var xOffset: Int = currentLocation.x - previous.x
-            var yOffset: Int = currentLocation.z - previous.z
-            val planeOffset: Int = currentLocation.level - previous.level
+            var xOffset = currentLocation.x - previous.x
+            var yOffset = currentLocation.z - previous.z
+            val planeOffset = currentLocation.level - previous.level
             if (abs(currentLocation.x - previous.x) <= 14 &&
                 abs(currentLocation.z - previous.z) <= 14
             ) {
                 writeBits(1, 0)
-                if (xOffset < 0)
-                    xOffset += 32
+                if (xOffset < 0) xOffset += 32
                 if (yOffset < 0) yOffset += 32
                 writeBits(12, yOffset + (xOffset shl 5) + (planeOffset shl 10))
             } else {

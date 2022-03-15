@@ -1,5 +1,6 @@
 package script.packet.disassembler.handler
 
+import org.rsmod.pathfinder.RouteCoordinates
 import org.rsmod.pathfinder.SmartPathFinder
 import xlitekt.game.packet.MovementPacket
 import xlitekt.game.packet.disassembler.handler.onPacketHandler
@@ -19,6 +20,5 @@ onPacketHandler<MovementPacket> {
         destY = packet.destinationZ,
         z = player.location.level
     )
-    player.movement.reset()
-    player.movement.addAll(path.coords.map { Location(it.x, it.y, player.location.level) })
+    player.movement.route(path.coords.map { Location(it.x, it.y, player.location.level) })
 }

@@ -26,7 +26,7 @@ onCommand("tele").use { arguments ->
 
         val level = arguments.drop(2).firstOrNull()?.toInt() ?: location.level
 
-        nextLocation = Location(x, z, level)
+        movement.route(location = Location(x, z, level), teleport = true)
         message("Teleported: ${Location(x, z, level)}")
     } catch (exception: NumberFormatException) {
         message(invalidSyntaxMessage)
