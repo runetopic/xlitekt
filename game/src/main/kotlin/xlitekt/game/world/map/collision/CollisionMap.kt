@@ -1,5 +1,6 @@
 package xlitekt.game.world.map.collision
 
+import org.rsmod.pathfinder.ZoneFlags
 import org.rsmod.pathfinder.flag.CollisionFlag.FLOOR
 import org.rsmod.pathfinder.flag.CollisionFlag.FLOOR_DECORATION
 import org.rsmod.pathfinder.flag.CollisionFlag.OBJECT
@@ -35,12 +36,12 @@ import xlitekt.cache.provider.map.MapSquareEntryType
 import xlitekt.game.world.map.location.Location
 import xlitekt.game.world.map.obj.GameObject
 import xlitekt.game.world.map.obj.GameObjectShape
-import xlitekt.game.world.map.zone.ZoneFlags
 import xlitekt.shared.inject
 import kotlin.experimental.and
 
 object CollisionMap {
     private val locs by inject<LocEntryTypeProvider>()
+    private val zoneFlags by inject<ZoneFlags>()
 
     fun applyCollision(type: MapSquareEntryType) {
         for (level in 0 until MapEntryTypeProvider.LEVELS) {
@@ -77,7 +78,7 @@ object CollisionMap {
         }
     }
 
-    fun collisionFlag(location: Location) = ZoneFlags[location]
+    fun collisionFlag(location: Location) = zoneFlags[location.x, location.z, location.level]
     private fun addObjectCollision(obj: GameObject) = changeNormalCollision(obj, true)
     fun removeObjectCollision(obj: GameObject) = changeNormalCollision(obj, false)
 
@@ -381,9 +382,9 @@ object CollisionMap {
 
     private fun changeFloorDecor(coords: Location, add: Boolean) = addCollisionFlag(coords, FLOOR_DECORATION, add)
 
-    private fun addCollisionFlag(coords: Location, mask: Int, add: Boolean) = when {
-        add -> ZoneFlags.add(coords, mask)
-        else -> ZoneFlags.remove(coords, mask)
+    private fun addCollisionFlag(location: Location, mask: Int, add: Boolean) = when {
+        add -> zoneFlags.add(location.x, location.z, location.level, mask)
+        else -> zoneFlags.remove(location.x, location.z, location.level, mask)
     }
 
     fun addFloorCollision(location: Location) = addCollisionFlag(location, FLOOR, true)

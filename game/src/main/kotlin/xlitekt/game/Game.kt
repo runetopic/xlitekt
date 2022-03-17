@@ -1,23 +1,23 @@
 package xlitekt.game
 
+import org.rsmod.pathfinder.ZoneFlags
 import xlitekt.cache.provider.map.MapEntryTypeProvider
 import xlitekt.game.actor.npc.NPC
 import xlitekt.game.world.World
 import xlitekt.game.world.engine.LoopTask
 import xlitekt.game.world.map.collision.CollisionMap
 import xlitekt.game.world.map.location.Location
-import xlitekt.game.world.map.zone.Zones
 import xlitekt.shared.inject
 
 class Game {
     private val loop = LoopTask()
     private val maps by inject<MapEntryTypeProvider>()
-
     private val world by inject<World>()
+    private val zoneFlags by inject<ZoneFlags>()
 
     fun start() {
         maps.entries().forEach(CollisionMap::applyCollision)
-        println("Created ${Zones.zones.filterNotNull().size}")
+        println("Clipped: ${zoneFlags.flags.filterNotNull().size} zones")
 
         repeat(10) { x ->
             repeat(10) { z ->

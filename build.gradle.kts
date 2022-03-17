@@ -32,7 +32,7 @@ allprojects {
             }
         }
         withType<KotlinCompile> {
-            kotlinOptions.jvmTarget = "1.8"
+            kotlinOptions.jvmTarget = "11"
             kotlinOptions.freeCompilerArgs = listOf(
                 "-Xopt-in=kotlinx.coroutines.ExperimentalCoroutinesApi",
                 "-Xopt-in=kotlin.time.ExperimentalTime",
