@@ -63,19 +63,29 @@ val npcBlocks = mapOf(
     Render.NPCTransmogrification::class to NPCTransmogrificationBlock()
 )
 
-fun List<Render>.buildPlayerUpdateBlocks(player: Player) = buildPacket {
-    val blocks = this@buildPlayerUpdateBlocks.map { it to playerBlocks[it::class]!! }.sortedBy { it.second.index }.toMap()
-    val mask = blocks.map { it.value.mask }.sum().let { if (it > 0xff) it or 0x10 else it }
-    if (mask > 0xff) writeShortLittleEndian(mask.toShort()) else writeByte(mask.toByte())
-    blocks.forEach { writeBytes(it.value.build(player, it.key).copy().readBytes()) }
+fun List<Render>.buildPlayerUpdateBlocks(player: Player, cache: Boolean = true) = buildPacket {
+    val blocks = this@buildPlayerUpdateBlocks.toSortedPlayerBlocks()
+    writeMask(blocks.map { it.value.mask }.sum().let { if (it > 0xff) it or 0x10 else it })
+    blocks.forEach {
+        // If (cache == true) then it will create a new block buffer and cache the new one to the player.
+        val packet = if (cache) it.value.build(player, it.key) else player.cachedUpdates()[it.key]
+        if (packet != null) {
+            if (cache) player.cacheUpdateBlock(it.key, packet)
+            writeBytes(packet.copy().readBytes())
+        }
+    }
 }
 
 fun BytePacketBuilder.buildNPCUpdateBlocks(npc: NPC) {
-    val blocks = npc.pendingUpdates().map { it to npcBlocks[it::class]!! }.sortedBy { it.second.index }.toMap()
-    val mask = blocks.map { it.value.mask }.sum().let { if (it > 0xff) it or 0x4 else it }
-    if (mask > 0xff) writeShortLittleEndian(mask.toShort()) else writeByte(mask.toByte())
+    val blocks = npc.pendingUpdates().toSortedNPCBlocks()
+    writeMask(blocks.map { it.value.mask }.sum().let { if (it > 0xff) it or 0x4 else it })
     blocks.forEach { writeBytes(it.value.build(npc, it.key).copy().readBytes()) }
 }
+
+private fun List<Render>.toSortedPlayerBlocks(): Map<Render, RenderingBlock<Player, Render>> = map { it to playerBlocks[it::class]!! }.sortedBy { it.second.index }.toMap()
+private fun List<Render>.toSortedNPCBlocks(): Map<Render, RenderingBlock<NPC, Render>> = map { it to npcBlocks[it::class]!! }.sortedBy { it.second.index }.toMap()
+
+private fun BytePacketBuilder.writeMask(mask: Int) = if (mask > 0xff) writeShortLittleEndian(mask.toShort()) else writeByte(mask.toByte())
 
 abstract class RenderingBlock<T : Actor, out R : Render>(val index: Int, val mask: Int) {
     abstract fun build(actor: T, render: @UnsafeVariance R): ByteReadPacket

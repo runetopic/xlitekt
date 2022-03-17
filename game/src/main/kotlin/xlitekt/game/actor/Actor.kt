@@ -1,5 +1,6 @@
 package xlitekt.game.actor
 
+import io.ktor.utils.io.core.ByteReadPacket
 import xlitekt.game.actor.movement.Movement
 import xlitekt.game.actor.render.ActorRenderer
 import xlitekt.game.actor.render.HitBarType
@@ -12,8 +13,6 @@ abstract class Actor(
 ) {
     protected val renderer = ActorRenderer()
 
-//    var teleported = false
-//    var nextLocation: Location? = null
     var previousLocation: Location? = null
     var index = 0
 
@@ -46,6 +45,11 @@ abstract class Actor(
 
     fun hasPendingUpdate() = renderer.hasPendingUpdate()
     fun pendingUpdates() = renderer.pendingUpdates.values.toList()
+    fun cacheUpdateBlock(render: Render, block: ByteReadPacket) {
+        renderer.cachedUpdates.entries.removeIf { it.key::class == render::class }
+        renderer.cachedUpdates[render] = block
+    }
+    fun cachedUpdates() = renderer.cachedUpdates
 
     fun reset() {
         renderer.clearUpdates()

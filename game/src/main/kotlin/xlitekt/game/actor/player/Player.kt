@@ -60,6 +60,7 @@ class Player(
         movementType(false)
         interfaces.login()
         vars.login()
+        faceDirection(640)
         sendUpdateRunEnergy()
         if (vars[VarPlayer.ToggleRun] == 1) movement.toggleRun()
 

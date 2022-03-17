@@ -5,12 +5,13 @@ import io.ktor.utils.io.core.ByteReadPacket
 import io.ktor.utils.io.core.buildPacket
 import io.ktor.utils.io.core.readBytes
 import xlitekt.game.actor.movement.Direction
+import xlitekt.game.actor.movement.MovementSpeed
 import xlitekt.game.actor.movement.MovementStep
 import xlitekt.game.actor.player.Client.Companion.world
 import xlitekt.game.actor.player.Player
 import xlitekt.game.actor.player.Viewport
 import xlitekt.game.actor.render.Render
-import xlitekt.game.actor.render.block.playerBlocks
+import xlitekt.game.actor.render.block.buildPlayerUpdateBlocks
 import xlitekt.game.packet.PlayerInfoPacket
 import xlitekt.game.packet.assembler.onPacketAssembler
 import xlitekt.game.world.map.location.Location
@@ -19,7 +20,6 @@ import xlitekt.shared.buffer.BitAccess
 import xlitekt.shared.buffer.withBitAccess
 import xlitekt.shared.buffer.writeBytes
 import kotlin.math.abs
-import xlitekt.game.actor.movement.MovementSpeed
 
 /**
  * @author Jordan Abraham
@@ -30,8 +30,8 @@ onPacketAssembler<PlayerInfoPacket>(opcode = 80, size = -2) {
         viewport.also {
             highDefinition(it, blocks, updates, previousLocations, locations, steps, true)
             highDefinition(it, blocks, updates, previousLocations, locations, steps, false)
-            lowDefinition(it, blocks, updates, locations, true)
-            lowDefinition(it, blocks, updates, locations, false)
+            lowDefinition(it, blocks, locations, true)
+            lowDefinition(it, blocks, locations, false)
         }.update()
         writePacket(blocks.build())
     }
@@ -161,7 +161,6 @@ fun BitAccess.processHighDefinitionPlayer(
 fun BytePacketBuilder.lowDefinition(
     viewport: Viewport,
     blocks: BytePacketBuilder,
-    updates: Map<Player, ByteReadPacket>,
     locations: Map<Player, Location>,
     nsn: Boolean
 ) {
@@ -189,7 +188,6 @@ fun BytePacketBuilder.lowDefinition(
                 index,
                 blocks,
                 locations[other]!!, // This is okay since it is checked above.
-                updates[other]
             )
         }
         if (skip > -1) {
@@ -204,7 +202,6 @@ fun BitAccess.processLowDefinitionPlayer(
     index: Int,
     blocks: BytePacketBuilder,
     location: Location,
-    updates: ByteReadPacket?
 ) {
     // add an external player to start tracking
     writeBits(2, 0)
@@ -214,9 +211,18 @@ fun BitAccess.processLowDefinitionPlayer(
     // send a force block update
     writeBit(true)
 
-    val appearanceBlock = playerBlocks[Render.Appearance::class]!!
-    blocks.writeByte(appearanceBlock.mask.toByte())
-    blocks.writeBytes(appearanceBlock.build(other, other.appearance).copy().readBytes())
+    // When adding a player to the local view, we can grab their blocks from their cached list.
+    val cached = other.cachedUpdates()
+        .filter {
+            it.key is Render.Appearance ||
+                it.key is Render.MovementType ||
+                it.key is Render.TemporaryMovementType ||
+                it.key is Render.FaceDirection
+        }
+        .map(Map.Entry<Render, ByteReadPacket>::key)
+        .buildPlayerUpdateBlocks(other, false)
+
+    blocks.writeBytes(cached.readBytes())
 
     viewport.localPlayers[other.index] = other
     viewport.nsnFlags[index] = viewport.nsnFlags[index] or 2

@@ -41,6 +41,25 @@ sealed class Direction {
         is SouthWest -> 0
     }
 
+    fun angle(): Int = when (this) {
+        is NorthWest -> 768
+        is NorthNorthWest -> 896
+        is North -> 1024
+        is NorthNorthEast -> 1152
+        is NorthEast -> 1280
+        is WestNorthWest -> 640
+        is EastNorthEast -> 1408
+        is West -> 512
+        is East -> 1536
+        is WestSouthWest -> 384
+        is EastSouthEast -> 1664
+        is SouthWest -> 256
+        is SouthSouthWest -> 128
+        is South -> 0
+        is SouthSouthEast -> 1920
+        is SouthEast -> 1792
+    }
+
     companion object {
         fun directionFromDelta(deltaX: Int, deltaZ: Int): Direction = when {
             // 16 point direction.

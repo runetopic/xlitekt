@@ -1,5 +1,6 @@
 package xlitekt.game.actor.render
 
+import io.ktor.utils.io.core.ByteReadPacket
 import xlitekt.game.actor.Actor
 import xlitekt.game.world.map.location.Location
 import kotlin.reflect.KClass
@@ -12,6 +13,7 @@ import kotlin.reflect.KClass
 class ActorRenderer {
 
     val pendingUpdates = mutableMapOf<KClass<*>, Render>()
+    val cachedUpdates = mutableMapOf<Render, ByteReadPacket>()
 
     fun hasPendingUpdate(): Boolean = pendingUpdates.isNotEmpty()
     fun clearUpdates() = pendingUpdates.clear()

@@ -15,6 +15,7 @@ class Movement(
     var currentWaypoint: Location? = null
     private var movementSpeed = MovementSpeed.WALKING
     private var teleporting = false
+    private var direction: Direction = Direction.South
 
     fun process(currentLocation: Location): MovementStep? {
         val previousLocation = actor.previousLocation
@@ -42,6 +43,10 @@ class Movement(
                     it.speed.isWalking() && isEmpty() && previousLocation?.withinDistance(location, 1) == false -> {
                         actor.temporaryMovementType(MovementSpeed.WALKING.id)
                     }
+                }
+                if (direction != it.direction) {
+                    direction = it.direction
+                    actor.faceDirection(direction.angle())
                 }
                 actor.location = location
             }
