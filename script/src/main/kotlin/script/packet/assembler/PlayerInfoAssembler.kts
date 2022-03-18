@@ -270,9 +270,6 @@ fun BitAccess.writeSkip(count: Int) {
     }
 }
 
-fun shouldAdd(us: Location?, other: Location?): Boolean = (us != null && other != null && other.withinDistance(us))
-fun shouldRemove(us: Location?, other: Location?): Boolean = us != null && (other == null || !other.withinDistance(us))
-
 fun highDefinitionActivities(
     viewport: Viewport,
     other: Player?,
@@ -280,9 +277,12 @@ fun highDefinitionActivities(
     updates: Map<Player, ByteReadPacket>,
     steps: Map<Player, MovementStep?>
 ) = buildList {
-    if (shouldRemove(locations[viewport.player], locations[other])) add(Removing)
-    if (steps[other]?.speed == MovementSpeed.TELEPORTING) add(Teleporting)
-    if (steps[other] != null) add(Moving)
+    val ourLocation = locations[viewport.player]
+    val theirLocation = locations[other]
+    if (ourLocation != null && (theirLocation == null || !theirLocation.withinDistance(ourLocation))) add(Removing)
+    else if (steps[other]?.speed == MovementSpeed.TELEPORTING) add(Teleporting)
+    else if (steps[other] != null) add(Moving)
+    // Always check if this player has block updates.
     if (updates[other] != null) add(Updating)
 }
 
@@ -291,5 +291,8 @@ fun lowDefinitionActivities(
     other: Player?,
     locations: Map<Player, Location>
 ) = buildList<LowDefinitionActivity> {
-    if (shouldAdd(locations[viewport.player], locations[other])) add(Adding)
+    val ourLocation = locations[viewport.player]
+    val theirLocation = locations[other]
+    if ((ourLocation != null && theirLocation != null && theirLocation.withinDistance(ourLocation))) add(Adding)
+    // List is unnecessary here but looks better for consistency.
 }
