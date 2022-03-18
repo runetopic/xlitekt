@@ -45,8 +45,8 @@ class Viewport(
         }
     }
 
-    fun isNsnFlagged(index: Int): Boolean = nsnFlags[index] and 0x1 != 0
-    fun setNsnFlagged(index: Int) {
+    fun isNsn(index: Int): Boolean = nsnFlags[index] and 0x1 != 0
+    fun setNsn(index: Int) {
         nsnFlags[index] = nsnFlags[index] or 2
     }
 

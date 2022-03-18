@@ -124,12 +124,12 @@ fun BytePacketBuilder.highDefinition(
     withBitAccess {
         repeat(viewport.highDefinitionsCount) {
             val index = viewport.highDefinitions[it]
-            if (viewport.isNsnFlagged(index) == nsn) return@repeat
+            if (viewport.isNsn(index) == nsn) return@repeat
             val other = viewport.players[index]
             // Check the activities this player is doing.
             val activities = highDefinitionActivities(viewport, other, locations, updates, steps)
             if (other == null || activities.isEmpty()) {
-                viewport.setNsnFlagged(index)
+                viewport.setNsn(index)
                 skip++
                 return@repeat
             }
@@ -139,28 +139,25 @@ fun BytePacketBuilder.highDefinition(
             }
             // This player has activity and needs to be processed.
             writeBit(true)
-            // Check if this player has pending update blocks.
-            val updating = activities.contains(Updating)
             // We can always grab the first one. Ordering is important for this and how they are added to the activities list.
-            activities.first().apply {
-                writeBits(
-                    bits = this@withBitAccess,
-                    updating = updating,
-                    current = locations[other] ?: other.location,
-                    previous = previousLocations[other] ?: other.location,
-                    step = steps[other]
-                )
-            }.run {
-                when (this) {
-                    Removing -> {
-                        // Update location.
-                        viewport.locations[index] = 0
-                        updateLocation(viewport, index, locations[other] ?: other.location)
-                        viewport.players[index] = null
-                    }
-                    Teleporting, Moving, Updating -> if (updating) {
-                        blocks.writeBytes(updates[other]!!.copy().readBytes())
-                    }
+            val activity = activities.first()
+            val updating = activities.contains(Updating)
+            activity.writeBits(
+                bits = this@withBitAccess,
+                updating = updating,
+                current = locations[other] ?: other.location,
+                previous = previousLocations[other] ?: other.location,
+                step = steps[other]
+            )
+            when (activity) {
+                Removing -> {
+                    // Update location.
+                    viewport.locations[index] = 0
+                    updateLocation(viewport, index, locations[other] ?: other.location)
+                    viewport.players[index] = null
+                }
+                Teleporting, Moving, Updating -> if (updating) {
+                    blocks.writeBytes(updates[other]!!.copy().readBytes())
                 }
             }
         }
@@ -180,12 +177,12 @@ fun BytePacketBuilder.lowDefinition(
     withBitAccess {
         repeat(viewport.lowDefinitionsCount) {
             val index = viewport.lowDefinitions[it]
-            if (!viewport.isNsnFlagged(index) == nsn) return@repeat
+            if (!viewport.isNsn(index) == nsn) return@repeat
             val other = world.players[index]
             // Check the activities this player is doing.
             val activities = lowDefinitionActivities(viewport, other, locations)
             if (other == null || activities.isEmpty()) {
-                viewport.setNsnFlagged(index)
+                viewport.setNsn(index)
                 skip++
                 return@repeat
             }
@@ -196,28 +193,22 @@ fun BytePacketBuilder.lowDefinition(
             // This player has activity and needs to be processed.
             writeBit(true)
             // We can always grab the first one.
-            activities.first().apply {
-                writeBits(
-                    bits = this@withBitAccess,
-                    current = locations[other] ?: other.location
-                )
-            }.run {
-                when (this) {
-                    Adding -> {
-                        // When adding a player to the local view, we can grab their blocks from their cached list.
-                        other.cachedUpdates()
-                            .filter { entry ->
-                                entry.key is Render.Appearance ||
-                                    entry.key is Render.MovementType ||
-                                    entry.key is Render.TemporaryMovementType ||
-                                    entry.key is Render.FaceDirection
-                            }
-                            .map(Map.Entry<Render, ByteReadPacket>::key)
-                            .buildPlayerUpdateBlocks(other, false)
-                            .run { blocks.writeBytes(readBytes()) }
-                        viewport.players[other.index] = other
-                        viewport.setNsnFlagged(index)
-                    }
+            val activity = activities.first()
+            activity.writeBits(
+                bits = this@withBitAccess,
+                current = locations[other] ?: other.location
+            )
+            when (activity) {
+                Adding -> {
+                    // When adding a player to the local view, we can grab their blocks from their cached list.
+                    other.cachedUpdates().filter { entry ->
+                        entry.key is Render.Appearance ||
+                            entry.key is Render.MovementType ||
+                            entry.key is Render.TemporaryMovementType ||
+                            entry.key is Render.FaceDirection
+                    }.map(Map.Entry<Render, ByteReadPacket>::key).buildPlayerUpdateBlocks(other, false).run { blocks.writeBytes(readBytes()) }
+                    viewport.players[other.index] = other
+                    viewport.setNsn(index)
                 }
             }
         }
