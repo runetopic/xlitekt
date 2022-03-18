@@ -8,49 +8,65 @@ import java.util.Deque
 import java.util.LinkedList
 import kotlin.math.sign
 
+/**
+ * @author Jordan Abraham
+ */
 class Movement(
     private val actor: Actor,
     private val waypoints: LinkedList<Location> = LinkedList(),
 ) : Deque<Location> by waypoints {
-    var currentWaypoint: Location? = null
+    private val steps = LinkedList<WaypointStep>()
     private var movementSpeed = MovementSpeed.WALKING
     private var teleporting = false
     private var direction: Direction = Direction.South
 
     fun process(currentLocation: Location): MovementStep? {
-        val previousLocation = actor.previousLocation
         actor.previousLocation = currentLocation
-        if (isEmpty() && currentWaypoint == null) {
-            println("RETURN NULL 1")
+        if (isEmpty() && steps.isEmpty()) {
             return null
         }
-        if (atWaypoint()) {
-            currentWaypoint = waypoints.poll() ?: run {
-                return null
-            }
+        if (steps.isEmpty()) {
+            queueWaypointSteps(currentLocation)
+            if (steps.isEmpty()) return null
         }
-        return nextWaypointStep(currentLocation).run {
-            MovementStep(
-                speed = speed,
-                location = location,
-                direction = if (speed == MovementSpeed.TELEPORTING) Direction.South else currentLocation.directionTo(location)
-            ).also {
-                when {
-                    it.speed.isTeleporting() -> {
-                        actor.temporaryMovementType(MovementSpeed.TELEPORTING.id)
-                        teleporting = false
-                    }
-                    it.speed.isWalking() && isEmpty() && previousLocation?.withinDistance(location, 1) == false -> {
+        // Poll the first step to move to.
+        var step = steps.poll() ?: return null
+        // The current speed of the first step.
+        var stepSpeed = step.speed
+        when (step.speed) {
+            MovementSpeed.TELEPORTING -> {
+                actor.temporaryMovementType(MovementSpeed.TELEPORTING.id)
+                teleporting = false
+            }
+            MovementSpeed.WALKING, MovementSpeed.RUNNING -> if (step.speed == MovementSpeed.RUNNING) {
+                // If the player is running, then we poll the second step to move to.
+                step = steps.poll() ?: run {
+                    // If the second step is unavailable, then we try to queue more and poll for the second step again.
+                    queueWaypointSteps(step.location)
+                    steps.poll()?.let {
+                        // If the new-found second step is within walking distance, then we have to adjust the step speed to walking instead of running.
+                        // We do not use the movement type mask here because we want the player to look like they are running but using walking opcodes.
+                        if (it.location.withinDistance(currentLocation, 1)) {
+                            stepSpeed = MovementSpeed.WALKING
+                        }
+                        it
+                    } ?: run {
+                        // If a second step is not able to be found, then we adjust the step the player has to walking.
+                        stepSpeed = MovementSpeed.WALKING
+                        // Apply this mask to the player to show them actually walking.
                         actor.temporaryMovementType(MovementSpeed.WALKING.id)
+                        step
                     }
                 }
-                if (direction != it.direction) {
-                    direction = it.direction
-                    actor.faceDirection(direction.angle())
-                }
-                actor.location = location
             }
         }
+        actor.location = step.location
+        val direction = if (step.speed == MovementSpeed.TELEPORTING) Direction.South else currentLocation.directionTo(step.location)
+        if (this.direction != direction) {
+            this.direction = direction
+            actor.faceDirection(direction.angle())
+        }
+        return MovementStep(stepSpeed, step.location, direction)
     }
 
     fun route(list: List<Location>) {
@@ -64,49 +80,32 @@ class Movement(
         if (teleport) teleporting = true
     }
 
-    private fun nextWaypointStep(location: Location): WaypointStep {
-        val waypoint = currentWaypoint ?: throw IllegalStateException("Current waypoint is null.")
-        if (teleporting) return WaypointStep(MovementSpeed.TELEPORTING, waypoint)
-        val waypointX = waypoint.x
-        val waypointZ = waypoint.z
+    private fun queueWaypointSteps(location: Location) {
+        if (waypoints.isEmpty()) return
+        steps.clear()
+        val waypoint = waypoints.poll()
+        if (teleporting) {
+            steps.add(WaypointStep(MovementSpeed.TELEPORTING, waypoint))
+            return
+        }
         var currentX = location.x
         var currentZ = location.z
+        val waypointX = waypoint.x
+        val waypointZ = waypoint.z
         val xSign = (waypointX - currentX).sign
         val zSign = (waypointZ - currentZ).sign
-        var speed = MovementSpeed.WALKING
-        repeat(movementSpeed.id) {
-            if (currentX != waypointX || currentZ != waypointZ) {
-                if (it == 1) speed = MovementSpeed.RUNNING
-                currentX += xSign
-                currentZ += zSign
-            } else {
-                currentWaypoint = poll()
-                if (currentWaypoint != null) {
-                    val waypoint = currentWaypoint ?: throw IllegalStateException("Current waypoint is null.")
-                    if (teleporting) return WaypointStep(MovementSpeed.TELEPORTING, waypoint)
-                    val waypointX = waypoint.x
-                    val waypointZ = waypoint.z
-                    val xSign = (waypointX - currentX).sign
-                    val zSign = (waypointZ - currentZ).sign
-                    if (currentX != waypointX || currentZ != waypointZ) {
-                        currentX += xSign
-                        currentZ += zSign
-                    }
-                }
-            }
+        var count = 0
+        while (currentX != waypointX || currentZ != waypointZ) {
+            currentX += xSign
+            currentZ += zSign
+            steps.add(WaypointStep(movementSpeed, Location(currentX, currentZ)))
+            if (++count > 25) break
         }
-        return WaypointStep(speed, Location(currentX, currentZ))
     }
 
-    private fun atWaypoint(): Boolean {
-        if (teleporting) return true
-        if (currentWaypoint == null) return true
-        return currentWaypoint!!.x - actor.location.x == 0 && currentWaypoint!!.z - actor.location.z == 0
-    }
-
-    fun reset() {
+    private fun reset() {
         waypoints.clear()
-        currentWaypoint = null
+        steps.clear()
         teleporting = false
     }
 
