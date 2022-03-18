@@ -13,7 +13,6 @@ import xlitekt.game.world.map.location.withinDistance
 import xlitekt.game.world.map.zone.Zones
 import xlitekt.shared.buffer.BitAccess
 import xlitekt.shared.buffer.withBitAccess
-import xlitekt.shared.toInt
 
 /**
  * @author Jordan Abraham
@@ -24,8 +23,8 @@ onPacketAssembler<NPCInfoPacket>(opcode = 78, size = -2) {
         val blocks = BytePacketBuilder()
         withBitAccess {
             viewport.let {
-                println("Sending ${it.localNPCs.size}")
-                writeBits(8, it.localNPCs.size)
+                println("Sending ${it.npcs.size}")
+                writeBits(8, it.npcs.size)
                 highDefinition(it, blocks, playerLocations)
                 lowDefinition(it, blocks, playerLocations)
             }
@@ -59,7 +58,7 @@ fun BitAccess.lowDefinition(viewport: Viewport, blocks: BytePacketBuilder, playe
         if (zone == null) return@forEach
 
         zone.npcs
-            .filter { !viewport.localNPCs.contains(it) }
+            .filter { !viewport.npcs.contains(it) }
             .filter { it.location.withinDistance(playerLocation, 14) }
             .forEach {
                 writeBits(15, it.index)
@@ -74,18 +73,18 @@ fun BitAccess.lowDefinition(viewport: Viewport, blocks: BytePacketBuilder, playe
                 writeBits(1, 0) // TODO handle teleporting
                 writeBits(14, it.id)
                 writeBits(5, x)
-                viewport.localNPCs.add(it)
+                viewport.npcs.add(it)
                 // if (it.hasPendingUpdate()) blocks.buildNPCUpdateBlocks(it)
             }
     }
 
-    println(viewport.localNPCs.size)
+    println(viewport.npcs.size)
 }
 
 fun BitAccess.highDefinition(viewport: Viewport, blocks: BytePacketBuilder, playerLocations: Map<Player, Location>) {
     val location = playerLocations[viewport.player] ?: viewport.player.location
 
-    viewport.localNPCs.forEach {
+    viewport.npcs.forEach {
         if (!it.location.withinDistance(location, 14)) {
             removeNPC()
             //viewport.localNPCs.remove(it)
@@ -94,7 +93,7 @@ fun BitAccess.highDefinition(viewport: Viewport, blocks: BytePacketBuilder, play
         val updating = processHighDefinitionNPC(it)
         if (updating) blocks.buildNPCUpdateBlocks(it)
     }
-    viewport.localNPCs.removeAll { !it.location.withinDistance(location, 14) }
+    viewport.npcs.removeAll { !it.location.withinDistance(location, 14) }
 }
 
 fun BitAccess.processHighDefinitionNPC(npc: NPC): Boolean {

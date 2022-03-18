@@ -22,7 +22,7 @@ onPacketAssembler<NPCInfoExtendedPacket>(opcode = 90, size = -2) {
         val blocks = BytePacketBuilder()
         withBitAccess {
             viewport.also {
-                writeBits(8, it.localNPCs.size)
+                writeBits(8, it.npcs.size)
                 highDefinition(it, blocks)
                 lowDefinition(it, blocks)
             }
@@ -36,7 +36,7 @@ onPacketAssembler<NPCInfoExtendedPacket>(opcode = 90, size = -2) {
 
 fun BitAccess.lowDefinition(viewport: Viewport, blocks: BytePacketBuilder) {
     world.npcs.toList().filterNotNull().forEach { // TODO iterate visible map regions to display all npcs when we do region support.
-        if (viewport.localNPCs.contains(it)) return@forEach
+        if (viewport.npcs.contains(it)) return@forEach
         writeBits(15, it.index)
         writeBits(1, 0) // if 1 == 1 read 32 bits they just don't use it atm. Looks like they're working on something
         var x = it.location.x - viewport.player.location.x
@@ -49,13 +49,13 @@ fun BitAccess.lowDefinition(viewport: Viewport, blocks: BytePacketBuilder) {
         writeBits(1, 0) // TODO handle teleporting
         writeBits(14, it.id)
         writeBits(8, x)
-        viewport.localNPCs.add(it)
+        viewport.npcs.add(it)
         if (it.hasPendingUpdate()) blocks.buildNPCUpdateBlocks(it)
     }
 }
 
 fun BitAccess.highDefinition(viewport: Viewport, blocks: BytePacketBuilder) {
-    viewport.localNPCs.forEach {
+    viewport.npcs.forEach {
         if (!it.location.withinDistance(viewport.player, 126)) {
             removeNPC()
             return@forEach

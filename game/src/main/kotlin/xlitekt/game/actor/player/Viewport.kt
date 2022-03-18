@@ -13,36 +13,41 @@ class Viewport(
 ) {
     val nsnFlags = IntArray(MAX_PLAYERS)
     val locations = IntArray(MAX_PLAYERS)
-    val localIndexes = IntArray(MAX_PLAYERS)
-    val externalIndexes = IntArray(MAX_PLAYERS)
-    val localPlayers = Array<Player?>(MAX_PLAYERS) { null }
-    val localNPCs = LinkedList<NPC>()
-    var localIndexesSize: Int = 0
-    var externalIndexesSize: Int = 0
+    val highDefinitions = IntArray(MAX_PLAYERS)
+    val lowDefinitions = IntArray(MAX_PLAYERS)
+    val players = Array<Player?>(MAX_PLAYERS) { null }
+    val npcs = LinkedList<NPC>()
+    var highDefinitionsCount: Int = 0
+    var lowDefinitionsCount: Int = 0
 
     fun init(builder: BytePacketBuilder) = builder.withBitAccess {
         writeBits(30, player.location.packedLocation)
-        localPlayers[player.index] = player
-        localIndexes[localIndexesSize++] = player.index
+        players[player.index] = player
+        highDefinitions[highDefinitionsCount++] = player.index
         (1 until MAX_PLAYERS).forEach {
             if (it == player.index) return@forEach
             val otherRegionCoordinates = world.players[it]?.location?.regionLocation ?: 0
             writeBits(18, otherRegionCoordinates)
             locations[it] = otherRegionCoordinates
-            externalIndexes[externalIndexesSize++] = it
+            lowDefinitions[lowDefinitionsCount++] = it
         }
     }
 
     fun update() {
-        localIndexesSize = 0
-        externalIndexesSize = 0
+        highDefinitionsCount = 0
+        lowDefinitionsCount = 0
         (1 until MAX_PLAYERS).forEach {
-            when (localPlayers[it]) {
-                null -> externalIndexes[externalIndexesSize++] = it
-                else -> localIndexes[localIndexesSize++] = it
+            when (players[it]) {
+                null -> lowDefinitions[lowDefinitionsCount++] = it
+                else -> highDefinitions[highDefinitionsCount++] = it
             }
             nsnFlags[it] = (nsnFlags[it] shr 1)
         }
+    }
+
+    fun isNsnFlagged(index: Int): Boolean = nsnFlags[index] and 0x1 != 0
+    fun setNsnFlagged(index: Int) {
+        nsnFlags[index] = nsnFlags[index] or 2
     }
 
     override fun equals(other: Any?): Boolean {
@@ -53,11 +58,11 @@ class Viewport(
 
         if (!nsnFlags.contentEquals(other.nsnFlags)) return false
         if (!locations.contentEquals(other.locations)) return false
-        if (!localIndexes.contentEquals(other.localIndexes)) return false
-        if (!externalIndexes.contentEquals(other.externalIndexes)) return false
-        if (!localPlayers.contentEquals(other.localPlayers)) return false
-        if (localIndexesSize != other.localIndexesSize) return false
-        if (externalIndexesSize != other.externalIndexesSize) return false
+        if (!highDefinitions.contentEquals(other.highDefinitions)) return false
+        if (!lowDefinitions.contentEquals(other.lowDefinitions)) return false
+        if (!players.contentEquals(other.players)) return false
+        if (highDefinitionsCount != other.highDefinitionsCount) return false
+        if (lowDefinitionsCount != other.lowDefinitionsCount) return false
 
         return true
     }
@@ -65,11 +70,11 @@ class Viewport(
     override fun hashCode(): Int {
         var result = nsnFlags.contentHashCode()
         result = 31 * result + locations.contentHashCode()
-        result = 31 * result + localIndexes.contentHashCode()
-        result = 31 * result + externalIndexes.contentHashCode()
-        result = 31 * result + localPlayers.contentHashCode()
-        result = 31 * result + localIndexesSize
-        result = 31 * result + externalIndexesSize
+        result = 31 * result + highDefinitions.contentHashCode()
+        result = 31 * result + lowDefinitions.contentHashCode()
+        result = 31 * result + players.contentHashCode()
+        result = 31 * result + highDefinitionsCount
+        result = 31 * result + lowDefinitionsCount
         return result
     }
 
