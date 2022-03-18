@@ -12,7 +12,7 @@ object Zones {
         return zones[zoneLocation.packedCoordinates]
     }
 
-    fun getOrCreateZone(location: ZoneLocation): Zone {
+    fun createZone(location: ZoneLocation): Zone {
         val currentZone = zones[location.packedCoordinates]
         if (currentZone != null) return currentZone
         val newZone = Zone()

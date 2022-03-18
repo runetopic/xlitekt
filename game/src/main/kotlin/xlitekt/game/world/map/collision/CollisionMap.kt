@@ -36,6 +36,7 @@ import xlitekt.cache.provider.map.MapSquareEntryType
 import xlitekt.game.world.map.location.Location
 import xlitekt.game.world.map.obj.GameObject
 import xlitekt.game.world.map.obj.GameObjectShape
+import xlitekt.game.world.map.zone.Zones
 import xlitekt.shared.inject
 import kotlin.experimental.and
 
@@ -55,8 +56,10 @@ object CollisionMap {
 
                     val baseX = type.regionX shl 6
                     val baseZ = type.regionZ shl 6
+
                     val location = Location(x + baseX, z + baseZ, level)
                     addFloorCollision(location)
+                    Zones.createZone(location.toZoneLocation())
                 }
             }
         }
@@ -72,6 +75,7 @@ object CollisionMap {
                         val entry = locs.entryType(mapLocation.id) ?: continue
                         val gameObject = GameObject(entry, location, mapLocation.shape, mapLocation.rotation)
                         addObjectCollision(gameObject)
+                        Zones.createZone(Location(mapLocation.x + baseX, mapLocation.z + baseZ, mapLocation.level).toZoneLocation())
                     }
                 }
             }
@@ -387,5 +391,5 @@ object CollisionMap {
         else -> zoneFlags.remove(location.x, location.z, location.level, mask)
     }
 
-    fun addFloorCollision(location: Location) = addCollisionFlag(location, FLOOR, true)
+    private fun addFloorCollision(location: Location) = addCollisionFlag(location, FLOOR, true)
 }
