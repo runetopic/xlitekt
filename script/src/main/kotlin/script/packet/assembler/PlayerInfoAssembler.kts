@@ -173,12 +173,13 @@ fun BytePacketBuilder.lowDefinition(
             // Update the player blocks.
             writeBit(true)
             // When adding a player to the local view, we can grab their blocks from their cached list.
-            val cached = other.cachedUpdates().filter { entry ->
-                entry.key is Render.Appearance ||
-                    entry.key is Render.MovementType ||
-                    entry.key is Render.TemporaryMovementType ||
-                    entry.key is Render.FaceDirection
-            }
+            val cached = other.cachedUpdates()
+                .filter { entry ->
+                    entry.key is Render.Appearance ||
+                        entry.key is Render.MovementType ||
+                        entry.key is Render.TemporaryMovementType ||
+                        entry.key is Render.FaceDirection
+                }
                 .map(Map.Entry<Render, ByteReadPacket>::key)
                 .buildPlayerUpdateBlocks(other, false)
             blocks.writeBytes(cached.readBytes())
