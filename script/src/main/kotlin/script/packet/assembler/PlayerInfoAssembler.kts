@@ -83,7 +83,7 @@ fun BytePacketBuilder.highDefinition(
                 REMOVING -> {
                     // Player has no update.
                     writeBit(false)
-                    // Make the player update.
+                    // The player is not moving.
                     writeBits(2, 0)
                     // Update location.
                     viewport.locations[index] = 0
@@ -128,7 +128,7 @@ fun BytePacketBuilder.highDefinition(
                 UPDATING -> {
                     // The player has pending block updates.
                     writeBit(true)
-                    // Make the player update.
+                    // The player is not moving.
                     writeBits(2, 0)
                     blocks.writeBytes(updates[other]!!.copy().readBytes())
                 }
