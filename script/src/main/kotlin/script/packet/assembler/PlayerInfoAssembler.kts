@@ -68,9 +68,9 @@ fun BytePacketBuilder.highDefinition(
         }
         writeBit(true)
         val updating = updates[other] != null
-        val current = locations[other] ?: other.location
-        val previous = previousLocations[other] ?: other.location
-        activity.writeBits(this@withBitAccess, viewport, index, updating, current, previous, steps[other])
+        val location = locations[other] ?: other.location
+        val previousLocation = previousLocations[other] ?: other.location
+        activity.writeBits(this@withBitAccess, viewport, index, updating, location, previousLocation, steps[other])
         when (activity) {
             Removing -> {
                 viewport.localPlayersCount = viewport.localPlayersCount - 1
@@ -79,7 +79,7 @@ fun BytePacketBuilder.highDefinition(
             Teleporting, Moving, Updating -> {
                 if (activity != Updating) {
                     // Update the location of the player if they are moving.
-                    viewport.locations[index] = current.regionLocation
+                    viewport.locations[index] = location.regionLocation
                 }
                 if (updating) {
                     blocks.writeBytes(updates[other]!!.copy().readBytes())
@@ -114,7 +114,8 @@ fun BytePacketBuilder.lowDefinition(
             skip = -1
         }
         writeBit(true)
-        activity.writeBits(this@withBitAccess, viewport, index, current = locations[other] ?: other.location, previous = locations[other] ?: other.location)
+        val location = locations[other] ?: other.location
+        activity.writeBits(this@withBitAccess, viewport, index, current = location, previous = location)
         when (activity) {
             Adding -> {
                 // When adding a player to the local view, we can grab their blocks from their cached list.
