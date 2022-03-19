@@ -3,10 +3,10 @@ package xlitekt.shared.buffer
 import com.runetopic.cryptography.isaac.ISAAC
 import io.ktor.utils.io.ByteReadChannel
 
-suspend fun ByteReadChannel.readUMedium() = ((readByte().toInt() and 0xff) shl 16) + ((readByte().toInt() and 0xff) shl 8) + (readByte().toInt() and 0xff)
+suspend fun ByteReadChannel.readUMedium() = ((readByte().toInt() and 0xff) shl 16) or ((readByte().toInt() and 0xff) shl 8) or (readByte().toInt() and 0xff)
 
 suspend fun ByteReadChannel.readPacketOpcode(isaac: ISAAC) = (0xff and (readByte().toInt() and 0xff) - isaac.getNext()).let {
-    if (it > Byte.MAX_VALUE) (it - (Byte.MAX_VALUE + 1) shl 8) + ((readByte().toInt() and 0xff) - isaac.getNext()) else it
+    if (it > Byte.MAX_VALUE) (it - (Byte.MAX_VALUE + 1) shl 8) or ((readByte().toInt() and 0xff) - isaac.getNext()) else it
 }
 
 suspend fun ByteReadChannel.readPacketSize(input: Int) = when (input) {

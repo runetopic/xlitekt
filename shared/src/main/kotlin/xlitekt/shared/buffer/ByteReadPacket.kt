@@ -20,16 +20,16 @@ fun ByteReadPacket.readStringCp1252NullCircumfixed() = buildString {
 
 fun ByteReadPacket.readUByteSubtract() = readUByte().toInt() - 128
 fun ByteReadPacket.readByteAdd() = readByte().toInt() + 128
-fun ByteReadPacket.readShortAdd() = (readByte().toInt() shl 8) + readByteAdd()
 
-fun ByteReadPacket.readUShortLittleEndian() = readUByte().toInt() + (readUByte().toInt() shl 8)
-fun ByteReadPacket.readUShortLittleEndianSubtract() = readUByteSubtract() + (readUByte().toInt() shl 8)
-fun ByteReadPacket.readShortLittleEndianAdd() = readByteAdd() + (readByte().toInt() shl 8)
+fun ByteReadPacket.readShortAdd() = (readByte().toInt() shl 8) or readByteAdd()
+fun ByteReadPacket.readUShortLittleEndian() = readUByte().toInt() or (readUByte().toInt() shl 8)
+fun ByteReadPacket.readUShortLittleEndianSubtract() = readUByteSubtract() or (readUByte().toInt() shl 8)
+fun ByteReadPacket.readShortLittleEndianAdd() = readByteAdd() or (readByte().toInt() shl 8)
 
-fun ByteReadPacket.readUMedium() = (readUByte().toInt() shl 16) + readUShort().toInt()
+fun ByteReadPacket.readUMedium() = (readUByte().toInt() shl 16) or readUShort().toInt()
 
-fun ByteReadPacket.readIntV1() = readUShort().toInt() + (readUByte().toInt() shl 24) + (readUByte().toInt() shl 16)
-fun ByteReadPacket.readIntV2() = (readUByte().toInt() shl 16) + (readUByte().toInt() shl 24) + readUShortLittleEndian()
+fun ByteReadPacket.readIntV1() = readUShort().toInt() or (readUByte().toInt() shl 24) or (readUByte().toInt() shl 16)
+fun ByteReadPacket.readIntV2() = (readUByte().toInt() shl 16) or (readUByte().toInt() shl 24) or readUShortLittleEndian()
 
 fun ByteReadPacket.readIncrSmallSmart(): Int {
     var offset = 0

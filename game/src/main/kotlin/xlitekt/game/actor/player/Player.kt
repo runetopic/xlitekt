@@ -25,6 +25,8 @@ import xlitekt.game.world.World
 import xlitekt.game.world.map.location.Location
 import xlitekt.shared.inject
 import kotlin.math.abs
+import kotlin.random.Random.Default.nextInt
+import xlitekt.game.packet.SetPlayerOpPacket
 
 /**
  * @author Jordan Abraham
@@ -68,16 +70,16 @@ class Player(
         online = true
         inject<EventBus>().value.notify(Events.OnLoginEvent(this))
 
-//        if (username == "jordan") {
-//            repeat(1999) {
-//                val bot = Player(username = "", password = "")
-//                bot.location = Location(nextInt(3210, 3240), nextInt(3210, 3240), 0)
-//                inject<World>().value.players.add(bot)
-//                write(SetPlayerOpPacket(false, "Follow", 1))
-//                bot.login(Client())
-//                // bot.movement.toggleRun()
-//            }
-//        }
+        if (username == "jordan") {
+            repeat(1999) {
+                val bot = Player(username = "", password = "")
+                bot.location = Location(nextInt(3200, 3250), nextInt(3200, 3250), 0)
+                inject<World>().value.players.add(bot)
+                bot.login(Client())
+                write(SetPlayerOpPacket(false, "Follow", 1))
+                // bot.movement.toggleRun()
+            }
+        }
     }
 
     fun logout() {

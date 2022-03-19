@@ -78,6 +78,7 @@ fun BytePacketBuilder.highDefinition(
             }
             Teleporting, Moving, Updating -> {
                 if (activity != Updating) {
+                    // Update the location of the player if they are moving.
                     viewport.locations[index] = current.regionLocation
                 }
                 if (updating) {
@@ -173,7 +174,7 @@ fun lowDefinitionActivities(
     val ourLocation = locations[viewport.player]
     val theirLocation = locations[other]
     return when {
-        ourLocation != null && theirLocation != null && theirLocation.withinDistance(ourLocation) && viewport.localPlayersCount < 250 -> Adding
+        ourLocation != null && theirLocation != null && theirLocation.withinDistance(ourLocation)/* && viewport.localPlayersCount < 250*/ -> Adding
         else -> null
     }
 }
@@ -202,10 +203,10 @@ sealed class ActivityUpdateType {
                 bits.writeBit(false)
                 if (deltaX < 0) deltaX += 32
                 if (deltaZ < 0) deltaZ += 32
-                bits.writeBits(12, deltaZ + (deltaX shl 5) + (deltaLevel shl 10))
+                bits.writeBits(12, deltaZ or (deltaX shl 5) or (deltaLevel shl 10))
             } else {
                 bits.writeBit(true)
-                bits.writeBits(30, (deltaZ and 0x3fff) + (deltaX and 0x3fff shl 14) + (deltaLevel and 0x3 shl 28))
+                bits.writeBits(30, (deltaZ and 0x3fff) or (deltaX and 0x3fff shl 14) or (deltaLevel and 0x3 shl 28))
             }
         }
     }
@@ -282,11 +283,11 @@ sealed class ActivityUpdateType {
             abs(currentX - previousX) <= 1 && abs(currentZ - previousZ) <= 1 -> {
                 val opcode = Direction.directionFromDelta(deltaX, deltaZ).opcode()
                 writeBits(2, 2)
-                writeBits(5, (deltaLevel shl 3) + (opcode and 0x7))
+                writeBits(5, (deltaLevel shl 3) or (opcode and 0x7))
             }
             else -> {
                 writeBits(2, 3)
-                writeBits(18, (deltaZ and 0xff) + (deltaX and 0xff shl 8) + (deltaLevel shl 16))
+                writeBits(18, (deltaZ and 0xff) or (deltaX and 0xff shl 8) or (deltaLevel shl 16))
             }
         }
     }
