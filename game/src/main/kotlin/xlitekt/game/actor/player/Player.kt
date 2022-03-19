@@ -55,18 +55,29 @@ class Player(
     fun login(client: Client) {
         this.client = client
         previousLocation = location
+        lastLoadedLocation = location
         sendRebuildNormal(true)
         updateAppearance()
         movementType(false)
         interfaces.login()
         vars.login()
-        faceDirection(640)
         sendUpdateRunEnergy()
         if (vars[VarPlayer.ToggleRun] == 1) movement.toggleRun()
 
         // Set the player online here, so they start processing by the main game loop.
         online = true
         inject<EventBus>().value.notify(Events.OnLoginEvent(this))
+
+//        if (username == "jordan") {
+//            repeat(1999) {
+//                val bot = Player(username = "", password = "")
+//                bot.location = Location(nextInt(3210, 3240), nextInt(3210, 3240), 0)
+//                inject<World>().value.players.add(bot)
+//                write(SetPlayerOpPacket(false, "Follow", 1))
+//                bot.login(Client())
+//                // bot.movement.toggleRun()
+//            }
+//        }
     }
 
     fun logout() {
@@ -99,8 +110,8 @@ fun Player.script(scriptId: Int, parameters: List<Any>) = write(RunClientScriptP
 fun Player.sendUpdateRunEnergy() = write(UpdateRunEnergyPacket(runEnergy / 100))
 
 fun Player.shouldRebuildMap(): Boolean {
-    val lastZoneX: Int = lastLoadedLocation?.zoneX ?: return false
-    val lastZoneZ: Int = lastLoadedLocation?.zoneZ ?: return false
+    val lastZoneX = lastLoadedLocation?.zoneX ?: 0
+    val lastZoneZ = lastLoadedLocation?.zoneZ ?: 0
     val zoneX = location.zoneX
     val zoneZ = location.zoneZ
     val size = ((104 shr 3) / 2) - 1
@@ -109,5 +120,5 @@ fun Player.shouldRebuildMap(): Boolean {
 
 fun Player.sendRebuildNormal(update: Boolean) {
     write(RebuildNormalPacket(viewport, location, update))
-    lastLoadedLocation = Location(location.packedLocation)
+    lastLoadedLocation = location
 }

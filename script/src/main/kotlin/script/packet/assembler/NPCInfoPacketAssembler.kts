@@ -23,7 +23,6 @@ onPacketAssembler<NPCInfoPacket>(opcode = 78, size = -2) {
         val blocks = BytePacketBuilder()
         withBitAccess {
             viewport.let {
-                println("Sending ${it.npcs.size}")
                 writeBits(8, it.npcs.size)
                 highDefinition(it, blocks, playerLocations)
                 lowDefinition(it, blocks, playerLocations)
@@ -42,8 +41,6 @@ fun BitAccess.lowDefinition(viewport: Viewport, blocks: BytePacketBuilder, playe
 
     val currentZoneLocation = playerLocation.toZoneLocation()
 
-    println(currentZoneLocation.x)
-
     val zones = buildSet {
         (-2..2).forEach { x ->
             (-2..2).forEach { z ->
@@ -51,8 +48,6 @@ fun BitAccess.lowDefinition(viewport: Viewport, blocks: BytePacketBuilder, playe
             }
         }
     }.map { Zones[it.toFullLocation()] }.filter { it?.npcs?.isNotEmpty() == true }
-
-    println("Mapping zones $zones")
 
     zones.forEach { zone ->
         if (zone == null) return@forEach
@@ -77,8 +72,6 @@ fun BitAccess.lowDefinition(viewport: Viewport, blocks: BytePacketBuilder, playe
                 // if (it.hasPendingUpdate()) blocks.buildNPCUpdateBlocks(it)
             }
     }
-
-    println(viewport.npcs.size)
 }
 
 fun BitAccess.highDefinition(viewport: Viewport, blocks: BytePacketBuilder, playerLocations: Map<Player, Location>) {
@@ -87,7 +80,7 @@ fun BitAccess.highDefinition(viewport: Viewport, blocks: BytePacketBuilder, play
     viewport.npcs.forEach {
         if (!it.location.withinDistance(location, 14)) {
             removeNPC()
-            //viewport.localNPCs.remove(it)
+            // viewport.localNPCs.remove(it)
             return@forEach
         }
         val updating = processHighDefinitionNPC(it)

@@ -5,7 +5,7 @@ import xlitekt.game.world.map.location.Location
 /**
  * @author Jordan Abraham
  */
-data class WaypointStep(
+data class DestinationStep(
     val speed: MovementSpeed,
     val location: Location,
 )

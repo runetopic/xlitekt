@@ -5,4 +5,3 @@ import xlitekt.game.packet.ClientCheatPacket
 import xlitekt.game.packet.disassembler.handler.onPacketHandler
 
 onPacketHandler<ClientCheatPacket> { Commands.execute(this.packet.command, player) }
-

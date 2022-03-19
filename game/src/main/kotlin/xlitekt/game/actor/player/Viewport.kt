@@ -17,8 +17,9 @@ class Viewport(
     val lowDefinitions = IntArray(MAX_PLAYERS)
     val players = Array<Player?>(MAX_PLAYERS) { null }
     val npcs = LinkedList<NPC>()
-    var highDefinitionsCount: Int = 0
-    var lowDefinitionsCount: Int = 0
+    var highDefinitionsCount = 0
+    var lowDefinitionsCount = 0
+    var localPlayersCount = 1
 
     fun init(builder: BytePacketBuilder) = builder.withBitAccess {
         writeBits(30, player.location.packedLocation)
