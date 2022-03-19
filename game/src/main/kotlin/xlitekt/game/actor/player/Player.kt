@@ -14,6 +14,7 @@ import xlitekt.game.packet.MessageGamePacket
 import xlitekt.game.packet.Packet
 import xlitekt.game.packet.RebuildNormalPacket
 import xlitekt.game.packet.RunClientScriptPacket
+import xlitekt.game.packet.SetPlayerOpPacket
 import xlitekt.game.packet.UpdateRunEnergyPacket
 import xlitekt.game.packet.UpdateStatPacket
 import xlitekt.game.packet.VarpLargePacket
@@ -26,7 +27,6 @@ import xlitekt.game.world.map.location.Location
 import xlitekt.shared.inject
 import kotlin.math.abs
 import kotlin.random.Random.Default.nextInt
-import xlitekt.game.packet.SetPlayerOpPacket
 
 /**
  * @author Jordan Abraham

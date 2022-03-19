@@ -19,7 +19,10 @@ class Viewport(
     val npcs = LinkedList<NPC>()
     var highDefinitionsCount = 0
     var lowDefinitionsCount = 0
-    var localPlayersCount = 1
+    private var forceViewDistance = false
+    var viewDistance = PREFERRED_VIEW_DISTANCE
+
+    private var resizeTickCount = 0
 
     fun init(builder: BytePacketBuilder) = builder.withBitAccess {
         writeBits(30, player.location.packedLocation)
@@ -43,6 +46,23 @@ class Viewport(
                 else -> highDefinitions[highDefinitionsCount++] = it
             }
             nsnFlags[it] = (nsnFlags[it] shr 1)
+        }
+    }
+
+    fun resize() {
+        // Thank you Kris =)
+        if (forceViewDistance) return
+        if (highDefinitionsCount >= PREFERRED_PLAYER_COUNT) {
+            if (viewDistance > 0) viewDistance--
+            resizeTickCount = 0
+            return
+        }
+        if (++resizeTickCount >= RESIZE_CHECK_INTERVAL) {
+            if (viewDistance < PREFERRED_VIEW_DISTANCE) {
+                viewDistance++
+            } else {
+                resizeTickCount = 0
+            }
         }
     }
 
@@ -80,6 +100,10 @@ class Viewport(
     }
 
     private companion object {
+        const val RESIZE_CHECK_INTERVAL = 10
+        const val PREFERRED_PLAYER_COUNT = 250
+        const val PREFERRED_VIEW_DISTANCE = 15
+
         val world by inject<World>()
     }
 }
