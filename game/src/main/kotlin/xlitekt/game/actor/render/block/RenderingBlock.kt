@@ -63,7 +63,7 @@ val npcBlocks = mapOf(
     Render.NPCTransmogrification::class to NPCTransmogrificationBlock()
 )
 
-fun List<Render>.buildPlayerUpdateBlocks(player: Player, cache: Boolean = true) = buildPacket {
+fun Collection<Render>.buildPlayerUpdateBlocks(player: Player, cache: Boolean = true) = buildPacket {
     val blocks = this@buildPlayerUpdateBlocks.toSortedPlayerBlocks()
     writePlayerMasks(blocks.values)
     blocks.forEach {
@@ -92,7 +92,7 @@ private fun BytePacketBuilder.writeNPCMasks(blocks: Collection<RenderingBlock<NP
 
 private fun BytePacketBuilder.writeMask(mask: Int) = if (mask > 0xff) writeShortLittleEndian(mask.toShort()) else writeByte(mask.toByte())
 
-private fun List<Render>.toSortedPlayerBlocks(): Map<Render, RenderingBlock<Player, Render>> = map { it to playerBlocks[it::class]!! }.sortedBy { it.second.index }.toMap()
+private fun Collection<Render>.toSortedPlayerBlocks(): Map<Render, RenderingBlock<Player, Render>> = map { it to playerBlocks[it::class]!! }.sortedBy { it.second.index }.toMap()
 private fun List<Render>.toSortedNPCBlocks(): Map<Render, RenderingBlock<NPC, Render>> = map { it to npcBlocks[it::class]!! }.sortedBy { it.second.index }.toMap()
 
 abstract class RenderingBlock<T : Actor, out R : Render>(val index: Int, val mask: Int) {

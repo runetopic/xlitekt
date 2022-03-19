@@ -32,11 +32,6 @@ class PlayerSynchronizer : Runnable {
     private val zoneFlags by inject<ZoneFlags>()
     private var tick = 0
 
-    private val pf = SmartPathFinder(
-        flags = zoneFlags.flags,
-        defaultFlag = 0
-    )
-
     override fun run() {
         try {
             val players = world.players.filterNotNull().filter(Player::online)
@@ -75,13 +70,10 @@ class PlayerSynchronizer : Runnable {
                 }
 
                 // Main player process.
+                val previousLocations = players.associateWith(Player::previousLocation)
+                val currentLocations = players.associateWith(Player::location)
                 players.parallelStream().forEach {
-                    it.processSync(
-                        updates = updates,
-                        previousLocations = players.associateWith(Player::previousLocation),
-                        locations = players.associateWith(Player::location),
-                        steps = steps
-                    )
+                    it.processSync(updates, previousLocations, currentLocations, steps)
                 }
                 tick++
             }

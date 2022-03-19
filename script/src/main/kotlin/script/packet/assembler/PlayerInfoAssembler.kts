@@ -13,6 +13,7 @@ import script.packet.assembler.PlayerInfoAssembler.ActivityUpdateType.Updating
 import xlitekt.game.actor.movement.Direction
 import xlitekt.game.actor.movement.MovementSpeed
 import xlitekt.game.actor.movement.MovementStep
+import xlitekt.game.actor.movement.isValid
 import xlitekt.game.actor.player.Client.Companion.world
 import xlitekt.game.actor.player.Player
 import xlitekt.game.actor.player.Viewport
@@ -25,7 +26,6 @@ import xlitekt.shared.buffer.BitAccess
 import xlitekt.shared.buffer.withBitAccess
 import xlitekt.shared.buffer.writeBytes
 import kotlin.math.abs
-import xlitekt.game.actor.movement.isValid
 
 /**
  * @author Jordan Abraham
@@ -121,7 +121,7 @@ fun BytePacketBuilder.lowDefinition(
         when (activity) {
             Adding -> {
                 // When adding a player to the local view, we can grab their blocks from their cached list.
-                blocks.writeBytes(other.cachedUpdates().keys.toList().buildPlayerUpdateBlocks(other, false).readBytes())
+                blocks.writeBytes(other.cachedUpdates().keys.buildPlayerUpdateBlocks(other, false).readBytes())
                 viewport.players[other.index] = other
                 viewport.setNsn(index)
                 viewport.localPlayersCount = viewport.localPlayersCount + 1
@@ -162,8 +162,10 @@ fun highDefinitionActivities(
     val theirLocation = locations[other]
     return when {
         ourLocation != null && (theirLocation == null || !theirLocation.withinDistance(ourLocation)) -> Removing
-        steps[other]?.isValid() == true && steps[other]?.speed == MovementSpeed.TELEPORTING -> Teleporting
-        steps[other]?.isValid() == true -> Moving
+        steps[other]?.isValid() == true -> {
+            val speed = steps[other]?.speed
+            if (speed == MovementSpeed.TELEPORTING) Teleporting else Moving
+        }
         updates[other]?.isNotEmpty == true -> Updating
         else -> null
     }
