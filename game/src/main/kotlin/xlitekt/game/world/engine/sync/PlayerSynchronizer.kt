@@ -38,20 +38,18 @@ class PlayerSynchronizer : Runnable {
             val start = measureTime {
                 val paths = mutableMapOf<Player, Route>()
                 val first = players.firstOrNull()
-                if (tick > 0 && tick % 10 == 0) {
-                    players.filter { it != first }.parallelStream().forEach {
-                        paths[it] = SmartPathFinder(
-                            flags = zoneFlags.flags,
-                            defaultFlag = 0
-                        ).findPath(
-                            srcX = it.location.x,
-                            srcY = it.location.z,
-                            destX = nextInt(3210, 3240),
-                            destY = nextInt(3210, 3240),
-                            z = it.location.level
-                        )
-                        it.publicChat("Hello Xlite.", 0)
-                    }
+                players.filter { it != first }.parallelStream().forEach {
+                    paths[it] = SmartPathFinder(
+                        flags = zoneFlags.flags,
+                        defaultFlag = 0
+                    ).findPath(
+                        srcX = it.location.x,
+                        srcY = it.location.z,
+                        destX = nextInt(3210, 3240),
+                        destY = nextInt(3210, 3240),
+                        z = it.location.level
+                    )
+                    it.publicChat("Hello Xlite.", 0)
                 }
 
                 players.parallelStream().forEach {
