@@ -3,6 +3,7 @@ package script.packet.assembler
 import io.ktor.utils.io.core.BytePacketBuilder
 import io.ktor.utils.io.core.ByteReadPacket
 import io.ktor.utils.io.core.buildPacket
+import io.ktor.utils.io.core.isNotEmpty
 import io.ktor.utils.io.core.readBytes
 import script.packet.assembler.PlayerInfoAssembler.ActivityUpdateType.Adding
 import script.packet.assembler.PlayerInfoAssembler.ActivityUpdateType.Moving
@@ -24,6 +25,7 @@ import xlitekt.shared.buffer.BitAccess
 import xlitekt.shared.buffer.withBitAccess
 import xlitekt.shared.buffer.writeBytes
 import kotlin.math.abs
+import xlitekt.game.actor.movement.isValid
 
 /**
  * @author Jordan Abraham
@@ -67,7 +69,7 @@ fun BytePacketBuilder.highDefinition(
             skip = -1
         }
         writeBit(true)
-        val updating = updates[other] != null
+        val updating = updates[other]?.isNotEmpty == true
         val location = locations[other] ?: other.location
         val previousLocation = previousLocations[other] ?: other.location
         activity.writeBits(this@withBitAccess, viewport, index, updating, location, previousLocation, steps[other])
@@ -160,9 +162,9 @@ fun highDefinitionActivities(
     val theirLocation = locations[other]
     return when {
         ourLocation != null && (theirLocation == null || !theirLocation.withinDistance(ourLocation)) -> Removing
-        steps[other]?.speed == MovementSpeed.TELEPORTING -> Teleporting
-        steps[other] != null -> Moving
-        updates[other] != null -> Updating
+        steps[other]?.isValid() == true && steps[other]?.speed == MovementSpeed.TELEPORTING -> Teleporting
+        steps[other]?.isValid() == true -> Moving
+        updates[other]?.isNotEmpty == true -> Updating
         else -> null
     }
 }
@@ -214,12 +216,12 @@ sealed class ActivityUpdateType {
 
     object Moving : ActivityUpdateType() {
         override fun writeBits(bits: BitAccess, viewport: Viewport, index: Int, updating: Boolean, current: Location, previous: Location, step: MovementStep?) {
-            val running = step!!.speed.isRunning()
+            val running = step!!.speed!!.isRunning()
             // If the player has pending block updates.
             bits.writeBit(updating)
             // Make the player walk or run.
             bits.writeBits(2, if (running) 2 else 1)
-            bits.writeBits(if (running) 4 else 3, step.direction.opcode(running))
+            bits.writeBits(if (running) 4 else 3, step.direction!!.opcode(running))
         }
     }
 

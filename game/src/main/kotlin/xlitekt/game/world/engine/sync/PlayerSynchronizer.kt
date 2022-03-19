@@ -3,6 +3,7 @@ package xlitekt.game.world.engine.sync
 import com.github.michaelbull.logging.InlineLogger
 import org.rsmod.pathfinder.Route
 import io.ktor.utils.io.core.ByteReadPacket
+import java.util.concurrent.ConcurrentHashMap
 import kotlin.random.Random.Default.nextInt
 import kotlinx.coroutines.Runnable
 import org.rsmod.pathfinder.SmartPathFinder
@@ -18,6 +19,8 @@ import xlitekt.game.world.World
 import xlitekt.game.world.map.location.Location
 import xlitekt.shared.inject
 import kotlin.time.measureTime
+import xlitekt.game.actor.movement.emptyStep
+import xlitekt.game.actor.movement.isValid
 
 /**
  * @author Jordan Abraham
@@ -64,23 +67,18 @@ class PlayerSynchronizer : Runnable {
                     }
                 }
 
-                val steps = mutableMapOf<Player, MovementStep?>()
+                val steps = ConcurrentHashMap<Player, MovementStep>()
                 // Move the player.
-                players.forEach { steps[it] = it.processMovement() }
+                players.parallelStream().forEach { steps[it] = it.processMovement() }
                 // Collect player locations.
                 val locations = players.associateWith(Player::location)
                 // Collect player previous locations.
                 val previousLocations = players.associateWith(Player::previousLocation)
                 // Collect player pending block updates.
                 val pending = players.associateWith(Player::pendingUpdates)
-                val updates = mutableMapOf<Player, ByteReadPacket>()
+                val updates = ConcurrentHashMap<Player, ByteReadPacket>()
                 // Build the player pending block updates.
-                players.parallelStream().forEach {
-                    val blocks = it.processUpdateBlocks(pending)
-                    if (blocks != null) {
-                        updates[it] = blocks
-                    }
-                }
+                players.parallelStream().forEach { updates[it] = it.processUpdateBlocks(pending) }
                 // Sync players.
                 players.parallelStream().forEach { it.processSync(updates, previousLocations, locations, steps) }
                 tick++
@@ -91,13 +89,13 @@ class PlayerSynchronizer : Runnable {
         }
     }
 
-    private fun Player.processMovement(): MovementStep? = movement.process(location).also {
-        if (shouldRebuildMap()) sendRebuildNormal(false)
+    private fun Player.processMovement(): MovementStep = movement.process(location).also {
+        if (it.isValid() && shouldRebuildMap()) sendRebuildNormal(false)
     }
 
-    private fun Player.processUpdateBlocks(pending: Map<Player, List<Render>>): ByteReadPacket? {
-        val renders = pending[this] ?: return null
-        if (renders.isEmpty()) return null
+    private fun Player.processUpdateBlocks(pending: Map<Player, List<Render>>): ByteReadPacket {
+        val renders = pending[this] ?: return ByteReadPacket.Empty
+        if (renders.isEmpty()) return ByteReadPacket.Empty
         return renders.buildPlayerUpdateBlocks(this)
     }
     private fun Player.processSync(updates: Map<Player, ByteReadPacket>, previousLocations: Map<Player, Location?>, locations: Map<Player, Location>, steps: Map<Player, MovementStep?>) {
