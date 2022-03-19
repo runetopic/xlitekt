@@ -1,7 +1,9 @@
 package xlitekt.game.world.engine.sync
 
 import com.github.michaelbull.logging.InlineLogger
+import org.rsmod.pathfinder.Route
 import io.ktor.utils.io.core.ByteReadPacket
+import kotlin.random.Random.Default.nextInt
 import kotlinx.coroutines.Runnable
 import org.rsmod.pathfinder.SmartPathFinder
 import org.rsmod.pathfinder.ZoneFlags
@@ -28,7 +30,7 @@ class PlayerSynchronizer : Runnable {
     private val zoneFlags by inject<ZoneFlags>()
     private var tick = 0
 
-    val pf = SmartPathFinder(
+    private val pf = SmartPathFinder(
         flags = zoneFlags.flags,
         defaultFlag = 0
     )
@@ -37,16 +39,27 @@ class PlayerSynchronizer : Runnable {
         try {
             val players = world.players.filterNotNull().filter(Player::online)
             val start = measureTime {
+                val paths = mutableMapOf<Player, Route>()
                 val first = players.firstOrNull()
-                players.filter { it != first }.forEach {
-                    if (tick > 0 && tick % 15 == 0) {
-                        val path = pf.findPath(
+                if (tick > 0 && tick % 10 == 0) {
+                    players.filter { it != first }.parallelStream().forEach {
+                        paths[it] = SmartPathFinder(
+                            flags = zoneFlags.flags,
+                            defaultFlag = 0
+                        ).findPath(
                             srcX = it.location.x,
                             srcY = it.location.z,
-                            destX = first!!.location.x,
-                            destY = first.location.z,
+                            destX = nextInt(3210, 3240),
+                            destY = nextInt(3210, 3240),
                             z = it.location.level
                         )
+                        it.publicChat("Hello Xlite.", 0)
+                    }
+                }
+
+                players.parallelStream().forEach {
+                    val path = paths[it]
+                    if (path != null) {
                         it.movement.route(path.coords.map { c -> Location(c.x, c.y, it.location.level) })
                     }
                 }
@@ -62,11 +75,14 @@ class PlayerSynchronizer : Runnable {
                 val pending = players.associateWith(Player::pendingUpdates)
                 val updates = mutableMapOf<Player, ByteReadPacket>()
                 // Build the player pending block updates.
-                players.forEach { it.processUpdateBlocks(pending)?.apply { updates[it] = this } }
+                players.parallelStream().forEach {
+                    val blocks = it.processUpdateBlocks(pending)
+                    if (blocks != null) {
+                        updates[it] = blocks
+                    }
+                }
                 // Sync players.
                 players.parallelStream().forEach { it.processSync(updates, previousLocations, locations, steps) }
-                // Reset players.
-                players.forEach(Player::reset)
                 tick++
             }
             logger.debug { "Tick took $start for ${players.size} players. [TICK=$tick]" }
@@ -88,5 +104,6 @@ class PlayerSynchronizer : Runnable {
         write(PlayerInfoPacket(viewport, updates, previousLocations, locations, steps))
         // write(NPCInfoPacket(viewport, locations))
         flushPool()
+        reset()
     }
 }

@@ -73,11 +73,11 @@ class Player(
         if (username == "jordan") {
             repeat(1999) {
                 val bot = Player(username = "", password = "")
-                bot.location = Location(nextInt(3200, 3250), nextInt(3200, 3250), 0)
+                bot.location = Location(nextInt(3200, 3280), nextInt(3200, 3280), 0)
                 inject<World>().value.players.add(bot)
                 bot.login(Client())
                 write(SetPlayerOpPacket(false, "Follow", 1))
-                // bot.movement.toggleRun()
+                bot.movement.toggleRun()
             }
         }
     }
