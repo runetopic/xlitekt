@@ -27,7 +27,7 @@ import java.net.SocketException
  * @author Jordan Abraham
  */
 class Client(
-    private val socket: Socket? = null,
+    val socket: Socket? = null,
     val readChannel: ByteReadChannel? = null,
     val writeChannel: ByteWriteChannel? = null
 ) {
@@ -40,9 +40,8 @@ class Client(
     private val pool = mutableListOf<Packet>()
 
     fun disconnect(reason: String) {
-        player?.let(world::requestLogout)
-        socket?.close()
         logger.debug { "Client disconnected for reason={$reason}." }
+        player?.let(world::requestLogout)
     }
 
     fun setIsaacCiphers(clientCipher: ISAAC, serverCipher: ISAAC) {
@@ -70,11 +69,11 @@ class Client(
     }
 
     fun flushPool() {
-        if (pool.isEmpty()) return
         pool.forEach {
             val assembler = PacketAssemblerListener.listeners[it::class] ?: return@forEach disconnect("Unhandled packet found when trying to write. Packet was $it.")
+            val packet = assembler.packet.invoke(it)
             runBlocking(Dispatchers.IO) {
-                writePacket(assembler.opcode, assembler.size, assembler.packet.invoke(it))
+                writePacket(assembler.opcode, assembler.size, packet)
             }
         }
         writeChannel?.flush()

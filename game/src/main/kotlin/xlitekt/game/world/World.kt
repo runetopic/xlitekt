@@ -49,11 +49,11 @@ class World(
         logoutRequests.add(player)
     }
 
-    fun processLoginRequests() = loginRequests.entries.take(250).onEach {
+    fun processLoginRequests() = loginRequests.entries.take(500).onEach {
         it.key.init(it.value)
     }.also(loginRequests.entries::removeAll)
 
-    fun processLogoutRequests() = logoutRequests.take(250).onEach(Player::logout).also(logoutRequests::removeAll)
+    fun processLogoutRequests() = logoutRequests.take(MAX_PLAYERS).onEach(Player::logout).also(logoutRequests::removeAll)
 
     companion object {
         const val MAX_PLAYERS = 2048

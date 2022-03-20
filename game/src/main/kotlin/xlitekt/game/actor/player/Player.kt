@@ -93,6 +93,7 @@ class Player(
         online = false
         write(LogoutPacket(0))
         flushPool()
+        client?.socket?.close()
         inject<World>().value.players.remove(this)
         encodeToJson()
     }
