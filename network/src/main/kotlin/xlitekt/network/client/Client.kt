@@ -298,6 +298,7 @@ private suspend fun Client.writeLogin(response: Int) {
 private suspend fun Client.readPackets(player: Player) = try {
     while (true) {
         val readChannel = readChannel ?: break
+        if (readChannel.isClosedForRead) break
         val opcode = readChannel.readPacketOpcode(clientCipher!!)
         if (opcode < 0 || opcode >= sizes.size) continue
         val size = readChannel.readPacketSize(sizes[opcode])

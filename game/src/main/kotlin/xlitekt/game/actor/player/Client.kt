@@ -72,16 +72,17 @@ class Client(
     fun flushPool() {
         if (pool.isEmpty()) return
         pool.forEach {
-            val assembler = PacketAssemblerListener.listeners[it::class] ?: return disconnect("Unhandled packet found when trying to write. Packet was $it.")
+            val assembler = PacketAssemblerListener.listeners[it::class] ?: return@forEach disconnect("Unhandled packet found when trying to write. Packet was $it.")
             runBlocking(Dispatchers.IO) {
                 writePacket(assembler.opcode, assembler.size, assembler.packet.invoke(it))
             }
         }
-        pool.clear()
         writeChannel?.flush()
+        pool.clear()
     }
 
     private suspend fun writePacket(opcode: Int, size: Int, packet: ByteReadPacket) = writeChannel?.apply {
+        if (isClosedForWrite) return@apply disconnect("Write channel closed.")
         // This write channel is null checked because bot client can use this.
         writePacketOpcode(serverCipher!!, opcode)
         if (size == -1 || size == -2) {
