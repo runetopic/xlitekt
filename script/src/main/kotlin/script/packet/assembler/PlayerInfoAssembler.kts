@@ -57,7 +57,7 @@ fun BytePacketBuilder.highDefinition(
         val other = viewport.players[index]
         // Check the activities this player is doing.
         val activity = highDefinitionActivities(viewport, other, locations, updates, steps)
-        if (other == null || activity == null) {
+        if (other == null || activity == null || blocks.size >= 8000) {
             // If this is true, then we update our viewport nsn flag for this player and skip them.
             viewport.setNsn(index)
             skip++
@@ -106,7 +106,7 @@ fun BytePacketBuilder.lowDefinition(
         val other = world.players[index]
         // Check the activities this player is doing.
         val activity = lowDefinitionActivities(viewport, other, locations)
-        if (other == null || activity == null) {
+        if (other == null || activity == null || blocks.size >= 8000) {
             // If this is true, then we update our viewport nsn flag for this player and skip them.
             viewport.setNsn(index)
             skip++
