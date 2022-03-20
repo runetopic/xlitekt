@@ -291,7 +291,7 @@ private suspend fun Client.writeLogin(response: Int) {
         writeByte(0)
     }.flush()
 
-    player.login(this)
+    world.requestLogin(player, this)
     readPackets(player)
 }
 

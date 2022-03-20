@@ -26,7 +26,6 @@ class Interfaces(
 
     fun login() {
         player.message("Welcome to Xlitekt.")
-        openTop(currentInterfaceLayout.interfaceId)
         gameInterfaces.forEach(::openInterface)
         player.write(VarpSmallPacket(1737, -1)) // TODO TEMP until i write a var system
     }
@@ -106,7 +105,7 @@ class Interfaces(
         )
     }
 
-    private fun openTop(id: Int) = player.write(IfOpenTopPacket(interfaceId = id))
+    fun openTop(id: Int) = player.write(IfOpenTopPacket(interfaceId = id))
 
     private fun openInterface(userInterface: UserInterface) = userInterface.apply {
         add(userInterface)

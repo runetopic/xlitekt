@@ -10,6 +10,7 @@ import io.ktor.utils.io.ByteReadChannel
 import io.ktor.utils.io.ByteWriteChannel
 import io.ktor.utils.io.ClosedWriteChannelException
 import io.ktor.utils.io.core.ByteReadPacket
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.TimeoutCancellationException
 import kotlinx.coroutines.channels.ClosedReceiveChannelException
 import kotlinx.coroutines.runBlocking
@@ -36,8 +37,10 @@ class Client(
     var serverCipher: ISAAC? = null
     var player: Player? = null // TODO Figure out a way to not have the player here.
 
+    private val pool = mutableListOf<Packet>()
+
     fun disconnect(reason: String) {
-        player?.logout()
+        player?.let(world::requestLogout)
         socket?.close()
         logger.debug { "Client disconnected for reason={$reason}." }
     }
@@ -62,21 +65,29 @@ class Client(
         }
     }
 
-    fun writePacket(packet: Packet) {
-        val assembler = PacketAssemblerListener.listeners[packet::class] ?: return disconnect("Unhandled packet found when trying to write. Packet was $packet.")
-        runBlocking {
-            poolToWriteChannel(assembler.opcode, assembler.size, assembler.packet.invoke(packet))
-        }
+    fun poolPacket(packet: Packet) {
+        pool.add(packet)
     }
 
-    suspend fun poolToWriteChannel(opcode: Int, size: Int, packet: ByteReadPacket) = writeChannel?.apply {
+    fun flushPool() {
+        if (pool.isEmpty()) return
+        pool.forEach {
+            val assembler = PacketAssemblerListener.listeners[it::class] ?: return disconnect("Unhandled packet found when trying to write. Packet was $it.")
+            runBlocking(Dispatchers.IO) {
+                writePacket(assembler.opcode, assembler.size, assembler.packet.invoke(it))
+            }
+        }
+        pool.clear()
+        writeChannel?.flush()
+    }
+
+    private suspend fun writePacket(opcode: Int, size: Int, packet: ByteReadPacket) = writeChannel?.apply {
         // This write channel is null checked because bot client can use this.
         writePacketOpcode(serverCipher!!, opcode)
         if (size == -1 || size == -2) {
             writePacketSize(size, packet.remaining)
         }
         writePacket(packet)
-        // The pool gets flushed to the client on tick.
     }
 
     companion object {

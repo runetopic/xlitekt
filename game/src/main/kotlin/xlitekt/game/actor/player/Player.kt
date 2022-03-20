@@ -17,7 +17,6 @@ import xlitekt.game.packet.MessageGamePacket
 import xlitekt.game.packet.Packet
 import xlitekt.game.packet.RebuildNormalPacket
 import xlitekt.game.packet.RunClientScriptPacket
-import xlitekt.game.packet.SetPlayerOpPacket
 import xlitekt.game.packet.UpdateRunEnergyPacket
 import xlitekt.game.packet.UpdateStatPacket
 import xlitekt.game.packet.VarpLargePacket
@@ -54,47 +53,54 @@ class Player(
     override fun totalHitpoints(): Int = 100
     override fun currentHitpoints(): Int = 100
 
-    fun login(client: Client) {
+    fun init(client: Client) {
         this.client = client
         previousLocation = location
         lastLoadedLocation = location
         sendRebuildNormal(true)
+        interfaces.openTop(interfaces.currentInterfaceLayout.interfaceId)
+        flushPool()
+        login()
+    }
+
+    private fun login() {
+        vars.login()
+        interfaces.login()
+
         updateAppearance()
         movementType(false)
-        interfaces.login()
-        vars.login()
         sendUpdateRunEnergy()
         if (vars[VarPlayer.ToggleRun] == 1) movement.toggleRun()
+        inject<EventBus>().value.notify(Events.OnLoginEvent(this))
 
         // Set the player online here, so they start processing by the main game loop.
         online = true
-        inject<EventBus>().value.notify(Events.OnLoginEvent(this))
 
         if (username == "jordan") {
             repeat(1999) {
                 val bot = Player(username = "", password = "")
                 bot.location = Location(nextInt(3200, 3280), nextInt(3200, 3280), 0)
-                inject<World>().value.players.add(bot)
-                bot.login(Client())
-                write(SetPlayerOpPacket(false, "Follow", 1))
-                bot.movement.toggleRun()
+                val world by inject<World>()
+                world.players.add(bot)
+                bot.vars.flip(VarPlayer.ToggleRun)
+                world.requestLogin(bot, Client())
             }
         }
     }
 
     fun logout() {
         if (!online) return
+        online = false
         write(LogoutPacket(0))
         flushPool()
-        online = false
         inject<World>().value.players.remove(this)
         encodeToJson()
     }
 
     fun updateAppearance() = renderer.appearance(appearance)
 
-    fun write(packet: Packet) = client?.writePacket(packet)
-    fun flushPool() = client?.writeChannel?.flush()
+    fun write(packet: Packet) = client?.poolPacket(packet)
+    fun flushPool() = client?.flushPool()
 }
 
 fun Player.sendVarp(id: Int, value: Int) = if (value < Byte.MIN_VALUE || value > Byte.MAX_VALUE) {

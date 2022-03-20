@@ -12,12 +12,17 @@ import xlitekt.game.actor.render.Render
 import xlitekt.game.actor.render.block.buildPlayerUpdateBlocks
 import xlitekt.game.packet.NPCInfoPacket
 import xlitekt.game.packet.PlayerInfoPacket
+import xlitekt.game.world.World
 import xlitekt.game.world.map.location.Location
+import xlitekt.shared.inject
 
 /**
  * @author Jordan Abraham
  */
 abstract class Task : Runnable {
+
+    val world by inject<World>()
+
     protected fun Actor.processMovement(): MovementStep = movement.process(location).also {
         if (this is Player) {
             if (it.isValid() && shouldRebuildMap()) sendRebuildNormal(false)

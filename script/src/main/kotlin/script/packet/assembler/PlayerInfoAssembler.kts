@@ -102,7 +102,6 @@ fun BytePacketBuilder.lowDefinition(
     repeat(viewport.lowDefinitionsCount) {
         val index = viewport.lowDefinitions[it]
         if (!viewport.isNsn(index) == nsn) return@repeat
-        // TODO This is an unsafe call until we synchronize login and logout.
         val other = world.players[index]
         // Check the activities this player is doing.
         val activity = lowDefinitionActivities(viewport, other, locations)

@@ -4,16 +4,12 @@ import io.ktor.utils.io.core.ByteReadPacket
 import xlitekt.game.actor.movement.MovementStep
 import xlitekt.game.actor.npc.NPC
 import xlitekt.game.actor.player.Player
-import xlitekt.game.world.World
-import xlitekt.shared.inject
 import java.util.concurrent.ConcurrentHashMap
 
 /**
  * @author Jordan Abraham
  */
 class ParallelSynchronizationTask : Task() {
-
-    private val world by inject<World>()
 
     override fun run() {
         val players = world.players.filterNotNull().filter(Player::online)

@@ -10,7 +10,6 @@ import org.rsmod.pathfinder.ZoneFlags
 import xlitekt.game.actor.movement.MovementStep
 import xlitekt.game.actor.npc.NPC
 import xlitekt.game.actor.player.Player
-import xlitekt.game.world.World
 import xlitekt.game.world.map.location.Location
 import xlitekt.shared.inject
 import java.util.concurrent.ArrayBlockingQueue
@@ -24,7 +23,6 @@ import kotlin.time.measureTime
 class BenchmarkSynchronizationTask : Task() {
 
     private val logger = InlineLogger()
-    private val world by inject<World>()
     private val zoneFlags by inject<ZoneFlags>()
     private val threads = Runtime.getRuntime().availableProcessors()
     private val queue: ArrayBlockingQueue<PathFinder> = ArrayBlockingQueue(

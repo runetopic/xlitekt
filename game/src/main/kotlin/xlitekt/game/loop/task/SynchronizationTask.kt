@@ -13,7 +13,11 @@ class SynchronizationTask(
 
     override fun run() {
         try {
-            val time = measureTime(task::run)
+            val time = measureTime {
+                world.processLoginRequests()
+                world.processLogoutRequests()
+                task.run()
+            }
             logger.debug { "Took $time to complete $task" }
         } catch (exception: Exception) {
             exception.printStackTrace()
