@@ -1,11 +1,11 @@
 package xlitekt.game
 
-import xlitekt.game.loop.GameLoop
+import xlitekt.game.loop.Loop
 import xlitekt.game.world.World
 import xlitekt.shared.inject
 
 class Game {
-    private val loop = GameLoop()
+    private val loop by inject<Loop>()
     private val world by inject<World>()
 
     fun start() {
