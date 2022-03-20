@@ -35,4 +35,8 @@ onInterface<UserInterface.Settings> {
     onClick("All Settings") {
         interfaces += UserInterface.AdvancedSettings
     }
+
+    onClick("Toggle Run") {
+        movement.toggleRun()
+    }
 }
