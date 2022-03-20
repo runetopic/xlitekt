@@ -7,6 +7,9 @@ import xlitekt.game.actor.player.serializer.PlayerSerializer
 import xlitekt.game.actor.render.Render
 import xlitekt.game.actor.skill.Skill
 import xlitekt.game.actor.skill.Skills
+import xlitekt.game.content.ui.Interfaces
+import xlitekt.game.content.vars.VarPlayer
+import xlitekt.game.content.vars.Vars
 import xlitekt.game.event.EventBus
 import xlitekt.game.event.impl.Events
 import xlitekt.game.packet.LogoutPacket
@@ -19,9 +22,6 @@ import xlitekt.game.packet.UpdateRunEnergyPacket
 import xlitekt.game.packet.UpdateStatPacket
 import xlitekt.game.packet.VarpLargePacket
 import xlitekt.game.packet.VarpSmallPacket
-import xlitekt.game.ui.Interfaces
-import xlitekt.game.vars.VarPlayer
-import xlitekt.game.vars.Vars
 import xlitekt.game.world.World
 import xlitekt.game.world.map.location.Location
 import xlitekt.shared.inject

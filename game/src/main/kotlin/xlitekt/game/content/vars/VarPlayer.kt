@@ -1,4 +1,4 @@
-package xlitekt.game.vars
+package xlitekt.game.content.vars
 
 sealed class VarPlayer(override val name: String) : Var(name) {
     override val info by lazy { VarsMap.varpInfo(name) }

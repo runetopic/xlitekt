@@ -1,6 +1,6 @@
-package xlitekt.game.ui
+package xlitekt.game.content.ui
 
-import xlitekt.game.ui.InterfaceMap.interfaceInfo
+import xlitekt.game.content.ui.InterfaceMap.interfaceInfo
 
 sealed class UserInterface(val name: String) {
     val interfaceInfo by lazy { interfaceInfo(name) }

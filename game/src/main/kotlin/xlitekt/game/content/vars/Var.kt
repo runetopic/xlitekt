@@ -1,4 +1,4 @@
-package xlitekt.game.vars
+package xlitekt.game.content.vars
 
 import xlitekt.shared.resource.VarInfoResource
 

@@ -1,4 +1,4 @@
-package xlitekt.game.ui
+package xlitekt.game.content.ui
 
 import xlitekt.game.actor.player.Player
 import xlitekt.shared.inject

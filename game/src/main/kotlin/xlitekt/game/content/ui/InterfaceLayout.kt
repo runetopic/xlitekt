@@ -1,4 +1,4 @@
-package xlitekt.game.ui
+package xlitekt.game.content.ui
 
 /**
  * @author Tyler Telis

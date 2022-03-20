@@ -1,4 +1,4 @@
-package xlitekt.game.ui
+package xlitekt.game.content.ui
 
 enum class InterfaceEvent(val value: Int) {
     CONTINUE(1 shl 0),

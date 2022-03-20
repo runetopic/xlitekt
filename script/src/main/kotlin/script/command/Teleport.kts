@@ -1,5 +1,5 @@
 import xlitekt.game.actor.player.message
-import xlitekt.game.command.Commands.onCommand
+import xlitekt.game.content.command.Commands.onCommand
 import xlitekt.game.world.map.location.Location
 
 // TODO make a color system so we're not using arbitrary hex codes throughout our app

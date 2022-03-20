@@ -1,4 +1,4 @@
-package xlitekt.game.command
+package xlitekt.game.content.command
 
 import xlitekt.game.actor.player.Player
 import xlitekt.game.actor.player.message

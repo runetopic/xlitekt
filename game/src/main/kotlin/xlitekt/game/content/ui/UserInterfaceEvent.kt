@@ -1,7 +1,7 @@
-package xlitekt.game.ui
+package xlitekt.game.content.ui
 
 import xlitekt.game.actor.player.Player
-import xlitekt.game.item.Item
+import xlitekt.game.content.item.Item
 
 sealed class UserInterfaceEvent {
     data class CreateEvent(

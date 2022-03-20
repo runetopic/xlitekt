@@ -1,15 +1,15 @@
-package xlitekt.game.ui
+package xlitekt.game.content.ui
 
 import xlitekt.cache.provider.config.enum.EnumEntryTypeProvider
 import xlitekt.game.actor.player.Player
 import xlitekt.game.actor.player.message
-import xlitekt.game.item.Item
+import xlitekt.game.content.item.Item
+import xlitekt.game.content.ui.InterfaceMap.addInterfaceListener
 import xlitekt.game.packet.IfMoveSubPacket
 import xlitekt.game.packet.IfOpenSubPacket
 import xlitekt.game.packet.IfOpenTopPacket
 import xlitekt.game.packet.UpdateContainerFullPacket
 import xlitekt.game.packet.VarpSmallPacket
-import xlitekt.game.ui.InterfaceMap.addInterfaceListener
 import xlitekt.shared.inject
 import xlitekt.shared.packInterface
 

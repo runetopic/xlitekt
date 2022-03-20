@@ -1,4 +1,4 @@
-package xlitekt.game.vars
+package xlitekt.game.content.vars
 
 import xlitekt.cache.provider.config.varbit.VarBitEntryType
 import xlitekt.cache.provider.config.varbit.VarBitEntryTypeProvider

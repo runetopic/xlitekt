@@ -1,8 +1,8 @@
 package script.ui
 
-import xlitekt.game.ui.InterfaceEvent.CLICK_OPTION_1
-import xlitekt.game.ui.UserInterface
-import xlitekt.game.ui.onInterface
+import xlitekt.game.content.ui.InterfaceEvent.CLICK_OPTION_1
+import xlitekt.game.content.ui.UserInterface
+import xlitekt.game.content.ui.onInterface
 import xlitekt.shared.inject
 import xlitekt.shared.resource.Sequences
 import xlitekt.shared.resource.SpotAnimations

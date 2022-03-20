@@ -1,11 +1,11 @@
 package script.ui
 
 import xlitekt.game.actor.player.script
-import xlitekt.game.ui.InterfaceEvent.CLICK_OPTION_1
-import xlitekt.game.ui.InterfaceLayout
-import xlitekt.game.ui.UserInterface
-import xlitekt.game.ui.onInterface
-import xlitekt.game.vars.VarBit
+import xlitekt.game.content.ui.InterfaceEvent.CLICK_OPTION_1
+import xlitekt.game.content.ui.InterfaceLayout
+import xlitekt.game.content.ui.UserInterface
+import xlitekt.game.content.ui.onInterface
+import xlitekt.game.content.vars.VarBit
 import xlitekt.shared.toInt
 
 private val layoutDropDownChildId = 84

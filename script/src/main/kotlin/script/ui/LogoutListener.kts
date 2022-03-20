@@ -1,7 +1,7 @@
 package script.ui
 
-import xlitekt.game.ui.UserInterface
-import xlitekt.game.ui.onInterface
+import xlitekt.game.content.ui.UserInterface
+import xlitekt.game.content.ui.onInterface
 
 /**
  * @author Jordan Abraham

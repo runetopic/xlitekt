@@ -1,6 +1,6 @@
 package xlitekt.game.packet
 
-import xlitekt.game.friend.Friend
+import xlitekt.game.content.friend.Friend
 
 /**
  * @author Tyler Telis

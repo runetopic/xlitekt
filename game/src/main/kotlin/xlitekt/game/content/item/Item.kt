@@ -1,4 +1,4 @@
-package xlitekt.game.item
+package xlitekt.game.content.item
 
 data class Item(
     val id: Int,

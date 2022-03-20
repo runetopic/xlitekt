@@ -2,8 +2,8 @@ package script.packet.assembler
 
 import io.ktor.utils.io.core.buildPacket
 import io.ktor.utils.io.core.writeInt
-import xlitekt.game.container.Container
-import xlitekt.game.item.Item
+import xlitekt.game.content.container.Container
+import xlitekt.game.content.item.Item
 import xlitekt.game.packet.RunClientScriptPacket
 import xlitekt.game.packet.assembler.onPacketAssembler
 import xlitekt.shared.buffer.writeStringCp1252NullTerminated
