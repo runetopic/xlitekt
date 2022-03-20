@@ -1,7 +1,7 @@
 package script.ui
 
-import xlitekt.game.actor.player.Equipment.Companion.SLOT_WEAPON
 import xlitekt.game.actor.player.message
+import xlitekt.game.content.container.equipment.Equipment.Companion.SLOT_WEAPON
 import xlitekt.game.content.item.Item
 import xlitekt.game.content.ui.UserInterface
 import xlitekt.game.content.ui.onInterface
