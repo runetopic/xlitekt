@@ -20,9 +20,27 @@ sealed class Direction {
     object SouthSouthEast : Direction()
     object SouthSouthWest : Direction()
 
-    override fun toString(): String = javaClass.simpleName
-
-    fun playerOpcode(useSixteenPoints: Boolean = false): Int = when (this) {
+    /**
+     * Returns the corresponding opcode used for this direction for player movement.
+     * @param useSixteenPoints Walking uses eight point cardinal direction and running uses sixteen point cardinal direction.
+     *
+     * Running direction opcodes.
+     *  ______________________
+     * | [11][12][13][14][15] |
+     * | [09][##][##][##][10] |
+     * | [07][##][XX][##][08] |
+     * | [05][##][##][##][06] |
+     * | [00][01][02][03][04] |
+     *  ----------------------
+     *
+     * Walking direction opcodes.
+     *  ______________
+     * | [05][06][07] |
+     * | [03][XX][04] |
+     * | [00][01][02] |
+     *  --------------
+     */
+    fun playerOpcode(useSixteenPoints: Boolean = false) = when (this) {
         is NorthEast -> if (useSixteenPoints) 15 else 7
         is NorthNorthEast -> 14
         is North -> if (useSixteenPoints) 13 else 6
@@ -41,19 +59,28 @@ sealed class Direction {
         is SouthWest -> 0
     }
 
-    fun npcOpcode(): Int = when (this) {
-        is NorthWest -> 0
-        is North -> 1
-        is NorthEast -> 2
-        is West -> 3
-        is East -> 4
+    /**
+     * Returns the corresponding opcode used for this direction for npc movement.
+     *  ______________
+     * | [00][01][02] |
+     * | [03][XX][04] |
+     * | [05][06][07] |
+     *  --------------
+     */
+    fun npcOpcode() = when (this) {
+        // TODO Running support.
         is SouthEast -> 7
         is South -> 6
         is SouthWest -> 5
+        is East -> 4
+        is West -> 3
+        is NorthEast -> 2
+        is North -> 1
+        is NorthWest -> 0
         else -> throw IllegalStateException("Direction opcode not found for npc. Direction was $this")
     }
 
-    fun angle(): Int = when (this) {
+    fun angle() = when (this) {
         is NorthWest -> 768
         is NorthNorthWest -> 896
         is North -> 1024
@@ -67,10 +94,14 @@ sealed class Direction {
         is EastSouthEast -> 1664
         is SouthWest -> 256
         is SouthSouthWest -> 128
-        is South -> 0
+        is South -> 2048
         is SouthSouthEast -> 1920
         is SouthEast -> 1792
     }
+
+    fun fourPointCardinalDirection() = angle() % 256 == 0
+
+    override fun toString(): String = javaClass.simpleName
 
     companion object {
         fun directionFromDelta(deltaX: Int, deltaZ: Int): Direction = when {
