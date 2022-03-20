@@ -232,7 +232,7 @@ sealed class ActivityUpdateType {
             bits.writeBit(updating)
             // Make the player walk or run.
             bits.writeBits(2, if (running) 2 else 1)
-            bits.writeBits(if (running) 4 else 3, step.direction!!.opcode(running))
+            bits.writeBits(if (running) 4 else 3, step.direction!!.playerOpcode(running))
         }
     }
 
@@ -300,7 +300,7 @@ sealed class ActivityUpdateType {
             }
             abs(currentX - previousX) <= 1 && abs(currentZ - previousZ) <= 1 -> {
                 writeBits(2, 2)
-                writeBits(5, (deltaLevel shl 3) or (Direction.directionFromDelta(deltaX, deltaZ).opcode() and 0x7))
+                writeBits(5, (deltaLevel shl 3) or (Direction.directionFromDelta(deltaX, deltaZ).playerOpcode() and 0x7))
             }
             else -> {
                 writeBits(2, 3)

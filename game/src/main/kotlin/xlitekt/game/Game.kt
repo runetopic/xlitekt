@@ -20,7 +20,9 @@ class Game {
 
         npcSpawns.forEach {
             val location = Location(it.x, it.z, it.level)
-            world.addNPC(NPC(it.id, location))
+            val npc = NPC(it.id, location)
+            npc.previousLocation = location
+            world.addNPC(npc)
         }
 
         loop.start()

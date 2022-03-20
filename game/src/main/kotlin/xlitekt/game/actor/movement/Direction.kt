@@ -22,7 +22,7 @@ sealed class Direction {
 
     override fun toString(): String = javaClass.simpleName
 
-    fun opcode(useSixteenPoints: Boolean = false): Int = when (this) {
+    fun playerOpcode(useSixteenPoints: Boolean = false): Int = when (this) {
         is NorthEast -> if (useSixteenPoints) 15 else 7
         is NorthNorthEast -> 14
         is North -> if (useSixteenPoints) 13 else 6
@@ -39,6 +39,18 @@ sealed class Direction {
         is South -> if (useSixteenPoints) 2 else 1
         is SouthSouthWest -> 1
         is SouthWest -> 0
+    }
+
+    fun npcOpcode(): Int = when (this) {
+        is NorthWest -> 0
+        is North -> 1
+        is NorthEast -> 2
+        is West -> 3
+        is East -> 4
+        is SouthEast -> 7
+        is South -> 6
+        is SouthWest -> 5
+        else -> throw IllegalStateException("Direction opcode not found for npc. Direction was $this")
     }
 
     fun angle(): Int = when (this) {

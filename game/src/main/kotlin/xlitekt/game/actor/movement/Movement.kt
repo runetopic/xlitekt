@@ -1,9 +1,11 @@
 package xlitekt.game.actor.movement
 
 import xlitekt.game.actor.Actor
+import xlitekt.game.actor.npc.NPC
 import xlitekt.game.world.map.location.Location
 import xlitekt.game.world.map.location.directionTo
 import xlitekt.game.world.map.location.withinDistance
+import xlitekt.game.world.map.zone.Zones
 import java.util.Deque
 import java.util.LinkedList
 import kotlin.math.sign
@@ -71,6 +73,10 @@ class Movement(
             }
         }
         actor.location = step.location
+        if (actor is NPC) {
+            Zones[currentLocation]?.npcs?.remove(actor)
+            Zones[actor.location]?.npcs?.add(actor)
+        }
         return MovementStep(stepSpeed, step.location, if (step.speed == MovementSpeed.TELEPORTING) Direction.South else currentLocation.directionTo(step.location))
     }
 
