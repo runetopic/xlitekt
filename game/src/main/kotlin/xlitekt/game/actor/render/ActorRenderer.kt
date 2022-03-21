@@ -1,6 +1,9 @@
 package xlitekt.game.actor.render
 
 import io.ktor.utils.io.core.ByteReadPacket
+import xlitekt.game.actor.Actor
+import xlitekt.game.actor.npc.NPC
+import xlitekt.game.actor.player.Player
 import xlitekt.game.world.map.location.Location
 import kotlin.reflect.KClass
 
@@ -9,7 +12,9 @@ import kotlin.reflect.KClass
  * @email <xlitersps@gmail.com>
  * @author Jordan Abraham
  */
-class ActorRenderer {
+class ActorRenderer(
+    val actor: Actor
+) {
 
     val pendingUpdates = mutableMapOf<KClass<*>, Render>()
     val cachedUpdates = mutableMapOf<Render, ByteReadPacket>()
@@ -26,6 +31,7 @@ class ActorRenderer {
     }
 
     fun appearance(appearance: Render.Appearance): Render.Appearance {
+        if (actor !is Player) return appearance
         pendingUpdates[Render.Appearance::class] = appearance
         return appearance
     }
@@ -34,7 +40,8 @@ class ActorRenderer {
         pendingUpdates[Render.FaceActor::class] = Render.FaceActor(index)
     }
 
-    fun faceTile(location: Location) {
+    fun faceLocation(location: Location) {
+        if (actor !is Player) return
         pendingUpdates[Render.FaceLocation::class] = Render.FaceLocation(location)
     }
 
@@ -51,6 +58,7 @@ class ActorRenderer {
     }
 
     fun setCustomCombatLevel(level: Int) {
+        if (actor !is NPC) return
         pendingUpdates[Render.NPCCustomLevel::class] = Render.NPCCustomLevel(level)
     }
 
@@ -63,22 +71,27 @@ class ActorRenderer {
     }
 
     fun transmog(id: Int) {
+        if (actor !is NPC) return
         pendingUpdates[Render.NPCTransmogrification::class] = Render.NPCTransmogrification(id)
     }
 
     fun movementType(running: Boolean) {
+        if (actor !is Player) return
         pendingUpdates[Render.MovementType::class] = Render.MovementType(running)
     }
 
     fun temporaryMovementType(id: Int) {
+        if (actor !is Player) return
         pendingUpdates[Render.TemporaryMovementType::class] = Render.TemporaryMovementType(id)
     }
 
     fun publicChat(message: String, packedEffects: Int, rights: Int) {
+        if (actor !is Player) return
         pendingUpdates[Render.PublicChat::class] = Render.PublicChat(message, packedEffects, rights)
     }
 
-    fun faceDirection(direction: Int) {
-        pendingUpdates[Render.FaceDirection::class] = Render.FaceDirection(direction)
+    fun faceAngle(direction: Int) {
+        if (actor !is Player) return
+        pendingUpdates[Render.FaceAngle::class] = Render.FaceAngle(direction)
     }
 }

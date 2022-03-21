@@ -123,7 +123,7 @@ fun BytePacketBuilder.lowDefinition(
             Adding -> {
                 // When adding a player to the local view, we can grab their blocks from their cached list.
                 // This will hurt performance some but I am not sure of a better way.
-                blocks.writeBytes(other.cachedUpdates().keys.filter { i -> i is Render.Appearance || i is Render.FaceDirection || i is Render.MovementType || i is Render.TemporaryMovementType }.buildPlayerUpdateBlocks(other, false).readBytes())
+                blocks.writeBytes(other.cachedUpdates().keys.filter { i -> i is Render.Appearance || i is Render.FaceAngle || i is Render.MovementType || i is Render.TemporaryMovementType }.buildPlayerUpdateBlocks(other, false).readBytes())
                 // Add them to our array.
                 viewport.players[other.index] = other
                 viewport.setNsn(index)

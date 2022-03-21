@@ -2,6 +2,7 @@ package xlitekt.game.actor.movement
 
 import xlitekt.game.actor.Actor
 import xlitekt.game.actor.npc.NPC
+import xlitekt.game.actor.player.Player
 import xlitekt.game.world.map.location.Location
 import xlitekt.game.world.map.location.directionTo
 import xlitekt.game.world.map.zone.Zones
@@ -29,11 +30,11 @@ class Movement(
         }
         if (steps.isEmpty()) {
             queueDestinationSteps(currentLocation)
-            if (steps.isEmpty()) {
+            if (steps.isEmpty() && actor is Player) {
                 val direction = previousLocation?.directionTo(currentLocation)
                 if (direction != null && this.direction != direction) {
                     this.direction = direction
-                    actor.faceDirection(direction.angle())
+                    actor.faceAngle(direction.angle())
                 }
             }
         }
@@ -44,11 +45,12 @@ class Movement(
         var modifiedSpeed = initialSpeed
         when (initialSpeed) {
             MovementSpeed.TELEPORTING -> {
-                actor.temporaryMovementType(MovementSpeed.TELEPORTING.id)
+                teleporting = false
                 val direction = Direction.South
                 this.direction = direction
-                actor.faceDirection(direction.angle())
-                teleporting = false
+                // Only players will do this.
+                actor.temporaryMovementType(MovementSpeed.TELEPORTING.id)
+                actor.faceAngle(direction.angle())
             }
             MovementSpeed.WALKING, MovementSpeed.RUNNING -> if (initialSpeed == MovementSpeed.RUNNING) {
                 // If the player is running, then we poll the second step to move to.
@@ -114,14 +116,18 @@ class Movement(
     }
 
     private fun reset() {
-        actor.faceActor(-1)
         checkpoints.clear()
         steps.clear()
         teleporting = false
+        if (actor is Player) {
+            // Since players and npcs can both do this, we need to instance check.
+            actor.faceActor(-1)
+        }
     }
 
     fun toggleRun() {
         movementSpeed = if (movementSpeed.isRunning()) MovementSpeed.WALKING else MovementSpeed.RUNNING
+        // Only players will do this.
         actor.movementType(movementSpeed.isRunning())
         actor.temporaryMovementType(movementSpeed.id)
     }

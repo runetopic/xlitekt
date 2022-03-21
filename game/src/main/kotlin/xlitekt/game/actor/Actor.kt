@@ -17,7 +17,7 @@ import xlitekt.game.world.map.location.Location
 abstract class Actor(
     open var location: Location
 ) {
-    protected val renderer by lazy(::ActorRenderer)
+    protected val renderer by lazy { ActorRenderer(this) }
     val movement by lazy { Movement(this) }
 
     var previousLocation: Location? = null
@@ -46,7 +46,7 @@ abstract class Actor(
     fun customOptions(prefix: String, infix: String, suffix: String) = renderer.customOptions(prefix, infix, suffix)
     fun animate(id: Int, delay: Int = 0) = renderer.sequence(id, delay)
     fun faceActor(index: Int) = renderer.faceActor(index)
-    fun faceDirection(direction: Int) = renderer.faceDirection(direction)
+    fun faceAngle(direction: Int) = renderer.faceAngle(direction)
     // fun forceMove(forceMovement: Render.ForceMovement) = renderer.forceMove(forceMovement)
     fun overheadChat(text: String) = renderer.overheadChat(text)
     // fun recolor(recolor: Render.Recolor) = renderer.recolor(recolor)
