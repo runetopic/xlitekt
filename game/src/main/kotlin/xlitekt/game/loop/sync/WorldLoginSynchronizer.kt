@@ -5,6 +5,9 @@ package xlitekt.game.loop.sync
  */
 class WorldLoginSynchronizer : Synchronizer() {
     override fun run() {
-        world.processLoginRequests()
+        // For now let's process 500 login requests at a time.
+        world.loginRequests.entries.take(500).onEach {
+            it.key.init(it.value)
+        }.also(world.loginRequests.entries::removeAll)
     }
 }

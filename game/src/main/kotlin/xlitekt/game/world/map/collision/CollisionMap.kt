@@ -70,12 +70,12 @@ object CollisionMap {
                     val baseX = type.regionX shl 6
                     val baseZ = type.regionZ shl 6
 
-                    for (mapLocation in type.locations[level][x][z]) {
-                        val location = Location(mapLocation.x + baseX, mapLocation.z + baseZ, mapLocation.level)
-                        val entry = locs.entryType(mapLocation.id) ?: continue
-                        val gameObject = GameObject(entry, location, mapLocation.shape, mapLocation.rotation)
+                    type.locations[level][x][z].forEach {
+                        val location = Location(it.x + baseX, it.z + baseZ, it.level)
+                        val entry = locs.entryType(it.id) ?: return@forEach
+                        val gameObject = GameObject(entry, location, it.shape, it.rotation)
                         addObjectCollision(gameObject)
-                        Zones.createZone(Location(mapLocation.x + baseX, mapLocation.z + baseZ, mapLocation.level).toZoneLocation())
+                        Zones.createZone(Location(it.x + baseX, it.z + baseZ, it.level).toZoneLocation())
                     }
                 }
             }
@@ -115,9 +115,7 @@ object CollisionMap {
                 }
                 changeNormalCollision(location, width, length, blockProjectile, !breakRouteFinding, add)
             }
-            shape in GameObjectShape.GROUND_DECOR_SHAPES && interactType == 1 -> {
-                changeFloorDecor(location, add)
-            }
+            shape in GameObjectShape.GROUND_DECOR_SHAPES && interactType == 1 -> changeFloorDecor(location, add)
         }
     }
 
@@ -154,68 +152,62 @@ object CollisionMap {
         add: Boolean
     ) {
         when (shape) {
-            GameObjectShape.WALL -> {
-                when (rotation) {
-                    0 -> {
-                        addCollisionFlag(location, WALL_WEST_ROUTE_BLOCKER, add)
-                        addCollisionFlag(location.transform(-1, 0), WALL_EAST_ROUTE_BLOCKER, add)
-                    }
-                    1 -> {
-                        addCollisionFlag(location, WALL_NORTH_ROUTE_BLOCKER, add)
-                        addCollisionFlag(location.transform(0, 1), WALL_SOUTH_ROUTE_BLOCKER, add)
-                    }
-                    2 -> {
-                        addCollisionFlag(location, WALL_EAST_ROUTE_BLOCKER, add)
-                        addCollisionFlag(location.transform(1, 0), WALL_WEST_ROUTE_BLOCKER, add)
-                    }
-                    3 -> {
-                        addCollisionFlag(location, WALL_SOUTH_ROUTE_BLOCKER, add)
-                        addCollisionFlag(location.transform(0, -1), WALL_NORTH_ROUTE_BLOCKER, add)
-                    }
+            GameObjectShape.WALL -> when (rotation) {
+                0 -> {
+                    addCollisionFlag(location, WALL_WEST_ROUTE_BLOCKER, add)
+                    addCollisionFlag(location.transform(-1, 0), WALL_EAST_ROUTE_BLOCKER, add)
+                }
+                1 -> {
+                    addCollisionFlag(location, WALL_NORTH_ROUTE_BLOCKER, add)
+                    addCollisionFlag(location.transform(0, 1), WALL_SOUTH_ROUTE_BLOCKER, add)
+                }
+                2 -> {
+                    addCollisionFlag(location, WALL_EAST_ROUTE_BLOCKER, add)
+                    addCollisionFlag(location.transform(1, 0), WALL_WEST_ROUTE_BLOCKER, add)
+                }
+                3 -> {
+                    addCollisionFlag(location, WALL_SOUTH_ROUTE_BLOCKER, add)
+                    addCollisionFlag(location.transform(0, -1), WALL_NORTH_ROUTE_BLOCKER, add)
                 }
             }
-            GameObjectShape.WALL_CORNER_DIAG, GameObjectShape.WALL_CORNER -> {
-                when (rotation) {
-                    0 -> {
-                        addCollisionFlag(location, WALL_NORTH_WEST_ROUTE_BLOCKER, add)
-                        addCollisionFlag(location.transform(-1, 1), WALL_SOUTH_EAST_ROUTE_BLOCKER, add)
-                    }
-                    1 -> {
-                        addCollisionFlag(location, WALL_NORTH_EAST_ROUTE_BLOCKER, add)
-                        addCollisionFlag(location.transform(1, 1), WALL_SOUTH_WEST_ROUTE_BLOCKER, add)
-                    }
-                    2 -> {
-                        addCollisionFlag(location, WALL_SOUTH_EAST_ROUTE_BLOCKER, add)
-                        addCollisionFlag(location.transform(1, -1), WALL_NORTH_WEST_ROUTE_BLOCKER, add)
-                    }
-                    3 -> {
-                        addCollisionFlag(location, WALL_SOUTH_WEST_ROUTE_BLOCKER, add)
-                        addCollisionFlag(location.transform(-1, -1), WALL_NORTH_EAST_ROUTE_BLOCKER, add)
-                    }
+            GameObjectShape.WALL_CORNER_DIAG, GameObjectShape.WALL_CORNER -> when (rotation) {
+                0 -> {
+                    addCollisionFlag(location, WALL_NORTH_WEST_ROUTE_BLOCKER, add)
+                    addCollisionFlag(location.transform(-1, 1), WALL_SOUTH_EAST_ROUTE_BLOCKER, add)
+                }
+                1 -> {
+                    addCollisionFlag(location, WALL_NORTH_EAST_ROUTE_BLOCKER, add)
+                    addCollisionFlag(location.transform(1, 1), WALL_SOUTH_WEST_ROUTE_BLOCKER, add)
+                }
+                2 -> {
+                    addCollisionFlag(location, WALL_SOUTH_EAST_ROUTE_BLOCKER, add)
+                    addCollisionFlag(location.transform(1, -1), WALL_NORTH_WEST_ROUTE_BLOCKER, add)
+                }
+                3 -> {
+                    addCollisionFlag(location, WALL_SOUTH_WEST_ROUTE_BLOCKER, add)
+                    addCollisionFlag(location.transform(-1, -1), WALL_NORTH_EAST_ROUTE_BLOCKER, add)
                 }
             }
-            GameObjectShape.UNFINISHED_WALL -> {
-                when (rotation) {
-                    0 -> {
-                        addCollisionFlag(location, WALL_NORTH_ROUTE_BLOCKER or WALL_WEST_ROUTE_BLOCKER, add)
-                        addCollisionFlag(location.transform(-1, 0), WALL_EAST_ROUTE_BLOCKER, add)
-                        addCollisionFlag(location.transform(0, 1), WALL_SOUTH_ROUTE_BLOCKER, add)
-                    }
-                    1 -> {
-                        addCollisionFlag(location, WALL_NORTH_ROUTE_BLOCKER or WALL_EAST_ROUTE_BLOCKER, add)
-                        addCollisionFlag(location.transform(0, 1), WALL_SOUTH_ROUTE_BLOCKER, add)
-                        addCollisionFlag(location.transform(1, 0), WALL_WEST_ROUTE_BLOCKER, add)
-                    }
-                    2 -> {
-                        addCollisionFlag(location, WALL_SOUTH_ROUTE_BLOCKER or WALL_EAST_ROUTE_BLOCKER, add)
-                        addCollisionFlag(location.transform(1, 0), WALL_WEST_ROUTE_BLOCKER, add)
-                        addCollisionFlag(location.transform(0, -1), WALL_NORTH_ROUTE_BLOCKER, add)
-                    }
-                    3 -> {
-                        addCollisionFlag(location, WALL_SOUTH_ROUTE_BLOCKER or WALL_WEST_ROUTE_BLOCKER, add)
-                        addCollisionFlag(location.transform(0, -1), WALL_NORTH_ROUTE_BLOCKER, add)
-                        addCollisionFlag(location.transform(-1, 0), WALL_EAST_ROUTE_BLOCKER, add)
-                    }
+            GameObjectShape.UNFINISHED_WALL -> when (rotation) {
+                0 -> {
+                    addCollisionFlag(location, WALL_NORTH_ROUTE_BLOCKER or WALL_WEST_ROUTE_BLOCKER, add)
+                    addCollisionFlag(location.transform(-1, 0), WALL_EAST_ROUTE_BLOCKER, add)
+                    addCollisionFlag(location.transform(0, 1), WALL_SOUTH_ROUTE_BLOCKER, add)
+                }
+                1 -> {
+                    addCollisionFlag(location, WALL_NORTH_ROUTE_BLOCKER or WALL_EAST_ROUTE_BLOCKER, add)
+                    addCollisionFlag(location.transform(0, 1), WALL_SOUTH_ROUTE_BLOCKER, add)
+                    addCollisionFlag(location.transform(1, 0), WALL_WEST_ROUTE_BLOCKER, add)
+                }
+                2 -> {
+                    addCollisionFlag(location, WALL_SOUTH_ROUTE_BLOCKER or WALL_EAST_ROUTE_BLOCKER, add)
+                    addCollisionFlag(location.transform(1, 0), WALL_WEST_ROUTE_BLOCKER, add)
+                    addCollisionFlag(location.transform(0, -1), WALL_NORTH_ROUTE_BLOCKER, add)
+                }
+                3 -> {
+                    addCollisionFlag(location, WALL_SOUTH_ROUTE_BLOCKER or WALL_WEST_ROUTE_BLOCKER, add)
+                    addCollisionFlag(location.transform(0, -1), WALL_NORTH_ROUTE_BLOCKER, add)
+                    addCollisionFlag(location.transform(-1, 0), WALL_EAST_ROUTE_BLOCKER, add)
                 }
             }
         }
@@ -229,7 +221,6 @@ object CollisionMap {
         breakRouteFinding: Boolean,
         add: Boolean
     ) {
-
         changeWallCollision(location, rotation, shape, add)
         if (blockProjectile) changeWallProjectileCollision(location, rotation, shape, add)
         if (breakRouteFinding) changeWallRouteFinding(location, rotation, shape, add)
@@ -237,74 +228,66 @@ object CollisionMap {
 
     private fun changeWallProjectileCollision(location: Location, rotation: Int, shape: Int, add: Boolean) {
         when (shape) {
-            GameObjectShape.WALL -> {
-                when (rotation) {
-                    0 -> {
-                        addCollisionFlag(location, WALL_WEST_PROJECTILE_BLOCKER, add)
-                        addCollisionFlag(location.transform(-1, 0), WALL_EAST_PROJECTILE_BLOCKER, add)
-                    }
-                    1 -> {
-                        addCollisionFlag(location, WALL_NORTH_PROJECTILE_BLOCKER, add)
-                        addCollisionFlag(location.transform(0, 1), WALL_SOUTH_PROJECTILE_BLOCKER, add)
-                    }
-                    2 -> {
-                        addCollisionFlag(location, WALL_EAST_PROJECTILE_BLOCKER, add)
-                        addCollisionFlag(location.transform(1, 0), WALL_WEST_PROJECTILE_BLOCKER, add)
-                    }
-                    3 -> {
-                        addCollisionFlag(location, WALL_SOUTH_PROJECTILE_BLOCKER, add)
-                        addCollisionFlag(location.transform(0, -1), WALL_NORTH_PROJECTILE_BLOCKER, add)
-                    }
+            GameObjectShape.WALL -> when (rotation) {
+                0 -> {
+                    addCollisionFlag(location, WALL_WEST_PROJECTILE_BLOCKER, add)
+                    addCollisionFlag(location.transform(-1, 0), WALL_EAST_PROJECTILE_BLOCKER, add)
+                }
+                1 -> {
+                    addCollisionFlag(location, WALL_NORTH_PROJECTILE_BLOCKER, add)
+                    addCollisionFlag(location.transform(0, 1), WALL_SOUTH_PROJECTILE_BLOCKER, add)
+                }
+                2 -> {
+                    addCollisionFlag(location, WALL_EAST_PROJECTILE_BLOCKER, add)
+                    addCollisionFlag(location.transform(1, 0), WALL_WEST_PROJECTILE_BLOCKER, add)
+                }
+                3 -> {
+                    addCollisionFlag(location, WALL_SOUTH_PROJECTILE_BLOCKER, add)
+                    addCollisionFlag(location.transform(0, -1), WALL_NORTH_PROJECTILE_BLOCKER, add)
                 }
             }
-            GameObjectShape.WALL_CORNER_DIAG, GameObjectShape.WALL_CORNER -> {
-                when (rotation) {
-                    0 -> {
-                        addCollisionFlag(location, WALL_NORTH_WEST_PROJECTILE_BLOCKER, add)
-                        addCollisionFlag(location.transform(-1, 1), WALL_SOUTH_EAST_PROJECTILE_BLOCKER, add)
-                    }
-                    1 -> {
-                        addCollisionFlag(location, WALL_NORTH_EAST_PROJECTILE_BLOCKER, add)
-                        addCollisionFlag(location.transform(1, 1), WALL_SOUTH_WEST_PROJECTILE_BLOCKER, add)
-                    }
-                    2 -> {
-                        addCollisionFlag(location, WALL_SOUTH_EAST_PROJECTILE_BLOCKER, add)
-                        addCollisionFlag(location.transform(1, -1), WALL_NORTH_WEST_PROJECTILE_BLOCKER, add)
-                    }
-                    3 -> {
-                        addCollisionFlag(location, WALL_SOUTH_WEST_PROJECTILE_BLOCKER, add)
-                        addCollisionFlag(location.transform(-1, -1), WALL_NORTH_EAST_PROJECTILE_BLOCKER, add)
-                    }
+            GameObjectShape.WALL_CORNER_DIAG, GameObjectShape.WALL_CORNER -> when (rotation) {
+                0 -> {
+                    addCollisionFlag(location, WALL_NORTH_WEST_PROJECTILE_BLOCKER, add)
+                    addCollisionFlag(location.transform(-1, 1), WALL_SOUTH_EAST_PROJECTILE_BLOCKER, add)
+                }
+                1 -> {
+                    addCollisionFlag(location, WALL_NORTH_EAST_PROJECTILE_BLOCKER, add)
+                    addCollisionFlag(location.transform(1, 1), WALL_SOUTH_WEST_PROJECTILE_BLOCKER, add)
+                }
+                2 -> {
+                    addCollisionFlag(location, WALL_SOUTH_EAST_PROJECTILE_BLOCKER, add)
+                    addCollisionFlag(location.transform(1, -1), WALL_NORTH_WEST_PROJECTILE_BLOCKER, add)
+                }
+                3 -> {
+                    addCollisionFlag(location, WALL_SOUTH_WEST_PROJECTILE_BLOCKER, add)
+                    addCollisionFlag(location.transform(-1, -1), WALL_NORTH_EAST_PROJECTILE_BLOCKER, add)
                 }
             }
-            GameObjectShape.UNFINISHED_WALL -> {
-                when (rotation) {
-                    0 -> {
-                        val flag = WALL_WEST_PROJECTILE_BLOCKER or WALL_NORTH_PROJECTILE_BLOCKER
-                        addCollisionFlag(location, flag, add)
-                        addCollisionFlag(location.transform(-1, 0), WALL_EAST_PROJECTILE_BLOCKER, add)
-                        addCollisionFlag(location.transform(0, 1), WALL_SOUTH_PROJECTILE_BLOCKER, add)
-                    }
-                    1 -> {
-                        val flag = WALL_NORTH_PROJECTILE_BLOCKER or
-                            WALL_EAST_PROJECTILE_BLOCKER
-                        addCollisionFlag(location, flag, add)
-                        addCollisionFlag(location.transform(0, 1), WALL_SOUTH_PROJECTILE_BLOCKER, add)
-                        addCollisionFlag(location.transform(1, 0), WALL_WEST_PROJECTILE_BLOCKER, add)
-                    }
-                    2 -> {
-                        val flag = WALL_EAST_PROJECTILE_BLOCKER or
-                            WALL_SOUTH_PROJECTILE_BLOCKER
-                        addCollisionFlag(location, flag, add)
-                        addCollisionFlag(location.transform(1, 0), WALL_WEST_PROJECTILE_BLOCKER, add)
-                        addCollisionFlag(location.transform(0, -1), WALL_NORTH_PROJECTILE_BLOCKER, add)
-                    }
-                    3 -> {
-                        val flag = WALL_SOUTH_PROJECTILE_BLOCKER or WALL_WEST_PROJECTILE_BLOCKER
-                        addCollisionFlag(location, flag, add)
-                        addCollisionFlag(location.transform(0, -1), WALL_NORTH_PROJECTILE_BLOCKER, add)
-                        addCollisionFlag(location.transform(-1, 0), WALL_EAST_PROJECTILE_BLOCKER, add)
-                    }
+            GameObjectShape.UNFINISHED_WALL -> when (rotation) {
+                0 -> {
+                    val flag = WALL_WEST_PROJECTILE_BLOCKER or WALL_NORTH_PROJECTILE_BLOCKER
+                    addCollisionFlag(location, flag, add)
+                    addCollisionFlag(location.transform(-1, 0), WALL_EAST_PROJECTILE_BLOCKER, add)
+                    addCollisionFlag(location.transform(0, 1), WALL_SOUTH_PROJECTILE_BLOCKER, add)
+                }
+                1 -> {
+                    val flag = WALL_NORTH_PROJECTILE_BLOCKER or WALL_EAST_PROJECTILE_BLOCKER
+                    addCollisionFlag(location, flag, add)
+                    addCollisionFlag(location.transform(0, 1), WALL_SOUTH_PROJECTILE_BLOCKER, add)
+                    addCollisionFlag(location.transform(1, 0), WALL_WEST_PROJECTILE_BLOCKER, add)
+                }
+                2 -> {
+                    val flag = WALL_EAST_PROJECTILE_BLOCKER or WALL_SOUTH_PROJECTILE_BLOCKER
+                    addCollisionFlag(location, flag, add)
+                    addCollisionFlag(location.transform(1, 0), WALL_WEST_PROJECTILE_BLOCKER, add)
+                    addCollisionFlag(location.transform(0, -1), WALL_NORTH_PROJECTILE_BLOCKER, add)
+                }
+                3 -> {
+                    val flag = WALL_SOUTH_PROJECTILE_BLOCKER or WALL_WEST_PROJECTILE_BLOCKER
+                    addCollisionFlag(location, flag, add)
+                    addCollisionFlag(location.transform(0, -1), WALL_NORTH_PROJECTILE_BLOCKER, add)
+                    addCollisionFlag(location.transform(-1, 0), WALL_EAST_PROJECTILE_BLOCKER, add)
                 }
             }
         }
@@ -317,68 +300,62 @@ object CollisionMap {
         add: Boolean
     ) {
         when (shape) {
-            GameObjectShape.WALL -> {
-                when (rotation) {
-                    0 -> {
-                        addCollisionFlag(location, WALL_WEST, add)
-                        addCollisionFlag(location.transform(-1, 0), WALL_EAST, add)
-                    }
-                    1 -> {
-                        addCollisionFlag(location, WALL_NORTH, add)
-                        addCollisionFlag(location.transform(0, 1), WALL_SOUTH, add)
-                    }
-                    2 -> {
-                        addCollisionFlag(location, WALL_EAST, add)
-                        addCollisionFlag(location.transform(1, 0), WALL_WEST, add)
-                    }
-                    3 -> {
-                        addCollisionFlag(location, WALL_SOUTH, add)
-                        addCollisionFlag(location.transform(0, -1), WALL_NORTH, add)
-                    }
+            GameObjectShape.WALL -> when (rotation) {
+                0 -> {
+                    addCollisionFlag(location, WALL_WEST, add)
+                    addCollisionFlag(location.transform(-1, 0), WALL_EAST, add)
+                }
+                1 -> {
+                    addCollisionFlag(location, WALL_NORTH, add)
+                    addCollisionFlag(location.transform(0, 1), WALL_SOUTH, add)
+                }
+                2 -> {
+                    addCollisionFlag(location, WALL_EAST, add)
+                    addCollisionFlag(location.transform(1, 0), WALL_WEST, add)
+                }
+                3 -> {
+                    addCollisionFlag(location, WALL_SOUTH, add)
+                    addCollisionFlag(location.transform(0, -1), WALL_NORTH, add)
                 }
             }
-            GameObjectShape.WALL_CORNER_DIAG, GameObjectShape.WALL_CORNER -> {
-                when (rotation) {
-                    0 -> {
-                        addCollisionFlag(location, WALL_NORTH_WEST, add)
-                        addCollisionFlag(location.transform(-1, 1), WALL_SOUTH_EAST, add)
-                    }
-                    1 -> {
-                        addCollisionFlag(location, WALL_NORTH_EAST, add)
-                        addCollisionFlag(location.transform(1, 1), WALL_SOUTH_WEST, add)
-                    }
-                    2 -> {
-                        addCollisionFlag(location, WALL_SOUTH_EAST, add)
-                        addCollisionFlag(location.transform(1, -1), WALL_NORTH_WEST, add)
-                    }
-                    3 -> {
-                        addCollisionFlag(location, WALL_SOUTH_WEST, add)
-                        addCollisionFlag(location.transform(-1, -1), WALL_NORTH_EAST, add)
-                    }
+            GameObjectShape.WALL_CORNER_DIAG, GameObjectShape.WALL_CORNER -> when (rotation) {
+                0 -> {
+                    addCollisionFlag(location, WALL_NORTH_WEST, add)
+                    addCollisionFlag(location.transform(-1, 1), WALL_SOUTH_EAST, add)
+                }
+                1 -> {
+                    addCollisionFlag(location, WALL_NORTH_EAST, add)
+                    addCollisionFlag(location.transform(1, 1), WALL_SOUTH_WEST, add)
+                }
+                2 -> {
+                    addCollisionFlag(location, WALL_SOUTH_EAST, add)
+                    addCollisionFlag(location.transform(1, -1), WALL_NORTH_WEST, add)
+                }
+                3 -> {
+                    addCollisionFlag(location, WALL_SOUTH_WEST, add)
+                    addCollisionFlag(location.transform(-1, -1), WALL_NORTH_EAST, add)
                 }
             }
-            GameObjectShape.UNFINISHED_WALL -> {
-                when (rotation) {
-                    0 -> {
-                        addCollisionFlag(location, WALL_NORTH or WALL_WEST, add)
-                        addCollisionFlag(location.transform(-1, 0), WALL_EAST, add)
-                        addCollisionFlag(location.transform(0, 1), WALL_SOUTH, add)
-                    }
-                    1 -> {
-                        addCollisionFlag(location, WALL_NORTH or WALL_EAST, add)
-                        addCollisionFlag(location.transform(0, 1), WALL_SOUTH, add)
-                        addCollisionFlag(location.transform(1, 0), WALL_WEST, add)
-                    }
-                    2 -> {
-                        addCollisionFlag(location, WALL_SOUTH or WALL_EAST, add)
-                        addCollisionFlag(location.transform(1, 0), WALL_WEST, add)
-                        addCollisionFlag(location.transform(0, -1), WALL_NORTH, add)
-                    }
-                    3 -> {
-                        addCollisionFlag(location, WALL_SOUTH or WALL_WEST, add)
-                        addCollisionFlag(location.transform(0, -1), WALL_NORTH, add)
-                        addCollisionFlag(location.transform(-1, 0), WALL_EAST, add)
-                    }
+            GameObjectShape.UNFINISHED_WALL -> when (rotation) {
+                0 -> {
+                    addCollisionFlag(location, WALL_NORTH or WALL_WEST, add)
+                    addCollisionFlag(location.transform(-1, 0), WALL_EAST, add)
+                    addCollisionFlag(location.transform(0, 1), WALL_SOUTH, add)
+                }
+                1 -> {
+                    addCollisionFlag(location, WALL_NORTH or WALL_EAST, add)
+                    addCollisionFlag(location.transform(0, 1), WALL_SOUTH, add)
+                    addCollisionFlag(location.transform(1, 0), WALL_WEST, add)
+                }
+                2 -> {
+                    addCollisionFlag(location, WALL_SOUTH or WALL_EAST, add)
+                    addCollisionFlag(location.transform(1, 0), WALL_WEST, add)
+                    addCollisionFlag(location.transform(0, -1), WALL_NORTH, add)
+                }
+                3 -> {
+                    addCollisionFlag(location, WALL_SOUTH or WALL_WEST, add)
+                    addCollisionFlag(location.transform(0, -1), WALL_NORTH, add)
+                    addCollisionFlag(location.transform(-1, 0), WALL_EAST, add)
                 }
             }
         }
