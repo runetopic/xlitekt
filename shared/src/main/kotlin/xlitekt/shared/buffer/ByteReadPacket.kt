@@ -18,13 +18,15 @@ fun ByteReadPacket.readStringCp1252NullCircumfixed() = buildString {
     return readStringCp1252NullTerminated()
 }
 
-fun ByteReadPacket.readUByteSubtract() = readUByte().toInt() - 128
-fun ByteReadPacket.readByteAdd() = readByte().toInt() + 128
+fun ByteReadPacket.readUByteSubtract() = readUByte().toInt() - 128 and 0xff
+fun ByteReadPacket.readUByteAdd() = readUByte().toInt() + 128 and 0xff
+fun ByteReadPacket.readUByteNegate() = 0 - readByte().toInt() and 0xff
 
-fun ByteReadPacket.readShortAdd() = (readByte().toInt() shl 8) or readByteAdd()
+fun ByteReadPacket.readUShortAdd() = (readUByte().toInt() shl 8) or readUByteAdd()
+fun ByteReadPacket.readUShortSubtract() = (readUByte().toInt() shl 8) or readUByteSubtract()
 fun ByteReadPacket.readUShortLittleEndian() = readUByte().toInt() or (readUByte().toInt() shl 8)
 fun ByteReadPacket.readUShortLittleEndianSubtract() = readUByteSubtract() or (readUByte().toInt() shl 8)
-fun ByteReadPacket.readShortLittleEndianAdd() = readByteAdd() or (readByte().toInt() shl 8)
+fun ByteReadPacket.readUShortLittleEndianAdd() = readUByteAdd() or (readUByte().toInt() shl 8)
 
 fun ByteReadPacket.readUMedium() = (readUByte().toInt() shl 16) or readUShort().toInt()
 

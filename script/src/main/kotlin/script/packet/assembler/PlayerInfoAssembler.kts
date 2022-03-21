@@ -17,6 +17,7 @@ import xlitekt.game.actor.movement.isValid
 import xlitekt.game.actor.player.Client.Companion.world
 import xlitekt.game.actor.player.Player
 import xlitekt.game.actor.player.Viewport
+import xlitekt.game.actor.render.Render
 import xlitekt.game.actor.render.block.buildPlayerUpdateBlocks
 import xlitekt.game.packet.PlayerInfoPacket
 import xlitekt.game.packet.assembler.onPacketAssembler
@@ -121,7 +122,8 @@ fun BytePacketBuilder.lowDefinition(
         when (activity) {
             Adding -> {
                 // When adding a player to the local view, we can grab their blocks from their cached list.
-                blocks.writeBytes(other.cachedUpdates().keys.buildPlayerUpdateBlocks(other, false).readBytes())
+                // This will hurt performance some but I am not sure of a better way.
+                blocks.writeBytes(other.cachedUpdates().keys.filter { i -> i is Render.Appearance || i is Render.FaceDirection || i is Render.MovementType || i is Render.TemporaryMovementType }.buildPlayerUpdateBlocks(other, false).readBytes())
                 // Add them to our array.
                 viewport.players[other.index] = other
                 viewport.setNsn(index)

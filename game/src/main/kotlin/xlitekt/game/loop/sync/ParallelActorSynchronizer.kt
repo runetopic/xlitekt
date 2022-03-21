@@ -13,7 +13,7 @@ class ParallelActorSynchronizer : Synchronizer() {
 
     override fun run() {
         val players = world.players.filterNotNull().filter(Player::online)
-        val npcs = world.npcs.toList().filterNotNull()
+        val npcs = world.npcs.filterNotNull()
         val playerSteps = ConcurrentHashMap<Player, MovementStep>()
         val npcSteps = ConcurrentHashMap<NPC, MovementStep>()
         val updates = ConcurrentHashMap<Player, ByteReadPacket>()

@@ -16,7 +16,7 @@ import xlitekt.game.packet.NPCInfoPacket
 import xlitekt.game.packet.assembler.onPacketAssembler
 import xlitekt.game.world.map.location.Location
 import xlitekt.game.world.map.location.withinDistance
-import xlitekt.game.world.map.zone.Zones
+import xlitekt.game.world.map.location.zones
 import xlitekt.shared.buffer.BitAccess
 import xlitekt.shared.buffer.withBitAccess
 
@@ -65,15 +65,7 @@ fun BitAccess.highDefinition(
 
 fun BitAccess.lowDefinition(viewport: Viewport, blocks: BytePacketBuilder, playerLocations: Map<Player, Location>) {
     val playerLocation = playerLocations[viewport.player] ?: viewport.player.location
-    val currentZoneLocation = playerLocation.toZoneLocation()
-    val zones = buildSet {
-        (-2..2).forEach { x ->
-            (-2..2).forEach { z ->
-                add(currentZoneLocation.transform(x, z))
-            }
-        }
-    }.map { Zones[it.toFullLocation()] }.filter { it?.npcs?.isNotEmpty() == true }.filterNotNull()
-    zones.forEach { zone ->
+    playerLocation.zones().forEach { zone ->
         zone.npcs.forEach {
             // Check the activities this npc is doing.
             val activity = lowDefinitionActivities(viewport, it, playerLocation)

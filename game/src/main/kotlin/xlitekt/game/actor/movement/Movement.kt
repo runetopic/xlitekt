@@ -109,11 +109,12 @@ class Movement(
         while (currentX != waypointX || currentZ != waypointZ) {
             currentX += xSign
             currentZ += zSign
-            steps += Location(currentX, currentZ)
+            steps += Location(currentX, currentZ, location.level)
         }
     }
 
     private fun reset() {
+        actor.faceActor(-1)
         checkpoints.clear()
         steps.clear()
         teleporting = false

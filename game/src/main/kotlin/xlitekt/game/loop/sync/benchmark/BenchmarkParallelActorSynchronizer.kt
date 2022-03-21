@@ -45,7 +45,7 @@ class BenchmarkParallelActorSynchronizer : Synchronizer() {
 
     override fun run() {
         val players = world.players.filterNotNull().filter(Player::online)
-        val npcs = world.npcs.toList().filterNotNull()
+        val npcs = world.npcs.filterNotNull()
         val paths = ConcurrentHashMap<Player, Route>()
         val finders = measureTime {
             val first = players.firstOrNull()

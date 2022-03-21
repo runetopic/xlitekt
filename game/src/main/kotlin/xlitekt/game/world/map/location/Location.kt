@@ -2,12 +2,13 @@ package xlitekt.game.world.map.location
 
 import kotlinx.serialization.Serializable
 import xlitekt.game.actor.movement.Direction
-import xlitekt.game.actor.player.Player
 import xlitekt.game.actor.player.serializer.LocationSerializer
+import xlitekt.game.world.map.zone.Zone
+import xlitekt.game.world.map.zone.Zones
 
 @Serializable(with = LocationSerializer::class)
 @JvmInline
-value class Location(val packedLocation: Int) : Comparable<Location> {
+value class Location(val packedLocation: Int) {
     constructor(x: Int, z: Int, level: Int = 0) : this((z and 0x3FFF) or ((x and 0x3FFF) shl 14) or ((level and 0x3) shl 28))
 
     val x: Int get() = (packedLocation shr 14) and 0x3FFF
@@ -31,18 +32,9 @@ value class Location(val packedLocation: Int) : Comparable<Location> {
 
     override fun toString(): String =
         "Location(packedCoordinates=$packedLocation, x=$x, z=$z, level=$level, zoneX=$zoneX, zoneZ=$zoneZ, zoneId=$zoneId, regionX=$regionX, regionZ=$regionZ, regionId=$regionId)"
-
-    override fun compareTo(other: Location): Int = if (x != other.x || z != other.z) 0 else 1
 }
 
 fun Location.directionTo(end: Location): Direction = Direction.directionFromDelta(end.x - x, end.z - z)
-
-fun Location.withinDistance(other: Player, distance: Int = 14): Boolean {
-    if (other.location.level != level) return false
-    val deltaX = other.location.x - x
-    val deltaZ = other.location.z - z
-    return deltaX <= distance && deltaX >= -distance && deltaZ <= distance && deltaZ >= -distance
-}
 
 fun Location.withinDistance(other: Location?, distance: Int = 14): Boolean {
     if (other == null) return false
@@ -51,3 +43,5 @@ fun Location.withinDistance(other: Location?, distance: Int = 14): Boolean {
     val deltaZ = other.z - z
     return deltaX <= distance && deltaX >= -distance && deltaZ <= distance && deltaZ >= -distance
 }
+
+fun Location.zones(): List<Zone> = (-2..2).flatMap { x -> (-2..2).map { z -> toZoneLocation().transform(x, z) } }.mapNotNull { Zones[it.toFullLocation()] }

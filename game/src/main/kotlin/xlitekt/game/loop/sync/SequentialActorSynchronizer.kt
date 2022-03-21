@@ -12,7 +12,7 @@ class SequentialActorSynchronizer : Synchronizer() {
 
     override fun run() {
         val players = world.players.filterNotNull().filter(Player::online)
-        val npcs = world.npcs.toList().filterNotNull()
+        val npcs = world.npcs.filterNotNull()
         val playerSteps = mutableMapOf<Player, MovementStep>()
         val npcSteps = mutableMapOf<NPC, MovementStep>()
         val updates = mutableMapOf<Player, ByteReadPacket>()

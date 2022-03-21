@@ -75,7 +75,8 @@ object CollisionMap {
                         val entry = locs.entryType(it.id) ?: return@forEach
                         val gameObject = GameObject(entry, location, it.shape, it.rotation)
                         addObjectCollision(gameObject)
-                        Zones.createZone(Location(it.x + baseX, it.z + baseZ, it.level).toZoneLocation())
+                        val zone = Zones.createZone(location.toZoneLocation())
+                        zone.objects.add(gameObject)
                     }
                 }
             }
