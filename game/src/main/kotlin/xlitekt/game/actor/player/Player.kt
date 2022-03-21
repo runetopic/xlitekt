@@ -37,7 +37,7 @@ class Player(
     val username: String,
     val password: String,
     val rights: Int = 0,
-    val appearance: Render.Appearance = Render.Appearance(),
+    val appearance: Render.Appearance = Render.Appearance().also { it.displayName = username },
     val skills: Skills = Skills(),
     var runEnergy: Float = 10_000f
 ) : Actor(location) {

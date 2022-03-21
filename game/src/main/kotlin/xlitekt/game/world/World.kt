@@ -46,7 +46,7 @@ class World(
     }
 
     fun requestLogout(player: Player) {
-        logoutRequests.add(player)
+        logoutRequests += player
     }
 
     fun processLoginRequests() = loginRequests.entries.take(500).onEach {

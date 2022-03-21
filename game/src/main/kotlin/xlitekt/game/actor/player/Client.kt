@@ -65,7 +65,7 @@ class Client(
     }
 
     fun poolPacket(packet: Packet) {
-        pool.add(packet)
+        pool += packet
     }
 
     fun flushPool() {

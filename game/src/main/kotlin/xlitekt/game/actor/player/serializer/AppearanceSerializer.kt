@@ -10,9 +10,9 @@ import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
 import kotlinx.serialization.encoding.decodeStructure
 import kotlinx.serialization.encoding.encodeStructure
+import xlitekt.game.actor.player.kit.BodyPart
+import xlitekt.game.actor.player.kit.BodyPartColor
 import xlitekt.game.actor.render.Render
-import xlitekt.game.actor.render.block.player.kit.BodyPart
-import xlitekt.game.actor.render.block.player.kit.BodyPartColor
 import java.util.EnumMap
 
 /**
@@ -24,6 +24,7 @@ class AppearanceSerializer : KSerializer<Render.Appearance> {
             element<String>("gender")
             element<Map<String, Int>>("bodyParts")
             element<Map<String, Int>>("bodyPartColors")
+            element<String>("displayName")
         }
 
     override fun deserialize(decoder: Decoder): Render.Appearance = decoder.decodeStructure(descriptor) {
@@ -32,11 +33,13 @@ class AppearanceSerializer : KSerializer<Render.Appearance> {
         val bodyParts = EnumMap(decoder.decodeSerializableValue(MapSerializer(String.serializer(), Int.serializer())).map { BodyPart.valueOf(it.key) to it.value }.toMap())
         decodeElementIndex(descriptor)
         val bodyPartColors = EnumMap(decoder.decodeSerializableValue(MapSerializer(String.serializer(), Int.serializer())).map { BodyPartColor.valueOf(it.key) to it.value }.toMap())
+        val displayName = decodeStringElement(descriptor, decodeElementIndex(descriptor))
 
         val appearance = Render.Appearance()
         appearance.gender = Render.Appearance.Gender.valueOf(gender)
         appearance.bodyParts.putAll(bodyParts)
         appearance.bodyPartColors.putAll(bodyPartColors)
+        appearance.displayName = displayName
         return appearance
     }
 
@@ -44,5 +47,6 @@ class AppearanceSerializer : KSerializer<Render.Appearance> {
         encodeStringElement(descriptor, 0, value.gender.name)
         encodeSerializableElement(descriptor, 1, MapSerializer(String.serializer(), Int.serializer()), value.bodyParts.map { it.key.name to it.value }.toMap())
         encodeSerializableElement(descriptor, 2, MapSerializer(String.serializer(), Int.serializer()), value.bodyPartColors.map { it.key.name to it.value }.toMap())
+        encodeStringElement(descriptor, 3, value.displayName)
     }
 }

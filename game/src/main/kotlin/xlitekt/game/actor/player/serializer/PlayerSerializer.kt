@@ -37,7 +37,9 @@ class PlayerSerializer : KSerializer<Player> {
         val rights = decodeIntElement(descriptor, decodeElementIndex(descriptor))
         val location = decodeSerializableElement(descriptor, decodeElementIndex(descriptor), LocationSerializer())
         val vars = decodeSerializableElement(descriptor, decodeElementIndex(descriptor), MapSerializer(Int.serializer(), Int.serializer()))
-        val appearance = decodeSerializableElement(descriptor, decodeElementIndex(descriptor), AppearanceSerializer())
+        val appearance = decodeSerializableElement(descriptor, decodeElementIndex(descriptor), AppearanceSerializer()).also {
+            if (it.displayName.isEmpty()) it.displayName = username
+        }
         val runEnergy = decodeFloatElement(descriptor, decodeElementIndex(descriptor))
         val skills = decodeSerializableElement(descriptor, decodeElementIndex(descriptor), SkillsSerializer())
 

@@ -97,7 +97,7 @@ class Movement(
         steps.clear()
         val waypoint = checkpoints.poll()
         if (teleporting) {
-            steps.add(waypoint)
+            steps += waypoint
             return
         }
         var currentX = location.x
@@ -109,7 +109,7 @@ class Movement(
         while (currentX != waypointX || currentZ != waypointZ) {
             currentX += xSign
             currentZ += zSign
-            steps.add(Location(currentX, currentZ))
+            steps += Location(currentX, currentZ)
         }
     }
 

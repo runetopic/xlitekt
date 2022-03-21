@@ -82,7 +82,7 @@ fun BitAccess.lowDefinition(viewport: Viewport, blocks: BytePacketBuilder, playe
                 activity.writeBits(this, it!!, playerLocation = playerLocation)
                 when (activity) {
                     Adding -> {
-                        viewport.npcs.add(it)
+                        viewport.npcs += it
                         if (it.hasPendingUpdate()) blocks.buildNPCUpdateBlocks(it)
                     }
                     else -> throw IllegalStateException("Low definition npc had an activity type of $activity")

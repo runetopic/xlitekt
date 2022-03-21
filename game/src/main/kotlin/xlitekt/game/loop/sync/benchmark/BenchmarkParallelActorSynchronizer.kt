@@ -59,7 +59,7 @@ class BenchmarkParallelActorSynchronizer : Synchronizer() {
                     z = it.location.level
                 )
                 queue.put(pf)
-                it.publicChat("Hello Xlite.", 0)
+                it.publicChat("Hello Xlite.", 0, it.rights)
             }
         }
         logger.debug { "Pathfinders took $finders for ${players.size} players. [TICK=$tick]" }

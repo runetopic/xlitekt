@@ -1,7 +1,6 @@
 package xlitekt.game.actor.render
 
 import io.ktor.utils.io.core.ByteReadPacket
-import xlitekt.game.actor.Actor
 import xlitekt.game.world.map.location.Location
 import kotlin.reflect.KClass
 
@@ -36,17 +35,15 @@ class ActorRenderer {
     }
 
     fun faceTile(location: Location) {
-        pendingUpdates[Render.FaceTile::class] = Render.FaceTile(location)
+        pendingUpdates[Render.FaceLocation::class] = Render.FaceLocation(location)
     }
 
     fun forceMove(forceMovement: Render.ForceMovement) {
         pendingUpdates[Render.ForceMovement::class] = forceMovement
     }
 
-    fun hit(source: Actor?, type: HitType, damage: Int, delay: Int): Render.HitDamage {
-        val hit = Render.HitDamage(source, type, damage, delay)
-        pendingUpdates[Render.HitDamage::class] = hit
-        return hit
+    fun hit(hit: Render.Hit) {
+        pendingUpdates[Render.Hit::class] = hit
     }
 
     fun overheadChat(text: String) {
@@ -77,8 +74,8 @@ class ActorRenderer {
         pendingUpdates[Render.TemporaryMovementType::class] = Render.TemporaryMovementType(id)
     }
 
-    fun publicChat(message: String, packedEffects: Int) {
-        pendingUpdates[Render.PublicChat::class] = Render.PublicChat(message, packedEffects)
+    fun publicChat(message: String, packedEffects: Int, rights: Int) {
+        pendingUpdates[Render.PublicChat::class] = Render.PublicChat(message, packedEffects, rights)
     }
 
     fun faceDirection(direction: Int) {

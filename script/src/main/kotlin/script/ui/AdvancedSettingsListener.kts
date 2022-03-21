@@ -1,7 +1,7 @@
 package script.ui
 
 import xlitekt.game.content.ui.InterfaceEvent
-import xlitekt.game.content.ui.UserInterface
+import xlitekt.game.content.ui.UserInterface.AdvancedSettings
 import xlitekt.game.content.ui.UserInterfaceEvent
 import xlitekt.game.content.ui.onInterface
 import xlitekt.game.content.vars.VarBit
@@ -27,7 +27,7 @@ enum class Categories(val id: Int) {
     WARNINGS(7)
 }
 
-onInterface<UserInterface.AdvancedSettings> {
+onInterface<AdvancedSettings> {
     onOpen {
         setEvent(21, 0..147, InterfaceEvent.CLICK_OPTION_1)
         setEvent(23, 0..7, InterfaceEvent.CLICK_OPTION_1)
@@ -36,7 +36,7 @@ onInterface<UserInterface.AdvancedSettings> {
     }
 
     onClick(childId = closeSettingsChildId) {
-        interfaces -= UserInterface.AdvancedSettings
+        interfaces -= AdvancedSettings
     }
 
     onClick(childId = categoriesChildId) {
