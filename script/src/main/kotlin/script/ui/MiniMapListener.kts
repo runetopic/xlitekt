@@ -1,10 +1,10 @@
 package script.ui
 
-import xlitekt.game.ui.UserInterface
-import xlitekt.game.ui.onInterface
-import xlitekt.game.vars.VarPlayer
+import xlitekt.game.content.ui.UserInterface.MiniMap
+import xlitekt.game.content.ui.onInterface
+import xlitekt.game.content.vars.VarPlayer
 
-onInterface<UserInterface.MiniMap> {
+onInterface<MiniMap> {
     onClick("Toggle Run") {
         vars.flip(VarPlayer.ToggleRun)
         movement.toggleRun()

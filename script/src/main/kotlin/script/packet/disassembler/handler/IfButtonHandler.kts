@@ -2,9 +2,9 @@ package script.packet.disassembler.handler
 
 import com.github.michaelbull.logging.InlineLogger
 import xlitekt.cache.provider.ui.InterfaceEntryTypeProvider
+import xlitekt.game.content.ui.UserInterfaceEvent
 import xlitekt.game.packet.IfButtonPacket
 import xlitekt.game.packet.disassembler.handler.onPacketHandler
-import xlitekt.game.ui.UserInterfaceEvent
 import xlitekt.shared.inject
 import xlitekt.shared.packedToChildId
 import xlitekt.shared.packedToInterfaceId

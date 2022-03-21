@@ -4,7 +4,7 @@ import xlitekt.game.actor.npc.NPC
 import xlitekt.game.actor.player.Player
 
 typealias PlayerList = ActorList<Player?>
-typealias NPCList = ActorList<NPC>
+typealias NPCList = ActorList<NPC?>
 
 /**
  * @author Tyler Telis

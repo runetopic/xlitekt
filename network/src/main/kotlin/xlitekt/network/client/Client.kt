@@ -22,10 +22,10 @@ import xlitekt.game.actor.player.Client.Companion.store
 import xlitekt.game.actor.player.Client.Companion.world
 import xlitekt.game.actor.player.Player
 import xlitekt.game.actor.player.PlayerDecoder
+import xlitekt.game.content.ui.InterfaceLayout
 import xlitekt.game.packet.disassembler.PacketDisassemblerListener
 import xlitekt.game.packet.disassembler.handler.PacketHandler
 import xlitekt.game.packet.disassembler.handler.PacketHandlerListener
-import xlitekt.game.ui.InterfaceLayout
 import xlitekt.network.client.ClientRequestOpcode.HANDSHAKE_JS5_OPCODE
 import xlitekt.network.client.ClientRequestOpcode.HANDSHAKE_LOGIN_OPCODE
 import xlitekt.network.client.ClientRequestOpcode.JS5_ENCRYPTION_OPCODE
@@ -291,13 +291,14 @@ private suspend fun Client.writeLogin(response: Int) {
         writeByte(0)
     }.flush()
 
-    player.login(this)
+    world.requestLogin(player, this)
     readPackets(player)
 }
 
 private suspend fun Client.readPackets(player: Player) = try {
     while (true) {
         val readChannel = readChannel ?: break
+        if (readChannel.isClosedForRead) break
         val opcode = readChannel.readPacketOpcode(clientCipher!!)
         if (opcode < 0 || opcode >= sizes.size) continue
         val size = readChannel.readPacketSize(sizes[opcode])

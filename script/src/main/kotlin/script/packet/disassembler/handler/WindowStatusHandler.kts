@@ -1,9 +1,9 @@
 package script.packet.disassembler.handler
 
+import xlitekt.game.content.ui.InterfaceLayout
+import xlitekt.game.content.vars.VarBit
 import xlitekt.game.packet.WindowStatusPacket
 import xlitekt.game.packet.disassembler.handler.onPacketHandler
-import xlitekt.game.ui.InterfaceLayout
-import xlitekt.game.vars.VarBit
 
 /**
  * @author Jordan Abraham

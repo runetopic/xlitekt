@@ -19,3 +19,11 @@ value class ZoneLocation(val packedCoordinates: Int) {
     fun toFullLocation(): Location = Location(x shl 3, z shl 3, level)
     override fun toString(): String = "ZoneLocation($x, $z, $level)"
 }
+
+fun ZoneLocation.withinDistance(other: ZoneLocation?, distance: Int = 14): Boolean {
+    if (other == null) return false
+    if (other.level != level) return false
+    val deltaX = other.x - x
+    val deltaZ = other.z - z
+    return deltaX <= distance && deltaX >= -distance && deltaZ <= distance && deltaZ >= -distance
+}

@@ -15,6 +15,5 @@ data class PlayerInfoPacket(
     val updates: Map<Player, ByteReadPacket>,
     val previousLocations: Map<Player, Location?>,
     val locations: Map<Player, Location>,
-    val teleports: Map<Player, Boolean>,
     val steps: Map<Player, MovementStep?>
 ) : Packet

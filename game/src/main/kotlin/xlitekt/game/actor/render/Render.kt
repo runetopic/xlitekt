@@ -2,9 +2,9 @@ package xlitekt.game.actor.render
 
 import kotlinx.serialization.Serializable
 import xlitekt.game.actor.Actor
+import xlitekt.game.actor.player.kit.BodyPart
+import xlitekt.game.actor.player.kit.BodyPartColor
 import xlitekt.game.actor.player.serializer.AppearanceSerializer
-import xlitekt.game.actor.render.block.player.kit.BodyPart
-import xlitekt.game.actor.render.block.player.kit.BodyPartColor
 import xlitekt.game.world.map.location.Location
 import java.util.EnumMap
 
@@ -35,15 +35,16 @@ sealed class Render {
 
     data class PublicChat(
         val message: String,
-        val packedEffects: Int
+        val packedEffects: Int,
+        val rights: Int
     ) : Render()
 
     data class FaceActor(
         val index: Int
     ) : Render()
 
-    data class FaceDirection(
-        val direction: Int
+    data class FaceAngle(
+        val angle: Int
     ) : Render()
 
     data class NPCTransmogrification(
@@ -60,20 +61,19 @@ sealed class Render {
     ) : Render()
 
     data class ForceMovement(
+        val currentLocation: Location,
         val firstLocation: Location,
         val secondLocation: Location?,
         val firstDelay: Int = 0,
         val secondDelay: Int = 0,
         val rotation: Int = 0
-    ) : Render() {
-        constructor(firstLocation: Location, delay: Int, rotation: Int) : this(firstLocation, null, delay, 0, rotation)
-    }
+    ) : Render()
 
     data class OverheadChat(
         val text: String
     ) : Render()
 
-    data class FaceTile(
+    data class FaceLocation(
         val location: Location
     ) : Render()
 
@@ -81,14 +81,11 @@ sealed class Render {
         val level: Int
     ) : Render()
 
-    data class HitDamage(
-        val source: Actor?,
-        val type: HitType,
-        val damage: Int,
-        val delay: Int
-    ) : Render() {
-        fun isInteracting(actor: Actor, target: Actor?): Boolean = source == actor || actor == target
-    }
+    data class Hit(
+        val actor: Actor,
+        val hits: List<HitDamage>,
+        val bars: List<HitBarType>
+    ) : Render()
 
     data class MovementType(
         val running: Boolean
@@ -106,6 +103,7 @@ sealed class Render {
         var skullIcon: Int = -1
         var transform: Int = -1
         var hidden: Boolean = false
+        var displayName: String = ""
 
         init {
             bodyParts[BodyPart.HEAD] = 0

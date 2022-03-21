@@ -1,6 +1,6 @@
 package xlitekt.game.packet
 
-import xlitekt.game.item.Item
+import xlitekt.game.content.item.Item
 
 /**
  * @author Tyler Telis

@@ -3,7 +3,6 @@ package xlitekt.cache.provider.map
 import xlitekt.cache.provider.EntryType
 import xlitekt.cache.provider.map.MapEntryTypeProvider.Companion.LEVELS
 import xlitekt.cache.provider.map.MapEntryTypeProvider.Companion.MAP_SIZE
-import java.util.Collections
 
 /**
  * @author Tyler Telis
@@ -16,9 +15,7 @@ data class MapSquareEntryType(
     val locations: Array<Array<Array<MutableList<MapSquareLocation>>>> = Array(LEVELS) {
         Array(MAP_SIZE) {
             Array(MAP_SIZE) {
-                Collections.synchronizedList(
-                    mutableListOf()
-                )
+                mutableListOf()
             }
         }
     }

@@ -1,5 +1,5 @@
 import xlitekt.game.actor.player.message
-import xlitekt.game.command.Commands.onCommand
+import xlitekt.game.content.command.Commands.onCommand
 import xlitekt.game.world.map.location.Location
 
 // TODO make a color system so we're not using arbitrary hex codes throughout our app
@@ -26,7 +26,7 @@ onCommand("tele").use { arguments ->
 
         val level = arguments.drop(2).firstOrNull()?.toInt() ?: location.level
 
-        nextLocation = Location(x, z, level)
+        movement.route(location = Location(x, z, level), teleport = true)
         message("Teleported: ${Location(x, z, level)}")
     } catch (exception: NumberFormatException) {
         message(invalidSyntaxMessage)

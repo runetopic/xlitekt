@@ -1,13 +1,13 @@
 package script.ui
 
-import xlitekt.game.ui.InterfaceEvent.CLICK_OPTION_1
-import xlitekt.game.ui.UserInterface
-import xlitekt.game.ui.onInterface
+import xlitekt.game.content.ui.InterfaceEvent.CLICK_OPTION_1
+import xlitekt.game.content.ui.UserInterface.Emotes
+import xlitekt.game.content.ui.onInterface
 import xlitekt.shared.inject
 import xlitekt.shared.resource.Sequences
 import xlitekt.shared.resource.SpotAnimations
 
-private enum class Emotes(
+private enum class Emote(
     val slotId: Int,
     val emoteName: String
 ) {
@@ -67,13 +67,13 @@ private enum class Emotes(
 private val sequences by inject<Sequences>()
 private val spotAnimations by inject<SpotAnimations>()
 
-onInterface<UserInterface.Emotes> {
+onInterface<Emotes> {
     onOpen {
         setEvent(childId = 1, slots = 0..50, event = CLICK_OPTION_1)
     }
 
     onClick {
-        val emote = enumValues<Emotes>().find { emote -> emote.slotId == it.slotId } ?: return@onClick
+        val emote = enumValues<Emote>().find { emote -> emote.slotId == it.slotId } ?: return@onClick
         val sequence = sequences[emote.emoteName] ?: return@onClick
         // Not every emote has a spot animation associated with it.
         val spotAnimation = spotAnimations[emote.emoteName]

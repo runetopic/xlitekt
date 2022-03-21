@@ -1,18 +1,19 @@
 package script.ui
 
 import xlitekt.game.actor.player.script
-import xlitekt.game.ui.InterfaceEvent.CLICK_OPTION_1
-import xlitekt.game.ui.InterfaceLayout
-import xlitekt.game.ui.UserInterface
-import xlitekt.game.ui.onInterface
-import xlitekt.game.vars.VarBit
+import xlitekt.game.content.ui.InterfaceEvent.CLICK_OPTION_1
+import xlitekt.game.content.ui.InterfaceLayout
+import xlitekt.game.content.ui.UserInterface
+import xlitekt.game.content.ui.UserInterface.Settings
+import xlitekt.game.content.ui.onInterface
+import xlitekt.game.content.vars.VarBit
 import xlitekt.shared.toInt
 
 private val layoutDropDownChildId = 84
 private val clientModeCS2Id = 3998
 private val interfaceScalingCS2Id = 2358
 
-onInterface<UserInterface.Settings> {
+onInterface<Settings> {
     onOpen {
         setEvent(childId = 41, slots = 0..21, event = CLICK_OPTION_1)
         setEvent(childId = 55, slots = 0..21, event = CLICK_OPTION_1)
@@ -34,5 +35,9 @@ onInterface<UserInterface.Settings> {
 
     onClick("All Settings") {
         interfaces += UserInterface.AdvancedSettings
+    }
+
+    onClick("Toggle Run") {
+        movement.toggleRun()
     }
 }

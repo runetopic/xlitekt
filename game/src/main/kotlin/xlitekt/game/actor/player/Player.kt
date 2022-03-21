@@ -7,6 +7,9 @@ import xlitekt.game.actor.player.serializer.PlayerSerializer
 import xlitekt.game.actor.render.Render
 import xlitekt.game.actor.skill.Skill
 import xlitekt.game.actor.skill.Skills
+import xlitekt.game.content.ui.Interfaces
+import xlitekt.game.content.vars.VarPlayer
+import xlitekt.game.content.vars.Vars
 import xlitekt.game.event.EventBus
 import xlitekt.game.event.impl.Events
 import xlitekt.game.packet.LogoutPacket
@@ -18,13 +21,11 @@ import xlitekt.game.packet.UpdateRunEnergyPacket
 import xlitekt.game.packet.UpdateStatPacket
 import xlitekt.game.packet.VarpLargePacket
 import xlitekt.game.packet.VarpSmallPacket
-import xlitekt.game.ui.Interfaces
-import xlitekt.game.vars.VarPlayer
-import xlitekt.game.vars.Vars
 import xlitekt.game.world.World
 import xlitekt.game.world.map.location.Location
 import xlitekt.shared.inject
 import kotlin.math.abs
+import kotlin.random.Random.Default.nextInt
 
 /**
  * @author Jordan Abraham
@@ -36,7 +37,7 @@ class Player(
     val username: String,
     val password: String,
     val rights: Int = 0,
-    val appearance: Render.Appearance = Render.Appearance(),
+    val appearance: Render.Appearance = Render.Appearance().also { it.displayName = username },
     val skills: Skills = Skills(),
     var runEnergy: Float = 10_000f
 ) : Actor(location) {
@@ -52,35 +53,55 @@ class Player(
     override fun totalHitpoints(): Int = 100
     override fun currentHitpoints(): Int = 100
 
-    fun login(client: Client) {
+    fun init(client: Client) {
         this.client = client
         previousLocation = location
+        lastLoadedLocation = location
         sendRebuildNormal(true)
+        interfaces.openTop(interfaces.currentInterfaceLayout.interfaceId)
+        flushPool()
+        login()
+    }
+
+    private fun login() {
+        vars.login()
+        interfaces.login()
+
         updateAppearance()
         movementType(false)
-        interfaces.login()
-        vars.login()
         sendUpdateRunEnergy()
         if (vars[VarPlayer.ToggleRun] == 1) movement.toggleRun()
+        inject<EventBus>().value.notify(Events.OnLoginEvent(this))
 
         // Set the player online here, so they start processing by the main game loop.
         online = true
-        inject<EventBus>().value.notify(Events.OnLoginEvent(this))
+
+        if (username == "jordan") {
+            repeat(1999) {
+                val bot = Player(username = "", password = "")
+                bot.location = Location(nextInt(3200, 3280), nextInt(3200, 3280), 0)
+                val world by inject<World>()
+                world.players.add(bot)
+                bot.vars.flip(VarPlayer.ToggleRun)
+                world.requestLogin(bot, Client())
+            }
+        }
     }
 
     fun logout() {
         if (!online) return
+        online = false
         write(LogoutPacket(0))
         flushPool()
-        online = false
+        client?.socket?.close()
         inject<World>().value.players.remove(this)
         encodeToJson()
     }
 
     fun updateAppearance() = renderer.appearance(appearance)
 
-    fun write(packet: Packet) = client?.writePacket(packet)
-    fun flushPool() = client?.writeChannel?.flush()
+    fun write(packet: Packet) = client?.poolPacket(packet)
+    fun flushPool() = client?.flushPool()
 }
 
 fun Player.sendVarp(id: Int, value: Int) = if (value < Byte.MIN_VALUE || value > Byte.MAX_VALUE) {
@@ -98,8 +119,8 @@ fun Player.script(scriptId: Int, parameters: List<Any>) = write(RunClientScriptP
 fun Player.sendUpdateRunEnergy() = write(UpdateRunEnergyPacket(runEnergy / 100))
 
 fun Player.shouldRebuildMap(): Boolean {
-    val lastZoneX: Int = lastLoadedLocation?.zoneX ?: return false
-    val lastZoneZ: Int = lastLoadedLocation?.zoneZ ?: return false
+    val lastZoneX = lastLoadedLocation?.zoneX ?: 0
+    val lastZoneZ = lastLoadedLocation?.zoneZ ?: 0
     val zoneX = location.zoneX
     val zoneZ = location.zoneZ
     val size = ((104 shr 3) / 2) - 1
@@ -108,5 +129,5 @@ fun Player.shouldRebuildMap(): Boolean {
 
 fun Player.sendRebuildNormal(update: Boolean) {
     write(RebuildNormalPacket(viewport, location, update))
-    lastLoadedLocation = Location(location.packedLocation)
+    lastLoadedLocation = location
 }

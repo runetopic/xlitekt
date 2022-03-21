@@ -1,12 +1,12 @@
 package script.ui
 
-import xlitekt.game.ui.InterfaceEvent
-import xlitekt.game.ui.UserInterface
-import xlitekt.game.ui.UserInterfaceEvent
-import xlitekt.game.ui.onInterface
-import xlitekt.game.vars.VarBit
-import xlitekt.game.vars.VarPlayer
-import xlitekt.game.vars.Vars
+import xlitekt.game.content.ui.InterfaceEvent
+import xlitekt.game.content.ui.UserInterface.AdvancedSettings
+import xlitekt.game.content.ui.UserInterfaceEvent
+import xlitekt.game.content.ui.onInterface
+import xlitekt.game.content.vars.VarBit
+import xlitekt.game.content.vars.VarPlayer
+import xlitekt.game.content.vars.Vars
 
 private val closeSettingsChildId = 4
 private val firstLayerChildId = 19
@@ -27,7 +27,7 @@ enum class Categories(val id: Int) {
     WARNINGS(7)
 }
 
-onInterface<UserInterface.AdvancedSettings> {
+onInterface<AdvancedSettings> {
     onOpen {
         setEvent(21, 0..147, InterfaceEvent.CLICK_OPTION_1)
         setEvent(23, 0..7, InterfaceEvent.CLICK_OPTION_1)
@@ -36,7 +36,7 @@ onInterface<UserInterface.AdvancedSettings> {
     }
 
     onClick(childId = closeSettingsChildId) {
-        interfaces -= UserInterface.AdvancedSettings
+        interfaces -= AdvancedSettings
     }
 
     onClick(childId = categoriesChildId) {

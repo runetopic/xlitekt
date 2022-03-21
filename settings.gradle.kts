@@ -18,7 +18,7 @@ dependencyResolutionManagement {
             version("classgraph", "4.8.141")
             version("shadowjar", "7.1.2")
             version("versions", "0.42.0")
-            version("pathfinder", "2.0.4")
+            version("pathfinder", "2.1.2")
 
             library("ktor-server-netty", "io.ktor", "ktor-server-netty").versionRef("ktor")
             library("koin-core", "io.insert-koin", "koin-core").versionRef("koin")

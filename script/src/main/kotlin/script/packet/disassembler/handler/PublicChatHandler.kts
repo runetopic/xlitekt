@@ -10,5 +10,5 @@ private val huffman by inject<Huffman>()
 
 onPacketHandler<PublicChatPacket> {
     val decompressedString = packet.data.fromHuffman(huffman, this.packet.length)
-    player.publicChat(decompressedString, packedEffects = packet.color shl 8 or packet.effect)
+    player.publicChat(decompressedString, packedEffects = packet.color shl 8 or packet.effect, player.rights)
 }

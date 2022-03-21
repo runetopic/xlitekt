@@ -50,6 +50,7 @@ We will be writing a tutorial in the future for dumping packets sizes and other 
 **Please change the RSA tokens for a production based environment, these keys are just an example. Do not use this for anything other than local development.**
 ```shell
 game {
+    benchmarking = false
     build {
         major = 202
         minor = 1
