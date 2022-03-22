@@ -1,0 +1,19 @@
+package script.packet.assembler
+
+import io.ktor.utils.io.core.buildPacket
+import xlitekt.game.packet.UpdateZoneFullFollowsPacket
+import xlitekt.game.packet.assembler.onPacketAssembler
+import xlitekt.shared.buffer.writeByteAdd
+
+/**
+ * @author Jordan Abraham
+ */
+onPacketAssembler<UpdateZoneFullFollowsPacket>(opcode = 16, size = 2) {
+    buildPacket {
+        println("PACKET")
+        println(((localX shr 3) shl 3).toByte())
+        println(((localZ shr 3) shl 3).toByte())
+        writeByteAdd(((localX shr 3) shl 3).toByte())
+        writeByte(((localZ shr 3) shl 3).toByte())
+    }
+}

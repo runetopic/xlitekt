@@ -2,8 +2,10 @@ package xlitekt.game.actor.player
 
 import io.ktor.utils.io.core.BytePacketBuilder
 import xlitekt.game.actor.npc.NPC
+import xlitekt.game.content.item.GroundItem
 import xlitekt.game.world.World
 import xlitekt.game.world.World.Companion.MAX_PLAYERS
+import xlitekt.game.world.map.zone.Zone
 import xlitekt.shared.buffer.withBitAccess
 import xlitekt.shared.inject
 import java.util.LinkedList
@@ -17,9 +19,12 @@ class Viewport(
     val lowDefinitions = IntArray(MAX_PLAYERS)
     val players = Array<Player?>(MAX_PLAYERS) { null }
     val npcs = LinkedList<NPC>()
+
+    val groundItems = mutableMapOf<Zone, List<GroundItem>>()
+
     var highDefinitionsCount = 0
     var lowDefinitionsCount = 0
-    private var forceViewDistance = false
+    var forceViewDistance = false
     var viewDistance = PREFERRED_VIEW_DISTANCE
 
     private var resizeTickCount = 0

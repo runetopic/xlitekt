@@ -23,9 +23,12 @@ import xlitekt.game.packet.VarpLargePacket
 import xlitekt.game.packet.VarpSmallPacket
 import xlitekt.game.world.World
 import xlitekt.game.world.map.location.Location
+import xlitekt.game.world.map.location.zones
+import xlitekt.game.world.map.zone.Zone
 import xlitekt.shared.inject
 import kotlin.math.abs
 import kotlin.random.Random.Default.nextInt
+import xlitekt.game.packet.UpdateZoneFullFollowsPacket
 
 /**
  * @author Jordan Abraham
@@ -45,6 +48,7 @@ class Player(
     val interfaces = Interfaces(this)
     val vars = Vars(this)
     var lastLoadedLocation: Location? = null
+    val zones = mutableSetOf<Zone?>()
 
     private var client: Client? = null
 
@@ -127,7 +131,42 @@ fun Player.shouldRebuildMap(): Boolean {
     return abs(lastZoneX - zoneX) >= size || abs(lastZoneZ - zoneZ) >= size
 }
 
+fun Player.shouldRefreshZones(): Boolean {
+    val checkZones = location.zones(width = 3, height = 3)
+    return mapLoaded && !zones.containsAll(checkZones)
+}
+
 fun Player.sendRebuildNormal(update: Boolean) {
+    mapLoaded = false
     write(RebuildNormalPacket(viewport, location, update))
     lastLoadedLocation = location
+    if (shouldRefreshZones()) rebuildZones(true)
+}
+
+fun Player.rebuildZones(refresh: Boolean) {
+    println("Rebuoild")
+    val newZones = location.zones(width = 3, height = 3)
+    val removingZones = zones.filter { it !in newZones }
+    val addingZones = newZones.filter { it !in zones }
+    if (refresh) {
+        addingZones.forEach {
+            val location = it.zoneLocation.toFullLocation()
+            println("fucked 2")
+            lastLoadedLocation?.let { l -> write(UpdateZoneFullFollowsPacket(location.sceneX(l), location.sceneZ(l))) }
+        }
+    }
+    // Remove old zones not found in new zones.
+    zones.removeAll(removingZones.toSet())
+//    if (removed) {
+//        removingZones.filterNotNull().forEach {
+//            lastLoadedLocation?.let(it::queueRemoveItems)
+//        }
+//    }
+    val added = zones.addAll(addingZones)
+    if (added) {
+        addingZones.forEach {
+            lastLoadedLocation?.let(it::queueRefresh)
+        }
+    }
+    message("Zones rebuilt. Size = ${zones.size}")
 }

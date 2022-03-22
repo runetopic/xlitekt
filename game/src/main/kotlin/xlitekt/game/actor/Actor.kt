@@ -5,8 +5,10 @@ import xlitekt.game.actor.movement.Movement
 import xlitekt.game.actor.movement.MovementStep
 import xlitekt.game.actor.movement.isValid
 import xlitekt.game.actor.player.Player
+import xlitekt.game.actor.player.rebuildZones
 import xlitekt.game.actor.player.sendRebuildNormal
 import xlitekt.game.actor.player.shouldRebuildMap
+import xlitekt.game.actor.player.shouldRefreshZones
 import xlitekt.game.actor.render.ActorRenderer
 import xlitekt.game.actor.render.HitBarType
 import xlitekt.game.actor.render.HitDamage
@@ -23,12 +25,15 @@ abstract class Actor(
     var previousLocation: Location? = null
     var index = 0
 
+    var mapLoaded = false
+
     abstract fun totalHitpoints(): Int
     abstract fun currentHitpoints(): Int
 
     fun processMovement(): MovementStep = movement.process(location).also {
         if (this is Player) {
             if (it.isValid() && shouldRebuildMap()) sendRebuildNormal(false)
+            // else if (it.isValid() && shouldRefreshZones() && !shouldRebuildMap()) rebuildZones(true)
         }
     }
 

@@ -13,6 +13,7 @@ import xlitekt.game.world.map.zone.Zones
 import xlitekt.shared.inject
 import xlitekt.shared.resource.NPCSpawns
 import java.util.concurrent.ConcurrentHashMap
+import xlitekt.game.content.item.GroundItem
 
 class World(
     val players: PlayerList = PlayerList(MAX_PLAYERS),
@@ -36,6 +37,11 @@ class World(
             npc.previousLocation = location
             spawn(npc)
         }
+
+        val item1 = GroundItem(4151, 1, Location(3222, 3222, 0))
+        val item2 = GroundItem(4151, 1, Location(3226, 3219, 0))
+        Zones[item1.location]?.requestAddGroundItem(item1)
+        Zones[item2.location]?.requestAddGroundItem(item2)
     }
 
     /**

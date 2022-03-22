@@ -75,6 +75,10 @@ class Movement(
             }
         }
         actor.location = step
+        println(step)
+        println(step.toZoneLocation())
+        println(step.x - 8 * (step.zoneX - (104 shr 4)))
+        println(step.z - 8 * (step.zoneZ - (104 shr 4)))
         if (actor is NPC) {
             Zones[currentLocation]?.npcs?.remove(actor)
             Zones[actor.location]?.npcs?.add(actor)

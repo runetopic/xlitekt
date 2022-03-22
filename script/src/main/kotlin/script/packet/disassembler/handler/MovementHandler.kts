@@ -9,6 +9,8 @@ import xlitekt.shared.inject
 
 private val zoneFlags by inject<ZoneFlags>()
 
+zoneFlags.zoneLocal(3222, 3222)
+
 val pf = SmartPathFinder(
     flags = zoneFlags.flags,
     defaultFlag = 0

@@ -1,8 +1,8 @@
 package xlitekt.game.content.item
 
-data class Item(
-    val id: Int,
-    val amount: Int
+open class Item(
+    open val id: Int,
+    open val amount: Int
 ) : Comparable<Item> {
     override fun compareTo(other: Item): Int {
         return this.id.compareTo(other.id) + this.amount.compareTo(other.amount)

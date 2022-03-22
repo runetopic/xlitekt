@@ -5,6 +5,7 @@ import xlitekt.game.actor.movement.Direction
 import xlitekt.game.actor.player.serializer.LocationSerializer
 import xlitekt.game.world.map.zone.Zone
 import xlitekt.game.world.map.zone.Zones
+import kotlin.math.sign
 
 @Serializable(with = LocationSerializer::class)
 @JvmInline
@@ -30,6 +31,14 @@ value class Location(val packedLocation: Int) {
         level = level + levelOffset
     )
 
+    fun sceneX(tile: Location): Int {
+        return x - 8 * (tile.zoneX - (104 shr 4))
+    }
+
+    fun sceneZ(tile: Location): Int {
+        return z - 8 * (tile.zoneZ - (104 shr 4))
+    }
+
     override fun toString(): String =
         "Location(packedCoordinates=$packedLocation, x=$x, z=$z, level=$level, zoneX=$zoneX, zoneZ=$zoneZ, zoneId=$zoneId, regionX=$regionX, regionZ=$regionZ, regionId=$regionId)"
 }
@@ -44,4 +53,10 @@ fun Location.withinDistance(other: Location?, distance: Int = 14): Boolean {
     return deltaX <= distance && deltaX >= -distance && deltaZ <= distance && deltaZ >= -distance
 }
 
-fun Location.zones(): List<Zone> = (-2..2).flatMap { x -> (-2..2).map { z -> toZoneLocation().transform(x, z) } }.mapNotNull { Zones[it.toFullLocation()] }
+fun main() {
+    val i = 7
+    val i2 = (7).sign
+    println("$i, $i2")
+}
+
+fun Location.zones(width: Int = 2, height: Int = 2): List<Zone> = (width.inv() + 1..width).flatMap { x -> (height.inv() + 1..height).map { z -> toZoneLocation().transform(x, z) } }.mapNotNull { Zones[it.toFullLocation()] }

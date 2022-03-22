@@ -12,6 +12,7 @@ import xlitekt.game.loop.sync.WorldLogoutSynchronizer
 import xlitekt.game.loop.sync.benchmark.BenchmarkParallelActorSynchronizer
 import xlitekt.game.world.World
 import java.util.concurrent.Executors
+import xlitekt.game.loop.sync.ZonesSynchronizer
 
 /**
  * @author Jordan Abraham
@@ -35,6 +36,7 @@ val gameModule = module(createdAtStart = true) {
             listOf(
                 WorldLogoutSynchronizer(),
                 WorldLoginSynchronizer(),
+                ZonesSynchronizer(),
                 mainSynchronizer
             )
         )
