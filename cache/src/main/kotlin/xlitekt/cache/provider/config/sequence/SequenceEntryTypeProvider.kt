@@ -35,7 +35,7 @@ class SequenceEntryTypeProvider : EntryTypeProvider<SequenceEntryType>() {
                         add(readUShort().toInt())
                     }
                     repeat(size) {
-                        set(it, this[it] + readUShort().toInt() shl 16)
+                        set(it, this[it] + (readUShort().toInt() shl 16))
                     }
                 }
             }
@@ -58,7 +58,7 @@ class SequenceEntryTypeProvider : EntryTypeProvider<SequenceEntryType>() {
                         add(readUShort().toInt())
                     }
                     repeat(size) {
-                        set(it, this[it] + readUShort().toInt() shl 16)
+                        set(it, this[it] + (readUShort().toInt() shl 16))
                     }
                 }
             }
