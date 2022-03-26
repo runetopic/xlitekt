@@ -15,7 +15,7 @@ dependencyResolutionManagement {
             version("cryptography", "1.0.10-SNAPSHOT")
             version("kotlinx", "1.3.2")
             version("kotlin-inline-logger", "1.0.4")
-            version("classgraph", "4.8.141")
+            version("classgraph", "4.8.143")
             version("shadowjar", "7.1.2")
             version("versions", "0.42.0")
             version("pathfinder", "2.1.2")
@@ -47,10 +47,13 @@ dependencyResolutionManagement {
         }
     }
 }
-include("cache")
-include("shared")
-include("game")
-include("network")
-include("application")
-include("script")
-include("http")
+include(
+    listOf(
+        "application",
+        "cache",
+        "game",
+        "network",
+        "script",
+        "shared"
+    )
+)
