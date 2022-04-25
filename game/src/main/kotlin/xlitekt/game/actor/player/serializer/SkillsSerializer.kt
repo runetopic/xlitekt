@@ -10,8 +10,8 @@ import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
 import kotlinx.serialization.encoding.decodeStructure
 import kotlinx.serialization.encoding.encodeStructure
-import xlitekt.game.actor.skill.Skill
-import xlitekt.game.actor.skill.Skills
+import xlitekt.game.content.skill.Skill
+import xlitekt.game.content.skill.Skills
 
 /**
  * @author Jordan Abraham

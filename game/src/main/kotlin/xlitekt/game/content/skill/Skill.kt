@@ -1,4 +1,4 @@
-package xlitekt.game.actor.skill
+package xlitekt.game.content.skill
 
 import kotlin.math.floor
 import kotlin.math.pow

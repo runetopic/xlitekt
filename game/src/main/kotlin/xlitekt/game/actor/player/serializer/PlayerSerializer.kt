@@ -12,7 +12,7 @@ import kotlinx.serialization.encoding.decodeStructure
 import kotlinx.serialization.encoding.encodeStructure
 import xlitekt.game.actor.player.Player
 import xlitekt.game.actor.render.Render
-import xlitekt.game.actor.skill.Skills
+import xlitekt.game.content.skill.Skills
 import xlitekt.game.world.map.location.Location
 
 /**

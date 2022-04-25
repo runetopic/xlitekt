@@ -1,12 +1,12 @@
-package xlitekt.game.actor.skill
+package xlitekt.game.content.skill
 
 import kotlinx.serialization.Serializable
 import xlitekt.game.actor.player.serializer.SkillsSerializer
-import xlitekt.game.actor.skill.Skill.Companion.DEFAULT_HERBLORE_LEVEL
-import xlitekt.game.actor.skill.Skill.Companion.DEFAULT_HITPOINTS_LEVEL
-import xlitekt.game.actor.skill.Skill.Companion.DEFAULT_LEVEL
-import xlitekt.game.actor.skill.Skill.Companion.MAX_SKILLS
-import xlitekt.game.actor.skill.Skill.Companion.getXPForLevel
+import xlitekt.game.content.skill.Skill.Companion.DEFAULT_HERBLORE_LEVEL
+import xlitekt.game.content.skill.Skill.Companion.DEFAULT_HITPOINTS_LEVEL
+import xlitekt.game.content.skill.Skill.Companion.DEFAULT_LEVEL
+import xlitekt.game.content.skill.Skill.Companion.MAX_SKILLS
+import xlitekt.game.content.skill.Skill.Companion.getXPForLevel
 
 @Serializable(SkillsSerializer::class)
 class Skills(

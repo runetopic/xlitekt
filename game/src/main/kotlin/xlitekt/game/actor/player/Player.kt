@@ -5,8 +5,8 @@ import xlitekt.game.actor.Actor
 import xlitekt.game.actor.player.PlayerEncoder.encodeToJson
 import xlitekt.game.actor.player.serializer.PlayerSerializer
 import xlitekt.game.actor.render.Render
-import xlitekt.game.actor.skill.Skill
-import xlitekt.game.actor.skill.Skills
+import xlitekt.game.content.skill.Skill
+import xlitekt.game.content.skill.Skills
 import xlitekt.game.content.ui.Interfaces
 import xlitekt.game.content.vars.VarPlayer
 import xlitekt.game.content.vars.Vars

@@ -1,7 +1,7 @@
 package script.skill
 
 import xlitekt.game.actor.player.updateStat
-import xlitekt.game.actor.skill.Skill
+import xlitekt.game.content.skill.Skill
 import xlitekt.game.event.impl.Events
 import xlitekt.game.event.onEvent
 
