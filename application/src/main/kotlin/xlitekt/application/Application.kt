@@ -25,8 +25,6 @@ import xlitekt.game.Game
 import xlitekt.game.gameModule
 import xlitekt.network.Network
 import xlitekt.network.networkModule
-import xlitekt.shared.config.JavaConfig
-import xlitekt.shared.inject
 import xlitekt.shared.lazy
 import xlitekt.shared.sharedModule
 import java.util.TimeZone
@@ -70,22 +68,31 @@ fun Application.module() {
     lazy<Network>().awaitOnPort(environment.config.property("ktor.deployment.port").getString().toInt())
 }
 
-fun Application.installHttpServer() {
-    val javaConfig by inject<JavaConfig>()
+val JavConfig: ByteArray = object {}::class.java.getResourceAsStream("/client_config/jav_config.ws")!!.readAllBytes()
+val GamePack: ByteArray = object {}::class.java.getResourceAsStream("/client_config/gamepack.jar")!!.readAllBytes()
+val BrowserControl0: ByteArray = object {}::class.java.getResourceAsStream("/client_config/browsercontrol_0.jar")?.readAllBytes() ?: byteArrayOf()
+val BrowserControl1: ByteArray = object {}::class.java.getResourceAsStream("/client_config/browsercontrol_1.jar")?.readAllBytes() ?: byteArrayOf()
 
+fun Application.installHttpServer() {
     embeddedServer(Netty, port = 8080) {
         routing {
             get("/jav_config.ws") {
-                call.respondBytes { javaConfig.fileAsBytes }
+                call.respondBytes(JavConfig)
             }
             get("/gamepack.jar") {
-                call.respondBytes { javaConfig.gamePackAsBytes }
+                call.respondBytes(GamePack)
             }
             get("/browsercontrol_0.jar") {
-                call.respondBytes { javaConfig.browserControl0 }
+                if (BrowserControl0.isEmpty()) {
+                    this@installHttpServer.log.warn("Missing browsercontrol_0.jar resource. Using empty response...")
+                }
+                call.respondBytes(BrowserControl0)
             }
             get("/browsercontrol_1.jar") {
-                call.respondBytes { javaConfig.browserControl1 }
+                if (BrowserControl1.isEmpty()) {
+                    this@installHttpServer.log.warn("Missing browsercontrol_1.jar resource. Using empty response...")
+                }
+                call.respondBytes(BrowserControl1)
             }
         }
     }.start(wait = false)

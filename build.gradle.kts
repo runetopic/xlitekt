@@ -35,11 +35,11 @@ allprojects {
         withType<KotlinCompile> {
             kotlinOptions.jvmTarget = "11"
             kotlinOptions.freeCompilerArgs = listOf(
-                "-Xopt-in=kotlinx.coroutines.ExperimentalCoroutinesApi",
-                "-Xopt-in=kotlin.time.ExperimentalTime",
-                "-Xopt-in=io.ktor.util.InternalAPI",
-                "-Xopt-in=kotlinx.serialization.ExperimentalSerializationApi",
-                "-Xopt-in=kotlin.ExperimentalUnsignedTypes"
+                "-opt-in=kotlinx.coroutines.ExperimentalCoroutinesApi",
+                "-opt-in=kotlin.time.ExperimentalTime",
+                "-opt-in=io.ktor.util.InternalAPI",
+                "-opt-in=kotlinx.serialization.ExperimentalSerializationApi",
+                "-opt-in=kotlin.ExperimentalUnsignedTypes"
             )
         }
     }

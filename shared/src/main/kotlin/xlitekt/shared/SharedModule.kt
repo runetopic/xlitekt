@@ -1,7 +1,6 @@
 package xlitekt.shared
 
 import org.koin.dsl.module
-import xlitekt.shared.config.JavaConfig
 import xlitekt.shared.resource.Resource.interfaceInfoResource
 import xlitekt.shared.resource.Resource.mapSquaresResource
 import xlitekt.shared.resource.Resource.npcInfoResource
@@ -21,5 +20,4 @@ val sharedModule = module(true) {
     single { varBitsResource() }
     single { interfaceInfoResource() }
     single { npcInfoResource() }
-    single { JavaConfig() }
 }
