@@ -72,7 +72,7 @@ fun UserInterfaceEvent.ButtonClickEvent.onChatClick(vars: Vars) {
         1 -> vars.flip(VarPlayer.ProfanityFilter)
         3 -> vars.flip(VarPlayer.ChatEffects)
         4 -> vars.flip(VarPlayer.SplitFriendsPrivateChat)
-        5 -> if (vars[VarPlayer.SplitFriendsPrivateChat] == 1) {
+        5 -> if (VarPlayer.SplitFriendsPrivateChat in vars) {
             vars.flip(VarBit.HidePrivateChatWhenChatboxHidden)
         }
     }

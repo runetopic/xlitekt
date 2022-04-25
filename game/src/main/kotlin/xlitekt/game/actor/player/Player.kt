@@ -70,7 +70,7 @@ class Player(
         updateAppearance()
         movementType(false)
         sendUpdateRunEnergy()
-        if (vars[VarPlayer.ToggleRun] == 1) movement.toggleRun()
+        if (VarPlayer.ToggleRun in vars) movement.toggleRun()
         inject<EventBus>().value.notify(Events.OnLoginEvent(this))
 
         // Set the player online here, so they start processing by the main game loop.
