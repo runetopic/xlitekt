@@ -1,4 +1,4 @@
-package xlitekt.game.loop.sync
+package xlitekt.game.tick
 
 import com.github.michaelbull.logging.InlineLogger
 import kotlin.time.measureTime

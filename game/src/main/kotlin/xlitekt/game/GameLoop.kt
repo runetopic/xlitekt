@@ -1,7 +1,7 @@
-package xlitekt.game.loop
+package xlitekt.game
 
-import xlitekt.game.loop.sync.PhasedSynchronizer
-import xlitekt.game.loop.sync.Synchronizer
+import xlitekt.game.tick.PhasedSynchronizer
+import xlitekt.game.tick.Synchronizer
 import java.util.concurrent.ScheduledExecutorService
 import java.util.concurrent.ScheduledFuture
 import java.util.concurrent.TimeUnit
@@ -9,7 +9,7 @@ import java.util.concurrent.TimeUnit
 /**
  * @author Jordan Abraham
  */
-class Loop(
+class GameLoop(
     private val executor: ScheduledExecutorService,
     private val synchronizers: List<Synchronizer>
 ) {

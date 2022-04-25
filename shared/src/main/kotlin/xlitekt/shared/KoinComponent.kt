@@ -12,3 +12,9 @@ inline fun <reified T : Any> inject(
     mode: LazyThreadSafetyMode = KoinPlatformTools.defaultLazyMode(),
     noinline parameters: ParametersDefinition? = null
 ): Lazy<T> = KoinPlatformTools.defaultContext().get().inject(qualifier, mode, parameters)
+
+inline fun <reified T : Any> lazy(
+    qualifier: Qualifier? = null,
+    mode: LazyThreadSafetyMode = KoinPlatformTools.defaultLazyMode(),
+    noinline parameters: ParametersDefinition? = null
+): T = KoinPlatformTools.defaultContext().get().inject<T>(qualifier, mode, parameters).value

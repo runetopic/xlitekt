@@ -7,15 +7,15 @@ dependencyResolutionManagement {
 
     versionCatalogs {
         create("deps") {
-            version("kotlin", "1.6.20")
-            version("ktor", "1.6.7")
-            version("koin", "3.1.5")
+            version("kotlin", "1.6.21")
+            version("ktor", "2.0.0")
+            version("koin", "3.2.0-beta-1")
             version("slf4j", "1.7.32")
             version("cache", "1.4.24-SNAPSHOT")
             version("cryptography", "1.0.10-SNAPSHOT")
             version("kotlinx", "1.3.2")
             version("kotlin-inline-logger", "1.0.4")
-            version("classgraph", "4.8.143")
+            version("classgraph", "4.8.146")
             version("shadowjar", "7.1.2")
             version("versions", "0.42.0")
             version("pathfinder", "2.1.2")

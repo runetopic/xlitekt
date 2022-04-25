@@ -1,4 +1,4 @@
-package xlitekt.game.loop.sync.benchmark
+package xlitekt.game.tick.benchmark
 
 import com.github.michaelbull.logging.InlineLogger
 import io.ktor.utils.io.core.ByteReadPacket
@@ -10,7 +10,7 @@ import org.rsmod.pathfinder.ZoneFlags
 import xlitekt.game.actor.movement.MovementStep
 import xlitekt.game.actor.npc.NPC
 import xlitekt.game.actor.player.Player
-import xlitekt.game.loop.sync.Synchronizer
+import xlitekt.game.tick.Synchronizer
 import xlitekt.game.world.map.location.Location
 import xlitekt.shared.inject
 import java.util.concurrent.ArrayBlockingQueue

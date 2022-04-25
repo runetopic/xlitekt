@@ -1,9 +1,9 @@
 package xlitekt.shared.resource
 
-import io.ktor.application.ApplicationEnvironment
+import io.ktor.server.application.ApplicationEnvironment
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.decodeFromStream
-import xlitekt.shared.inject
+import xlitekt.shared.lazy
 
 class MapSquares(list: Map<Int, MapSquareResource>) : HashMap<Int, MapSquareResource>(list)
 class Sequences(list: Map<String, SequenceResource>) : HashMap<String, SequenceResource>(list)
@@ -25,5 +25,5 @@ object Resource {
     fun npcInfoResource(): NPCSpawns = NPCSpawns(loadResource("game.resources.npc_info"))
 
     private inline fun <reified T> loadResource(path: String): T =
-        json.decodeFromStream(Resource::class.java.getResourceAsStream(inject<ApplicationEnvironment>().value.config.property(path).getString())!!)
+        json.decodeFromStream(Resource::class.java.getResourceAsStream(lazy<ApplicationEnvironment>().config.property(path).getString())!!)
 }

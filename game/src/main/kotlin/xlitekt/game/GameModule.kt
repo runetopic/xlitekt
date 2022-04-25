@@ -1,28 +1,28 @@
 package xlitekt.game
 
-import io.ktor.application.ApplicationEnvironment
+import io.ktor.server.application.ApplicationEnvironment
 import org.koin.dsl.module
 import org.rsmod.pathfinder.ZoneFlags
 import xlitekt.game.event.EventBus
-import xlitekt.game.loop.Loop
-import xlitekt.game.loop.sync.ParallelActorSynchronizer
-import xlitekt.game.loop.sync.SequentialActorSynchronizer
-import xlitekt.game.loop.sync.WorldLoginSynchronizer
-import xlitekt.game.loop.sync.WorldLogoutSynchronizer
-import xlitekt.game.loop.sync.benchmark.BenchmarkParallelActorSynchronizer
+import xlitekt.game.tick.ParallelActorSynchronizer
+import xlitekt.game.tick.SequentialActorSynchronizer
+import xlitekt.game.tick.WorldLoginSynchronizer
+import xlitekt.game.tick.WorldLogoutSynchronizer
+import xlitekt.game.tick.benchmark.BenchmarkParallelActorSynchronizer
 import xlitekt.game.world.World
+import xlitekt.shared.lazy
 import java.util.concurrent.Executors
 
 /**
  * @author Jordan Abraham
  */
 val gameModule = module(createdAtStart = true) {
+    single { EventBus() }
     single { World() }
     single { ZoneFlags() }
     single { Game() }
-    single { EventBus() }
     single {
-        val benchmarking = inject<ApplicationEnvironment>().value.config.property("game.benchmarking").getString().toBoolean()
+        val benchmarking = lazy<ApplicationEnvironment>().config.property("game.benchmarking").getString().toBoolean()
         val threads = Runtime.getRuntime().availableProcessors()
 
         val mainSynchronizer = when {
@@ -30,7 +30,7 @@ val gameModule = module(createdAtStart = true) {
             threads >= 4 -> ParallelActorSynchronizer()
             else -> SequentialActorSynchronizer()
         }
-        Loop(
+        GameLoop(
             Executors.newSingleThreadScheduledExecutor(),
             listOf(
                 WorldLogoutSynchronizer(),

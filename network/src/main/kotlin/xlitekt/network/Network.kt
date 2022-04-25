@@ -11,7 +11,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import xlitekt.game.actor.player.Client
 import xlitekt.network.client.readHandshake
-import java.net.InetSocketAddress
 import java.util.concurrent.Executors
 
 /**
@@ -23,7 +22,13 @@ class Network {
     private val selector = ActorSelectorManager(dispatcher)
 
     fun awaitOnPort(port: Int) = runBlocking {
-        val server = aSocket(selector).tcp().bind(InetSocketAddress(port))
+        val server = aSocket(selector).tcp().bind(
+            hostname = "0.0.0.0",
+            port = port
+        ) {
+            this.backlogSize = 2000
+            this.reuseAddress = true
+        }
         logger.info { "Now accepting connections." }
 
         while (true) {

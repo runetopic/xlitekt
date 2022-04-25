@@ -1,4 +1,4 @@
-package xlitekt.game.loop.sync
+package xlitekt.game.tick
 
 /**
  * @author Jordan Abraham

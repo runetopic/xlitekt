@@ -51,7 +51,7 @@ class Vars(
 
     private fun toVarpParent(entryType: VarBitEntryType, value: Int): Int {
         val prime = mersennePrime[entryType.mostSignificantBit - entryType.leastSignificantBit] shl entryType.leastSignificantBit
-        return (vars[entryType.index] ?: 0) and prime.inv() or (if (value < 0 || value > prime) 0 else value) shl entryType.leastSignificantBit and prime
+        return (vars[entryType.index] ?: 0) and prime.inv() or (((if (value < 0 || value > prime) 0 else value) shl entryType.leastSignificantBit) and prime)
     }
 
     private companion object {

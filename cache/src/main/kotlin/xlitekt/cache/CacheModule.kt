@@ -2,7 +2,7 @@ package xlitekt.cache
 
 import com.runetopic.cache.store.Js5Store
 import com.runetopic.cryptography.huffman.Huffman
-import io.ktor.application.ApplicationEnvironment
+import io.ktor.server.application.ApplicationEnvironment
 import org.koin.dsl.module
 import xlitekt.cache.provider.EntryTypeProvider
 import xlitekt.cache.provider.config.enum.EnumEntryTypeProvider
@@ -21,6 +21,7 @@ import xlitekt.cache.provider.config.varbit.VarBitEntryTypeProvider
 import xlitekt.cache.provider.config.varp.VarpEntryTypeProvider
 import xlitekt.cache.provider.map.MapEntryTypeProvider
 import xlitekt.cache.provider.ui.InterfaceEntryTypeProvider
+import xlitekt.shared.lazy
 import java.nio.file.Path
 
 /**
@@ -29,7 +30,7 @@ import java.nio.file.Path
 val cacheModule = module(createdAtStart = true) {
     single {
         Js5Store(
-            path = Path.of(inject<ApplicationEnvironment>().value.config.property("game.cache.path").getString()),
+            path = Path.of(lazy<ApplicationEnvironment>().config.property("game.cache.path").getString()),
             parallel = true,
             decompressionIndexExclusions = intArrayOf(EntryTypeProvider.MAP_INDEX)
         )

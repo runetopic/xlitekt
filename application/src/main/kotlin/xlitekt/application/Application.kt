@@ -2,19 +2,25 @@ package xlitekt.application
 
 import com.github.michaelbull.logging.InlineLogger
 import io.github.classgraph.ClassGraph
-import io.ktor.application.Application
-import io.ktor.application.call
-import io.ktor.application.log
-import io.ktor.response.respondBytes
-import io.ktor.routing.get
-import io.ktor.routing.routing
+import io.ktor.events.EventDefinition
+import io.ktor.server.application.Application
+import io.ktor.server.application.ApplicationStopped
+import io.ktor.server.application.call
+import io.ktor.server.application.createApplicationPlugin
+import io.ktor.server.application.install
+import io.ktor.server.application.log
 import io.ktor.server.engine.commandLineEnvironment
 import io.ktor.server.engine.embeddedServer
 import io.ktor.server.netty.Netty
+import io.ktor.server.response.respondBytes
+import io.ktor.server.routing.get
+import io.ktor.server.routing.routing
+import org.koin.core.KoinApplication
+import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
+import org.koin.core.module.Module
+import org.koin.dsl.KoinAppDeclaration
 import org.koin.dsl.module
-import org.koin.ktor.ext.get
-import org.koin.ktor.ext.modules
 import xlitekt.cache.cacheModule
 import xlitekt.game.Game
 import xlitekt.game.gameModule
@@ -22,6 +28,7 @@ import xlitekt.network.Network
 import xlitekt.network.networkModule
 import xlitekt.shared.config.JavaConfig
 import xlitekt.shared.inject
+import xlitekt.shared.lazy
 import xlitekt.shared.sharedModule
 import java.util.TimeZone
 import kotlin.script.templates.standard.ScriptTemplateWithArgs
@@ -42,7 +49,7 @@ fun Application.module() {
         installKoin()
         installKotlinScript()
         installHttpServer()
-        get<Game>().start()
+        lazy<Game>().start()
     }
     logger.info {
         "\n" +
@@ -61,7 +68,7 @@ fun Application.module() {
             " '----'       '----'         `'-'                      '------'  '---'`'-'   \n"
     }
     logger.debug { "XliteKt launched in $time ms." }
-    get<Network>().awaitOnPort(environment.config.property("ktor.deployment.port").getString().toInt())
+    lazy<Network>().awaitOnPort(environment.config.property("ktor.deployment.port").getString().toInt())
 }
 
 fun Application.installHttpServer() {
@@ -85,14 +92,40 @@ fun Application.installHttpServer() {
     }.start(wait = false)
 }
 
+class KoinConfig {
+    internal var modules: ArrayList<Module> = ArrayList()
+}
+
+val KoinApplicationStarted = EventDefinition<KoinApplication>()
+val KoinApplicationStopPreparing = EventDefinition<KoinApplication>()
+val KoinApplicationStopped = EventDefinition<KoinApplication>()
+
+val Koin = createApplicationPlugin(name = "Koin", createConfiguration = ::KoinConfig) {
+    val declaration: KoinAppDeclaration = {
+        modules(pluginConfig.modules)
+    }
+    val koinApplication = startKoin(appDeclaration = declaration)
+    environment?.monitor?.let { monitor ->
+        monitor.raise(KoinApplicationStarted, koinApplication)
+        monitor.subscribe(ApplicationStopped) {
+            monitor.raise(KoinApplicationStopPreparing, koinApplication)
+            stopKoin()
+            monitor.raise(KoinApplicationStopped, koinApplication)
+        }
+    }
+}
+
 fun Application.installKoin() {
-    modules(
-        module { single { this@installKoin.environment } },
-        cacheModule,
-        gameModule,
-        networkModule,
-        sharedModule
-    )
+    // Fix provided by https://github.com/InsertKoinIO/koin/issues/1295
+    install(Koin) {
+        modules = arrayListOf(
+            module { single { this@installKoin.environment } },
+            sharedModule,
+            cacheModule,
+            gameModule,
+            networkModule,
+        )
+    }
     log.debug("Installed koin modules.")
 }
 
@@ -104,12 +137,12 @@ fun Application.installKotlinScript() {
     }.let { log.debug("Installed $it kotlin scripts.") }
 }
 
-fun Application.addShutdownHook() {
+fun addShutdownHook() {
     Runtime.getRuntime().addShutdownHook(
         Thread {
             logger.debug { "Running shutdown hook..." }
-            get<Game>().shutdown()
-            get<Network>().shutdown()
+            lazy<Game>().shutdown()
+            lazy<Network>().shutdown()
             logger.debug { "Stopping koin..." }
             stopKoin()
         }

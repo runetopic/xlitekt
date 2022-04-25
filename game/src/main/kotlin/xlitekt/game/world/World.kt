@@ -1,6 +1,5 @@
 package xlitekt.game.world
 
-import io.ktor.util.collections.ConcurrentList
 import xlitekt.cache.provider.map.MapEntryTypeProvider
 import xlitekt.game.actor.NPCList
 import xlitekt.game.actor.PlayerList
@@ -13,12 +12,13 @@ import xlitekt.game.world.map.zone.Zones
 import xlitekt.shared.inject
 import xlitekt.shared.resource.NPCSpawns
 import java.util.concurrent.ConcurrentHashMap
+import java.util.concurrent.ConcurrentMap
 
 class World(
     val players: PlayerList = PlayerList(MAX_PLAYERS),
     val npcs: NPCList = NPCList(MAX_NPCs),
-    val loginRequests: ConcurrentHashMap<Player, Client> = ConcurrentHashMap(),
-    val logoutRequests: ConcurrentList<Player> = ConcurrentList()
+    val loginRequests: ConcurrentMap<Player, Client> = ConcurrentHashMap(),
+    val logoutRequests: ConcurrentHashMap.KeySetView<Player, Boolean> = ConcurrentHashMap.newKeySet()
 ) {
     private val maps by inject<MapEntryTypeProvider>()
     private val npcSpawns by inject<NPCSpawns>()

@@ -3,8 +3,8 @@ package xlitekt.game.actor.player
 import com.github.michaelbull.logging.InlineLogger
 import com.runetopic.cache.store.Js5Store
 import com.runetopic.cryptography.isaac.ISAAC
-import io.ktor.application.ApplicationEnvironment
 import io.ktor.network.sockets.Socket
+import io.ktor.server.application.ApplicationEnvironment
 import io.ktor.util.reflect.instanceOf
 import io.ktor.utils.io.ByteReadChannel
 import io.ktor.utils.io.ByteWriteChannel

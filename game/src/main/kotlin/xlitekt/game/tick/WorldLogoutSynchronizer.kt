@@ -1,4 +1,4 @@
-package xlitekt.game.loop.sync
+package xlitekt.game.tick
 
 import xlitekt.game.actor.player.Player
 import xlitekt.game.world.World

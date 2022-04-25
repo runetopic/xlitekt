@@ -1,4 +1,4 @@
-package xlitekt.game.loop.sync
+package xlitekt.game.tick
 
 import io.ktor.utils.io.core.ByteReadPacket
 import xlitekt.game.actor.movement.MovementStep
