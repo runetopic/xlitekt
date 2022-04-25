@@ -29,7 +29,7 @@ class Network {
             this.backlogSize = 2000
             this.reuseAddress = true
         }
-        logger.info { "Now accepting connections." }
+        logger.info { "Awaiting client requests..." }
 
         while (true) {
             val socket = server.accept()

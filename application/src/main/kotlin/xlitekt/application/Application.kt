@@ -1,6 +1,5 @@
 package xlitekt.application
 
-import com.github.michaelbull.logging.InlineLogger
 import io.github.classgraph.ClassGraph
 import io.ktor.events.EventDefinition
 import io.ktor.server.application.Application
@@ -37,21 +36,21 @@ import kotlin.system.measureTimeMillis
 /**
  * @author Jordan Abraham
  */
-private val logger = InlineLogger()
-
 fun main(args: Array<String>) = commandLineEnvironment(args).start()
 
 fun Application.module() {
+    log.info("Starting XliteKt.")
+
     val time = measureTimeMillis {
-        addShutdownHook()
-        logger.info { "Starting XliteKt." }
         TimeZone.setDefault(TimeZone.getTimeZone("UTC"))
+        addShutdownHook()
         installKoin()
         installKotlinScript()
         installHttpServer()
         lazy<Game>().start()
     }
-    logger.info {
+
+    log.info(
         "\n" +
             "                                                                             \n" +
             "                 .---.                                                       \n" +
@@ -66,8 +65,8 @@ fun Application.module() {
             "    .'  .'`.   `.'---'       |  '.'    `''-...... -'    |   |  \\  \\   |  '.' \n" +
             "  .'   /    `.   `.          |   /                      '    \\  \\  \\  |   /  \n" +
             " '----'       '----'         `'-'                      '------'  '---'`'-'   \n"
-    }
-    logger.debug { "XliteKt launched in $time ms." }
+    )
+    log.info("XliteKt launched in $time ms.")
     lazy<Network>().awaitOnPort(environment.config.property("ktor.deployment.port").getString().toInt())
 }
 
@@ -120,10 +119,10 @@ fun Application.installKoin() {
     install(Koin) {
         modules = arrayListOf(
             module { single { this@installKoin.environment } },
-            sharedModule,
             cacheModule,
             gameModule,
             networkModule,
+            sharedModule
         )
     }
     log.debug("Installed koin modules.")
@@ -137,14 +136,12 @@ fun Application.installKotlinScript() {
     }.let { log.debug("Installed $it kotlin scripts.") }
 }
 
-fun addShutdownHook() {
+fun Application.addShutdownHook() {
     Runtime.getRuntime().addShutdownHook(
         Thread {
-            logger.debug { "Running shutdown hook..." }
-            lazy<Game>().shutdown()
+            log.info("Running shutdown hook...")
             lazy<Network>().shutdown()
-            logger.debug { "Stopping koin..." }
-            stopKoin()
+            lazy<Game>().shutdown()
         }
     )
 }
