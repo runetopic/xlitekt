@@ -4,6 +4,7 @@ import io.ktor.utils.io.core.buildPacket
 import io.ktor.utils.io.core.writeInt
 import xlitekt.game.packet.IfCloseSubPacket
 import xlitekt.game.packet.assembler.onPacketAssembler
+import xlitekt.shared.buffer.writeInt
 
 /**
  * @author Jordan Abraham
@@ -11,6 +12,6 @@ import xlitekt.game.packet.assembler.onPacketAssembler
  */
 onPacketAssembler<IfCloseSubPacket>(opcode = 13, size = 4) {
     buildPacket {
-        writeInt(packedInterface)
+        writeInt { packedInterface }
     }
 }

@@ -4,6 +4,8 @@ import io.ktor.utils.io.core.buildPacket
 import io.ktor.utils.io.core.writeShort
 import xlitekt.game.packet.SoundEffectPacket
 import xlitekt.game.packet.assembler.onPacketAssembler
+import xlitekt.shared.buffer.writeByte
+import xlitekt.shared.buffer.writeShort
 
 /**
  * @author Jordan Abraham
@@ -11,8 +13,8 @@ import xlitekt.game.packet.assembler.onPacketAssembler
  */
 onPacketAssembler<SoundEffectPacket>(opcode = 81, size = 5) {
     buildPacket {
-        writeShort(id.toShort())
-        writeByte(count.toByte())
-        writeShort(delay.toShort())
+        writeShort { id }
+        writeByte { count }
+        writeShort { delay }
     }
 }

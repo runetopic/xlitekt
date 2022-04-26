@@ -10,6 +10,6 @@ import xlitekt.shared.buffer.writeStringCp1252NullTerminated
  */
 onNPCUpdateBlock<OverheadChat>(3, 0x10) {
     buildPacket {
-        writeStringCp1252NullTerminated(text)
+        writeStringCp1252NullTerminated { text }
     }
 }

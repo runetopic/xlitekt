@@ -5,6 +5,7 @@ import io.ktor.utils.io.core.writeShortLittleEndian
 import xlitekt.game.packet.IfSetColorPacket
 import xlitekt.game.packet.assembler.onPacketAssembler
 import xlitekt.shared.buffer.writeIntV2
+import xlitekt.shared.buffer.writeShortLittleEndian
 
 /**
  * @author Jordan Abraham
@@ -12,7 +13,7 @@ import xlitekt.shared.buffer.writeIntV2
  */
 onPacketAssembler<IfSetColorPacket>(opcode = 62, size = 6) {
     buildPacket {
-        writeIntV2(packedInterface)
-        writeShortLittleEndian(color.toShort())
+        writeIntV2 { packedInterface }
+        writeShortLittleEndian { color }
     }
 }

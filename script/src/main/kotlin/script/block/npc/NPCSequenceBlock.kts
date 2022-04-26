@@ -11,7 +11,7 @@ import xlitekt.shared.buffer.writeShortLittleEndianAdd
  */
 onNPCUpdateBlock<Sequence>(6, 0x40) {
     buildPacket {
-        writeShortLittleEndianAdd(id.toShort())
-        writeByteSubtract(delay.toByte())
+        writeShortLittleEndianAdd { id }
+        writeByteSubtract { delay }
     }
 }

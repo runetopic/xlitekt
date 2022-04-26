@@ -10,6 +10,6 @@ import xlitekt.shared.buffer.writeIntV1
  */
 onNPCUpdateBlock<NPCCustomLevel>(5, 0x200) {
     buildPacket {
-        writeIntV1(level)
+        writeIntV1 { level }
     }
 }

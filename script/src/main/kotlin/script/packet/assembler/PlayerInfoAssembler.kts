@@ -17,7 +17,6 @@ import xlitekt.game.actor.movement.isValid
 import xlitekt.game.actor.player.Client.Companion.world
 import xlitekt.game.actor.player.Player
 import xlitekt.game.actor.player.Viewport
-import xlitekt.game.actor.render.Render
 import xlitekt.game.actor.render.block.buildPlayerUpdateBlocks
 import xlitekt.game.packet.PlayerInfoPacket
 import xlitekt.game.packet.assembler.onPacketAssembler
@@ -67,7 +66,7 @@ fun BytePacketBuilder.highDefinition(
         // Write player skips.
         skip = skipPlayers(skip)
         // This player has an activity update (true).
-        writeBit(true)
+        writeBit { true }
         // We have to hard check if the player is updating here because the highDefinitionActivities()
         // can only return one activity and this is in a specific order. So if the player is doing any
         // other activity, then we will not know they need a blocks update unless we do this.
@@ -84,7 +83,7 @@ fun BytePacketBuilder.highDefinition(
                 }
                 if (updating) {
                     // Since we hard check if the player has a blocks update, write the buffer here.
-                    blocks.writeBytes(updates[other]!!.copy().readBytes())
+                    blocks.writeBytes(updates[other]!!.copy()::readBytes)
                 }
             }
             else -> throw IllegalStateException("High definition player had an activity type of $activity.")
@@ -115,7 +114,7 @@ fun BytePacketBuilder.lowDefinition(
         // Write player skips.
         skip = skipPlayers(skip)
         // This player has an activity update (true).
-        writeBit(true)
+        writeBit { true }
         val location = locations[other] ?: other.location
         // Write corresponding bits depending on the activity type the player is doing.
         activity.writeBits(this@withBitAccess, viewport, index, current = location, previous = location)
@@ -123,7 +122,7 @@ fun BytePacketBuilder.lowDefinition(
             Adding -> {
                 // When adding a player to the local view, we can grab their blocks from their cached list.
                 // This will hurt performance some but I am not sure of a better way.
-                blocks.writeBytes(other.cachedUpdates().keys.filter { i -> i is Render.Appearance || i is Render.FaceAngle || i is Render.MovementType || i is Render.TemporaryMovementType }.buildPlayerUpdateBlocks(other, false).readBytes())
+                blocks.writeBytes(other.cachedUpdates().keys.buildPlayerUpdateBlocks(other, false)::readBytes)
                 // Add them to our array.
                 viewport.players[other.index] = other
                 viewport.setNsn(index)
@@ -138,20 +137,20 @@ fun BitAccess.skipPlayers(count: Int): Int {
     // Check if there are any players to skip.
     if (count == -1) return count
     // This player has no activity update (false).
-    writeBit(false)
+    writeBit { false }
     when {
-        count == 0 -> writeBits(2, 0)
+        count == 0 -> writeBits(2) { 0 }
         count < 32 -> {
-            writeBits(2, 1)
-            writeBits(5, count)
+            writeBits(2) { 1 }
+            writeBits(5) { count }
         }
         count < 256 -> {
-            writeBits(2, 2)
-            writeBits(8, count)
+            writeBits(2) { 2 }
+            writeBits(8) { count }
         }
         count < 2048 -> {
-            writeBits(2, 3)
-            writeBits(11, count)
+            writeBits(2) { 3 }
+            writeBits(11) { count }
         }
     }
     return -1
@@ -198,9 +197,9 @@ sealed class ActivityUpdateType {
     object Removing : ActivityUpdateType() {
         override fun writeBits(bits: BitAccess, viewport: Viewport, index: Int, updating: Boolean, current: Location, previous: Location, step: MovementStep?) {
             // Player has no update.
-            bits.writeBit(false)
+            bits.writeBit { false }
             // The player is not moving.
-            bits.writeBits(2, 0)
+            bits.writeBits(2) { 0 }
             bits.updateLocation(viewport, index, current)
         }
     }
@@ -208,20 +207,20 @@ sealed class ActivityUpdateType {
     object Teleporting : ActivityUpdateType() {
         override fun writeBits(bits: BitAccess, viewport: Viewport, index: Int, updating: Boolean, current: Location, previous: Location, step: MovementStep?) {
             // If the player has pending block updates.
-            bits.writeBit(updating)
+            bits.writeBit { updating }
             // Make the player teleport.
-            bits.writeBits(2, 3)
+            bits.writeBits(2) { 3 }
             var deltaX = current.x - previous.x
             var deltaZ = current.z - previous.z
             val deltaLevel = current.level - previous.level
             if (abs(current.x - previous.x) <= 14 && abs(current.z - previous.z) <= 14) {
-                bits.writeBit(false)
+                bits.writeBit { false }
                 if (deltaX < 0) deltaX += 32
                 if (deltaZ < 0) deltaZ += 32
-                bits.writeBits(12, deltaZ or (deltaX shl 5) or (deltaLevel shl 10))
+                bits.writeBits(12) { deltaZ or (deltaX shl 5) or (deltaLevel shl 10) }
             } else {
-                bits.writeBit(true)
-                bits.writeBits(30, (deltaZ and 0x3fff) or (deltaX and 0x3fff shl 14) or (deltaLevel and 0x3 shl 28))
+                bits.writeBit { true }
+                bits.writeBits(30) { (deltaZ and 0x3fff) or (deltaX and 0x3fff shl 14) or (deltaLevel and 0x3 shl 28) }
             }
         }
     }
@@ -230,31 +229,31 @@ sealed class ActivityUpdateType {
         override fun writeBits(bits: BitAccess, viewport: Viewport, index: Int, updating: Boolean, current: Location, previous: Location, step: MovementStep?) {
             val running = step!!.speed!!.isRunning()
             // If the player has pending block updates.
-            bits.writeBit(updating)
+            bits.writeBit { updating }
             // Make the player walk or run.
-            bits.writeBits(2, if (running) 2 else 1)
-            bits.writeBits(if (running) 4 else 3, step.direction!!.playerOpcode(running))
+            bits.writeBits(2) { if (running) 2 else 1 }
+            bits.writeBits(if (running) 4 else 3) { step.direction!!.playerOpcode(running) }
         }
     }
 
     object Updating : ActivityUpdateType() {
         override fun writeBits(bits: BitAccess, viewport: Viewport, index: Int, updating: Boolean, current: Location, previous: Location, step: MovementStep?) {
             // The player has pending block updates.
-            bits.writeBit(true)
+            bits.writeBit { true }
             // The player is not moving.
-            bits.writeBits(2, 0)
+            bits.writeBits(2) { 0 }
         }
     }
 
     object Adding : ActivityUpdateType() {
         override fun writeBits(bits: BitAccess, viewport: Viewport, index: Int, updating: Boolean, current: Location, previous: Location, step: MovementStep?) {
-            bits.writeBits(2, 0)
+            bits.writeBits(2) { 0 }
             // Update the player location.
             bits.updateLocation(viewport, index, current)
-            bits.writeBits(13, current.x)
-            bits.writeBits(13, current.z)
+            bits.writeBits(13, current::x)
+            bits.writeBits(13, current::z)
             // Update the player blocks.
-            bits.writeBit(true)
+            bits.writeBit { true }
         }
     }
 
@@ -272,7 +271,7 @@ sealed class ActivityUpdateType {
         val current = viewport.locations[index]
         when (val next = location.regionLocation) {
             // Write there is no location chance.
-            current -> writeBit(false)
+            current -> writeBit { false }
             else -> {
                 // Write the new location.
                 writeLocation(current, next)
@@ -284,7 +283,7 @@ sealed class ActivityUpdateType {
 
     private fun BitAccess.writeLocation(previous: Int, current: Int) {
         // Write there is a location change.
-        writeBit(true)
+        writeBit { true }
         val previousLevel = previous shr 16
         val previousX = previous shr 8
         val previousZ = previous and 0xff
@@ -296,16 +295,16 @@ sealed class ActivityUpdateType {
         val deltaZ = currentZ - previousZ
         when {
             previousX == currentX && previousZ == currentZ -> {
-                writeBits(2, 1)
-                writeBits(2, deltaLevel)
+                writeBits(2) { 1 }
+                writeBits(2) { deltaLevel }
             }
             abs(currentX - previousX) <= 1 && abs(currentZ - previousZ) <= 1 -> {
-                writeBits(2, 2)
-                writeBits(5, (deltaLevel shl 3) or (Direction.directionFromDelta(deltaX, deltaZ).playerOpcode() and 0x7))
+                writeBits(2) { 2 }
+                writeBits(5) { (deltaLevel shl 3) or (Direction.directionFromDelta(deltaX, deltaZ).playerOpcode() and 0x7) }
             }
             else -> {
-                writeBits(2, 3)
-                writeBits(18, (deltaZ and 0xff) or (deltaX and 0xff shl 8) or (deltaLevel shl 16))
+                writeBits(2) { 3 }
+                writeBits(18) { (deltaZ and 0xff) or (deltaX and 0xff shl 8) or (deltaLevel shl 16) }
             }
         }
     }

@@ -4,6 +4,7 @@ import io.ktor.utils.io.core.buildPacket
 import io.ktor.utils.io.core.writeInt
 import xlitekt.game.packet.IfMoveSubPacket
 import xlitekt.game.packet.assembler.onPacketAssembler
+import xlitekt.shared.buffer.writeInt
 
 /**
  * @author Jordan Abraham
@@ -11,7 +12,7 @@ import xlitekt.game.packet.assembler.onPacketAssembler
  */
 onPacketAssembler<IfMoveSubPacket>(opcode = 30, size = 8) {
     buildPacket {
-        writeInt(fromPackedInterface)
-        writeInt(toPackedInterface)
+        writeInt { fromPackedInterface }
+        writeInt { toPackedInterface }
     }
 }

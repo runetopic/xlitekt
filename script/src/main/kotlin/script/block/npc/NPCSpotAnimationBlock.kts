@@ -11,7 +11,7 @@ import xlitekt.shared.buffer.writeShortLittleEndianAdd
  */
 onNPCUpdateBlock<SpotAnimation>(4, 0x2) {
     buildPacket {
-        writeShortLittleEndianAdd(id.toShort())
-        writeIntV2(packedMetaData())
+        writeShortLittleEndianAdd { id }
+        writeIntV2(::packedMetaData)
     }
 }

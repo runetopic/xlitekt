@@ -11,6 +11,6 @@ import xlitekt.shared.toByte
  */
 onPlayerUpdateBlock<MovementType>(9, 0x400) {
     buildPacket {
-        writeByteAdd((running.toByte() + 1).toByte())
+        writeByteAdd { running.toByte() + 1 }
     }
 }

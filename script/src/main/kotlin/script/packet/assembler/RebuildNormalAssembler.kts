@@ -8,7 +8,9 @@ import io.ktor.utils.io.core.writeShortLittleEndian
 import xlitekt.game.packet.RebuildNormalPacket
 import xlitekt.game.packet.assembler.onPacketAssembler
 import xlitekt.shared.buffer.writeBytes
+import xlitekt.shared.buffer.writeShort
 import xlitekt.shared.buffer.writeShortAdd
+import xlitekt.shared.buffer.writeShortLittleEndian
 import xlitekt.shared.inject
 import xlitekt.shared.resource.MapSquares
 
@@ -27,8 +29,8 @@ onPacketAssembler<RebuildNormalPacket>(opcode = 54, size = -2) {
         val zoneX = location.zoneX
         val zoneZ = location.zoneZ
 
-        writeShortAdd(zoneZ.toShort())
-        writeShortLittleEndian(zoneX.toShort())
+        writeShortAdd { zoneZ }
+        writeShortLittleEndian { zoneX }
 
         var size = 0
         val xteas = buildPacket {
@@ -42,7 +44,7 @@ onPacketAssembler<RebuildNormalPacket>(opcode = 54, size = -2) {
             }
         }
 
-        writeShort(size.toShort())
-        writeBytes(xteas.readBytes())
+        writeShort { size }
+        writeBytes(xteas::readBytes)
     }
 }

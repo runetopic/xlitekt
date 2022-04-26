@@ -8,7 +8,9 @@ import io.ktor.utils.io.core.writeShortLittleEndian
 import xlitekt.game.actor.npc.NPC
 import xlitekt.game.actor.player.Player
 import xlitekt.game.actor.render.Render
+import xlitekt.shared.buffer.writeByte
 import xlitekt.shared.buffer.writeBytes
+import xlitekt.shared.buffer.writeShortLittleEndian
 
 data class RenderingBlock(
     val index: Int,
@@ -24,7 +26,7 @@ fun Collection<Render>.buildPlayerUpdateBlocks(player: Player, cache: Boolean = 
         val packet = if (cache) it.value.packet.invoke(it.key) else player.cachedUpdates()[it.key]
         if (packet != null) {
             if (cache) player.cacheUpdateBlock(it.key, packet)
-            writeBytes(packet.copy().readBytes())
+            writeBytes(packet.copy()::readBytes)
         }
     }
 }
@@ -33,7 +35,7 @@ fun BytePacketBuilder.buildNPCUpdateBlocks(npc: NPC) {
     val blocks = npc.pendingUpdates().toSortedNPCBlocks()
     writeNPCMasks(blocks.values)
     blocks.forEach {
-        writeBytes(it.value.packet.invoke(it.key).readBytes())
+        writeBytes(it.value.packet.invoke(it.key)::readBytes)
     }
 }
 
@@ -45,7 +47,9 @@ private fun BytePacketBuilder.writeNPCMasks(blocks: Collection<RenderingBlock>) 
     blocks.fold(0) { current, next -> current or next.mask }.let { if (it > 0xff) it or 0x4 else it }
 )
 
-private fun BytePacketBuilder.writeMask(mask: Int) = if (mask > 0xff) writeShortLittleEndian(mask.toShort()) else writeByte(mask.toByte())
+private fun BytePacketBuilder.writeMask(mask: Int) {
+    if (mask > 0xff) writeShortLittleEndian { mask } else writeByte { mask }
+}
 
 private fun Collection<Render>.toSortedPlayerBlocks(): Map<Render, RenderingBlock> = map { it to PlayerUpdateBlockListener.listeners[it::class]!! }.sortedBy { it.second.index }.toMap()
 private fun Collection<Render>.toSortedNPCBlocks(): Map<Render, RenderingBlock> = map { it to NPCUpdateBlockListener.listeners[it::class]!! }.sortedBy { it.second.index }.toMap()

@@ -6,6 +6,8 @@ import io.ktor.utils.io.core.writeShort
 import xlitekt.game.actor.render.HintArrowType
 import xlitekt.game.packet.HintArrowPacket
 import xlitekt.game.packet.assembler.onPacketAssembler
+import xlitekt.shared.buffer.writeByte
+import xlitekt.shared.buffer.writeShort
 
 /**
  * @author Jordan Abraham
@@ -17,13 +19,13 @@ onPacketAssembler<HintArrowPacket>(opcode = 43, size = 6) {
 
         when (type) {
             HintArrowType.PLAYER, HintArrowType.NPC -> {
-                writeShort(targetIndex.toShort())
+                writeShort { targetIndex }
                 fill(3, 0)
             }
             HintArrowType.LOCATION -> {
-                writeShort(targetX.toShort())
-                writeShort(targetZ.toShort())
-                writeByte(targetHeight.toByte())
+                writeShort { targetX }
+                writeShort { targetZ }
+                writeByte { targetHeight }
             }
         }
     }

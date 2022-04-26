@@ -11,7 +11,7 @@ import xlitekt.shared.buffer.writeShortAdd
  */
 onPlayerUpdateBlock<Sequence>(8, 0x2) {
     buildPacket {
-        writeShortAdd(id.toShort())
-        writeByteNegate(delay.toByte())
+        writeShortAdd { id }
+        writeByteNegate { delay }
     }
 }
