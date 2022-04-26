@@ -270,7 +270,7 @@ sealed class ActivityUpdateType {
     fun BitAccess.updateLocation(viewport: Viewport, index: Int, location: Location) {
         val current = viewport.locations[index]
         when (val next = location.regionLocation) {
-            // Write there is no location chance.
+            // Write there is no location change.
             current -> writeBit { false }
             else -> {
                 // Write the new location.

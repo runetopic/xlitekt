@@ -73,12 +73,12 @@ fun BytePacketBuilder.writeIntV2(value: () -> Int) = value.invoke().also {
 fun BytePacketBuilder.withBitAccess(block: BitAccess.() -> Unit) {
     val accessor = BitAccess()
     block.invoke(accessor)
-    accessor.write(this)
+    writeFully(accessor.data, 0, (accessor.bitIndex + 7) / 8)
 }
 
 class BitAccess {
-    private var bitIndex = 0
-    private val data = ByteArray(4096 * 2)
+    var bitIndex = 0
+    val data = ByteArray(4096 * 2)
 
     fun writeBit(value: () -> Boolean) = value.invoke().also {
         writeBits(1, it::toInt)
@@ -112,8 +112,6 @@ class BitAccess {
         }
         data[byteIndex] = tmp.toByte()
     }
-
-    fun write(builder: BytePacketBuilder) = builder.writeFully(data, 0, (bitIndex + 7) / 8)
 
     companion object {
         private val BIT_MASKS = IntArray(32)
