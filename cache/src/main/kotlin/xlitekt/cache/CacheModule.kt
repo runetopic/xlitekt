@@ -14,6 +14,7 @@ import xlitekt.cache.provider.config.kit.KitEntryTypeProvider
 import xlitekt.cache.provider.config.loc.LocEntryTypeProvider
 import xlitekt.cache.provider.config.npc.NPCEntryTypeProvider
 import xlitekt.cache.provider.config.obj.ObjEntryTypeProvider
+import xlitekt.cache.provider.config.overlay.FloorOverlayEntryTypeProvider
 import xlitekt.cache.provider.config.param.ParamEntryTypeProvider
 import xlitekt.cache.provider.config.sequence.SequenceEntryTypeProvider
 import xlitekt.cache.provider.config.spotanimation.SpotAnimationEntryTypeProvider
@@ -56,4 +57,5 @@ val cacheModule = module(createdAtStart = true) {
     single { InvEntryTypeProvider() }
     single { SpotAnimationEntryTypeProvider() }
     single { VarpEntryTypeProvider() }
+    single { FloorOverlayEntryTypeProvider() }
 }
