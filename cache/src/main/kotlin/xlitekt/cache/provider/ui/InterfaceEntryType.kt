@@ -1,10 +1,12 @@
 package xlitekt.cache.provider.ui
 
+import kotlinx.serialization.Serializable
 import xlitekt.cache.provider.EntryType
 
 /**
  * @author Jordan Abraham
  */
+@Serializable
 data class InterfaceEntryType(
     override val id: Int,
     var isModern: Boolean = false,

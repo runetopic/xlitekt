@@ -1,11 +1,11 @@
 package xlitekt.game.actor.render
 
 import io.ktor.utils.io.core.ByteReadPacket
-import kotlin.reflect.KClass
 import xlitekt.game.actor.Actor
 import xlitekt.game.actor.npc.NPC
 import xlitekt.game.actor.player.Player
 import xlitekt.game.world.map.location.Location
+import kotlin.reflect.KClass
 
 /**
  * @author Tyler Telis

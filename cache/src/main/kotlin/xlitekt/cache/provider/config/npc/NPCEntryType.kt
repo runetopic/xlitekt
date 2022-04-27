@@ -1,10 +1,13 @@
 package xlitekt.cache.provider.config.npc
 
+import kotlinx.serialization.Contextual
+import kotlinx.serialization.Serializable
 import xlitekt.cache.provider.EntryType
 
 /**
  * @author Jordan Abraham
  */
+@Serializable
 data class NPCEntryType(
     override val id: Int,
     var name: String = "null",
@@ -33,5 +36,5 @@ data class NPCEntryType(
     var isFollower: Boolean = false,
     var models: List<Int> = listOf(),
     var transforms: List<Int> = listOf(),
-    var params: Map<Int, Any> = mapOf()
+    var params: Map<Int, @Contextual Any> = mapOf()
 ) : EntryType(id)

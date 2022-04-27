@@ -1,10 +1,10 @@
 package xlitekt.game
 
+import xlitekt.game.tick.PhasedSynchronizer
+import xlitekt.game.tick.Synchronizer
 import java.util.concurrent.ScheduledExecutorService
 import java.util.concurrent.ScheduledFuture
 import java.util.concurrent.TimeUnit
-import xlitekt.game.tick.PhasedSynchronizer
-import xlitekt.game.tick.Synchronizer
 
 /**
  * @author Jordan Abraham

@@ -1,10 +1,12 @@
 package xlitekt.cache.provider.config.spotanimation
 
+import kotlinx.serialization.Serializable
 import xlitekt.cache.provider.EntryType
 
 /**
  * @author Jordan Abraham
  */
+@Serializable
 data class SpotAnimationEntryType(
     override val id: Int,
     var sequence: Int = -1,

@@ -14,9 +14,6 @@ import io.ktor.server.netty.Netty
 import io.ktor.server.response.respondBytes
 import io.ktor.server.routing.get
 import io.ktor.server.routing.routing
-import java.util.TimeZone
-import kotlin.script.templates.standard.ScriptTemplateWithArgs
-import kotlin.system.measureTimeMillis
 import org.koin.core.KoinApplication
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
@@ -30,6 +27,9 @@ import xlitekt.network.Network
 import xlitekt.network.networkModule
 import xlitekt.shared.lazy
 import xlitekt.shared.sharedModule
+import java.util.TimeZone
+import kotlin.script.templates.standard.ScriptTemplateWithArgs
+import kotlin.system.measureTimeMillis
 
 /**
  * @author Jordan Abraham

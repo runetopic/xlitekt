@@ -1,10 +1,13 @@
 package xlitekt.cache.provider.config.loc
 
+import kotlinx.serialization.Contextual
+import kotlinx.serialization.Serializable
 import xlitekt.cache.provider.EntryType
 
 /**
  * @author Jordan Abraham
  */
+@Serializable
 data class LocEntryType(
     override val id: Int,
     var name: String = "null",
@@ -42,5 +45,5 @@ data class LocEntryType(
     var int6: Int = 0,
     var boolean3: Boolean = true,
     var transforms: List<Int> = listOf(),
-    var params: Map<Int, Any> = mapOf()
+    var params: Map<Int, @Contextual Any> = mapOf()
 ) : EntryType(id)

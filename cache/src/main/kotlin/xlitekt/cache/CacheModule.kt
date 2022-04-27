@@ -3,7 +3,12 @@ package xlitekt.cache
 import com.runetopic.cache.store.Js5Store
 import com.runetopic.cryptography.huffman.Huffman
 import io.ktor.server.application.ApplicationEnvironment
-import java.nio.file.Path
+import kotlinx.serialization.ContextualSerializer
+import kotlinx.serialization.KSerializer
+import kotlinx.serialization.descriptors.SerialDescriptor
+import kotlinx.serialization.encoding.Decoder
+import kotlinx.serialization.encoding.Encoder
+import org.koin.core.error.NoBeanDefFoundException
 import org.koin.dsl.module
 import xlitekt.cache.provider.EntryTypeProvider
 import xlitekt.cache.provider.config.enum.EnumEntryTypeProvider
@@ -24,14 +29,20 @@ import xlitekt.cache.provider.config.varp.VarpEntryTypeProvider
 import xlitekt.cache.provider.map.MapEntryTypeProvider
 import xlitekt.cache.provider.ui.InterfaceEntryTypeProvider
 import xlitekt.shared.lazy
+import java.nio.file.Path
 
 /**
  * @author Jordan Abraham
  */
 val cacheModule = module(createdAtStart = true) {
     single {
+        val path = try {
+            lazy<ApplicationEnvironment>().config.property("game.cache.path").getString()
+        } catch (e: NoBeanDefFoundException) {
+            "./cache/data/"
+        }
         Js5Store(
-            path = Path.of(lazy<ApplicationEnvironment>().config.property("game.cache.path").getString()),
+            path = Path.of(path),
             parallel = true,
             decompressionIndexExclusions = intArrayOf(EntryTypeProvider.MAP_INDEX)
         )
@@ -58,4 +69,18 @@ val cacheModule = module(createdAtStart = true) {
     single { SpotAnimationEntryTypeProvider() }
     single { VarpEntryTypeProvider() }
     single { FloorOverlayEntryTypeProvider() }
+}
+
+object AnySerializer : KSerializer<Any> {
+    override fun deserialize(decoder: Decoder): Any {
+        TODO("Not yet implemented")
+    }
+
+    override val descriptor: SerialDescriptor get() = ContextualSerializer(Any::class, null, emptyArray()).descriptor
+
+    override fun serialize(encoder: Encoder, value: Any) = when (value) {
+        is Int -> encoder.encodeInt(value)
+        is String -> encoder.encodeString(value)
+        else -> throw IllegalStateException("This can only be in context of INT or STRING.")
+    }
 }

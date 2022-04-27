@@ -1,10 +1,10 @@
 package xlitekt.game.content.ui
 
-import kotlin.reflect.KClass
 import xlitekt.game.actor.player.Player
 import xlitekt.shared.inject
 import xlitekt.shared.resource.InterfaceInfoMap
 import xlitekt.shared.resource.InterfaceInfoResource
+import kotlin.reflect.KClass
 
 /**
  * @author Tyler Telis

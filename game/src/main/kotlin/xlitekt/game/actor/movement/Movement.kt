@@ -1,14 +1,14 @@
 package xlitekt.game.actor.movement
 
-import java.util.Deque
-import java.util.LinkedList
-import kotlin.math.sign
 import xlitekt.game.actor.Actor
 import xlitekt.game.actor.npc.NPC
 import xlitekt.game.actor.player.Player
 import xlitekt.game.world.map.location.Location
 import xlitekt.game.world.map.location.directionTo
 import xlitekt.game.world.map.zone.Zones
+import java.util.Deque
+import java.util.LinkedList
+import kotlin.math.sign
 
 /**
  * @author Jordan Abraham

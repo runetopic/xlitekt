@@ -1,12 +1,12 @@
 package xlitekt.game.actor.player
 
 import io.ktor.utils.io.core.BytePacketBuilder
-import java.util.LinkedList
 import xlitekt.game.actor.npc.NPC
 import xlitekt.game.world.World
 import xlitekt.game.world.World.Companion.MAX_PLAYERS
 import xlitekt.shared.buffer.withBitAccess
 import xlitekt.shared.inject
+import java.util.LinkedList
 
 class Viewport(
     val player: Player,

@@ -1,10 +1,13 @@
 package xlitekt.cache.provider.config.obj
 
+import kotlinx.serialization.Contextual
+import kotlinx.serialization.Serializable
 import xlitekt.cache.provider.EntryType
 
 /**
  * @author Jordan Abraham
  */
+@Serializable
 data class ObjEntryType(
     override val id: Int,
     var model: Int = 0,
@@ -46,5 +49,5 @@ data class ObjEntryType(
     var notedId: Int = -1,
     var placeholder: Int = -1,
     var placeholderTemplate: Int = -1,
-    var params: Map<Int, Any> = mapOf()
+    var params: Map<Int, @Contextual Any> = mapOf()
 ) : EntryType(id)

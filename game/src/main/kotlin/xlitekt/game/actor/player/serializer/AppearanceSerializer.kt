@@ -1,6 +1,5 @@
 package xlitekt.game.actor.player.serializer
 
-import java.util.EnumMap
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.builtins.MapSerializer
 import kotlinx.serialization.builtins.serializer
@@ -14,6 +13,7 @@ import kotlinx.serialization.encoding.encodeStructure
 import xlitekt.game.actor.render.Render
 import xlitekt.game.actor.render.block.body.BodyPart
 import xlitekt.game.actor.render.block.body.BodyPartColor
+import java.util.EnumMap
 
 /**
  * @author Jordan Abraham

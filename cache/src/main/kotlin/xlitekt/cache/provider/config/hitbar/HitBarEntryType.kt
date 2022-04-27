@@ -1,10 +1,12 @@
 package xlitekt.cache.provider.config.hitbar
 
+import kotlinx.serialization.Serializable
 import xlitekt.cache.provider.EntryType
 
 /**
  * @author Jordan Abraham
  */
+@Serializable
 data class HitBarEntryType(
     override val id: Int,
     var int1: Int = 255,

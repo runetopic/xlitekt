@@ -5,7 +5,6 @@ import io.ktor.utils.io.core.ByteReadPacket
 import io.ktor.utils.io.core.buildPacket
 import io.ktor.utils.io.core.isNotEmpty
 import io.ktor.utils.io.core.readBytes
-import kotlin.math.abs
 import script.packet.assembler.PlayerInfoAssembler.ActivityUpdateType.Adding
 import script.packet.assembler.PlayerInfoAssembler.ActivityUpdateType.Moving
 import script.packet.assembler.PlayerInfoAssembler.ActivityUpdateType.Removing
@@ -26,6 +25,7 @@ import xlitekt.game.world.map.location.withinDistance
 import xlitekt.shared.buffer.BitAccess
 import xlitekt.shared.buffer.withBitAccess
 import xlitekt.shared.buffer.writeBytes
+import kotlin.math.abs
 
 /**
  * @author Jordan Abraham

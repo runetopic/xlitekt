@@ -1,10 +1,12 @@
 package xlitekt.cache.provider.config.sequence
 
+import kotlinx.serialization.Serializable
 import xlitekt.cache.provider.EntryType
 
 /**
  * @author Jordan Abraham
  */
+@Serializable
 data class SequenceEntryType(
     override val id: Int,
     var field2079: Int = -1,
