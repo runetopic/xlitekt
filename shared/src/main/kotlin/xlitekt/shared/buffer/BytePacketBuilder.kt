@@ -73,7 +73,6 @@ fun BytePacketBuilder.writeIntV2(value: () -> Int) = value.invoke().also {
 fun BytePacketBuilder.withBitAccess(block: BitAccess.() -> Unit) {
     val accessor = BitAccess()
     block.invoke(accessor)
-    accessor.write(this)
     writeFully(accessor.data, 0, (accessor.bitIndex + 7) / 8)
 }
 
