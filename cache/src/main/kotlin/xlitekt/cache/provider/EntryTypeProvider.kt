@@ -41,7 +41,7 @@ abstract class EntryTypeProvider<R : EntryType> {
 
         // Config groups.
         const val KIT_CONFIG = 3
-        const val FLOOR_OVERLAY_CONFIG = 3
+        const val FLOOR_OVERLAY_CONFIG = 4
         const val INV_CONFIG = 5
         const val LOC_CONFIG = 6
         const val ENUM_CONFIG = 8
