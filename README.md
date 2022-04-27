@@ -77,7 +77,7 @@ game {
 ```
 
 # Maps
-Maps are loaded using the xteas provided from Runestar, which follows this format:
+Maps are loaded using the xteas provided from OpenRS2, which follows this format:
 
 ```json
 [
