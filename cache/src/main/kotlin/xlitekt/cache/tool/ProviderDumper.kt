@@ -20,6 +20,7 @@ import xlitekt.cache.provider.config.param.ParamEntryTypeProvider
 import xlitekt.cache.provider.config.sequence.SequenceEntryTypeProvider
 import xlitekt.cache.provider.config.spotanimation.SpotAnimationEntryTypeProvider
 import xlitekt.cache.provider.config.struct.StructEntryTypeProvider
+import xlitekt.cache.provider.config.underlay.FloorUnderlayEntryTypeProvider
 import xlitekt.cache.provider.config.varbit.VarBitEntryTypeProvider
 import xlitekt.cache.provider.config.varp.VarpEntryTypeProvider
 import xlitekt.cache.provider.ui.InterfaceEntryTypeProvider
@@ -62,6 +63,7 @@ fun main() {
     val spotAnimations by inject<SpotAnimationEntryTypeProvider>()
     val varps by inject<VarpEntryTypeProvider>()
     val floorOverlays by inject<FloorOverlayEntryTypeProvider>()
+    val floorUnderlays by inject<FloorUnderlayEntryTypeProvider>()
 
     Path.of("./cache/data/dump/").apply {
         if (notExists()) createDirectories()
@@ -83,5 +85,6 @@ fun main() {
         json.encodeToStream(spotAnimations.entries().toList(), Path.of("$it/spotAnimations.json").outputStream())
         json.encodeToStream(varps.entries().toList(), Path.of("$it/varps.json").outputStream())
         json.encodeToStream(floorOverlays.entries().toList(), Path.of("$it/floorOverlays.json").outputStream())
+        json.encodeToStream(floorUnderlays.entries().toList(), Path.of("$it/floorUnderlays.json").outputStream())
     }
 }
