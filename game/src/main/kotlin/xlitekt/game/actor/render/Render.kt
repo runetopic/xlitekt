@@ -1,12 +1,12 @@
 package xlitekt.game.actor.render
 
+import java.util.EnumMap
 import kotlinx.serialization.Serializable
 import xlitekt.game.actor.Actor
-import xlitekt.game.actor.player.kit.BodyPart
-import xlitekt.game.actor.player.kit.BodyPartColor
 import xlitekt.game.actor.player.serializer.AppearanceSerializer
+import xlitekt.game.actor.render.block.body.BodyPart
+import xlitekt.game.actor.render.block.body.BodyPartColor
 import xlitekt.game.world.map.location.Location
-import java.util.EnumMap
 
 /**
  * @author Jordan Abraham

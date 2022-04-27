@@ -1,5 +1,7 @@
 package xlitekt.game.actor.player
 
+import kotlin.math.abs
+import kotlin.random.Random.Default.nextInt
 import kotlinx.serialization.Serializable
 import xlitekt.game.actor.Actor
 import xlitekt.game.actor.player.PlayerEncoder.encodeToJson
@@ -24,8 +26,6 @@ import xlitekt.game.packet.VarpSmallPacket
 import xlitekt.game.world.World
 import xlitekt.game.world.map.location.Location
 import xlitekt.shared.inject
-import kotlin.math.abs
-import kotlin.random.Random.Default.nextInt
 
 /**
  * @author Jordan Abraham

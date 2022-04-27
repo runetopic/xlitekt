@@ -1,5 +1,6 @@
 package xlitekt.game.world.map.collision
 
+import kotlin.experimental.and
 import org.rsmod.pathfinder.ZoneFlags
 import org.rsmod.pathfinder.flag.CollisionFlag.FLOOR
 import org.rsmod.pathfinder.flag.CollisionFlag.FLOOR_DECORATION
@@ -38,7 +39,6 @@ import xlitekt.game.world.map.obj.GameObject
 import xlitekt.game.world.map.obj.GameObjectShape
 import xlitekt.game.world.map.zone.Zones
 import xlitekt.shared.inject
-import kotlin.experimental.and
 
 object CollisionMap {
     private val locs by inject<LocEntryTypeProvider>()

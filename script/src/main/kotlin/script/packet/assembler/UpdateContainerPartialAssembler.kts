@@ -1,13 +1,13 @@
 package script.packet.assembler
 
 import io.ktor.utils.io.core.buildPacket
+import kotlin.math.min
 import xlitekt.game.packet.UpdateContainerPartialPacket
 import xlitekt.game.packet.assembler.onPacketAssembler
 import xlitekt.shared.buffer.writeByte
 import xlitekt.shared.buffer.writeInt
 import xlitekt.shared.buffer.writeShort
 import xlitekt.shared.buffer.writeSmart
-import kotlin.math.min
 
 /**
  * @author Jordan Abraham

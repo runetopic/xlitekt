@@ -3,6 +3,7 @@ package xlitekt.cache
 import com.runetopic.cache.store.Js5Store
 import com.runetopic.cryptography.huffman.Huffman
 import io.ktor.server.application.ApplicationEnvironment
+import java.nio.file.Path
 import org.koin.dsl.module
 import xlitekt.cache.provider.EntryTypeProvider
 import xlitekt.cache.provider.config.enum.EnumEntryTypeProvider
@@ -22,7 +23,6 @@ import xlitekt.cache.provider.config.varp.VarpEntryTypeProvider
 import xlitekt.cache.provider.map.MapEntryTypeProvider
 import xlitekt.cache.provider.ui.InterfaceEntryTypeProvider
 import xlitekt.shared.lazy
-import java.nio.file.Path
 
 /**
  * @author Jordan Abraham

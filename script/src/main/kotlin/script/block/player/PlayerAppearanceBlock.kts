@@ -1,16 +1,16 @@
 package script.block.player
 
-// import io.ktor.utils.io.core.BytePacketBuilder
-// import io.ktor.utils.io.core.buildPacket
-// import io.ktor.utils.io.core.readBytes
 import io.ktor.utils.io.core.BytePacketBuilder
 import io.ktor.utils.io.core.buildPacket
 import io.ktor.utils.io.core.readBytes
-import xlitekt.game.actor.player.kit.BodyPartColor
-import xlitekt.game.actor.player.kit.PlayerIdentityKit
 import xlitekt.game.actor.render.Render.Appearance
+import xlitekt.game.actor.render.block.body.BodyPartBuilder
+import xlitekt.game.actor.render.block.body.BodyPartColor
+import xlitekt.game.actor.render.block.body.BodyPartInfo
+import xlitekt.game.actor.render.block.body.BodyPartListener
 import xlitekt.game.actor.render.block.onPlayerUpdateBlock
 import xlitekt.shared.buffer.writeByte
+import xlitekt.shared.buffer.writeBytes
 import xlitekt.shared.buffer.writeBytesAdd
 import xlitekt.shared.buffer.writeShort
 import xlitekt.shared.buffer.writeStringCp1252NullTerminated
@@ -20,7 +20,7 @@ import xlitekt.shared.buffer.writeStringCp1252NullTerminated
  */
 onPlayerUpdateBlock<Appearance>(5, 0x1) {
     buildPacket {
-        val data = buildPacket {
+        val appearance = buildPacket {
             writeByte(gender::mask)
             writeByte { skullIcon }
             writeByte { headIcon }
@@ -32,8 +32,8 @@ onPlayerUpdateBlock<Appearance>(5, 0x1) {
             writeShort { 0 } // Total level
             writeByte { 0 } // Hidden
         }
-        writeByte(data.remaining::toInt)
-        writeBytesAdd(data::readBytes)
+        writeByte(appearance.remaining::toInt)
+        writeBytesAdd(appearance::readBytes)
     }
 }
 
@@ -48,11 +48,13 @@ fun BytePacketBuilder.writeTransmogrification(render: Appearance) {
     writeShort(render::transform)
 }
 
-fun BytePacketBuilder.writeIdentityKit(render: Appearance) = enumValues<PlayerIdentityKit>()
-    .sortedBy { it.info.index }
-    .forEach {
+fun BytePacketBuilder.writeIdentityKit(render: Appearance) {
+    BodyPartListener.listeners.entries.sortedBy(MutableMap.MutableEntry<Int, BodyPartInfo>::key).forEach {
         // TODO We will need to add support for the item worn in the specific body slot.
-        it.info.build(this, render.gender, render.bodyParts.getOrDefault(it.bodyPart, 0))
+        val bodyPartBuilder = BodyPartBuilder(render.bodyParts.getOrDefault(it.value.bodyPart, 0), render.gender)
+        it.value.builder.invoke(bodyPartBuilder)
+        writeBytes(bodyPartBuilder.data!!::readBytes)
     }
+}
 
 fun BytePacketBuilder.color(colours: Set<Map.Entry<BodyPartColor, Int>>) = colours.sortedBy { it.key.id }.forEach { writeByte(it::value) }

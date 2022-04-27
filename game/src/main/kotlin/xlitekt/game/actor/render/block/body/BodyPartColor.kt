@@ -1,4 +1,4 @@
-package xlitekt.game.actor.player.kit
+package xlitekt.game.actor.render.block.body
 
 enum class BodyPartColor(val id: Int, val color: Int) {
     HAIR(0, 23),

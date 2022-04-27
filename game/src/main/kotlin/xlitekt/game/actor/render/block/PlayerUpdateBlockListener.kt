@@ -1,8 +1,8 @@
 package xlitekt.game.actor.render.block
 
 import io.ktor.utils.io.core.ByteReadPacket
-import xlitekt.game.actor.render.Render
 import kotlin.reflect.KClass
+import xlitekt.game.actor.render.Render
 
 /**
  * @author Jordan Abraham

@@ -1,7 +1,7 @@
 package script.ui
 
 import xlitekt.game.actor.player.message
-import xlitekt.game.content.container.equipment.Equipment.Companion.SLOT_WEAPON
+import xlitekt.game.content.container.equipment.Equipment.Companion.SLOT_MAINHAND
 import xlitekt.game.content.item.Item
 import xlitekt.game.content.ui.UserInterface
 import xlitekt.game.content.ui.UserInterface.WornEquipment
@@ -14,7 +14,7 @@ onInterface<WornEquipment> {
     onOpen {
         // TODO this will be handled inside of the players equipment manager.
         val equipment = MutableList<Item?>(equipmentSize) { null }
-        equipment[SLOT_WEAPON] = Item(4151, 1)
+        equipment[SLOT_MAINHAND] = Item(4151, 1)
         setItems(equipmentContainerKey, equipment.toList())
     }
     onClick("View equipment stats") {

@@ -1,8 +1,8 @@
 package xlitekt.game.packet.assembler
 
 import io.ktor.utils.io.core.ByteReadPacket
-import xlitekt.game.packet.Packet
 import kotlin.reflect.KClass
+import xlitekt.game.packet.Packet
 
 /**
  * @author Jordan Abraham

@@ -9,6 +9,8 @@ import io.ktor.utils.io.core.readLong
 import io.ktor.utils.io.core.readShort
 import io.ktor.utils.io.core.readUByte
 import io.ktor.utils.io.core.readUShort
+import java.math.BigInteger
+import java.nio.ByteBuffer
 import kotlinx.coroutines.withTimeout
 import xlitekt.game.actor.player.Client
 import xlitekt.game.actor.player.Client.Companion.checksums
@@ -45,8 +47,6 @@ import xlitekt.shared.buffer.readStringCp1252NullCircumfixed
 import xlitekt.shared.buffer.readStringCp1252NullTerminated
 import xlitekt.shared.buffer.readUMedium
 import xlitekt.shared.toBoolean
-import java.math.BigInteger
-import java.nio.ByteBuffer
 
 /**
  * @author Jordan Abraham

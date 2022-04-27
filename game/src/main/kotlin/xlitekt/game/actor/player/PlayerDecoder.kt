@@ -1,10 +1,10 @@
 package xlitekt.game.actor.player
 
-import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.decodeFromStream
 import java.nio.file.Path
 import kotlin.io.path.exists
 import kotlin.io.path.inputStream
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.decodeFromStream
 
 /**
  * @author Jordan Abraham

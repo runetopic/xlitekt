@@ -1,6 +1,7 @@
 package xlitekt.game
 
 import io.ktor.server.application.ApplicationEnvironment
+import java.util.concurrent.Executors
 import org.koin.dsl.module
 import org.rsmod.pathfinder.ZoneFlags
 import xlitekt.game.event.EventBus
@@ -11,7 +12,6 @@ import xlitekt.game.tick.WorldLogoutSynchronizer
 import xlitekt.game.tick.benchmark.BenchmarkParallelActorSynchronizer
 import xlitekt.game.world.World
 import xlitekt.shared.lazy
-import java.util.concurrent.Executors
 
 /**
  * @author Jordan Abraham

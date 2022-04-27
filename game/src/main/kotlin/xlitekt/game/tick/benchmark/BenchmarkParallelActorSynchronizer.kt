@@ -2,6 +2,10 @@ package xlitekt.game.tick.benchmark
 
 import com.github.michaelbull.logging.InlineLogger
 import io.ktor.utils.io.core.ByteReadPacket
+import java.util.concurrent.ArrayBlockingQueue
+import java.util.concurrent.ConcurrentHashMap
+import kotlin.random.Random
+import kotlin.time.measureTime
 import org.rsmod.pathfinder.DumbPathFinder
 import org.rsmod.pathfinder.PathFinder
 import org.rsmod.pathfinder.Route
@@ -13,10 +17,6 @@ import xlitekt.game.actor.player.Player
 import xlitekt.game.tick.Synchronizer
 import xlitekt.game.world.map.location.Location
 import xlitekt.shared.inject
-import java.util.concurrent.ArrayBlockingQueue
-import java.util.concurrent.ConcurrentHashMap
-import kotlin.random.Random
-import kotlin.time.measureTime
 
 /**
  * @author Jordan Abraham

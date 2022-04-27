@@ -1,7 +1,7 @@
 package xlitekt.game.packet.disassembler.handler
 
-import xlitekt.game.packet.Packet
 import kotlin.reflect.KClass
+import xlitekt.game.packet.Packet
 
 /**
  * @author Jordan Abraham

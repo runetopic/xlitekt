@@ -10,6 +10,8 @@ import io.ktor.utils.io.ByteReadChannel
 import io.ktor.utils.io.ByteWriteChannel
 import io.ktor.utils.io.ClosedWriteChannelException
 import io.ktor.utils.io.core.ByteReadPacket
+import java.io.IOException
+import java.net.SocketException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.TimeoutCancellationException
 import kotlinx.coroutines.channels.ClosedReceiveChannelException
@@ -20,8 +22,6 @@ import xlitekt.game.world.World
 import xlitekt.shared.buffer.writePacketOpcode
 import xlitekt.shared.buffer.writePacketSize
 import xlitekt.shared.inject
-import java.io.IOException
-import java.net.SocketException
 
 /**
  * @author Jordan Abraham

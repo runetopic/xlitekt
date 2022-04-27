@@ -1,10 +1,10 @@
 package xlitekt.game.tick
 
 import io.ktor.utils.io.core.ByteReadPacket
+import java.util.concurrent.ConcurrentHashMap
 import xlitekt.game.actor.movement.MovementStep
 import xlitekt.game.actor.npc.NPC
 import xlitekt.game.actor.player.Player
-import java.util.concurrent.ConcurrentHashMap
 
 /**
  * @author Jordan Abraham
