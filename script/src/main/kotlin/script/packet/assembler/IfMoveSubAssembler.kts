@@ -1,7 +1,6 @@
 package script.packet.assembler
 
 import io.ktor.utils.io.core.buildPacket
-import io.ktor.utils.io.core.writeInt
 import xlitekt.game.packet.IfMoveSubPacket
 import xlitekt.game.packet.assembler.onPacketAssembler
 import xlitekt.shared.buffer.writeInt

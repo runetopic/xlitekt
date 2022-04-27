@@ -7,7 +7,6 @@ import io.ktor.utils.io.core.readUShort
 import xlitekt.cache.provider.EntryTypeProvider
 import xlitekt.cache.provider.config.ScriptType
 import xlitekt.shared.buffer.readStringCp1252NullTerminated
-import java.lang.IllegalArgumentException
 
 class EnumEntryTypeProvider : EntryTypeProvider<EnumEntryType>() {
     override fun load(): Map<Int, EnumEntryType> = store

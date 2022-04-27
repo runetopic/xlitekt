@@ -4,7 +4,6 @@ import com.runetopic.cryptography.huffman.Huffman
 import com.runetopic.cryptography.toHuffman
 import io.ktor.utils.io.core.buildPacket
 import io.ktor.utils.io.core.writeFully
-import io.ktor.utils.io.core.writeShort
 import xlitekt.game.actor.render.Render.PublicChat
 import xlitekt.game.actor.render.block.onPlayerUpdateBlock
 import xlitekt.shared.buffer.writeByte

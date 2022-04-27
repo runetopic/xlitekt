@@ -1,7 +1,6 @@
 package script.packet.assembler
 
 import io.ktor.utils.io.core.buildPacket
-import io.ktor.utils.io.core.writeShort
 import xlitekt.game.packet.UpdateWeightPacket
 import xlitekt.game.packet.assembler.onPacketAssembler
 import xlitekt.shared.buffer.writeShort

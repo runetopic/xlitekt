@@ -1,7 +1,5 @@
 package xlitekt.game.actor.movement
 
-import java.lang.IllegalArgumentException
-
 sealed class Direction {
     object North : Direction()
     object East : Direction()

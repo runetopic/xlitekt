@@ -8,7 +8,6 @@ import xlitekt.cache.provider.EntryTypeProvider
 import xlitekt.shared.buffer.readStringCp1252NullCircumfixed
 import xlitekt.shared.buffer.readUIntSmart
 import xlitekt.shared.buffer.readUMedium
-import java.lang.IllegalArgumentException
 
 /**
  * @author Jordan Abraham

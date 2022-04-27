@@ -1,8 +1,6 @@
 package script.packet.assembler
 
 import io.ktor.utils.io.core.buildPacket
-import io.ktor.utils.io.core.writeInt
-import io.ktor.utils.io.core.writeShort
 import xlitekt.game.packet.UpdateFriendListPacket
 import xlitekt.game.packet.assembler.onPacketAssembler
 import xlitekt.shared.buffer.writeByte

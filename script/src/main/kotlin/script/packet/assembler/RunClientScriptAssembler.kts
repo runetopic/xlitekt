@@ -1,7 +1,6 @@
 package script.packet.assembler
 
 import io.ktor.utils.io.core.buildPacket
-import io.ktor.utils.io.core.writeInt
 import xlitekt.game.content.container.Container
 import xlitekt.game.content.item.Item
 import xlitekt.game.packet.RunClientScriptPacket

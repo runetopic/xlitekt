@@ -4,7 +4,6 @@ import io.ktor.utils.io.core.ByteReadPacket
 import io.ktor.utils.io.core.readUByte
 import io.ktor.utils.io.core.readUShort
 import xlitekt.cache.provider.EntryTypeProvider
-import java.lang.IllegalArgumentException
 
 /**
  * @author Jordan Abraham

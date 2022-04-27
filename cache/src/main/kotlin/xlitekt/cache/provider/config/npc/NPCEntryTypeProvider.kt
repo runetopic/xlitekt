@@ -5,7 +5,6 @@ import io.ktor.utils.io.core.readUByte
 import io.ktor.utils.io.core.readUShort
 import xlitekt.cache.provider.EntryTypeProvider
 import xlitekt.shared.buffer.readStringCp1252NullTerminated
-import java.lang.IllegalArgumentException
 
 /**
  * @author Jordan Abraham
