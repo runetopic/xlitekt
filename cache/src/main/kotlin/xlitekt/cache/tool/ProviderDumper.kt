@@ -39,6 +39,7 @@ fun main() {
 
     val json = Json {
         prettyPrint = true
+        encodeDefaults = true
         serializersModule = SerializersModule {
             contextual(Any::class, AnySerializer)
         }
