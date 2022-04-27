@@ -1,6 +1,5 @@
 package script.block.player.body
 
-import xlitekt.game.actor.render.Render
 import xlitekt.game.actor.render.Render.Appearance.Gender
 import xlitekt.game.actor.render.block.body.BodyPart
 import xlitekt.game.actor.render.block.body.onBodyPart
@@ -16,9 +15,7 @@ import xlitekt.shared.buffer.writeShort
  * The head.
  */
 onBodyPart(index = 0) {
-    equipmentSlot {
-        Equipment.SLOT_HEAD
-    }
+    equipmentSlot(Equipment.Companion::SLOT_HEAD)
 
     bodyPart {
         writeByte { kit }
@@ -29,9 +26,7 @@ onBodyPart(index = 0) {
  * The back.
  */
 onBodyPart(index = 1) {
-    equipmentSlot {
-        Equipment.SLOT_BACK
-    }
+    equipmentSlot(Equipment.Companion::SLOT_BACK)
 
     bodyPart {
         writeByte { it }
@@ -42,9 +37,7 @@ onBodyPart(index = 1) {
  * The neck.
  */
 onBodyPart(index = 2) {
-    equipmentSlot {
-        Equipment.SLOT_NECK
-    }
+    equipmentSlot(Equipment.Companion::SLOT_NECK)
 
     bodyPart {
         writeByte { kit }
@@ -55,9 +48,7 @@ onBodyPart(index = 2) {
  * The main-hand.
  */
 onBodyPart(index = 3) {
-    equipmentSlot {
-        Equipment.SLOT_MAINHAND
-    }
+    equipmentSlot(Equipment.Companion::SLOT_MAINHAND)
 
     bodyPart {
         writeByte { kit }
@@ -68,9 +59,7 @@ onBodyPart(index = 3) {
  * The torso.
  */
 onBodyPart(index = 4, BodyPart.TORSO) {
-    equipmentSlot {
-        Equipment.SLOT_TORSO
-    }
+    equipmentSlot(Equipment.Companion::SLOT_TORSO)
 
     bodyPart {
         writeShort { 0x100 + kit }
@@ -81,9 +70,7 @@ onBodyPart(index = 4, BodyPart.TORSO) {
  * The off-hand.
  */
 onBodyPart(index = 5) {
-    equipmentSlot {
-        Equipment.SLOT_OFFHAND
-    }
+    equipmentSlot(Equipment.Companion::SLOT_OFFHAND)
 
     bodyPart {
         writeByte { kit }
@@ -94,9 +81,7 @@ onBodyPart(index = 5) {
  * The arms.
  */
 onBodyPart(index = 6, BodyPart.ARMS) {
-    equipmentSlot {
-        Equipment.SLOT_TORSO
-    }
+    equipmentSlot(Equipment.Companion::SLOT_TORSO)
 
     bodyPart {
         writeShort { 0x100 + kit }
@@ -107,9 +92,7 @@ onBodyPart(index = 6, BodyPart.ARMS) {
  * The legs.
  */
 onBodyPart(index = 7, BodyPart.LEGS) {
-    equipmentSlot {
-        Equipment.SLOT_LEG
-    }
+    equipmentSlot(Equipment.Companion::SLOT_LEG)
 
     bodyPart {
         writeShort { 0x100 + kit }
@@ -120,9 +103,7 @@ onBodyPart(index = 7, BodyPart.LEGS) {
  * The hair.
  */
 onBodyPart(index = 8, BodyPart.HEAD) {
-    equipmentSlot {
-        Equipment.SLOT_HEAD
-    }
+    equipmentSlot(Equipment.Companion::SLOT_HEAD)
 
     bodyPart {
         writeShort { 0x100 + kit }
@@ -133,9 +114,7 @@ onBodyPart(index = 8, BodyPart.HEAD) {
  * The hands.
  */
 onBodyPart(index = 9, BodyPart.HANDS) {
-    equipmentSlot {
-        Equipment.SLOT_HANDS
-    }
+    equipmentSlot(Equipment.Companion::SLOT_HANDS)
 
     bodyPart {
         writeShort { 0x100 + kit }
@@ -146,9 +125,7 @@ onBodyPart(index = 9, BodyPart.HANDS) {
  * The feet.
  */
 onBodyPart(index = 10, BodyPart.FEET) {
-    equipmentSlot {
-        Equipment.SLOT_FEET
-    }
+    equipmentSlot(Equipment.Companion::SLOT_FEET)
 
     bodyPart {
         writeShort { 0x100 + kit }

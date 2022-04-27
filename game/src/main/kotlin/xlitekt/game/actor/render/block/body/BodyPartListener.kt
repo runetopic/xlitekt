@@ -28,8 +28,8 @@ class BodyPartBuilder(
     var equipmentIndex: Int? = null
     var data: ByteReadPacket? = null
 
-    fun equipmentSlot(equipmentIndex: (Render.Appearance.Gender) -> Int) {
-        this.equipmentIndex = equipmentIndex.invoke(gender)
+    fun equipmentSlot(equipmentIndex: () -> Int) {
+        this.equipmentIndex = equipmentIndex.invoke()
     }
 
     fun bodyPart(builder: BytePacketBuilder.(Int) -> Unit) {
