@@ -26,6 +26,7 @@ import xlitekt.cache.provider.config.spotanimation.SpotAnimationEntryTypeProvide
 import xlitekt.cache.provider.config.struct.StructEntryTypeProvider
 import xlitekt.cache.provider.config.underlay.FloorUnderlayEntryTypeProvider
 import xlitekt.cache.provider.config.varbit.VarBitEntryTypeProvider
+import xlitekt.cache.provider.config.varc.VarcEntryTypeProvider
 import xlitekt.cache.provider.config.varp.VarpEntryTypeProvider
 import xlitekt.cache.provider.map.MapEntryTypeProvider
 import xlitekt.cache.provider.ui.InterfaceEntryTypeProvider
@@ -71,6 +72,7 @@ val cacheModule = module(createdAtStart = true) {
     single { VarpEntryTypeProvider() }
     single { FloorOverlayEntryTypeProvider() }
     single { FloorUnderlayEntryTypeProvider() }
+    single { VarcEntryTypeProvider() }
 }
 
 object AnySerializer : KSerializer<Any> {
