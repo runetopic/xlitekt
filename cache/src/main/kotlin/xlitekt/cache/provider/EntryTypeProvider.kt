@@ -40,6 +40,7 @@ abstract class EntryTypeProvider<R : EntryType> {
         const val MAP_INDEX = 5
         const val SPRITE_INDEX = 8
         const val TEXTURE_INDEX = 9
+        const val BINARY_INDEX = 10
 
         // Config groups.
         const val FLOOR_UNDERLAY_CONFIG = 1

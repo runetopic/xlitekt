@@ -43,5 +43,4 @@ data class TextureEntryType(
         result = 31 * result + animationSpeed
         return result
     }
-
 }

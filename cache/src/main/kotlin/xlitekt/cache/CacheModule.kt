@@ -6,6 +6,7 @@ import io.ktor.server.application.ApplicationEnvironment
 import org.koin.core.error.NoBeanDefFoundException
 import org.koin.dsl.module
 import xlitekt.cache.provider.EntryTypeProvider
+import xlitekt.cache.provider.binary.title.TitleEntryTypeProvider
 import xlitekt.cache.provider.config.enum.EnumEntryTypeProvider
 import xlitekt.cache.provider.config.hitbar.HitBarEntryTypeProvider
 import xlitekt.cache.provider.config.hitsplat.HitSplatEntryTypeProvider
@@ -26,6 +27,7 @@ import xlitekt.cache.provider.config.varp.VarpEntryTypeProvider
 import xlitekt.cache.provider.config.worldmap.WorldMapElementEntryTypeProvider
 import xlitekt.cache.provider.map.MapEntryTypeProvider
 import xlitekt.cache.provider.sprite.SpriteEntryTypeProvider
+import xlitekt.cache.provider.sprite.titlescreen.TitleScreenEntryTypeProvider
 import xlitekt.cache.provider.texture.TextureEntryTypeProvider
 import xlitekt.cache.provider.ui.InterfaceEntryTypeProvider
 import xlitekt.shared.lazy
@@ -74,4 +76,6 @@ val cacheModule = module(createdAtStart = true) {
     single { WorldMapElementEntryTypeProvider() }
     single { SpriteEntryTypeProvider() }
     single { TextureEntryTypeProvider() }
+    single { TitleEntryTypeProvider() }
+    single { TitleScreenEntryTypeProvider() }
 }

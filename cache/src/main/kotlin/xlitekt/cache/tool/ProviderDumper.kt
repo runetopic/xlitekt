@@ -11,6 +11,7 @@ import kotlinx.serialization.modules.SerializersModule
 import org.koin.core.context.loadKoinModules
 import org.koin.core.context.startKoin
 import xlitekt.cache.cacheModule
+import xlitekt.cache.provider.binary.title.TitleEntryTypeProvider
 import xlitekt.cache.provider.config.enum.EnumEntryTypeProvider
 import xlitekt.cache.provider.config.hitbar.HitBarEntryTypeProvider
 import xlitekt.cache.provider.config.hitsplat.HitSplatEntryTypeProvider
@@ -31,10 +32,12 @@ import xlitekt.cache.provider.config.varp.VarpEntryTypeProvider
 import xlitekt.cache.provider.config.worldmap.WorldMapElementEntryTypeProvider
 import xlitekt.cache.provider.sprite.Sprite
 import xlitekt.cache.provider.sprite.SpriteEntryTypeProvider
+import xlitekt.cache.provider.sprite.titlescreen.TitleScreenEntryTypeProvider
 import xlitekt.cache.provider.texture.TextureEntryTypeProvider
 import xlitekt.cache.provider.ui.InterfaceEntryTypeProvider
 import xlitekt.shared.inject
 import java.awt.image.BufferedImage
+import java.io.ByteArrayInputStream
 import java.io.File
 import java.nio.file.Path
 import javax.imageio.ImageIO
@@ -52,6 +55,7 @@ fun main() {
     dumpJson()
     dumpSprites()
     dumpTextures()
+    dumpTitleScreen()
 }
 
 private fun dumpJson() {
@@ -119,9 +123,7 @@ private fun dumpSprites() {
         val sprites by inject<SpriteEntryTypeProvider>()
         for (entry in sprites.entries()) {
             for (sprite in entry.sprites.filter(Sprite::renderable)) {
-                val image = BufferedImage(sprite.width, sprite.height, BufferedImage.TYPE_INT_ARGB)
-                image.setRGB(0, 0, sprite.width, sprite.height, sprite.pixels, 0, sprite.width)
-                ImageIO.write(image, "png", File(it.toString(), "${entry.id}_${sprite.id}.png"))
+                sprite.write(it, "png", "${entry.id}_${sprite.id}")
             }
         }
     }
@@ -139,13 +141,34 @@ private fun dumpTextures() {
             for (id in texture.textureIds!!) {
                 val entry = sprites.entryType(id) ?: continue
                 for (sprite in entry.sprites.filter(Sprite::renderable)) {
-                    val image = BufferedImage(sprite.width, sprite.height, BufferedImage.TYPE_INT_ARGB)
-                    image.setRGB(0, 0, sprite.width, sprite.height, sprite.pixels, 0, sprite.width)
-                    ImageIO.write(image, "png", File(it.toString(), "${entry.id}_${sprite.id}.png"))
+                    sprite.write(it, "png", "${entry.id}_${sprite.id}")
                 }
             }
         }
     }
+}
+
+private fun dumpTitleScreen() {
+    Path.of("./cache/data/dump/title/").apply {
+        if (notExists()) createDirectories()
+    }.also {
+        // Background.
+        val title by inject<TitleEntryTypeProvider>()
+        ImageIO.write(ImageIO.read(ByteArrayInputStream(title.entries().first().pixels!!)), "jpg", File(it.toString(), "title.jpg"))
+
+        // Logo.
+        val sprites by inject<SpriteEntryTypeProvider>()
+        val logo by inject<TitleScreenEntryTypeProvider>()
+        for (entry in logo.entries()) {
+            sprites.entryType(entry.id)?.sprites?.first()?.write(it, "png", "${entry.id}")
+        }
+    }
+}
+
+private fun Sprite.write(path: Path, format: String, name: String) {
+    val image = BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB)
+    image.setRGB(0, 0, width, height, pixels, 0, width)
+    ImageIO.write(image, format, File(path.toString(), "$name.$format"))
 }
 
 object AnySerializer : KSerializer<Any> {
