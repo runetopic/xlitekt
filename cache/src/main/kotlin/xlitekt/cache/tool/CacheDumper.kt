@@ -140,7 +140,7 @@ object CacheDumper {
                 for (id in texture.textureIds!!) {
                     val entry = sprites.entryType(id) ?: continue
                     for (sprite in entry.sprites.filter(Sprite::renderable)) {
-                        sprite.write(it, "png", "${entry.id}_${sprite.id}")
+                        sprite.write(it, "png", "${texture.id}_${entry.id}_${sprite.id}")
                     }
                 }
             }
