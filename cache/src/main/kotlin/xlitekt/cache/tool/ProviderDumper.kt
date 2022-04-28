@@ -149,17 +149,17 @@ private fun dumpTextures() {
 }
 
 private fun dumpTitleScreen() {
-    Path.of("./cache/data/dump/title/").apply {
+    Path.of("./cache/data/dump/titlescreen/").apply {
         if (notExists()) createDirectories()
     }.also {
         // Background.
         val title by inject<TitleEntryTypeProvider>()
         ImageIO.write(ImageIO.read(ByteArrayInputStream(title.entries().first().pixels!!)), "jpg", File(it.toString(), "title.jpg"))
 
-        // Logo.
+        // Title screen.
         val sprites by inject<SpriteEntryTypeProvider>()
-        val logo by inject<TitleScreenEntryTypeProvider>()
-        for (entry in logo.entries()) {
+        val titlescreen by inject<TitleScreenEntryTypeProvider>()
+        for (entry in titlescreen.entries()) {
             sprites.entryType(entry.id)?.sprites?.first()?.write(it, "png", "${entry.id}")
         }
     }

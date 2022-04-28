@@ -1,11 +1,11 @@
 package xlitekt.cache
 
 import com.runetopic.cache.store.Js5Store
-import com.runetopic.cryptography.huffman.Huffman
 import io.ktor.server.application.ApplicationEnvironment
 import org.koin.core.error.NoBeanDefFoundException
 import org.koin.dsl.module
 import xlitekt.cache.provider.EntryTypeProvider
+import xlitekt.cache.provider.binary.huffman.HuffmanEntryTypeProvider
 import xlitekt.cache.provider.binary.title.TitleEntryTypeProvider
 import xlitekt.cache.provider.config.enum.EnumEntryTypeProvider
 import xlitekt.cache.provider.config.hitbar.HitBarEntryTypeProvider
@@ -49,7 +49,7 @@ val cacheModule = module(createdAtStart = true) {
             decompressionIndexExclusions = intArrayOf(EntryTypeProvider.MAP_INDEX)
         )
     }
-    single { Huffman(get<Js5Store>().index(indexId = 10).group(groupName = "huffman").file(0).data) }
+    single { HuffmanEntryTypeProvider() }
     single { VarBitEntryTypeProvider() }
     single { InterfaceEntryTypeProvider() }
     single { EnumEntryTypeProvider() }
