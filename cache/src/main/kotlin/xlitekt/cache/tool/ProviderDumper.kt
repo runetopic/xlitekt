@@ -24,6 +24,7 @@ import xlitekt.cache.provider.config.underlay.FloorUnderlayEntryTypeProvider
 import xlitekt.cache.provider.config.varbit.VarBitEntryTypeProvider
 import xlitekt.cache.provider.config.varc.VarcEntryTypeProvider
 import xlitekt.cache.provider.config.varp.VarpEntryTypeProvider
+import xlitekt.cache.provider.config.worldmap.WorldMapElementEntryTypeProvider
 import xlitekt.cache.provider.ui.InterfaceEntryTypeProvider
 import xlitekt.shared.inject
 import java.nio.file.Path
@@ -66,6 +67,7 @@ fun main() {
     val floorOverlays by inject<FloorOverlayEntryTypeProvider>()
     val floorUnderlays by inject<FloorUnderlayEntryTypeProvider>()
     val varcs by inject<VarcEntryTypeProvider>()
+    val worldmap by inject<WorldMapElementEntryTypeProvider>()
 
     Path.of("./cache/data/dump/").apply {
         if (notExists()) createDirectories()
@@ -89,5 +91,6 @@ fun main() {
         json.encodeToStream(floorOverlays.entries().toList(), Path.of("$it/floorOverlays.json").outputStream())
         json.encodeToStream(floorUnderlays.entries().toList(), Path.of("$it/floorUnderlays.json").outputStream())
         json.encodeToStream(varcs.entries().toList(), Path.of("$it/varcs.json").outputStream())
+        json.encodeToStream(worldmap.entries().toList(), Path.of("$it/worldmap.json").outputStream())
     }
 }

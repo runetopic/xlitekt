@@ -28,6 +28,7 @@ import xlitekt.cache.provider.config.underlay.FloorUnderlayEntryTypeProvider
 import xlitekt.cache.provider.config.varbit.VarBitEntryTypeProvider
 import xlitekt.cache.provider.config.varc.VarcEntryTypeProvider
 import xlitekt.cache.provider.config.varp.VarpEntryTypeProvider
+import xlitekt.cache.provider.config.worldmap.WorldMapElementEntryTypeProvider
 import xlitekt.cache.provider.map.MapEntryTypeProvider
 import xlitekt.cache.provider.ui.InterfaceEntryTypeProvider
 import xlitekt.shared.lazy
@@ -73,6 +74,7 @@ val cacheModule = module(createdAtStart = true) {
     single { FloorOverlayEntryTypeProvider() }
     single { FloorUnderlayEntryTypeProvider() }
     single { VarcEntryTypeProvider() }
+    single { WorldMapElementEntryTypeProvider() }
 }
 
 object AnySerializer : KSerializer<Any> {
