@@ -21,10 +21,12 @@ import org.koin.core.module.Module
 import org.koin.dsl.KoinAppDeclaration
 import org.koin.dsl.module
 import xlitekt.cache.cacheModule
+import xlitekt.cache.provider.sprite.SpriteEntryTypeProvider
 import xlitekt.game.Game
 import xlitekt.game.gameModule
 import xlitekt.network.Network
 import xlitekt.network.networkModule
+import xlitekt.shared.inject
 import xlitekt.shared.lazy
 import xlitekt.shared.sharedModule
 import java.util.TimeZone
@@ -47,6 +49,9 @@ fun Application.module() {
         installHttpServer()
         lazy<Game>().start()
     }
+
+    val sprites by inject<SpriteEntryTypeProvider>()
+    println(sprites.entries().size)
 
     log.info(
         "\n" +

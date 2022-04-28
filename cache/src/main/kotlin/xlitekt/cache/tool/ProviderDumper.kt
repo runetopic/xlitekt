@@ -25,9 +25,14 @@ import xlitekt.cache.provider.config.varbit.VarBitEntryTypeProvider
 import xlitekt.cache.provider.config.varc.VarcEntryTypeProvider
 import xlitekt.cache.provider.config.varp.VarpEntryTypeProvider
 import xlitekt.cache.provider.config.worldmap.WorldMapElementEntryTypeProvider
+import xlitekt.cache.provider.sprite.Sprite
+import xlitekt.cache.provider.sprite.SpriteEntryTypeProvider
 import xlitekt.cache.provider.ui.InterfaceEntryTypeProvider
 import xlitekt.shared.inject
+import java.awt.image.BufferedImage
+import java.io.File
 import java.nio.file.Path
+import javax.imageio.ImageIO
 import kotlin.io.path.createDirectories
 import kotlin.io.path.notExists
 import kotlin.io.path.outputStream
@@ -39,7 +44,11 @@ fun main() {
     startKoin {
         loadKoinModules(cacheModule)
     }
+    dumpJson()
+    dumpSprites()
+}
 
+private fun dumpJson() {
     val json = Json {
         prettyPrint = true
         encodeDefaults = true
@@ -92,5 +101,20 @@ fun main() {
         json.encodeToStream(floorUnderlays.entries().toList(), Path.of("$it/floorUnderlays.json").outputStream())
         json.encodeToStream(varcs.entries().toList(), Path.of("$it/varcs.json").outputStream())
         json.encodeToStream(worldmap.entries().toList(), Path.of("$it/worldmap.json").outputStream())
+    }
+}
+
+private fun dumpSprites() {
+    Path.of("./cache/data/dump/sprites/").apply {
+        if (notExists()) createDirectories()
+    }.also {
+        val sprites by inject<SpriteEntryTypeProvider>()
+        for (entry in sprites.entries()) {
+            for (sprite in entry.sprites.filter(Sprite::renderable)) {
+                val image = BufferedImage(sprite.width, sprite.height, BufferedImage.TYPE_INT_ARGB)
+                image.setRGB(0, 0, sprite.width, sprite.height, sprite.pixels, 0, sprite.width)
+                ImageIO.write(image, "png", File(it.toString(), "${entry.id}_${sprite.id}.png"))
+            }
+        }
     }
 }

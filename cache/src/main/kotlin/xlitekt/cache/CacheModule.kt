@@ -30,6 +30,7 @@ import xlitekt.cache.provider.config.varc.VarcEntryTypeProvider
 import xlitekt.cache.provider.config.varp.VarpEntryTypeProvider
 import xlitekt.cache.provider.config.worldmap.WorldMapElementEntryTypeProvider
 import xlitekt.cache.provider.map.MapEntryTypeProvider
+import xlitekt.cache.provider.sprite.SpriteEntryTypeProvider
 import xlitekt.cache.provider.ui.InterfaceEntryTypeProvider
 import xlitekt.shared.lazy
 import java.nio.file.Path
@@ -75,6 +76,7 @@ val cacheModule = module(createdAtStart = true) {
     single { FloorUnderlayEntryTypeProvider() }
     single { VarcEntryTypeProvider() }
     single { WorldMapElementEntryTypeProvider() }
+    single { SpriteEntryTypeProvider() }
 }
 
 object AnySerializer : KSerializer<Any> {
