@@ -17,14 +17,21 @@ class TitleScreenEntryTypeProvider : EntryTypeProvider<TitleScreenEntryType>() {
             index.group("titlebox"),
             index.group("titlebutton"),
             index.group("titlebutton_large"),
-            // index.group("play_now_text"),
+            index.group("play_now_text"),
             index.group("titlebutton_wide42,1"),
             index.group("runes"),
             index.group("title_mute"),
             index.group("options_radio_buttons,0"),
             index.group("options_radio_buttons,4"),
             index.group("options_radio_buttons,2"),
-            index.group("options_radio_buttons,6")
+            index.group("options_radio_buttons,6"),
+            index.group("sl_button"),
+            index.group("sl_back"),
+            index.group("sl_flags"),
+            index.group("sl_arrows"),
+            index.group("sl_stars"),
+            index.group("leftarrow"),
+            index.group("rightarrow")
         )
         return groups.map { ByteReadPacket(it.data).loadEntryType(TitleScreenEntryType(it.id)) }.associateBy(TitleScreenEntryType::id)
     }
