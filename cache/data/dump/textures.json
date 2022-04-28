@@ -1,0 +1,942 @@
+[
+    {
+        "id": 0,
+        "averageRGB": 5654,
+        "field2206": true,
+        "textureIds": [
+            447
+        ],
+        "animationDirection": 0,
+        "animationSpeed": 0
+    },
+    {
+        "id": 1,
+        "averageRGB": 40269,
+        "field2206": true,
+        "textureIds": [
+            448
+        ],
+        "animationDirection": 0,
+        "animationSpeed": 0
+    },
+    {
+        "id": 2,
+        "averageRGB": 6183,
+        "field2206": true,
+        "textureIds": [
+            449
+        ],
+        "animationDirection": 0,
+        "animationSpeed": 0
+    },
+    {
+        "id": 3,
+        "averageRGB": 4636,
+        "field2206": true,
+        "textureIds": [
+            450
+        ],
+        "animationDirection": 0,
+        "animationSpeed": 0
+    },
+    {
+        "id": 4,
+        "averageRGB": 6678,
+        "field2206": true,
+        "textureIds": [
+            451
+        ],
+        "animationDirection": 0,
+        "animationSpeed": 0
+    },
+    {
+        "id": 5,
+        "averageRGB": 6024,
+        "field2206": true,
+        "textureIds": [
+            452
+        ],
+        "animationDirection": 0,
+        "animationSpeed": 0
+    },
+    {
+        "id": 6,
+        "averageRGB": 2473,
+        "field2206": true,
+        "textureIds": [
+            453
+        ],
+        "animationDirection": 0,
+        "animationSpeed": 0
+    },
+    {
+        "id": 7,
+        "averageRGB": 7057,
+        "field2206": false,
+        "textureIds": [
+            454
+        ],
+        "animationDirection": 0,
+        "animationSpeed": 0
+    },
+    {
+        "id": 8,
+        "averageRGB": 12818,
+        "field2206": false,
+        "textureIds": [
+            455
+        ],
+        "animationDirection": 0,
+        "animationSpeed": 0
+    },
+    {
+        "id": 9,
+        "averageRGB": 5927,
+        "field2206": false,
+        "textureIds": [
+            456
+        ],
+        "animationDirection": 0,
+        "animationSpeed": 0
+    },
+    {
+        "id": 10,
+        "averageRGB": 8233,
+        "field2206": true,
+        "textureIds": [
+            530
+        ],
+        "animationDirection": 0,
+        "animationSpeed": 0
+    },
+    {
+        "id": 11,
+        "averageRGB": 5155,
+        "field2206": true,
+        "textureIds": [
+            457
+        ],
+        "animationDirection": 0,
+        "animationSpeed": 0
+    },
+    {
+        "id": 12,
+        "averageRGB": 18,
+        "field2206": false,
+        "textureIds": [
+            458
+        ],
+        "animationDirection": 0,
+        "animationSpeed": 0
+    },
+    {
+        "id": 13,
+        "averageRGB": 32847,
+        "field2206": true,
+        "textureIds": [
+            459
+        ],
+        "animationDirection": 0,
+        "animationSpeed": 0
+    },
+    {
+        "id": 14,
+        "averageRGB": 5295,
+        "field2206": true,
+        "textureIds": [
+            460
+        ],
+        "animationDirection": 0,
+        "animationSpeed": 0
+    },
+    {
+        "id": 15,
+        "averageRGB": 47161,
+        "field2206": true,
+        "textureIds": [
+            461
+        ],
+        "animationDirection": 0,
+        "animationSpeed": 0
+    },
+    {
+        "id": 16,
+        "averageRGB": 6934,
+        "field2206": true,
+        "textureIds": [
+            462
+        ],
+        "animationDirection": 0,
+        "animationSpeed": 0
+    },
+    {
+        "id": 17,
+        "averageRGB": 39640,
+        "field2206": false,
+        "textureIds": [
+            463
+        ],
+        "animationDirection": 1,
+        "animationSpeed": 2
+    },
+    {
+        "id": 18,
+        "averageRGB": 9534,
+        "field2206": true,
+        "textureIds": [
+            464
+        ],
+        "animationDirection": 0,
+        "animationSpeed": 0
+    },
+    {
+        "id": 19,
+        "averageRGB": 5405,
+        "field2206": false,
+        "textureIds": [
+            465
+        ],
+        "animationDirection": 0,
+        "animationSpeed": 0
+    },
+    {
+        "id": 20,
+        "averageRGB": 5662,
+        "field2206": true,
+        "textureIds": [
+            466
+        ],
+        "animationDirection": 0,
+        "animationSpeed": 0
+    },
+    {
+        "id": 21,
+        "averageRGB": 6673,
+        "field2206": false,
+        "textureIds": [
+            467
+        ],
+        "animationDirection": 0,
+        "animationSpeed": 0
+    },
+    {
+        "id": 22,
+        "averageRGB": 4512,
+        "field2206": true,
+        "textureIds": [
+            468
+        ],
+        "animationDirection": 0,
+        "animationSpeed": 0
+    },
+    {
+        "id": 23,
+        "averageRGB": 7446,
+        "field2206": true,
+        "textureIds": [
+            469
+        ],
+        "animationDirection": 0,
+        "animationSpeed": 0
+    },
+    {
+        "id": 24,
+        "averageRGB": 40269,
+        "field2206": true,
+        "textureIds": [
+            531
+        ],
+        "animationDirection": 1,
+        "animationSpeed": 2
+    },
+    {
+        "id": 25,
+        "averageRGB": 29101,
+        "field2206": true,
+        "textureIds": [
+            470
+        ],
+        "animationDirection": 0,
+        "animationSpeed": 0
+    },
+    {
+        "id": 26,
+        "averageRGB": 81,
+        "field2206": false,
+        "textureIds": [
+            471
+        ],
+        "animationDirection": 0,
+        "animationSpeed": 0
+    },
+    {
+        "id": 27,
+        "averageRGB": 5648,
+        "field2206": true,
+        "textureIds": [
+            472
+        ],
+        "animationDirection": 0,
+        "animationSpeed": 0
+    },
+    {
+        "id": 28,
+        "averageRGB": 21534,
+        "field2206": false,
+        "textureIds": [
+            473
+        ],
+        "animationDirection": 0,
+        "animationSpeed": 0
+    },
+    {
+        "id": 29,
+        "averageRGB": 13862,
+        "field2206": false,
+        "textureIds": [
+            474
+        ],
+        "animationDirection": 0,
+        "animationSpeed": 0
+    },
+    {
+        "id": 30,
+        "averageRGB": 12698,
+        "field2206": false,
+        "textureIds": [
+            475
+        ],
+        "animationDirection": 0,
+        "animationSpeed": 0
+    },
+    {
+        "id": 31,
+        "averageRGB": 6089,
+        "field2206": true,
+        "textureIds": [
+            476
+        ],
+        "animationDirection": 0,
+        "animationSpeed": 0
+    },
+    {
+        "id": 32,
+        "averageRGB": 5541,
+        "field2206": true,
+        "textureIds": [
+            477
+        ],
+        "animationDirection": 0,
+        "animationSpeed": 0
+    },
+    {
+        "id": 33,
+        "averageRGB": 5009,
+        "field2206": false,
+        "textureIds": [
+            478
+        ],
+        "animationDirection": 0,
+        "animationSpeed": 0
+    },
+    {
+        "id": 34,
+        "averageRGB": 9443,
+        "field2206": false,
+        "textureIds": [
+            479
+        ],
+        "animationDirection": 1,
+        "animationSpeed": 2
+    },
+    {
+        "id": 35,
+        "averageRGB": 7484,
+        "field2206": true,
+        "textureIds": [
+            480
+        ],
+        "animationDirection": 0,
+        "animationSpeed": 0
+    },
+    {
+        "id": 36,
+        "averageRGB": 3733,
+        "field2206": true,
+        "textureIds": [
+            481
+        ],
+        "animationDirection": 0,
+        "animationSpeed": 0
+    },
+    {
+        "id": 37,
+        "averageRGB": 32,
+        "field2206": true,
+        "textureIds": [
+            482
+        ],
+        "animationDirection": 0,
+        "animationSpeed": 0
+    },
+    {
+        "id": 38,
+        "averageRGB": 6740,
+        "field2206": true,
+        "textureIds": [
+            483
+        ],
+        "animationDirection": 0,
+        "animationSpeed": 0
+    },
+    {
+        "id": 39,
+        "averageRGB": 13482,
+        "field2206": true,
+        "textureIds": [
+            484
+        ],
+        "animationDirection": 0,
+        "animationSpeed": 0
+    },
+    {
+        "id": 40,
+        "averageRGB": 6089,
+        "field2206": true,
+        "textureIds": [
+            485
+        ],
+        "animationDirection": 1,
+        "animationSpeed": 2
+    },
+    {
+        "id": 41,
+        "averageRGB": 10128,
+        "field2206": false,
+        "textureIds": [
+            486
+        ],
+        "animationDirection": 0,
+        "animationSpeed": 0
+    },
+    {
+        "id": 42,
+        "averageRGB": 8295,
+        "field2206": true,
+        "textureIds": [
+            532
+        ],
+        "animationDirection": 0,
+        "animationSpeed": 0
+    },
+    {
+        "id": 43,
+        "averageRGB": 10290,
+        "field2206": true,
+        "textureIds": [
+            487
+        ],
+        "animationDirection": 0,
+        "animationSpeed": 0
+    },
+    {
+        "id": 44,
+        "averageRGB": 41,
+        "field2206": true,
+        "textureIds": [
+            488
+        ],
+        "animationDirection": 0,
+        "animationSpeed": 0
+    },
+    {
+        "id": 45,
+        "averageRGB": 9256,
+        "field2206": true,
+        "textureIds": [
+            533
+        ],
+        "animationDirection": 0,
+        "animationSpeed": 0
+    },
+    {
+        "id": 46,
+        "averageRGB": 3119,
+        "field2206": true,
+        "textureIds": [
+            490
+        ],
+        "animationDirection": 0,
+        "animationSpeed": 0
+    },
+    {
+        "id": 47,
+        "averageRGB": 8403,
+        "field2206": true,
+        "textureIds": [
+            491
+        ],
+        "animationDirection": 0,
+        "animationSpeed": 0
+    },
+    {
+        "id": 48,
+        "averageRGB": 6434,
+        "field2206": true,
+        "textureIds": [
+            492
+        ],
+        "animationDirection": 0,
+        "animationSpeed": 0
+    },
+    {
+        "id": 49,
+        "averageRGB": 5592,
+        "field2206": true,
+        "textureIds": [
+            493
+        ],
+        "animationDirection": 0,
+        "animationSpeed": 0
+    },
+    {
+        "id": 50,
+        "averageRGB": 9380,
+        "field2206": true,
+        "textureIds": [
+            643
+        ],
+        "animationDirection": 0,
+        "animationSpeed": 0
+    },
+    {
+        "id": 51,
+        "averageRGB": 5679,
+        "field2206": true,
+        "textureIds": [
+            644
+        ],
+        "animationDirection": 0,
+        "animationSpeed": 0
+    },
+    {
+        "id": 52,
+        "averageRGB": 41072,
+        "field2206": false,
+        "textureIds": [
+            763
+        ],
+        "animationDirection": 0,
+        "animationSpeed": 0
+    },
+    {
+        "id": 53,
+        "averageRGB": 35049,
+        "field2206": true,
+        "textureIds": [
+            861
+        ],
+        "animationDirection": 0,
+        "animationSpeed": 0
+    },
+    {
+        "id": 55,
+        "averageRGB": 14483,
+        "field2206": true,
+        "textureIds": [
+            866
+        ],
+        "animationDirection": 0,
+        "animationSpeed": 0
+    },
+    {
+        "id": 56,
+        "averageRGB": 709,
+        "field2206": true,
+        "textureIds": [
+            1075
+        ],
+        "animationDirection": 1,
+        "animationSpeed": 2
+    },
+    {
+        "id": 57,
+        "averageRGB": 108,
+        "field2206": true,
+        "textureIds": [
+            1076
+        ],
+        "animationDirection": 1,
+        "animationSpeed": 2
+    },
+    {
+        "id": 58,
+        "averageRGB": 3747,
+        "field2206": false,
+        "textureIds": [
+            1396
+        ],
+        "animationDirection": 0,
+        "animationSpeed": 0
+    },
+    {
+        "id": 59,
+        "averageRGB": 3875,
+        "field2206": true,
+        "textureIds": [
+            318
+        ],
+        "animationDirection": 1,
+        "animationSpeed": 1
+    },
+    {
+        "id": 60,
+        "averageRGB": 12818,
+        "field2206": false,
+        "textureIds": [
+            1648
+        ],
+        "animationDirection": 0,
+        "animationSpeed": 0
+    },
+    {
+        "id": 61,
+        "averageRGB": 43086,
+        "field2206": false,
+        "textureIds": [
+            3024
+        ],
+        "animationDirection": 0,
+        "animationSpeed": 0
+    },
+    {
+        "id": 62,
+        "averageRGB": 73,
+        "field2206": false,
+        "textureIds": [
+            3025
+        ],
+        "animationDirection": 0,
+        "animationSpeed": 0
+    },
+    {
+        "id": 63,
+        "averageRGB": 58,
+        "field2206": false,
+        "textureIds": [
+            3026
+        ],
+        "animationDirection": 0,
+        "animationSpeed": 0
+    },
+    {
+        "id": 64,
+        "averageRGB": 61,
+        "field2206": false,
+        "textureIds": [
+            3027
+        ],
+        "animationDirection": 0,
+        "animationSpeed": 0
+    },
+    {
+        "id": 65,
+        "averageRGB": 55339,
+        "field2206": false,
+        "textureIds": [
+            3028
+        ],
+        "animationDirection": 0,
+        "animationSpeed": 0
+    },
+    {
+        "id": 66,
+        "averageRGB": 55350,
+        "field2206": false,
+        "textureIds": [
+            3029
+        ],
+        "animationDirection": 0,
+        "animationSpeed": 0
+    },
+    {
+        "id": 67,
+        "averageRGB": 61,
+        "field2206": false,
+        "textureIds": [
+            3030
+        ],
+        "animationDirection": 0,
+        "animationSpeed": 0
+    },
+    {
+        "id": 68,
+        "averageRGB": 45,
+        "field2206": false,
+        "textureIds": [
+            3031
+        ],
+        "animationDirection": 0,
+        "animationSpeed": 0
+    },
+    {
+        "id": 69,
+        "averageRGB": 43048,
+        "field2206": false,
+        "textureIds": [
+            3032
+        ],
+        "animationDirection": 0,
+        "animationSpeed": 0
+    },
+    {
+        "id": 70,
+        "averageRGB": 43038,
+        "field2206": false,
+        "textureIds": [
+            3033
+        ],
+        "animationDirection": 0,
+        "animationSpeed": 0
+    },
+    {
+        "id": 71,
+        "averageRGB": 66,
+        "field2206": false,
+        "textureIds": [
+            3034
+        ],
+        "animationDirection": 0,
+        "animationSpeed": 0
+    },
+    {
+        "id": 72,
+        "averageRGB": 43017,
+        "field2206": false,
+        "textureIds": [
+            3035
+        ],
+        "animationDirection": 0,
+        "animationSpeed": 0
+    },
+    {
+        "id": 73,
+        "averageRGB": 63,
+        "field2206": false,
+        "textureIds": [
+            3036
+        ],
+        "animationDirection": 0,
+        "animationSpeed": 0
+    },
+    {
+        "id": 74,
+        "averageRGB": 36,
+        "field2206": false,
+        "textureIds": [
+            3037
+        ],
+        "animationDirection": 0,
+        "animationSpeed": 0
+    },
+    {
+        "id": 75,
+        "averageRGB": 41,
+        "field2206": false,
+        "textureIds": [
+            3038
+        ],
+        "animationDirection": 0,
+        "animationSpeed": 0
+    },
+    {
+        "id": 76,
+        "averageRGB": 55337,
+        "field2206": false,
+        "textureIds": [
+            3039
+        ],
+        "animationDirection": 0,
+        "animationSpeed": 0
+    },
+    {
+        "id": 77,
+        "averageRGB": 54,
+        "field2206": false,
+        "textureIds": [
+            3040
+        ],
+        "animationDirection": 0,
+        "animationSpeed": 0
+    },
+    {
+        "id": 78,
+        "averageRGB": 61,
+        "field2206": false,
+        "textureIds": [
+            3041
+        ],
+        "animationDirection": 0,
+        "animationSpeed": 0
+    },
+    {
+        "id": 79,
+        "averageRGB": 55355,
+        "field2206": false,
+        "textureIds": [
+            3042
+        ],
+        "animationDirection": 0,
+        "animationSpeed": 0
+    },
+    {
+        "id": 80,
+        "averageRGB": 32781,
+        "field2206": false,
+        "textureIds": [
+            3043
+        ],
+        "animationDirection": 0,
+        "animationSpeed": 0
+    },
+    {
+        "id": 81,
+        "averageRGB": 50,
+        "field2206": false,
+        "textureIds": [
+            3044
+        ],
+        "animationDirection": 0,
+        "animationSpeed": 0
+    },
+    {
+        "id": 82,
+        "averageRGB": 57,
+        "field2206": false,
+        "textureIds": [
+            3045
+        ],
+        "animationDirection": 0,
+        "animationSpeed": 0
+    },
+    {
+        "id": 83,
+        "averageRGB": 70,
+        "field2206": false,
+        "textureIds": [
+            3046
+        ],
+        "animationDirection": 0,
+        "animationSpeed": 0
+    },
+    {
+        "id": 84,
+        "averageRGB": 43066,
+        "field2206": false,
+        "textureIds": [
+            3047
+        ],
+        "animationDirection": 0,
+        "animationSpeed": 0
+    },
+    {
+        "id": 85,
+        "averageRGB": 55346,
+        "field2206": false,
+        "textureIds": [
+            3048
+        ],
+        "animationDirection": 0,
+        "animationSpeed": 0
+    },
+    {
+        "id": 86,
+        "averageRGB": 55342,
+        "field2206": false,
+        "textureIds": [
+            3049
+        ],
+        "animationDirection": 0,
+        "animationSpeed": 0
+    },
+    {
+        "id": 87,
+        "averageRGB": 51,
+        "field2206": false,
+        "textureIds": [
+            3050
+        ],
+        "animationDirection": 0,
+        "animationSpeed": 0
+    },
+    {
+        "id": 88,
+        "averageRGB": 42,
+        "field2206": false,
+        "textureIds": [
+            3023
+        ],
+        "animationDirection": 0,
+        "animationSpeed": 0
+    },
+    {
+        "id": 89,
+        "averageRGB": 14482,
+        "field2206": false,
+        "textureIds": [
+            3364
+        ],
+        "animationDirection": 0,
+        "animationSpeed": 0
+    },
+    {
+        "id": 90,
+        "averageRGB": 14482,
+        "field2206": false,
+        "textureIds": [
+            3365
+        ],
+        "animationDirection": 0,
+        "animationSpeed": 0
+    },
+    {
+        "id": 91,
+        "averageRGB": 38002,
+        "field2206": true,
+        "textureIds": [
+            3523
+        ],
+        "animationDirection": 0,
+        "animationSpeed": 0
+    },
+    {
+        "id": 92,
+        "averageRGB": 49262,
+        "field2206": true,
+        "textureIds": [
+            3601
+        ],
+        "animationDirection": 0,
+        "animationSpeed": 0
+    },
+    {
+        "id": 93,
+        "averageRGB": 120,
+        "field2206": true,
+        "textureIds": [
+            3602
+        ],
+        "animationDirection": 0,
+        "animationSpeed": 0
+    },
+    {
+        "id": 94,
+        "averageRGB": 4133,
+        "field2206": true,
+        "textureIds": [
+            3603
+        ],
+        "animationDirection": 0,
+        "animationSpeed": 0
+    }
+]

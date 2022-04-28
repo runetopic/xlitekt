@@ -11,4 +11,3 @@ main_file_cache.*
 /application/src/main/resources/client_config/browsercontrol_0.jar
 /application/src/main/resources/client_config/browsercontrol_1.jar
 /application/src/main/resources/client_config/gamepack.jar
-/cache/data/dump/*

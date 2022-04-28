@@ -1,0 +1,1838 @@
+[
+    {
+        "id": 0,
+        "bodyPartId": 0,
+        "models": [
+            63,
+            -1,
+            -1,
+            -1,
+            -1
+        ],
+        "nonSelectable": false
+    },
+    {
+        "id": 1,
+        "bodyPartId": 0,
+        "models": [
+            49,
+            -1,
+            -1,
+            -1,
+            -1
+        ],
+        "nonSelectable": false
+    },
+    {
+        "id": 2,
+        "bodyPartId": 0,
+        "models": [
+            52,
+            -1,
+            -1,
+            -1,
+            -1
+        ],
+        "nonSelectable": false
+    },
+    {
+        "id": 3,
+        "bodyPartId": 0,
+        "models": [
+            55,
+            -1,
+            -1,
+            -1,
+            -1
+        ],
+        "nonSelectable": false
+    },
+    {
+        "id": 4,
+        "bodyPartId": 0,
+        "models": [
+            59,
+            -1,
+            -1,
+            -1,
+            -1
+        ],
+        "nonSelectable": false
+    },
+    {
+        "id": 5,
+        "bodyPartId": 0,
+        "models": [
+            53,
+            -1,
+            -1,
+            -1,
+            -1
+        ],
+        "nonSelectable": false
+    },
+    {
+        "id": 6,
+        "bodyPartId": 0,
+        "models": [
+            67,
+            -1,
+            -1,
+            -1,
+            -1
+        ],
+        "nonSelectable": false
+    },
+    {
+        "id": 7,
+        "bodyPartId": 0,
+        "models": [
+            46,
+            -1,
+            -1,
+            -1,
+            -1
+        ],
+        "nonSelectable": false
+    },
+    {
+        "id": 8,
+        "bodyPartId": 0,
+        "models": [
+            45,
+            -1,
+            -1,
+            -1,
+            -1
+        ],
+        "nonSelectable": false
+    },
+    {
+        "id": 9,
+        "bodyPartId": 0,
+        "models": [
+            28386,
+            -1,
+            -1,
+            -1,
+            -1
+        ],
+        "nonSelectable": false
+    },
+    {
+        "id": 10,
+        "bodyPartId": 1,
+        "models": [
+            81,
+            -1,
+            -1,
+            -1,
+            -1
+        ],
+        "nonSelectable": false
+    },
+    {
+        "id": 11,
+        "bodyPartId": 1,
+        "models": [
+            82,
+            -1,
+            -1,
+            -1,
+            -1
+        ],
+        "nonSelectable": false
+    },
+    {
+        "id": 12,
+        "bodyPartId": 1,
+        "models": [
+            83,
+            -1,
+            -1,
+            -1,
+            -1
+        ],
+        "nonSelectable": false
+    },
+    {
+        "id": 13,
+        "bodyPartId": 1,
+        "models": [
+            79,
+            -1,
+            -1,
+            -1,
+            -1
+        ],
+        "nonSelectable": false
+    },
+    {
+        "id": 14,
+        "bodyPartId": 1,
+        "models": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+        ],
+        "nonSelectable": false
+    },
+    {
+        "id": 15,
+        "bodyPartId": 1,
+        "models": [
+            80,
+            -1,
+            -1,
+            -1,
+            -1
+        ],
+        "nonSelectable": false
+    },
+    {
+        "id": 16,
+        "bodyPartId": 1,
+        "models": [
+            85,
+            -1,
+            -1,
+            -1,
+            -1
+        ],
+        "nonSelectable": false
+    },
+    {
+        "id": 17,
+        "bodyPartId": 1,
+        "models": [
+            84,
+            -1,
+            -1,
+            -1,
+            -1
+        ],
+        "nonSelectable": false
+    },
+    {
+        "id": 18,
+        "bodyPartId": 2,
+        "models": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+        ],
+        "nonSelectable": false
+    },
+    {
+        "id": 19,
+        "bodyPartId": 2,
+        "models": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+        ],
+        "nonSelectable": false
+    },
+    {
+        "id": 20,
+        "bodyPartId": 2,
+        "models": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+        ],
+        "nonSelectable": false
+    },
+    {
+        "id": 21,
+        "bodyPartId": 2,
+        "models": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+        ],
+        "nonSelectable": false
+    },
+    {
+        "id": 22,
+        "bodyPartId": 2,
+        "models": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+        ],
+        "nonSelectable": false
+    },
+    {
+        "id": 23,
+        "bodyPartId": 2,
+        "models": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+        ],
+        "nonSelectable": false
+    },
+    {
+        "id": 24,
+        "bodyPartId": 2,
+        "models": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+        ],
+        "nonSelectable": false
+    },
+    {
+        "id": 25,
+        "bodyPartId": 2,
+        "models": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+        ],
+        "nonSelectable": false
+    },
+    {
+        "id": 26,
+        "bodyPartId": 3,
+        "models": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+        ],
+        "nonSelectable": false
+    },
+    {
+        "id": 27,
+        "bodyPartId": 3,
+        "models": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+        ],
+        "nonSelectable": false
+    },
+    {
+        "id": 28,
+        "bodyPartId": 3,
+        "models": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+        ],
+        "nonSelectable": false
+    },
+    {
+        "id": 29,
+        "bodyPartId": 3,
+        "models": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+        ],
+        "nonSelectable": false
+    },
+    {
+        "id": 30,
+        "bodyPartId": 3,
+        "models": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+        ],
+        "nonSelectable": false
+    },
+    {
+        "id": 31,
+        "bodyPartId": 3,
+        "models": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+        ],
+        "nonSelectable": false
+    },
+    {
+        "id": 32,
+        "bodyPartId": 3,
+        "models": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+        ],
+        "nonSelectable": false
+    },
+    {
+        "id": 33,
+        "bodyPartId": 4,
+        "models": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+        ],
+        "nonSelectable": false
+    },
+    {
+        "id": 34,
+        "bodyPartId": 4,
+        "models": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+        ],
+        "nonSelectable": false
+    },
+    {
+        "id": 35,
+        "bodyPartId": 4,
+        "models": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+        ],
+        "nonSelectable": true
+    },
+    {
+        "id": 36,
+        "bodyPartId": 5,
+        "models": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+        ],
+        "nonSelectable": false
+    },
+    {
+        "id": 37,
+        "bodyPartId": 5,
+        "models": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+        ],
+        "nonSelectable": false
+    },
+    {
+        "id": 38,
+        "bodyPartId": 5,
+        "models": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+        ],
+        "nonSelectable": false
+    },
+    {
+        "id": 39,
+        "bodyPartId": 5,
+        "models": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+        ],
+        "nonSelectable": false
+    },
+    {
+        "id": 40,
+        "bodyPartId": 5,
+        "models": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+        ],
+        "nonSelectable": false
+    },
+    {
+        "id": 41,
+        "bodyPartId": 5,
+        "models": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+        ],
+        "nonSelectable": false
+    },
+    {
+        "id": 42,
+        "bodyPartId": 6,
+        "models": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+        ],
+        "nonSelectable": false
+    },
+    {
+        "id": 43,
+        "bodyPartId": 6,
+        "models": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+        ],
+        "nonSelectable": false
+    },
+    {
+        "id": 44,
+        "bodyPartId": 6,
+        "models": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+        ],
+        "nonSelectable": true
+    },
+    {
+        "id": 45,
+        "bodyPartId": 7,
+        "models": [
+            120,
+            -1,
+            -1,
+            -1,
+            -1
+        ],
+        "nonSelectable": false
+    },
+    {
+        "id": 46,
+        "bodyPartId": 7,
+        "models": [
+            103,
+            -1,
+            -1,
+            -1,
+            -1
+        ],
+        "nonSelectable": false
+    },
+    {
+        "id": 47,
+        "bodyPartId": 7,
+        "models": [
+            110,
+            -1,
+            -1,
+            -1,
+            -1
+        ],
+        "nonSelectable": false
+    },
+    {
+        "id": 48,
+        "bodyPartId": 7,
+        "models": [
+            113,
+            -1,
+            -1,
+            -1,
+            -1
+        ],
+        "nonSelectable": false
+    },
+    {
+        "id": 49,
+        "bodyPartId": 7,
+        "models": [
+            115,
+            -1,
+            -1,
+            -1,
+            -1
+        ],
+        "nonSelectable": false
+    },
+    {
+        "id": 50,
+        "bodyPartId": 7,
+        "models": [
+            118,
+            -1,
+            -1,
+            -1,
+            -1
+        ],
+        "nonSelectable": false
+    },
+    {
+        "id": 51,
+        "bodyPartId": 7,
+        "models": [
+            114,
+            -1,
+            -1,
+            -1,
+            -1
+        ],
+        "nonSelectable": false
+    },
+    {
+        "id": 52,
+        "bodyPartId": 7,
+        "models": [
+            125,
+            -1,
+            -1,
+            -1,
+            -1
+        ],
+        "nonSelectable": false
+    },
+    {
+        "id": 53,
+        "bodyPartId": 7,
+        "models": [
+            105,
+            -1,
+            -1,
+            -1,
+            -1
+        ],
+        "nonSelectable": false
+    },
+    {
+        "id": 54,
+        "bodyPartId": 7,
+        "models": [
+            104,
+            -1,
+            -1,
+            -1,
+            -1
+        ],
+        "nonSelectable": false
+    },
+    {
+        "id": 55,
+        "bodyPartId": 7,
+        "models": [
+            28402,
+            -1,
+            -1,
+            -1,
+            -1
+        ],
+        "nonSelectable": false
+    },
+    {
+        "id": 56,
+        "bodyPartId": 9,
+        "models": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+        ],
+        "nonSelectable": false
+    },
+    {
+        "id": 57,
+        "bodyPartId": 9,
+        "models": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+        ],
+        "nonSelectable": false
+    },
+    {
+        "id": 58,
+        "bodyPartId": 9,
+        "models": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+        ],
+        "nonSelectable": false
+    },
+    {
+        "id": 59,
+        "bodyPartId": 9,
+        "models": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+        ],
+        "nonSelectable": false
+    },
+    {
+        "id": 60,
+        "bodyPartId": 9,
+        "models": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+        ],
+        "nonSelectable": false
+    },
+    {
+        "id": 61,
+        "bodyPartId": 10,
+        "models": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+        ],
+        "nonSelectable": false
+    },
+    {
+        "id": 62,
+        "bodyPartId": 10,
+        "models": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+        ],
+        "nonSelectable": false
+    },
+    {
+        "id": 63,
+        "bodyPartId": 10,
+        "models": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+        ],
+        "nonSelectable": false
+    },
+    {
+        "id": 64,
+        "bodyPartId": 10,
+        "models": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+        ],
+        "nonSelectable": false
+    },
+    {
+        "id": 65,
+        "bodyPartId": 10,
+        "models": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+        ],
+        "nonSelectable": false
+    },
+    {
+        "id": 66,
+        "bodyPartId": 10,
+        "models": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+        ],
+        "nonSelectable": false
+    },
+    {
+        "id": 67,
+        "bodyPartId": 11,
+        "models": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+        ],
+        "nonSelectable": false
+    },
+    {
+        "id": 68,
+        "bodyPartId": 11,
+        "models": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+        ],
+        "nonSelectable": false
+    },
+    {
+        "id": 69,
+        "bodyPartId": 11,
+        "models": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+        ],
+        "nonSelectable": true
+    },
+    {
+        "id": 70,
+        "bodyPartId": 12,
+        "models": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+        ],
+        "nonSelectable": false
+    },
+    {
+        "id": 71,
+        "bodyPartId": 12,
+        "models": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+        ],
+        "nonSelectable": false
+    },
+    {
+        "id": 72,
+        "bodyPartId": 12,
+        "models": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+        ],
+        "nonSelectable": false
+    },
+    {
+        "id": 73,
+        "bodyPartId": 12,
+        "models": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+        ],
+        "nonSelectable": false
+    },
+    {
+        "id": 74,
+        "bodyPartId": 12,
+        "models": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+        ],
+        "nonSelectable": false
+    },
+    {
+        "id": 75,
+        "bodyPartId": 12,
+        "models": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+        ],
+        "nonSelectable": false
+    },
+    {
+        "id": 76,
+        "bodyPartId": 12,
+        "models": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+        ],
+        "nonSelectable": false
+    },
+    {
+        "id": 77,
+        "bodyPartId": 12,
+        "models": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+        ],
+        "nonSelectable": false
+    },
+    {
+        "id": 78,
+        "bodyPartId": 12,
+        "models": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+        ],
+        "nonSelectable": false
+    },
+    {
+        "id": 79,
+        "bodyPartId": 13,
+        "models": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+        ],
+        "nonSelectable": false
+    },
+    {
+        "id": 80,
+        "bodyPartId": 13,
+        "models": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+        ],
+        "nonSelectable": false
+    },
+    {
+        "id": 81,
+        "bodyPartId": 13,
+        "models": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+        ],
+        "nonSelectable": true
+    },
+    {
+        "id": 82,
+        "bodyPartId": 6,
+        "models": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+        ],
+        "nonSelectable": true
+    },
+    {
+        "id": 83,
+        "bodyPartId": 13,
+        "models": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+        ],
+        "nonSelectable": true
+    },
+    {
+        "id": 84,
+        "bodyPartId": 3,
+        "models": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+        ],
+        "nonSelectable": false
+    },
+    {
+        "id": 85,
+        "bodyPartId": 3,
+        "models": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+        ],
+        "nonSelectable": false
+    },
+    {
+        "id": 86,
+        "bodyPartId": 3,
+        "models": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+        ],
+        "nonSelectable": false
+    },
+    {
+        "id": 87,
+        "bodyPartId": 3,
+        "models": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+        ],
+        "nonSelectable": false
+    },
+    {
+        "id": 88,
+        "bodyPartId": 3,
+        "models": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+        ],
+        "nonSelectable": false
+    },
+    {
+        "id": 89,
+        "bodyPartId": 9,
+        "models": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+        ],
+        "nonSelectable": false
+    },
+    {
+        "id": 90,
+        "bodyPartId": 9,
+        "models": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+        ],
+        "nonSelectable": false
+    },
+    {
+        "id": 91,
+        "bodyPartId": 9,
+        "models": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+        ],
+        "nonSelectable": false
+    },
+    {
+        "id": 92,
+        "bodyPartId": 9,
+        "models": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+        ],
+        "nonSelectable": false
+    },
+    {
+        "id": 93,
+        "bodyPartId": 9,
+        "models": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+        ],
+        "nonSelectable": false
+    },
+    {
+        "id": 94,
+        "bodyPartId": 9,
+        "models": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+        ],
+        "nonSelectable": false
+    },
+    {
+        "id": 95,
+        "bodyPartId": 10,
+        "models": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+        ],
+        "nonSelectable": false
+    },
+    {
+        "id": 96,
+        "bodyPartId": 10,
+        "models": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+        ],
+        "nonSelectable": false
+    },
+    {
+        "id": 97,
+        "bodyPartId": 10,
+        "models": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+        ],
+        "nonSelectable": false
+    },
+    {
+        "id": 98,
+        "bodyPartId": 10,
+        "models": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+        ],
+        "nonSelectable": false
+    },
+    {
+        "id": 99,
+        "bodyPartId": 10,
+        "models": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+        ],
+        "nonSelectable": false
+    },
+    {
+        "id": 100,
+        "bodyPartId": 5,
+        "models": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+        ],
+        "nonSelectable": false
+    },
+    {
+        "id": 101,
+        "bodyPartId": 5,
+        "models": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+        ],
+        "nonSelectable": false
+    },
+    {
+        "id": 102,
+        "bodyPartId": 5,
+        "models": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+        ],
+        "nonSelectable": false
+    },
+    {
+        "id": 103,
+        "bodyPartId": 5,
+        "models": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+        ],
+        "nonSelectable": false
+    },
+    {
+        "id": 104,
+        "bodyPartId": 5,
+        "models": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+        ],
+        "nonSelectable": false
+    },
+    {
+        "id": 105,
+        "bodyPartId": 2,
+        "models": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+        ],
+        "nonSelectable": false
+    },
+    {
+        "id": 106,
+        "bodyPartId": 2,
+        "models": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+        ],
+        "nonSelectable": false
+    },
+    {
+        "id": 107,
+        "bodyPartId": 2,
+        "models": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+        ],
+        "nonSelectable": false
+    },
+    {
+        "id": 108,
+        "bodyPartId": 2,
+        "models": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+        ],
+        "nonSelectable": false
+    },
+    {
+        "id": 109,
+        "bodyPartId": 2,
+        "models": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+        ],
+        "nonSelectable": false
+    },
+    {
+        "id": 110,
+        "bodyPartId": 2,
+        "models": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+        ],
+        "nonSelectable": false
+    },
+    {
+        "id": 111,
+        "bodyPartId": 1,
+        "models": [
+            28392,
+            -1,
+            -1,
+            -1,
+            -1
+        ],
+        "nonSelectable": false
+    },
+    {
+        "id": 112,
+        "bodyPartId": 1,
+        "models": [
+            28390,
+            -1,
+            -1,
+            -1,
+            -1
+        ],
+        "nonSelectable": false
+    },
+    {
+        "id": 113,
+        "bodyPartId": 1,
+        "models": [
+            28395,
+            -1,
+            -1,
+            -1,
+            -1
+        ],
+        "nonSelectable": false
+    },
+    {
+        "id": 114,
+        "bodyPartId": 1,
+        "models": [
+            28396,
+            -1,
+            -1,
+            -1,
+            -1
+        ],
+        "nonSelectable": false
+    },
+    {
+        "id": 115,
+        "bodyPartId": 1,
+        "models": [
+            28391,
+            -1,
+            -1,
+            -1,
+            -1
+        ],
+        "nonSelectable": false
+    },
+    {
+        "id": 116,
+        "bodyPartId": 1,
+        "models": [
+            28401,
+            -1,
+            -1,
+            -1,
+            -1
+        ],
+        "nonSelectable": false
+    },
+    {
+        "id": 117,
+        "bodyPartId": 1,
+        "models": [
+            28389,
+            -1,
+            -1,
+            -1,
+            -1
+        ],
+        "nonSelectable": false
+    },
+    {
+        "id": 118,
+        "bodyPartId": 7,
+        "models": [
+            16446,
+            -1,
+            -1,
+            -1,
+            -1
+        ],
+        "nonSelectable": false
+    },
+    {
+        "id": 119,
+        "bodyPartId": 7,
+        "models": [
+            16441,
+            -1,
+            -1,
+            -1,
+            -1
+        ],
+        "nonSelectable": false
+    },
+    {
+        "id": 120,
+        "bodyPartId": 7,
+        "models": [
+            16448,
+            -1,
+            -1,
+            -1,
+            -1
+        ],
+        "nonSelectable": false
+    },
+    {
+        "id": 121,
+        "bodyPartId": 7,
+        "models": [
+            16470,
+            -1,
+            -1,
+            -1,
+            -1
+        ],
+        "nonSelectable": false
+    },
+    {
+        "id": 122,
+        "bodyPartId": 7,
+        "models": [
+            28406,
+            -1,
+            -1,
+            -1,
+            -1
+        ],
+        "nonSelectable": false
+    },
+    {
+        "id": 123,
+        "bodyPartId": 7,
+        "models": [
+            16439,
+            -1,
+            -1,
+            -1,
+            -1
+        ],
+        "nonSelectable": false
+    },
+    {
+        "id": 124,
+        "bodyPartId": 7,
+        "models": [
+            28416,
+            -1,
+            -1,
+            -1,
+            -1
+        ],
+        "nonSelectable": false
+    },
+    {
+        "id": 125,
+        "bodyPartId": 7,
+        "models": [
+            16442,
+            -1,
+            -1,
+            -1,
+            -1
+        ],
+        "nonSelectable": false
+    },
+    {
+        "id": 126,
+        "bodyPartId": 7,
+        "models": [
+            28408,
+            -1,
+            -1,
+            -1,
+            -1
+        ],
+        "nonSelectable": false
+    },
+    {
+        "id": 127,
+        "bodyPartId": 7,
+        "models": [
+            28418,
+            -1,
+            -1,
+            -1,
+            -1
+        ],
+        "nonSelectable": false
+    },
+    {
+        "id": 128,
+        "bodyPartId": 7,
+        "models": [
+            28415,
+            -1,
+            -1,
+            -1,
+            -1
+        ],
+        "nonSelectable": false
+    },
+    {
+        "id": 129,
+        "bodyPartId": 0,
+        "models": [
+            28387,
+            -1,
+            -1,
+            -1,
+            -1
+        ],
+        "nonSelectable": false
+    },
+    {
+        "id": 130,
+        "bodyPartId": 0,
+        "models": [
+            28380,
+            -1,
+            -1,
+            -1,
+            -1
+        ],
+        "nonSelectable": false
+    },
+    {
+        "id": 131,
+        "bodyPartId": 0,
+        "models": [
+            28384,
+            -1,
+            -1,
+            -1,
+            -1
+        ],
+        "nonSelectable": false
+    },
+    {
+        "id": 132,
+        "bodyPartId": 0,
+        "models": [
+            28377,
+            -1,
+            -1,
+            -1,
+            -1
+        ],
+        "nonSelectable": false
+    },
+    {
+        "id": 133,
+        "bodyPartId": 0,
+        "models": [
+            28382,
+            -1,
+            -1,
+            -1,
+            -1
+        ],
+        "nonSelectable": false
+    },
+    {
+        "id": 134,
+        "bodyPartId": 0,
+        "models": [
+            28379,
+            -1,
+            -1,
+            -1,
+            -1
+        ],
+        "nonSelectable": false
+    },
+    {
+        "id": 135,
+        "bodyPartId": 12,
+        "models": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+        ],
+        "nonSelectable": false
+    },
+    {
+        "id": 136,
+        "bodyPartId": 12,
+        "models": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+        ],
+        "nonSelectable": false
+    },
+    {
+        "id": 137,
+        "bodyPartId": 12,
+        "models": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+        ],
+        "nonSelectable": false
+    },
+    {
+        "id": 138,
+        "bodyPartId": 12,
+        "models": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+        ],
+        "nonSelectable": false
+    },
+    {
+        "id": 139,
+        "bodyPartId": 12,
+        "models": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+        ],
+        "nonSelectable": false
+    },
+    {
+        "id": 140,
+        "bodyPartId": 12,
+        "models": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+        ],
+        "nonSelectable": false
+    },
+    {
+        "id": 141,
+        "bodyPartId": 7,
+        "models": [
+            39840,
+            -1,
+            -1,
+            -1,
+            -1
+        ],
+        "nonSelectable": false
+    },
+    {
+        "id": 142,
+        "bodyPartId": 7,
+        "models": [
+            39840,
+            -1,
+            -1,
+            -1,
+            -1
+        ],
+        "nonSelectable": false
+    },
+    {
+        "id": 143,
+        "bodyPartId": 7,
+        "models": [
+            32846,
+            -1,
+            -1,
+            -1,
+            -1
+        ],
+        "nonSelectable": false
+    },
+    {
+        "id": 144,
+        "bodyPartId": 0,
+        "models": [
+            32843,
+            -1,
+            -1,
+            -1,
+            -1
+        ],
+        "nonSelectable": false
+    },
+    {
+        "id": 145,
+        "bodyPartId": 0,
+        "models": [
+            32840,
+            -1,
+            -1,
+            -1,
+            -1
+        ],
+        "nonSelectable": false
+    },
+    {
+        "id": 146,
+        "bodyPartId": 0,
+        "models": [
+            32844,
+            -1,
+            -1,
+            -1,
+            -1
+        ],
+        "nonSelectable": false
+    },
+    {
+        "id": 147,
+        "bodyPartId": 0,
+        "models": [
+            32841,
+            -1,
+            -1,
+            -1,
+            -1
+        ],
+        "nonSelectable": false
+    },
+    {
+        "id": 148,
+        "bodyPartId": 0,
+        "models": [
+            32845,
+            -1,
+            -1,
+            -1,
+            -1
+        ],
+        "nonSelectable": false
+    },
+    {
+        "id": 149,
+        "bodyPartId": 0,
+        "models": [
+            32839,
+            -1,
+            -1,
+            -1,
+            -1
+        ],
+        "nonSelectable": false
+    },
+    {
+        "id": 150,
+        "bodyPartId": 0,
+        "models": [
+            32842,
+            -1,
+            -1,
+            -1,
+            -1
+        ],
+        "nonSelectable": false
+    },
+    {
+        "id": 151,
+        "bodyPartId": 0,
+        "models": [
+            39833,
+            -1,
+            -1,
+            -1,
+            -1
+        ],
+        "nonSelectable": false
+    },
+    {
+        "id": 152,
+        "bodyPartId": 7,
+        "models": [
+            39840,
+            -1,
+            -1,
+            -1,
+            -1
+        ],
+        "nonSelectable": false
+    }
+]

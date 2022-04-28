@@ -1,0 +1,1395 @@
+[
+    {
+        "id": 0,
+        "primaryRgb": 11184810,
+        "texture": -1,
+        "hideUnderlay": true,
+        "secondaryRgb": -1
+    },
+    {
+        "id": 1,
+        "primaryRgb": 4473924,
+        "texture": -1,
+        "hideUnderlay": true,
+        "secondaryRgb": -1
+    },
+    {
+        "id": 2,
+        "primaryRgb": 6710886,
+        "texture": -1,
+        "hideUnderlay": true,
+        "secondaryRgb": -1
+    },
+    {
+        "id": 3,
+        "primaryRgb": 8947848,
+        "texture": -1,
+        "hideUnderlay": true,
+        "secondaryRgb": -1
+    },
+    {
+        "id": 4,
+        "primaryRgb": 0,
+        "texture": 3,
+        "hideUnderlay": true,
+        "secondaryRgb": -1
+    },
+    {
+        "id": 5,
+        "primaryRgb": 0,
+        "texture": 1,
+        "hideUnderlay": true,
+        "secondaryRgb": -1
+    },
+    {
+        "id": 6,
+        "primaryRgb": 0,
+        "texture": 25,
+        "hideUnderlay": true,
+        "secondaryRgb": -1
+    },
+    {
+        "id": 7,
+        "primaryRgb": 5987163,
+        "texture": -1,
+        "hideUnderlay": true,
+        "secondaryRgb": -1
+    },
+    {
+        "id": 8,
+        "primaryRgb": 16777205,
+        "texture": -1,
+        "hideUnderlay": true,
+        "secondaryRgb": -1
+    },
+    {
+        "id": 9,
+        "primaryRgb": 5263440,
+        "texture": -1,
+        "hideUnderlay": true,
+        "secondaryRgb": -1
+    },
+    {
+        "id": 10,
+        "primaryRgb": 2236962,
+        "texture": -1,
+        "hideUnderlay": true,
+        "secondaryRgb": -1
+    },
+    {
+        "id": 11,
+        "primaryRgb": 0,
+        "texture": 46,
+        "hideUnderlay": true,
+        "secondaryRgb": -1
+    },
+    {
+        "id": 12,
+        "primaryRgb": 10040115,
+        "texture": -1,
+        "hideUnderlay": true,
+        "secondaryRgb": -1
+    },
+    {
+        "id": 13,
+        "primaryRgb": 4008715,
+        "texture": -1,
+        "hideUnderlay": true,
+        "secondaryRgb": -1
+    },
+    {
+        "id": 14,
+        "primaryRgb": 4008715,
+        "texture": -1,
+        "hideUnderlay": true,
+        "secondaryRgb": -1
+    },
+    {
+        "id": 15,
+        "primaryRgb": 6697728,
+        "texture": -1,
+        "hideUnderlay": true,
+        "secondaryRgb": -1
+    },
+    {
+        "id": 16,
+        "primaryRgb": 6697728,
+        "texture": -1,
+        "hideUnderlay": true,
+        "secondaryRgb": -1
+    },
+    {
+        "id": 17,
+        "primaryRgb": 204,
+        "texture": -1,
+        "hideUnderlay": true,
+        "secondaryRgb": -1
+    },
+    {
+        "id": 18,
+        "primaryRgb": 0,
+        "texture": 31,
+        "hideUnderlay": true,
+        "secondaryRgb": -1
+    },
+    {
+        "id": 19,
+        "primaryRgb": 0,
+        "texture": 15,
+        "hideUnderlay": true,
+        "secondaryRgb": -1
+    },
+    {
+        "id": 20,
+        "primaryRgb": 10053120,
+        "texture": -1,
+        "hideUnderlay": true,
+        "secondaryRgb": -1
+    },
+    {
+        "id": 21,
+        "primaryRgb": 7166763,
+        "texture": -1,
+        "hideUnderlay": true,
+        "secondaryRgb": -1
+    },
+    {
+        "id": 22,
+        "primaryRgb": 7166763,
+        "texture": -1,
+        "hideUnderlay": true,
+        "secondaryRgb": -1
+    },
+    {
+        "id": 23,
+        "primaryRgb": 0,
+        "texture": 47,
+        "hideUnderlay": true,
+        "secondaryRgb": -1
+    },
+    {
+        "id": 24,
+        "primaryRgb": 13351542,
+        "texture": -1,
+        "hideUnderlay": true,
+        "secondaryRgb": -1
+    },
+    {
+        "id": 25,
+        "primaryRgb": 8550724,
+        "texture": -1,
+        "hideUnderlay": true,
+        "secondaryRgb": -1
+    },
+    {
+        "id": 26,
+        "primaryRgb": 0,
+        "texture": 23,
+        "hideUnderlay": true,
+        "secondaryRgb": -1
+    },
+    {
+        "id": 27,
+        "primaryRgb": 0,
+        "texture": 2,
+        "hideUnderlay": true,
+        "secondaryRgb": -1
+    },
+    {
+        "id": 28,
+        "primaryRgb": 3502602,
+        "texture": -1,
+        "hideUnderlay": true,
+        "secondaryRgb": -1
+    },
+    {
+        "id": 29,
+        "primaryRgb": 15658734,
+        "texture": -1,
+        "hideUnderlay": true,
+        "secondaryRgb": -1
+    },
+    {
+        "id": 30,
+        "primaryRgb": 6638859,
+        "texture": -1,
+        "hideUnderlay": true,
+        "secondaryRgb": -1
+    },
+    {
+        "id": 31,
+        "primaryRgb": 0,
+        "texture": 11,
+        "hideUnderlay": true,
+        "secondaryRgb": -1
+    },
+    {
+        "id": 32,
+        "primaryRgb": 13229559,
+        "texture": -1,
+        "hideUnderlay": true,
+        "secondaryRgb": -1
+    },
+    {
+        "id": 33,
+        "primaryRgb": 5263440,
+        "texture": -1,
+        "hideUnderlay": true,
+        "secondaryRgb": -1
+    },
+    {
+        "id": 34,
+        "primaryRgb": 0,
+        "texture": 3,
+        "hideUnderlay": true,
+        "secondaryRgb": -1
+    },
+    {
+        "id": 35,
+        "primaryRgb": 6702097,
+        "texture": -1,
+        "hideUnderlay": true,
+        "secondaryRgb": -1
+    },
+    {
+        "id": 36,
+        "primaryRgb": 0,
+        "texture": -1,
+        "hideUnderlay": true,
+        "secondaryRgb": -1
+    },
+    {
+        "id": 37,
+        "primaryRgb": 5601177,
+        "texture": -1,
+        "hideUnderlay": true,
+        "secondaryRgb": -1
+    },
+    {
+        "id": 38,
+        "primaryRgb": 0,
+        "texture": 17,
+        "hideUnderlay": true,
+        "secondaryRgb": -1
+    },
+    {
+        "id": 39,
+        "primaryRgb": 4671907,
+        "texture": -1,
+        "hideUnderlay": true,
+        "secondaryRgb": -1
+    },
+    {
+        "id": 40,
+        "primaryRgb": 4153729,
+        "texture": -1,
+        "hideUnderlay": true,
+        "secondaryRgb": -1
+    },
+    {
+        "id": 41,
+        "primaryRgb": 16711935,
+        "texture": -1,
+        "hideUnderlay": false,
+        "secondaryRgb": -1
+    },
+    {
+        "id": 42,
+        "primaryRgb": 16711935,
+        "texture": -1,
+        "hideUnderlay": true,
+        "secondaryRgb": -1
+    },
+    {
+        "id": 43,
+        "primaryRgb": 5263440,
+        "texture": -1,
+        "hideUnderlay": false,
+        "secondaryRgb": -1
+    },
+    {
+        "id": 44,
+        "primaryRgb": 0,
+        "texture": 3,
+        "hideUnderlay": false,
+        "secondaryRgb": -1
+    },
+    {
+        "id": 45,
+        "primaryRgb": 0,
+        "texture": 23,
+        "hideUnderlay": false,
+        "secondaryRgb": -1
+    },
+    {
+        "id": 46,
+        "primaryRgb": 0,
+        "texture": 2,
+        "hideUnderlay": false,
+        "secondaryRgb": -1
+    },
+    {
+        "id": 47,
+        "primaryRgb": 2631712,
+        "texture": -1,
+        "hideUnderlay": true,
+        "secondaryRgb": 0
+    },
+    {
+        "id": 48,
+        "primaryRgb": 2631712,
+        "texture": -1,
+        "hideUnderlay": true,
+        "secondaryRgb": -1
+    },
+    {
+        "id": 49,
+        "primaryRgb": 3153952,
+        "texture": -1,
+        "hideUnderlay": true,
+        "secondaryRgb": -1
+    },
+    {
+        "id": 50,
+        "primaryRgb": 16711935,
+        "texture": -1,
+        "hideUnderlay": false,
+        "secondaryRgb": 8550724
+    },
+    {
+        "id": 51,
+        "primaryRgb": 0,
+        "texture": 51,
+        "hideUnderlay": true,
+        "secondaryRgb": -1
+    },
+    {
+        "id": 52,
+        "primaryRgb": 16711935,
+        "texture": -1,
+        "hideUnderlay": false,
+        "secondaryRgb": 12889166
+    },
+    {
+        "id": 53,
+        "primaryRgb": 16711935,
+        "texture": -1,
+        "hideUnderlay": false,
+        "secondaryRgb": 12031847
+    },
+    {
+        "id": 54,
+        "primaryRgb": 16711935,
+        "texture": -1,
+        "hideUnderlay": false,
+        "secondaryRgb": 6316120
+    },
+    {
+        "id": 55,
+        "primaryRgb": 6316120,
+        "texture": -1,
+        "hideUnderlay": true,
+        "secondaryRgb": -1
+    },
+    {
+        "id": 56,
+        "primaryRgb": 16711935,
+        "texture": -1,
+        "hideUnderlay": false,
+        "secondaryRgb": 8635338
+    },
+    {
+        "id": 57,
+        "primaryRgb": 4008715,
+        "texture": -1,
+        "hideUnderlay": false,
+        "secondaryRgb": 16777205
+    },
+    {
+        "id": 58,
+        "primaryRgb": 16711935,
+        "texture": -1,
+        "hideUnderlay": false,
+        "secondaryRgb": 2631712
+    },
+    {
+        "id": 59,
+        "primaryRgb": 8544278,
+        "texture": -1,
+        "hideUnderlay": false,
+        "secondaryRgb": -1
+    },
+    {
+        "id": 60,
+        "primaryRgb": 16711935,
+        "texture": -1,
+        "hideUnderlay": false,
+        "secondaryRgb": 4008715
+    },
+    {
+        "id": 61,
+        "primaryRgb": 16711935,
+        "texture": -1,
+        "hideUnderlay": false,
+        "secondaryRgb": 6168
+    },
+    {
+        "id": 62,
+        "primaryRgb": 14392,
+        "texture": -1,
+        "hideUnderlay": false,
+        "secondaryRgb": -1
+    },
+    {
+        "id": 63,
+        "primaryRgb": 16711935,
+        "texture": -1,
+        "hideUnderlay": false,
+        "secondaryRgb": 12103832
+    },
+    {
+        "id": 64,
+        "primaryRgb": 16711935,
+        "texture": -1,
+        "hideUnderlay": false,
+        "secondaryRgb": 8921634
+    },
+    {
+        "id": 65,
+        "primaryRgb": 7899240,
+        "texture": -1,
+        "hideUnderlay": false,
+        "secondaryRgb": -1
+    },
+    {
+        "id": 66,
+        "primaryRgb": 16711935,
+        "texture": -1,
+        "hideUnderlay": false,
+        "secondaryRgb": 7899240
+    },
+    {
+        "id": 67,
+        "primaryRgb": 6037591,
+        "texture": -1,
+        "hideUnderlay": false,
+        "secondaryRgb": -1
+    },
+    {
+        "id": 68,
+        "primaryRgb": 16711935,
+        "texture": -1,
+        "hideUnderlay": false,
+        "secondaryRgb": 6037591
+    },
+    {
+        "id": 69,
+        "primaryRgb": 8862056,
+        "texture": -1,
+        "hideUnderlay": false,
+        "secondaryRgb": -1
+    },
+    {
+        "id": 70,
+        "primaryRgb": 16711935,
+        "texture": -1,
+        "hideUnderlay": false,
+        "secondaryRgb": 8862056
+    },
+    {
+        "id": 71,
+        "primaryRgb": 6684672,
+        "texture": -1,
+        "hideUnderlay": false,
+        "secondaryRgb": -1
+    },
+    {
+        "id": 72,
+        "primaryRgb": 16711935,
+        "texture": -1,
+        "hideUnderlay": false,
+        "secondaryRgb": 6684672
+    },
+    {
+        "id": 73,
+        "primaryRgb": 3846161,
+        "texture": -1,
+        "hideUnderlay": false,
+        "secondaryRgb": -1
+    },
+    {
+        "id": 74,
+        "primaryRgb": 16711935,
+        "texture": -1,
+        "hideUnderlay": false,
+        "secondaryRgb": 3846161
+    },
+    {
+        "id": 75,
+        "primaryRgb": 12889166,
+        "texture": -1,
+        "hideUnderlay": true,
+        "secondaryRgb": -1
+    },
+    {
+        "id": 76,
+        "primaryRgb": 12031847,
+        "texture": -1,
+        "hideUnderlay": true,
+        "secondaryRgb": -1
+    },
+    {
+        "id": 77,
+        "primaryRgb": 4206608,
+        "texture": -1,
+        "hideUnderlay": false,
+        "secondaryRgb": 4206608
+    },
+    {
+        "id": 78,
+        "primaryRgb": 9930575,
+        "texture": -1,
+        "hideUnderlay": true,
+        "secondaryRgb": -1
+    },
+    {
+        "id": 79,
+        "primaryRgb": 8215339,
+        "texture": -1,
+        "hideUnderlay": true,
+        "secondaryRgb": -1
+    },
+    {
+        "id": 80,
+        "primaryRgb": 5259296,
+        "texture": -1,
+        "hideUnderlay": true,
+        "secondaryRgb": -1
+    },
+    {
+        "id": 81,
+        "primaryRgb": 6050884,
+        "texture": -1,
+        "hideUnderlay": true,
+        "secondaryRgb": -1
+    },
+    {
+        "id": 82,
+        "primaryRgb": 4603956,
+        "texture": -1,
+        "hideUnderlay": true,
+        "secondaryRgb": -1
+    },
+    {
+        "id": 83,
+        "primaryRgb": 0,
+        "texture": 35,
+        "hideUnderlay": true,
+        "secondaryRgb": -1
+    },
+    {
+        "id": 84,
+        "primaryRgb": 3159333,
+        "texture": -1,
+        "hideUnderlay": true,
+        "secondaryRgb": -1
+    },
+    {
+        "id": 85,
+        "primaryRgb": 2949120,
+        "texture": -1,
+        "hideUnderlay": true,
+        "secondaryRgb": -1
+    },
+    {
+        "id": 86,
+        "primaryRgb": 4341619,
+        "texture": -1,
+        "hideUnderlay": true,
+        "secondaryRgb": -1
+    },
+    {
+        "id": 87,
+        "primaryRgb": 5524791,
+        "texture": -1,
+        "hideUnderlay": true,
+        "secondaryRgb": -1
+    },
+    {
+        "id": 88,
+        "primaryRgb": 6178332,
+        "texture": -1,
+        "hideUnderlay": true,
+        "secondaryRgb": -1
+    },
+    {
+        "id": 89,
+        "primaryRgb": 3025184,
+        "texture": -1,
+        "hideUnderlay": true,
+        "secondaryRgb": -1
+    },
+    {
+        "id": 90,
+        "primaryRgb": 5259296,
+        "texture": -1,
+        "hideUnderlay": true,
+        "secondaryRgb": -1
+    },
+    {
+        "id": 91,
+        "primaryRgb": 16711935,
+        "texture": -1,
+        "hideUnderlay": false,
+        "secondaryRgb": 0
+    },
+    {
+        "id": 92,
+        "primaryRgb": 3160120,
+        "texture": -1,
+        "hideUnderlay": false,
+        "secondaryRgb": 3160120
+    },
+    {
+        "id": 93,
+        "primaryRgb": 4801090,
+        "texture": -1,
+        "hideUnderlay": true,
+        "secondaryRgb": -1
+    },
+    {
+        "id": 94,
+        "primaryRgb": 51344,
+        "texture": -1,
+        "hideUnderlay": true,
+        "secondaryRgb": 51344
+    },
+    {
+        "id": 95,
+        "primaryRgb": 5795952,
+        "texture": -1,
+        "hideUnderlay": true,
+        "secondaryRgb": -1
+    },
+    {
+        "id": 96,
+        "primaryRgb": 65280,
+        "texture": -1,
+        "hideUnderlay": false,
+        "secondaryRgb": 0
+    },
+    {
+        "id": 97,
+        "primaryRgb": 16711935,
+        "texture": -1,
+        "hideUnderlay": true,
+        "secondaryRgb": 3820341
+    },
+    {
+        "id": 98,
+        "primaryRgb": 2631720,
+        "texture": -1,
+        "hideUnderlay": true,
+        "secondaryRgb": -1
+    },
+    {
+        "id": 99,
+        "primaryRgb": 16711935,
+        "texture": -1,
+        "hideUnderlay": false,
+        "secondaryRgb": 2236962
+    },
+    {
+        "id": 100,
+        "primaryRgb": 5521943,
+        "texture": -1,
+        "hideUnderlay": true,
+        "secondaryRgb": -1
+    },
+    {
+        "id": 101,
+        "primaryRgb": 3159333,
+        "texture": -1,
+        "hideUnderlay": true,
+        "secondaryRgb": -1
+    },
+    {
+        "id": 102,
+        "primaryRgb": 5249088,
+        "texture": -1,
+        "hideUnderlay": true,
+        "secondaryRgb": 5249088
+    },
+    {
+        "id": 103,
+        "primaryRgb": 8635338,
+        "texture": -1,
+        "hideUnderlay": true,
+        "secondaryRgb": -1
+    },
+    {
+        "id": 104,
+        "primaryRgb": 6710886,
+        "texture": -1,
+        "hideUnderlay": true,
+        "secondaryRgb": -1
+    },
+    {
+        "id": 105,
+        "primaryRgb": 6707515,
+        "texture": -1,
+        "hideUnderlay": true,
+        "secondaryRgb": -1
+    },
+    {
+        "id": 106,
+        "primaryRgb": 3820341,
+        "texture": -1,
+        "hideUnderlay": true,
+        "secondaryRgb": -1
+    },
+    {
+        "id": 107,
+        "primaryRgb": 4206608,
+        "texture": -1,
+        "hideUnderlay": true,
+        "secondaryRgb": -1
+    },
+    {
+        "id": 108,
+        "primaryRgb": 13229561,
+        "texture": -1,
+        "hideUnderlay": true,
+        "secondaryRgb": -1
+    },
+    {
+        "id": 109,
+        "primaryRgb": 3684384,
+        "texture": -1,
+        "hideUnderlay": true,
+        "secondaryRgb": -1
+    },
+    {
+        "id": 110,
+        "primaryRgb": 16711935,
+        "texture": -1,
+        "hideUnderlay": false,
+        "secondaryRgb": 45296
+    },
+    {
+        "id": 111,
+        "primaryRgb": 16711935,
+        "texture": -1,
+        "hideUnderlay": false,
+        "secondaryRgb": 6354992
+    },
+    {
+        "id": 112,
+        "primaryRgb": 16711935,
+        "texture": -1,
+        "hideUnderlay": false,
+        "secondaryRgb": 15730696
+    },
+    {
+        "id": 113,
+        "primaryRgb": 4208656,
+        "texture": -1,
+        "hideUnderlay": false,
+        "secondaryRgb": 4208656
+    },
+    {
+        "id": 114,
+        "primaryRgb": 1579024,
+        "texture": -1,
+        "hideUnderlay": true,
+        "secondaryRgb": -1
+    },
+    {
+        "id": 115,
+        "primaryRgb": 0,
+        "texture": -1,
+        "hideUnderlay": true,
+        "secondaryRgb": 1579024
+    },
+    {
+        "id": 116,
+        "primaryRgb": 5197647,
+        "texture": -1,
+        "hideUnderlay": false,
+        "secondaryRgb": -1
+    },
+    {
+        "id": 117,
+        "primaryRgb": 14211312,
+        "texture": -1,
+        "hideUnderlay": true,
+        "secondaryRgb": 14211312
+    },
+    {
+        "id": 118,
+        "primaryRgb": 6050876,
+        "texture": -1,
+        "hideUnderlay": true,
+        "secondaryRgb": -1
+    },
+    {
+        "id": 119,
+        "primaryRgb": 3091231,
+        "texture": -1,
+        "hideUnderlay": true,
+        "secondaryRgb": 3354664
+    },
+    {
+        "id": 120,
+        "primaryRgb": 16711935,
+        "texture": -1,
+        "hideUnderlay": false,
+        "secondaryRgb": 14211312
+    },
+    {
+        "id": 121,
+        "primaryRgb": 16711935,
+        "texture": -1,
+        "hideUnderlay": false,
+        "secondaryRgb": 2104888
+    },
+    {
+        "id": 122,
+        "primaryRgb": 12103832,
+        "texture": -1,
+        "hideUnderlay": true,
+        "secondaryRgb": -1
+    },
+    {
+        "id": 123,
+        "primaryRgb": 16711935,
+        "texture": -1,
+        "hideUnderlay": false,
+        "secondaryRgb": 4521984
+    },
+    {
+        "id": 124,
+        "primaryRgb": 16711935,
+        "texture": -1,
+        "hideUnderlay": true,
+        "secondaryRgb": 6707515
+    },
+    {
+        "id": 125,
+        "primaryRgb": 16711935,
+        "texture": -1,
+        "hideUnderlay": true,
+        "secondaryRgb": 3684400
+    },
+    {
+        "id": 126,
+        "primaryRgb": 4210744,
+        "texture": -1,
+        "hideUnderlay": true,
+        "secondaryRgb": -1
+    },
+    {
+        "id": 127,
+        "primaryRgb": 7841669,
+        "texture": -1,
+        "hideUnderlay": true,
+        "secondaryRgb": -1
+    },
+    {
+        "id": 128,
+        "primaryRgb": 16711935,
+        "texture": -1,
+        "hideUnderlay": false,
+        "secondaryRgb": 4491374
+    },
+    {
+        "id": 129,
+        "primaryRgb": 8570040,
+        "texture": -1,
+        "hideUnderlay": true,
+        "secondaryRgb": -1
+    },
+    {
+        "id": 130,
+        "primaryRgb": 2565904,
+        "texture": -1,
+        "hideUnderlay": true,
+        "secondaryRgb": -1
+    },
+    {
+        "id": 131,
+        "primaryRgb": 3617321,
+        "texture": -1,
+        "hideUnderlay": true,
+        "secondaryRgb": -1
+    },
+    {
+        "id": 132,
+        "primaryRgb": 3160104,
+        "texture": -1,
+        "hideUnderlay": true,
+        "secondaryRgb": -1
+    },
+    {
+        "id": 133,
+        "primaryRgb": 4210756,
+        "texture": -1,
+        "hideUnderlay": false,
+        "secondaryRgb": 4605510
+    },
+    {
+        "id": 134,
+        "primaryRgb": 16711935,
+        "texture": -1,
+        "hideUnderlay": false,
+        "secondaryRgb": 15658734
+    },
+    {
+        "id": 135,
+        "primaryRgb": 16711935,
+        "texture": -1,
+        "hideUnderlay": false,
+        "secondaryRgb": 6518694
+    },
+    {
+        "id": 136,
+        "primaryRgb": 7629129,
+        "texture": -1,
+        "hideUnderlay": true,
+        "secondaryRgb": -1
+    },
+    {
+        "id": 137,
+        "primaryRgb": 16711935,
+        "texture": -1,
+        "hideUnderlay": false,
+        "secondaryRgb": 3026478
+    },
+    {
+        "id": 138,
+        "primaryRgb": 3026478,
+        "texture": -1,
+        "hideUnderlay": false,
+        "secondaryRgb": 3026478
+    },
+    {
+        "id": 139,
+        "primaryRgb": 4737080,
+        "texture": -1,
+        "hideUnderlay": false,
+        "secondaryRgb": 4737080
+    },
+    {
+        "id": 140,
+        "primaryRgb": 6848640,
+        "texture": -1,
+        "hideUnderlay": false,
+        "secondaryRgb": 6848640
+    },
+    {
+        "id": 141,
+        "primaryRgb": 10528936,
+        "texture": -1,
+        "hideUnderlay": false,
+        "secondaryRgb": 10528936
+    },
+    {
+        "id": 142,
+        "primaryRgb": 5267552,
+        "texture": -1,
+        "hideUnderlay": false,
+        "secondaryRgb": 5267552
+    },
+    {
+        "id": 143,
+        "primaryRgb": 16711935,
+        "texture": -1,
+        "hideUnderlay": false,
+        "secondaryRgb": 10528936
+    },
+    {
+        "id": 144,
+        "primaryRgb": 8487283,
+        "texture": -1,
+        "hideUnderlay": false,
+        "secondaryRgb": 8487283
+    },
+    {
+        "id": 145,
+        "primaryRgb": 11579558,
+        "texture": -1,
+        "hideUnderlay": false,
+        "secondaryRgb": 11579558
+    },
+    {
+        "id": 146,
+        "primaryRgb": 6579289,
+        "texture": -1,
+        "hideUnderlay": false,
+        "secondaryRgb": 6579289
+    },
+    {
+        "id": 147,
+        "primaryRgb": 16711935,
+        "texture": -1,
+        "hideUnderlay": false,
+        "secondaryRgb": 11579558
+    },
+    {
+        "id": 148,
+        "primaryRgb": 7569779,
+        "texture": -1,
+        "hideUnderlay": false,
+        "secondaryRgb": 7569779
+    },
+    {
+        "id": 149,
+        "primaryRgb": 10924198,
+        "texture": -1,
+        "hideUnderlay": false,
+        "secondaryRgb": 10924198
+    },
+    {
+        "id": 150,
+        "primaryRgb": 7509687,
+        "texture": -1,
+        "hideUnderlay": true,
+        "secondaryRgb": -1
+    },
+    {
+        "id": 151,
+        "primaryRgb": 16711935,
+        "texture": -1,
+        "hideUnderlay": false,
+        "secondaryRgb": 16174862
+    },
+    {
+        "id": 152,
+        "primaryRgb": 16711935,
+        "texture": -1,
+        "hideUnderlay": false,
+        "secondaryRgb": 5524791
+    },
+    {
+        "id": 153,
+        "primaryRgb": 16711935,
+        "texture": -1,
+        "hideUnderlay": false,
+        "secondaryRgb": 3502602
+    },
+    {
+        "id": 154,
+        "primaryRgb": 16711935,
+        "texture": -1,
+        "hideUnderlay": false,
+        "secondaryRgb": 13351542
+    },
+    {
+        "id": 155,
+        "primaryRgb": 4491374,
+        "texture": -1,
+        "hideUnderlay": true,
+        "secondaryRgb": -1
+    },
+    {
+        "id": 156,
+        "primaryRgb": 16430903,
+        "texture": -1,
+        "hideUnderlay": true,
+        "secondaryRgb": -1
+    },
+    {
+        "id": 157,
+        "primaryRgb": 4293295,
+        "texture": -1,
+        "hideUnderlay": true,
+        "secondaryRgb": -1
+    },
+    {
+        "id": 158,
+        "primaryRgb": 3942435,
+        "texture": -1,
+        "hideUnderlay": true,
+        "secondaryRgb": -1
+    },
+    {
+        "id": 159,
+        "primaryRgb": 14526173,
+        "texture": -1,
+        "hideUnderlay": false,
+        "secondaryRgb": 14399451
+    },
+    {
+        "id": 160,
+        "primaryRgb": 16711935,
+        "texture": -1,
+        "hideUnderlay": false,
+        "secondaryRgb": 6638859
+    },
+    {
+        "id": 161,
+        "primaryRgb": 4412737,
+        "texture": -1,
+        "hideUnderlay": false,
+        "secondaryRgb": 4412737
+    },
+    {
+        "id": 162,
+        "primaryRgb": 7224879,
+        "texture": -1,
+        "hideUnderlay": false,
+        "secondaryRgb": 7224879
+    },
+    {
+        "id": 163,
+        "primaryRgb": 5263472,
+        "texture": -1,
+        "hideUnderlay": true,
+        "secondaryRgb": -1
+    },
+    {
+        "id": 164,
+        "primaryRgb": 5858393,
+        "texture": -1,
+        "hideUnderlay": false,
+        "secondaryRgb": 5858393
+    },
+    {
+        "id": 165,
+        "primaryRgb": 16448069,
+        "texture": -1,
+        "hideUnderlay": true,
+        "secondaryRgb": -1
+    },
+    {
+        "id": 166,
+        "primaryRgb": 10930884,
+        "texture": -1,
+        "hideUnderlay": true,
+        "secondaryRgb": -1
+    },
+    {
+        "id": 167,
+        "primaryRgb": 13269961,
+        "texture": -1,
+        "hideUnderlay": true,
+        "secondaryRgb": -1
+    },
+    {
+        "id": 168,
+        "primaryRgb": 8697796,
+        "texture": -1,
+        "hideUnderlay": true,
+        "secondaryRgb": -1
+    },
+    {
+        "id": 169,
+        "primaryRgb": 16711935,
+        "texture": -1,
+        "hideUnderlay": false,
+        "secondaryRgb": 10924198
+    },
+    {
+        "id": 170,
+        "primaryRgb": 7893088,
+        "texture": -1,
+        "hideUnderlay": true,
+        "secondaryRgb": -1
+    },
+    {
+        "id": 171,
+        "primaryRgb": 7891794,
+        "texture": -1,
+        "hideUnderlay": true,
+        "secondaryRgb": -1
+    },
+    {
+        "id": 172,
+        "primaryRgb": 7891016,
+        "texture": -1,
+        "hideUnderlay": true,
+        "secondaryRgb": -1
+    },
+    {
+        "id": 173,
+        "primaryRgb": 0,
+        "texture": 43,
+        "hideUnderlay": true,
+        "secondaryRgb": -1
+    },
+    {
+        "id": 174,
+        "primaryRgb": 6590096,
+        "texture": -1,
+        "hideUnderlay": false,
+        "secondaryRgb": 6590096
+    },
+    {
+        "id": 175,
+        "primaryRgb": 10205883,
+        "texture": -1,
+        "hideUnderlay": false,
+        "secondaryRgb": 10205883
+    },
+    {
+        "id": 176,
+        "primaryRgb": 5074543,
+        "texture": -1,
+        "hideUnderlay": false,
+        "secondaryRgb": 5074543
+    },
+    {
+        "id": 177,
+        "primaryRgb": 16711935,
+        "texture": -1,
+        "hideUnderlay": false,
+        "secondaryRgb": 5074543
+    },
+    {
+        "id": 178,
+        "primaryRgb": 3881780,
+        "texture": -1,
+        "hideUnderlay": true,
+        "secondaryRgb": -1
+    },
+    {
+        "id": 179,
+        "primaryRgb": 4866626,
+        "texture": -1,
+        "hideUnderlay": true,
+        "secondaryRgb": -1
+    },
+    {
+        "id": 180,
+        "primaryRgb": 737875,
+        "texture": -1,
+        "hideUnderlay": false,
+        "secondaryRgb": -1
+    },
+    {
+        "id": 181,
+        "primaryRgb": 3290685,
+        "texture": -1,
+        "hideUnderlay": false,
+        "secondaryRgb": -1
+    },
+    {
+        "id": 182,
+        "primaryRgb": 1778227,
+        "texture": -1,
+        "hideUnderlay": true,
+        "secondaryRgb": -1
+    },
+    {
+        "id": 183,
+        "primaryRgb": 659746,
+        "texture": -1,
+        "hideUnderlay": true,
+        "secondaryRgb": -1
+    },
+    {
+        "id": 184,
+        "primaryRgb": 5456941,
+        "texture": -1,
+        "hideUnderlay": true,
+        "secondaryRgb": -1
+    },
+    {
+        "id": 185,
+        "primaryRgb": 4404251,
+        "texture": -1,
+        "hideUnderlay": true,
+        "secondaryRgb": -1
+    },
+    {
+        "id": 186,
+        "primaryRgb": 3351306,
+        "texture": -1,
+        "hideUnderlay": true,
+        "secondaryRgb": -1
+    },
+    {
+        "id": 187,
+        "primaryRgb": 1579309,
+        "texture": -1,
+        "hideUnderlay": true,
+        "secondaryRgb": -1
+    },
+    {
+        "id": 188,
+        "primaryRgb": 2171454,
+        "texture": -1,
+        "hideUnderlay": true,
+        "secondaryRgb": -1
+    },
+    {
+        "id": 189,
+        "primaryRgb": 16356130,
+        "texture": -1,
+        "hideUnderlay": false,
+        "secondaryRgb": -1
+    },
+    {
+        "id": 190,
+        "primaryRgb": 8224087,
+        "texture": -1,
+        "hideUnderlay": true,
+        "secondaryRgb": -1
+    },
+    {
+        "id": 191,
+        "primaryRgb": 6710599,
+        "texture": -1,
+        "hideUnderlay": true,
+        "secondaryRgb": -1
+    },
+    {
+        "id": 192,
+        "primaryRgb": 9408077,
+        "texture": -1,
+        "hideUnderlay": true,
+        "secondaryRgb": -1
+    },
+    {
+        "id": 193,
+        "primaryRgb": 4398363,
+        "texture": -1,
+        "hideUnderlay": false,
+        "secondaryRgb": -1
+    },
+    {
+        "id": 194,
+        "primaryRgb": 2365977,
+        "texture": -1,
+        "hideUnderlay": false,
+        "secondaryRgb": -1
+    },
+    {
+        "id": 195,
+        "primaryRgb": 0,
+        "texture": 91,
+        "hideUnderlay": true,
+        "secondaryRgb": -1
+    },
+    {
+        "id": 196,
+        "primaryRgb": 15526889,
+        "texture": -1,
+        "hideUnderlay": true,
+        "secondaryRgb": -1
+    },
+    {
+        "id": 197,
+        "primaryRgb": 12564918,
+        "texture": -1,
+        "hideUnderlay": true,
+        "secondaryRgb": -1
+    },
+    {
+        "id": 198,
+        "primaryRgb": 10261100,
+        "texture": -1,
+        "hideUnderlay": true,
+        "secondaryRgb": -1
+    }
+]
