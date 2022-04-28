@@ -31,6 +31,7 @@ import xlitekt.cache.provider.config.varp.VarpEntryTypeProvider
 import xlitekt.cache.provider.config.worldmap.WorldMapElementEntryTypeProvider
 import xlitekt.cache.provider.map.MapEntryTypeProvider
 import xlitekt.cache.provider.sprite.SpriteEntryTypeProvider
+import xlitekt.cache.provider.texture.TextureEntryTypeProvider
 import xlitekt.cache.provider.ui.InterfaceEntryTypeProvider
 import xlitekt.shared.lazy
 import java.nio.file.Path
@@ -77,6 +78,7 @@ val cacheModule = module(createdAtStart = true) {
     single { VarcEntryTypeProvider() }
     single { WorldMapElementEntryTypeProvider() }
     single { SpriteEntryTypeProvider() }
+    single { TextureEntryTypeProvider() }
 }
 
 object AnySerializer : KSerializer<Any> {

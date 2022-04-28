@@ -27,6 +27,7 @@ import xlitekt.cache.provider.config.varp.VarpEntryTypeProvider
 import xlitekt.cache.provider.config.worldmap.WorldMapElementEntryTypeProvider
 import xlitekt.cache.provider.sprite.Sprite
 import xlitekt.cache.provider.sprite.SpriteEntryTypeProvider
+import xlitekt.cache.provider.texture.TextureEntryTypeProvider
 import xlitekt.cache.provider.ui.InterfaceEntryTypeProvider
 import xlitekt.shared.inject
 import java.awt.image.BufferedImage
@@ -46,6 +47,7 @@ fun main() {
     }
     dumpJson()
     dumpSprites()
+    dumpTextures()
 }
 
 private fun dumpJson() {
@@ -77,6 +79,7 @@ private fun dumpJson() {
     val floorUnderlays by inject<FloorUnderlayEntryTypeProvider>()
     val varcs by inject<VarcEntryTypeProvider>()
     val worldmap by inject<WorldMapElementEntryTypeProvider>()
+    val textures by inject<TextureEntryTypeProvider>()
 
     Path.of("./cache/data/dump/").apply {
         if (notExists()) createDirectories()
@@ -101,6 +104,7 @@ private fun dumpJson() {
         json.encodeToStream(floorUnderlays.entries().toList(), Path.of("$it/floorUnderlays.json").outputStream())
         json.encodeToStream(varcs.entries().toList(), Path.of("$it/varcs.json").outputStream())
         json.encodeToStream(worldmap.entries().toList(), Path.of("$it/worldmap.json").outputStream())
+        json.encodeToStream(textures.entries().toList(), Path.of("$it/textures.json").outputStream())
     }
 }
 
@@ -114,6 +118,27 @@ private fun dumpSprites() {
                 val image = BufferedImage(sprite.width, sprite.height, BufferedImage.TYPE_INT_ARGB)
                 image.setRGB(0, 0, sprite.width, sprite.height, sprite.pixels, 0, sprite.width)
                 ImageIO.write(image, "png", File(it.toString(), "${entry.id}_${sprite.id}.png"))
+            }
+        }
+    }
+}
+
+private fun dumpTextures() {
+    Path.of("./cache/data/dump/textures/").apply {
+        if (notExists()) createDirectories()
+    }.also {
+        val sprites by inject<SpriteEntryTypeProvider>()
+        val textures by inject<TextureEntryTypeProvider>()
+
+        for (texture in textures.entries()) {
+            if (texture.textureIds == null) continue
+            for (id in texture.textureIds!!) {
+                val entry = sprites.entryType(id) ?: continue
+                for (sprite in entry.sprites.filter(Sprite::renderable)) {
+                    val image = BufferedImage(sprite.width, sprite.height, BufferedImage.TYPE_INT_ARGB)
+                    image.setRGB(0, 0, sprite.width, sprite.height, sprite.pixels, 0, sprite.width)
+                    ImageIO.write(image, "png", File(it.toString(), "${entry.id}_${sprite.id}.png"))
+                }
             }
         }
     }
