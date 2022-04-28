@@ -72,9 +72,8 @@ class SpriteEntryTypeProvider : EntryTypeProvider<SpriteEntryType>() {
                 }
                 pixels[it] = spritePalette[i and 0xff] or (alphas[it].toInt() shl 24)
             }
-            val sprite = Sprite(spriteId, spriteWidth, spriteHeight, pixels)
             type.sprites = type.sprites.toMutableList().apply {
-                add(sprite)
+                add(Sprite(spriteId, spriteWidth, spriteHeight, pixels))
             }
         }
 
