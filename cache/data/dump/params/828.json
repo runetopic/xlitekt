@@ -1,7 +1,0 @@
-{
-    "id": 828,
-    "type": "STRING",
-    "defaultInt": 0,
-    "autoDisable": true,
-    "defaultString": "You forgot to give the path a name."
-}

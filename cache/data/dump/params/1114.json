@@ -1,7 +1,0 @@
-{
-    "id": 1114,
-    "type": "STRING",
-    "defaultInt": 0,
-    "autoDisable": true,
-    "defaultString": "2,147,483,647 coins"
-}

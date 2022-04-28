@@ -1,8 +1,0 @@
-{
-    "id": 2948,
-    "params": {
-        "1251": "Assign member ranks",
-        "1252": "Rank required to assign ranks to subordinate clan members. A clan member cannot edit more senior members' ranks, nor assign a rank higher than their own rank.",
-        "1253": 100
-    }
-}

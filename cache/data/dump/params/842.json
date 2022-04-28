@@ -1,7 +1,0 @@
-{
-    "id": 842,
-    "type": "STRING",
-    "defaultInt": 0,
-    "autoDisable": true,
-    "defaultString": "You forgot to add a description to adventurepath_description_free"
-}

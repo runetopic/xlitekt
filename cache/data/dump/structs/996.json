@@ -1,9 +1,0 @@
-{
-    "id": 996,
-    "params": {
-        "1078": 8,
-        "1086": "The following options control the warning messages for <col=ffffff>teleport spells</col> that take you to the wilderness. When enabled, you will be shown a warning message when you cast a teleport spell to the wilderness.",
-        "1088": "teleports",
-        "1118": 1
-    }
-}

@@ -1,8 +1,0 @@
-{
-    "id": 2961,
-    "params": {
-        "1255": 1,
-        "1251": "Guest Iron status",
-        "1252": "Iron status required for a new guest to join the clan's channel. Changing the requirement will not expel existing guests."
-    }
-}
