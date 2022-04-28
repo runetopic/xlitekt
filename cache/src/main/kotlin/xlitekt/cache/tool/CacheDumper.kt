@@ -30,6 +30,7 @@ import xlitekt.cache.provider.config.varbit.VarBitEntryTypeProvider
 import xlitekt.cache.provider.config.varc.VarcEntryTypeProvider
 import xlitekt.cache.provider.config.varp.VarpEntryTypeProvider
 import xlitekt.cache.provider.config.worldmap.WorldMapElementEntryTypeProvider
+import xlitekt.cache.provider.font.FontEntryTypeProvider
 import xlitekt.cache.provider.sprite.Sprite
 import xlitekt.cache.provider.sprite.SpriteEntryTypeProvider
 import xlitekt.cache.provider.sprite.titlescreen.TitleScreenEntryTypeProvider
@@ -56,6 +57,7 @@ fun main() {
     CacheDumper.dumpSprites()
     CacheDumper.dumpTextures()
     CacheDumper.dumpTitleScreen()
+    CacheDumper.dumpFonts()
 }
 
 object CacheDumper {
@@ -83,6 +85,7 @@ object CacheDumper {
     private val textures by inject<TextureEntryTypeProvider>()
     private val title by inject<TitleEntryTypeProvider>()
     private val titlescreen by inject<TitleScreenEntryTypeProvider>()
+    private val fonts by inject<FontEntryTypeProvider>()
 
     fun dumpJson() {
         val json = Json {
@@ -252,6 +255,14 @@ object CacheDumper {
                 json.encodeToStream(it, Path.of("$path/${it.id}.json").outputStream())
             }
         }
+
+        Path.of("./cache/data/dump/fonts/").apply {
+            if (notExists()) createDirectories()
+        }.also { path ->
+            fonts.entries().parallelStream().forEach {
+                json.encodeToStream(it, Path.of("$path/${it.name ?: it.id}.json").outputStream())
+            }
+        }
     }
 
     fun dumpSprites() {
@@ -292,7 +303,20 @@ object CacheDumper {
             for (entry in titlescreen.entries()) {
                 if (sprites.entryType(entry.id)?.sprites == null) continue
                 for (sprite in sprites.entryType(entry.id)?.sprites!!.filter(Sprite::renderable)) {
-                    sprite.write(it, "png", "${entry.id}_${sprite.id}")
+                    sprite.write(it, "png", "${entry.name}_${entry.id}_${sprite.id}")
+                }
+            }
+        }
+    }
+
+    fun dumpFonts() {
+        Path.of("./cache/data/dump/fonts/sprites/").apply {
+            if (notExists()) createDirectories()
+        }.also {
+            for (entry in fonts.entries()) {
+                if (sprites.entryType(entry.id)?.sprites == null) continue
+                for (sprite in sprites.entryType(entry.id)?.sprites!!.filter(Sprite::renderable)) {
+                    sprite.write(it, "png", "${entry.name}_${entry.id}_${sprite.id}")
                 }
             }
         }

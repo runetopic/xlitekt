@@ -9,31 +9,33 @@ import xlitekt.cache.provider.EntryTypeProvider
 class TitleScreenEntryTypeProvider : EntryTypeProvider<TitleScreenEntryType>() {
 
     override fun load(): Map<Int, TitleScreenEntryType> {
-        val index = store.index(SPRITE_INDEX)
-        val groups = listOf(
-            index.group("logo"),
-            index.group("logo_deadman_mode"),
-            index.group("logo_seasonal_mode"),
-            index.group("titlebox"),
-            index.group("titlebutton"),
-            index.group("titlebutton_large"),
-            index.group("play_now_text"),
-            index.group("titlebutton_wide42,1"),
-            index.group("runes"),
-            index.group("title_mute"),
-            index.group("options_radio_buttons,0"),
-            index.group("options_radio_buttons,4"),
-            index.group("options_radio_buttons,2"),
-            index.group("options_radio_buttons,6"),
-            index.group("sl_button"),
-            index.group("sl_back"),
-            index.group("sl_flags"),
-            index.group("sl_arrows"),
-            index.group("sl_stars"),
-            index.group("leftarrow"),
-            index.group("rightarrow")
+        val names = listOf(
+            "logo",
+            "logo_deadman_mode",
+            "logo_seasonal_mode",
+            "titlebox",
+            "titlebutton",
+            "titlebutton_large",
+            "play_now_text",
+            "titlebutton_wide42,1",
+            "runes",
+            "title_mute",
+            "options_radio_buttons,0",
+            "options_radio_buttons,4",
+            "options_radio_buttons,2",
+            "options_radio_buttons,6",
+            "sl_button",
+            "sl_back",
+            "sl_flags",
+            "sl_arrows",
+            "sl_stars",
+            "leftarrow",
+            "rightarrow"
         )
-        return groups.map { ByteReadPacket(it.data).loadEntryType(TitleScreenEntryType(it.id)) }.associateBy(TitleScreenEntryType::id)
+        val groups = names.map(store.index(SPRITE_INDEX)::group)
+        return groups.mapIndexed { index, group ->
+            ByteReadPacket(group.data).loadEntryType(TitleScreenEntryType(group.id, name = names[index]))
+        }.associateBy(TitleScreenEntryType::id)
     }
 
     override fun ByteReadPacket.loadEntryType(type: TitleScreenEntryType): TitleScreenEntryType {

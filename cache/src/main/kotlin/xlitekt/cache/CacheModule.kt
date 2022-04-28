@@ -25,6 +25,7 @@ import xlitekt.cache.provider.config.varbit.VarBitEntryTypeProvider
 import xlitekt.cache.provider.config.varc.VarcEntryTypeProvider
 import xlitekt.cache.provider.config.varp.VarpEntryTypeProvider
 import xlitekt.cache.provider.config.worldmap.WorldMapElementEntryTypeProvider
+import xlitekt.cache.provider.font.FontEntryTypeProvider
 import xlitekt.cache.provider.map.MapEntryTypeProvider
 import xlitekt.cache.provider.sprite.SpriteEntryTypeProvider
 import xlitekt.cache.provider.sprite.titlescreen.TitleScreenEntryTypeProvider
@@ -78,4 +79,5 @@ val cacheModule = module(createdAtStart = true) {
     single { TextureEntryTypeProvider() }
     single { TitleEntryTypeProvider() }
     single { TitleScreenEntryTypeProvider() }
+    single { FontEntryTypeProvider() }
 }

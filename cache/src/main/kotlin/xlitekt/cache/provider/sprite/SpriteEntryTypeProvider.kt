@@ -38,6 +38,11 @@ class SpriteEntryTypeProvider : EntryTypeProvider<SpriteEntryType>() {
         repeat(spriteCount) { heights[it] = buffer.readUShort().toInt() }
         buffer.release()
 
+        type.offsetsX = offsetsX
+        type.offsetsY = offsetsY
+        type.widths = widths
+        type.heights = heights
+
         val palette = copy().spritePalette(spriteCount, paletteSize)
         val spritePalette = IntArray(paletteSize)
         for (index in 1 until spritePalette.size) {
