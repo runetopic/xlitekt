@@ -1,0 +1,40 @@
+{
+    "id": 5922,
+    "name": "Skullball",
+    "size": 1,
+    "idleSequence": 1607,
+    "turnLeftSequence": -1,
+    "turnRightSequence": -1,
+    "walkSequence": 1608,
+    "walkBackSequence": -1,
+    "walkLeftSequence": -1,
+    "walkRightSequence": -1,
+    "actions": [
+        "Tap",
+        "null",
+        "Kick",
+        "Shoot",
+        "Show-Goal"
+    ],
+    "drawMapDot": true,
+    "combatLevel": 0,
+    "widthScale": 128,
+    "heightScale": 128,
+    "isVisible": true,
+    "ambient": 20,
+    "contrast": 0,
+    "headIconPrayer": -1,
+    "rotation": 32,
+    "transformVarbit": -1,
+    "transformVarp": -1,
+    "isInteractable": true,
+    "isClickable": true,
+    "isFollower": false,
+    "models": [
+        5145
+    ],
+    "transforms": [
+    ],
+    "params": {
+    }
+}

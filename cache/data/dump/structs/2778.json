@@ -1,0 +1,12 @@
+{
+    "id": 2778,
+    "params": {
+        "1077": 60,
+        "1078": 0,
+        "1086": "Show warning when casting: Teleport to Target",
+        "1088": "Show warning when casting: Teleport to Target,Show warning when casting Teleport to Target,gameplay,teleports",
+        "1085": 1,
+        "1096": "When enabled, shows a warning before using this teleport.",
+        "1119": 1
+    }
+}

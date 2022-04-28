@@ -1,0 +1,20 @@
+{
+    "id": 1389,
+    "params": {
+        "806": 23,
+        "810": "Automatic Wizard",
+        "812": "Autocast the Water Strike spell.",
+        "813": "Ensure you have runes to cast the Water strike spell. This would be one Mind rune, one Water rune and either a Staff of air or one Air rune.",
+        "814": "Ensure you have runes to cast the Water strike spell. This would be one Mind rune, one Water rune and either a Staff of air or one Air rune.|You will need at least level 5 in the Magic skill to cast this spell.|To autocast a spell, you need a staff. Most staffs can autocast but make sure the staff you are using can autocast the normal spellbook.|@control_leftclick_caps the choose spell button and select the water strike spell. You can now autocast the spell when fighting monsters.",
+        "807": 3,
+        "820": 2982,
+        "821": 2983,
+        "811": 202,
+        "822": 2560,
+        "823": "You can access the autocast menu via Combat options.",
+        "824": "https://oldschool.runescape.wiki/w/Autocast",
+        "825": 1,
+        "826": 5,
+        "827": 1390
+    }
+}

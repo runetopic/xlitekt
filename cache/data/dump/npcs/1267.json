@@ -1,0 +1,40 @@
+{
+    "id": 1267,
+    "name": "Vulture",
+    "size": 2,
+    "idleSequence": 2017,
+    "turnLeftSequence": -1,
+    "turnRightSequence": -1,
+    "walkSequence": 2016,
+    "walkBackSequence": -1,
+    "walkLeftSequence": -1,
+    "walkRightSequence": -1,
+    "actions": [
+        "null",
+        "Attack",
+        "null",
+        "null",
+        "null"
+    ],
+    "drawMapDot": true,
+    "combatLevel": 31,
+    "widthScale": 128,
+    "heightScale": 128,
+    "isVisible": false,
+    "ambient": 0,
+    "contrast": 0,
+    "headIconPrayer": -1,
+    "rotation": 32,
+    "transformVarbit": -1,
+    "transformVarp": -1,
+    "isInteractable": true,
+    "isClickable": true,
+    "isFollower": false,
+    "models": [
+        6458
+    ],
+    "transforms": [
+    ],
+    "params": {
+    }
+}

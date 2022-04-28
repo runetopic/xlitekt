@@ -1,0 +1,31 @@
+{
+    "id": 3507,
+    "keyType": "INTEGER",
+    "valType": "STRING",
+    "defaultString": "No Course",
+    "defaultInt": 0,
+    "size": 21,
+    "params": {
+        "1": "Gnome Stronghold Course",
+        "2": "Brimhaven Agility Arena",
+        "3": "Draynor Village Rooftops",
+        "4": "Al Kharid Rooftops",
+        "5": "Werewolf Skullball",
+        "6": "Agility Pyramid",
+        "7": "Varrock Rooftops",
+        "8": "Penguin Agility Course",
+        "9": "Barbarian Agility Course",
+        "10": "Canifis Rooftops",
+        "11": "Ape Atoll Agility Course",
+        "12": "Falador Rooftops",
+        "13": "Wilderness Agility Course",
+        "14": "Werewolf Agility Course",
+        "15": "Seers' Village Rooftops",
+        "16": "Dorgesh-Kaan Agility Course",
+        "17": "Pollnivneach Rooftops",
+        "18": "Prifddinas Agility Course",
+        "19": "Rellekka Rooftops",
+        "20": "Ardougne Rooftops",
+        "21": "Shayzien Agility Course"
+    }
+}

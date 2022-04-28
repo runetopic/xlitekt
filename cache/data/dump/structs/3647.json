@@ -1,0 +1,13 @@
+{
+    "id": 3647,
+    "params": {
+        "1088": "destination tile highlighting indicator",
+        "1077": 178,
+        "1078": 0,
+        "1086": "Highlight destination tile",
+        "1157": 1,
+        "1084": 0,
+        "1096": "When enabled, highlights the tile you are moving to.",
+        "1085": 1
+    }
+}

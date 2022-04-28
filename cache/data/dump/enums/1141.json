@@ -1,0 +1,24 @@
+{
+    "id": 1141,
+    "keyType": "INTEGER",
+    "valType": "STRING",
+    "defaultString": "",
+    "defaultInt": 0,
+    "size": 14,
+    "params": {
+        "0": "Combat Options",
+        "1": "Skills",
+        "2": "*",
+        "3": "Inventory",
+        "4": "Worn Equipment",
+        "5": "Prayer",
+        "6": "Magic",
+        "7": "*",
+        "9": "*",
+        "8": "Account Management",
+        "10": "Logout",
+        "11": "Settings",
+        "12": "Emotes",
+        "13": "Music Player"
+    }
+}

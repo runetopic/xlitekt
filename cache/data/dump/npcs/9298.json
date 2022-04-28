@@ -1,0 +1,40 @@
+{
+    "id": 9298,
+    "name": "Maz",
+    "size": 1,
+    "idleSequence": 3212,
+    "turnLeftSequence": -1,
+    "turnRightSequence": -1,
+    "walkSequence": 3210,
+    "walkBackSequence": -1,
+    "walkLeftSequence": -1,
+    "walkRightSequence": -1,
+    "actions": [
+        "null",
+        "null",
+        "null",
+        "null",
+        "null"
+    ],
+    "drawMapDot": true,
+    "combatLevel": 0,
+    "widthScale": 128,
+    "heightScale": 128,
+    "isVisible": false,
+    "ambient": 0,
+    "contrast": 0,
+    "headIconPrayer": -1,
+    "rotation": 32,
+    "transformVarbit": -1,
+    "transformVarp": -1,
+    "isInteractable": true,
+    "isClickable": true,
+    "isFollower": false,
+    "models": [
+        11723
+    ],
+    "transforms": [
+    ],
+    "params": {
+    }
+}

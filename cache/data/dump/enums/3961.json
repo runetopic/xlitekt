@@ -1,0 +1,16 @@
+{
+    "id": 3961,
+    "keyType": "INTEGER",
+    "valType": "STRING",
+    "defaultString": "null",
+    "defaultInt": 0,
+    "size": 6,
+    "params": {
+        "0": "50k XP lamp (minimum skill requirement: 70)",
+        "1": "The maximum quantity assigned from the <col=ffffff>Like a boss</col> slayer reward is increased by 15",
+        "2": "When you are assigned a <col=ffffff>TzTok-Jad</col> or <col=ffffff>TzKal-Zuk</col> slayer task you will be assigned to kill 3",
+        "3": "The drop chance of an <col=ffffff>Ecumenical Key</col> is increased by 33%",
+        "4": "The essence required to access a <col=ffffff>God Wars</col> boss is reduced to 30",
+        "5": "You can access a privately rented <col=ffffff>God Wars</col> boss instance for a fee of 75k coins"
+    }
+}

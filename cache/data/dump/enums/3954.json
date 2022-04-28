@@ -1,0 +1,11 @@
+{
+    "id": 3954,
+    "keyType": "INTEGER",
+    "valType": "STRING",
+    "defaultString": "null",
+    "defaultInt": 0,
+    "size": 1,
+    "params": {
+        "0": "The ability to combine <col=ffffff>KBD Heads</col> with a <col=ffffff>Dragon Hunter Crossbow</col> to recolour it"
+    }
+}

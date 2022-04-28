@@ -1,0 +1,12 @@
+{
+    "id": 2756,
+    "params": {
+        "1077": 33,
+        "1078": 0,
+        "1086": "Music unlock message",
+        "1088": "Music unlock message toggle,Audio unlock message toggle",
+        "1084": 1,
+        "1085": 1,
+        "1096": "When enabled, a message will be shown in the chat box when you unlock a new music track."
+    }
+}

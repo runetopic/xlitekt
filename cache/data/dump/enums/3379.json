@@ -1,0 +1,17 @@
+{
+    "id": 3379,
+    "keyType": "INTEGER",
+    "valType": "STRING",
+    "defaultString": "Welcome to Leagues II - Trailblazer!",
+    "defaultInt": 0,
+    "size": 7,
+    "params": {
+        "0": "Welcome to Leagues II - Trailblazer!",
+        "3": "The Leagues Menu",
+        "4": "The Leagues Menu",
+        "5": "Trailblazer Tasks",
+        "7": "Trailblazer Areas",
+        "9": "Trailblazer Relics",
+        "11": "Finishing Up"
+    }
+}

@@ -1,0 +1,12 @@
+{
+    "id": 914,
+    "keyType": "INTEGER",
+    "valType": "STRING",
+    "defaultString": "Choose carefully!",
+    "defaultInt": 0,
+    "size": 2,
+    "params": {
+        "0": "Melee combat is allowed.",
+        "1": "Melee combat is disabled."
+    }
+}

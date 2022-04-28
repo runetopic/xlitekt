@@ -1,0 +1,44 @@
+{
+    "id": 2987,
+    "name": "Gravingas",
+    "size": 1,
+    "idleSequence": 1421,
+    "turnLeftSequence": -1,
+    "turnRightSequence": -1,
+    "walkSequence": 1422,
+    "walkBackSequence": 1423,
+    "walkLeftSequence": 1424,
+    "walkRightSequence": 1425,
+    "actions": [
+        "Talk-to",
+        "null",
+        "null",
+        "null",
+        "null"
+    ],
+    "drawMapDot": true,
+    "combatLevel": 0,
+    "widthScale": 128,
+    "heightScale": 128,
+    "isVisible": false,
+    "ambient": 35,
+    "contrast": 175,
+    "headIconPrayer": -1,
+    "rotation": 32,
+    "transformVarbit": -1,
+    "transformVarp": -1,
+    "isInteractable": true,
+    "isClickable": true,
+    "isFollower": false,
+    "models": [
+        5398,
+        5219,
+        5209,
+        5216,
+        5399
+    ],
+    "transforms": [
+    ],
+    "params": {
+    }
+}

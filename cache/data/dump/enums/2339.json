@@ -1,0 +1,12 @@
+{
+    "id": 2339,
+    "keyType": "INTEGER",
+    "valType": "STRING",
+    "defaultString": "Choose carefully!",
+    "defaultInt": 0,
+    "size": 2,
+    "params": {
+        "0": "Players may rejoin the fight without a delay.",
+        "1": "Players must wait 60 seconds before returning to a fight."
+    }
+}

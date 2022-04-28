@@ -1,0 +1,50 @@
+{
+    "id": 5323,
+    "name": "Sigmund",
+    "size": 1,
+    "idleSequence": 808,
+    "turnLeftSequence": -1,
+    "turnRightSequence": -1,
+    "walkSequence": 819,
+    "walkBackSequence": 820,
+    "walkLeftSequence": 821,
+    "walkRightSequence": 822,
+    "actions": [
+        "Talk-to",
+        "null",
+        "null",
+        "null",
+        "null"
+    ],
+    "drawMapDot": true,
+    "combatLevel": 0,
+    "widthScale": 128,
+    "heightScale": 128,
+    "isVisible": false,
+    "ambient": 0,
+    "contrast": 0,
+    "headIconPrayer": -1,
+    "rotation": 32,
+    "transformVarbit": -1,
+    "transformVarp": -1,
+    "isInteractable": true,
+    "isClickable": true,
+    "isFollower": false,
+    "models": [
+        24536,
+        176,
+        5215,
+        181,
+        24537,
+        296,
+        5434,
+        5430,
+        5433,
+        317,
+        283
+    ],
+    "transforms": [
+    ],
+    "params": {
+    }
+}

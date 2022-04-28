@@ -1,0 +1,46 @@
+{
+    "id": 4587,
+    "name": "Phingspet",
+    "size": 1,
+    "idleSequence": 808,
+    "turnLeftSequence": -1,
+    "turnRightSequence": -1,
+    "walkSequence": 819,
+    "walkBackSequence": 820,
+    "walkLeftSequence": 821,
+    "walkRightSequence": 822,
+    "actions": [
+        "Talk-to",
+        "null",
+        "null",
+        "null",
+        "null"
+    ],
+    "drawMapDot": true,
+    "combatLevel": 0,
+    "widthScale": 140,
+    "heightScale": 115,
+    "isVisible": true,
+    "ambient": 20,
+    "contrast": 50,
+    "headIconPrayer": -1,
+    "rotation": 32,
+    "transformVarbit": -1,
+    "transformVarp": -1,
+    "isInteractable": true,
+    "isClickable": true,
+    "isFollower": false,
+    "models": [
+        398,
+        470,
+        479,
+        348,
+        353,
+        428,
+        358
+    ],
+    "transforms": [
+    ],
+    "params": {
+    }
+}

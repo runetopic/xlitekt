@@ -1,0 +1,14 @@
+{
+    "id": 4149,
+    "keyType": "INTEGER",
+    "valType": "STRUCT",
+    "defaultString": "null",
+    "defaultInt": -1,
+    "size": 4,
+    "params": {
+        "0": 4041,
+        "1": 4048,
+        "2": 4045,
+        "3": 4054
+    }
+}

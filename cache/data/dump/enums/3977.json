@@ -1,0 +1,16 @@
+{
+    "id": 3977,
+    "keyType": "INTEGER",
+    "valType": "BOOLEAN",
+    "defaultString": "null",
+    "defaultInt": 0,
+    "size": 6,
+    "params": {
+        "11": 1,
+        "40": 1,
+        "38": 1,
+        "19": 1,
+        "42": 1,
+        "32": 1
+    }
+}

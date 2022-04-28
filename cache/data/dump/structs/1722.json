@@ -1,0 +1,12 @@
+{
+    "id": 1722,
+    "params": {
+        "879": "Endless Harvest",
+        "880": "- Resources gathered from Fishing, Woodcutting and Mining are multiplied by 2x.<br><br>- All resources gathered by this Relic are sent directly to your Bank if you have space, otherwise they are placed in your Inventory.<br><br>- Items which normally cannot be banked will be placed in your Inventory instead even if you have bank space.<br><br>Tip: If you fill your bank with bank fillers, the resources will go to your Inventory instead!",
+        "884": 2604,
+        "881": 2652,
+        "883": 2653,
+        "885": 0,
+        "1274": 3059
+    }
+}

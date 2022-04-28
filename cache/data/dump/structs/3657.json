@@ -1,0 +1,14 @@
+{
+    "id": 3657,
+    "params": {
+        "1088": "ui interface scaling scale mode",
+        "1077": 169,
+        "1078": 2,
+        "1086": "Interface scaling mode",
+        "1091": 4033,
+        "1157": 1,
+        "739": 1,
+        "1085": 0,
+        "1096": "Change how the interface is scaled, this affects the quality and performance of the scaling."
+    }
+}

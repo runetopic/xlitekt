@@ -1,0 +1,40 @@
+{
+    "id": 9039,
+    "name": "null",
+    "size": 1,
+    "idleSequence": 8423,
+    "turnLeftSequence": -1,
+    "turnRightSequence": -1,
+    "walkSequence": 8423,
+    "walkBackSequence": -1,
+    "walkLeftSequence": -1,
+    "walkRightSequence": -1,
+    "actions": [
+        "null",
+        "null",
+        "null",
+        "null",
+        "null"
+    ],
+    "drawMapDot": true,
+    "combatLevel": 1,
+    "widthScale": 88,
+    "heightScale": 88,
+    "isVisible": true,
+    "ambient": 10,
+    "contrast": 220,
+    "headIconPrayer": -1,
+    "rotation": 0,
+    "transformVarbit": -1,
+    "transformVarp": -1,
+    "isInteractable": false,
+    "isClickable": true,
+    "isFollower": false,
+    "models": [
+        38601
+    ],
+    "transforms": [
+    ],
+    "params": {
+    }
+}

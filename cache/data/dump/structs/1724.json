@@ -1,0 +1,12 @@
+{
+    "id": 1724,
+    "params": {
+        "879": "Skilling Prodigy",
+        "880": "- All non-combat skills are permanently boosted by +12.<br><br>- The boost from this Relic does not stack with any other weaker boosts but can be over-written by a stronger one.<br><br>- When using this Relic, skills that are boosted above +12 will over time drain back to the original +12 boost.<br><br>- When using this Relic, skills that are drained below +12 will over time restore back to the original +12 boost.",
+        "884": 2608,
+        "881": 2656,
+        "883": 2657,
+        "885": 0,
+        "1274": 3061
+    }
+}

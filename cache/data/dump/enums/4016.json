@@ -1,0 +1,16 @@
+{
+    "id": 4016,
+    "keyType": "INTEGER",
+    "valType": "LOC",
+    "defaultString": "null",
+    "defaultInt": -1,
+    "size": 6,
+    "params": {
+        "0": 22569,
+        "1": 22572,
+        "2": 22552,
+        "3": 22557,
+        "4": 22564,
+        "5": 22664
+    }
+}

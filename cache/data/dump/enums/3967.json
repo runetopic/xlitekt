@@ -1,0 +1,18 @@
+{
+    "id": 3967,
+    "keyType": "INTEGER",
+    "valType": "STRING",
+    "defaultString": "",
+    "defaultInt": 0,
+    "size": 8,
+    "params": {
+        "-1": "Tier",
+        "0": "All",
+        "1": "Easy",
+        "2": "Medium",
+        "3": "Hard",
+        "4": "Elite",
+        "5": "Master",
+        "6": "Grandmaster"
+    }
+}

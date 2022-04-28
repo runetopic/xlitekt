@@ -1,0 +1,16 @@
+{
+    "id": 1415,
+    "keyType": "INTEGER",
+    "valType": "STRING",
+    "defaultString": "",
+    "defaultInt": 0,
+    "size": 6,
+    "params": {
+        "0": "Lure range 5",
+        "1": "Lure range 5",
+        "2": "Lure range 6",
+        "3": "Lure range 8",
+        "4": "Lure range 10",
+        "5": " - Mastered - "
+    }
+}

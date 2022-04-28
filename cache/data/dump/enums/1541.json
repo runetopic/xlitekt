@@ -1,0 +1,18 @@
+{
+    "id": 1541,
+    "keyType": "INTEGER",
+    "valType": "STRING",
+    "defaultString": "Not ranked",
+    "defaultInt": 0,
+    "size": 8,
+    "params": {
+        "1": "Recruit",
+        "2": "Corporal",
+        "3": "Sergeant",
+        "4": "Lieutenant",
+        "5": "Captain",
+        "6": "General",
+        "7": "Owner",
+        "127": "Jmod"
+    }
+}

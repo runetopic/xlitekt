@@ -1,0 +1,40 @@
+{
+    "id": 10886,
+    "name": "Greater zombified thrall",
+    "size": 1,
+    "idleSequence": 5565,
+    "turnLeftSequence": -1,
+    "turnRightSequence": -1,
+    "walkSequence": 5566,
+    "walkBackSequence": 5790,
+    "walkLeftSequence": 5788,
+    "walkRightSequence": 5789,
+    "actions": [
+        "null",
+        "null",
+        "null",
+        "null",
+        "null"
+    ],
+    "drawMapDot": true,
+    "combatLevel": 0,
+    "widthScale": 128,
+    "heightScale": 128,
+    "isVisible": false,
+    "ambient": 0,
+    "contrast": 0,
+    "headIconPrayer": -1,
+    "rotation": 32,
+    "transformVarbit": -1,
+    "transformVarp": -1,
+    "isInteractable": true,
+    "isClickable": true,
+    "isFollower": false,
+    "models": [
+        41985
+    ],
+    "transforms": [
+    ],
+    "params": {
+    }
+}

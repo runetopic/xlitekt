@@ -1,0 +1,44 @@
+{
+    "id": 927,
+    "name": "Pee Hat",
+    "size": 2,
+    "idleSequence": 926,
+    "turnLeftSequence": -1,
+    "turnRightSequence": -1,
+    "walkSequence": 1139,
+    "walkBackSequence": -1,
+    "walkLeftSequence": -1,
+    "walkRightSequence": -1,
+    "actions": [
+        "null",
+        "Attack",
+        "null",
+        "null",
+        "null"
+    ],
+    "drawMapDot": true,
+    "combatLevel": 91,
+    "widthScale": 174,
+    "heightScale": 160,
+    "isVisible": false,
+    "ambient": 0,
+    "contrast": 0,
+    "headIconPrayer": -1,
+    "rotation": 32,
+    "transformVarbit": -1,
+    "transformVarp": -1,
+    "isInteractable": true,
+    "isClickable": true,
+    "isFollower": false,
+    "models": [
+        3753,
+        3758,
+        3756,
+        3766,
+        3762
+    ],
+    "transforms": [
+    ],
+    "params": {
+    }
+}

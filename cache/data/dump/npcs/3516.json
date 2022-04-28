@@ -1,0 +1,45 @@
+{
+    "id": 3516,
+    "name": "Ghost",
+    "size": 1,
+    "idleSequence": 808,
+    "turnLeftSequence": -1,
+    "turnRightSequence": -1,
+    "walkSequence": 819,
+    "walkBackSequence": 820,
+    "walkLeftSequence": 821,
+    "walkRightSequence": 822,
+    "actions": [
+        "Talk-To",
+        "null",
+        "null",
+        "null",
+        "null"
+    ],
+    "drawMapDot": true,
+    "combatLevel": 0,
+    "widthScale": 128,
+    "heightScale": 128,
+    "isVisible": true,
+    "ambient": 35,
+    "contrast": 175,
+    "headIconPrayer": -1,
+    "rotation": 32,
+    "transformVarbit": -1,
+    "transformVarp": -1,
+    "isInteractable": true,
+    "isClickable": true,
+    "isFollower": false,
+    "models": [
+        22280,
+        22283,
+        22278,
+        22282,
+        22279,
+        22284
+    ],
+    "transforms": [
+    ],
+    "params": {
+    }
+}

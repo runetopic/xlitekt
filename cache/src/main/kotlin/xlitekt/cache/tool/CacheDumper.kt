@@ -93,31 +93,191 @@ object CacheDumper {
             }
         }
 
-        Path.of("./cache/data/dump/").apply {
+        Path.of("./cache/data/dump/varbits/").apply {
             if (notExists()) createDirectories()
-        }.also {
-            json.encodeToStream(varbits.entries().toList(), Path.of("$it/varbits.json").outputStream())
-            json.encodeToStream(interfaces.entries().toList(), Path.of("$it/interfaces.json").outputStream())
-            json.encodeToStream(enums.entries().toList(), Path.of("$it/enums.json").outputStream())
-            json.encodeToStream(objs.entries().toList(), Path.of("$it/objs.json").outputStream())
-            json.encodeToStream(npcs.entries().toList(), Path.of("$it/npcs.json").outputStream())
-            json.encodeToStream(locs.entries().toList(), Path.of("$it/locs.json").outputStream())
-            // json.encodeToStream(maps.entries().toList(), Path.of("$it/maps.json").outputStream())
-            json.encodeToStream(sequences.entries().toList(), Path.of("$it/sequences.json").outputStream())
-            json.encodeToStream(hitSplats.entries().toList(), Path.of("$it/hitSplats.json").outputStream())
-            json.encodeToStream(params.entries().toList(), Path.of("$it/params.json").outputStream())
-            json.encodeToStream(hitBars.entries().toList(), Path.of("$it/hitBars.json").outputStream())
-            json.encodeToStream(structs.entries().toList(), Path.of("$it/structs.json").outputStream())
-            json.encodeToStream(kits.entries().toList(), Path.of("$it/kits.json").outputStream())
-            json.encodeToStream(invs.entries().toList(), Path.of("$it/invs.json").outputStream())
-            json.encodeToStream(spotAnimations.entries().toList(), Path.of("$it/spotAnimations.json").outputStream())
-            json.encodeToStream(varps.entries().toList(), Path.of("$it/varps.json").outputStream())
-            json.encodeToStream(floorOverlays.entries().toList(), Path.of("$it/floorOverlays.json").outputStream())
-            json.encodeToStream(floorUnderlays.entries().toList(), Path.of("$it/floorUnderlays.json").outputStream())
-            json.encodeToStream(varcs.entries().toList(), Path.of("$it/varcs.json").outputStream())
-            json.encodeToStream(worldmap.entries().toList(), Path.of("$it/worldmap.json").outputStream())
-            json.encodeToStream(textures.entries().toList(), Path.of("$it/textures.json").outputStream())
+        }.also { path ->
+            varbits.entries().parallelStream().forEach {
+                json.encodeToStream(it, Path.of("$path/${it.id}.json").outputStream())
+            }
         }
+
+        Path.of("./cache/data/dump/interfaces/").apply {
+            if (notExists()) createDirectories()
+        }.also { path ->
+            interfaces.entries().parallelStream().forEach {
+                json.encodeToStream(it, Path.of("$path/${it.id}.json").outputStream())
+            }
+        }
+
+        Path.of("./cache/data/dump/enums/").apply {
+            if (notExists()) createDirectories()
+        }.also { path ->
+            enums.entries().parallelStream().forEach {
+                json.encodeToStream(it, Path.of("$path/${it.id}.json").outputStream())
+            }
+        }
+
+        Path.of("./cache/data/dump/objs/").apply {
+            if (notExists()) createDirectories()
+        }.also { path ->
+            objs.entries().parallelStream().forEach {
+                json.encodeToStream(it, Path.of("$path/${it.id}.json").outputStream())
+            }
+        }
+
+        Path.of("./cache/data/dump/npcs/").apply {
+            if (notExists()) createDirectories()
+        }.also { path ->
+            npcs.entries().parallelStream().forEach {
+                json.encodeToStream(it, Path.of("$path/${it.id}.json").outputStream())
+            }
+        }
+
+        Path.of("./cache/data/dump/locs/").apply {
+            if (notExists()) createDirectories()
+        }.also { path ->
+            locs.entries().parallelStream().forEach {
+                json.encodeToStream(it, Path.of("$path/${it.id}.json").outputStream())
+            }
+        }
+
+        Path.of("./cache/data/dump/sequences/").apply {
+            if (notExists()) createDirectories()
+        }.also { path ->
+            sequences.entries().parallelStream().forEach {
+                json.encodeToStream(it, Path.of("$path/${it.id}.json").outputStream())
+            }
+        }
+
+        Path.of("./cache/data/dump/hitSplats/").apply {
+            if (notExists()) createDirectories()
+        }.also { path ->
+            hitSplats.entries().parallelStream().forEach {
+                json.encodeToStream(it, Path.of("$path/${it.id}.json").outputStream())
+            }
+        }
+
+        Path.of("./cache/data/dump/params/").apply {
+            if (notExists()) createDirectories()
+        }.also { path ->
+            params.entries().parallelStream().forEach {
+                json.encodeToStream(it, Path.of("$path/${it.id}.json").outputStream())
+            }
+        }
+
+        Path.of("./cache/data/dump/hitBars/").apply {
+            if (notExists()) createDirectories()
+        }.also { path ->
+            hitBars.entries().parallelStream().forEach {
+                json.encodeToStream(it, Path.of("$path/${it.id}.json").outputStream())
+            }
+        }
+
+        Path.of("./cache/data/dump/structs/").apply {
+            if (notExists()) createDirectories()
+        }.also { path ->
+            structs.entries().parallelStream().forEach {
+                json.encodeToStream(it, Path.of("$path/${it.id}.json").outputStream())
+            }
+        }
+
+        Path.of("./cache/data/dump/kits/").apply {
+            if (notExists()) createDirectories()
+        }.also { path ->
+            kits.entries().parallelStream().forEach {
+                json.encodeToStream(it, Path.of("$path/${it.id}.json").outputStream())
+            }
+        }
+
+        Path.of("./cache/data/dump/invs/").apply {
+            if (notExists()) createDirectories()
+        }.also { path ->
+            invs.entries().parallelStream().forEach {
+                json.encodeToStream(it, Path.of("$path/${it.id}.json").outputStream())
+            }
+        }
+
+        Path.of("./cache/data/dump/spotAnimations/").apply {
+            if (notExists()) createDirectories()
+        }.also { path ->
+            spotAnimations.entries().parallelStream().forEach {
+                json.encodeToStream(it, Path.of("$path/${it.id}.json").outputStream())
+            }
+        }
+
+        Path.of("./cache/data/dump/varps/").apply {
+            if (notExists()) createDirectories()
+        }.also { path ->
+            varps.entries().parallelStream().forEach {
+                json.encodeToStream(it, Path.of("$path/${it.id}.json").outputStream())
+            }
+        }
+
+        Path.of("./cache/data/dump/floorOverlays/").apply {
+            if (notExists()) createDirectories()
+        }.also { path ->
+            floorOverlays.entries().parallelStream().forEach {
+                json.encodeToStream(it, Path.of("$path/${it.id}.json").outputStream())
+            }
+        }
+
+        Path.of("./cache/data/dump/floorUnderlays/").apply {
+            if (notExists()) createDirectories()
+        }.also { path ->
+            floorUnderlays.entries().parallelStream().forEach {
+                json.encodeToStream(it, Path.of("$path/${it.id}.json").outputStream())
+            }
+        }
+
+        Path.of("./cache/data/dump/varcs/").apply {
+            if (notExists()) createDirectories()
+        }.also { path ->
+            varcs.entries().parallelStream().forEach {
+                json.encodeToStream(it, Path.of("$path/${it.id}.json").outputStream())
+            }
+        }
+
+        Path.of("./cache/data/dump/worldmap/").apply {
+            if (notExists()) createDirectories()
+        }.also { path ->
+            worldmap.entries().parallelStream().forEach {
+                json.encodeToStream(it, Path.of("$path/${it.id}.json").outputStream())
+            }
+        }
+
+        Path.of("./cache/data/dump/textures/").apply {
+            if (notExists()) createDirectories()
+        }.also { path ->
+            textures.entries().parallelStream().forEach {
+                json.encodeToStream(it, Path.of("$path/${it.id}.json").outputStream())
+            }
+        }
+
+//        Path.of("./cache/data/dump/").apply {
+//            if (notExists()) createDirectories()
+//        }.also {
+//            json.encodeToStream(varbits.entries().toList(), Path.of("$it/varbits.json").outputStream())
+//            json.encodeToStream(interfaces.entries().toList(), Path.of("$it/interfaces.json").outputStream())
+//            json.encodeToStream(enums.entries().toList(), Path.of("$it/enums.json").outputStream())
+//            json.encodeToStream(objs.entries().toList(), Path.of("$it/objs.json").outputStream())
+//            json.encodeToStream(npcs.entries().toList(), Path.of("$it/npcs.json").outputStream())
+//            json.encodeToStream(locs.entries().toList(), Path.of("$it/locs.json").outputStream())
+//            // json.encodeToStream(maps.entries().toList(), Path.of("$it/maps.json").outputStream())
+//            json.encodeToStream(sequences.entries().toList(), Path.of("$it/sequences.json").outputStream())
+//            json.encodeToStream(hitSplats.entries().toList(), Path.of("$it/hitSplats.json").outputStream())
+//            json.encodeToStream(params.entries().toList(), Path.of("$it/params.json").outputStream())
+//            json.encodeToStream(hitBars.entries().toList(), Path.of("$it/hitBars.json").outputStream())
+//            json.encodeToStream(structs.entries().toList(), Path.of("$it/structs.json").outputStream())
+//            json.encodeToStream(kits.entries().toList(), Path.of("$it/kits.json").outputStream())
+//            json.encodeToStream(invs.entries().toList(), Path.of("$it/invs.json").outputStream())
+//            json.encodeToStream(spotAnimations.entries().toList(), Path.of("$it/spotAnimations.json").outputStream())
+//            json.encodeToStream(varps.entries().toList(), Path.of("$it/varps.json").outputStream())
+//            json.encodeToStream(floorOverlays.entries().toList(), Path.of("$it/floorOverlays.json").outputStream())
+//            json.encodeToStream(floorUnderlays.entries().toList(), Path.of("$it/floorUnderlays.json").outputStream())
+//            json.encodeToStream(varcs.entries().toList(), Path.of("$it/varcs.json").outputStream())
+//            json.encodeToStream(worldmap.entries().toList(), Path.of("$it/worldmap.json").outputStream())
+//            json.encodeToStream(textures.entries().toList(), Path.of("$it/textures.json").outputStream())
+//        }
     }
 
     fun dumpSprites() {
@@ -133,7 +293,7 @@ object CacheDumper {
     }
 
     fun dumpTextures() {
-        Path.of("./cache/data/dump/textures/").apply {
+        Path.of("./cache/data/dump/textures/sprites/").apply {
             if (notExists()) createDirectories()
         }.also {
             for (texture in textures.entries().filter { ids -> ids.textureIds != null }) {

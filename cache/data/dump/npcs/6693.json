@@ -1,0 +1,41 @@
+{
+    "id": 6693,
+    "name": "Wily cat",
+    "size": 1,
+    "idleSequence": 317,
+    "turnLeftSequence": -1,
+    "turnRightSequence": -1,
+    "walkSequence": 314,
+    "walkBackSequence": -1,
+    "walkLeftSequence": -1,
+    "walkRightSequence": -1,
+    "actions": [
+        "null",
+        "null",
+        "Pick-up",
+        "null",
+        "null"
+    ],
+    "drawMapDot": false,
+    "combatLevel": 0,
+    "widthScale": 70,
+    "heightScale": 70,
+    "isVisible": false,
+    "ambient": 0,
+    "contrast": 0,
+    "headIconPrayer": -1,
+    "rotation": 32,
+    "transformVarbit": -1,
+    "transformVarp": -1,
+    "isInteractable": true,
+    "isClickable": true,
+    "isFollower": false,
+    "models": [
+        9428,
+        9426
+    ],
+    "transforms": [
+    ],
+    "params": {
+    }
+}

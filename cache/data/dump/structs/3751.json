@@ -1,0 +1,12 @@
+{
+    "id": 3751,
+    "params": {
+        "1077": 200,
+        "1078": 4,
+        "1086": "Iron Group loot broadcast threshold",
+        "1088": "Iron Group loot broadcast threshold,loot drop notification threshold,loot drop threshold,Notifications,Iron,Iron Group,GIM,Broadcast",
+        "1096": "Sets the threshold for item drops you receive which are broadcast to your Iron Group.",
+        "1085": 1,
+        "1414": 1
+    }
+}

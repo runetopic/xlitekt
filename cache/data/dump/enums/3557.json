@@ -1,0 +1,14 @@
+{
+    "id": 3557,
+    "keyType": "INTEGER",
+    "valType": "NAMEDOBJ",
+    "defaultString": "null",
+    "defaultInt": -1,
+    "size": 4,
+    "params": {
+        "0": 25028,
+        "1": 25031,
+        "2": 25034,
+        "3": 25037
+    }
+}

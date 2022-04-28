@@ -1,0 +1,10 @@
+{
+    "id": 4003,
+    "keyType": "INTEGER",
+    "valType": "LOC",
+    "defaultString": "null",
+    "defaultInt": -1,
+    "size": 0,
+    "params": {
+    }
+}

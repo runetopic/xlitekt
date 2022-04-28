@@ -1,0 +1,40 @@
+{
+    "id": 10684,
+    "name": "Ramarno",
+    "size": 1,
+    "idleSequence": 101,
+    "turnLeftSequence": -1,
+    "turnRightSequence": -1,
+    "walkSequence": 98,
+    "walkBackSequence": -1,
+    "walkLeftSequence": -1,
+    "walkRightSequence": -1,
+    "actions": [
+        "Talk-to",
+        "null",
+        "Exchange",
+        "null",
+        "null"
+    ],
+    "drawMapDot": true,
+    "combatLevel": 0,
+    "widthScale": 128,
+    "heightScale": 128,
+    "isVisible": false,
+    "ambient": 0,
+    "contrast": 0,
+    "headIconPrayer": -1,
+    "rotation": 32,
+    "transformVarbit": -1,
+    "transformVarp": -1,
+    "isInteractable": true,
+    "isClickable": true,
+    "isFollower": false,
+    "models": [
+        42131
+    ],
+    "transforms": [
+    ],
+    "params": {
+    }
+}

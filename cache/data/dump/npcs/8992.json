@@ -1,0 +1,41 @@
+{
+    "id": 8992,
+    "name": "Witch's cat",
+    "size": 1,
+    "idleSequence": 317,
+    "turnLeftSequence": -1,
+    "turnRightSequence": -1,
+    "walkSequence": 314,
+    "walkBackSequence": -1,
+    "walkLeftSequence": -1,
+    "walkRightSequence": -1,
+    "actions": [
+        "Pick-up",
+        "null",
+        "Talk-to",
+        "null",
+        "null"
+    ],
+    "drawMapDot": true,
+    "combatLevel": 0,
+    "widthScale": 60,
+    "heightScale": 60,
+    "isVisible": false,
+    "ambient": 0,
+    "contrast": 0,
+    "headIconPrayer": -1,
+    "rotation": 32,
+    "transformVarbit": -1,
+    "transformVarp": -1,
+    "isInteractable": true,
+    "isClickable": true,
+    "isFollower": false,
+    "models": [
+        3010,
+        3006
+    ],
+    "transforms": [
+    ],
+    "params": {
+    }
+}

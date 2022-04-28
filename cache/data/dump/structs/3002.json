@@ -1,0 +1,11 @@
+{
+    "id": 3002,
+    "params": {
+        "1077": 10,
+        "1078": 0,
+        "1086": "Show boss health overlay",
+        "1088": "Show health overlay,hide health overlay,boss health overlay,Advanced Display Settings",
+        "1084": 1,
+        "1096": "When enabled, fighting certain bosses will display a larger health overlay."
+    }
+}

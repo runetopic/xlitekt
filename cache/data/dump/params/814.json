@@ -1,0 +1,7 @@
+{
+    "id": 814,
+    "type": "STRING",
+    "defaultInt": 0,
+    "autoDisable": true,
+    "defaultString": "You forgot to give this task a more hint"
+}

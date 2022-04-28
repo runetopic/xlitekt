@@ -1,0 +1,43 @@
+{
+    "id": 8077,
+    "name": "Blue dragon",
+    "size": 5,
+    "idleSequence": 7870,
+    "turnLeftSequence": -1,
+    "turnRightSequence": -1,
+    "walkSequence": 7870,
+    "walkBackSequence": -1,
+    "walkLeftSequence": -1,
+    "walkRightSequence": -1,
+    "actions": [
+        "null",
+        "null",
+        "null",
+        "null",
+        "null"
+    ],
+    "drawMapDot": true,
+    "combatLevel": 111,
+    "widthScale": 110,
+    "heightScale": 110,
+    "isVisible": false,
+    "ambient": 0,
+    "contrast": 0,
+    "headIconPrayer": -1,
+    "rotation": 32,
+    "transformVarbit": -1,
+    "transformVarp": -1,
+    "isInteractable": true,
+    "isClickable": true,
+    "isFollower": false,
+    "models": [
+        17410,
+        17425,
+        17420,
+        17423
+    ],
+    "transforms": [
+    ],
+    "params": {
+    }
+}

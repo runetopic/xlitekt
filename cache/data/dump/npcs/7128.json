@@ -1,0 +1,41 @@
+{
+    "id": 7128,
+    "name": "Monkey guard",
+    "size": 1,
+    "idleSequence": 1386,
+    "turnLeftSequence": -1,
+    "turnRightSequence": -1,
+    "walkSequence": 1380,
+    "walkBackSequence": -1,
+    "walkLeftSequence": -1,
+    "walkRightSequence": -1,
+    "actions": [
+        "null",
+        "null",
+        "null",
+        "null",
+        "null"
+    ],
+    "drawMapDot": true,
+    "combatLevel": 86,
+    "widthScale": 128,
+    "heightScale": 128,
+    "isVisible": true,
+    "ambient": 0,
+    "contrast": 0,
+    "headIconPrayer": -1,
+    "rotation": 32,
+    "transformVarbit": -1,
+    "transformVarp": -1,
+    "isInteractable": true,
+    "isClickable": false,
+    "isFollower": false,
+    "models": [
+        4821,
+        4828
+    ],
+    "transforms": [
+    ],
+    "params": {
+    }
+}

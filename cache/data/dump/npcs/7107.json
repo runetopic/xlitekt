@@ -1,0 +1,47 @@
+{
+    "id": 7107,
+    "name": "Kob",
+    "size": 2,
+    "idleSequence": 927,
+    "turnLeftSequence": -1,
+    "turnRightSequence": -1,
+    "walkSequence": 1141,
+    "walkBackSequence": -1,
+    "walkLeftSequence": -1,
+    "walkRightSequence": -1,
+    "actions": [
+        "Talk-to",
+        "Attack",
+        "null",
+        "null",
+        "null"
+    ],
+    "drawMapDot": true,
+    "combatLevel": 185,
+    "widthScale": 221,
+    "heightScale": 221,
+    "isVisible": false,
+    "ambient": 0,
+    "contrast": 0,
+    "headIconPrayer": -1,
+    "rotation": 32,
+    "transformVarbit": -1,
+    "transformVarp": -1,
+    "isInteractable": true,
+    "isClickable": true,
+    "isFollower": false,
+    "models": [
+        3753,
+        3759,
+        3756,
+        3768,
+        3770,
+        3760,
+        3757,
+        3774
+    ],
+    "transforms": [
+    ],
+    "params": {
+    }
+}

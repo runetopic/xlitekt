@@ -1,0 +1,40 @@
+{
+    "id": 7671,
+    "name": "Skotos",
+    "size": 1,
+    "idleSequence": 6935,
+    "turnLeftSequence": -1,
+    "turnRightSequence": -1,
+    "walkSequence": 4070,
+    "walkBackSequence": -1,
+    "walkLeftSequence": -1,
+    "walkRightSequence": -1,
+    "actions": [
+        "Talk-to",
+        "null",
+        "Pick-up",
+        "null",
+        "null"
+    ],
+    "drawMapDot": false,
+    "combatLevel": 0,
+    "widthScale": 20,
+    "heightScale": 20,
+    "isVisible": false,
+    "ambient": 30,
+    "contrast": 150,
+    "headIconPrayer": -1,
+    "rotation": 32,
+    "transformVarbit": -1,
+    "transformVarp": -1,
+    "isInteractable": true,
+    "isClickable": true,
+    "isFollower": true,
+    "models": [
+        31653
+    ],
+    "transforms": [
+    ],
+    "params": {
+    }
+}

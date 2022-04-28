@@ -1,0 +1,15 @@
+{
+    "id": 1744,
+    "keyType": "INTEGER",
+    "valType": "STRING",
+    "defaultString": "",
+    "defaultInt": 0,
+    "size": 5,
+    "params": {
+        "0": "Clean finds from the Digsite on the tables in the museum and place them in their cases.",
+        "5": "Examine the displays in the Natural History section of the museum and answer Orlando Smith's quiz.",
+        "19": "Gather information from around Gielinor by completing quests and other activities, then speak to Historian Minas.",
+        "33": "Discover fossils on fossil island to complete the displays on the bottom floor of the museum.",
+        "69": "Crush Barronite deposits in the ruins of Camdozaal to find relics and hand them in to the curator."
+    }
+}

@@ -1,0 +1,15 @@
+{
+    "id": 934,
+    "keyType": "INTEGER",
+    "valType": "STRING",
+    "defaultString": "",
+    "defaultInt": 0,
+    "size": 5,
+    "params": {
+        "16": "Ignore freezing",
+        "17": "PJ timer",
+        "18": "Allow Powered Staves",
+        "19": "Single Spells",
+        "30": "Allow Blighted VLS"
+    }
+}

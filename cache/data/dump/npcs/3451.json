@@ -1,0 +1,47 @@
+{
+    "id": 3451,
+    "name": "Mysterious ghost",
+    "size": 1,
+    "idleSequence": 2334,
+    "turnLeftSequence": -1,
+    "turnRightSequence": -1,
+    "walkSequence": 2333,
+    "walkBackSequence": -1,
+    "walkLeftSequence": -1,
+    "walkRightSequence": -1,
+    "actions": [
+        "Talk-To",
+        "null",
+        "null",
+        "null",
+        "null"
+    ],
+    "drawMapDot": false,
+    "combatLevel": 0,
+    "widthScale": 112,
+    "heightScale": 112,
+    "isVisible": false,
+    "ambient": 35,
+    "contrast": 175,
+    "headIconPrayer": -1,
+    "rotation": 32,
+    "transformVarbit": -1,
+    "transformVarp": -1,
+    "isInteractable": true,
+    "isClickable": true,
+    "isFollower": false,
+    "models": [
+        202,
+        230,
+        246,
+        292,
+        170,
+        176,
+        260,
+        185
+    ],
+    "transforms": [
+    ],
+    "params": {
+    }
+}

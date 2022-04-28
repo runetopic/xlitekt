@@ -1,0 +1,12 @@
+{
+    "id": 1625,
+    "keyType": "INTEGER",
+    "valType": "STRING",
+    "defaultString": "Fake drops",
+    "defaultInt": 0,
+    "size": 2,
+    "params": {
+        "0": "On",
+        "1": "Off"
+    }
+}

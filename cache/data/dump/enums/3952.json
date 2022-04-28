@@ -1,0 +1,16 @@
+{
+    "id": 3952,
+    "keyType": "INTEGER",
+    "valType": "STRING",
+    "defaultString": "null",
+    "defaultInt": 0,
+    "size": 6,
+    "params": {
+        "0": "15k XP lamp (minimum skill requirement: 40)",
+        "1": "The drop chance of a <col=ffffff>Clue Scroll (Hard)</col> from all sources (excl. implings) is increased by 5%",
+        "2": "The maximum quantity assigned from the <col=ffffff>Like a boss</col> slayer reward is increased by 6",
+        "3": "The drop chance of an <col=ffffff>Ecumenical Key</col> is increased by 8%",
+        "4": "The essence required to access a <col=ffffff>God Wars</col> boss is reduced to 38",
+        "5": "You can access a privately rented <col=ffffff>God Wars</col> boss instance for a fee of 150k coins"
+    }
+}

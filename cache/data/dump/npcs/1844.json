@@ -1,0 +1,44 @@
+{
+    "id": 1844,
+    "name": "Centaur",
+    "size": 2,
+    "idleSequence": 4311,
+    "turnLeftSequence": -1,
+    "turnRightSequence": -1,
+    "walkSequence": 4310,
+    "walkBackSequence": -1,
+    "walkLeftSequence": -1,
+    "walkRightSequence": -1,
+    "actions": [
+        "Talk-to",
+        "null",
+        "null",
+        "null",
+        "null"
+    ],
+    "drawMapDot": true,
+    "combatLevel": 0,
+    "widthScale": 128,
+    "heightScale": 128,
+    "isVisible": false,
+    "ambient": 0,
+    "contrast": 0,
+    "headIconPrayer": -1,
+    "rotation": 32,
+    "transformVarbit": -1,
+    "transformVarp": -1,
+    "isInteractable": true,
+    "isClickable": true,
+    "isFollower": false,
+    "models": [
+        16195,
+        16201,
+        16198,
+        16197,
+        16200
+    ],
+    "transforms": [
+    ],
+    "params": {
+    }
+}

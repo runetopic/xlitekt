@@ -1,0 +1,13 @@
+{
+    "id": 2861,
+    "params": {
+        "1077": 84,
+        "1078": 0,
+        "1086": "Food/Potions can form supply piles on death",
+        "1088": "Food/Potions can form supply piles on death,grave,gameplay,combat",
+        "1084": 1,
+        "1085": 1,
+        "1096": "When enabled, on death in eligible areas, food & potions will be dropped as a pile of supplies where you died, rather than going to a gravestone.",
+        "1119": 0
+    }
+}

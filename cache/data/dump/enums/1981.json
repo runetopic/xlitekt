@@ -1,0 +1,14 @@
+{
+    "id": 1981,
+    "keyType": "INTEGER",
+    "valType": "ENUM",
+    "defaultString": "null",
+    "defaultInt": -1,
+    "size": 4,
+    "params": {
+        "0": 1982,
+        "1": 1983,
+        "2": 1984,
+        "3": 1985
+    }
+}

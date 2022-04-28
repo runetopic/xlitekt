@@ -1,0 +1,15 @@
+{
+    "id": 3993,
+    "keyType": "INTEGER",
+    "valType": "STRING",
+    "defaultString": "Left-click where available",
+    "defaultInt": 0,
+    "size": 5,
+    "params": {
+        "0": "Depends on combat levels",
+        "1": "Always right-click",
+        "2": "Left-click where available",
+        "3": "Hidden",
+        "4": "Right-click for clanmates"
+    }
+}

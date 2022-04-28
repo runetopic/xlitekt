@@ -1,0 +1,10 @@
+{
+    "id": 3640,
+    "params": {
+        "1088": "collection log,cl,new item,notifications",
+        "1077": 85,
+        "1078": 0,
+        "1086": "Collection log - New addition notification",
+        "1096": "Sends a chat notification whenever a new item is added to your Collection log."
+    }
+}

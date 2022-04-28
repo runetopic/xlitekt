@@ -1,0 +1,32 @@
+{
+    "id": 848,
+    "keyType": "INTEGER",
+    "valType": "STRING",
+    "defaultString": "",
+    "defaultInt": 0,
+    "size": 22,
+    "params": {
+        "1": "Barbarian Assault",
+        "2": "Blast Furnace",
+        "4": "Castle Wars",
+        "7": "Fishing Trawler",
+        "3": "Burthorpe Games Room",
+        "10": "Nightmare Zone",
+        "11": "Pest Control",
+        "13": "Rat Pits",
+        "14": "Shades of Mort'ton",
+        "20": "Trouble Brewing",
+        "21": "TzHaar Fight Pit",
+        "15": "Shield of Arrav",
+        "5": "Clan Wars",
+        "8": "God Wars",
+        "6": "Dagannoth Kings",
+        "12": "Player Owned Houses",
+        "19": "Tithe Farm",
+        "9": "Last Man Standing",
+        "22": "Volcanic Mine",
+        "18": "Theatre of Blood",
+        "17": "Soul Wars",
+        "16": "Shooting Stars"
+    }
+}

@@ -1,0 +1,13 @@
+{
+    "id": 3711,
+    "params": {
+        "1077": 183,
+        "1078": 0,
+        "1086": "Iron loot restriction messages",
+        "1088": "iron,loot,kill,message",
+        "1085": 1,
+        "742": 1,
+        "1084": 1,
+        "1096": "When enabled, Iron players will occasionally see chatbox messages warning them if they're attacking a creature that's restricted from dropping loot to them."
+    }
+}

@@ -1,0 +1,15 @@
+{
+    "id": 3808,
+    "keyType": "INTEGER",
+    "valType": "STRING",
+    "defaultString": "",
+    "defaultInt": 0,
+    "size": 5,
+    "params": {
+        "-1": "Type",
+        "0": "Bossing",
+        "1": "Skilling",
+        "3": "Social",
+        "2": "PvP"
+    }
+}

@@ -1,0 +1,15 @@
+{
+    "id": 1743,
+    "keyType": "INTEGER",
+    "valType": "STRING",
+    "defaultString": "",
+    "defaultInt": 0,
+    "size": 5,
+    "params": {
+        "0": "Digsite Finds",
+        "5": "Natural History Displays",
+        "19": "Timeline Displays",
+        "33": "Fossil Island Displays",
+        "69": "Camdozaal Relics"
+    }
+}

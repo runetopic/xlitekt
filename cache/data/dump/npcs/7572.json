@@ -1,0 +1,40 @@
+{
+    "id": 7572,
+    "name": "<col=00ffff>Guardian</col>",
+    "size": 2,
+    "idleSequence": 3280,
+    "turnLeftSequence": -1,
+    "turnRightSequence": -1,
+    "walkSequence": 3280,
+    "walkBackSequence": -1,
+    "walkLeftSequence": -1,
+    "walkRightSequence": -1,
+    "actions": [
+        "null",
+        "null",
+        "null",
+        "null",
+        "null"
+    ],
+    "drawMapDot": true,
+    "combatLevel": 0,
+    "widthScale": 128,
+    "heightScale": 128,
+    "isVisible": true,
+    "ambient": 0,
+    "contrast": 0,
+    "headIconPrayer": -1,
+    "rotation": 32,
+    "transformVarbit": -1,
+    "transformVarp": -1,
+    "isInteractable": true,
+    "isClickable": true,
+    "isFollower": false,
+    "models": [
+        32659
+    ],
+    "transforms": [
+    ],
+    "params": {
+    }
+}

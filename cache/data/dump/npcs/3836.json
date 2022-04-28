@@ -1,0 +1,42 @@
+{
+    "id": 3836,
+    "name": "House",
+    "size": 5,
+    "idleSequence": 4391,
+    "turnLeftSequence": -1,
+    "turnRightSequence": -1,
+    "walkSequence": 4390,
+    "walkBackSequence": -1,
+    "walkLeftSequence": -1,
+    "walkRightSequence": -1,
+    "actions": [
+        "Go-inside",
+        "null",
+        "null",
+        "null",
+        "null"
+    ],
+    "drawMapDot": false,
+    "combatLevel": 0,
+    "widthScale": 215,
+    "heightScale": 215,
+    "isVisible": true,
+    "ambient": 10,
+    "contrast": 50,
+    "headIconPrayer": -1,
+    "rotation": 32,
+    "transformVarbit": -1,
+    "transformVarp": -1,
+    "isInteractable": true,
+    "isClickable": true,
+    "isFollower": false,
+    "models": [
+        16736,
+        16735,
+        16737
+    ],
+    "transforms": [
+    ],
+    "params": {
+    }
+}

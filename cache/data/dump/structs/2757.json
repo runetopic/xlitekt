@@ -1,0 +1,11 @@
+{
+    "id": 2757,
+    "params": {
+        "1077": 34,
+        "1078": 0,
+        "1086": "Show chat effects",
+        "1088": "show chat effects,hide chat effects,Game chat",
+        "1084": 1,
+        "1096": "When enabled, chat effects will be displayed when players use them."
+    }
+}

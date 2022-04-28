@@ -1,0 +1,47 @@
+{
+    "id": 5213,
+    "name": "Jonny the beard",
+    "size": 1,
+    "idleSequence": 808,
+    "turnLeftSequence": -1,
+    "turnRightSequence": -1,
+    "walkSequence": 819,
+    "walkBackSequence": 820,
+    "walkLeftSequence": 821,
+    "walkRightSequence": 822,
+    "actions": [
+        "Talk-to",
+        "Attack",
+        "null",
+        "null",
+        "null"
+    ],
+    "drawMapDot": true,
+    "combatLevel": 2,
+    "widthScale": 130,
+    "heightScale": 124,
+    "isVisible": true,
+    "ambient": 0,
+    "contrast": 0,
+    "headIconPrayer": -1,
+    "rotation": 32,
+    "transformVarbit": -1,
+    "transformVarp": -1,
+    "isInteractable": true,
+    "isClickable": true,
+    "isFollower": false,
+    "models": [
+        25658,
+        25663,
+        299,
+        16831,
+        159,
+        177,
+        19250,
+        25649
+    ],
+    "transforms": [
+    ],
+    "params": {
+    }
+}

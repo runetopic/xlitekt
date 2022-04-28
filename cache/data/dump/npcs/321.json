@@ -1,0 +1,48 @@
+{
+    "id": 321,
+    "name": "Mime",
+    "size": 1,
+    "idleSequence": 808,
+    "turnLeftSequence": -1,
+    "turnRightSequence": -1,
+    "walkSequence": -1,
+    "walkBackSequence": -1,
+    "walkLeftSequence": -1,
+    "walkRightSequence": -1,
+    "actions": [
+        "null",
+        "null",
+        "null",
+        "null",
+        "null"
+    ],
+    "drawMapDot": true,
+    "combatLevel": 0,
+    "widthScale": 128,
+    "heightScale": 128,
+    "isVisible": true,
+    "ambient": 0,
+    "contrast": 0,
+    "headIconPrayer": -1,
+    "rotation": 32,
+    "transformVarbit": -1,
+    "transformVarp": -1,
+    "isInteractable": true,
+    "isClickable": true,
+    "isFollower": false,
+    "models": [
+        3598,
+        3667,
+        292,
+        163,
+        179,
+        254,
+        185,
+        198,
+        230
+    ],
+    "transforms": [
+    ],
+    "params": {
+    }
+}

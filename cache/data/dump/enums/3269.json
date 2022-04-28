@@ -1,0 +1,18 @@
+{
+    "id": 3269,
+    "keyType": "INTEGER",
+    "valType": "STRING",
+    "defaultString": "",
+    "defaultInt": 0,
+    "size": 8,
+    "params": {
+        "1": "Paddewa",
+        "2": "Senntisten",
+        "3": "Kharyll",
+        "4": "Lassar",
+        "5": "Dareeyak",
+        "6": "Carrallangar",
+        "7": "Annakarl",
+        "8": "Ghorrock"
+    }
+}

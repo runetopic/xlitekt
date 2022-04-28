@@ -1,0 +1,13 @@
+{
+    "id": 3735,
+    "params": {
+        "1077": 187,
+        "1078": 2,
+        "1086": "Ore respawn timer",
+        "1088": "respawn notification",
+        "1157": 1,
+        "1091": 4065,
+        "1096": "When enabled, a respawn timer will be shown when you mine a rock for ore. You can set this to only be shown if you have a pickaxe.",
+        "1085": 1
+    }
+}

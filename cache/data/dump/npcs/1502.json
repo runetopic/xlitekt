@@ -1,0 +1,49 @@
+{
+    "id": 1502,
+    "name": "Leon",
+    "size": 1,
+    "idleSequence": 808,
+    "turnLeftSequence": -1,
+    "turnRightSequence": -1,
+    "walkSequence": 819,
+    "walkBackSequence": 820,
+    "walkLeftSequence": 821,
+    "walkRightSequence": 822,
+    "actions": [
+        "Talk-to",
+        "null",
+        "Trade",
+        "Ammo",
+        "null"
+    ],
+    "drawMapDot": true,
+    "combatLevel": 0,
+    "widthScale": 128,
+    "heightScale": 128,
+    "isVisible": true,
+    "ambient": 0,
+    "contrast": 0,
+    "headIconPrayer": -1,
+    "rotation": 32,
+    "transformVarbit": -1,
+    "transformVarp": -1,
+    "isInteractable": true,
+    "isClickable": true,
+    "isFollower": false,
+    "models": [
+        9452,
+        245,
+        9620,
+        10984,
+        6036,
+        151,
+        179,
+        19839,
+        11339,
+        181
+    ],
+    "transforms": [
+    ],
+    "params": {
+    }
+}

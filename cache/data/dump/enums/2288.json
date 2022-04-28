@@ -1,0 +1,13 @@
+{
+    "id": 2288,
+    "keyType": "INTEGER",
+    "valType": "STAT",
+    "defaultString": "null",
+    "defaultInt": -1,
+    "size": 3,
+    "params": {
+        "21": 15,
+        "22": 14,
+        "23": 19
+    }
+}

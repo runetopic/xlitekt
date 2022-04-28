@@ -1,0 +1,17 @@
+{
+    "id": 3651,
+    "params": {
+        "1088": "hover mouseover tile highlighting indicator always on top",
+        "1077": 173,
+        "1078": 0,
+        "1086": "Highlight hovered tile - Always on top",
+        "1157": 1,
+        "739": 1,
+        "1084": 0,
+        "1096": "When enabled, shows the hovered tile highlight over objects in the world.",
+        "1080": 4027,
+        "1081": 4028,
+        "1116": "Highlight hovered tile must be enabled for this setting to have any effect.",
+        "1085": 1
+    }
+}

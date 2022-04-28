@@ -1,0 +1,18 @@
+{
+    "id": 1168,
+    "keyType": "INTEGER",
+    "valType": "STRING",
+    "defaultString": "Colour",
+    "defaultInt": 0,
+    "size": 8,
+    "params": {
+        "0": "White",
+        "1": "Lilac",
+        "2": "Cyan",
+        "3": "Jade",
+        "4": "Lime",
+        "5": "Yellow",
+        "6": "Orange",
+        "7": "Pink"
+    }
+}

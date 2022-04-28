@@ -1,0 +1,15 @@
+{
+    "id": 2232,
+    "params": {
+        "1077": 9,
+        "1078": 0,
+        "1086": "Show Wiki entity lookup",
+        "1088": "Show Wiki entity lookup,hide Wiki entity lookup,Advanced Display Settings",
+        "1084": 1,
+        "1080": 3500,
+        "1081": 3501,
+        "1085": 1,
+        "1116": "You must have data orbs turned on to change this setting.",
+        "1096": "When enabled, the Wiki entity lookup will be displayed under the minimap."
+    }
+}

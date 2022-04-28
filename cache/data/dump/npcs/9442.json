@@ -1,0 +1,40 @@
+{
+    "id": 9442,
+    "name": "<col=00ffff>Totem</col>",
+    "size": 3,
+    "idleSequence": 8589,
+    "turnLeftSequence": -1,
+    "turnRightSequence": -1,
+    "walkSequence": -1,
+    "walkBackSequence": -1,
+    "walkLeftSequence": -1,
+    "walkRightSequence": -1,
+    "actions": [
+        "null",
+        "Charge",
+        "null",
+        "null",
+        "null"
+    ],
+    "drawMapDot": false,
+    "combatLevel": 0,
+    "widthScale": 128,
+    "heightScale": 128,
+    "isVisible": true,
+    "ambient": 10,
+    "contrast": 50,
+    "headIconPrayer": -1,
+    "rotation": 0,
+    "transformVarbit": -1,
+    "transformVarp": -1,
+    "isInteractable": true,
+    "isClickable": true,
+    "isFollower": false,
+    "models": [
+        39321
+    ],
+    "transforms": [
+    ],
+    "params": {
+    }
+}

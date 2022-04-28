@@ -1,0 +1,40 @@
+{
+    "id": 10580,
+    "name": "<col=00ffff>Lightning cloud</col>",
+    "size": 4,
+    "idleSequence": 8875,
+    "turnLeftSequence": -1,
+    "turnRightSequence": -1,
+    "walkSequence": 8875,
+    "walkBackSequence": -1,
+    "walkLeftSequence": -1,
+    "walkRightSequence": -1,
+    "actions": [
+        "null",
+        "null",
+        "null",
+        "null",
+        "null"
+    ],
+    "drawMapDot": false,
+    "combatLevel": 0,
+    "widthScale": 128,
+    "heightScale": 128,
+    "isVisible": false,
+    "ambient": -5,
+    "contrast": 0,
+    "headIconPrayer": -1,
+    "rotation": 0,
+    "transformVarbit": -1,
+    "transformVarp": -1,
+    "isInteractable": true,
+    "isClickable": true,
+    "isFollower": false,
+    "models": [
+        41926
+    ],
+    "transforms": [
+    ],
+    "params": {
+    }
+}

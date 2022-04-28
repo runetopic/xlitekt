@@ -1,0 +1,22 @@
+{
+    "id": 595,
+    "keyType": "INTEGER",
+    "valType": "STRING",
+    "defaultString": "",
+    "defaultInt": 0,
+    "size": 12,
+    "params": {
+        "1": "Ardougne",
+        "5": "Desert",
+        "2": "Falador",
+        "3": "Fremennik",
+        "4": "Kandarin",
+        "0": "Karamja",
+        "6": "Lumbridge & Draynor",
+        "7": "Morytania",
+        "8": "Varrock",
+        "10": "Western Provinces",
+        "9": "Wilderness",
+        "11": "Kourend & Kebos"
+    }
+}

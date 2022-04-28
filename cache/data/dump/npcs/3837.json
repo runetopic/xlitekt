@@ -1,0 +1,47 @@
+{
+    "id": 3837,
+    "name": "Baba Yaga",
+    "size": 1,
+    "idleSequence": 4424,
+    "turnLeftSequence": -1,
+    "turnRightSequence": -1,
+    "walkSequence": 4426,
+    "walkBackSequence": 4427,
+    "walkLeftSequence": 4428,
+    "walkRightSequence": 4429,
+    "actions": [
+        "Talk-to",
+        "null",
+        "Trade",
+        "null",
+        "null"
+    ],
+    "drawMapDot": true,
+    "combatLevel": 0,
+    "widthScale": 110,
+    "heightScale": 110,
+    "isVisible": true,
+    "ambient": 12,
+    "contrast": 60,
+    "headIconPrayer": -1,
+    "rotation": 32,
+    "transformVarbit": -1,
+    "transformVarp": -1,
+    "isInteractable": true,
+    "isClickable": true,
+    "isFollower": false,
+    "models": [
+        12140,
+        10078,
+        16506,
+        16494,
+        353,
+        534,
+        16503,
+        270
+    ],
+    "transforms": [
+    ],
+    "params": {
+    }
+}

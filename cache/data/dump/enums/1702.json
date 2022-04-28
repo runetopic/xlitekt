@@ -1,0 +1,32 @@
+{
+    "id": 1702,
+    "keyType": "INTEGER",
+    "valType": "STRING",
+    "defaultString": "",
+    "defaultInt": 0,
+    "size": 22,
+    "params": {
+        "1": "Honest Jimmy",
+        "2": "Bert the Sandman",
+        "3": "Lanthus",
+        "4": "Advisor Ghrim",
+        "5": "Dark Mage",
+        "6": "Turael",
+        "7": "Mazchna",
+        "8": "Vannaka",
+        "9": "Chaeldar",
+        "10": "Nieve",
+        "11": "Duradel",
+        "18": "Krystilia",
+        "20": "Konar",
+        "22": "Spria",
+        "12": "Murphy",
+        "13": "Cyrisus",
+        "14": "Smoggy",
+        "15": "Ginea",
+        "16": "Watson",
+        "19": "Barbarian guard",
+        "17": "Random",
+        "21": "Amy"
+    }
+}

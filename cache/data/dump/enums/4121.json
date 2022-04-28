@@ -1,0 +1,17 @@
+{
+    "id": 4121,
+    "keyType": "INTEGER",
+    "valType": "STRING",
+    "defaultString": "",
+    "defaultInt": 0,
+    "size": 7,
+    "params": {
+        "0": "<col=ffffff>Leagues</col> are <col=ffffff>time-limited game modes</col> that let you experience the world of Gielinor in <col=ffffff>new ways</col>.<br><br>The aim of each <col=ffffff>League</col> is to complete <col=ffffff>tasks</col> and earn<br><col=ffffff>League Points</col>. These <col=ffffff>points</col> can be exchanged for <col=ffffff>rewards</col>. You can also earn <col=ffffff>Sage's Renown</col>, which is used to <col=ffffff>unlock content</col>.<br><br>To begin your journey in <col=ffffff>Leagues III: Shattered Relics</col>, use the <col=ffffff>Get Started</col> button below. Otherwise, you can use the<br><col=ffffff>Exit Leagues</col> button to quit.",
+        "3": "In <col=ffffff>Leagues III: Shattered Relics</col>, progression is key. To help you keep track of it, you have the <col=ffffff>Leagues Menu</col>. This is an extra section that appears on the <col=ffffff>Character Summary Panel</col> while in a <col=ffffff>Leagues World</col>.<br><br>Let's open the <col=ffffff>Leagues Menu</col> now. To do so, look for the flashing <col=ffffff>character summary icon</col> on your screen.",
+        "4": "Now that you have your <col=ffffff>Character Summary Panel</col> open, you can open the <col=ffffff>Leagues Menu</col>. To do so, look for the flashing <col=ffffff>Leagues tab</col>.",
+        "5": "Congratulations, you've completed your first <col=ffffff>task</col> in<br><col=ffffff>Leagues III: Shattered Relics</col>!<br><br>Completing <col=ffffff>tasks</col> is the ticket to success in any <col=ffffff>League</col>. As doing so earns you <col=ffffff>League Points</col> and, in <col=ffffff>Leagues III</col>, <col=ffffff>Sage's Renown</col>.<br><br>Let's take a look at the <col=ffffff>task list</col> now. To do so, look for the flashing <col=ffffff>tasks button</col> in the <col=ffffff>Leagues Menu</col>.",
+        "8": "In <col=ffffff>Leagues III: Shattered Relics</col>, most of your skills have been locked off, but you can unlock new ones by completing <col=ffffff>tasks</col>.<br><br>Now you've selected your Combat path, you can unlock your first <col=ffffff>skill</col>! To do so, look for the flashing <col=ffffff>unlocks button</col> in the <col=ffffff>Leagues Menu</col>.",
+        "10": "Throughout the League, you'll be able to earn <col=ffffff>Fragments</col>.<br><br><col=ffffff>Fragments</col> are powerful items which can be used to imbue your character with powerful effects when equipped!<br><br>Let's take a look at these <col=ffffff>Fragments</col> now. To do so, look for the flashing <col=ffffff>Fragments button</col> in the <col=ffffff>Leagues Menu</col>.",
+        "13": "You are now ready to properly start your adventure in <col=ffffff>Leagues III: Shattered Relics</col>!<br><br>If you need a recap on anything, you can use the <col=ffffff>info button</col> in the <col=ffffff>Leagues Menu</col> at any time. Alternatively, <br><col=ffffff>The Sage</col> in <col=ffffff>Catherby</col> can provide you with some<br>useful guidance.<br><br>When you are ready to begin, just use the <col=ffffff>End Tutorial</col> button below to get started."
+    }
+}

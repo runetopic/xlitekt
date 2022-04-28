@@ -1,0 +1,43 @@
+{
+    "id": 5080,
+    "name": "Weakened Delrith",
+    "size": 2,
+    "idleSequence": 4619,
+    "turnLeftSequence": -1,
+    "turnRightSequence": -1,
+    "walkSequence": 63,
+    "walkBackSequence": -1,
+    "walkLeftSequence": -1,
+    "walkRightSequence": -1,
+    "actions": [
+        "Banish",
+        "null",
+        "null",
+        "null",
+        "null"
+    ],
+    "drawMapDot": true,
+    "combatLevel": 1,
+    "widthScale": 86,
+    "heightScale": 86,
+    "isVisible": true,
+    "ambient": 0,
+    "contrast": 0,
+    "headIconPrayer": -1,
+    "rotation": 32,
+    "transformVarbit": -1,
+    "transformVarp": -1,
+    "isInteractable": true,
+    "isClickable": true,
+    "isFollower": false,
+    "models": [
+        17382,
+        17387,
+        17392,
+        17389
+    ],
+    "transforms": [
+    ],
+    "params": {
+    }
+}

@@ -1,0 +1,15 @@
+{
+    "id": 4070,
+    "keyType": "INTEGER",
+    "valType": "STRING",
+    "defaultString": "",
+    "defaultInt": 0,
+    "size": 5,
+    "params": {
+        "0": "Public",
+        "1": "Channel",
+        "2": "Clan",
+        "3": "Guest Clan",
+        "4": "Iron Group"
+    }
+}

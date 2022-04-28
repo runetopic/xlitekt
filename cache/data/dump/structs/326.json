@@ -1,0 +1,14 @@
+{
+    "id": 326,
+    "params": {
+        "1077": 162,
+        "1078": 0,
+        "1086": "Combat Achievement Tasks - Repeat failure",
+        "1088": "combat,achievements,notification,pvm,task,failure,completed",
+        "1085": 1,
+        "1080": 3942,
+        "1081": 3943,
+        "1096": "When enabled, you will be notified when you fail Combat Achievement tasks, which you have already completed, where applicable.",
+        "1116": "You can only change this setting if you have Combat Achievement task failure notifications enabled."
+    }
+}

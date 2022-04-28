@@ -1,0 +1,12 @@
+{
+    "id": 1727,
+    "params": {
+        "879": "Last Recall",
+        "880": "- Upon selecting this Relic you will receive a Crystal of Memories which when used will teleport you back to the location from where your most recent teleport occurred.<br><br>- Your teleport will only be stored if the Crystal of Memories is in your inventory and you will receive a message in your chatbox if it successfully stored your previous destination.<br><br>- The Crystal of Memories will not remember your teleport location if you teleport from an instance.<br><br>- There are various other locations this teleport won't save your teleport location such as quest areas, minigames, etc.<br><br>- You cannot teleport using the Crystal of Memories whilst you have a follower.<br><br>- On death, the Crystal of Memories is destroyed and can be reclaimed from the Leagues Tutor in Lumbridge.<br><br>- As this Relic gives you an item it must be unlocked at a bank.",
+        "884": 2614,
+        "881": 2662,
+        "883": 2663,
+        "885": 1,
+        "1274": 3064
+    }
+}

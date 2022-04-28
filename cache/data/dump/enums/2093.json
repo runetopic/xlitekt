@@ -1,0 +1,12 @@
+{
+    "id": 2093,
+    "keyType": "INTEGER",
+    "valType": "STRING",
+    "defaultString": "No Type",
+    "defaultInt": 0,
+    "size": 2,
+    "params": {
+        "0": "Quests",
+        "1": "Miniquests"
+    }
+}

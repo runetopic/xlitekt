@@ -1,0 +1,14 @@
+{
+    "id": 3661,
+    "keyType": "INTEGER",
+    "valType": "STRING",
+    "defaultString": "Tap-to-drop",
+    "defaultInt": 0,
+    "size": 4,
+    "params": {
+        "0": "Disable",
+        "1": "Tap-to-drop",
+        "2": "Single-tap",
+        "3": "Keyboard"
+    }
+}

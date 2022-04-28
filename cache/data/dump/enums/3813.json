@@ -1,0 +1,21 @@
+{
+    "id": 3813,
+    "keyType": "INTEGER",
+    "valType": "STRING",
+    "defaultString": "",
+    "defaultInt": 0,
+    "size": 11,
+    "params": {
+        "-1": "Subtype",
+        "0": "None",
+        "1": "Mass",
+        "2": "Wilderness",
+        "3": "Risky",
+        "4": "Serious",
+        "5": "Chill",
+        "6": "Meta",
+        "7": "Competition",
+        "8": "Rewards",
+        "9": "Bingo"
+    }
+}

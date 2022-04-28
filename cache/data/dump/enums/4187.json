@@ -1,0 +1,27 @@
+{
+    "id": 4187,
+    "keyType": "ENUM",
+    "valType": "STRING",
+    "defaultString": "",
+    "defaultInt": 0,
+    "size": 18,
+    "params": {
+        "4154": "Fishing",
+        "4155": "Woodcutting",
+        "4156": "Thieving",
+        "4160": "Firemaking",
+        "4157": "Agility",
+        "4159": "Mining",
+        "4164": "Cooking",
+        "4165": "Farming",
+        "4161": "Fletching",
+        "4167": "Magic",
+        "4168": "smithing",
+        "4162": "Construction",
+        "4163": "Prayer",
+        "4158": "Hunter",
+        "4153": "Crafting",
+        "4166": "Herblore",
+        "4169": "Runecraft"
+    }
+}

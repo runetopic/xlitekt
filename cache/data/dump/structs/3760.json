@@ -1,0 +1,13 @@
+{
+    "id": 3760,
+    "params": {
+        "1077": 206,
+        "1078": 0,
+        "1086": "PK Skull Prevention",
+        "1088": "skull,skulling,PK,prevention",
+        "1096": "When enabled, you will be prevented from attacking players in any way that would cause you to become skulled.",
+        "1115": 1,
+        "1085": 1,
+        "1116": "This setting cannot be enabled on Deadman worlds."
+    }
+}

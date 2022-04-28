@@ -1,0 +1,11 @@
+{
+    "id": 2760,
+    "params": {
+        "1077": 37,
+        "1078": 0,
+        "1086": "Enable profanity filter",
+        "1088": "Enable profanity filter,disable profanity filter,Game chat",
+        "1084": 1,
+        "1096": "When enabled, replaces bad words with a set of *."
+    }
+}

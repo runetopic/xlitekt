@@ -1,0 +1,40 @@
+{
+    "id": 9446,
+    "name": "Sleepwalker",
+    "size": 1,
+    "idleSequence": 8569,
+    "turnLeftSequence": -1,
+    "turnRightSequence": -1,
+    "walkSequence": 8534,
+    "walkBackSequence": -1,
+    "walkLeftSequence": -1,
+    "walkRightSequence": -1,
+    "actions": [
+        "null",
+        "Attack",
+        "null",
+        "null",
+        "null"
+    ],
+    "drawMapDot": true,
+    "combatLevel": 3,
+    "widthScale": 128,
+    "heightScale": 128,
+    "isVisible": true,
+    "ambient": 20,
+    "contrast": 0,
+    "headIconPrayer": -1,
+    "rotation": 32,
+    "transformVarbit": -1,
+    "transformVarp": -1,
+    "isInteractable": true,
+    "isClickable": true,
+    "isFollower": false,
+    "models": [
+        29145
+    ],
+    "transforms": [
+    ],
+    "params": {
+    }
+}

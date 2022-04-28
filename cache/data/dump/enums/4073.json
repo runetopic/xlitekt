@@ -1,0 +1,13 @@
+{
+    "id": 4073,
+    "keyType": "INTEGER",
+    "valType": "STRING",
+    "defaultString": "On (Req based)",
+    "defaultInt": 0,
+    "size": 3,
+    "params": {
+        "0": "Off",
+        "1": "On",
+        "2": "On (Req based)"
+    }
+}

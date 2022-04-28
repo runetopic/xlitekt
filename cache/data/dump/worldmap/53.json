@@ -1,0 +1,28 @@
+{
+    "id": 53,
+    "sprite1": 1499,
+    "sprite2": -1,
+    "name": "",
+    "location": 0,
+    "textSize": 0,
+    "field1758": true,
+    "field1759": true,
+    "menuActions": [
+        "null",
+        "null",
+        "null",
+        "null",
+        "null"
+    ],
+    "field1770": 2147483647,
+    "field1764": 2147483647,
+    "field1763": -2147483648,
+    "field1766": -2147483648,
+    "horizontalAlignment": 0,
+    "verticalAlignment": 0,
+    "category": 1099,
+    "field1762": null,
+    "field1749": null,
+    "field1769": null,
+    "menuTargetName": ""
+}

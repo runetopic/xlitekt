@@ -1,0 +1,46 @@
+{
+    "id": 6047,
+    "name": "Black Guard",
+    "size": 1,
+    "idleSequence": 101,
+    "turnLeftSequence": -1,
+    "turnRightSequence": -1,
+    "walkSequence": 98,
+    "walkBackSequence": -1,
+    "walkLeftSequence": -1,
+    "walkRightSequence": -1,
+    "actions": [
+        "Talk-to",
+        "Attack",
+        "null",
+        "null",
+        "null"
+    ],
+    "drawMapDot": true,
+    "combatLevel": 48,
+    "widthScale": 130,
+    "heightScale": 130,
+    "isVisible": false,
+    "ambient": 0,
+    "contrast": 0,
+    "headIconPrayer": -1,
+    "rotation": 32,
+    "transformVarbit": -1,
+    "transformVarp": -1,
+    "isInteractable": true,
+    "isClickable": true,
+    "isFollower": false,
+    "models": [
+        2970,
+        2986,
+        7051,
+        7040,
+        7043,
+        7065,
+        2993
+    ],
+    "transforms": [
+    ],
+    "params": {
+    }
+}

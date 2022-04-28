@@ -1,0 +1,11 @@
+{
+    "id": 3704,
+    "params": {
+        "1371": 48,
+        "1372": "Sigil of Rampage",
+        "1373": "Alternating combat styles will increase your rampage count, up to a maximum of 5. Consecutive attacks with the same style will reset the counter. Each rampage count increases your damage and accuracy by 3%. Your rampage count will reset after not attacking for 12 seconds.<br>The damage bonus provided by this will not stack with the Sigil of Aggression.",
+        "1374": 1,
+        "1375": 3,
+        "1384": 3422
+    }
+}

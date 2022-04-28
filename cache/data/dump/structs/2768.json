@@ -1,0 +1,18 @@
+{
+    "id": 2768,
+    "params": {
+        "1077": 46,
+        "1078": 0,
+        "1086": "Click through transparent chatbox",
+        "1087": "Allow tapping through the chatbox",
+        "1088": "Allow tapping through chatbox,Allow clicking through chatbox,Advanced Display Settings,Resizable mode - Click through transparent chatbox,Resizable mode Click through transparent chatbox",
+        "1084": 1,
+        "1085": 1,
+        "1080": 3846,
+        "1082": 3502,
+        "1083": 3503,
+        "1116": "You must have the transparent chatbox enabled and be in resizable mode to change this setting.",
+        "1096": "When enabled, if you have a transparent chat box, you can click through it.",
+        "1097": "When enabled, if you have a transparent chat box, you can tap through it."
+    }
+}

@@ -1,0 +1,50 @@
+{
+    "id": 3058,
+    "name": "Barbarian",
+    "size": 1,
+    "idleSequence": 2561,
+    "turnLeftSequence": -1,
+    "turnRightSequence": -1,
+    "walkSequence": 2562,
+    "walkBackSequence": 2562,
+    "walkLeftSequence": 2562,
+    "walkRightSequence": 2562,
+    "actions": [
+        "Talk-to",
+        "Attack",
+        "null",
+        "null",
+        "null"
+    ],
+    "drawMapDot": true,
+    "combatLevel": 17,
+    "widthScale": 137,
+    "heightScale": 128,
+    "isVisible": false,
+    "ambient": 0,
+    "contrast": 0,
+    "headIconPrayer": -1,
+    "rotation": 32,
+    "transformVarbit": -1,
+    "transformVarp": -1,
+    "isInteractable": true,
+    "isClickable": true,
+    "isFollower": false,
+    "models": [
+        11739,
+        214,
+        251,
+        11758,
+        11764,
+        11727,
+        11731,
+        11756,
+        11734,
+        11762,
+        11792
+    ],
+    "transforms": [
+    ],
+    "params": {
+    }
+}

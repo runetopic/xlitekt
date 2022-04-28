@@ -1,0 +1,12 @@
+{
+    "id": 3381,
+    "keyType": "INTEGER",
+    "valType": "STRING",
+    "defaultString": "",
+    "defaultInt": 0,
+    "size": 2,
+    "params": {
+        "0": "Exit Leagues",
+        "11": "End Tutorial"
+    }
+}

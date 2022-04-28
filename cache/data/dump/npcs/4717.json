@@ -1,0 +1,46 @@
+{
+    "id": 4717,
+    "name": "Auguste",
+    "size": 1,
+    "idleSequence": 773,
+    "turnLeftSequence": -1,
+    "turnRightSequence": -1,
+    "walkSequence": 772,
+    "walkBackSequence": 772,
+    "walkLeftSequence": 772,
+    "walkRightSequence": 772,
+    "actions": [
+        "Talk-to",
+        "null",
+        "null",
+        "Fly",
+        "null"
+    ],
+    "drawMapDot": true,
+    "combatLevel": 0,
+    "widthScale": 128,
+    "heightScale": 128,
+    "isVisible": true,
+    "ambient": 0,
+    "contrast": 0,
+    "headIconPrayer": -1,
+    "rotation": 32,
+    "transformVarbit": -1,
+    "transformVarp": -1,
+    "isInteractable": true,
+    "isClickable": true,
+    "isFollower": false,
+    "models": [
+        19470,
+        246,
+        19476,
+        19467,
+        177,
+        19472,
+        181
+    ],
+    "transforms": [
+    ],
+    "params": {
+    }
+}

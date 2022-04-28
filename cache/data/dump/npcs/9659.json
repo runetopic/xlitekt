@@ -1,0 +1,47 @@
+{
+    "id": 9659,
+    "name": "mad melvin96",
+    "size": 1,
+    "idleSequence": -1,
+    "turnLeftSequence": -1,
+    "turnRightSequence": -1,
+    "walkSequence": -1,
+    "walkBackSequence": -1,
+    "walkLeftSequence": -1,
+    "walkRightSequence": -1,
+    "actions": [
+        "Talk-to",
+        "null",
+        "null",
+        "null",
+        "null"
+    ],
+    "drawMapDot": true,
+    "combatLevel": 43,
+    "widthScale": 140,
+    "heightScale": 140,
+    "isVisible": false,
+    "ambient": 0,
+    "contrast": 0,
+    "headIconPrayer": -1,
+    "rotation": 32,
+    "transformVarbit": -1,
+    "transformVarp": -1,
+    "isInteractable": true,
+    "isClickable": true,
+    "isFollower": false,
+    "models": [
+        5585,
+        9458,
+        151,
+        11736,
+        176,
+        218,
+        28493,
+        490
+    ],
+    "transforms": [
+    ],
+    "params": {
+    }
+}

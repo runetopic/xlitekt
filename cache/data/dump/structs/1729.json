@@ -1,0 +1,12 @@
+{
+    "id": 1729,
+    "params": {
+        "879": "Fluid Strikes",
+        "880": "- The attack speed of all melee weapons is halved (rounded up).<br><br>- Your melee attacks have 25% increased accuracy.<br><br>- You take 15% less damage from all sources.<br><br>- Your Hitpoints regenerate at a rate of 4 Hitpoints per minute instead of 1 Hitpoint per minute.",
+        "884": 2618,
+        "881": 2666,
+        "883": 2667,
+        "885": 2,
+        "1274": 3066
+    }
+}

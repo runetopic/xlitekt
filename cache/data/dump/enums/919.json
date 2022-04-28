@@ -1,0 +1,14 @@
+{
+    "id": 919,
+    "keyType": "INTEGER",
+    "valType": "STRING",
+    "defaultString": "",
+    "defaultInt": 0,
+    "size": 4,
+    "params": {
+        "-1": "Prayer",
+        "0": "All allowed",
+        "1": "No overhead icons",
+        "2": "Disabled"
+    }
+}

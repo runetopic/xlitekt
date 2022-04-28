@@ -1,0 +1,43 @@
+{
+    "id": 8084,
+    "name": "Black dragon",
+    "size": 5,
+    "idleSequence": 90,
+    "turnLeftSequence": -1,
+    "turnRightSequence": -1,
+    "walkSequence": 79,
+    "walkBackSequence": -1,
+    "walkLeftSequence": -1,
+    "walkRightSequence": -1,
+    "actions": [
+        "null",
+        "null",
+        "null",
+        "null",
+        "null"
+    ],
+    "drawMapDot": true,
+    "combatLevel": 227,
+    "widthScale": 110,
+    "heightScale": 110,
+    "isVisible": true,
+    "ambient": 0,
+    "contrast": 0,
+    "headIconPrayer": -1,
+    "rotation": 32,
+    "transformVarbit": -1,
+    "transformVarp": -1,
+    "isInteractable": true,
+    "isClickable": true,
+    "isFollower": false,
+    "models": [
+        17407,
+        17425,
+        17418,
+        17423
+    ],
+    "transforms": [
+    ],
+    "params": {
+    }
+}

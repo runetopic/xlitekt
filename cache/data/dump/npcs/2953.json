@@ -1,0 +1,46 @@
+{
+    "id": 2953,
+    "name": "Void Knight",
+    "size": 1,
+    "idleSequence": 3926,
+    "turnLeftSequence": -1,
+    "turnRightSequence": -1,
+    "walkSequence": -1,
+    "walkBackSequence": -1,
+    "walkLeftSequence": -1,
+    "walkRightSequence": -1,
+    "actions": [
+        "null",
+        "null",
+        "null",
+        "null",
+        "null"
+    ],
+    "drawMapDot": true,
+    "combatLevel": 0,
+    "widthScale": 128,
+    "heightScale": 128,
+    "isVisible": true,
+    "ambient": 0,
+    "contrast": 0,
+    "headIconPrayer": -1,
+    "rotation": 0,
+    "transformVarbit": -1,
+    "transformVarp": -1,
+    "isInteractable": true,
+    "isClickable": true,
+    "isFollower": false,
+    "models": [
+        378,
+        14578,
+        14570,
+        14572,
+        14576,
+        358,
+        14579
+    ],
+    "transforms": [
+    ],
+    "params": {
+    }
+}

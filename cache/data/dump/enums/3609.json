@@ -1,0 +1,18 @@
+{
+    "id": 3609,
+    "keyType": "INTEGER",
+    "valType": "SYNTH",
+    "defaultString": "null",
+    "defaultInt": -1,
+    "size": 8,
+    "params": {
+        "0": 2405,
+        "1": 2346,
+        "2": 2397,
+        "3": 2404,
+        "4": 2353,
+        "5": 2344,
+        "6": 2330,
+        "7": 2331
+    }
+}

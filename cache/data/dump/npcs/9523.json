@@ -1,0 +1,49 @@
+{
+    "id": 9523,
+    "name": "Veliaf Hurtz",
+    "size": 1,
+    "idleSequence": 8009,
+    "turnLeftSequence": -1,
+    "turnRightSequence": -1,
+    "walkSequence": 8011,
+    "walkBackSequence": 8012,
+    "walkLeftSequence": 8013,
+    "walkRightSequence": 8014,
+    "actions": [
+        "Talk-to",
+        "null",
+        "null",
+        "null",
+        "null"
+    ],
+    "drawMapDot": true,
+    "combatLevel": 0,
+    "widthScale": 128,
+    "heightScale": 128,
+    "isVisible": true,
+    "ambient": 0,
+    "contrast": 0,
+    "headIconPrayer": -1,
+    "rotation": 32,
+    "transformVarbit": -1,
+    "transformVarp": -1,
+    "isInteractable": true,
+    "isClickable": true,
+    "isFollower": false,
+    "models": [
+        210,
+        247,
+        313,
+        167,
+        179,
+        268,
+        181,
+        284,
+        244,
+        35177
+    ],
+    "transforms": [
+    ],
+    "params": {
+    }
+}

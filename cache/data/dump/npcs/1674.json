@@ -1,0 +1,45 @@
+{
+    "id": 1674,
+    "name": "Guthan the Infested",
+    "size": 1,
+    "idleSequence": 813,
+    "turnLeftSequence": -1,
+    "turnRightSequence": -1,
+    "walkSequence": 1205,
+    "walkBackSequence": 1206,
+    "walkLeftSequence": 1207,
+    "walkRightSequence": 1208,
+    "actions": [
+        "null",
+        "Attack",
+        "null",
+        "null",
+        "null"
+    ],
+    "drawMapDot": true,
+    "combatLevel": 115,
+    "widthScale": 128,
+    "heightScale": 128,
+    "isVisible": true,
+    "ambient": 50,
+    "contrast": 250,
+    "headIconPrayer": -1,
+    "rotation": 32,
+    "transformVarbit": -1,
+    "transformVarp": -1,
+    "isInteractable": true,
+    "isClickable": true,
+    "isFollower": false,
+    "models": [
+        6654,
+        6673,
+        6642,
+        6666,
+        6679,
+        6710
+    ],
+    "transforms": [
+    ],
+    "params": {
+    }
+}

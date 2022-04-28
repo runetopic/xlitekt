@@ -1,0 +1,13 @@
+{
+    "id": 3950,
+    "keyType": "INTEGER",
+    "valType": "STRING",
+    "defaultString": "null",
+    "defaultInt": 0,
+    "size": 3,
+    "params": {
+        "0": "10k XP lamp (minimum skill requirement: 30)",
+        "1": "The drop chance of a <col=ffffff>Clue Scroll (Medium)</col> from all sources (excl. implings) is increased by 5%",
+        "2": "The maximum quantity assigned from the <col=ffffff>Like a boss</col> slayer reward is increased by 4"
+    }
+}

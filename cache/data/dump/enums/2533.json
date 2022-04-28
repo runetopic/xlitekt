@@ -1,0 +1,12 @@
+{
+    "id": 2533,
+    "keyType": "INTEGER",
+    "valType": "ENUM",
+    "defaultString": "null",
+    "defaultInt": -1,
+    "size": 2,
+    "params": {
+        "0": 2535,
+        "1": 2537
+    }
+}

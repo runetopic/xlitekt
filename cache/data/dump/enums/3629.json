@@ -1,0 +1,12 @@
+{
+    "id": 3629,
+    "keyType": "INTEGER",
+    "valType": "STRING",
+    "defaultString": "null",
+    "defaultInt": 0,
+    "size": 2,
+    "params": {
+        "0": "deadman_pause",
+        "1": "deadman_resume"
+    }
+}

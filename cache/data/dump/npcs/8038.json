@@ -1,0 +1,47 @@
+{
+    "id": 8038,
+    "name": "Ellen",
+    "size": 1,
+    "idleSequence": 813,
+    "turnLeftSequence": -1,
+    "turnRightSequence": -1,
+    "walkSequence": 1205,
+    "walkBackSequence": -1,
+    "walkLeftSequence": -1,
+    "walkRightSequence": -1,
+    "actions": [
+        "Talk-to",
+        "null",
+        "null",
+        "null",
+        "null"
+    ],
+    "drawMapDot": true,
+    "combatLevel": 0,
+    "widthScale": 128,
+    "heightScale": 128,
+    "isVisible": true,
+    "ambient": 0,
+    "contrast": 0,
+    "headIconPrayer": -1,
+    "rotation": 32,
+    "transformVarbit": -1,
+    "transformVarp": -1,
+    "isInteractable": true,
+    "isClickable": true,
+    "isFollower": false,
+    "models": [
+        34635,
+        34646,
+        20193,
+        353,
+        16496,
+        417,
+        34651,
+        34288
+    ],
+    "transforms": [
+    ],
+    "params": {
+    }
+}

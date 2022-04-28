@@ -1,0 +1,15 @@
+{
+    "id": 932,
+    "keyType": "INTEGER",
+    "valType": "STRING",
+    "defaultString": "Choose carefully!",
+    "defaultInt": 0,
+    "size": 5,
+    "params": {
+        "0": "If freezing is ignored, spells such as Entangle and Ice Barrage will not prevent their targets from moving. Damage dealt by the spells will be applied normally.",
+        "1": "In single-way combat areas, the PJ timer prevents players from being attacked for 10 secs after they have been attacking someone else.",
+        "2": "If Single Spells is enabled, multi-target attacks (such as chinchompas) will hit only one target, even in multi-way combat areas.",
+        "3": "Should Powered Staves and Wands be able to cast their spells on players? Normally they work only against monsters.",
+        "4": "Should Vesta's Blighted Longsword be permitted in this battle? Normally it works only on specific worlds."
+    }
+}

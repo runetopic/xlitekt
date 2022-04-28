@@ -1,0 +1,45 @@
+{
+    "id": 6043,
+    "name": "Trade Referee",
+    "size": 1,
+    "idleSequence": 101,
+    "turnLeftSequence": -1,
+    "turnRightSequence": -1,
+    "walkSequence": 98,
+    "walkBackSequence": -1,
+    "walkLeftSequence": -1,
+    "walkRightSequence": -1,
+    "actions": [
+        "Talk-to",
+        "null",
+        "null",
+        "null",
+        "null"
+    ],
+    "drawMapDot": true,
+    "combatLevel": 0,
+    "widthScale": 140,
+    "heightScale": 130,
+    "isVisible": true,
+    "ambient": 0,
+    "contrast": 0,
+    "headIconPrayer": -1,
+    "rotation": 32,
+    "transformVarbit": -1,
+    "transformVarp": -1,
+    "isInteractable": true,
+    "isClickable": true,
+    "isFollower": false,
+    "models": [
+        2973,
+        7071,
+        7063,
+        7037,
+        7044,
+        2985
+    ],
+    "transforms": [
+    ],
+    "params": {
+    }
+}

@@ -1,0 +1,33 @@
+{
+    "id": 5592,
+    "field2079": -1,
+    "field2082": 0,
+    "field2083": 0,
+    "frameCount": -1,
+    "field2091": false,
+    "field2092": 5,
+    "shield": -1,
+    "weapon": -1,
+    "field2095": 99,
+    "field2096": -1,
+    "field2097": -1,
+    "field2078": 2,
+    "frameLengths": [
+        3,
+        2,
+        1,
+        2,
+        2,
+        35
+    ],
+    "frameIds": [
+        94961677,
+        94961678,
+        94961679,
+        94961680,
+        94961681,
+        94961682
+    ],
+    "chatFrameIds": [
+    ]
+}

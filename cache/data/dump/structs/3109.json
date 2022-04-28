@@ -1,0 +1,8 @@
+{
+    "id": 3109,
+    "params": {
+        "1255": 1,
+        "1251": "Loot broadcast value",
+        "1252": "Minimum value for tradeable monster loot to trigger a clan notification message."
+    }
+}

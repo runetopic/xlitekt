@@ -1,0 +1,40 @@
+{
+    "id": 7394,
+    "name": "Flaming pyrelord",
+    "size": 2,
+    "idleSequence": 1578,
+    "turnLeftSequence": -1,
+    "turnRightSequence": -1,
+    "walkSequence": 1579,
+    "walkBackSequence": -1,
+    "walkLeftSequence": -1,
+    "walkRightSequence": -1,
+    "actions": [
+        "null",
+        "Attack",
+        "null",
+        "null",
+        "null"
+    ],
+    "drawMapDot": true,
+    "combatLevel": 97,
+    "widthScale": 128,
+    "heightScale": 128,
+    "isVisible": false,
+    "ambient": 60,
+    "contrast": 300,
+    "headIconPrayer": -1,
+    "rotation": 32,
+    "transformVarbit": -1,
+    "transformVarp": -1,
+    "isInteractable": true,
+    "isClickable": true,
+    "isFollower": false,
+    "models": [
+        32923
+    ],
+    "transforms": [
+    ],
+    "params": {
+    }
+}

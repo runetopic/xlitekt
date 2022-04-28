@@ -1,0 +1,40 @@
+{
+    "id": 1487,
+    "name": "Desert eagle",
+    "size": 3,
+    "idleSequence": 5280,
+    "turnLeftSequence": -1,
+    "turnRightSequence": -1,
+    "walkSequence": 5279,
+    "walkBackSequence": -1,
+    "walkLeftSequence": -1,
+    "walkRightSequence": -1,
+    "actions": [
+        "null",
+        "null",
+        "null",
+        "null",
+        "null"
+    ],
+    "drawMapDot": true,
+    "combatLevel": 0,
+    "widthScale": 128,
+    "heightScale": 128,
+    "isVisible": true,
+    "ambient": 0,
+    "contrast": 0,
+    "headIconPrayer": -1,
+    "rotation": 32,
+    "transformVarbit": -1,
+    "transformVarp": -1,
+    "isInteractable": true,
+    "isClickable": true,
+    "isFollower": false,
+    "models": [
+        19380
+    ],
+    "transforms": [
+    ],
+    "params": {
+    }
+}

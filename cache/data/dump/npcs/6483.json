@@ -1,0 +1,40 @@
+{
+    "id": 6483,
+    "name": "Monkey",
+    "size": 1,
+    "idleSequence": 222,
+    "turnLeftSequence": -1,
+    "turnRightSequence": -1,
+    "walkSequence": 219,
+    "walkBackSequence": -1,
+    "walkLeftSequence": -1,
+    "walkRightSequence": -1,
+    "actions": [
+        "null",
+        "null",
+        "null",
+        "null",
+        "null"
+    ],
+    "drawMapDot": true,
+    "combatLevel": 1,
+    "widthScale": 128,
+    "heightScale": 128,
+    "isVisible": false,
+    "ambient": 0,
+    "contrast": 0,
+    "headIconPrayer": -1,
+    "rotation": 32,
+    "transformVarbit": -1,
+    "transformVarp": -1,
+    "isInteractable": true,
+    "isClickable": true,
+    "isFollower": false,
+    "models": [
+        3004
+    ],
+    "transforms": [
+    ],
+    "params": {
+    }
+}

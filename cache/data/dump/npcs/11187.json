@@ -1,0 +1,40 @@
+{
+    "id": 11187,
+    "name": "Xarpus",
+    "size": 5,
+    "idleSequence": 8058,
+    "turnLeftSequence": -1,
+    "turnRightSequence": -1,
+    "walkSequence": 8058,
+    "walkBackSequence": -1,
+    "walkLeftSequence": -1,
+    "walkRightSequence": -1,
+    "actions": [
+        "null",
+        "null",
+        "null",
+        "null",
+        "null"
+    ],
+    "drawMapDot": true,
+    "combatLevel": 331,
+    "widthScale": 64,
+    "heightScale": 64,
+    "isVisible": true,
+    "ambient": 0,
+    "contrast": 0,
+    "headIconPrayer": -1,
+    "rotation": 32,
+    "transformVarbit": -1,
+    "transformVarp": -1,
+    "isInteractable": true,
+    "isClickable": true,
+    "isFollower": false,
+    "models": [
+        35383
+    ],
+    "transforms": [
+    ],
+    "params": {
+    }
+}

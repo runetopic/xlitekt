@@ -1,0 +1,16 @@
+{
+    "id": 4053,
+    "keyType": "COMPONENT",
+    "valType": "INTEGER",
+    "defaultString": "null",
+    "defaultInt": -1,
+    "size": 6,
+    "params": {
+        "47382536": 0,
+        "47382538": 1,
+        "47382537": 2,
+        "47382539": 3,
+        "47382529": 4,
+        "47382535": 5
+    }
+}

@@ -1,0 +1,40 @@
+{
+    "id": 10686,
+    "name": "Fishing spot",
+    "size": 1,
+    "idleSequence": 7634,
+    "turnLeftSequence": -1,
+    "turnRightSequence": -1,
+    "walkSequence": 7634,
+    "walkBackSequence": -1,
+    "walkLeftSequence": -1,
+    "walkRightSequence": -1,
+    "actions": [
+        "Small Net",
+        "null",
+        "Big Net",
+        "null",
+        "null"
+    ],
+    "drawMapDot": false,
+    "combatLevel": 0,
+    "widthScale": 128,
+    "heightScale": 128,
+    "isVisible": false,
+    "ambient": 50,
+    "contrast": 100,
+    "headIconPrayer": -1,
+    "rotation": 32,
+    "transformVarbit": -1,
+    "transformVarp": -1,
+    "isInteractable": true,
+    "isClickable": true,
+    "isFollower": false,
+    "models": [
+        41967
+    ],
+    "transforms": [
+    ],
+    "params": {
+    }
+}

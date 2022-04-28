@@ -1,0 +1,17 @@
+{
+    "id": 1253,
+    "keyType": "INTEGER",
+    "valType": "OBJ",
+    "defaultString": "null",
+    "defaultInt": 526,
+    "size": 7,
+    "params": {
+        "1": 2349,
+        "2": 2351,
+        "3": 2353,
+        "4": 2359,
+        "5": 2361,
+        "6": 2363,
+        "7": 13354
+    }
+}

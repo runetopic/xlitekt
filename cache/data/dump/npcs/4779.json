@@ -1,0 +1,47 @@
+{
+    "id": 4779,
+    "name": "Greldo",
+    "size": 1,
+    "idleSequence": 6200,
+    "turnLeftSequence": -1,
+    "turnRightSequence": -1,
+    "walkSequence": 6201,
+    "walkBackSequence": -1,
+    "walkLeftSequence": -1,
+    "walkRightSequence": -1,
+    "actions": [
+        "null",
+        "null",
+        "null",
+        "null",
+        "null"
+    ],
+    "drawMapDot": true,
+    "combatLevel": 0,
+    "widthScale": 128,
+    "heightScale": 128,
+    "isVisible": false,
+    "ambient": 15,
+    "contrast": 0,
+    "headIconPrayer": -1,
+    "rotation": 32,
+    "transformVarbit": -1,
+    "transformVarp": -1,
+    "isInteractable": true,
+    "isClickable": true,
+    "isFollower": false,
+    "models": [
+        24463,
+        24483,
+        24433,
+        24474,
+        24441,
+        24449,
+        24508,
+        24507
+    ],
+    "transforms": [
+    ],
+    "params": {
+    }
+}

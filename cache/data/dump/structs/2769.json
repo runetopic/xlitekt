@@ -1,0 +1,13 @@
+{
+    "id": 2769,
+    "params": {
+        "1077": 48,
+        "1078": 0,
+        "1086": "Single mouse button mode",
+        "1087": "Single-tap mode",
+        "1088": "Single mouse button mode,single tap mode,single-tap mode,controls",
+        "1096": "When enabled, if you left click where there is more than one option, the click will act as if you right clicked.",
+        "1097": "When enabled, if you tap where there is more than one option, the tap will act as if you long pressed.",
+        "1085": 1
+    }
+}

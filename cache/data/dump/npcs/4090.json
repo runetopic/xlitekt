@@ -1,0 +1,45 @@
+{
+    "id": 4090,
+    "name": "Soldier",
+    "size": 1,
+    "idleSequence": 1144,
+    "turnLeftSequence": -1,
+    "turnRightSequence": -1,
+    "walkSequence": 1144,
+    "walkBackSequence": 1144,
+    "walkLeftSequence": 1144,
+    "walkRightSequence": 1144,
+    "actions": [
+        "Talk-to",
+        "null",
+        "null",
+        "null",
+        "null"
+    ],
+    "drawMapDot": true,
+    "combatLevel": 0,
+    "widthScale": 128,
+    "heightScale": 128,
+    "isVisible": false,
+    "ambient": 0,
+    "contrast": 0,
+    "headIconPrayer": -1,
+    "rotation": 32,
+    "transformVarbit": -1,
+    "transformVarp": -1,
+    "isInteractable": true,
+    "isClickable": true,
+    "isFollower": false,
+    "models": [
+        230,
+        295,
+        150,
+        264,
+        3710,
+        246
+    ],
+    "transforms": [
+    ],
+    "params": {
+    }
+}

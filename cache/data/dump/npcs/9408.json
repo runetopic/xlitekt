@@ -1,0 +1,47 @@
+{
+    "id": 9408,
+    "name": "Lumiere",
+    "size": 1,
+    "idleSequence": 809,
+    "turnLeftSequence": -1,
+    "turnRightSequence": -1,
+    "walkSequence": 819,
+    "walkBackSequence": 820,
+    "walkLeftSequence": 821,
+    "walkRightSequence": 822,
+    "actions": [
+        "Talk-to",
+        "null",
+        "null",
+        "null",
+        "null"
+    ],
+    "drawMapDot": true,
+    "combatLevel": 0,
+    "widthScale": 140,
+    "heightScale": 140,
+    "isVisible": true,
+    "ambient": 0,
+    "contrast": 0,
+    "headIconPrayer": -1,
+    "rotation": 32,
+    "transformVarbit": -1,
+    "transformVarp": -1,
+    "isInteractable": true,
+    "isClickable": true,
+    "isFollower": false,
+    "models": [
+        39160,
+        315,
+        173,
+        39164,
+        275,
+        37041,
+        3189,
+        3381
+    ],
+    "transforms": [
+    ],
+    "params": {
+    }
+}

@@ -1,0 +1,18 @@
+{
+    "id": 2646,
+    "keyType": "INTEGER",
+    "valType": "STRING",
+    "defaultString": "Reward",
+    "defaultInt": 0,
+    "size": 8,
+    "params": {
+        "0": "Carpenter's helmet",
+        "1": "Carpenter's shirt",
+        "2": "Carpenter's trousers",
+        "3": "Carpenter's boots",
+        "4": "Plank sack",
+        "5": "Supply crate",
+        "6": "Amy's saw",
+        "7": "Hosidius blueprints"
+    }
+}

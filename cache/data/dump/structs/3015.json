@@ -1,0 +1,18 @@
+{
+    "id": 3015,
+    "params": {
+        "1077": 122,
+        "1078": 0,
+        "1086": "Fishing spot indicators - Mouse over tooltip",
+        "1088": "fishing spot indicators,small fishing net,big fishing net,drift net,fishing rod,fly fishing rod,oily fishing rod,barbarian rod,harpoon,lobster pot,cormorants glove,karambwan vessel",
+        "1096": "When enabled, hovering over a fishing spot indicator will show all the fish the spot has to offer.",
+        "1157": 1,
+        "739": 1,
+        "1084": 1,
+        "1080": 3893,
+        "1081": 3894,
+        "1085": 1,
+        "1116": "You can only change this setting if fishing spot indicators are enabled.",
+        "1090": 1
+    }
+}

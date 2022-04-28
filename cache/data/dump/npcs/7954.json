@@ -1,0 +1,49 @@
+{
+    "id": 7954,
+    "name": "Mysterious Adventurer",
+    "size": 1,
+    "idleSequence": 1713,
+    "turnLeftSequence": -1,
+    "turnRightSequence": -1,
+    "walkSequence": 1703,
+    "walkBackSequence": -1,
+    "walkLeftSequence": -1,
+    "walkRightSequence": -1,
+    "actions": [
+        "Talk-to",
+        "null",
+        "null",
+        "null",
+        "null"
+    ],
+    "drawMapDot": true,
+    "combatLevel": 0,
+    "widthScale": 128,
+    "heightScale": 128,
+    "isVisible": true,
+    "ambient": 0,
+    "contrast": 0,
+    "headIconPrayer": -1,
+    "rotation": 32,
+    "transformVarbit": -1,
+    "transformVarp": -1,
+    "isInteractable": true,
+    "isClickable": true,
+    "isFollower": false,
+    "models": [
+        21873,
+        34271,
+        246,
+        314,
+        258,
+        27638,
+        13307,
+        27654,
+        9642,
+        34282
+    ],
+    "transforms": [
+    ],
+    "params": {
+    }
+}

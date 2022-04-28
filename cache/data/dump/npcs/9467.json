@@ -1,0 +1,40 @@
+{
+    "id": 9467,
+    "name": "Husk",
+    "size": 1,
+    "idleSequence": 8562,
+    "turnLeftSequence": -1,
+    "turnRightSequence": -1,
+    "walkSequence": 8563,
+    "walkBackSequence": -1,
+    "walkLeftSequence": -1,
+    "walkRightSequence": -1,
+    "actions": [
+        "null",
+        "Attack",
+        "null",
+        "null",
+        "null"
+    ],
+    "drawMapDot": true,
+    "combatLevel": 104,
+    "widthScale": 112,
+    "heightScale": 112,
+    "isVisible": true,
+    "ambient": 20,
+    "contrast": 0,
+    "headIconPrayer": -1,
+    "rotation": 32,
+    "transformVarbit": -1,
+    "transformVarp": -1,
+    "isInteractable": true,
+    "isClickable": true,
+    "isFollower": false,
+    "models": [
+        39189
+    ],
+    "transforms": [
+    ],
+    "params": {
+    }
+}

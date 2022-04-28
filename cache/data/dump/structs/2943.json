@@ -1,0 +1,8 @@
+{
+    "id": 2943,
+    "params": {
+        "1251": "Permission access",
+        "1252": "Minimum rank required to edit any of these permissions. To edit a permission, a clan member must satisfy this rank, or whatever rank the permission currently requires, whichever is higher.",
+        "1253": 100
+    }
+}

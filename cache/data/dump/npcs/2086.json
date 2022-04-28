@@ -1,0 +1,42 @@
+{
+    "id": 2086,
+    "name": "Ice giant",
+    "size": 2,
+    "idleSequence": 4670,
+    "turnLeftSequence": -1,
+    "turnRightSequence": -1,
+    "walkSequence": 4669,
+    "walkBackSequence": -1,
+    "walkLeftSequence": -1,
+    "walkRightSequence": -1,
+    "actions": [
+        "null",
+        "Attack",
+        "null",
+        "null",
+        "null"
+    ],
+    "drawMapDot": true,
+    "combatLevel": 53,
+    "widthScale": 128,
+    "heightScale": 128,
+    "isVisible": false,
+    "ambient": 0,
+    "contrast": 0,
+    "headIconPrayer": -1,
+    "rotation": 32,
+    "transformVarbit": -1,
+    "transformVarp": -1,
+    "isInteractable": true,
+    "isClickable": true,
+    "isFollower": false,
+    "models": [
+        17454,
+        17442,
+        17460
+    ],
+    "transforms": [
+    ],
+    "params": {
+    }
+}

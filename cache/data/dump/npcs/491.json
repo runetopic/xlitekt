@@ -1,0 +1,45 @@
+{
+    "id": 491,
+    "name": "Entomologist",
+    "size": 1,
+    "idleSequence": 7136,
+    "turnLeftSequence": -1,
+    "turnRightSequence": -1,
+    "walkSequence": 7136,
+    "walkBackSequence": 7136,
+    "walkLeftSequence": 7136,
+    "walkRightSequence": 7136,
+    "actions": [
+        "Search",
+        "null",
+        "null",
+        "null",
+        "null"
+    ],
+    "drawMapDot": false,
+    "combatLevel": 0,
+    "widthScale": 128,
+    "heightScale": 128,
+    "isVisible": true,
+    "ambient": 0,
+    "contrast": 0,
+    "headIconPrayer": -1,
+    "rotation": 0,
+    "transformVarbit": -1,
+    "transformVarp": -1,
+    "isInteractable": true,
+    "isClickable": true,
+    "isFollower": false,
+    "models": [
+        194,
+        209,
+        292,
+        327,
+        162,
+        4227
+    ],
+    "transforms": [
+    ],
+    "params": {
+    }
+}

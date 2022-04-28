@@ -1,0 +1,40 @@
+{
+    "id": 8482,
+    "name": "Smoke Devil",
+    "size": 1,
+    "idleSequence": 1829,
+    "turnLeftSequence": -1,
+    "turnRightSequence": -1,
+    "walkSequence": 1828,
+    "walkBackSequence": -1,
+    "walkLeftSequence": -1,
+    "walkRightSequence": -1,
+    "actions": [
+        "Talk-to",
+        "null",
+        "Pick-up",
+        "null",
+        "null"
+    ],
+    "drawMapDot": false,
+    "combatLevel": 0,
+    "widthScale": 60,
+    "heightScale": 60,
+    "isVisible": false,
+    "ambient": 25,
+    "contrast": 125,
+    "headIconPrayer": -1,
+    "rotation": 32,
+    "transformVarbit": -1,
+    "transformVarp": -1,
+    "isInteractable": true,
+    "isClickable": true,
+    "isFollower": false,
+    "models": [
+        28442
+    ],
+    "transforms": [
+    ],
+    "params": {
+    }
+}

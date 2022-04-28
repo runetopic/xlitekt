@@ -1,0 +1,11 @@
+{
+    "id": 1518,
+    "keyType": "NAMEDOBJ",
+    "valType": "STRING",
+    "defaultString": "You forgot to give this item a description in the item description enum.",
+    "defaultInt": 0,
+    "size": 1,
+    "params": {
+        "24131": "This is a voucher. It's used to claim your path rewards from NPC's around Varrock. After claiming all the rewards, you will not get this voucher again."
+    }
+}

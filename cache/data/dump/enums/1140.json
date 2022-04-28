@@ -1,0 +1,13 @@
+{
+    "id": 1140,
+    "keyType": "INTEGER",
+    "valType": "STRING",
+    "defaultString": "Speed",
+    "defaultInt": 0,
+    "size": 3,
+    "params": {
+        "0": "Default",
+        "1": "Slower",
+        "2": "Faster"
+    }
+}

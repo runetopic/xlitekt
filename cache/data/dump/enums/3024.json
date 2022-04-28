@@ -1,0 +1,11 @@
+{
+    "id": 3024,
+    "keyType": "NAMEDOBJ",
+    "valType": "STRING",
+    "defaultString": "You forgot to give this item a description in the item description enum.",
+    "defaultInt": 0,
+    "size": 1,
+    "params": {
+        "843": "The oak shortbow is a ranged weapon that requires level 5 Ranged to wear. Shortbows fire faster than longbows but are less accurate. Longbows also have the benefit of being able to fire at monsters from a longer range. You use arrows with bows. Most of the time, the better the metal used to make the arrow, the more damage you will hit when using the arrow with your bow. Not all arrows are compatible with each bow, check your Ranged skill guide to find out which arrows your bow can use."
+    }
+}

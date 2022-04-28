@@ -1,0 +1,41 @@
+{
+    "id": 10804,
+    "name": "Nylocas Prinkipas",
+    "size": 3,
+    "idleSequence": 8002,
+    "turnLeftSequence": -1,
+    "turnRightSequence": -1,
+    "walkSequence": 8003,
+    "walkBackSequence": -1,
+    "walkLeftSequence": -1,
+    "walkRightSequence": -1,
+    "actions": [
+        "null",
+        "Attack",
+        "null",
+        "null",
+        "null"
+    ],
+    "drawMapDot": true,
+    "combatLevel": 400,
+    "widthScale": 130,
+    "heightScale": 130,
+    "isVisible": false,
+    "ambient": 0,
+    "contrast": 0,
+    "headIconPrayer": -1,
+    "rotation": 32,
+    "transformVarbit": -1,
+    "transformVarp": -1,
+    "isInteractable": true,
+    "isClickable": true,
+    "isFollower": false,
+    "models": [
+        35183
+    ],
+    "transforms": [
+    ],
+    "params": {
+        "509": 0
+    }
+}

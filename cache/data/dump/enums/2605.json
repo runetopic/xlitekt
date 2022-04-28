@@ -1,0 +1,12 @@
+{
+    "id": 2605,
+    "keyType": "OBJ",
+    "valType": "INTEGER",
+    "defaultString": "null",
+    "defaultInt": -1,
+    "size": 2,
+    "params": {
+        "853": 1,
+        "884": 75
+    }
+}

@@ -1,0 +1,7 @@
+{
+    "id": 653,
+    "type": "STRUCT",
+    "defaultInt": -1,
+    "autoDisable": true,
+    "defaultString": ""
+}

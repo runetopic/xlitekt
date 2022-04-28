@@ -1,0 +1,10 @@
+{
+    "id": 2762,
+    "params": {
+        "1077": 39,
+        "1078": 4,
+        "1086": "Minimum item value needed for loot notification",
+        "1088": "Minimum item value needed for loot notification,loot drop notification threshold,loot drop threshold,Notifications",
+        "1096": "If an item drops that is worth more than this value, a message will be shown in chat to let you know."
+    }
+}

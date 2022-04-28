@@ -1,0 +1,15 @@
+{
+    "id": 2095,
+    "keyType": "INTEGER",
+    "valType": "STRING",
+    "defaultString": "No Length",
+    "defaultInt": 0,
+    "size": 5,
+    "params": {
+        "0": "Very Short",
+        "1": "Short",
+        "2": "Medium",
+        "3": "Long",
+        "4": "Very Long"
+    }
+}

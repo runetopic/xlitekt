@@ -1,0 +1,11 @@
+{
+    "id": 3683,
+    "params": {
+        "1371": 27,
+        "1372": "Sigil of the Ruthless Ranger",
+        "1373": "Upon dealing Ranged damage, you have a 10% chance to cripple the target's movement. The effect deals 5 damage over the next 6 seconds and drains a total of 30 run energy in that time. The damage is doubled against targets with no run energy. A target can only suffer from one crippling effect at a time.<br>You also gain an additional 50% XP in the Ranged skill.",
+        "1374": 1,
+        "1375": 2,
+        "1384": 3409
+    }
+}

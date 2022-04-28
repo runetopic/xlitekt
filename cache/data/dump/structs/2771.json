@@ -1,0 +1,11 @@
+{
+    "id": 2771,
+    "params": {
+        "1077": 50,
+        "1078": 0,
+        "1086": "Move follower options lower down",
+        "1088": "Move follower options lower down,controls,pet",
+        "1096": "Moves the pet options lower down in the options menu, this stops your left click on the pet being Talk-to.",
+        "1097": "Moves the pet options lower down in the options menu, this stops your tap on the pet being Talk-to."
+    }
+}

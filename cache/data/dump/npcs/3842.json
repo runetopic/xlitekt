@@ -1,0 +1,46 @@
+{
+    "id": 3842,
+    "name": "Rimae Sirsalis",
+    "size": 1,
+    "idleSequence": 4424,
+    "turnLeftSequence": -1,
+    "turnRightSequence": -1,
+    "walkSequence": 4426,
+    "walkBackSequence": 4427,
+    "walkLeftSequence": 4428,
+    "walkRightSequence": 4429,
+    "actions": [
+        "Talk-to",
+        "null",
+        "Trade",
+        "null",
+        "null"
+    ],
+    "drawMapDot": true,
+    "combatLevel": 0,
+    "widthScale": 120,
+    "heightScale": 120,
+    "isVisible": true,
+    "ambient": 12,
+    "contrast": 60,
+    "headIconPrayer": -1,
+    "rotation": 32,
+    "transformVarbit": -1,
+    "transformVarp": -1,
+    "isInteractable": true,
+    "isClickable": true,
+    "isFollower": false,
+    "models": [
+        403,
+        16506,
+        16493,
+        16498,
+        16503,
+        16508,
+        270
+    ],
+    "transforms": [
+    ],
+    "params": {
+    }
+}

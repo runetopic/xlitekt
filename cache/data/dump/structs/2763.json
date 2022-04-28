@@ -1,0 +1,13 @@
+{
+    "id": 2763,
+    "params": {
+        "1077": 40,
+        "1078": 0,
+        "1086": "Untradeable loot notifications",
+        "1088": "Untradeable loot notifications,Notifications",
+        "1080": 3498,
+        "1085": 1,
+        "1116": "You must have loot drop notifications turned on to change this setting.",
+        "1096": "When enabled, shows a message in chat when you receive an untradeable item as a drop."
+    }
+}

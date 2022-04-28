@@ -1,0 +1,40 @@
+{
+    "id": 8200,
+    "name": "Vespina",
+    "size": 1,
+    "idleSequence": 7449,
+    "turnLeftSequence": -1,
+    "turnRightSequence": -1,
+    "walkSequence": 7448,
+    "walkBackSequence": -1,
+    "walkLeftSequence": -1,
+    "walkRightSequence": -1,
+    "actions": [
+        "Talk-to",
+        "null",
+        "Pick-up",
+        "null",
+        "null"
+    ],
+    "drawMapDot": false,
+    "combatLevel": 0,
+    "widthScale": 20,
+    "heightScale": 20,
+    "isVisible": false,
+    "ambient": 0,
+    "contrast": 0,
+    "headIconPrayer": -1,
+    "rotation": 32,
+    "transformVarbit": -1,
+    "transformVarp": -1,
+    "isInteractable": true,
+    "isClickable": true,
+    "isFollower": false,
+    "models": [
+        32689
+    ],
+    "transforms": [
+    ],
+    "params": {
+    }
+}

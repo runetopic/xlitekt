@@ -1,0 +1,40 @@
+{
+    "id": 3290,
+    "name": "Frog",
+    "size": 1,
+    "idleSequence": 1796,
+    "turnLeftSequence": -1,
+    "turnRightSequence": -1,
+    "walkSequence": 1797,
+    "walkBackSequence": -1,
+    "walkLeftSequence": -1,
+    "walkRightSequence": -1,
+    "actions": [
+        "null",
+        "null",
+        "null",
+        "null",
+        "null"
+    ],
+    "drawMapDot": true,
+    "combatLevel": 0,
+    "widthScale": 32,
+    "heightScale": 32,
+    "isVisible": false,
+    "ambient": 15,
+    "contrast": 0,
+    "headIconPrayer": -1,
+    "rotation": 32,
+    "transformVarbit": -1,
+    "transformVarp": -1,
+    "isInteractable": true,
+    "isClickable": true,
+    "isFollower": false,
+    "models": [
+        6947
+    ],
+    "transforms": [
+    ],
+    "params": {
+    }
+}

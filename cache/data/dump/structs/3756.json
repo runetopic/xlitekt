@@ -1,0 +1,11 @@
+{
+    "id": 3756,
+    "params": {
+        "1077": 195,
+        "1078": 0,
+        "1086": "Chatbox Mode - Set Automatically",
+        "1088": "chat,mode,chatbox,/p,/c,/f,/gc,auto,set,clan,channel,guestclan,guest,group,public",
+        "1085": 1,
+        "1096": "When enabled, sending a message with any chat prefix will automatically sets your chat mode to the respective channel: /p, /f, /c, /gc or /g (GIM only)."
+    }
+}

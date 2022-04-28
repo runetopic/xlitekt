@@ -1,0 +1,29 @@
+{
+    "id": 3810,
+    "keyType": "INTEGER",
+    "valType": "STRING",
+    "defaultString": "",
+    "defaultInt": 0,
+    "size": 19,
+    "params": {
+        "-1": "Activity",
+        "0": "Combat",
+        "1": "Prayer",
+        "2": "Runecrafting",
+        "3": "Construction",
+        "4": "Agility",
+        "5": "Herblore",
+        "6": "Thieving",
+        "7": "Crafting",
+        "8": "Fletching",
+        "9": "Hunter",
+        "10": "Mining",
+        "11": "Smithing",
+        "12": "Fishing",
+        "13": "Cooking",
+        "14": "Firemaking",
+        "15": "Woodcutting",
+        "16": "Farming",
+        "17": "Slayer"
+    }
+}

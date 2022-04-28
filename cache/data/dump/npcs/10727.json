@@ -1,0 +1,40 @@
+{
+    "id": 10727,
+    "name": "Veos",
+    "size": 1,
+    "idleSequence": 813,
+    "turnLeftSequence": -1,
+    "turnRightSequence": -1,
+    "walkSequence": 1205,
+    "walkBackSequence": 1206,
+    "walkLeftSequence": 1207,
+    "walkRightSequence": 1208,
+    "actions": [
+        "Talk-to",
+        "null",
+        "Port Sarim",
+        "Land's End",
+        "null"
+    ],
+    "drawMapDot": true,
+    "combatLevel": 0,
+    "widthScale": 128,
+    "heightScale": 128,
+    "isVisible": true,
+    "ambient": 0,
+    "contrast": 0,
+    "headIconPrayer": -1,
+    "rotation": 32,
+    "transformVarbit": -1,
+    "transformVarp": -1,
+    "isInteractable": true,
+    "isClickable": true,
+    "isFollower": false,
+    "models": [
+        41983
+    ],
+    "transforms": [
+    ],
+    "params": {
+    }
+}

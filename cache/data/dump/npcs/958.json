@@ -1,0 +1,40 @@
+{
+    "id": 958,
+    "name": "Kalphite Soldier",
+    "size": 3,
+    "idleSequence": 6218,
+    "turnLeftSequence": -1,
+    "turnRightSequence": -1,
+    "walkSequence": 6220,
+    "walkBackSequence": -1,
+    "walkLeftSequence": -1,
+    "walkRightSequence": -1,
+    "actions": [
+        "null",
+        "Attack",
+        "null",
+        "null",
+        "null"
+    ],
+    "drawMapDot": true,
+    "combatLevel": 85,
+    "widthScale": 128,
+    "heightScale": 128,
+    "isVisible": false,
+    "ambient": 0,
+    "contrast": 0,
+    "headIconPrayer": -1,
+    "rotation": 32,
+    "transformVarbit": -1,
+    "transformVarp": -1,
+    "isInteractable": true,
+    "isClickable": true,
+    "isFollower": false,
+    "models": [
+        24595
+    ],
+    "transforms": [
+    ],
+    "params": {
+    }
+}

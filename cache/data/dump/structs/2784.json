@@ -1,0 +1,11 @@
+{
+    "id": 2784,
+    "params": {
+        "1077": 66,
+        "1078": 4,
+        "1086": "Minimum item value needed for Alchemy spells warning",
+        "1088": "Minimum item value needed for Alchemy spells warning,low level alchemy,low alchemy,high level alchemy,high alchemy,notifications",
+        "1113": "0 coins",
+        "1096": "When casting alchemy spells on items in your inventory, if the item is worth more than this value, a warning will be shown."
+    }
+}

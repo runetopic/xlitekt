@@ -1,0 +1,22 @@
+{
+    "id": 3301,
+    "keyType": "ENUM",
+    "valType": "STRING",
+    "defaultString": "Costume Room",
+    "defaultInt": 0,
+    "size": 12,
+    "params": {
+        "3289": "Magic Wardrobe",
+        "3290": "Armour Case",
+        "3292": "Cape Rack",
+        "3291": "Fancy Dress Box",
+        "3299": "Toy Box",
+        "3293": "Treasure Chest: Beginner rewards",
+        "3294": "Treasure Chest: Easy rewards",
+        "3295": "Treasure Chest: Medium rewards",
+        "3296": "Treasure Chest: Hard rewards",
+        "3297": "Treasure Chest: Elite rewards",
+        "3298": "Treasure Chest: Master rewards",
+        "3300": "Boss Lair Jars"
+    }
+}

@@ -1,0 +1,31 @@
+{
+    "id": 1394,
+    "params": {
+        "806": 27,
+        "810": "Striking a pose",
+        "812": "Reach level 10 in the Ranged skill.",
+        "813": "Ensure you have a bow and arrows suitable for your level. The Cows north east of Lumbridge are suitable targets to fight.",
+        "814": "Train your Ranged to level 10 by fighting nearby monsters! Ensure you have a bow and arrows suitable for your level.|Take some food to keep your hitpoints high.|The Cows north east of Lumbridge are suitable targets to fight. You can fire arrows over the fence and some other scenery. This means that the cows will not be able to attack you, but you can attack the cow.|If you run out of arrows, speak to the Ranged combat instructor south of the general store in Lumbridge. Arrows you fire can be picked up from the ground.",
+        "815": 4,
+        "816": 10,
+        "807": 4,
+        "820": 3014,
+        "821": 3015,
+        "811": 200,
+        "822": 2241,
+        "823": "Use obstacles when using Ranged combat to avoid taking damage.",
+        "824": "https://oldschool.runescape.wiki/w/Cow",
+        "825": 1,
+        "826": 0,
+        "827": 1393,
+        "808": 1392,
+        "926": 5,
+        "927": 53316823,
+        "929": 1,
+        "989": 3025,
+        "931": 15,
+        "932": 53316823,
+        "936": "A hint arrow has been added above a Cow you could attack.",
+        "938": "Look for a Cow near the hint arrow location."
+    }
+}

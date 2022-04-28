@@ -1,0 +1,43 @@
+{
+    "id": 2857,
+    "name": "Giant rat",
+    "size": 2,
+    "idleSequence": 4932,
+    "turnLeftSequence": -1,
+    "turnRightSequence": -1,
+    "walkSequence": 4931,
+    "walkBackSequence": -1,
+    "walkLeftSequence": -1,
+    "walkRightSequence": -1,
+    "actions": [
+        "null",
+        "Attack",
+        "null",
+        "null",
+        "null"
+    ],
+    "drawMapDot": true,
+    "combatLevel": 3,
+    "widthScale": 128,
+    "heightScale": 128,
+    "isVisible": false,
+    "ambient": 0,
+    "contrast": 0,
+    "headIconPrayer": -1,
+    "rotation": 32,
+    "transformVarbit": -1,
+    "transformVarp": -1,
+    "isInteractable": true,
+    "isClickable": true,
+    "isFollower": false,
+    "models": [
+        18892,
+        18890,
+        18895,
+        18888
+    ],
+    "transforms": [
+    ],
+    "params": {
+    }
+}

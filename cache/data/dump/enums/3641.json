@@ -1,0 +1,22 @@
+{
+    "id": 3641,
+    "keyType": "INTEGER",
+    "valType": "STRING",
+    "defaultString": "null",
+    "defaultInt": 0,
+    "size": 12,
+    "params": {
+        "0": "drill_bgsound",
+        "1": "lathe_bgsound",
+        "2": "mine_rumbling_1",
+        "3": "mine_rumbling_2",
+        "4": "mine_rumbling_3",
+        "5": "mine_rumbling_4",
+        "6": "mine_rumbling_5",
+        "7": "twigs_snapping_1",
+        "8": "twigs_snapping_2",
+        "9": "twigs_snapping_3",
+        "10": "twigs_snapping_4",
+        "11": "twigs_snapping_5"
+    }
+}

@@ -1,0 +1,26 @@
+{
+    "id": 3792,
+    "keyType": "INTEGER",
+    "valType": "STRING",
+    "defaultString": "",
+    "defaultInt": 0,
+    "size": 16,
+    "params": {
+        "0": "F2P",
+        "1": "Newbie-friendly",
+        "2": "Socialising",
+        "3": "Diversity",
+        "4": "Pure",
+        "5": "PvP",
+        "6": "Boss-hunting",
+        "7": "Raiding",
+        "8": "Slayer",
+        "9": "Skilling",
+        "10": "Role-playing",
+        "11": "Iron players",
+        "12": "Ultimate Iron players",
+        "13": "Hardcore Iron players",
+        "14": "Castle Wars",
+        "15": "Soul Wars"
+    }
+}

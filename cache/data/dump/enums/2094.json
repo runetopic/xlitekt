@@ -1,0 +1,16 @@
+{
+    "id": 2094,
+    "keyType": "INTEGER",
+    "valType": "STRING",
+    "defaultString": "No Difficulty",
+    "defaultInt": 0,
+    "size": 6,
+    "params": {
+        "0": "Novice",
+        "1": "Intermediate",
+        "2": "Experienced",
+        "3": "Master",
+        "4": "Grandmaster",
+        "5": "Special"
+    }
+}

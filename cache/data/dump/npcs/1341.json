@@ -1,0 +1,47 @@
+{
+    "id": 1341,
+    "name": "Matthias",
+    "size": 1,
+    "idleSequence": 5160,
+    "turnLeftSequence": -1,
+    "turnRightSequence": -1,
+    "walkSequence": 5164,
+    "walkBackSequence": -1,
+    "walkLeftSequence": -1,
+    "walkRightSequence": -1,
+    "actions": [
+        "Talk-to",
+        "null",
+        "null",
+        "null",
+        "null"
+    ],
+    "drawMapDot": true,
+    "combatLevel": 0,
+    "widthScale": 132,
+    "heightScale": 135,
+    "isVisible": true,
+    "ambient": 0,
+    "contrast": 0,
+    "headIconPrayer": -1,
+    "rotation": 32,
+    "transformVarbit": -1,
+    "transformVarp": -1,
+    "isInteractable": true,
+    "isClickable": true,
+    "isFollower": false,
+    "models": [
+        10981,
+        251,
+        293,
+        323,
+        169,
+        19955,
+        274,
+        185
+    ],
+    "transforms": [
+    ],
+    "params": {
+    }
+}

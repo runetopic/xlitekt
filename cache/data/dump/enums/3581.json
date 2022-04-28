@@ -1,0 +1,15 @@
+{
+    "id": 3581,
+    "keyType": "INTEGER",
+    "valType": "STRING",
+    "defaultString": "null",
+    "defaultInt": 0,
+    "size": 5,
+    "params": {
+        "0": "HasBankKey",
+        "1": "personal rex",
+        "2": "Bas Furret",
+        "3": "UIM Herblore",
+        "4": "Crowride1873"
+    }
+}

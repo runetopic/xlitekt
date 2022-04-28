@@ -1,0 +1,12 @@
+{
+    "id": 928,
+    "keyType": "INTEGER",
+    "valType": "STRING",
+    "defaultString": "Choose carefully!",
+    "defaultInt": 0,
+    "size": 2,
+    "params": {
+        "0": "A team will lose the battle if it has no fighters in the arena.",
+        "1": "A team will lose the battle if it has 5 fighters or fewer in the arena."
+    }
+}

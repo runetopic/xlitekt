@@ -1,0 +1,18 @@
+{
+    "id": 1953,
+    "keyType": "OBJ",
+    "valType": "INTEGER",
+    "defaultString": "null",
+    "defaultInt": -1,
+    "size": 8,
+    "params": {
+        "12625": 1,
+        "2434": 2,
+        "6685": 3,
+        "3024": 3,
+        "7058": 1,
+        "385": 1,
+        "397": 2,
+        "391": 2
+    }
+}

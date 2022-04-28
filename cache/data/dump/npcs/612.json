@@ -1,0 +1,45 @@
+{
+    "id": 612,
+    "name": "Zombie protester",
+    "size": 1,
+    "idleSequence": 5584,
+    "turnLeftSequence": -1,
+    "turnRightSequence": -1,
+    "walkSequence": 5583,
+    "walkBackSequence": -1,
+    "walkLeftSequence": -1,
+    "walkRightSequence": -1,
+    "actions": [
+        "Talk-to",
+        "null",
+        "null",
+        "null",
+        "null"
+    ],
+    "drawMapDot": true,
+    "combatLevel": 0,
+    "widthScale": 118,
+    "heightScale": 118,
+    "isVisible": false,
+    "ambient": 0,
+    "contrast": 0,
+    "headIconPrayer": -1,
+    "rotation": 32,
+    "transformVarbit": -1,
+    "transformVarp": -1,
+    "isInteractable": true,
+    "isClickable": true,
+    "isFollower": false,
+    "models": [
+        21101,
+        21056,
+        21038,
+        21097,
+        21130,
+        21074
+    ],
+    "transforms": [
+    ],
+    "params": {
+    }
+}

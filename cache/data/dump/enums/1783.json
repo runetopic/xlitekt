@@ -1,0 +1,16 @@
+{
+    "id": 1783,
+    "keyType": "OBJ",
+    "valType": "STRING",
+    "defaultString": "",
+    "defaultInt": 0,
+    "size": 6,
+    "params": {
+        "21570": "Small Fossils",
+        "21580": "Medium Fossils",
+        "21600": "Large Fossils",
+        "21590": "Plant Fossils",
+        "21610": "Rare Fossils",
+        "21562": "Unidentified Fossils"
+    }
+}

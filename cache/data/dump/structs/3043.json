@@ -1,0 +1,11 @@
+{
+    "id": 3043,
+    "params": {
+        "1077": 151,
+        "1078": 0,
+        "1086": "Display relative stat value",
+        "1096": "When enabled, displays the difference between the stat and its base value. When disabled, displays the current stat value.",
+        "1088": "stat boost,stat drain,modified stat",
+        "1157": 1
+    }
+}

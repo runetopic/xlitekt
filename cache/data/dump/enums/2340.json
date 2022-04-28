@@ -1,0 +1,19 @@
+{
+    "id": 2340,
+    "keyType": "INTEGER",
+    "valType": "STRING",
+    "defaultString": "",
+    "defaultInt": 0,
+    "size": 9,
+    "params": {
+        "-1": "Team cap",
+        "0": "Uncapped",
+        "1": "1 v 1",
+        "2": "5 v 5",
+        "3": "10 v 10",
+        "4": "15 v 15",
+        "5": "20 v 20",
+        "6": "50 v 50",
+        "7": "100 v 100"
+    }
+}

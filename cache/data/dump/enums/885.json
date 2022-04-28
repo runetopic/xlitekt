@@ -1,0 +1,10 @@
+{
+    "id": 885,
+    "keyType": "INTEGER",
+    "valType": "MODEL",
+    "defaultString": "null",
+    "defaultInt": 63,
+    "size": 0,
+    "params": {
+    }
+}

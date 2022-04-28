@@ -1,0 +1,13 @@
+{
+    "id": 3736,
+    "params": {
+        "1077": 188,
+        "1078": 2,
+        "1086": "Woodcutting respawn timer",
+        "1088": "respawn notification",
+        "1157": 1,
+        "1091": 4066,
+        "1096": "When enabled, a respawn timer will be shown when you chopdown a tree. You can set this to only be shown if you have an axe.",
+        "1085": 1
+    }
+}

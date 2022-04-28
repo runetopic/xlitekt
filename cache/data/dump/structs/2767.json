@@ -1,0 +1,12 @@
+{
+    "id": 2767,
+    "params": {
+        "1077": 44,
+        "1078": 2,
+        "1091": 3499,
+        "1086": "Friend Login/Logout messages",
+        "1088": "Friend Login/Logout message timeout Friend Login Logout message timeout,Game chat",
+        "1084": 1,
+        "1096": "When timeout is selected, the message you receive when a friend logs in will be removed after an amount of time."
+    }
+}

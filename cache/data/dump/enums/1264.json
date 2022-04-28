@@ -1,0 +1,15 @@
+{
+    "id": 1264,
+    "keyType": "INTEGER",
+    "valType": "STRING",
+    "defaultString": "",
+    "defaultInt": 0,
+    "size": 5,
+    "params": {
+        "1": "Shayzien",
+        "2": "Hosidius",
+        "3": "Arceuus",
+        "4": "Lovakengj",
+        "5": "Piscarilius"
+    }
+}

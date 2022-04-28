@@ -1,0 +1,12 @@
+{
+    "id": 1730,
+    "params": {
+        "879": "Double Cast",
+        "880": "- The attack speed of all magic spells and weapons is halved (rounded up).<br><br>- With +60 Magic Attack Accuracy (or +20 with Regular or Elite Void Knight Mage Armour) your binding and ice spells have 100% accuracy against creatures.<br>Otherwise, your magic attacks have 125% increased accuracy against creatures and 50% increased accuracy against other players.<br><br>- You save 90% of your runes when casting spells. This includes charges when using powered staves such as the Trident of the Seas, Trident of the Swamp, Sanguinesti Staff and the Enchanted Slayer Staff.",
+        "884": 2620,
+        "881": 2668,
+        "883": 2669,
+        "885": 2,
+        "1274": 3067
+    }
+}

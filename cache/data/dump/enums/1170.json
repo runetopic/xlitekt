@@ -1,0 +1,12 @@
+{
+    "id": 1170,
+    "keyType": "INTEGER",
+    "valType": "STRING",
+    "defaultString": "Group",
+    "defaultInt": 0,
+    "size": 2,
+    "params": {
+        "0": "Off",
+        "1": "On"
+    }
+}

@@ -1,0 +1,23 @@
+{
+    "id": 24,
+    "fontId": -1,
+    "textColor": 16777215,
+    "displayCycles": 50,
+    "leftSpriteId": -1,
+    "backgroundSprite": -1,
+    "spriteId2": -1,
+    "rightSpriteId": -1,
+    "scrollToOffsetX": 0,
+    "scrollToOffsetY": 0,
+    "fadeStartCycle": -1,
+    "stringFormat": "",
+    "useDamage": -1,
+    "textOffsetY": 0,
+    "transformVarbit": 10236,
+    "transformVarp": -1,
+    "transforms": [
+        32,
+        32,
+        32
+    ]
+}

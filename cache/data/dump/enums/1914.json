@@ -1,0 +1,23 @@
+{
+    "id": 1914,
+    "keyType": "INTEGER",
+    "valType": "STRING",
+    "defaultString": "",
+    "defaultInt": 0,
+    "size": 13,
+    "params": {
+        "1": "Solo",
+        "2": "2 players",
+        "3": "3 players",
+        "4": "4 players",
+        "5": "5 players",
+        "6": "6 players",
+        "7": "7 players",
+        "8": "8 players",
+        "9": "9 players",
+        "10": "10 players",
+        "15": "11-15 players",
+        "23": "16-23 players",
+        "100": "24+ players"
+    }
+}

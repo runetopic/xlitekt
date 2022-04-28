@@ -1,0 +1,47 @@
+{
+    "id": 7631,
+    "name": "Mandy",
+    "size": 1,
+    "idleSequence": 7053,
+    "turnLeftSequence": -1,
+    "turnRightSequence": -1,
+    "walkSequence": 7052,
+    "walkBackSequence": 7052,
+    "walkLeftSequence": 7048,
+    "walkRightSequence": 7047,
+    "actions": [
+        "Talk-to",
+        "null",
+        "null",
+        "null",
+        "null"
+    ],
+    "drawMapDot": true,
+    "combatLevel": 0,
+    "widthScale": 128,
+    "heightScale": 128,
+    "isVisible": false,
+    "ambient": 0,
+    "contrast": 0,
+    "headIconPrayer": -1,
+    "rotation": 32,
+    "transformVarbit": -1,
+    "transformVarp": -1,
+    "isInteractable": true,
+    "isClickable": true,
+    "isFollower": false,
+    "models": [
+        391,
+        471,
+        332,
+        353,
+        419,
+        358,
+        414,
+        27648
+    ],
+    "transforms": [
+    ],
+    "params": {
+    }
+}

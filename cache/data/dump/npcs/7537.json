@@ -1,0 +1,40 @@
+{
+    "id": 7537,
+    "name": "Lux grub",
+    "size": 3,
+    "idleSequence": 7468,
+    "turnLeftSequence": -1,
+    "turnRightSequence": -1,
+    "walkSequence": 7468,
+    "walkBackSequence": -1,
+    "walkLeftSequence": -1,
+    "walkRightSequence": -1,
+    "actions": [
+        "null",
+        "null",
+        "null",
+        "null",
+        "null"
+    ],
+    "drawMapDot": false,
+    "combatLevel": 0,
+    "widthScale": 128,
+    "heightScale": 128,
+    "isVisible": false,
+    "ambient": 0,
+    "contrast": 0,
+    "headIconPrayer": -1,
+    "rotation": 32,
+    "transformVarbit": -1,
+    "transformVarp": -1,
+    "isInteractable": true,
+    "isClickable": true,
+    "isFollower": false,
+    "models": [
+        32696
+    ],
+    "transforms": [
+    ],
+    "params": {
+    }
+}

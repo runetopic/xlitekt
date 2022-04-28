@@ -1,0 +1,33 @@
+{
+    "id": 108,
+    "keyType": "INTEGER",
+    "valType": "STRING",
+    "defaultString": "this skill",
+    "defaultInt": 0,
+    "size": 23,
+    "params": {
+        "1": "Attack",
+        "2": "Strength",
+        "3": "Ranged",
+        "4": "Magic",
+        "5": "Defence",
+        "6": "Hitpoints",
+        "7": "Prayer",
+        "8": "Agility",
+        "9": "Herblore",
+        "10": "Thieving",
+        "11": "Crafting",
+        "12": "Runecraft",
+        "13": "Mining",
+        "14": "Smithing",
+        "15": "Fishing",
+        "16": "Cooking",
+        "17": "Firemaking",
+        "18": "Woodcutting",
+        "19": "Fletching",
+        "20": "Slayer",
+        "21": "Farming",
+        "22": "Construction",
+        "23": "Hunter"
+    }
+}

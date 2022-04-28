@@ -1,0 +1,40 @@
+{
+    "id": 9463,
+    "name": "The Nightmare",
+    "size": 5,
+    "idleSequence": 8578,
+    "turnLeftSequence": -1,
+    "turnRightSequence": -1,
+    "walkSequence": 8578,
+    "walkBackSequence": -1,
+    "walkLeftSequence": -1,
+    "walkRightSequence": -1,
+    "actions": [
+        "Disturb",
+        "null",
+        "Inspect",
+        "Spectate",
+        "null"
+    ],
+    "drawMapDot": true,
+    "combatLevel": 814,
+    "widthScale": 128,
+    "heightScale": 128,
+    "isVisible": true,
+    "ambient": 15,
+    "contrast": 500,
+    "headIconPrayer": -1,
+    "rotation": 0,
+    "transformVarbit": -1,
+    "transformVarp": -1,
+    "isInteractable": true,
+    "isClickable": true,
+    "isFollower": false,
+    "models": [
+        39192
+    ],
+    "transforms": [
+    ],
+    "params": {
+    }
+}

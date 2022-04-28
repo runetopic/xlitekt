@@ -1,0 +1,13 @@
+{
+    "id": 915,
+    "keyType": "INTEGER",
+    "valType": "STRING",
+    "defaultString": "",
+    "defaultInt": 0,
+    "size": 3,
+    "params": {
+        "-1": "Ranging",
+        "0": "Allowed",
+        "1": "Disabled"
+    }
+}

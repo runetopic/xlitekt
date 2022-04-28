@@ -1,0 +1,13 @@
+{
+    "id": 3962,
+    "keyType": "INTEGER",
+    "valType": "STRING",
+    "defaultString": "null",
+    "defaultInt": 0,
+    "size": 3,
+    "params": {
+        "0": "<col=ffffff>Ghommal's hilt 6</col>",
+        "1": "Daily Trollheim teleports - Unlimited",
+        "2": "Daily Mor Ul Rek teleports - Unlimited"
+    }
+}

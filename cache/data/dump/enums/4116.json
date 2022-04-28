@@ -1,0 +1,15 @@
+{
+    "id": 4116,
+    "keyType": "INTEGER",
+    "valType": "STRING",
+    "defaultString": "null",
+    "defaultInt": 0,
+    "size": 5,
+    "params": {
+        "0": "Old School Leagues",
+        "1": "League Tasks",
+        "2": "League Fragments",
+        "3": "Ranking System",
+        "4": "Rewards"
+    }
+}

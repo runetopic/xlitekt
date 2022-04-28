@@ -1,0 +1,14 @@
+{
+    "id": 1980,
+    "keyType": "COMPONENT",
+    "valType": "INTEGER",
+    "defaultString": "null",
+    "defaultInt": 4,
+    "size": 4,
+    "params": {
+        "12582923": 0,
+        "12582925": 1,
+        "12582927": 2,
+        "12582929": 3
+    }
+}

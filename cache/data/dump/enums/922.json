@@ -1,0 +1,12 @@
+{
+    "id": 922,
+    "keyType": "INTEGER",
+    "valType": "STRING",
+    "defaultString": "Choose carefully!",
+    "defaultInt": 0,
+    "size": 2,
+    "params": {
+        "0": "Food may be eaten during the battle.",
+        "1": "No food may be eaten during the battle."
+    }
+}

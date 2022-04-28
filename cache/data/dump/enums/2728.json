@@ -1,0 +1,15 @@
+{
+    "id": 2728,
+    "keyType": "INTEGER",
+    "valType": "STRING",
+    "defaultString": "null",
+    "defaultInt": 0,
+    "size": 5,
+    "params": {
+        "0": "Leagues are time-limited game modes in which you can experience Old School RuneScape like never before!|Complete tasks to earn League Points that can be used to unlock powerful Relics which enhance your gameplay!|Each League is different - figure out the best strategy to pull ahead of the competition. Or alternatively, just have fun!",
+        "1": "In Leagues, League Points can be earned by completing various tasks. These can then be used to unlock powerful Relics.|League Points are also transferred to your main game profile where they can be used to buy rewards in the Leagues Reward Shop.",
+        "2": "Relics are powerful buffs which affect your gameplay for the entire League. Choose carefully, because choices cannot later be changed!",
+        "3": "Your performance in the League is measured by how many League Points you earn. And the more you score compared to your rivals, the higher League Rank you'll achieve!|The cut-offs for League Ranks are:|- Bronze: Earn 100 League Points<br>- Iron: Top 80%<br>- Steel: Top 60%<br>- Mithril: Top 40%<br>- Adamant: Top 20%<br>- Rune: Top 5%<br>- Dragon: Top 1%",
+        "4": "As well as letting you unlock Relics, League Points are transferred to your main game profile.|Points can be used to buy rewards in the Leagues Reward Shop.|Performance in one League will also contribute to the next, with rewards such as:|- League Starter Outfits<br>- League Icons<br>- League Participation Worlds<br>- Pet Transfers"
+    }
+}

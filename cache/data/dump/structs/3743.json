@@ -1,0 +1,13 @@
+{
+    "id": 3743,
+    "params": {
+        "1077": 192,
+        "1078": 0,
+        "1086": "Show confirmation when paying for items from gravestone",
+        "1088": "Show confirmation when paying for items from gravestone,confirmation,gravestone,items,pay,gold",
+        "1084": 1,
+        "1085": 1,
+        "1096": "When enabled, you will get a confirmation before paying for your items from a gravestone.",
+        "1119": 0
+    }
+}

@@ -1,0 +1,19 @@
+{
+    "id": 63,
+    "keyType": "INTEGER",
+    "valType": "STRING",
+    "defaultString": "",
+    "defaultInt": 0,
+    "size": 9,
+    "params": {
+        "0": "https://osrs.game/watch-broadcast-rs",
+        "1": "https://osrs.game/watch-broadcast-osrs",
+        "2": "https://osrs.game/watch-rs-directory",
+        "3": "https://osrs.game/watch-osrs-directory",
+        "4": "https://osrs.game/UpdateBroadcast",
+        "5": "https://osrs.game/NewsArchiveBroadcast",
+        "6": "https://osrs.game/osrsBroadcast",
+        "7": "https://osrs.game/watch-broadcast-jagex",
+        "25": "*"
+    }
+}

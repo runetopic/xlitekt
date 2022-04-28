@@ -1,0 +1,13 @@
+{
+    "id": 927,
+    "keyType": "INTEGER",
+    "valType": "STRING",
+    "defaultString": "",
+    "defaultInt": 0,
+    "size": 3,
+    "params": {
+        "-1": "Stragglers",
+        "0": "Kill 'em all",
+        "1": "Ignore 5"
+    }
+}

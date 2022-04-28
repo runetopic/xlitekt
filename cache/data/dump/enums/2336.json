@@ -1,0 +1,13 @@
+{
+    "id": 2336,
+    "keyType": "INTEGER",
+    "valType": "STRING",
+    "defaultString": "",
+    "defaultInt": 0,
+    "size": 3,
+    "params": {
+        "-1": "Leaving channel",
+        "0": "Counts as death",
+        "1": "No penalty"
+    }
+}

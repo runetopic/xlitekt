@@ -1,0 +1,13 @@
+{
+    "id": 2092,
+    "keyType": "INTEGER",
+    "valType": "STRING",
+    "defaultString": "No Progress",
+    "defaultInt": 0,
+    "size": 3,
+    "params": {
+        "0": "Started",
+        "1": "Not Started",
+        "2": "Finished"
+    }
+}

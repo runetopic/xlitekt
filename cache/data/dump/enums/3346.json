@@ -1,0 +1,15 @@
+{
+    "id": 3346,
+    "keyType": "INTEGER",
+    "valType": "GRAPHIC",
+    "defaultString": "null",
+    "defaultInt": -1,
+    "size": 5,
+    "params": {
+        "0": 2792,
+        "1": 2793,
+        "2": 2794,
+        "3": 2795,
+        "4": 2796
+    }
+}

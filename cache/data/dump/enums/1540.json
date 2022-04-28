@@ -1,0 +1,18 @@
+{
+    "id": 1540,
+    "keyType": "INTEGER",
+    "valType": "STRING",
+    "defaultString": "",
+    "defaultInt": 0,
+    "size": 8,
+    "params": {
+        "0": "Dwarf",
+        "1": "Wartface & Bentnoze",
+        "2": "Pirate Pete",
+        "3": "Lumbridge Guide",
+        "4": "Evil Dave",
+        "5": "Skrach Uglogwee",
+        "6": "Sir Amik Varze",
+        "7": "Monkey Ambassador"
+    }
+}

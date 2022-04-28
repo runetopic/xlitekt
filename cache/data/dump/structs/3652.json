@@ -1,0 +1,16 @@
+{
+    "id": 3652,
+    "params": {
+        "1088": "player current true tile highlighting indicator always on top",
+        "1077": 176,
+        "1078": 0,
+        "1086": "Highlight current tile - Always on top",
+        "1157": 1,
+        "1084": 0,
+        "1096": "When enabled, shows the current tile highlight over objects in the world.",
+        "1080": 4029,
+        "1081": 4030,
+        "1116": "Highlight current tile must be enabled for this setting to have any effect.",
+        "1085": 1
+    }
+}

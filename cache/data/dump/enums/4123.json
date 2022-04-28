@@ -1,0 +1,11 @@
+{
+    "id": 4123,
+    "keyType": "INTEGER",
+    "valType": "STRING",
+    "defaultString": "",
+    "defaultInt": 0,
+    "size": 1,
+    "params": {
+        "0": "Get Started"
+    }
+}

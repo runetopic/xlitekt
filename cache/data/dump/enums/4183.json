@@ -1,0 +1,13 @@
+{
+    "id": 4183,
+    "keyType": "INTEGER",
+    "valType": "STRING",
+    "defaultString": "All",
+    "defaultInt": 0,
+    "size": 3,
+    "params": {
+        "0": "All",
+        "1": "Locked",
+        "2": "Unlocked"
+    }
+}

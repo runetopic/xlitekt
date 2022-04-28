@@ -1,0 +1,41 @@
+{
+    "id": 10760,
+    "name": "Stray dog",
+    "size": 1,
+    "idleSequence": 4777,
+    "turnLeftSequence": -1,
+    "turnRightSequence": -1,
+    "walkSequence": 4773,
+    "walkBackSequence": -1,
+    "walkLeftSequence": -1,
+    "walkRightSequence": -1,
+    "actions": [
+        "null",
+        "null",
+        "null",
+        "null",
+        "Pet"
+    ],
+    "drawMapDot": true,
+    "combatLevel": 0,
+    "widthScale": 128,
+    "heightScale": 128,
+    "isVisible": false,
+    "ambient": 20,
+    "contrast": 0,
+    "headIconPrayer": -1,
+    "rotation": 32,
+    "transformVarbit": -1,
+    "transformVarp": -1,
+    "isInteractable": true,
+    "isClickable": true,
+    "isFollower": false,
+    "models": [
+        18168,
+        18169
+    ],
+    "transforms": [
+    ],
+    "params": {
+    }
+}

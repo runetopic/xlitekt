@@ -1,0 +1,7 @@
+{
+    "id": 601,
+    "type": "STRING",
+    "defaultInt": 0,
+    "autoDisable": false,
+    "defaultString": "Spell"
+}

@@ -1,0 +1,7 @@
+{
+    "id": 1145,
+    "type": "ENUM",
+    "defaultInt": -1,
+    "autoDisable": true,
+    "defaultString": ""
+}

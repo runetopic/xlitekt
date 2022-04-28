@@ -1,0 +1,13 @@
+{
+    "id": 3646,
+    "params": {
+        "1088": "player current true tile highlighting indicator",
+        "1077": 175,
+        "1078": 0,
+        "1086": "Highlight current tile",
+        "1157": 1,
+        "1084": 0,
+        "1096": "When enabled, highlights the tile you are currently on.",
+        "1085": 1
+    }
+}

@@ -1,0 +1,12 @@
+{
+    "id": 1134,
+    "keyType": "ENUM",
+    "valType": "BOOLEAN",
+    "defaultString": "null",
+    "defaultInt": 0,
+    "size": 2,
+    "params": {
+        "1131": 1,
+        "1745": 1
+    }
+}

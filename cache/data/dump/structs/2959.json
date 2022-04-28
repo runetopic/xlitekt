@@ -1,0 +1,8 @@
+{
+    "id": 2959,
+    "params": {
+        "1255": 1,
+        "1251": "Guest minimum skill total",
+        "1252": "Minimum skill total required for a new guest to join the clan's channel. Changing the requirement will not expel existing guests."
+    }
+}

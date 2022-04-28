@@ -1,0 +1,12 @@
+{
+    "id": 1735,
+    "params": {
+        "879": "Infernal Gathering",
+        "880": "- Upon selecting this Relic, you will receive a set of Trailblazer Tools which can be used with no requirements. These tools will function on par with Crystal Tools.<br><br>- Any ore mined with the Trailblazer Pickaxe will be smelted into a bar, and Smithing XP given, regardless of Smithing level.<br><br>- Any fish caught with the Trailblazer Harpoon will be cooked, and Cooking XP given, regardless of Cooking level. This will work even for fish that don't require a Harpoon to be caught if the Trailblazer Harpoon is equipped or in your Inventory.<br><br>- Any logs chopped with the Trailblazer Axe will be burned, and Firemaking XP given, regardless of Firemaking level.<br><br>- On death, these tools are lost and can be reclaimed from the Leagues Tutor in Lumbridge.<br><br>- As this Relic gives you an item it must be unlocked at a bank.",
+        "884": 2630,
+        "881": 2678,
+        "883": 2679,
+        "885": 4,
+        "1274": 3072
+    }
+}

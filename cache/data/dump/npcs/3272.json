@@ -1,0 +1,48 @@
+{
+    "id": 3272,
+    "name": "Guard",
+    "size": 1,
+    "idleSequence": 808,
+    "turnLeftSequence": -1,
+    "turnRightSequence": -1,
+    "walkSequence": 819,
+    "walkBackSequence": 820,
+    "walkLeftSequence": 821,
+    "walkRightSequence": 822,
+    "actions": [
+        "null",
+        "Attack",
+        "Pickpocket",
+        "null",
+        "null"
+    ],
+    "drawMapDot": true,
+    "combatLevel": 22,
+    "widthScale": 128,
+    "heightScale": 128,
+    "isVisible": false,
+    "ambient": 0,
+    "contrast": 0,
+    "headIconPrayer": -1,
+    "rotation": 32,
+    "transformVarbit": -1,
+    "transformVarp": -1,
+    "isInteractable": true,
+    "isClickable": true,
+    "isFollower": false,
+    "models": [
+        233,
+        250,
+        9458,
+        9450,
+        176,
+        254,
+        185,
+        563,
+        215
+    ],
+    "transforms": [
+    ],
+    "params": {
+    }
+}

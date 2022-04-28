@@ -1,0 +1,18 @@
+{
+    "id": 3968,
+    "keyType": "INTEGER",
+    "valType": "STRING",
+    "defaultString": "",
+    "defaultInt": 0,
+    "size": 8,
+    "params": {
+        "-1": "Type",
+        "0": "All",
+        "1": "Stamina",
+        "2": "Perfection",
+        "3": "Kill Count",
+        "4": "Mechanical",
+        "5": "Restriction",
+        "6": "Speed"
+    }
+}

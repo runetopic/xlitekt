@@ -1,0 +1,49 @@
+{
+    "id": 3222,
+    "name": "Mining tutor",
+    "size": 1,
+    "idleSequence": 2065,
+    "turnLeftSequence": -1,
+    "turnRightSequence": -1,
+    "walkSequence": 2064,
+    "walkBackSequence": -1,
+    "walkLeftSequence": -1,
+    "walkRightSequence": -1,
+    "actions": [
+        "Talk-to",
+        "null",
+        "null",
+        "null",
+        "null"
+    ],
+    "drawMapDot": true,
+    "combatLevel": 0,
+    "widthScale": 128,
+    "heightScale": 120,
+    "isVisible": true,
+    "ambient": 0,
+    "contrast": 0,
+    "headIconPrayer": -1,
+    "rotation": 32,
+    "transformVarbit": -1,
+    "transformVarp": -1,
+    "isInteractable": true,
+    "isClickable": true,
+    "isFollower": false,
+    "models": [
+        230,
+        9619,
+        11750,
+        299,
+        9621,
+        167,
+        177,
+        509,
+        263,
+        185
+    ],
+    "transforms": [
+    ],
+    "params": {
+    }
+}

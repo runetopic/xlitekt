@@ -1,0 +1,17 @@
+{
+    "id": 3793,
+    "keyType": "INTEGER",
+    "valType": "STRING",
+    "defaultString": "",
+    "defaultInt": 0,
+    "size": 7,
+    "params": {
+        "0": "Rank",
+        "1": "Joined",
+        "2": "Last seen",
+        "3": "Skill total",
+        "4": "Combat level",
+        "5": "Hiscores",
+        "6": "Expel"
+    }
+}

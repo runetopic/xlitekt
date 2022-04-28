@@ -1,0 +1,40 @@
+{
+    "id": 6339,
+    "name": "Nazastarool (hard)",
+    "size": 2,
+    "idleSequence": 5530,
+    "turnLeftSequence": -1,
+    "turnRightSequence": -1,
+    "walkSequence": 5531,
+    "walkBackSequence": -1,
+    "walkLeftSequence": -1,
+    "walkRightSequence": -1,
+    "actions": [
+        "null",
+        "Attack",
+        "null",
+        "null",
+        "null"
+    ],
+    "drawMapDot": true,
+    "combatLevel": 181,
+    "widthScale": 128,
+    "heightScale": 128,
+    "isVisible": true,
+    "ambient": 0,
+    "contrast": 0,
+    "headIconPrayer": -1,
+    "rotation": 32,
+    "transformVarbit": -1,
+    "transformVarp": -1,
+    "isInteractable": true,
+    "isClickable": true,
+    "isFollower": false,
+    "models": [
+        21142
+    ],
+    "transforms": [
+    ],
+    "params": {
+    }
+}

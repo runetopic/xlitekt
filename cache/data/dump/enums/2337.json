@@ -1,0 +1,12 @@
+{
+    "id": 2337,
+    "keyType": "INTEGER",
+    "valType": "STRING",
+    "defaultString": "Choose carefully!",
+    "defaultInt": 0,
+    "size": 2,
+    "params": {
+        "0": "If a player leaves the chat-channel during the fight, the game will attempt to count it as a kill by the opposing team.",
+        "1": "Players may leave the chat-channel during the fight without a penalty."
+    }
+}

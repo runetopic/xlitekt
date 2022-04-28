@@ -1,0 +1,43 @@
+{
+    "id": 911,
+    "name": "Agrith Naar",
+    "size": 3,
+    "idleSequence": 4675,
+    "turnLeftSequence": -1,
+    "turnRightSequence": -1,
+    "walkSequence": 4674,
+    "walkBackSequence": -1,
+    "walkLeftSequence": -1,
+    "walkRightSequence": -1,
+    "actions": [
+        "null",
+        "Attack",
+        "null",
+        "null",
+        "null"
+    ],
+    "drawMapDot": true,
+    "combatLevel": 100,
+    "widthScale": 95,
+    "heightScale": 95,
+    "isVisible": false,
+    "ambient": 0,
+    "contrast": 0,
+    "headIconPrayer": -1,
+    "rotation": 32,
+    "transformVarbit": -1,
+    "transformVarp": -1,
+    "isInteractable": true,
+    "isClickable": true,
+    "isFollower": false,
+    "models": [
+        17380,
+        17397,
+        17384,
+        17401
+    ],
+    "transforms": [
+    ],
+    "params": {
+    }
+}

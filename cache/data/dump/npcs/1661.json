@@ -1,0 +1,48 @@
+{
+    "id": 1661,
+    "name": "Private Paldon",
+    "size": 1,
+    "idleSequence": 2561,
+    "turnLeftSequence": -1,
+    "turnRightSequence": -1,
+    "walkSequence": 2562,
+    "walkBackSequence": 2562,
+    "walkLeftSequence": 2562,
+    "walkRightSequence": 2562,
+    "actions": [
+        "Talk-to",
+        "null",
+        "null",
+        "null",
+        "null"
+    ],
+    "drawMapDot": true,
+    "combatLevel": 0,
+    "widthScale": 128,
+    "heightScale": 128,
+    "isVisible": false,
+    "ambient": 0,
+    "contrast": 0,
+    "headIconPrayer": -1,
+    "rotation": 32,
+    "transformVarbit": -1,
+    "transformVarp": -1,
+    "isInteractable": true,
+    "isClickable": true,
+    "isFollower": false,
+    "models": [
+        11740,
+        230,
+        251,
+        11759,
+        11726,
+        11732,
+        11793,
+        19250,
+        11735
+    ],
+    "transforms": [
+    ],
+    "params": {
+    }
+}

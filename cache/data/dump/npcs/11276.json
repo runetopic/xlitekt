@@ -1,0 +1,40 @@
+{
+    "id": 11276,
+    "name": "Nexling",
+    "size": 1,
+    "idleSequence": 9177,
+    "turnLeftSequence": -1,
+    "turnRightSequence": -1,
+    "walkSequence": 9176,
+    "walkBackSequence": -1,
+    "walkLeftSequence": -1,
+    "walkRightSequence": -1,
+    "actions": [
+        "Talk-to",
+        "null",
+        "Pick-up",
+        "null",
+        "null"
+    ],
+    "drawMapDot": false,
+    "combatLevel": 0,
+    "widthScale": 48,
+    "heightScale": 48,
+    "isVisible": false,
+    "ambient": 0,
+    "contrast": 0,
+    "headIconPrayer": -1,
+    "rotation": 32,
+    "transformVarbit": -1,
+    "transformVarp": -1,
+    "isInteractable": true,
+    "isClickable": true,
+    "isFollower": false,
+    "models": [
+        43209
+    ],
+    "transforms": [
+    ],
+    "params": {
+    }
+}

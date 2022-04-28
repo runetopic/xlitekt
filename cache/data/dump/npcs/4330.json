@@ -1,0 +1,50 @@
+{
+    "id": 4330,
+    "name": "Johanhus Ulsbrecht",
+    "size": 1,
+    "idleSequence": 4208,
+    "turnLeftSequence": -1,
+    "turnRightSequence": -1,
+    "walkSequence": 819,
+    "walkBackSequence": 820,
+    "walkLeftSequence": 821,
+    "walkRightSequence": 822,
+    "actions": [
+        "null",
+        "null",
+        "null",
+        "null",
+        "null"
+    ],
+    "drawMapDot": true,
+    "combatLevel": 0,
+    "widthScale": 130,
+    "heightScale": 130,
+    "isVisible": false,
+    "ambient": 0,
+    "contrast": 0,
+    "headIconPrayer": -1,
+    "rotation": 32,
+    "transformVarbit": -1,
+    "transformVarp": -1,
+    "isInteractable": true,
+    "isClickable": true,
+    "isFollower": false,
+    "models": [
+        167,
+        176,
+        215,
+        249,
+        181,
+        265,
+        292,
+        5434,
+        5433,
+        317,
+        15476
+    ],
+    "transforms": [
+    ],
+    "params": {
+    }
+}

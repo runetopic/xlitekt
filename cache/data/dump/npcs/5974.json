@@ -1,0 +1,41 @@
+{
+    "id": 5974,
+    "name": "Sweeper",
+    "size": 1,
+    "idleSequence": 3244,
+    "turnLeftSequence": -1,
+    "turnRightSequence": -1,
+    "walkSequence": 3245,
+    "walkBackSequence": -1,
+    "walkLeftSequence": -1,
+    "walkRightSequence": -1,
+    "actions": [
+        "null",
+        "null",
+        "null",
+        "null",
+        "null"
+    ],
+    "drawMapDot": true,
+    "combatLevel": 0,
+    "widthScale": 128,
+    "heightScale": 128,
+    "isVisible": false,
+    "ambient": 10,
+    "contrast": 50,
+    "headIconPrayer": -1,
+    "rotation": 32,
+    "transformVarbit": -1,
+    "transformVarp": -1,
+    "isInteractable": true,
+    "isClickable": true,
+    "isFollower": false,
+    "models": [
+        10641,
+        1760
+    ],
+    "transforms": [
+    ],
+    "params": {
+    }
+}

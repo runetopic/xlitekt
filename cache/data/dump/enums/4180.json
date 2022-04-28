@@ -1,0 +1,15 @@
+{
+    "id": 4180,
+    "keyType": "INTEGER",
+    "valType": "STRING",
+    "defaultString": "All",
+    "defaultInt": 0,
+    "size": 5,
+    "params": {
+        "0": "All",
+        "1": "Combat",
+        "2": "Harvesting",
+        "3": "Production",
+        "4": "Other"
+    }
+}

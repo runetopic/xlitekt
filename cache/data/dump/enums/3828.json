@@ -1,0 +1,13 @@
+{
+    "id": 3828,
+    "keyType": "INTEGER",
+    "valType": "STRING",
+    "defaultString": "None",
+    "defaultInt": 0,
+    "size": 3,
+    "params": {
+        "1": "Any Iron player",
+        "2": "UIM only",
+        "3": "HCIM only"
+    }
+}

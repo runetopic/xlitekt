@@ -1,0 +1,21 @@
+{
+    "id": 784,
+    "keyType": "INTEGER",
+    "valType": "STRING",
+    "defaultString": "",
+    "defaultInt": 0,
+    "size": 11,
+    "params": {
+        "0": "Short sleeves",
+        "1": "Bare arms",
+        "2": "Muscley",
+        "3": "Long sleeved",
+        "4": "Large cuffs",
+        "5": "Frilly",
+        "6": "Sweater",
+        "7": "White cuffs",
+        "8": "Thin stripe",
+        "9": "Tatty",
+        "10": "Bare shoulders"
+    }
+}

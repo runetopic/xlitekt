@@ -1,0 +1,48 @@
+{
+    "id": 5383,
+    "name": "Guard Captain",
+    "size": 1,
+    "idleSequence": 3040,
+    "turnLeftSequence": -1,
+    "turnRightSequence": -1,
+    "walkSequence": 3039,
+    "walkBackSequence": 820,
+    "walkLeftSequence": 821,
+    "walkRightSequence": 822,
+    "actions": [
+        "Talk-to",
+        "null",
+        "null",
+        "null",
+        "null"
+    ],
+    "drawMapDot": true,
+    "combatLevel": 0,
+    "widthScale": 128,
+    "heightScale": 128,
+    "isVisible": false,
+    "ambient": 0,
+    "contrast": 0,
+    "headIconPrayer": -1,
+    "rotation": 32,
+    "transformVarbit": -1,
+    "transformVarp": -1,
+    "isInteractable": true,
+    "isClickable": true,
+    "isFollower": false,
+    "models": [
+        233,
+        247,
+        312,
+        323,
+        152,
+        179,
+        6098,
+        263,
+        4954
+    ],
+    "transforms": [
+    ],
+    "params": {
+    }
+}

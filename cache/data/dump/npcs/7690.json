@@ -1,0 +1,45 @@
+{
+    "id": 7690,
+    "name": "TzHaar-Ket-Keh",
+    "size": 2,
+    "idleSequence": 2604,
+    "turnLeftSequence": -1,
+    "turnRightSequence": -1,
+    "walkSequence": 2602,
+    "walkBackSequence": -1,
+    "walkLeftSequence": -1,
+    "walkRightSequence": -1,
+    "actions": [
+        "Talk to",
+        "null",
+        "Exchange",
+        "null",
+        "null"
+    ],
+    "drawMapDot": true,
+    "combatLevel": 0,
+    "widthScale": 192,
+    "heightScale": 192,
+    "isVisible": false,
+    "ambient": 10,
+    "contrast": 0,
+    "headIconPrayer": -1,
+    "rotation": 32,
+    "transformVarbit": -1,
+    "transformVarp": -1,
+    "isInteractable": true,
+    "isClickable": true,
+    "isFollower": false,
+    "models": [
+        33124,
+        33123,
+        33122,
+        33125,
+        9316,
+        9308
+    ],
+    "transforms": [
+    ],
+    "params": {
+    }
+}

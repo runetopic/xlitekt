@@ -1,0 +1,17 @@
+{
+    "id": 355,
+    "keyType": "OBJ",
+    "valType": "INTEGER",
+    "defaultString": "null",
+    "defaultInt": 1,
+    "size": 7,
+    "params": {
+        "2084": 6,
+        "2048": 8,
+        "2054": 18,
+        "2080": 20,
+        "2092": 32,
+        "2074": 33,
+        "2064": 37
+    }
+}

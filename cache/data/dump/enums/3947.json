@@ -1,0 +1,17 @@
+{
+    "id": 3947,
+    "keyType": "INTEGER",
+    "valType": "STRING",
+    "defaultString": "",
+    "defaultInt": 0,
+    "size": 7,
+    "params": {
+        "0": "",
+        "1": "an",
+        "2": "a",
+        "3": "a",
+        "4": "an",
+        "5": "a",
+        "6": "a"
+    }
+}

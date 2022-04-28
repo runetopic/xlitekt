@@ -1,0 +1,40 @@
+{
+    "id": 9294,
+    "name": "Bakuna",
+    "size": 3,
+    "idleSequence": 8497,
+    "turnLeftSequence": -1,
+    "turnRightSequence": -1,
+    "walkSequence": 8498,
+    "walkBackSequence": -1,
+    "walkLeftSequence": -1,
+    "walkRightSequence": -1,
+    "actions": [
+        "null",
+        "null",
+        "null",
+        "null",
+        "null"
+    ],
+    "drawMapDot": true,
+    "combatLevel": 218,
+    "widthScale": 76,
+    "heightScale": 76,
+    "isVisible": false,
+    "ambient": 0,
+    "contrast": 0,
+    "headIconPrayer": -1,
+    "rotation": 32,
+    "transformVarbit": -1,
+    "transformVarp": -1,
+    "isInteractable": true,
+    "isClickable": true,
+    "isFollower": false,
+    "models": [
+        38868
+    ],
+    "transforms": [
+    ],
+    "params": {
+    }
+}

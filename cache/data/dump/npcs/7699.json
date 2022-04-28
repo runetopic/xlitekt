@@ -1,0 +1,40 @@
+{
+    "id": 7699,
+    "name": "Jal-Zek",
+    "size": 4,
+    "idleSequence": 7609,
+    "turnLeftSequence": -1,
+    "turnRightSequence": -1,
+    "walkSequence": 7608,
+    "walkBackSequence": 7609,
+    "walkLeftSequence": 7609,
+    "walkRightSequence": 7609,
+    "actions": [
+        "null",
+        "Attack",
+        "null",
+        "null",
+        "null"
+    ],
+    "drawMapDot": true,
+    "combatLevel": 490,
+    "widthScale": 128,
+    "heightScale": 128,
+    "isVisible": false,
+    "ambient": -10,
+    "contrast": 0,
+    "headIconPrayer": -1,
+    "rotation": 32,
+    "transformVarbit": -1,
+    "transformVarp": -1,
+    "isInteractable": true,
+    "isClickable": true,
+    "isFollower": false,
+    "models": [
+        33000
+    ],
+    "transforms": [
+    ],
+    "params": {
+    }
+}

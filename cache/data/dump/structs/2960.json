@@ -1,0 +1,8 @@
+{
+    "id": 2960,
+    "params": {
+        "1255": 1,
+        "1251": "Guest minimum QP",
+        "1252": "Minimum quest points required for a new guest to join the clan's channel. Changing the requirement will not expel existing guests."
+    }
+}

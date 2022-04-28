@@ -1,0 +1,46 @@
+{
+    "id": 573,
+    "name": "Zombie pirate",
+    "size": 1,
+    "idleSequence": 5650,
+    "turnLeftSequence": -1,
+    "turnRightSequence": -1,
+    "walkSequence": 5652,
+    "walkBackSequence": -1,
+    "walkLeftSequence": -1,
+    "walkRightSequence": -1,
+    "actions": [
+        "null",
+        "Attack",
+        "null",
+        "null",
+        "null"
+    ],
+    "drawMapDot": true,
+    "combatLevel": 57,
+    "widthScale": 128,
+    "heightScale": 128,
+    "isVisible": false,
+    "ambient": 0,
+    "contrast": 0,
+    "headIconPrayer": -1,
+    "rotation": 32,
+    "transformVarbit": -1,
+    "transformVarp": -1,
+    "isInteractable": true,
+    "isClickable": true,
+    "isFollower": false,
+    "models": [
+        21438,
+        21477,
+        21416,
+        21443,
+        21463,
+        21456,
+        21423
+    ],
+    "transforms": [
+    ],
+    "params": {
+    }
+}

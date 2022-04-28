@@ -1,0 +1,49 @@
+{
+    "id": 7663,
+    "name": "Krystilia",
+    "size": 1,
+    "idleSequence": 813,
+    "turnLeftSequence": -1,
+    "turnRightSequence": -1,
+    "walkSequence": 813,
+    "walkBackSequence": -1,
+    "walkLeftSequence": -1,
+    "walkRightSequence": -1,
+    "actions": [
+        "Talk-to",
+        "null",
+        "Assignment",
+        "Trade",
+        "Rewards"
+    ],
+    "drawMapDot": true,
+    "combatLevel": 0,
+    "widthScale": 128,
+    "heightScale": 128,
+    "isVisible": true,
+    "ambient": 0,
+    "contrast": 0,
+    "headIconPrayer": -1,
+    "rotation": 32,
+    "transformVarbit": -1,
+    "transformVarp": -1,
+    "isInteractable": true,
+    "isClickable": true,
+    "isFollower": false,
+    "models": [
+        390,
+        377,
+        462,
+        348,
+        353,
+        481,
+        440,
+        444,
+        450,
+        32970
+    ],
+    "transforms": [
+    ],
+    "params": {
+    }
+}

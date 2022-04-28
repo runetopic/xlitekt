@@ -1,0 +1,45 @@
+{
+    "id": 3172,
+    "name": "Aviansie",
+    "size": 2,
+    "idleSequence": 6952,
+    "turnLeftSequence": -1,
+    "turnRightSequence": -1,
+    "walkSequence": 6953,
+    "walkBackSequence": -1,
+    "walkLeftSequence": -1,
+    "walkRightSequence": -1,
+    "actions": [
+        "null",
+        "Attack",
+        "null",
+        "null",
+        "null"
+    ],
+    "drawMapDot": true,
+    "combatLevel": 83,
+    "widthScale": 128,
+    "heightScale": 128,
+    "isVisible": true,
+    "ambient": 0,
+    "contrast": 0,
+    "headIconPrayer": -1,
+    "rotation": 32,
+    "transformVarbit": -1,
+    "transformVarp": -1,
+    "isInteractable": true,
+    "isClickable": true,
+    "isFollower": false,
+    "models": [
+        27940,
+        27958,
+        27945,
+        27937,
+        27967,
+        27971
+    ],
+    "transforms": [
+    ],
+    "params": {
+    }
+}

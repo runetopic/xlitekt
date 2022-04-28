@@ -1,0 +1,22 @@
+{
+    "id": 775,
+    "keyType": "INTEGER",
+    "valType": "STRING",
+    "defaultString": "",
+    "defaultInt": 0,
+    "size": 12,
+    "params": {
+        "0": "Regular",
+        "1": "Musclebound",
+        "2": "Loose sleeved",
+        "3": "Large cuffed",
+        "4": "Thin sleeved",
+        "5": "Shoulder pads",
+        "6": "Thin stripe",
+        "7": "Thick stripe",
+        "8": "White cuffs",
+        "9": "Princely",
+        "10": "Tatty",
+        "11": "Ripped"
+    }
+}

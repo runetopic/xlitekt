@@ -1,0 +1,17 @@
+{
+    "id": 3014,
+    "params": {
+        "1077": 121,
+        "1078": 0,
+        "1086": "Fishing spot indicators - Tools only",
+        "1088": "fishing spot indicators,small fishing net,big fishing net,drift net,fishing rod,fly fishing rod,oily fishing rod,barbarian rod,harpoon,lobster pot,cormorants glove,karambwan vessel",
+        "1096": "When enabled, fishing spot indicators will only be shown if you have a tool that can be used at the fishing spot. When disabled, show fishing spot indicators regardless of tools.",
+        "1157": 1,
+        "1084": 1,
+        "1080": 3893,
+        "1081": 3894,
+        "1085": 1,
+        "1116": "You can only change this setting if fishing spot indicators are enabled.",
+        "1090": 1
+    }
+}

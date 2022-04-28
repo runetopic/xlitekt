@@ -1,0 +1,51 @@
+{
+    "id": 8161,
+    "name": "Brundt the Chieftain",
+    "size": 1,
+    "idleSequence": 808,
+    "turnLeftSequence": -1,
+    "turnRightSequence": -1,
+    "walkSequence": 819,
+    "walkBackSequence": 820,
+    "walkLeftSequence": 821,
+    "walkRightSequence": 822,
+    "actions": [
+        "null",
+        "null",
+        "null",
+        "null",
+        "null"
+    ],
+    "drawMapDot": true,
+    "combatLevel": 126,
+    "widthScale": 128,
+    "heightScale": 128,
+    "isVisible": true,
+    "ambient": 0,
+    "contrast": 0,
+    "headIconPrayer": -1,
+    "rotation": 32,
+    "transformVarbit": -1,
+    "transformVarp": -1,
+    "isInteractable": true,
+    "isClickable": true,
+    "isFollower": false,
+    "models": [
+        4220,
+        250,
+        3379,
+        164,
+        176,
+        4226,
+        4218,
+        542,
+        26424,
+        236,
+        4221,
+        4219
+    ],
+    "transforms": [
+    ],
+    "params": {
+    }
+}

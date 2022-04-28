@@ -1,0 +1,12 @@
+{
+    "id": 916,
+    "keyType": "INTEGER",
+    "valType": "STRING",
+    "defaultString": "Choose carefully!",
+    "defaultInt": 0,
+    "size": 2,
+    "params": {
+        "0": "Ranging is allowed",
+        "1": "Ranging is disabled"
+    }
+}

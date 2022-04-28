@@ -1,0 +1,21 @@
+{
+    "id": 781,
+    "keyType": "INTEGER",
+    "valType": "STRING",
+    "defaultString": "",
+    "defaultInt": 0,
+    "size": 11,
+    "params": {
+        "0": "Plain",
+        "1": "Crop-tops",
+        "2": "Polo-neck",
+        "3": "Simple",
+        "4": "Torn",
+        "5": "Sweater",
+        "6": "Shirt",
+        "7": "Vest",
+        "8": "Frilly",
+        "9": "Corsetry",
+        "10": "Bodice"
+    }
+}

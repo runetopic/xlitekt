@@ -1,0 +1,47 @@
+{
+    "id": 7635,
+    "name": "Abigale",
+    "size": 1,
+    "idleSequence": 860,
+    "turnLeftSequence": -1,
+    "turnRightSequence": -1,
+    "walkSequence": 819,
+    "walkBackSequence": 820,
+    "walkLeftSequence": 821,
+    "walkRightSequence": 822,
+    "actions": [
+        "Fight",
+        "null",
+        "null",
+        "null",
+        "null"
+    ],
+    "drawMapDot": true,
+    "combatLevel": 0,
+    "widthScale": 115,
+    "heightScale": 115,
+    "isVisible": false,
+    "ambient": 0,
+    "contrast": 0,
+    "headIconPrayer": -1,
+    "rotation": 32,
+    "transformVarbit": -1,
+    "transformVarp": -1,
+    "isInteractable": true,
+    "isClickable": true,
+    "isFollower": false,
+    "models": [
+        32327,
+        32326,
+        176,
+        32325,
+        32332,
+        181,
+        12141,
+        32332
+    ],
+    "transforms": [
+    ],
+    "params": {
+    }
+}

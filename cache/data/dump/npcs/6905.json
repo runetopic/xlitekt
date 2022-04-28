@@ -1,0 +1,46 @@
+{
+    "id": 6905,
+    "name": "Soldier (tier 1)",
+    "size": 1,
+    "idleSequence": 2561,
+    "turnLeftSequence": -1,
+    "turnRightSequence": -1,
+    "walkSequence": 2562,
+    "walkBackSequence": -1,
+    "walkLeftSequence": -1,
+    "walkRightSequence": -1,
+    "actions": [
+        "null",
+        "Attack",
+        "null",
+        "null",
+        "null"
+    ],
+    "drawMapDot": true,
+    "combatLevel": 39,
+    "widthScale": 128,
+    "heightScale": 128,
+    "isVisible": false,
+    "ambient": 0,
+    "contrast": 0,
+    "headIconPrayer": -1,
+    "rotation": 32,
+    "transformVarbit": -1,
+    "transformVarp": -1,
+    "isInteractable": true,
+    "isClickable": true,
+    "isFollower": false,
+    "models": [
+        29692,
+        29772,
+        29766,
+        29699,
+        29711,
+        29781,
+        546
+    ],
+    "transforms": [
+    ],
+    "params": {
+    }
+}

@@ -1,0 +1,17 @@
+{
+    "id": 4120,
+    "keyType": "INTEGER",
+    "valType": "STRING",
+    "defaultString": "Welcome to Leagues III: Shattered Relics!",
+    "defaultInt": 0,
+    "size": 7,
+    "params": {
+        "0": "Welcome to Leagues III: Shattered Relics!",
+        "3": "The Leagues Menu",
+        "4": "The Leagues Menu",
+        "5": "Shattered Relics Tasks",
+        "8": "Shattered Relics Skills",
+        "10": "Shattered Relics Fragments",
+        "13": "Finishing Up"
+    }
+}

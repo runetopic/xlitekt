@@ -1,0 +1,13 @@
+{
+    "id": 2795,
+    "keyType": "INTEGER",
+    "valType": "COLOUR",
+    "defaultString": "null",
+    "defaultInt": 800,
+    "size": 3,
+    "params": {
+        "1": 853,
+        "2": 31104,
+        "3": 28480
+    }
+}

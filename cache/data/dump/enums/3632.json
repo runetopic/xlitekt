@@ -1,0 +1,21 @@
+{
+    "id": 3632,
+    "keyType": "INTEGER",
+    "valType": "STRING",
+    "defaultString": "null",
+    "defaultInt": 0,
+    "size": 11,
+    "params": {
+        "0": "earth_wave_all",
+        "1": "earth_wave_fail",
+        "2": "fire_blast_all",
+        "3": "fire_bolt_all",
+        "4": "fire_wave_all",
+        "5": "fire_wave_fail",
+        "6": "water_strike_fail",
+        "7": "water_wave_all",
+        "8": "water_wave_fail",
+        "9": "wind_wave_all",
+        "10": "wind_wave_fail"
+    }
+}

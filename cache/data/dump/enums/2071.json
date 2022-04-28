@@ -1,0 +1,13 @@
+{
+    "id": 2071,
+    "keyType": "INTEGER",
+    "valType": "STRING",
+    "defaultString": "",
+    "defaultInt": 0,
+    "size": 3,
+    "params": {
+        "0": "All",
+        "1": "Free",
+        "2": "Members"
+    }
+}

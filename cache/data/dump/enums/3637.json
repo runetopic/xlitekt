@@ -1,0 +1,18 @@
+{
+    "id": 3637,
+    "keyType": "INTEGER",
+    "valType": "STRING",
+    "defaultString": "null",
+    "defaultInt": 0,
+    "size": 8,
+    "params": {
+        "0": "absorb_relic_2",
+        "1": "league_trophy_ding",
+        "2": "relic_unlock_absorb",
+        "3": "relic_unlock_all_1",
+        "4": "relic_unlock_high_sound_1",
+        "5": "relic_unlock_high_sound_2",
+        "6": "relic_unlock_pulsing",
+        "7": "relic_unlock_spinning_hover"
+    }
+}

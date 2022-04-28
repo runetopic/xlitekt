@@ -1,0 +1,11 @@
+{
+    "id": 4017,
+    "keyType": "INTEGER",
+    "valType": "NPC",
+    "defaultString": "null",
+    "defaultInt": -1,
+    "size": 1,
+    "params": {
+        "0": 2295
+    }
+}

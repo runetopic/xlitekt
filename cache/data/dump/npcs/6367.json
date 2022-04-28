@@ -1,0 +1,40 @@
+{
+    "id": 6367,
+    "name": "Evil Chicken",
+    "size": 1,
+    "idleSequence": 2298,
+    "turnLeftSequence": -1,
+    "turnRightSequence": -1,
+    "walkSequence": 2297,
+    "walkBackSequence": -1,
+    "walkLeftSequence": -1,
+    "walkRightSequence": -1,
+    "actions": [
+        "null",
+        "Attack",
+        "null",
+        "null",
+        "null"
+    ],
+    "drawMapDot": true,
+    "combatLevel": 159,
+    "widthScale": 50,
+    "heightScale": 50,
+    "isVisible": true,
+    "ambient": 0,
+    "contrast": 0,
+    "headIconPrayer": -1,
+    "rotation": 32,
+    "transformVarbit": -1,
+    "transformVarp": -1,
+    "isInteractable": true,
+    "isClickable": true,
+    "isFollower": false,
+    "models": [
+        7728
+    ],
+    "transforms": [
+    ],
+    "params": {
+    }
+}

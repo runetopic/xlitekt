@@ -1,0 +1,43 @@
+{
+    "id": 4492,
+    "name": "Skeleton fremennik",
+    "size": 1,
+    "idleSequence": 6113,
+    "turnLeftSequence": -1,
+    "turnRightSequence": -1,
+    "walkSequence": 6112,
+    "walkBackSequence": -1,
+    "walkLeftSequence": -1,
+    "walkRightSequence": -1,
+    "actions": [
+        "null",
+        "Attack",
+        "null",
+        "null",
+        "null"
+    ],
+    "drawMapDot": true,
+    "combatLevel": 40,
+    "widthScale": 128,
+    "heightScale": 128,
+    "isVisible": false,
+    "ambient": 0,
+    "contrast": 0,
+    "headIconPrayer": -1,
+    "rotation": 32,
+    "transformVarbit": -1,
+    "transformVarp": -1,
+    "isInteractable": true,
+    "isClickable": true,
+    "isFollower": false,
+    "models": [
+        24180,
+        24187,
+        24184,
+        24054
+    ],
+    "transforms": [
+    ],
+    "params": {
+    }
+}

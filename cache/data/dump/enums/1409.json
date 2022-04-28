@@ -1,0 +1,16 @@
+{
+    "id": 1409,
+    "keyType": "INTEGER",
+    "valType": "MODEL",
+    "defaultString": "null",
+    "defaultInt": -1,
+    "size": 6,
+    "params": {
+        "0": 20522,
+        "1": 20522,
+        "2": 20523,
+        "3": 20524,
+        "4": 20525,
+        "5": 20525
+    }
+}

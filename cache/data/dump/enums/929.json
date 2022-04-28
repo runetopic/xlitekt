@@ -1,0 +1,25 @@
+{
+    "id": 929,
+    "keyType": "INTEGER",
+    "valType": "STRING",
+    "defaultString": "",
+    "defaultInt": 0,
+    "size": 15,
+    "params": {
+        "-1": "Arena",
+        "0": "Wasteland",
+        "1": "Plateau",
+        "2": "Sylvan Glade",
+        "3": "Forsaken Quarry",
+        "4": "Turrets",
+        "6": "Soggy Swamp",
+        "7": "Ghastly Swamp",
+        "8": "Northleach Quell",
+        "5": "Clan Cup Arena",
+        "9": "Gridlock",
+        "10": "Ethereal",
+        "11": "Classic",
+        "12": "Lumbridge Castle",
+        "13": "Falador Park"
+    }
+}

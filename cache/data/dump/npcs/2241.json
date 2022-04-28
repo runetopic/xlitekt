@@ -1,0 +1,40 @@
+{
+    "id": 2241,
+    "name": "Hobgoblin",
+    "size": 1,
+    "idleSequence": 166,
+    "turnLeftSequence": -1,
+    "turnRightSequence": -1,
+    "walkSequence": 162,
+    "walkBackSequence": -1,
+    "walkLeftSequence": -1,
+    "walkRightSequence": -1,
+    "actions": [
+        "null",
+        "Attack",
+        "null",
+        "null",
+        "null"
+    ],
+    "drawMapDot": true,
+    "combatLevel": 47,
+    "widthScale": 140,
+    "heightScale": 140,
+    "isVisible": true,
+    "ambient": 0,
+    "contrast": 0,
+    "headIconPrayer": -1,
+    "rotation": 32,
+    "transformVarbit": -1,
+    "transformVarp": -1,
+    "isInteractable": true,
+    "isClickable": true,
+    "isFollower": false,
+    "models": [
+        10334
+    ],
+    "transforms": [
+    ],
+    "params": {
+    }
+}

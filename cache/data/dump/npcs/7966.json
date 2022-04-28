@@ -1,0 +1,46 @@
+{
+    "id": 7966,
+    "name": "Cabin Boy Colin",
+    "size": 1,
+    "idleSequence": 7826,
+    "turnLeftSequence": -1,
+    "turnRightSequence": -1,
+    "walkSequence": 7826,
+    "walkBackSequence": -1,
+    "walkLeftSequence": -1,
+    "walkRightSequence": -1,
+    "actions": [
+        "Talk-to",
+        "null",
+        "null",
+        "null",
+        "null"
+    ],
+    "drawMapDot": true,
+    "combatLevel": 0,
+    "widthScale": 128,
+    "heightScale": 128,
+    "isVisible": true,
+    "ambient": 0,
+    "contrast": 0,
+    "headIconPrayer": -1,
+    "rotation": 32,
+    "transformVarbit": -1,
+    "transformVarp": -1,
+    "isInteractable": true,
+    "isClickable": true,
+    "isFollower": false,
+    "models": [
+        211,
+        246,
+        292,
+        10980,
+        10218,
+        34277,
+        20748
+    ],
+    "transforms": [
+    ],
+    "params": {
+    }
+}

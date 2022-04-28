@@ -1,0 +1,48 @@
+{
+    "id": 6948,
+    "name": "Farmer",
+    "size": 1,
+    "idleSequence": 3040,
+    "turnLeftSequence": -1,
+    "turnRightSequence": -1,
+    "walkSequence": 3039,
+    "walkBackSequence": -1,
+    "walkLeftSequence": -1,
+    "walkRightSequence": -1,
+    "actions": [
+        "Talk-to",
+        "null",
+        "null",
+        "null",
+        "null"
+    ],
+    "drawMapDot": true,
+    "combatLevel": 0,
+    "widthScale": 128,
+    "heightScale": 128,
+    "isVisible": true,
+    "ambient": 0,
+    "contrast": 0,
+    "headIconPrayer": -1,
+    "rotation": 32,
+    "transformVarbit": -1,
+    "transformVarp": -1,
+    "isInteractable": true,
+    "isClickable": true,
+    "isFollower": false,
+    "models": [
+        215,
+        4843,
+        248,
+        310,
+        167,
+        10218,
+        18132,
+        7121,
+        6098
+    ],
+    "transforms": [
+    ],
+    "params": {
+    }
+}

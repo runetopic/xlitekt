@@ -1,0 +1,7 @@
+{
+    "id": 605,
+    "type": "INTEGER",
+    "defaultInt": -1,
+    "autoDisable": false,
+    "defaultString": ""
+}

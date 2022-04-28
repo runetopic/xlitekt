@@ -1,0 +1,16 @@
+{
+    "id": 1413,
+    "keyType": "INTEGER",
+    "valType": "STRING",
+    "defaultString": "",
+    "defaultInt": 0,
+    "size": 6,
+    "params": {
+        "0": "+2 bonus damage",
+        "1": "+2 bonus damage",
+        "2": "+3 bonus damage",
+        "3": "+4 bonus damage",
+        "4": "+5 bonus damage",
+        "5": " - Mastered - "
+    }
+}

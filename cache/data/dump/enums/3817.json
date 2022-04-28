@@ -1,0 +1,11 @@
+{
+    "id": 3817,
+    "keyType": "INTEGER",
+    "valType": "STRING",
+    "defaultString": "",
+    "defaultInt": 0,
+    "size": 1,
+    "params": {
+        "-1": "World"
+    }
+}
