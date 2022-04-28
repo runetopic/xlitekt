@@ -1,11 +1,15 @@
 package xlitekt.cache.tool
 
+import kotlinx.serialization.ContextualSerializer
+import kotlinx.serialization.KSerializer
+import kotlinx.serialization.descriptors.SerialDescriptor
+import kotlinx.serialization.encoding.Decoder
+import kotlinx.serialization.encoding.Encoder
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.encodeToStream
 import kotlinx.serialization.modules.SerializersModule
 import org.koin.core.context.loadKoinModules
 import org.koin.core.context.startKoin
-import xlitekt.cache.AnySerializer
 import xlitekt.cache.cacheModule
 import xlitekt.cache.provider.config.enum.EnumEntryTypeProvider
 import xlitekt.cache.provider.config.hitbar.HitBarEntryTypeProvider
@@ -141,5 +145,19 @@ private fun dumpTextures() {
                 }
             }
         }
+    }
+}
+
+object AnySerializer : KSerializer<Any> {
+    override fun deserialize(decoder: Decoder): Any {
+        TODO("Not yet implemented")
+    }
+
+    override val descriptor: SerialDescriptor get() = ContextualSerializer(Any::class, null, emptyArray()).descriptor
+
+    override fun serialize(encoder: Encoder, value: Any) = when (value) {
+        is Int -> encoder.encodeInt(value)
+        is String -> encoder.encodeString(value)
+        else -> throw IllegalStateException("This can only be in context of INT or STRING.")
     }
 }

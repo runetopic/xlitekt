@@ -3,11 +3,6 @@ package xlitekt.cache
 import com.runetopic.cache.store.Js5Store
 import com.runetopic.cryptography.huffman.Huffman
 import io.ktor.server.application.ApplicationEnvironment
-import kotlinx.serialization.ContextualSerializer
-import kotlinx.serialization.KSerializer
-import kotlinx.serialization.descriptors.SerialDescriptor
-import kotlinx.serialization.encoding.Decoder
-import kotlinx.serialization.encoding.Encoder
 import org.koin.core.error.NoBeanDefFoundException
 import org.koin.dsl.module
 import xlitekt.cache.provider.EntryTypeProvider
@@ -79,18 +74,4 @@ val cacheModule = module(createdAtStart = true) {
     single { WorldMapElementEntryTypeProvider() }
     single { SpriteEntryTypeProvider() }
     single { TextureEntryTypeProvider() }
-}
-
-object AnySerializer : KSerializer<Any> {
-    override fun deserialize(decoder: Decoder): Any {
-        TODO("Not yet implemented")
-    }
-
-    override val descriptor: SerialDescriptor get() = ContextualSerializer(Any::class, null, emptyArray()).descriptor
-
-    override fun serialize(encoder: Encoder, value: Any) = when (value) {
-        is Int -> encoder.encodeInt(value)
-        is String -> encoder.encodeString(value)
-        else -> throw IllegalStateException("This can only be in context of INT or STRING.")
-    }
 }
