@@ -61,6 +61,7 @@ fun main() {
     CacheDumper.dumpHitBars()
     CacheDumper.dumpHitSplats()
     CacheDumper.dumpWorldMapElements()
+    CacheDumper.dumpChatBoxIcons()
 }
 
 object CacheDumper {
@@ -385,6 +386,17 @@ object CacheDumper {
                 for (sprite in sprites.entryType(entry.sprite2)?.sprites!!.filter(Sprite::renderable)) {
                     sprite.write(it, "png", "${entry.id}_${entry.sprite2}")
                 }
+            }
+        }
+    }
+
+    fun dumpChatBoxIcons() {
+        Path.of("./cache/data/dump/chatboxicons/").apply {
+            if (notExists()) createDirectories()
+        }.also {
+            val entry = sprites.entryType(423) ?: return
+            for (sprite in entry.sprites.filter(Sprite::renderable)) {
+                sprite.write(it, "png", "${entry.id}_${sprite.id}")
             }
         }
     }
