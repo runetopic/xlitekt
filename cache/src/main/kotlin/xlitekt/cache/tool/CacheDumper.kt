@@ -58,6 +58,9 @@ fun main() {
     CacheDumper.dumpTextures()
     CacheDumper.dumpTitleScreen()
     CacheDumper.dumpFonts()
+    CacheDumper.dumpHitBars()
+    CacheDumper.dumpHitSplats()
+    CacheDumper.dumpWorldMapElements()
 }
 
 object CacheDumper {
@@ -317,6 +320,70 @@ object CacheDumper {
                 if (sprites.entryType(entry.id)?.sprites == null) continue
                 for (sprite in sprites.entryType(entry.id)?.sprites!!.filter(Sprite::renderable)) {
                     sprite.write(it, "png", "${entry.name}_${entry.id}_${sprite.id}")
+                }
+            }
+        }
+    }
+
+    fun dumpHitBars() {
+        Path.of("./cache/data/dump/hitBars/sprites/").apply {
+            if (notExists()) createDirectories()
+        }.also {
+            for (entry in hitBars.entries()) {
+                if (sprites.entryType(entry.frontSpriteId)?.sprites == null) continue
+                for (sprite in sprites.entryType(entry.frontSpriteId)?.sprites!!.filter(Sprite::renderable)) {
+                    sprite.write(it, "png", "${entry.id}_${entry.frontSpriteId}")
+                }
+
+                if (sprites.entryType(entry.backgroundSpriteId)?.sprites == null) continue
+                for (sprite in sprites.entryType(entry.backgroundSpriteId)?.sprites!!.filter(Sprite::renderable)) {
+                    sprite.write(it, "png", "${entry.id}_${entry.backgroundSpriteId}")
+                }
+            }
+        }
+    }
+
+    fun dumpHitSplats() {
+        Path.of("./cache/data/dump/hitSplats/sprites/").apply {
+            if (notExists()) createDirectories()
+        }.also {
+            for (entry in hitSplats.entries()) {
+                if (sprites.entryType(entry.backgroundSprite)?.sprites == null) continue
+                for (sprite in sprites.entryType(entry.backgroundSprite)?.sprites!!.filter(Sprite::renderable)) {
+                    sprite.write(it, "png", "${entry.id}_${entry.backgroundSprite}")
+                }
+
+                if (sprites.entryType(entry.leftSpriteId)?.sprites == null) continue
+                for (sprite in sprites.entryType(entry.leftSpriteId)?.sprites!!.filter(Sprite::renderable)) {
+                    sprite.write(it, "png", "${entry.id}_${entry.leftSpriteId}")
+                }
+
+                if (sprites.entryType(entry.rightSpriteId)?.sprites == null) continue
+                for (sprite in sprites.entryType(entry.rightSpriteId)?.sprites!!.filter(Sprite::renderable)) {
+                    sprite.write(it, "png", "${entry.id}_${entry.rightSpriteId}")
+                }
+
+                if (sprites.entryType(entry.spriteId2)?.sprites == null) continue
+                for (sprite in sprites.entryType(entry.spriteId2)?.sprites!!.filter(Sprite::renderable)) {
+                    sprite.write(it, "png", "${entry.id}_${entry.spriteId2}")
+                }
+            }
+        }
+    }
+
+    fun dumpWorldMapElements() {
+        Path.of("./cache/data/dump/worldmap/sprites/").apply {
+            if (notExists()) createDirectories()
+        }.also {
+            for (entry in worldmap.entries()) {
+                if (sprites.entryType(entry.sprite1)?.sprites == null) continue
+                for (sprite in sprites.entryType(entry.sprite1)?.sprites!!.filter(Sprite::renderable)) {
+                    sprite.write(it, "png", "${entry.id}_${entry.sprite1}")
+                }
+
+                if (sprites.entryType(entry.sprite2)?.sprites == null) continue
+                for (sprite in sprites.entryType(entry.sprite2)?.sprites!!.filter(Sprite::renderable)) {
+                    sprite.write(it, "png", "${entry.id}_${entry.sprite2}")
                 }
             }
         }
