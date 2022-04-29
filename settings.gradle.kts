@@ -8,7 +8,7 @@ dependencyResolutionManagement {
     versionCatalogs {
         create("deps") {
             version("kotlin", "1.6.21")
-            version("ktor", "2.0.0")
+            version("ktor", "2.0.1")
             version("koin", "3.2.0-beta-1")
             version("slf4j", "1.7.32")
             version("cache", "1.4.24-SNAPSHOT")
