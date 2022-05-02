@@ -31,6 +31,7 @@ import xlitekt.cache.provider.config.varc.VarcEntryTypeProvider
 import xlitekt.cache.provider.config.varp.VarpEntryTypeProvider
 import xlitekt.cache.provider.config.worldmap.WorldMapElementEntryTypeProvider
 import xlitekt.cache.provider.font.FontEntryTypeProvider
+import xlitekt.cache.provider.music.MusicEntryTypeProvider
 import xlitekt.cache.provider.sprite.Sprite
 import xlitekt.cache.provider.sprite.SpriteEntryTypeProvider
 import xlitekt.cache.provider.sprite.titlescreen.TitleScreenEntryTypeProvider
@@ -40,6 +41,7 @@ import xlitekt.shared.inject
 import java.awt.image.BufferedImage
 import java.io.ByteArrayInputStream
 import java.io.File
+import java.nio.file.Files
 import java.nio.file.Path
 import javax.imageio.ImageIO
 import kotlin.io.path.createDirectories
@@ -62,6 +64,7 @@ fun main() {
     CacheDumper.dumpHitSplats()
     CacheDumper.dumpWorldMapElements()
     CacheDumper.dumpChatBoxIcons()
+    CacheDumper.dumpMusicTracks()
 }
 
 object CacheDumper {
@@ -90,6 +93,7 @@ object CacheDumper {
     private val title by inject<TitleEntryTypeProvider>()
     private val titlescreen by inject<TitleScreenEntryTypeProvider>()
     private val fonts by inject<FontEntryTypeProvider>()
+    private val musics by inject<MusicEntryTypeProvider>()
 
     fun dumpJson() {
         val json = Json {
@@ -397,6 +401,17 @@ object CacheDumper {
             val entry = sprites.entryType(423) ?: return
             for (sprite in entry.sprites.filter(Sprite::renderable)) {
                 sprite.write(it, "png", "${entry.id}_${sprite.id}")
+            }
+        }
+    }
+
+    fun dumpMusicTracks() {
+        Path.of("./cache/data/dump/music/").apply {
+            if (notExists()) createDirectories()
+        }.also {
+            for (entry in musics.entries()) {
+                val name = if (entry.name != null) "${entry.name!!}_${entry.id}" else "${entry.id}"
+                entry.bytes?.let { bytes -> Files.write(Path.of(it.toString(), "$name.midi"), bytes) }
             }
         }
     }
