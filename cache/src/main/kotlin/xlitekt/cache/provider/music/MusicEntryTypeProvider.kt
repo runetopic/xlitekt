@@ -305,6 +305,14 @@ class MusicEntryTypeProvider : EntryTypeProvider<MusicEntryType>() {
         return type
     }
 
+    override fun postLoadEntryType(type: MusicEntryType) {
+        method5280(type)
+        val var5 = true
+        val samples = intArrayOf(22050)
+        if (type.table == null) return
+        // TODO Finish this.
+    }
+
     private fun ByteReadPacket.header(): ByteReadPacket {
         discard(remaining.toInt() - 3)
         val bytes = ByteArray(remaining.toInt())
@@ -360,6 +368,75 @@ class MusicEntryTypeProvider : EntryTypeProvider<MusicEntryType>() {
         array[array.size - it - 2] = (it shr 8).toByte()
         array[array.size - it - 1] = it.toByte()
         writeBytes { array }
+    }
+
+    private fun method5280(type: MusicEntryType) {
+        type.table = HashMap(16)
+        val var1 = IntArray(16)
+        val var2 = IntArray(16)
+        var2[9] = 128
+        var1[9] = 128
+        val var4 = MidiFileReader(type.bytes!!)
+        repeat(var4.trackCount()) {
+            var4.goToTrack(it)
+            var4.readTrackLength(it)
+            var4.markTrackPosition(it)
+        }
+        loop@
+        do {
+            while (true) {
+                val var6 = var4.getPrioritizedTrack()
+                val var7 = var4.trackLengths!![var6]
+                while (var7 == var4.trackLengths!![var6]) {
+                    var4.goToTrack(var6)
+                    val var8 = var4.readMessage(var6)
+                    if (var8 == 1) {
+                        var4.setTrackDone()
+                        var4.markTrackPosition(var6)
+                        continue@loop
+                    }
+                    val var9 = var8 and 240
+                    var var10: Int
+                    var var11: Int
+                    var var12: Int
+                    if (var9 == 176) {
+                        var10 = var8 and 15
+                        var11 = var8 shr 8 and 127
+                        var12 = var8 shr 16 and 127
+                        if (var11 == 0) {
+                            var1[var10] = (var12 shl 14) + (var1[var10] and -2080769)
+                        }
+                        if (var11 == 32) {
+                            var1[var10] = (var1[var10] and -16257) + (var12 shl 7)
+                        }
+                    }
+
+                    if (var9 == 192) {
+                        var10 = var8 and 15
+                        var11 = var8 shr 8 and 127
+                        var2[var10] = var11 + var1[var10]
+                    }
+
+                    if (var9 == 144) {
+                        var10 = var8 and 15
+                        var11 = var8 shr 8 and 127
+                        var12 = var8 shr 16 and 127
+                        if (var12 > 0) {
+                            val var13 = var2[var10]
+                            var var14 = type.table!![var13]
+                            if (var14 == null) {
+                                var14 = ByteArray(128)
+                                type.table!![var13] = var14
+                            }
+                            var14[var11] = 1
+                        }
+                    }
+
+                    var4.readTrackLength(var6)
+                    var4.markTrackPosition(var6)
+                }
+            }
+        } while (!var4.isDone())
     }
 
     private companion object {

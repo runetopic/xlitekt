@@ -31,6 +31,7 @@ import xlitekt.cache.provider.config.varc.VarcEntryTypeProvider
 import xlitekt.cache.provider.config.varp.VarpEntryTypeProvider
 import xlitekt.cache.provider.config.worldmap.WorldMapElementEntryTypeProvider
 import xlitekt.cache.provider.font.FontEntryTypeProvider
+import xlitekt.cache.provider.instrument.InstrumentEntryTypeProvider
 import xlitekt.cache.provider.music.MusicEntryTypeProvider
 import xlitekt.cache.provider.sprite.Sprite
 import xlitekt.cache.provider.sprite.SpriteEntryTypeProvider
@@ -94,6 +95,7 @@ object CacheDumper {
     private val titlescreen by inject<TitleScreenEntryTypeProvider>()
     private val fonts by inject<FontEntryTypeProvider>()
     private val musics by inject<MusicEntryTypeProvider>()
+    private val instruments by inject<InstrumentEntryTypeProvider>()
 
     fun dumpJson() {
         val json = Json {
