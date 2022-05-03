@@ -38,6 +38,7 @@ import xlitekt.cache.provider.sprite.SpriteEntryTypeProvider
 import xlitekt.cache.provider.sprite.titlescreen.TitleScreenEntryTypeProvider
 import xlitekt.cache.provider.texture.TextureEntryTypeProvider
 import xlitekt.cache.provider.ui.InterfaceEntryTypeProvider
+import xlitekt.cache.provider.vorbis.VorbisEntryTypeProvider
 import xlitekt.shared.inject
 import java.awt.image.BufferedImage
 import java.io.ByteArrayInputStream
@@ -96,6 +97,7 @@ object CacheDumper {
     private val fonts by inject<FontEntryTypeProvider>()
     private val musics by inject<MusicEntryTypeProvider>()
     private val instruments by inject<InstrumentEntryTypeProvider>()
+    private val vorbis by inject<VorbisEntryTypeProvider>()
 
     fun dumpJson() {
         val json = Json {

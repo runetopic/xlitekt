@@ -8,10 +8,12 @@ import io.ktor.utils.io.core.readFully
 import io.ktor.utils.io.core.readUByte
 import io.ktor.utils.io.core.readUShort
 import xlitekt.cache.provider.EntryTypeProvider
+import xlitekt.cache.provider.instrument.InstrumentEntryTypeProvider
 import xlitekt.shared.buffer.writeByte
 import xlitekt.shared.buffer.writeBytes
 import xlitekt.shared.buffer.writeInt
 import xlitekt.shared.buffer.writeShort
+import xlitekt.shared.inject
 
 /**
  * @author Jordan Abraham
@@ -307,10 +309,24 @@ class MusicEntryTypeProvider : EntryTypeProvider<MusicEntryType>() {
 
     override fun postLoadEntryType(type: MusicEntryType) {
         method5280(type)
-        val var5 = true
+        var var5 = true
         val samples = intArrayOf(22050)
+        val instruments by inject<InstrumentEntryTypeProvider>()
+
         if (type.table == null) return
-        // TODO Finish this.
+        type.table!!.forEach {
+            val instrument = instruments.entryType(it.key)
+            if (instrument == null) {
+                var5 = false
+                return@forEach
+            }
+            if (!instrument.method5253(it.value, samples)) {
+                var5 = false
+            }
+        }
+        if (var5) {
+            type.table!!.clear()
+        }
     }
 
     private fun ByteReadPacket.header(): ByteReadPacket {

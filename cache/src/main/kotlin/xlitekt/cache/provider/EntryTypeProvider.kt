@@ -43,6 +43,7 @@ abstract class EntryTypeProvider<R : EntryType> {
         const val TEXTURE_INDEX = 9
         const val BINARY_INDEX = 10
         const val FONT_INDEX = 13
+        const val VORBIS_INDEX = 14
         const val INSTRUMENT_INDEX = 15
 
         // Config groups.

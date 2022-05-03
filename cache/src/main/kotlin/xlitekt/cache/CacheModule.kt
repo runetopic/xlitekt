@@ -33,13 +33,14 @@ import xlitekt.cache.provider.sprite.SpriteEntryTypeProvider
 import xlitekt.cache.provider.sprite.titlescreen.TitleScreenEntryTypeProvider
 import xlitekt.cache.provider.texture.TextureEntryTypeProvider
 import xlitekt.cache.provider.ui.InterfaceEntryTypeProvider
+import xlitekt.cache.provider.vorbis.VorbisEntryTypeProvider
 import xlitekt.shared.lazy
 import java.nio.file.Path
 
 /**
  * @author Jordan Abraham
  */
-val cacheModule = module(createdAtStart = true) {
+val cacheModule = module(createdAtStart = false) {
     single {
         val path = try {
             lazy<ApplicationEnvironment>().config.property("game.cache.path").getString()
@@ -83,6 +84,7 @@ val cacheModule = module(createdAtStart = true) {
     single { TitleScreenEntryTypeProvider() }
     single { FontEntryTypeProvider() }
     single { InstrumentEntryTypeProvider() }
+    single { VorbisEntryTypeProvider() }
     single {
         MusicEntryTypeProvider().apply {
             entries().forEach(::postLoadEntryType)
