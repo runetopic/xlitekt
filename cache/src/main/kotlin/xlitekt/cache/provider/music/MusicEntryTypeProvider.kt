@@ -327,6 +327,7 @@ class MusicEntryTypeProvider : EntryTypeProvider<MusicEntryType>() {
         if (loaded) {
             type.table!!.clear()
         }
+        // TODO Somehow Jagex mixes the instruments in with the raw (type.bytes) array. We need to do that somehow using all of this data.
     }
 
     private fun ByteReadPacket.header(): ByteReadPacket {
