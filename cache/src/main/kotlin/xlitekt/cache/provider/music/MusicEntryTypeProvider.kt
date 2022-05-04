@@ -308,8 +308,8 @@ class MusicEntryTypeProvider : EntryTypeProvider<MusicEntryType>() {
     }
 
     override fun postLoadEntryType(type: MusicEntryType) {
-        method5280(type)
-        var var5 = true
+        createMidiTable(type)
+        var loaded = true
         val samples = intArrayOf(22050)
         val instruments by inject<InstrumentEntryTypeProvider>()
 
@@ -317,14 +317,14 @@ class MusicEntryTypeProvider : EntryTypeProvider<MusicEntryType>() {
         type.table!!.forEach {
             val instrument = instruments.entryType(it.key)
             if (instrument == null) {
-                var5 = false
+                loaded = false
                 return@forEach
             }
-            if (!instrument.method5253(it.value, samples)) {
-                var5 = false
+            if (!instrument.loadVorbisSamples(it.value, samples)) {
+                loaded = false
             }
         }
-        if (var5) {
+        if (loaded) {
             type.table!!.clear()
         }
     }
@@ -386,39 +386,36 @@ class MusicEntryTypeProvider : EntryTypeProvider<MusicEntryType>() {
         writeBytes { array }
     }
 
-    private fun method5280(type: MusicEntryType) {
+    private fun createMidiTable(type: MusicEntryType) {
         type.table = HashMap(16)
         val var1 = IntArray(16)
         val var2 = IntArray(16)
         var2[9] = 128
         var1[9] = 128
-        val var4 = MidiFileReader(type.bytes!!)
-        repeat(var4.trackCount()) {
-            var4.goToTrack(it)
-            var4.readTrackLength(it)
-            var4.markTrackPosition(it)
+        val midiFile = MidiFileReader(type.bytes!!)
+        repeat(midiFile.trackCount()) {
+            midiFile.goToTrack(it)
+            midiFile.readTrackLength(it)
+            midiFile.markTrackPosition(it)
         }
         loop@
         do {
             while (true) {
-                val var6 = var4.getPrioritizedTrack()
-                val var7 = var4.trackLengths!![var6]
-                while (var7 == var4.trackLengths!![var6]) {
-                    var4.goToTrack(var6)
-                    val var8 = var4.readMessage(var6)
-                    if (var8 == 1) {
-                        var4.setTrackDone()
-                        var4.markTrackPosition(var6)
+                val trackId = midiFile.getPrioritizedTrack()
+                val trackLength = midiFile.trackLengths!![trackId]
+                while (trackLength == midiFile.trackLengths!![trackId]) {
+                    midiFile.goToTrack(trackId)
+                    val mask = midiFile.readMessage(trackId)
+                    if (mask == 1) {
+                        midiFile.setTrackDone()
+                        midiFile.markTrackPosition(trackId)
                         continue@loop
                     }
-                    val var9 = var8 and 240
-                    var var10: Int
-                    var var11: Int
-                    var var12: Int
-                    if (var9 == 176) {
-                        var10 = var8 and 15
-                        var11 = var8 shr 8 and 127
-                        var12 = var8 shr 16 and 127
+                    val id = mask and 240
+                    if (id == 176) {
+                        val var10 = mask and 15
+                        val var11 = mask shr 8 and 127
+                        val var12 = mask shr 16 and 127
                         if (var11 == 0) {
                             var1[var10] = (var12 shl 14) + (var1[var10] and -2080769)
                         }
@@ -427,16 +424,16 @@ class MusicEntryTypeProvider : EntryTypeProvider<MusicEntryType>() {
                         }
                     }
 
-                    if (var9 == 192) {
-                        var10 = var8 and 15
-                        var11 = var8 shr 8 and 127
+                    if (id == 192) {
+                        val var10 = mask and 15
+                        val var11 = mask shr 8 and 127
                         var2[var10] = var11 + var1[var10]
                     }
 
-                    if (var9 == 144) {
-                        var10 = var8 and 15
-                        var11 = var8 shr 8 and 127
-                        var12 = var8 shr 16 and 127
+                    if (id == 144) {
+                        val var10 = mask and 15
+                        val var11 = mask shr 8 and 127
+                        val var12 = mask shr 16 and 127
                         if (var12 > 0) {
                             val var13 = var2[var10]
                             var var14 = type.table!![var13]
@@ -448,11 +445,11 @@ class MusicEntryTypeProvider : EntryTypeProvider<MusicEntryType>() {
                         }
                     }
 
-                    var4.readTrackLength(var6)
-                    var4.markTrackPosition(var6)
+                    midiFile.readTrackLength(trackId)
+                    midiFile.markTrackPosition(trackId)
                 }
             }
-        } while (!var4.isDone())
+        } while (!midiFile.isDone())
     }
 
     private companion object {

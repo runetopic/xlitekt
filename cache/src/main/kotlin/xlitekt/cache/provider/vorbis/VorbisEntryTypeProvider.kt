@@ -23,42 +23,37 @@ class VorbisEntryTypeProvider : EntryTypeProvider<VorbisEntryType>() {
 
     override fun ByteReadPacket.loadEntryType(type: VorbisEntryType): VorbisEntryType {
         if (type.id == 0) {
-            setData(readBytes(), 0)
+            setGlobalVorbis(readBytes(), 0)
             vorbisBlockSize0 = 1 shl readBits(4)
             vorbisBlockSize1 = 1 shl readBits(4)
             field380 = FloatArray(vorbisBlockSize1)
 
-            var var2: Int
-            var var3: Int
-            var var4: Int
-            var var5: Int
-            var var1 = 0
-            while (var1 < 2) {
-                var2 = if (var1 != 0) vorbisBlockSize1 else vorbisBlockSize0
-                var3 = var2 shr 1
-                var4 = var2 shr 2
-                var5 = var2 shr 3
+            repeat(2) { i ->
+                val size = if (i != 0) vorbisBlockSize1 else vorbisBlockSize0
+                val var3 = size shr 1
+                val var4 = size shr 2
+                val var5 = size shr 3
                 val var12 = FloatArray(var3)
-                for (var7 in 0 until var4) {
-                    var12[var7 * 2] = cos((var7 * 4).toDouble() * 3.141592653589793 / var2.toDouble()).toFloat()
-                    var12[var7 * 2 + 1] = -sin((var7 * 4).toDouble() * 3.141592653589793 / var2.toDouble()).toFloat()
+                repeat(var4) {
+                    var12[it * 2] = cos((it * 4).toDouble() * 3.141592653589793 / size.toDouble()).toFloat()
+                    var12[it * 2 + 1] = -sin((it * 4).toDouble() * 3.141592653589793 / size.toDouble()).toFloat()
                 }
                 val var13 = FloatArray(var3)
-                for (var8 in 0 until var4) {
-                    var13[var8 * 2] = cos((var8 * 2 + 1).toDouble() * 3.141592653589793 / (var2 * 2).toDouble()).toFloat()
-                    var13[var8 * 2 + 1] = sin((var8 * 2 + 1).toDouble() * 3.141592653589793 / (var2 * 2).toDouble()).toFloat()
+                repeat(var4) {
+                    var13[it * 2] = cos((it * 2 + 1).toDouble() * 3.141592653589793 / (size * 2).toDouble()).toFloat()
+                    var13[it * 2 + 1] = sin((it * 2 + 1).toDouble() * 3.141592653589793 / (size * 2).toDouble()).toFloat()
                 }
                 val var14 = FloatArray(var4)
-                for (var9 in 0 until var5) {
-                    var14[var9 * 2] = cos((var9 * 4 + 2).toDouble() * 3.141592653589793 / var2.toDouble()).toFloat()
-                    var14[var9 * 2 + 1] = -sin((var9 * 4 + 2).toDouble() * 3.141592653589793 / var2.toDouble()).toFloat()
+                repeat(var5) {
+                    var14[it * 2] = cos((it * 4 + 2).toDouble() * 3.141592653589793 / size.toDouble()).toFloat()
+                    var14[it * 2 + 1] = -sin((it * 4 + 2).toDouble() * 3.141592653589793 / size.toDouble()).toFloat()
                 }
                 val var15 = IntArray(var5)
-                val var10: Int = iLog(var5 - 1)
-                for (var11 in 0 until var5) {
-                    var15[var11] = method7074(var11, var10)
+                val var10 = iLog(var5 - 1)
+                repeat(var5) {
+                    var15[it] = method7074(it, var10)
                 }
-                if (var1 != 0) {
+                if (i != 0) {
                     field363 = var12
                     field378 = var13
                     field367 = var14
@@ -69,62 +64,40 @@ class VorbisEntryTypeProvider : EntryTypeProvider<VorbisEntryType>() {
                     field383 = var14
                     field358 = var15
                 }
-                ++var1
             }
 
-            var1 = readBits(8) + 1
-            VorbisSample_codebooks = arrayOfNulls(var1)
-
-            var2 = 0
-            while (var2 < var1) {
-                VorbisSample_codebooks!![var2] = VorbisCodebook()
-                ++var2
+            vorbisCodebooks = arrayOfNulls(readBits(8) + 1)
+            repeat(vorbisCodebooks!!.size) {
+                vorbisCodebooks!![it] = VorbisCodebook()
             }
 
-            var2 = readBits(6) + 1
-
-            var3 = 0
-            while (var3 < var2) {
+            repeat(readBits(6) + 1) {
                 readBits(16)
-                ++var3
             }
 
-            var2 = readBits(6) + 1
-            VorbisSample_floors = arrayOfNulls(var2)
-
-            var3 = 0
-            while (var3 < var2) {
-                VorbisSample_floors!![var3] = VorbisFloor()
-                ++var3
+            vorbisFloors = arrayOfNulls(readBits(6) + 1)
+            repeat(vorbisFloors!!.size) {
+                vorbisFloors!![it] = VorbisFloor()
             }
 
-            var3 = readBits(6) + 1
-            VorbisSample_residues = arrayOfNulls(var3)
-
-            var4 = 0
-            while (var4 < var3) {
-                VorbisSample_residues!![var4] = VorbisResidue()
-                ++var4
+            vorbisResidues = arrayOfNulls(readBits(6) + 1)
+            repeat(vorbisResidues!!.size) {
+                vorbisResidues!![it] = VorbisResidue()
             }
 
-            var4 = readBits(6) + 1
-            VorbisSample_mappings = arrayOfNulls(var4)
-
-            var5 = 0
-            while (var5 < var4) {
-                VorbisSample_mappings!![var5] = VorbisMapping()
-                ++var5
+            vorbisMappings = arrayOfNulls(readBits(6) + 1)
+            repeat(vorbisMappings!!.size) {
+                vorbisMappings!![it] = VorbisMapping()
             }
 
-            var5 = readBits(6) + 1
-            vorbisBlockFlags = BooleanArray(var5)
-            vorbisMapping = IntArray(var5)
-
-            for (var6 in 0 until var5) {
-                vorbisBlockFlags!![var6] = readBit() != 0
+            val blockSize = readBits(6) + 1
+            vorbisBlockFlags = BooleanArray(blockSize)
+            vorbisBlockMapping = IntArray(blockSize)
+            repeat(blockSize) {
+                vorbisBlockFlags!![it] = readBit() != 0
                 readBits(16)
                 readBits(16)
-                vorbisMapping!![var6] = readBits(8)
+                vorbisBlockMapping!![it] = readBits(8)
             }
             return type
         }
@@ -136,10 +109,8 @@ class VorbisEntryTypeProvider : EntryTypeProvider<VorbisEntryType>() {
             type.end = type.end.inv()
             type.field368 = true
         }
-        val var3 = readInt()
-        type.field375 = arrayOfNulls(var3)
-
-        repeat(var3) {
+        type.field375 = arrayOfNulls(readInt())
+        repeat(type.field375!!.size) {
             var size = 0
             var opcode: Int
             do {
@@ -147,17 +118,17 @@ class VorbisEntryTypeProvider : EntryTypeProvider<VorbisEntryType>() {
                 size += opcode
             } while (opcode >= 255)
 
-            val var7 = ByteArray(size)
-            readBytes(size).copyInto(var7, 0)
-            type.field375!![it] = var7
+            val bytes = ByteArray(size)
+            readBytes(size).copyInto(bytes, 0)
+            type.field375!![it] = bytes
         }
         return type
     }
 
     internal companion object {
-        var vorbisSample: ByteArray? = null
-        var vorbisByteOffset: Int = 0
-        var vorbisBitOffset: Int = 0
+        private var vorbisSample: ByteArray? = null
+        private var vorbisByteOffset: Int = 0
+        private var vorbisBitOffset: Int = 0
         var vorbisBlockSize0: Int = 0
         var vorbisBlockSize1: Int = 0
         var field380: FloatArray? = null
@@ -170,47 +141,47 @@ class VorbisEntryTypeProvider : EntryTypeProvider<VorbisEntryType>() {
         var field384: IntArray? = null
         var field358: IntArray? = null
         var vorbisBlockFlags: BooleanArray? = null
-        var vorbisMapping: IntArray? = null
-        var VorbisSample_codebooks: Array<VorbisCodebook?>? = null
-        var VorbisSample_floors: Array<VorbisFloor?>? = null
-        var VorbisSample_residues: Array<VorbisResidue?>? = null
-        var VorbisSample_mappings: Array<VorbisMapping?>? = null
+        var vorbisBlockMapping: IntArray? = null
+        var vorbisCodebooks: Array<VorbisCodebook?>? = null
+        var vorbisFloors: Array<VorbisFloor?>? = null
+        var vorbisResidues: Array<VorbisResidue?>? = null
+        var vorbisMappings: Array<VorbisMapping?>? = null
 
-        fun setData(bytes: ByteArray, offset: Int) {
+        fun setGlobalVorbis(bytes: ByteArray, offset: Int) {
             vorbisSample = bytes
             vorbisByteOffset = offset
             vorbisBitOffset = 0
         }
 
         fun readBit(): Int {
-            val var0 = vorbisSample!![vorbisByteOffset].toInt() shr vorbisBitOffset and 1
+            val value = vorbisSample!![vorbisByteOffset].toInt() shr vorbisBitOffset and 1
             ++vorbisBitOffset
             vorbisByteOffset += vorbisBitOffset shr 3
             vorbisBitOffset = vorbisBitOffset and 7
-            return var0
+            return value
         }
 
         fun readBits(amount: Int): Int {
-            var var1 = 0
-            var var3: Int
-            var var2 = 0
+            var value = 0
+            var offset: Int
+            var index = 0
             var numBits = amount
             while (numBits >= 8 - vorbisBitOffset) {
-                var3 = 8 - vorbisBitOffset
-                val var4 = (1 shl var3) - 1
-                var1 += vorbisSample!![vorbisByteOffset].toInt() shr vorbisBitOffset and var4 shl var2
+                offset = 8 - vorbisBitOffset
+                val var4 = (1 shl offset) - 1
+                value += vorbisSample!![vorbisByteOffset].toInt() shr vorbisBitOffset and var4 shl index
                 vorbisBitOffset = 0
                 ++vorbisByteOffset
-                var2 += var3
-                numBits -= var3
+                index += offset
+                numBits -= offset
             }
 
             if (numBits > 0) {
-                var3 = (1 shl numBits) - 1
-                var1 += vorbisSample!![vorbisByteOffset].toInt() shr vorbisBitOffset and var3 shl var2
+                offset = (1 shl numBits) - 1
+                value += vorbisSample!![vorbisByteOffset].toInt() shr vorbisBitOffset and offset shl index
                 vorbisBitOffset += numBits
             }
-            return var1
+            return value
         }
 
         fun iLog(i: Int): Int {
@@ -242,14 +213,14 @@ class VorbisEntryTypeProvider : EntryTypeProvider<VorbisEntryType>() {
         fun method7074(i: Int, i2: Int): Int {
             var var0 = i
             var var1 = i2
-            var var2: Int
-            var2 = 0
+            var value: Int
+            value = 0
             while (var1 > 0) {
-                var2 = var2 shl 1 or var0 and 1
+                value = value shl 1 or var0 and 1
                 var0 = var0 ushr 1
                 --var1
             }
-            return var2
+            return value
         }
     }
 }

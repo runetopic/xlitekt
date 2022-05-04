@@ -22,29 +22,25 @@ class MidiFileReader(
     init {
         buffer.put(bytes)
         buffer.position(10)
-        val var2 = buffer.short.toInt() and 0xffff
+        val size = buffer.short.toInt() and 0xffff
         division = buffer.short.toInt() and 0xffff
         field3103 = 500000
-        trackStarts = IntArray(var2)
-        var var3 = 0
-        while (var3 < var2) {
+        trackStarts = IntArray(size)
+        repeat(size) {
             val var4 = buffer.int
-            val var5 = buffer.int
+            val offset = buffer.int
             if (var4 == 1297379947) {
-                trackStarts!![var3] = buffer.position()
-                ++var3
+                trackStarts!![it] = buffer.position()
             }
-            buffer.position(buffer.position() + var5)
+            buffer.position(buffer.position() + offset)
         }
-        this.field3098 = 0L
-        this.trackPositions = IntArray(var2)
-        var3 = 0
-        while (var3 < var2) {
-            trackPositions!![var3] = trackStarts!![var3]
-            ++var3
+        field3098 = 0L
+        trackPositions = IntArray(size)
+        repeat(size) {
+            trackPositions!![it] = trackStarts!![it]
         }
-        this.trackLengths = IntArray(var2)
-        this.field3100 = IntArray(var2)
+        trackLengths = IntArray(size)
+        field3100 = IntArray(size)
     }
 
     fun trackCount() = trackPositions!!.size
@@ -91,10 +87,10 @@ class MidiFileReader(
     }
 
     private fun readMessage0(var1: Int): Int {
-        val var2 = buffer.array()[buffer.position()]
+        val value = buffer.array()[buffer.position()]
         val var5: Int
-        if (var2 < 0) {
-            var5 = var2.toInt() and 0xff
+        if (value < 0) {
+            var5 = value.toInt() and 0xff
             field3100!![var1] = var5
             buffer.position(buffer.position() + 1)
         } else {
@@ -104,47 +100,45 @@ class MidiFileReader(
         if (var5 != 240 && var5 != 247) {
             return method5208(var1, var5)
         } else {
-            val var3 = buffer.readVarInt()
-            if (var5 == 247 && var3 > 0) {
-                val var4: Int = buffer.array()[buffer.position()].toInt() and 255
+            val offset = buffer.readVarInt()
+            if (var5 == 247 && offset > 0) {
+                val var4 = buffer.array()[buffer.position()].toInt() and 255
                 if (var4 in 241..243 || var4 == 246 || var4 == 248 || var4 in 250..252 || var4 == 254) {
                     buffer.position(buffer.position() + 1)
                     field3100!![var1] = var4
                     return method5208(var1, var4)
                 }
             }
-            buffer.position(buffer.position() + var3)
+            buffer.position(buffer.position() + offset)
             return 0
         }
     }
 
     private fun method5208(var1: Int, var2: Int): Int {
-        var var4: Int
         return if (var2 == 255) {
             val var7 = buffer.get().toInt() and 0xff
-            var4 = buffer.readVarInt()
+            val offset = buffer.readVarInt()
             when (var7) {
                 47 -> {
-                    buffer.position(buffer.position() + var4)
+                    buffer.position(buffer.position() + offset)
                     1
                 }
                 81 -> {
                     val var5: Int = buffer.readMedium()
-                    var4 -= 3
                     val var6 = trackLengths!![var1]
                     field3098 += var6.toLong() * (field3103 - var5).toLong()
                     field3103 = var5
-                    buffer.position(buffer.position() + var4)
+                    buffer.position(buffer.position() + (offset - 3))
                     2
                 }
                 else -> {
-                    buffer.position(buffer.position() + var4)
+                    buffer.position(buffer.position() + offset)
                     3
                 }
             }
         } else {
             val var3 = field3106[var2 - 128]
-            var4 = var2
+            var var4 = var2
             if (var3 >= 1) {
                 var4 = var2 or ((buffer.get().toInt() and 0xff) shl 8)
             }

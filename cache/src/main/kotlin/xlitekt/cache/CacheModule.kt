@@ -40,7 +40,7 @@ import java.nio.file.Path
 /**
  * @author Jordan Abraham
  */
-val cacheModule = module(createdAtStart = false) {
+val cacheModule = module(createdAtStart = true) {
     single {
         val path = try {
             lazy<ApplicationEnvironment>().config.property("game.cache.path").getString()
