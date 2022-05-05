@@ -69,7 +69,7 @@ fun main() {
     CacheDumper.dumpSoundBank()
 }
 
-object CacheDumper {
+internal object CacheDumper {
     private val varbits by inject<VarBitEntryTypeProvider>()
     private val interfaces by inject<InterfaceEntryTypeProvider>()
     private val enums by inject<EnumEntryTypeProvider>()
