@@ -7,7 +7,6 @@ import xlitekt.cache.provider.music.MusicEntryTypeProvider
 import xlitekt.shared.inject
 import java.io.ByteArrayInputStream
 import java.nio.file.Path
-import java.sql.Time
 import java.util.Scanner
 import java.util.concurrent.TimeUnit
 import javax.sound.midi.MidiSystem
@@ -15,6 +14,7 @@ import javax.sound.midi.Sequence
 import javax.sound.midi.Sequencer
 import javax.sound.midi.Synthesizer
 import kotlin.io.path.readBytes
+import kotlin.system.exitProcess
 
 /**
  * @author Jordan Abraham
@@ -38,45 +38,67 @@ internal object MusicPlayer {
 
         val scanner = Scanner(System.`in`)
         while (true) {
-            println("Enter track ID (0-${musics.size()})")
-            val entry = musics.entryType(scanner.nextInt()) ?: run {
-                println("Not found!")
-                return
+            println("Input One Of The Following Options Into The Console...")
+            println("----- (0-${musics.size()}) ----- pause ----- play ----- stop -----")
+            val input = scanner.next()
+            if (input.toIntOrNull() == null) {
+                when (input) {
+                    "pause" -> {
+                        println("Pausing...")
+                        sequencers?.forEach { it?.stop() }
+                    }
+                    "play" -> {
+                        println("Playing...")
+                        sequencers?.forEach { it?.start() }
+                    }
+                    "stop" -> {
+                        println("Stopping...")
+                        sequencers?.forEach { it?.stop() }
+                        synthesizers?.onEach { it?.close() }
+                        Thread.sleep(1000)
+                        exitProcess(0)
+                    }
+                }
+            } else {
+                val entry = musics.entryType(input.toInt()) ?: run {
+                    println("Not found!")
+                    return
+                }
+
+                println("Loading ${entry.name ?: entry.id}...")
+
+                sequencers?.onEach { it?.stop() }
+                synthesizers?.onEach { it?.close() }
+
+                sequence = MidiSystem.getSequence(ByteArrayInputStream(entry.bytes!!))
+                val count = sequence.tracks.size
+                sequencers = arrayOfNulls(count)
+                synthesizers = arrayOfNulls(count)
+
+                repeat(count) {
+                    synthesizers[it] = MidiSystem.getSynthesizer()
+                    synthesizers[it]!!.open()
+                    synthesizers[it]!!.unloadAllInstruments(synthesizers[it]!!.defaultSoundbank)
+                    synthesizers[it]!!.loadAllInstruments(soundBank)
+                }
+
+                repeat(count) {
+                    sequencers[it] = MidiSystem.getSequencer()
+                    sequencers[it]!!.open()
+                    sequencers[it]!!.transmitter.receiver = synthesizers[it]!!.receiver
+                    sequencers[it]!!.sequence = sequence
+                    sequencers[it]!!.setTrackSolo(it, true)
+                }
+
+                Thread.sleep(1000)
+
+                repeat(sequencers.size) {
+                    sequencers[it]!!.start()
+                }
+                val minutes = TimeUnit.MICROSECONDS.toMinutes(sequence!!.microsecondLength)
+                val seconds = TimeUnit.MICROSECONDS.toSeconds(sequence.microsecondLength) % 60
+                println("Playing ${entry.name ?: entry.id} --- $minutes minutes and $seconds seconds long.")
             }
-
-            println("Loading...")
-
-            sequencers?.onEach { it?.stop() }
-            synthesizers?.onEach { it?.close() }
-
-            sequence = MidiSystem.getSequence(ByteArrayInputStream(entry.bytes!!))
-            val count = sequence.tracks.size
-            sequencers = arrayOfNulls(count)
-            synthesizers = arrayOfNulls(count)
-
-            repeat(count) {
-                synthesizers[it] = MidiSystem.getSynthesizer()
-                synthesizers[it]!!.unloadAllInstruments(synthesizers[it]!!.defaultSoundbank)
-                synthesizers[it]!!.loadAllInstruments(soundBank)
-                synthesizers[it]!!.open()
-            }
-
-            repeat(count) {
-                sequencers[it] = MidiSystem.getSequencer(false)
-                sequencers[it]!!.transmitter.receiver = synthesizers[it]!!.receiver
-                sequencers[it]!!.sequence = sequence
-                sequencers[it]!!.setTrackSolo(it, true)
-                sequencers[it]!!.open()
-            }
-
-            Thread.sleep(1000)
-
-            repeat(sequencers.size) {
-                sequencers[it]!!.start()
-            }
-            val minutes = TimeUnit.MICROSECONDS.toMinutes(sequence!!.microsecondLength)
-            val seconds = TimeUnit.MICROSECONDS.toSeconds(sequence.microsecondLength) % 60
-            println("Playing ${entry.name} --- $minutes minutes and $seconds seconds long.")
         }
     }
 }
