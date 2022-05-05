@@ -95,9 +95,10 @@ internal object MusicPlayer {
                 repeat(sequencers.size) {
                     sequencers[it]!!.start()
                 }
+
                 val minutes = TimeUnit.MICROSECONDS.toMinutes(sequence!!.microsecondLength)
                 val seconds = TimeUnit.MICROSECONDS.toSeconds(sequence.microsecondLength) % 60
-                println("Playing ${entry.name ?: entry.id} --- $minutes minutes and $seconds seconds long.")
+                println("Playing ${entry.name ?: entry.id} ----- $minutes minutes and $seconds seconds long.")
             }
         }
     }
