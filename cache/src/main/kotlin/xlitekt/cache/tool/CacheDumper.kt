@@ -31,14 +31,13 @@ import xlitekt.cache.provider.config.varc.VarcEntryTypeProvider
 import xlitekt.cache.provider.config.varp.VarpEntryTypeProvider
 import xlitekt.cache.provider.config.worldmap.WorldMapElementEntryTypeProvider
 import xlitekt.cache.provider.font.FontEntryTypeProvider
-import xlitekt.cache.provider.instrument.InstrumentEntryTypeProvider
+import xlitekt.cache.provider.instrument.InstrumentEntryType
 import xlitekt.cache.provider.music.MusicEntryTypeProvider
 import xlitekt.cache.provider.sprite.Sprite
 import xlitekt.cache.provider.sprite.SpriteEntryTypeProvider
 import xlitekt.cache.provider.sprite.titlescreen.TitleScreenEntryTypeProvider
 import xlitekt.cache.provider.texture.TextureEntryTypeProvider
 import xlitekt.cache.provider.ui.InterfaceEntryTypeProvider
-import xlitekt.cache.provider.vorbis.VorbisEntryTypeProvider
 import xlitekt.shared.inject
 import java.awt.image.BufferedImage
 import java.io.ByteArrayInputStream
@@ -67,6 +66,7 @@ fun main() {
     CacheDumper.dumpWorldMapElements()
     CacheDumper.dumpChatBoxIcons()
     CacheDumper.dumpMusicTracks()
+    CacheDumper.dumpSoundBank()
 }
 
 object CacheDumper {
@@ -96,8 +96,6 @@ object CacheDumper {
     private val titlescreen by inject<TitleScreenEntryTypeProvider>()
     private val fonts by inject<FontEntryTypeProvider>()
     private val musics by inject<MusicEntryTypeProvider>()
-    private val instruments by inject<InstrumentEntryTypeProvider>()
-    private val vorbis by inject<VorbisEntryTypeProvider>()
 
     fun dumpJson() {
         val json = Json {
@@ -417,6 +415,14 @@ object CacheDumper {
                 val name = if (entry.name != null) "${entry.name!!}_${entry.id}" else "${entry.id}"
                 entry.bytes?.let { bytes -> Files.write(Path.of(it.toString(), "$name.midi"), bytes) }
             }
+        }
+    }
+
+    fun dumpSoundBank() {
+        Path.of("./cache/data/dump/soundbank/").apply {
+            if (notExists()) createDirectories()
+        }.also { path ->
+            InstrumentEntryType.globalSoundBank.save(File(path.toString(), "soundbank.sf2"))
         }
     }
 

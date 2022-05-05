@@ -18,11 +18,11 @@ class InstrumentEntryTypeProvider : EntryTypeProvider<InstrumentEntryType>() {
 
     override fun ByteReadPacket.loadEntryType(type: InstrumentEntryType): InstrumentEntryType {
         type.instrumentSamples = Array(128) { null }
-        type.field3113 = ShortArray(128)
-        type.field3111 = ByteArray(128)
-        type.field3115 = ByteArray(128)
+        type.pitchOffset = ShortArray(128)
+        type.volumeOffset = ByteArray(128)
+        type.panOffset = ByteArray(128)
         type.field3117 = arrayOfNulls(128)
-        type.field3119 = ByteArray(128)
+        type.loopMode = ByteArray(128)
         type.groupIdOffsets = IntArray(128)
         val buffer = ByteBuffer.wrap(this.readBytes())
 
@@ -139,7 +139,7 @@ class InstrumentEntryTypeProvider : EntryTypeProvider<InstrumentEntryType>() {
         var var19 = 0
         repeat(128) {
             var19 += buffer.get().toInt() and 0xff
-            type.field3113!![it] = var19.toShort()
+            type.pitchOffset!![it] = var19.toShort()
         }
 
         // ==================================================================
@@ -148,7 +148,7 @@ class InstrumentEntryTypeProvider : EntryTypeProvider<InstrumentEntryType>() {
         var var48: ShortArray
         repeat(128) {
             var19 += buffer.get().toInt() and 0xff
-            var48 = type.field3113!!
+            var48 = type.pitchOffset!!
             var48[it] = (var48[it] + (var19 shl 8)).toShort()
         }
 
@@ -162,7 +162,7 @@ class InstrumentEntryTypeProvider : EntryTypeProvider<InstrumentEntryType>() {
                 var20 = if (var21 < var18.size) var18[var21++].toInt() else -1
                 var22 = buffer.readVarInt()
             }
-            var48 = type.field3113!!
+            var48 = type.pitchOffset!!
             var48[it] = (var48[it] + (var22 - 1 and 2 shl 14)).toShort()
             type.groupIdOffsets!![it] = var22
             --var20
@@ -179,7 +179,7 @@ class InstrumentEntryTypeProvider : EntryTypeProvider<InstrumentEntryType>() {
                     var20 = if (var21 < firstArrayBlock.size) firstArrayBlock[var21++].toInt() else -1
                     var23 = buffer.array()[firstArrayBlockPosition++] - 1
                 }
-                type.field3119!![it] = var23.toByte()
+                type.loopMode!![it] = var23.toByte()
                 --var20
             }
         }
@@ -195,7 +195,7 @@ class InstrumentEntryTypeProvider : EntryTypeProvider<InstrumentEntryType>() {
                     var20 = if (var21 < secondArrayBlock.size) secondArrayBlock[var21++].toInt() else -1
                     var24 = buffer.array()[secondArrayBlockPosition++] + 16 shl 2
                 }
-                type.field3115!![it] = var24.toByte()
+                type.panOffset!![it] = var24.toByte()
                 --var20
             }
         }
@@ -228,13 +228,13 @@ class InstrumentEntryTypeProvider : EntryTypeProvider<InstrumentEntryType>() {
                     var26 = (buffer.get().toInt() and 0xff) + 1
                 }
             }
-            type.field3111!![it] = var26.toByte()
+            type.volumeOffset!![it] = var26.toByte()
             --var20
         }
 
         // ==================================================================
 
-        type.field3114 = (buffer.get().toInt() and 0xff) + 1
+        type.baseVelocity = (buffer.get().toInt() and 0xff) + 1
 
         // ==================================================================
 
@@ -329,7 +329,7 @@ class InstrumentEntryTypeProvider : EntryTypeProvider<InstrumentEntryType>() {
             var var28 = var42[1]
 
             repeat(var47.toInt()) {
-                type.field3111!![it] = (var28 * type.field3111!![it] + 32 shr 6).toByte()
+                type.volumeOffset!![it] = (var28 * type.volumeOffset!![it] + 32 shr 6).toByte()
             }
 
             var29 = 2
@@ -340,7 +340,7 @@ class InstrumentEntryTypeProvider : EntryTypeProvider<InstrumentEntryType>() {
                 var33 = var47.toInt()
                 while (var33 < var30) {
                     var34 = method4142(var32, var30 - var47)
-                    type.field3111!![var33] = (var34 * type.field3111!![var33] + 32 shr 6).toByte()
+                    type.volumeOffset!![var33] = (var34 * type.volumeOffset!![var33] + 32 shr 6).toByte()
                     var32 += var31 - var28
                     ++var33
                 }
@@ -351,7 +351,7 @@ class InstrumentEntryTypeProvider : EntryTypeProvider<InstrumentEntryType>() {
 
             var45 = var47.toInt()
             while (var45 < 128) {
-                type.field3111!![var45] = (var28 * type.field3111!![var45] + 32 shr 6).toByte()
+                type.volumeOffset!![var45] = (var28 * type.volumeOffset!![var45] + 32 shr 6).toByte()
                 ++var45
             }
             var15 = null
@@ -374,7 +374,7 @@ class InstrumentEntryTypeProvider : EntryTypeProvider<InstrumentEntryType>() {
             var var44 = var16[1].toInt() shl 1
 
             repeat(var47.toInt()) {
-                var45 = var44 + (type.field3115!![it].toInt() and 255)
+                var45 = var44 + (type.panOffset!![it].toInt() and 255)
                 if (var45 < 0) {
                     var45 = 0
                 }
@@ -383,7 +383,7 @@ class InstrumentEntryTypeProvider : EntryTypeProvider<InstrumentEntryType>() {
                     var45 = 128
                 }
 
-                type.field3115!![it] = var45.toByte()
+                type.panOffset!![it] = var45.toByte()
             }
 
             var var46: Int
@@ -395,14 +395,14 @@ class InstrumentEntryTypeProvider : EntryTypeProvider<InstrumentEntryType>() {
                 var33 = var47.toInt()
                 while (var33 < var30) {
                     var34 = method4142(var32, var30 - var47)
-                    var var35 = var34 + (type.field3115!![var33].toInt() and 255)
+                    var var35 = var34 + (type.panOffset!![var33].toInt() and 255)
                     if (var35 < 0) {
                         var35 = 0
                     }
                     if (var35 > 128) {
                         var35 = 128
                     }
-                    type.field3115!![var33] = var35.toByte()
+                    type.panOffset!![var33] = var35.toByte()
                     var32 += var46 - var44
                     ++var33
                 }
@@ -413,14 +413,14 @@ class InstrumentEntryTypeProvider : EntryTypeProvider<InstrumentEntryType>() {
 
             var45 = var47.toInt()
             while (var45 < 128) {
-                var46 = var44 + (type.field3115!![var45].toInt() and 255)
+                var46 = var44 + (type.panOffset!![var45].toInt() and 255)
                 if (var46 < 0) {
                     var46 = 0
                 }
                 if (var46 > 128) {
                     var46 = 128
                 }
-                type.field3115!![var45] = var46.toByte()
+                type.panOffset!![var45] = var46.toByte()
                 ++var45
             }
         }
@@ -467,6 +467,7 @@ class InstrumentEntryTypeProvider : EntryTypeProvider<InstrumentEntryType>() {
                 var39.field3060 = buffer.get().toInt() and 0xff
             }
         }
+        type.bytes = buffer.array()
         return type
     }
 

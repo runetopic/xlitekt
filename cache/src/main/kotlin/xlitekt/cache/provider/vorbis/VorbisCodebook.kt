@@ -69,10 +69,10 @@ data class VorbisCodebook(
                 repeat(entries) { var8 ->
                     var var9 = 0.0f
                     var var10 = 1
-                    repeat(dimensions) { var11 ->
+                    repeat(dimensions) {
                         val var12 = var8 / var10 % var7
                         val var13 = field355!![var12].toFloat() * var16 + var15 + var9
-                        field356!![var8]!![var11] = var13
+                        field356!![var8]!![it] = var13
                         if (var6) {
                             var9 = var13
                         }
@@ -83,9 +83,9 @@ data class VorbisCodebook(
                 repeat(entries) { var8 ->
                     var var9 = 0.0f
                     var var10 = var8 * dimensions
-                    repeat(dimensions) { var11 ->
+                    repeat(dimensions) {
                         val var17 = field355!![var10].toFloat() * var16 + var15 + var9
-                        field356!![var8]!![var11] = var17
+                        field356!![var8]!![it] = var17
                         if (var6) {
                             var9 = var17
                         }
@@ -100,31 +100,25 @@ data class VorbisCodebook(
         val var1 = IntArray(entries)
         val var2 = IntArray(33)
 
-        var var4: Int
-        var var5: Int
-        var var6: Int
-        var var7: Int
-        var var8: Int
-        var var10: Int
-        var var3 = 0
-        while (var3 < entries) {
-            var4 = lengthMap!![var3]
+        repeat(entries) {
+            val var4 = lengthMap!![it]
             if (var4 != 0) {
-                var5 = 1 shl 32 - var4
-                var6 = var2[var4]
-                var1[var3] = var6
+                val var5 = 1 shl 32 - var4
+                val var6 = var2[var4]
+                var1[it] = var6
+                val var7: Int
                 var var12: Int
                 if (var6 and var5 != 0) {
                     var7 = var2[var4 - 1]
                 } else {
                     var7 = var6 or var5
-                    var8 = var4 - 1
+                    var var8 = var4 - 1
                     while (var8 >= 1) {
                         var12 = var2[var8]
                         if (var12 != var6) {
                             break
                         }
-                        var10 = 1 shl 32 - var8
+                        val var10 = 1 shl 32 - var8
                         if (var12 and var10 != 0) {
                             var2[var8] = var2[var8 - 1]
                             break
@@ -134,7 +128,7 @@ data class VorbisCodebook(
                     }
                 }
                 var2[var4] = var7
-                var8 = var4 + 1
+                var var8 = var4 + 1
                 while (var8 <= 32) {
                     var12 = var2[var8]
                     if (var12 == var6) {
@@ -143,20 +137,17 @@ data class VorbisCodebook(
                     ++var8
                 }
             }
-            ++var3
         }
 
         keys = IntArray(8)
         var var11 = 0
-        var3 = 0
-        while (var3 < entries) {
-            var4 = lengthMap!![var3]
+        repeat(entries) { var3 ->
+            val var4 = lengthMap!![var3]
             if (var4 != 0) {
-                var5 = var1[var3]
-                var6 = 0
-                var7 = 0
-                while (var7 < var4) {
-                    var8 = Int.MIN_VALUE ushr var7
+                val var5 = var1[var3]
+                var var6 = 0
+                repeat(var4) { var7 ->
+                    var var8 = Int.MIN_VALUE ushr var7
                     if (var5 and var8 != 0) {
                         if (keys!![var6] == 0) {
                             keys!![var6] = var11
@@ -167,22 +158,18 @@ data class VorbisCodebook(
                     }
                     if (var6 >= keys!!.size) {
                         val var9 = IntArray(keys!!.size * 2)
-                        var10 = 0
-                        while (var10 < keys!!.size) {
-                            var9[var10] = keys!![var10]
-                            ++var10
+                        repeat(keys!!.size) {
+                            var9[it] = keys!![it]
                         }
                         keys = var9
                     }
                     var8 = var8 ushr 1
-                    ++var7
                 }
                 keys!![var6] = var3.inv()
                 if (var6 >= var11) {
                     var11 = var6 + 1
                 }
             }
-            ++var3
         }
     }
 
