@@ -39,7 +39,7 @@ internal object MusicPlayer {
         val scanner = Scanner(System.`in`)
         while (true) {
             println("Input One Of The Following Options Into The Console...")
-            println("----- (0-${musics.size()}) ----- pause ----- play ----- stop -----")
+            println("----- (0-${musics.size()}) ----- pause ----- play ----- stop ----- list -----")
             val input = scanner.next()
             if (input.toIntOrNull() == null) {
                 when (input) {
@@ -57,6 +57,9 @@ internal object MusicPlayer {
                         synthesizers?.onEach { it?.close() }
                         Thread.sleep(1000)
                         exitProcess(0)
+                    }
+                    "list" -> {
+                        musics.entries().associate { it.id to it.name }.forEach(::println)
                     }
                 }
             } else {
