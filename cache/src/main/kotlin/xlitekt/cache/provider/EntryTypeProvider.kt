@@ -37,6 +37,7 @@ abstract class EntryTypeProvider<R : EntryType> {
         // Indexes.
         const val CONFIG_INDEX = 2
         const val INTERFACE_INDEX = 3
+        const val SOUND_EFFECT_INDEX = 4
         const val MAP_INDEX = 5
         const val MUSIC_INDEX = 6
         const val SPRITE_INDEX = 8

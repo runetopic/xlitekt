@@ -29,6 +29,7 @@ import xlitekt.cache.provider.font.FontEntryTypeProvider
 import xlitekt.cache.provider.instrument.InstrumentEntryTypeProvider
 import xlitekt.cache.provider.map.MapEntryTypeProvider
 import xlitekt.cache.provider.music.MusicEntryTypeProvider
+import xlitekt.cache.provider.soundeffect.SoundEffectEntryTypeProvider
 import xlitekt.cache.provider.sprite.SpriteEntryTypeProvider
 import xlitekt.cache.provider.sprite.titlescreen.TitleScreenEntryTypeProvider
 import xlitekt.cache.provider.texture.TextureEntryTypeProvider
@@ -85,6 +86,7 @@ val cacheModule = module(createdAtStart = true) {
     single { FontEntryTypeProvider() }
     single { InstrumentEntryTypeProvider() }
     single { VorbisEntryTypeProvider() }
+    single { SoundEffectEntryTypeProvider() }
     single {
         MusicEntryTypeProvider().apply {
             entries().forEach(::postLoadEntryType)

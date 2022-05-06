@@ -8,6 +8,7 @@ import com.sun.media.SF2Region
 import com.sun.media.SF2Sample
 import com.sun.media.SF2Soundbank
 import xlitekt.cache.provider.EntryType
+import xlitekt.cache.provider.soundeffect.SoundEffectEntryTypeProvider
 import xlitekt.cache.provider.vorbis.VorbisEntryTypeProvider
 import xlitekt.shared.inject
 import javax.sound.midi.Patch
@@ -40,7 +41,7 @@ data class InstrumentEntryType(
                     if (offset != idOffset) {
                         offset = idOffset--
                         instrumentSample = if (idOffset and 1 == 0) {
-                            null // getSoundEffect(var8 shr 2, samples) TODO For sound effects.
+                            getSoundEffect(idOffset shr 2, samples)
                         } else {
                             getInstrumentForTrack(idOffset shr 2, samples)
                         }
@@ -50,9 +51,6 @@ data class InstrumentEntryType(
                     }
 
                     if (instrumentSample != null) {
-                        instrumentSamples!![it] = instrumentSample
-                        groupIdOffsets!![it] = 0
-
                         val data = instrumentSample.samples
                         val audio = ByteArray(data.size * 2)
 
@@ -81,7 +79,7 @@ data class InstrumentEntryType(
                                 noteRange[0] = i.toByte()
                                 noteRange[1] = i.toByte()
                                 if (nextNoteRange < 128) {
-                                    addSample(sample, id, noteRange, nextNoteRange)
+                                    addSample(sample, noteRange, nextNoteRange)
                                 }
                                 nextNoteRange++
                             }
@@ -91,6 +89,9 @@ data class InstrumentEntryType(
                         if (nextNoteRange >= 127) {
                             sf2Instrument = null
                         }
+
+                        instrumentSamples!![it] = instrumentSample
+                        groupIdOffsets!![it] = 0
                     }
                 }
             }
@@ -99,14 +100,24 @@ data class InstrumentEntryType(
     }
 
     private fun getInstrumentForTrack(id: Int, samples: IntArray): InstrumentSample? {
+        val packedId = id xor (0 shl 4 and 65535 or 0 ushr 12)
         val entry = vorbis.entryType(id) ?: return null
         val sample = entry.toInstrumentSample(samples) ?: return null
-        globalInstrumentSamples[id] = sample
+        globalInstrumentSamples[packedId] = sample
         return sample
     }
 
-    private fun addSample(sample: SF2Sample, id: Int, noteRange: ByteArray, nextNoteRange: Int) {
+    private fun getSoundEffect(id: Int, samples: IntArray): InstrumentSample? {
+        val packedId = 0 xor (id shl 4 and 65535 or id ushr 12)
+        val entry = soundEffects.entryType(id) ?: return null
+        val sample = entry.toInstrumentSample(samples)
+        globalInstrumentSamples[packedId] = sample
+        return sample
+    }
+
+    private fun addSample(sample: SF2Sample, noteRange: ByteArray, nextNoteRange: Int) {
         globalSoundBank.addResource(sample)
+
         if (sf2Instrument == null) {
             sf2Instrument = SF2Instrument()
             sf2Instrument!!.name = "Patch $id"
@@ -152,10 +163,23 @@ data class InstrumentEntryType(
         layer.regions.add(region)
         val instrumentRegion = SF2InstrumentRegion()
         instrumentRegion.layer = layer
+        if (globalSoundBanks[id] == null) {
+            globalSoundBanks[id] = SF2Soundbank().also {
+                it.name = "soundbank"
+                it.romName = "osrs"
+                it.romVersionMajor = 2
+                it.romVersionMinor = 0
+            }
+        }
+        globalSoundBanks[id]!!.addResource(sample)
+        globalSoundBanks[id]!!.addResource(layer)
         globalSoundBank.addResource(layer)
         sf2Instrument!!.regions.add(instrumentRegion)
+        if (globalSoundBanks[id]!!.getInstrument(sf2Instrument!!.patch) == null) {
+            globalSoundBanks[id]!!.addInstrument(sf2Instrument!!)
+        }
         if (globalSoundBank.getInstrument(sf2Instrument!!.patch) == null) {
-            globalSoundBank.addInstrument(sf2Instrument!!)
+            globalSoundBank.addInstrument(sf2Instrument)
         }
     }
 
@@ -346,7 +370,9 @@ data class InstrumentEntryType(
 
     companion object {
         private val vorbis by inject<VorbisEntryTypeProvider>()
-        private val globalInstrumentSamples = mutableMapOf<Int, InstrumentSample>()
+        private val soundEffects by inject<SoundEffectEntryTypeProvider>()
+        val globalInstrumentSamples = mutableMapOf<Int, InstrumentSample>()
+        val globalSoundBanks = mutableMapOf<Int, SF2Soundbank>()
         val globalSoundBank = SF2Soundbank().also {
             it.name = "soundbank"
             it.romName = "osrs"
