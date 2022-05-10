@@ -1,11 +1,8 @@
 package xlitekt.application
 
 import io.github.classgraph.ClassGraph
-import io.ktor.events.EventDefinition
 import io.ktor.server.application.Application
-import io.ktor.server.application.ApplicationStopped
 import io.ktor.server.application.call
-import io.ktor.server.application.createApplicationPlugin
 import io.ktor.server.application.install
 import io.ktor.server.application.log
 import io.ktor.server.engine.commandLineEnvironment
@@ -14,12 +11,8 @@ import io.ktor.server.netty.Netty
 import io.ktor.server.response.respondBytes
 import io.ktor.server.routing.get
 import io.ktor.server.routing.routing
-import org.koin.core.KoinApplication
-import org.koin.core.context.startKoin
-import org.koin.core.context.stopKoin
-import org.koin.core.module.Module
-import org.koin.dsl.KoinAppDeclaration
 import org.koin.dsl.module
+import org.koin.ktor.plugin.Koin
 import xlitekt.cache.cacheModule
 import xlitekt.game.Game
 import xlitekt.game.gameModule
@@ -59,7 +52,7 @@ fun Application.module() {
             "  `.   \\  .'    /|   ||  | .'     ||                  | |   | ____  .'     | \n" +
             "    `.  `'    .' |   ||  |'--.  .-'\\    .-------------' |   | \\ .' '--.  .-' \n" +
             "      '.    .'   |   ||  |   |  |   \\    '-.____...---. |   |/  .     |  |   \n" +
-            "      .'     `.  |   ||__|   |  |    `.             .'  |    \\  \\    |  |   \n" +
+            "      .'     `.  |   ||__|   |  |    `.             .'  |    \\  \\     |  |   \n" +
             "    .'  .'`.   `.'---'       |  '.'    `''-...... -'    |   |  \\  \\   |  '.' \n" +
             "  .'   /    `.   `.          |   /                      '    \\  \\  \\  |   /  \n" +
             " '----'       '----'         `'-'                      '------'  '---'`'-'   \n"
@@ -98,33 +91,9 @@ fun Application.installHttpServer() {
     }.start(wait = false)
 }
 
-class KoinConfig {
-    internal var modules: ArrayList<Module> = ArrayList()
-}
-
-val KoinApplicationStarted = EventDefinition<KoinApplication>()
-val KoinApplicationStopPreparing = EventDefinition<KoinApplication>()
-val KoinApplicationStopped = EventDefinition<KoinApplication>()
-
-val Koin = createApplicationPlugin(name = "Koin", createConfiguration = ::KoinConfig) {
-    val declaration: KoinAppDeclaration = {
-        modules(pluginConfig.modules)
-    }
-    val koinApplication = startKoin(appDeclaration = declaration)
-    environment?.monitor?.let { monitor ->
-        monitor.raise(KoinApplicationStarted, koinApplication)
-        monitor.subscribe(ApplicationStopped) {
-            monitor.raise(KoinApplicationStopPreparing, koinApplication)
-            stopKoin()
-            monitor.raise(KoinApplicationStopped, koinApplication)
-        }
-    }
-}
-
 fun Application.installKoin() {
-    // Fix provided by https://github.com/InsertKoinIO/koin/issues/1295
     install(Koin) {
-        modules = arrayListOf(
+        modules(
             module { single { this@installKoin.environment } },
             cacheModule,
             gameModule,

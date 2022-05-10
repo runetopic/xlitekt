@@ -9,7 +9,7 @@ dependencyResolutionManagement {
         create("deps") {
             version("kotlin", "1.6.21")
             version("ktor", "2.0.1")
-            version("koin", "3.2.0-beta-1")
+            version("koin", "3.2.0")
             version("slf4j", "1.7.36")
             version("cache", "1.4.24-SNAPSHOT")
             version("cryptography", "1.0.10-SNAPSHOT")
