@@ -47,6 +47,7 @@ import javax.sound.sampled.AudioFormat;
  *
  * @author Karl Helgason
  */
+@SuppressWarnings("all")
 public abstract class ModelInstrument extends Instrument {
 
     protected ModelInstrument(Soundbank soundbank, Patch patch, String name,

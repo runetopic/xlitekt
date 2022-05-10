@@ -38,6 +38,7 @@ import javax.sound.midi.spi.SoundbankReader;
  *
  * @author Karl Helgason
  */
+@SuppressWarnings("all")
 public class SF2SoundbankReader extends SoundbankReader {
 
     public Soundbank getSoundbank(URL url)

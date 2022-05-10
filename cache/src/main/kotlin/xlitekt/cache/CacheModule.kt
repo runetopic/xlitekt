@@ -87,9 +87,5 @@ val cacheModule = module(createdAtStart = true) {
     single { InstrumentEntryTypeProvider() }
     single { VorbisEntryTypeProvider() }
     single { SoundEffectEntryTypeProvider() }
-    single {
-        MusicEntryTypeProvider().apply {
-            entries().forEach(::postLoadEntryType)
-        }
-    }
+    single { MusicEntryTypeProvider() }
 }

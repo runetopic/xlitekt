@@ -30,6 +30,7 @@ package com.sun.media;
  *
  * @author Karl Helgason
  */
+@SuppressWarnings("all")
 public class ModelStandardIndexedDirector implements ModelDirector {
 
     ModelPerformer[] performers;

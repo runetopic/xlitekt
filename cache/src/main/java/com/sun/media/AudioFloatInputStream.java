@@ -41,6 +41,7 @@ import javax.sound.sampled.UnsupportedAudioFileException;
  *
  * @author Karl Helgason
  */
+@SuppressWarnings("all")
 public abstract class AudioFloatInputStream {
 
     private static class BytaArrayAudioFloatInputStream

@@ -17,13 +17,13 @@ class InstrumentEntryTypeProvider : EntryTypeProvider<InstrumentEntryType>() {
         .associateBy(InstrumentEntryType::id)
 
     override fun ByteReadPacket.loadEntryType(type: InstrumentEntryType): InstrumentEntryType {
-        type.instrumentSamples = Array(128) { null }
+        type.audioBuffers = Array(128) { null }
         type.pitchOffset = ShortArray(128)
         type.volumeOffset = ByteArray(128)
         type.panOffset = ByteArray(128)
         type.field3117 = arrayOfNulls(128)
         type.loopMode = ByteArray(128)
-        type.groupIdOffsets = IntArray(128)
+        type.offsets = IntArray(128)
         val buffer = ByteBuffer.wrap(this.readBytes())
 
         // ==================================================================
@@ -164,7 +164,7 @@ class InstrumentEntryTypeProvider : EntryTypeProvider<InstrumentEntryType>() {
             }
             var48 = type.pitchOffset!!
             var48[it] = (var48[it] + (var22 - 1 and 2 shl 14)).toShort()
-            type.groupIdOffsets!![it] = var22
+            type.offsets!![it] = var22
             --var20
         }
 
@@ -174,7 +174,7 @@ class InstrumentEntryTypeProvider : EntryTypeProvider<InstrumentEntryType>() {
         var21 = 0
         var var23 = 0
         repeat(128) {
-            if (type.groupIdOffsets!![it] != 0) {
+            if (type.offsets!![it] != 0) {
                 if (var20 == 0) {
                     var20 = if (var21 < firstArrayBlock.size) firstArrayBlock[var21++].toInt() else -1
                     var23 = buffer.array()[firstArrayBlockPosition++] - 1
@@ -190,7 +190,7 @@ class InstrumentEntryTypeProvider : EntryTypeProvider<InstrumentEntryType>() {
         var21 = 0
         var var24 = 0
         repeat(128) {
-            if (type.groupIdOffsets!![it] != 0) {
+            if (type.offsets!![it] != 0) {
                 if (var20 == 0) {
                     var20 = if (var21 < secondArrayBlock.size) secondArrayBlock[var21++].toInt() else -1
                     var24 = buffer.array()[secondArrayBlockPosition++] + 16 shl 2
@@ -206,7 +206,7 @@ class InstrumentEntryTypeProvider : EntryTypeProvider<InstrumentEntryType>() {
         var21 = 0
         var var38: Instrument? = null
         repeat(128) {
-            if (type.groupIdOffsets!![it] != 0) {
+            if (type.offsets!![it] != 0) {
                 if (var20 == 0) {
                     var38 = var37[var36[var21].toInt()]!!
                     var20 = if (var21 < thirdArrayBlock.size) thirdArrayBlock[var21++].toInt() else -1
@@ -224,7 +224,7 @@ class InstrumentEntryTypeProvider : EntryTypeProvider<InstrumentEntryType>() {
         repeat(128) {
             if (var20 == 0) {
                 var20 = if (var21 < var18.size) var18[var21++].toInt() else -1
-                if (type.groupIdOffsets!![it] > 0) {
+                if (type.offsets!![it] > 0) {
                     var26 = (buffer.get().toInt() and 0xff) + 1
                 }
             }
@@ -467,7 +467,6 @@ class InstrumentEntryTypeProvider : EntryTypeProvider<InstrumentEntryType>() {
                 var39.field3060 = buffer.get().toInt() and 0xff
             }
         }
-        type.bytes = buffer.array()
         return type
     }
 

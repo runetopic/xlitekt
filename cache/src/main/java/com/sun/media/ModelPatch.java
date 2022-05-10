@@ -33,6 +33,7 @@ import javax.sound.midi.Patch;
  *
  * @author Karl Helgason
  */
+@SuppressWarnings("all")
 public class ModelPatch extends Patch {
 
     private boolean percussion = false;

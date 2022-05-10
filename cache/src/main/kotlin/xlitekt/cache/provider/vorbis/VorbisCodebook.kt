@@ -8,7 +8,7 @@ import kotlin.math.pow
 /**
  * @author Jordan Abraham
  */
-data class VorbisCodebook(
+internal data class VorbisCodebook(
     var dimensions: Int = 0,
     var entries: Int = 0,
     var lengthMap: IntArray? = null,

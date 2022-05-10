@@ -31,6 +31,7 @@ import java.io.IOException;
  *
  * @author Karl Helgason
  */
+@SuppressWarnings("all")
 public class InvalidDataException extends IOException {
 
     private static final long serialVersionUID = 1L;

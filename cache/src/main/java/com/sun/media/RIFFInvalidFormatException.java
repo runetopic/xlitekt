@@ -30,6 +30,7 @@ package com.sun.media;
  *
  * @author Karl Helgason
  */
+@SuppressWarnings("all")
 public class RIFFInvalidFormatException extends InvalidFormatException {
 
     private static final long serialVersionUID = 1L;

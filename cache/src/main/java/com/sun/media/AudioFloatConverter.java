@@ -38,6 +38,7 @@ import javax.sound.sampled.AudioFormat.Encoding;
  *
  * @author Karl Helgason
  */
+@SuppressWarnings("all")
 public abstract class AudioFloatConverter {
 
     public static final Encoding PCM_FLOAT = new Encoding("PCM_FLOAT");

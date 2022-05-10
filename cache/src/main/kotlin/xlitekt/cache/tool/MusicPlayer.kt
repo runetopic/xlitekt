@@ -33,8 +33,8 @@ internal object MusicPlayer {
 
         val musics by inject<MusicEntryTypeProvider>()
         var sequence: Sequence?
-        var sequencers: Array<Sequencer?>? = null
-        var synthesizers: Array<Synthesizer?>? = null
+        var sequencer: Sequencer? = null
+        var synthesizer: Synthesizer? = null
 
         val scanner = Scanner(System.`in`)
         while (true) {
@@ -45,16 +45,16 @@ internal object MusicPlayer {
                 when (input) {
                     "pause" -> {
                         println("Pausing...")
-                        sequencers?.forEach { it?.stop() }
+                        sequencer?.stop()
                     }
                     "play" -> {
                         println("Playing...")
-                        sequencers?.forEach { it?.start() }
+                        sequencer?.start()
                     }
                     "stop" -> {
                         println("Stopping...")
-                        sequencers?.forEach { it?.stop() }
-                        synthesizers?.onEach { it?.close() }
+                        sequencer?.stop()
+                        synthesizer?.close()
                         Thread.sleep(1000)
                         exitProcess(0)
                     }
@@ -70,34 +70,25 @@ internal object MusicPlayer {
 
                 println("Loading ${entry.name ?: entry.id}...")
 
-                sequencers?.onEach { it?.stop() }
-                synthesizers?.onEach { it?.close() }
+                sequencer?.stop()
+                synthesizer?.close()
 
                 sequence = MidiSystem.getSequence(ByteArrayInputStream(entry.bytes!!))
-                val count = sequence.tracks.size
-                sequencers = arrayOfNulls(count)
-                synthesizers = arrayOfNulls(count)
 
-                repeat(count) {
-                    synthesizers[it] = MidiSystem.getSynthesizer()
-                    synthesizers[it]!!.open()
-                    synthesizers[it]!!.unloadAllInstruments(synthesizers[it]!!.defaultSoundbank)
-                    synthesizers[it]!!.loadAllInstruments(soundBank)
-                }
+                synthesizer = MidiSystem.getSynthesizer()
+                synthesizer.open()
+                synthesizer.unloadAllInstruments(synthesizer.defaultSoundbank)
+                synthesizer.loadAllInstruments(soundBank)
 
-                repeat(count) {
-                    sequencers[it] = MidiSystem.getSequencer()
-                    sequencers[it]!!.open()
-                    sequencers[it]!!.transmitter.receiver = synthesizers[it]!!.receiver
-                    sequencers[it]!!.sequence = sequence
-                    sequencers[it]!!.setTrackSolo(it, true)
-                }
+                sequencer = MidiSystem.getSequencer(false)
+                sequencer.open()
+                sequencer.transmitter.receiver = synthesizer.receiver
+                sequencer.sequence = sequence
+                sequencer.open()
 
                 Thread.sleep(1000)
 
-                repeat(sequencers.size) {
-                    sequencers[it]!!.start()
-                }
+                sequencer.start()
 
                 val minutes = TimeUnit.MICROSECONDS.toMinutes(sequence!!.microsecondLength)
                 val seconds = TimeUnit.MICROSECONDS.toSeconds(sequence.microsecondLength) % 60

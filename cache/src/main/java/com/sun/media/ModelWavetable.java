@@ -29,6 +29,7 @@ package com.sun.media;
  *
  * @author Karl Helgason
  */
+@SuppressWarnings("all")
 public interface ModelWavetable extends ModelOscillator {
 
     public static final int LOOP_TYPE_OFF = 0;

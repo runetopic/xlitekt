@@ -29,6 +29,7 @@ package com.sun.media;
  *
  * @author Karl Helgason
  */
+@SuppressWarnings("all")
 public class SF2InstrumentRegion extends SF2Region {
 
     protected SF2Layer layer;

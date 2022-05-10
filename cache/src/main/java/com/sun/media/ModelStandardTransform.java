@@ -36,6 +36,7 @@ package com.sun.media;
  *
  * @author Karl Helgason
  */
+@SuppressWarnings("all")
 public class ModelStandardTransform implements ModelTransform {
 
     public static final boolean DIRECTION_MIN2MAX = false;

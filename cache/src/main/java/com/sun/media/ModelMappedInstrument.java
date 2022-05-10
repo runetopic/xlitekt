@@ -33,6 +33,7 @@ import javax.sound.sampled.AudioFormat;
  *
  * @author Karl Helgason
  */
+@SuppressWarnings("all")
 public class ModelMappedInstrument extends ModelInstrument {
 
     private ModelInstrument ins;

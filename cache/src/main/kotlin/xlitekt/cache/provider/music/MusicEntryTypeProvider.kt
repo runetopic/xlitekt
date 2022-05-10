@@ -8,12 +8,10 @@ import io.ktor.utils.io.core.readFully
 import io.ktor.utils.io.core.readUByte
 import io.ktor.utils.io.core.readUShort
 import xlitekt.cache.provider.EntryTypeProvider
-import xlitekt.cache.provider.instrument.InstrumentEntryTypeProvider
 import xlitekt.shared.buffer.writeByte
 import xlitekt.shared.buffer.writeBytes
 import xlitekt.shared.buffer.writeInt
 import xlitekt.shared.buffer.writeShort
-import xlitekt.shared.inject
 
 /**
  * @author Jordan Abraham
@@ -23,7 +21,7 @@ class MusicEntryTypeProvider : EntryTypeProvider<MusicEntryType>() {
     override fun load(): Map<Int, MusicEntryType> = store
         .index(MUSIC_INDEX)
         .groups()
-        .map { ByteReadPacket(it.data).loadEntryType(MusicEntryType(it.id, name = crackedGroupNames[it.nameHash])) }
+        .map { ByteReadPacket(it.data).loadEntryType(MusicEntryType(it.id, name = glossary[it.nameHash])) }
         .associateBy(MusicEntryType::id)
 
     override fun ByteReadPacket.loadEntryType(type: MusicEntryType): MusicEntryType {
@@ -211,8 +209,7 @@ class MusicEntryTypeProvider : EntryTypeProvider<MusicEntryType>() {
                 val startSize = this@buildPacket.size
                 var id = -1
                 while (true) {
-                    val var63 = midi.readVarInt()
-                    writeVarInt { var63 }
+                    writeVarInt { midi.readVarInt() }
                     val status = bytes[index++].toInt() and 0xff
                     val switch = status != id
                     id = status and 15
@@ -307,29 +304,6 @@ class MusicEntryTypeProvider : EntryTypeProvider<MusicEntryType>() {
         return type
     }
 
-    override fun postLoadEntryType(type: MusicEntryType) {
-        createMidiTable(type)
-        var loaded = true
-        val samples = intArrayOf(22050)
-        val instruments by inject<InstrumentEntryTypeProvider>()
-
-        if (type.table == null) return
-        type.table!!.forEach {
-            val instrument = instruments.entryType(it.key)
-            if (instrument == null) {
-                loaded = false
-                return@forEach
-            }
-            if (!instrument.loadVorbisSamples(it.value, samples)) {
-                loaded = false
-            }
-        }
-        if (loaded) {
-            type.table!!.clear()
-        }
-        // TODO Somehow Jagex mixes the instruments in with the raw (type.bytes) array. We need to do that somehow using all of this data.
-    }
-
     private fun ByteReadPacket.header(): ByteReadPacket {
         discard(remaining.toInt() - 3)
         val bytes = ByteArray(remaining.toInt())
@@ -387,74 +361,8 @@ class MusicEntryTypeProvider : EntryTypeProvider<MusicEntryType>() {
         writeBytes { array }
     }
 
-    private fun createMidiTable(type: MusicEntryType) {
-        type.table = HashMap(16)
-        val var1 = IntArray(16)
-        val var2 = IntArray(16)
-        var2[9] = 128
-        var1[9] = 128
-        val midiFile = MidiFileReader(type.bytes!!)
-        repeat(midiFile.trackCount()) {
-            midiFile.goToTrack(it)
-            midiFile.readTrackLength(it)
-            midiFile.markTrackPosition(it)
-        }
-        loop@
-        do {
-            while (true) {
-                val trackId = midiFile.getPrioritizedTrack()
-                val trackLength = midiFile.trackLengths!![trackId]
-                while (trackLength == midiFile.trackLengths!![trackId]) {
-                    midiFile.goToTrack(trackId)
-                    val mask = midiFile.readMessage(trackId)
-                    if (mask == 1) {
-                        midiFile.setTrackDone()
-                        midiFile.markTrackPosition(trackId)
-                        continue@loop
-                    }
-                    val id = mask and 240
-                    if (id == 176) {
-                        val var10 = mask and 15
-                        val var11 = mask shr 8 and 127
-                        val var12 = mask shr 16 and 127
-                        if (var11 == 0) {
-                            var1[var10] = (var12 shl 14) + (var1[var10] and -2080769)
-                        }
-                        if (var11 == 32) {
-                            var1[var10] = (var1[var10] and -16257) + (var12 shl 7)
-                        }
-                    }
-
-                    if (id == 192) {
-                        val var10 = mask and 15
-                        val var11 = mask shr 8 and 127
-                        var2[var10] = var11 + var1[var10]
-                    }
-
-                    if (id == 144) {
-                        val var10 = mask and 15
-                        val var11 = mask shr 8 and 127
-                        val var12 = mask shr 16 and 127
-                        if (var12 > 0) {
-                            val var13 = var2[var10]
-                            var var14 = type.table!![var13]
-                            if (var14 == null) {
-                                var14 = ByteArray(128)
-                                type.table!![var13] = var14
-                            }
-                            var14[var11] = 1
-                        }
-                    }
-
-                    midiFile.readTrackLength(trackId)
-                    midiFile.markTrackPosition(trackId)
-                }
-            }
-        } while (!midiFile.isDone())
-    }
-
     private companion object {
-        val crackedGroupNames = mapOf(
+        val glossary = mapOf(
             1120933843 to "scape_main",
             3225350 to "iban",
             828650857 to "autumn_voyage",

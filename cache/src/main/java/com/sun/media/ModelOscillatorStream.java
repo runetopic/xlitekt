@@ -33,6 +33,7 @@ import javax.sound.midi.VoiceStatus;
  *
  * @author Karl Helgason
  */
+@SuppressWarnings("all")
 public interface ModelOscillatorStream {
 
     public void setPitch(float pitch); // Pitch is in cents!

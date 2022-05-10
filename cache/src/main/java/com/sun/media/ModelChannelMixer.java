@@ -39,6 +39,7 @@ import javax.sound.midi.MidiChannel;
  *
  * @author Karl Helgason
  */
+@SuppressWarnings("all")
 public interface ModelChannelMixer extends MidiChannel {
 
     // Used to process input audio from voices mix.

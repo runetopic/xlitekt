@@ -29,6 +29,7 @@ package com.sun.media;
  *
  * @author Karl Helgason
  */
+@SuppressWarnings("all")
 public interface ModelTransform {
 
     abstract public double transform(double value);

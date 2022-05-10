@@ -36,6 +36,7 @@ import javax.sound.sampled.AudioFormat.Encoding;
  *
  * @author Karl Helgason
  */
+@SuppressWarnings("all")
 public class ModelByteBufferWavetable implements ModelWavetable {
 
     private class Buffer8PlusInputStream extends InputStream {

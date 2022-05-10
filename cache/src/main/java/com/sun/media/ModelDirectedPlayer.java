@@ -30,6 +30,7 @@ package com.sun.media;
  *
  * @author Karl Helgason
  */
+@SuppressWarnings("all")
 public interface ModelDirectedPlayer {
 
     public void play(int performerIndex, ModelConnectionBlock[] connectionBlocks);

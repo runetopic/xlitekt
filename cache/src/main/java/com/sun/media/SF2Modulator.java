@@ -29,6 +29,7 @@ package com.sun.media;
  *
  * @author Karl Helgason
  */
+@SuppressWarnings("all")
 public class SF2Modulator {
 
     public final static int SOURCE_NONE = 0;

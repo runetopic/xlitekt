@@ -141,12 +141,12 @@ data class SoundEffectInstrument(
             var14 = 0
             while (var14 < 5) {
                 if (oscillatorVolume[var14] != 0) {
-                    var15 = Instrument_delays.get(var14) + var11
+                    var15 = Instrument_delays[var14] + var11
                     if (var15 < var1) {
                         var10000 = Instrument_samples
-                        var10000[var15] += this.evaluateWave(Instrument_phases.get(var14), var13 * Instrument_volumeSteps.get(var14) shr 15, pitch!!.form)
+                        var10000[var15] += this.evaluateWave(Instrument_phases[var14], var13 * Instrument_volumeSteps[var14] shr 15, pitch!!.form)
                         var10000 = Instrument_phases
-                        var10000[var14] += (var12 * Instrument_pitchSteps.get(var14) shr 16) + Instrument_pitchBaseSteps.get(var14)
+                        var10000[var14] += (var12 * Instrument_pitchSteps[var14] shr 16) + Instrument_pitchBaseSteps[var14]
                     }
                 }
                 ++var14

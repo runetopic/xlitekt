@@ -33,6 +33,7 @@ import java.io.InputStream;
  *
  * @author Karl Helgason
  */
+@SuppressWarnings("all")
 public class RIFFReader extends InputStream {
 
     private RIFFReader root;

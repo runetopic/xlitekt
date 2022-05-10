@@ -35,6 +35,7 @@ import java.io.RandomAccessFile;
  *
  * @author Karl Helgason
  */
+@SuppressWarnings("all")
 public class RIFFWriter extends OutputStream {
 
     private interface RandomAccessWriter {

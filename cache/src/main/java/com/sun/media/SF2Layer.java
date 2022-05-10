@@ -34,6 +34,7 @@ import javax.sound.midi.SoundbankResource;
  *
  * @author Karl Helgason
  */
+@SuppressWarnings("all")
 public class SF2Layer extends SoundbankResource {
 
     protected String name = "";

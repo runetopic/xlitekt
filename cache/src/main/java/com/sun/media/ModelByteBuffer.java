@@ -38,6 +38,7 @@ import java.util.Collection;
  *
  * @author Karl Helgason
  */
+@SuppressWarnings("all")
 public class ModelByteBuffer {
 
     private ModelByteBuffer root = this;

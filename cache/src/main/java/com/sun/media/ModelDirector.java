@@ -36,6 +36,7 @@ package com.sun.media;
  *
  * @author Karl Helgason
  */
+@SuppressWarnings("all")
 public interface ModelDirector {
 
     public void noteOn(int noteNumber, int velocity);

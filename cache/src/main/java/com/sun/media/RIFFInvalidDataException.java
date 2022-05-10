@@ -29,6 +29,7 @@ package com.sun.media;
  *
  * @author Karl Helgason
  */
+@SuppressWarnings("all")
 public class RIFFInvalidDataException extends InvalidDataException {
 
     private static final long serialVersionUID = 1L;

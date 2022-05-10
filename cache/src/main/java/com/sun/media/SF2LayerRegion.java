@@ -29,6 +29,7 @@ package com.sun.media;
  *
  * @author Karl Helgason
  */
+@SuppressWarnings("all")
 public class SF2LayerRegion extends SF2Region {
 
     protected SF2Sample sample;

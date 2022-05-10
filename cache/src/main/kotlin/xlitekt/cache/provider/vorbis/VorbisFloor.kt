@@ -8,7 +8,7 @@ import xlitekt.cache.provider.vorbis.VorbisEntryTypeProvider.Companion.vorbisCod
 /**
  * @author Jordan Abraham
  */
-data class VorbisFloor(
+internal data class VorbisFloor(
     var field268: IntArray? = null,
     var multiplier: Int = 0,
     var partitionClassList: IntArray? = null,

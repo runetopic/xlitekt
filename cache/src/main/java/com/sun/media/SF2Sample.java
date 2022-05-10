@@ -36,6 +36,7 @@ import javax.sound.sampled.AudioInputStream;
  *
  * @author Karl Helgason
  */
+@SuppressWarnings("all")
 public class SF2Sample extends SoundbankResource {
 
     protected String name = "";

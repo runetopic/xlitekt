@@ -34,6 +34,7 @@ import javax.sound.midi.Patch;
  *
  * @author Karl Helgason
  */
+@SuppressWarnings("all")
 public class ModelInstrumentComparator implements Comparator<Instrument> {
 
     public int compare(Instrument arg0, Instrument arg1) {

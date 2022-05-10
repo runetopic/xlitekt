@@ -7,7 +7,7 @@ import xlitekt.cache.provider.vorbis.VorbisEntryTypeProvider.Companion.vorbisCod
 /**
  * @author Jordan Abraham
  */
-data class VorbisResidue(
+internal data class VorbisResidue(
     var residueType: Int = 0,
     var begin: Int = 0,
     var end: Int = 0,

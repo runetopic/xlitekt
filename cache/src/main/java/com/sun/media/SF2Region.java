@@ -34,6 +34,7 @@ import java.util.Map;
  *
  * @author Karl Helgason
  */
+@SuppressWarnings("all")
 public class SF2Region {
 
     public final static int GENERATOR_STARTADDRSOFFSET = 0;

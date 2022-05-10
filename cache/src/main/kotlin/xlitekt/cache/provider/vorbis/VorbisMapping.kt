@@ -6,7 +6,7 @@ import xlitekt.cache.provider.vorbis.VorbisEntryTypeProvider.Companion.readBits
 /**
  * @author Jordan Abraham
  */
-data class VorbisMapping(
+internal data class VorbisMapping(
     var submaps: Int = 0,
     var mappingMux: Int = 0,
     var submapFloor: IntArray? = null,

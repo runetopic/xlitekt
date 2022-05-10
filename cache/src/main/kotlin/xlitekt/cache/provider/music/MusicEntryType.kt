@@ -8,8 +8,7 @@ import xlitekt.cache.provider.EntryType
 data class MusicEntryType(
     override val id: Int,
     var name: String? = null,
-    var bytes: ByteArray? = null,
-    var table: MutableMap<Int, ByteArray?>? = null
+    var bytes: ByteArray? = null
 ) : EntryType(id) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

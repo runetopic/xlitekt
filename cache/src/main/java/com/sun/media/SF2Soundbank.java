@@ -50,6 +50,7 @@ import javax.sound.midi.SoundbankResource;
  *
  * @author Karl Helgason
  */
+@SuppressWarnings("all")
 public class SF2Soundbank implements Soundbank {
 
     // version of the Sound Font RIFF file
@@ -943,6 +944,14 @@ public class SF2Soundbank implements Soundbank {
 
     public void setTools(String tools) {
         this.tools = tools;
+    }
+
+    public String getCopyright() {
+        return copyright;
+    }
+
+    public void setCopyright(String copyright) {
+        this.copyright = copyright;
     }
 
     public void addResource(SoundbankResource resource) {

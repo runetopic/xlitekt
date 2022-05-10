@@ -12,7 +12,7 @@ data class SoundEffectEntryType(
     var start: Int = 0,
     var end: Int = 0
 ) : EntryType(id) {
-    fun toInstrumentSample(samples: IntArray): InstrumentSample = InstrumentSample(samples[0], mix(), start * 22050 / 1000, end * 22050 / 1000, false)
+    fun toInstrumentSample(samples: IntArray?): InstrumentSample = InstrumentSample(samples?.get(0) ?: 0, mix(), start * 22050 / 1000, end * 22050 / 1000, false)
 
     private fun mix(): ByteArray {
         var var1 = 0
@@ -28,11 +28,11 @@ data class SoundEffectEntryType(
             if (instruments!![it] != null) {
                 val var5 = instruments!![it]!!.duration * 22050 / 1000
                 val var6 = instruments!![it]!!.offset * 22050 / 1000
-                val var7: IntArray = instruments!![it]!!.synthesize(var5, instruments!![it]!!.duration)
+                val var7 = instruments!![it]!!.synthesize(var5, instruments!![it]!!.duration)
                 repeat(var5) { var8 ->
                     var var9 = (var7[var8] shr 8) + var3[var8 + var6]
                     if (var9 + 128 and -256 != 0) {
-                        var9 = var9 shr 31 xor 127
+                        var9 = (var9 shr 31) xor 127
                     }
                     var3[var8 + var6] = var9.toByte()
                 }

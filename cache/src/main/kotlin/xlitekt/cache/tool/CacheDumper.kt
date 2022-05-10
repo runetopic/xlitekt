@@ -1,5 +1,6 @@
 package xlitekt.cache.tool
 
+import com.sun.media.SF2Soundbank
 import kotlinx.serialization.ContextualSerializer
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.descriptors.SerialDescriptor
@@ -31,19 +32,21 @@ import xlitekt.cache.provider.config.varc.VarcEntryTypeProvider
 import xlitekt.cache.provider.config.varp.VarpEntryTypeProvider
 import xlitekt.cache.provider.config.worldmap.WorldMapElementEntryTypeProvider
 import xlitekt.cache.provider.font.FontEntryTypeProvider
-import xlitekt.cache.provider.instrument.InstrumentEntryType
+import xlitekt.cache.provider.instrument.InstrumentEntryTypeProvider
 import xlitekt.cache.provider.music.MusicEntryTypeProvider
 import xlitekt.cache.provider.sprite.Sprite
 import xlitekt.cache.provider.sprite.SpriteEntryTypeProvider
 import xlitekt.cache.provider.sprite.titlescreen.TitleScreenEntryTypeProvider
 import xlitekt.cache.provider.texture.TextureEntryTypeProvider
 import xlitekt.cache.provider.ui.InterfaceEntryTypeProvider
+import xlitekt.cache.tool.util.SoundFont
 import xlitekt.shared.inject
 import java.awt.image.BufferedImage
 import java.io.ByteArrayInputStream
 import java.io.File
 import java.nio.file.Files
 import java.nio.file.Path
+import java.time.LocalDateTime
 import javax.imageio.ImageIO
 import kotlin.io.path.createDirectories
 import kotlin.io.path.notExists
@@ -56,16 +59,16 @@ fun main() {
     startKoin {
         loadKoinModules(cacheModule)
     }
-    CacheDumper.dumpJson()
-    CacheDumper.dumpSprites()
-    CacheDumper.dumpTextures()
-    CacheDumper.dumpTitleScreen()
-    CacheDumper.dumpFonts()
-    CacheDumper.dumpHitBars()
-    CacheDumper.dumpHitSplats()
-    CacheDumper.dumpWorldMapElements()
-    CacheDumper.dumpChatBoxIcons()
-    CacheDumper.dumpMusicTracks()
+//    CacheDumper.dumpJson()
+//    CacheDumper.dumpSprites()
+//    CacheDumper.dumpTextures()
+//    CacheDumper.dumpTitleScreen()
+//    CacheDumper.dumpFonts()
+//    CacheDumper.dumpHitBars()
+//    CacheDumper.dumpHitSplats()
+//    CacheDumper.dumpWorldMapElements()
+//    CacheDumper.dumpChatBoxIcons()
+//    CacheDumper.dumpMusicTracks()
     CacheDumper.dumpSoundBank()
 }
 
@@ -96,6 +99,7 @@ internal object CacheDumper {
     private val titlescreen by inject<TitleScreenEntryTypeProvider>()
     private val fonts by inject<FontEntryTypeProvider>()
     private val musics by inject<MusicEntryTypeProvider>()
+    private val instruments by inject<InstrumentEntryTypeProvider>()
 
     fun dumpJson() {
         val json = Json {
@@ -421,8 +425,26 @@ internal object CacheDumper {
     fun dumpSoundBank() {
         Path.of("./cache/data/dump/soundbank/").apply {
             if (notExists()) createDirectories()
-        }.also { path ->
-            InstrumentEntryType.globalSoundBank.save(File(path.toString(), "soundbank.sf2"))
+        }.also {
+            val soundbank = SF2Soundbank().apply {
+                name = "Old School RuneScape SoundFont"
+                romName = "osrs"
+                creationDate = LocalDateTime.now().run {
+                    "${month.name}, $dayOfMonth, $year"
+                }
+                vendor = "Old School RuneScape"
+                copyright = "1999 - 2022 Jagex Ltd. 220 Science Park, Cambridge, CB4 0WA, United Kingdom"
+            }
+            val addedInstruments = mutableListOf<Int>()
+            instruments.entries().forEach { instrument ->
+                val soundfont = SoundFont()
+                soundfont.addSamples(instrument, addedInstruments)
+                soundfont.sf2Soundbank.instruments.forEach(soundbank::addInstrument)
+                soundfont.sf2Soundbank.resources.forEach(soundbank::addResource)
+                soundfont.sf2Soundbank.save(File(it.toString(), "${instrument.id}.sf2"))
+            }
+            soundbank.save(File(it.toString(), "soundbank.sf2"))
+            // TODO The main sound bank saving is not 100% or something with Vorbis is not proper but it is really close enough.
         }
     }
 

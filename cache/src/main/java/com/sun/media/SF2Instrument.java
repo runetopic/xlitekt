@@ -36,6 +36,7 @@ import javax.sound.midi.Patch;
  *
  * @author Karl Helgason
  */
+@SuppressWarnings("all")
 public class SF2Instrument extends ModelInstrument {
 
     protected String name = "";

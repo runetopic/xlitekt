@@ -33,6 +33,7 @@ import java.util.List;
  *
  * @author Karl Helgason
  */
+@SuppressWarnings("all")
 public class ModelPerformer {
 
     private List<ModelOscillator> oscillators = new ArrayList<ModelOscillator>();
