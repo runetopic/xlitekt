@@ -12,6 +12,7 @@ import xlitekt.shared.resource.MapSquares
 import java.util.Collections
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.Executors
+import java.util.zip.ZipException
 import kotlin.time.measureTime
 
 /**
@@ -56,7 +57,11 @@ class MapEntryTypeProvider : EntryTypeProvider<MapSquareEntryType>() {
                             return@execute
                         }
 
-                        ByteReadPacket(locData.decompress(xteas)).loadMapEntryLocations(mapSquare)
+                        try {
+                            ByteReadPacket(locData.decompress(xteas)).loadMapEntryLocations(mapSquare)
+                        } catch (exception: ZipException) {
+                            logger.error(exception) { "Perhaps the xtea keys are incorrect." }
+                        }
                         latch.countDown()
                     }
                 }
