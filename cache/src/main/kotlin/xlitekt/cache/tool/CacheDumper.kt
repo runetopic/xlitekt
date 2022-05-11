@@ -59,16 +59,16 @@ fun main() {
     startKoin {
         loadKoinModules(cacheModule)
     }
-    CacheDumper.dumpJson()
-    CacheDumper.dumpSprites()
-    CacheDumper.dumpTextures()
-    CacheDumper.dumpTitleScreen()
-    CacheDumper.dumpFonts()
-    CacheDumper.dumpHitBars()
-    CacheDumper.dumpHitSplats()
-    CacheDumper.dumpWorldMapElements()
-    CacheDumper.dumpChatBoxIcons()
-    CacheDumper.dumpMusicTracks()
+//    CacheDumper.dumpJson()
+//    CacheDumper.dumpSprites()
+//    CacheDumper.dumpTextures()
+//    CacheDumper.dumpTitleScreen()
+//    CacheDumper.dumpFonts()
+//    CacheDumper.dumpHitBars()
+//    CacheDumper.dumpHitSplats()
+//    CacheDumper.dumpWorldMapElements()
+//    CacheDumper.dumpChatBoxIcons()
+//    CacheDumper.dumpMusicTracks()
     CacheDumper.dumpSoundBank()
 }
 

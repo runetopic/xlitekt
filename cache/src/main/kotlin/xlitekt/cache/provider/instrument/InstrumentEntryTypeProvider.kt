@@ -374,7 +374,7 @@ class InstrumentEntryTypeProvider : EntryTypeProvider<InstrumentEntryType>() {
             var var44 = var16[1].toInt() shl 1
 
             repeat(var47.toInt()) {
-                var45 = var44 + (type.panOffset!![it].toInt() and 255)
+                var45 = var44 + (type.panOffset!![it].toInt() and 0xff)
                 if (var45 < 0) {
                     var45 = 0
                 }
@@ -395,7 +395,7 @@ class InstrumentEntryTypeProvider : EntryTypeProvider<InstrumentEntryType>() {
                 var33 = var47.toInt()
                 while (var33 < var30) {
                     var34 = method4142(var32, var30 - var47)
-                    var var35 = var34 + (type.panOffset!![var33].toInt() and 255)
+                    var var35 = var34 + (type.panOffset!![var33].toInt() and 0xff)
                     if (var35 < 0) {
                         var35 = 0
                     }
@@ -413,7 +413,7 @@ class InstrumentEntryTypeProvider : EntryTypeProvider<InstrumentEntryType>() {
 
             var45 = var47.toInt()
             while (var45 < 128) {
-                var46 = var44 + (type.panOffset!![var45].toInt() and 255)
+                var46 = var44 + (type.panOffset!![var45].toInt() and 0xff)
                 if (var46 < 0) {
                     var46 = 0
                 }

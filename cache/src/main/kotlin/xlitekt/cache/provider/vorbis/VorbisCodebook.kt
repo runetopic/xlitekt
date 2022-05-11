@@ -216,9 +216,7 @@ internal data class VorbisCodebook(
         return keys!![var1].inv()
     }
 
-    fun method1014(): FloatArray {
-        return field356!![method1013()]!!
-    }
+    fun method1014(): FloatArray = field356!![method1013()]!!
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

@@ -14,8 +14,7 @@ internal data class VorbisMapping(
 ) {
     init {
         readBits(16)
-        val i = readBit() != 0
-        submaps = if (i) readBits(4) + 1 else 1
+        submaps = if (readBit() != 0) readBits(4) + 1 else 1
         if (readBit() != 0) {
             readBits(8)
         }

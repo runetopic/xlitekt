@@ -18,8 +18,7 @@ internal data class VorbisFloor(
     var subclassBooks: Array<IntArray?>? = null
 ) {
     init {
-        val var1 = readBits(16)
-        if (var1 != 1) throw IllegalArgumentException("Not 1. Was $var1.")
+        if (readBits(16) != 1) throw IllegalStateException("Not 1.")
         val partitionSize = readBits(5)
         var subSize = 0
         partitionClassList = IntArray(partitionSize)
@@ -40,14 +39,13 @@ internal data class VorbisFloor(
         repeat(subSize) {
             classDimensions!![it] = readBits(3) + 1
             classSubClasses!![it] = readBits(2)
-            var var5 = classSubClasses!![it]
+            val var5 = classSubClasses!![it]
             if (var5 != 0) {
                 classMasterbooks!![it] = readBits(8)
             }
-            var5 = 1 shl var5
-            val var9 = IntArray(var5)
+            val var9 = IntArray(1 shl var5)
             subclassBooks!![it] = var9
-            repeat(var5) { var7 ->
+            repeat(var9.size) { var7 ->
                 var9[var7] = readBits(8) - 1
             }
         }
@@ -55,16 +53,13 @@ internal data class VorbisFloor(
         multiplier = readBits(2) + 1
         val var4 = readBits(4)
         var var5 = 2
-
         repeat(partitionSize) {
             var5 += classDimensions!![partitionClassList!![it]]
         }
-
         field268 = IntArray(var5)
         field268!![0] = 0
         field268!![1] = 1 shl var4
         var5 = 2
-
         repeat(partitionSize) {
             val var7 = partitionClassList!![it]
             repeat(classDimensions!![var7]) {

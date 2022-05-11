@@ -31,7 +31,7 @@ internal data class VorbisResidue(
             if (var5) {
                 var3 = readBits(5)
             }
-            var1[it] = var3 shl 3 or var4
+            var1[it] = (var3 shl 3) or var4
         }
         cascade = IntArray(classifications * 8)
         repeat(classifications * 8) {
