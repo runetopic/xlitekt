@@ -16,11 +16,13 @@ class SoundEffectEntryTypeProvider : EntryTypeProvider<SoundEffectEntryType>() {
         .associateBy(SoundEffectEntryType::id)
 
     override fun ByteReadPacket.loadEntryType(type: SoundEffectEntryType): SoundEffectEntryType {
-        type.instruments = arrayOfNulls(10)
-        repeat(10) {
+        type.instruments = Array(10) {
             when {
-                tryPeek() != 0 -> type.instruments!![it] = SoundEffectInstrument(this)
-                else -> discard(1)
+                tryPeek() != 0 -> SoundEffectInstrument(this)
+                else -> {
+                    discard(1)
+                    null
+                }
             }
         }
         type.start = readUShort().toInt()

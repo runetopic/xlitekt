@@ -48,10 +48,9 @@ class VorbisEntryTypeProvider : EntryTypeProvider<VorbisEntryType>() {
                     trig3[it * 2] = cos((it * 4 + 2).toDouble() * 3.141592653589793 / floorCount.toDouble()).toFloat()
                     trig3[it * 2 + 1] = -sin((it * 4 + 2).toDouble() * 3.141592653589793 / floorCount.toDouble()).toFloat()
                 }
-                val var15 = IntArray(timeCount)
                 val var10 = iLog(timeCount - 1)
-                repeat(timeCount) {
-                    var15[it] = method7074(it, var10)
+                val var15 = IntArray(timeCount) {
+                    method7074(it, var10)
                 }
                 if (i != 0) {
                     __cd_ag = trig1
@@ -66,29 +65,13 @@ class VorbisEntryTypeProvider : EntryTypeProvider<VorbisEntryType>() {
                 }
             }
 
-            vorbisCodebooks = arrayOfNulls(readBits(8) + 1)
-            repeat(vorbisCodebooks!!.size) {
-                vorbisCodebooks!![it] = VorbisCodebook()
-            }
-
+            vorbisCodebooks = Array(readBits(8) + 1) { VorbisCodebook() }
             repeat(readBits(6) + 1) {
                 readBits(16)
             }
-
-            vorbisFloors = arrayOfNulls(readBits(6) + 1)
-            repeat(vorbisFloors!!.size) {
-                vorbisFloors!![it] = VorbisFloor()
-            }
-
-            vorbisResidues = arrayOfNulls(readBits(6) + 1)
-            repeat(vorbisResidues!!.size) {
-                vorbisResidues!![it] = VorbisResidue()
-            }
-
-            vorbisMappings = arrayOfNulls(readBits(6) + 1)
-            repeat(vorbisMappings!!.size) {
-                vorbisMappings!![it] = VorbisMapping()
-            }
+            vorbisFloors = Array(readBits(6) + 1) { VorbisFloor() }
+            vorbisResidues = Array(readBits(6) + 1) { VorbisResidue() }
+            vorbisMappings = Array(readBits(6) + 1) { VorbisMapping() }
 
             val blockSize = readBits(6) + 1
             vorbisBlockFlags = BooleanArray(blockSize)
@@ -109,8 +92,7 @@ class VorbisEntryTypeProvider : EntryTypeProvider<VorbisEntryType>() {
             type.end = type.end.inv()
             type.field368 = true
         }
-        type.packets = arrayOfNulls(readInt())
-        repeat(type.packets!!.size) {
+        type.packets = Array(readInt()) {
             var size = 0
             var opcode: Int
             do {
@@ -120,7 +102,7 @@ class VorbisEntryTypeProvider : EntryTypeProvider<VorbisEntryType>() {
 
             val bytes = ByteArray(size)
             readBytes(size).copyInto(bytes, 0)
-            type.packets!![it] = bytes
+            bytes
         }
         assertEmptyAndRelease()
         return type

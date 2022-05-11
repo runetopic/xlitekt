@@ -23,19 +23,17 @@ internal data class VorbisResidue(
         partitionSize = readBits(24) + 1
         classifications = readBits(6) + 1
         classbook = readBits(8)
-        val var1 = IntArray(classifications)
-        repeat(classifications) {
+        val var1 = IntArray(classifications) {
             var var3 = 0
             val var4 = readBits(3)
             val var5 = readBit() != 0
             if (var5) {
                 var3 = readBits(5)
             }
-            var1[it] = (var3 shl 3) or var4
+            (var3 shl 3) or var4
         }
-        cascade = IntArray(classifications * 8)
-        repeat(classifications * 8) {
-            cascade!![it] = if (var1[it shr 3] and (1 shl (it and 7)) != 0) readBits(8) else -1
+        cascade = IntArray(classifications * 8) {
+            if (var1[it shr 3] and (1 shl (it and 7)) != 0) readBits(8) else -1
         }
     }
 
@@ -53,13 +51,11 @@ internal data class VorbisResidue(
                 while (var9 < var6) {
                     if (var8 == 0) {
                         var var10 = vorbisCodebooks!![classbook]!!.method1013()
-                        var var11 = var4 - 1
-                        while (var11 >= 0) {
+                        for (var11 in (var4 - 1) downTo 0) {
                             if (var9 + var11 < var6) {
                                 var7[var9 + var11] = var10 % classifications
                             }
                             var10 /= classifications
-                            --var11
                         }
                     }
                     repeat(var4) {

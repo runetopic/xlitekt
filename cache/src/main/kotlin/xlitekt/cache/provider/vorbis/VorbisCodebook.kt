@@ -27,10 +27,8 @@ internal data class VorbisCodebook(
             var var3 = readBits(5) + 1
             while (var2 < entries) {
                 val var4 = readBits(iLog(entries - var2))
-                var var5 = 0
-                while (var5 < var4) {
+                repeat(var4) {
                     lengthMap!![var2++] = var3
-                    ++var5
                 }
                 ++var3
             }
@@ -101,18 +99,18 @@ internal data class VorbisCodebook(
         val var2 = IntArray(33)
 
         repeat(entries) {
-            val var4 = lengthMap!![it]
-            if (var4 != 0) {
-                val var5 = 1 shl 32 - var4
-                val var6 = var2[var4]
+            val length = lengthMap!![it]
+            if (length != 0) {
+                val var5 = 1 shl 32 - length
+                val var6 = var2[length]
                 var1[it] = var6
                 val var7: Int
                 var var12: Int
                 if (var6 and var5 != 0) {
-                    var7 = var2[var4 - 1]
+                    var7 = var2[length - 1]
                 } else {
                     var7 = var6 or var5
-                    var var8 = var4 - 1
+                    var var8 = length - 1
                     while (var8 >= 1) {
                         var12 = var2[var8]
                         if (var12 != var6) {
@@ -127,14 +125,12 @@ internal data class VorbisCodebook(
                         --var8
                     }
                 }
-                var2[var4] = var7
-                var var8 = var4 + 1
-                while (var8 <= 32) {
+                var2[length] = var7
+                for (var8 in (length + 1) until 32 + 1) {
                     var12 = var2[var8]
                     if (var12 == var6) {
                         var2[var8] = var7
                     }
-                    ++var8
                 }
             }
         }

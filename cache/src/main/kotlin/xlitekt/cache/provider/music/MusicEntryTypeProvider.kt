@@ -8,6 +8,7 @@ import io.ktor.utils.io.core.readFully
 import io.ktor.utils.io.core.readUByte
 import io.ktor.utils.io.core.readUShort
 import xlitekt.cache.provider.EntryTypeProvider
+import xlitekt.shared.buffer.readVarInt
 import xlitekt.shared.buffer.writeByte
 import xlitekt.shared.buffer.writeBytes
 import xlitekt.shared.buffer.writeInt
@@ -209,7 +210,7 @@ class MusicEntryTypeProvider : EntryTypeProvider<MusicEntryType>() {
                 val startSize = this@buildPacket.size
                 var id = -1
                 while (true) {
-                    writeVarInt { midi.readVarInt() }
+                    writeVarInt(midi::readVarInt)
                     val status = bytes[index++].toInt() and 0xff
                     val switch = status != id
                     id = status and 15
@@ -325,16 +326,6 @@ class MusicEntryTypeProvider : EntryTypeProvider<MusicEntryType>() {
     }
 
     private fun ByteReadPacket.offset(amount: Int) = remaining.toInt() - amount
-
-    private fun ByteReadPacket.readVarInt(): Int {
-        var var1 = readByte().toInt()
-        var var2 = 0
-        while (var1 < 0) {
-            var2 = (var2 or (var1 and 127)) shl 7
-            var1 = readByte().toInt()
-        }
-        return var2 or var1
-    }
 
     private inline fun BytePacketBuilder.writeVarInt(value: () -> Int) = value.invoke().also {
         if (it and -128 != 0) {

@@ -1,9 +1,11 @@
 package xlitekt.cache.provider.instrument
 
 import io.ktor.utils.io.core.ByteReadPacket
+import io.ktor.utils.io.core.discardUntilDelimiter
 import io.ktor.utils.io.core.readBytes
+import io.ktor.utils.io.core.readUByte
 import xlitekt.cache.provider.EntryTypeProvider
-import java.nio.ByteBuffer
+import xlitekt.shared.buffer.readVarInt
 
 /**
  * @author Jordan Abraham
@@ -24,60 +26,25 @@ class InstrumentEntryTypeProvider : EntryTypeProvider<InstrumentEntryType>() {
         type.field3117 = arrayOfNulls(128)
         type.loopMode = ByteArray(128)
         type.offsets = IntArray(128)
-        val buffer = ByteBuffer.wrap(this.readBytes())
 
-        // ==================================================================
+        val firstArrayBlock = ByteArray(copy().discardUntilDelimiter(0).toInt()).map { readByte() }
+        var firstArrayBlockPosition = firstArrayBlock.size + 1 + 1
+        discard(firstArrayBlock.size + 1 + 1)
 
-        var sizeToFirstZero = 0
-        while (buffer.array()[sizeToFirstZero + buffer.position()].toInt() != 0) {
-            ++sizeToFirstZero
-        }
-        val firstArrayBlock = ByteArray(sizeToFirstZero)
-        repeat(sizeToFirstZero) {
-            firstArrayBlock[it] = buffer.get()
-        }
-        buffer.position(buffer.position() + 1)
-        ++sizeToFirstZero
-        var firstArrayBlockPosition = buffer.position()
-        buffer.position(buffer.position() + sizeToFirstZero)
+        val secondArrayBlock = ByteArray(copy().discardUntilDelimiter(0).toInt()).map { readByte() }
+        var secondArrayBlockPosition = secondArrayBlock.size + 1 + 1
+        discard(secondArrayBlock.size + 1 + 1)
 
-        // ==================================================================
+        val thirdArrayBlock = ByteArray(copy().discardUntilDelimiter(0).toInt()).map { readByte() }
+        discard(1)
 
-        var sizeToSecondZero = 0
-        while (buffer.array()[sizeToSecondZero + buffer.position()].toInt() != 0) {
-            ++sizeToSecondZero
-        }
-        val secondArrayBlock = ByteArray(sizeToSecondZero)
-        repeat(sizeToSecondZero) {
-            secondArrayBlock[it] = buffer.get()
-        }
-        buffer.position(buffer.position() + 1)
-        ++sizeToSecondZero
-        var secondArrayBlockPosition = buffer.position()
-        buffer.position(buffer.position() + sizeToSecondZero)
-
-        // ==================================================================
-
-        var sizeToThirdZero = 0
-        while (buffer.array()[sizeToThirdZero + buffer.position()].toInt() != 0) {
-            ++sizeToThirdZero
-        }
-        val thirdArrayBlock = ByteArray(sizeToThirdZero)
-        repeat(sizeToThirdZero) {
-            thirdArrayBlock[it] = buffer.get()
-        }
-        buffer.position(buffer.position() + 1)
-        ++sizeToThirdZero
-
-        // ==================================================================
-
-        val var36 = ByteArray(sizeToThirdZero)
-        val var12 = if (sizeToThirdZero > 1) {
+        val var36 = ByteArray(thirdArrayBlock.size + 1)
+        val var12 = if (thirdArrayBlock.size + 1 > 1) {
             var36[1] = 1
             var var13 = 1
             var value = 2
-            for (index in 2 until sizeToThirdZero) {
-                var var41 = buffer.get().toInt() and 0xff
+            for (index in 2 until thirdArrayBlock.size + 1) {
+                var var41 = readUByte().toInt()
                 var13 = if (var41 == 0) {
                     value++
                 } else {
@@ -90,65 +57,44 @@ class InstrumentEntryTypeProvider : EntryTypeProvider<InstrumentEntryType>() {
             }
             value
         } else {
-            sizeToThirdZero
+            thirdArrayBlock.size + 1
         }
 
-        // ==================================================================
-
-        val instruments = Array<Instrument?>(var12) { null }
         var var15: Instrument?
-        repeat(instruments.size) {
+        val instruments = Array<Instrument?>(var12) {
             val instrument = Instrument()
-            instruments[it] = instrument
             var15 = instrument
-            val var40 = buffer.get().toInt() and 0xff
+            val var40 = readUByte().toInt()
             if (var40 > 0) {
                 var15!!.field3056 = ByteArray(var40 * 2)
             }
-            val var401 = buffer.get().toInt() and 0xff
+            val var401 = readUByte().toInt()
             if (var401 > 0) {
                 var15!!.field3054 = ByteArray(var401 * 2 + 2)
                 var15!!.field3054!![1] = 64
             }
+            instrument
         }
 
-        // ==================================================================
-
-        val var141 = buffer.get().toInt() and 0xff
+        val var141 = readUByte().toInt()
         val var42 = if (var141 > 0) ByteArray(var141 * 2) else null
-        val var1412 = buffer.get().toInt() and 0xff
+        val var1412 = readUByte().toInt()
         val var16 = if (var1412 > 0) ByteArray(var1412 * 2) else null
 
-        // ==================================================================
-
-        var var17 = 0
-        while (buffer.array()[var17 + buffer.position()].toInt() != 0) {
-            ++var17
-        }
-        val var18 = ByteArray(var17)
-        repeat(var17) {
-            var18[it] = buffer.get()
-        }
-        buffer.position(buffer.position() + 1)
-        ++var17
-
-        // ==================================================================
+        val var18 = ByteArray(copy().discardUntilDelimiter(0).toInt()).map { readByte() }
+        discard(1)
 
         var var19 = 0
         repeat(128) {
-            var19 += buffer.get().toInt() and 0xff
+            var19 += readUByte().toInt()
             type.pitchOffset!![it] = var19.toShort()
         }
 
-        // ==================================================================
-
         var19 = 0
         repeat(128) {
-            var19 += buffer.get().toInt() and 0xff
+            var19 += readUByte().toInt()
             type.pitchOffset!![it] = (type.pitchOffset!![it] + (var19 shl 8)).toShort()
         }
-
-        // ==================================================================
 
         var var20 = 0
         var var21 = 0
@@ -156,14 +102,12 @@ class InstrumentEntryTypeProvider : EntryTypeProvider<InstrumentEntryType>() {
         repeat(128) {
             if (var20 == 0) {
                 var20 = if (var21 < var18.size) var18[var21++].toInt() else -1
-                var22 = buffer.readVarInt()
+                var22 = readVarInt()
             }
             type.pitchOffset!![it] = (type.pitchOffset!![it] + ((var22 - 1 and 2) shl 14)).toShort()
             type.offsets!![it] = var22
             --var20
         }
-
-        // ==================================================================
 
         var20 = 0
         var21 = 0
@@ -172,14 +116,12 @@ class InstrumentEntryTypeProvider : EntryTypeProvider<InstrumentEntryType>() {
             if (type.offsets!![it] != 0) {
                 if (var20 == 0) {
                     var20 = if (var21 < firstArrayBlock.size) firstArrayBlock[var21++].toInt() else -1
-                    var23 = buffer.array()[firstArrayBlockPosition++] - 1
+                    var23 = copy().readBytes()[firstArrayBlockPosition++] - 1
                 }
                 type.loopMode!![it] = var23.toByte()
                 --var20
             }
         }
-
-        // ==================================================================
 
         var20 = 0
         var21 = 0
@@ -188,14 +130,12 @@ class InstrumentEntryTypeProvider : EntryTypeProvider<InstrumentEntryType>() {
             if (type.offsets!![it] != 0) {
                 if (var20 == 0) {
                     var20 = if (var21 < secondArrayBlock.size) secondArrayBlock[var21++].toInt() else -1
-                    var24 = buffer.array()[secondArrayBlockPosition++] + 16 shl 2
+                    var24 = copy().readBytes()[secondArrayBlockPosition++] + 16 shl 2
                 }
                 type.panOffset!![it] = var24.toByte()
                 --var20
             }
         }
-
-        // ==================================================================
 
         var20 = 0
         var21 = 0
@@ -211,8 +151,6 @@ class InstrumentEntryTypeProvider : EntryTypeProvider<InstrumentEntryType>() {
             }
         }
 
-        // ==================================================================
-
         var20 = 0
         var21 = 0
         var var26 = 0
@@ -220,81 +158,69 @@ class InstrumentEntryTypeProvider : EntryTypeProvider<InstrumentEntryType>() {
             if (var20 == 0) {
                 var20 = if (var21 < var18.size) var18[var21++].toInt() else -1
                 if (type.offsets!![it] > 0) {
-                    var26 = (buffer.get().toInt() and 0xff) + 1
+                    var26 = readUByte().toInt() + 1
                 }
             }
             type.volumeOffset!![it] = var26.toByte()
             --var20
         }
 
-        // ==================================================================
-
-        type.baseVelocity = (buffer.get().toInt() and 0xff) + 1
-
-        // ==================================================================
+        type.baseVelocity = readUByte().toInt() + 1
 
         repeat(var12) {
             val instrument = instruments[it]!!
             if (instrument.field3056 != null) {
                 for (index in 1 until instrument.field3056!!.size step 2) {
-                    instrument.field3056!![index] = buffer.get()
+                    instrument.field3056!![index] = readByte()
                 }
             }
             if (instrument.field3054 != null) {
                 for (index in 3 until instrument.field3054!!.size - 2 step 2) {
-                    instrument.field3054!![index] = buffer.get()
+                    instrument.field3054!![index] = readByte()
                 }
             }
         }
 
-        // ==================================================================
-
         if (var42 != null) {
             for (index in 1 until var42.size step 2) {
-                var42[index] = buffer.get()
+                var42[index] = readByte()
             }
         }
 
         if (var16 != null) {
             for (index in 1 until var16.size step 2) {
-                var16[index] = buffer.get()
+                var16[index] = readByte()
             }
         }
-
-        // ==================================================================
 
         repeat(var12) {
             val instrument = instruments[it]!!
             if (instrument.field3054 != null) {
                 var var191 = 0
                 for (index in 2 until instrument.field3054!!.size step 2) {
-                    var191 += 1 + (buffer.get().toInt() and 0xff)
+                    var191 += 1 + readUByte().toInt()
                     instrument.field3054!![index] = var191.toByte()
                 }
             }
         }
-
-        // ==================================================================
 
         repeat(var12) {
             val instrument = instruments[it]!!
             if (instrument.field3056 != null) {
                 var var191 = 0
                 for (index in 2 until instrument.field3056!!.size step 2) {
-                    var191 += 1 + (buffer.get().toInt() and 0xff)
+                    var191 += 1 + readUByte().toInt()
                     instrument.field3056!![index] = var191.toByte()
                 }
             }
         }
 
-        // ==================================================================
-
         if (var42 != null) {
-            var var191 = buffer.get().toInt() and 0xff
+            var var191 = readUByte().toInt()
             var42[0] = var191.toByte()
 
             for (index in 2 until var42.size step 2) {
-                var191 += 1 + (buffer.get().toInt() and 0xff)
+                var191 += 1 + readUByte().toInt()
                 var42[index] = var191.toByte()
             }
 
@@ -324,14 +250,12 @@ class InstrumentEntryTypeProvider : EntryTypeProvider<InstrumentEntryType>() {
             var15 = null
         }
 
-        // ==================================================================
-
         if (var16 != null) {
-            var var191 = buffer.get().toInt() and 0xff
+            var var191 = readUByte().toInt()
             var16[0] = var191.toByte()
 
             for (index in 2 until var16.size step 2) {
-                var191 += 1 + (buffer.get().toInt() and 0xff)
+                var191 += 1 + readUByte().toInt()
                 var16[index] = var191.toByte()
             }
 
@@ -381,60 +305,44 @@ class InstrumentEntryTypeProvider : EntryTypeProvider<InstrumentEntryType>() {
             }
         }
 
-        // ==================================================================
-
         repeat(var12) {
-            instruments[it]!!.field3052 = buffer.get().toInt() and 0xff
+            instruments[it]!!.field3052 = readUByte().toInt()
         }
-
-        // ==================================================================
 
         repeat(var12) {
             val var39 = instruments[it]!!
             if (var39.field3056 != null) {
-                var39.field3055 = buffer.get().toInt() and 0xff
+                var39.field3055 = readUByte().toInt()
             }
 
             if (var39.field3054 != null) {
-                var39.field3053 = buffer.get().toInt() and 0xff
+                var39.field3053 = readUByte().toInt()
             }
 
             if (var39.field3052 > 0) {
-                var39.field3057 = buffer.get().toInt() and 0xff
+                var39.field3057 = readUByte().toInt()
             }
         }
 
-        // ==================================================================
-
         repeat(var12) {
-            instruments[it]!!.field3059 = buffer.get().toInt() and 0xff
+            instruments[it]!!.field3059 = readUByte().toInt()
         }
 
         repeat(var12) {
             val var39 = instruments[it]!!
             if (var39.field3059 > 0) {
-                var39.field3058 = buffer.get().toInt() and 0xff
+                var39.field3058 = readUByte().toInt()
             }
         }
 
         repeat(var12) {
             val var39 = instruments[it]!!
             if (var39.field3058 > 0) {
-                var39.field3060 = buffer.get().toInt() and 0xff
+                var39.field3060 = readUByte().toInt()
             }
         }
         assertEmptyAndRelease()
         return type
-    }
-
-    private fun ByteBuffer.readVarInt(): Int {
-        var var1 = get().toInt()
-        var var2 = 0
-        while (var1 < 0) {
-            var2 = (var2 or (var1 and 127)) shl 7
-            var1 = get().toInt()
-        }
-        return var2 or var1
     }
 
     private fun method4142(var0: Int, var1: Int): Int {
