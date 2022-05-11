@@ -74,6 +74,20 @@ class NPCEntryTypeProvider : EntryTypeProvider<NPCEntryType>() {
             107 -> type.isInteractable = false
             109 -> type.isClickable = false
             111 -> type.isFollower = true
+            114 -> type.runSequence = readUShort().toInt()
+            115 -> {
+                type.runSequence = readUShort().toInt()
+                type.runBackSequence = readUShort().toInt()
+                type.runLeftSequence = readUShort().toInt()
+                type.runRightSequence = readUShort().toInt()
+            }
+            116 -> type.crawlSequence = readUShort().toInt()
+            117 -> {
+                type.crawlSequence = readUShort().toInt()
+                type.crawlBackSequence = readUShort().toInt()
+                type.crawlLeftSequence = readUShort().toInt()
+                type.crawlRightSequence = readUShort().toInt()
+            }
             249 -> type.params = readStringIntParameters()
             else -> throw IllegalArgumentException("Missing opcode $opcode.")
         }
