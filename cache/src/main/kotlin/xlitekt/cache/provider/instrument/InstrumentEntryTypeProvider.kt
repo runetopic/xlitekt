@@ -163,7 +163,7 @@ class InstrumentEntryTypeProvider : EntryTypeProvider<InstrumentEntryType>() {
                 var22 = buffer.readVarInt()
             }
             var48 = type.pitchOffset!!
-            var48[it] = (var48[it] + (var22 - 1 and 2 shl 14)).toShort()
+            var48[it] = (var48[it] + ((var22 - 1 and 2) shl 14)).toShort()
             type.offsets!![it] = var22
             --var20
         }
