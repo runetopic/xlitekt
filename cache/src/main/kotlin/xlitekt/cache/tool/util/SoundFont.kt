@@ -8,11 +8,11 @@ import com.sun.media.SF2Region
 import com.sun.media.SF2Sample
 import com.sun.media.SF2Soundbank
 import xlitekt.cache.provider.instrument.InstrumentEntryType
+import xlitekt.cache.provider.instrument.InstrumentSample
 import xlitekt.cache.provider.soundeffect.SoundEffectEntryTypeProvider
 import xlitekt.cache.provider.vorbis.VorbisEntryTypeProvider
 import xlitekt.shared.inject
 import javax.sound.midi.Patch
-import xlitekt.cache.provider.instrument.InstrumentSample
 
 /**
  * @author Jordan Abraham

@@ -1,12 +1,15 @@
 package xlitekt.cache.provider.soundeffect
 
-import java.nio.ByteBuffer
+import io.ktor.utils.io.core.ByteReadPacket
+import io.ktor.utils.io.core.readInt
+import io.ktor.utils.io.core.readUByte
+import io.ktor.utils.io.core.readUShort
 
 /**
  * @author Jordan Abraham
  */
 data class SoundEffectEnvelope(
-    val buffer: ByteBuffer? = null,
+    val buffer: ByteReadPacket? = null,
     var form: Int = 0,
     var start: Int = 0,
     var end: Int = 0,
@@ -24,20 +27,20 @@ data class SoundEffectEnvelope(
         durations[1] = 65535
         phases[1] = 65535
         if (buffer != null) {
-            form = buffer.get().toInt() and 0xff
-            start = buffer.int
-            end = buffer.int
+            form = buffer.readUByte().toInt()
+            start = buffer.readInt()
+            end = buffer.readInt()
             decodeSegments(buffer)
         }
     }
 
-    fun decodeSegments(buffer: ByteBuffer) {
-        segments = buffer.get().toInt() and 0xff
+    fun decodeSegments(buffer: ByteReadPacket) {
+        segments = buffer.readUByte().toInt()
         durations = IntArray(segments)
         phases = IntArray(segments)
         repeat(segments) {
-            durations[it] = buffer.short.toInt() and 0xffff
-            phases[it] = buffer.short.toInt() and 0xffff
+            durations[it] = buffer.readUShort().toInt()
+            phases[it] = buffer.readUShort().toInt()
         }
     }
 

@@ -61,8 +61,7 @@ internal data class VorbisFloor(
         field268!![1] = 1 shl var4
         var5 = 2
         repeat(partitionSize) {
-            val var7 = partitionClassList!![it]
-            repeat(classDimensions!![var7]) {
+            repeat(classDimensions!![partitionClassList!![it]]) {
                 field268!![var5++] = readBits(var4)
             }
         }
@@ -111,8 +110,7 @@ internal data class VorbisFloor(
         field277!![1] = true
         var5!![0] = true
 
-        var var6 = 2
-        while (var6 < size) {
+        for (var6 in 2 until size) {
             val var7 = method722(field279, var6)
             val var8 = method721(field279, var6)
             val var9 = method726(field279!![var7], field278!![var7], field279!![var8], field278!![var8], field279!![var6])
@@ -133,15 +131,13 @@ internal data class VorbisFloor(
                 field277!![var6] = false
                 field278!![var6] = var9
             }
-            ++var6
         }
 
         sort(0, size - 1)
-        var6 = 0
+        var var6 = 0
         var var7 = field278!![0] * multiplier
 
-        var var8 = 1
-        while (var8 < size) {
+        for (var8 in 1 until size) {
             if (field277!![var8]) {
                 val var9 = field279!![var8]
                 val var10 = field278!![var8] * multiplier
@@ -152,15 +148,10 @@ internal data class VorbisFloor(
                 var6 = var9
                 var7 = var10
             }
-            ++var8
         }
-
         val var16 = decibelStats[var7]
-
-        var var9 = var6
-        while (var9 < var2) {
+        for (var9 in var6 until var2) {
             var1!![var9] *= var16
-            ++var9
         }
     }
 

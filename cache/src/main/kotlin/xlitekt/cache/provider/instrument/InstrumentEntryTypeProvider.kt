@@ -76,8 +76,7 @@ class InstrumentEntryTypeProvider : EntryTypeProvider<InstrumentEntryType>() {
             var36[1] = 1
             var var13 = 1
             var value = 2
-            var var14 = 2
-            while (var14 < sizeToThirdZero) {
+            for (index in 2 until sizeToThirdZero) {
                 var var41 = buffer.get().toInt() and 0xff
                 var13 = if (var41 == 0) {
                     value++
@@ -87,8 +86,7 @@ class InstrumentEntryTypeProvider : EntryTypeProvider<InstrumentEntryType>() {
                     }
                     var41
                 }
-                var36[var14] = var13.toByte()
-                ++var14
+                var36[index] = var13.toByte()
             }
             value
         } else {
@@ -97,11 +95,11 @@ class InstrumentEntryTypeProvider : EntryTypeProvider<InstrumentEntryType>() {
 
         // ==================================================================
 
-        val var37 = Array<Instrument?>(var12) { null }
+        val instruments = Array<Instrument?>(var12) { null }
         var var15: Instrument?
-        repeat(var37.size) {
+        repeat(instruments.size) {
             val instrument = Instrument()
-            var37[it] = instrument
+            instruments[it] = instrument
             var15 = instrument
             val var40 = buffer.get().toInt() and 0xff
             if (var40 > 0) {
@@ -145,11 +143,9 @@ class InstrumentEntryTypeProvider : EntryTypeProvider<InstrumentEntryType>() {
         // ==================================================================
 
         var19 = 0
-        var var48: ShortArray
         repeat(128) {
             var19 += buffer.get().toInt() and 0xff
-            var48 = type.pitchOffset!!
-            var48[it] = (var48[it] + (var19 shl 8)).toShort()
+            type.pitchOffset!![it] = (type.pitchOffset!![it] + (var19 shl 8)).toShort()
         }
 
         // ==================================================================
@@ -162,8 +158,7 @@ class InstrumentEntryTypeProvider : EntryTypeProvider<InstrumentEntryType>() {
                 var20 = if (var21 < var18.size) var18[var21++].toInt() else -1
                 var22 = buffer.readVarInt()
             }
-            var48 = type.pitchOffset!!
-            var48[it] = (var48[it] + ((var22 - 1 and 2) shl 14)).toShort()
+            type.pitchOffset!![it] = (type.pitchOffset!![it] + ((var22 - 1 and 2) shl 14)).toShort()
             type.offsets!![it] = var22
             --var20
         }
@@ -208,7 +203,7 @@ class InstrumentEntryTypeProvider : EntryTypeProvider<InstrumentEntryType>() {
         repeat(128) {
             if (type.offsets!![it] != 0) {
                 if (var20 == 0) {
-                    var38 = var37[var36[var21].toInt()]!!
+                    var38 = instruments[var36[var21].toInt()]!!
                     var20 = if (var21 < thirdArrayBlock.size) thirdArrayBlock[var21++].toInt() else -1
                 }
                 type.field3117!![it] = var38
@@ -238,22 +233,16 @@ class InstrumentEntryTypeProvider : EntryTypeProvider<InstrumentEntryType>() {
 
         // ==================================================================
 
-        var var29: Int
-        var var39: Instrument
         repeat(var12) {
-            var39 = var37[it]!!
-            if (var39.field3056 != null) {
-                var29 = 1
-                while (var29 < var39.field3056!!.size) {
-                    var39.field3056!![var29] = buffer.get()
-                    var29 += 2
+            val instrument = instruments[it]!!
+            if (instrument.field3056 != null) {
+                for (index in 1 until instrument.field3056!!.size step 2) {
+                    instrument.field3056!![index] = buffer.get()
                 }
             }
-            if (var39.field3054 != null) {
-                var29 = 3
-                while (var29 < var39.field3054!!.size - 2) {
-                    var39.field3054!![var29] = buffer.get()
-                    var29 += 2
+            if (instrument.field3054 != null) {
+                for (index in 3 until instrument.field3054!!.size - 2 step 2) {
+                    instrument.field3054!![index] = buffer.get()
                 }
             }
         }
@@ -261,32 +250,26 @@ class InstrumentEntryTypeProvider : EntryTypeProvider<InstrumentEntryType>() {
         // ==================================================================
 
         if (var42 != null) {
-            var var27 = 1
-            while (var27 < var42.size) {
-                var42[var27] = buffer.get()
-                var27 += 2
+            for (index in 1 until var42.size step 2) {
+                var42[index] = buffer.get()
             }
         }
 
         if (var16 != null) {
-            var var27 = 1
-            while (var27 < var16.size) {
-                var16[var27] = buffer.get()
-                var27 += 2
+            for (index in 1 until var16.size step 2) {
+                var16[index] = buffer.get()
             }
         }
 
         // ==================================================================
 
         repeat(var12) {
-            var39 = var37[it]!!
-            if (var39.field3054 != null) {
-                var19 = 0
-                var29 = 2
-                while (var29 < var39.field3054!!.size) {
-                    var19 += 1 + (buffer.get().toInt() and 0xff)
-                    var39.field3054!![var29] = var19.toByte()
-                    var29 += 2
+            val instrument = instruments[it]!!
+            if (instrument.field3054 != null) {
+                var var191 = 0
+                for (index in 2 until instrument.field3054!!.size step 2) {
+                    var191 += 1 + (buffer.get().toInt() and 0xff)
+                    instrument.field3054!![index] = var191.toByte()
                 }
             }
         }
@@ -294,65 +277,49 @@ class InstrumentEntryTypeProvider : EntryTypeProvider<InstrumentEntryType>() {
         // ==================================================================
 
         repeat(var12) {
-            var39 = var37[it]!!
-            if (var39.field3056 != null) {
-                var19 = 0
-                var29 = 2
-                while (var29 < var39.field3056!!.size) {
-                    var19 += 1 + (buffer.get().toInt() and 0xff)
-                    var39.field3056!![var29] = var19.toByte()
-                    var29 += 2
+            val instrument = instruments[it]!!
+            if (instrument.field3056 != null) {
+                var var191 = 0
+                for (index in 2 until instrument.field3056!!.size step 2) {
+                    var191 += 1 + (buffer.get().toInt() and 0xff)
+                    instrument.field3056!![index] = var191.toByte()
                 }
             }
         }
 
         // ==================================================================
 
-        var var30: Byte
-        var var32: Int
-        var var33: Int
-        var var34: Int
-        var var45: Int
-        var var47: Byte
         if (var42 != null) {
-            var19 = buffer.get().toInt() and 0xff
-            var42[0] = var19.toByte()
+            var var191 = buffer.get().toInt() and 0xff
+            var42[0] = var191.toByte()
 
-            var var27 = 2
-            while (var27 < var42.size) {
-                var19 += 1 + (buffer.get().toInt() and 0xff)
-                var42[var27] = var19.toByte()
-                var27 += 2
+            for (index in 2 until var42.size step 2) {
+                var191 += 1 + (buffer.get().toInt() and 0xff)
+                var42[index] = var191.toByte()
             }
 
-            var47 = var42[0]
+            var var47 = var42[0]
             var var28 = var42[1]
 
             repeat(var47.toInt()) {
                 type.volumeOffset!![it] = (var28 * type.volumeOffset!![it] + 32 shr 6).toByte()
             }
 
-            var29 = 2
-            while (var29 < var42.size) {
-                var30 = var42[var29]
-                val var31 = var42[var29 + 1]
-                var32 = var28 * (var30 - var47) + (var30 - var47) / 2
-                var33 = var47.toInt()
-                while (var33 < var30) {
-                    var34 = method4142(var32, var30 - var47)
-                    type.volumeOffset!![var33] = (var34 * type.volumeOffset!![var33] + 32 shr 6).toByte()
+            for (index in 2 until var42.size step 2) {
+                val var30 = var42[index]
+                val var31 = var42[index + 1]
+                var var32 = var28 * (var30 - var47) + (var30 - var47) / 2
+                for (volumeIndex in var47.toInt() until var30) {
+                    val var34 = method4142(var32, var30 - var47)
+                    type.volumeOffset!![volumeIndex] = (var34 * type.volumeOffset!![volumeIndex] + 32 shr 6).toByte()
                     var32 += var31 - var28
-                    ++var33
                 }
                 var47 = var30
                 var28 = var31
-                var29 += 2
             }
 
-            var45 = var47.toInt()
-            while (var45 < 128) {
-                type.volumeOffset!![var45] = (var28 * type.volumeOffset!![var45] + 32 shr 6).toByte()
-                ++var45
+            for (index in var47.toInt() until 128) {
+                type.volumeOffset!![index] = (var28 * type.volumeOffset!![index] + 32 shr 6).toByte()
             }
             var15 = null
         }
@@ -360,81 +327,70 @@ class InstrumentEntryTypeProvider : EntryTypeProvider<InstrumentEntryType>() {
         // ==================================================================
 
         if (var16 != null) {
-            var19 = buffer.get().toInt() and 0xff
-            var16[0] = var19.toByte()
+            var var191 = buffer.get().toInt() and 0xff
+            var16[0] = var191.toByte()
 
-            var var27 = 2
-            while (var27 < var16.size) {
-                var19 += 1 + (buffer.get().toInt() and 0xff)
-                var16[var27] = var19.toByte()
-                var27 += 2
+            for (index in 2 until var16.size step 2) {
+                var191 += 1 + (buffer.get().toInt() and 0xff)
+                var16[index] = var191.toByte()
             }
 
-            var47 = var16[0]
+            var var47 = var16[0]
             var var44 = var16[1].toInt() shl 1
 
             repeat(var47.toInt()) {
-                var45 = var44 + (type.panOffset!![it].toInt() and 0xff)
+                var var45 = var44 + (type.panOffset!![it].toInt() and 0xff)
                 if (var45 < 0) {
                     var45 = 0
                 }
-
                 if (var45 > 128) {
                     var45 = 128
                 }
-
                 type.panOffset!![it] = var45.toByte()
             }
 
-            var var46: Int
-            var29 = 2
-            while (var29 < var16.size) {
-                var30 = var16[var29]
-                var46 = var16[var29 + 1].toInt() shl 1
-                var32 = var44 * (var30 - var47) + (var30 - var47) / 2
-                var33 = var47.toInt()
-                while (var33 < var30) {
-                    var34 = method4142(var32, var30 - var47)
-                    var var35 = var34 + (type.panOffset!![var33].toInt() and 0xff)
+            for (index in 2 until var16.size step 2) {
+                val var30 = var16[index]
+                val var46 = var16[index + 1].toInt() shl 1
+                var var32 = var44 * (var30 - var47) + (var30 - var47) / 2
+                for (panIndex in var47.toInt() until var30) {
+                    val var34 = method4142(var32, var30 - var47)
+                    var var35 = var34 + (type.panOffset!![panIndex].toInt() and 0xff)
                     if (var35 < 0) {
                         var35 = 0
                     }
                     if (var35 > 128) {
                         var35 = 128
                     }
-                    type.panOffset!![var33] = var35.toByte()
+                    type.panOffset!![panIndex] = var35.toByte()
                     var32 += var46 - var44
-                    ++var33
                 }
                 var47 = var30
                 var44 = var46
-                var29 += 2
             }
 
-            var45 = var47.toInt()
-            while (var45 < 128) {
-                var46 = var44 + (type.panOffset!![var45].toInt() and 0xff)
+            for (index in var47.toInt() until 128) {
+                var var46 = var44 + (type.panOffset!![index].toInt() and 0xff)
                 if (var46 < 0) {
                     var46 = 0
                 }
                 if (var46 > 128) {
                     var46 = 128
                 }
-                type.panOffset!![var45] = var46.toByte()
-                ++var45
+                type.panOffset!![index] = var46.toByte()
             }
         }
 
         // ==================================================================
 
         repeat(var12) {
-            var37[it]!!.field3052 = buffer.get().toInt() and 0xff
+            instruments[it]!!.field3052 = buffer.get().toInt() and 0xff
         }
 
         // ==================================================================
 
         repeat(var12) {
-            var39 = var37[it]!!
+            val var39 = instruments[it]!!
             if (var39.field3056 != null) {
                 var39.field3055 = buffer.get().toInt() and 0xff
             }
@@ -451,22 +407,23 @@ class InstrumentEntryTypeProvider : EntryTypeProvider<InstrumentEntryType>() {
         // ==================================================================
 
         repeat(var12) {
-            var37[it]!!.field3059 = buffer.get().toInt() and 0xff
+            instruments[it]!!.field3059 = buffer.get().toInt() and 0xff
         }
 
         repeat(var12) {
-            var39 = var37[it]!!
+            val var39 = instruments[it]!!
             if (var39.field3059 > 0) {
                 var39.field3058 = buffer.get().toInt() and 0xff
             }
         }
 
         repeat(var12) {
-            var39 = var37[it]!!
+            val var39 = instruments[it]!!
             if (var39.field3058 > 0) {
                 var39.field3060 = buffer.get().toInt() and 0xff
             }
         }
+        assertEmptyAndRelease()
         return type
     }
 

@@ -196,11 +196,7 @@ internal data class VorbisCodebook(
                 var4 *= var4
                 var5 = var5 shr 1
             }
-            val var3 = if (var5 == 1) {
-                var4 * var6
-            } else {
-                var6
-            }
+            val var3 = if (var5 == 1) var4 * var6 else var6
             if (var3 <= var0) {
                 return var2
             }

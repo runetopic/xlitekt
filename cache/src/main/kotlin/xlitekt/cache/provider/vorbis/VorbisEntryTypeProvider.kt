@@ -122,6 +122,7 @@ class VorbisEntryTypeProvider : EntryTypeProvider<VorbisEntryType>() {
             readBytes(size).copyInto(bytes, 0)
             type.packets!![it] = bytes
         }
+        assertEmptyAndRelease()
         return type
     }
 
@@ -210,15 +211,13 @@ class VorbisEntryTypeProvider : EntryTypeProvider<VorbisEntryType>() {
             return var0 + var1
         }
 
-        fun method7074(i: Int, i2: Int): Int {
+        fun method7074(i: Int, var1: Int): Int {
             var var0 = i
-            var var1 = i2
             var value: Int
             value = 0
-            while (var1 > 0) {
+            for (index in var1 downTo 1) {
                 value = (value shl 1) or (var0 and 1)
                 var0 = var0 ushr 1
-                --var1
             }
             return value
         }

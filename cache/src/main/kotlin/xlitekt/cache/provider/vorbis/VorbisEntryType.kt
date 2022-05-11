@@ -110,10 +110,8 @@ data class VorbisEntryType(
         }
         val var20: FloatArray
         if (hasReadFloor) {
-            var index = n shr 1
-            while (index < n) {
+            for (index in (n shr 1) until n) {
                 window!![index] = 0.0f
-                ++index
             }
         } else {
             val floorNumber = n shr 1
@@ -123,10 +121,8 @@ data class VorbisEntryType(
             repeat(floorNumber) {
                 var20[it] *= 0.5f
             }
-            var var21 = floorNumber
-            while (var21 < n) {
+            for (var21 in floorNumber until n) {
                 var20[var21] = -var20[n - var21 - 1]
-                ++var21
             }
             val var40 = if (blockFlag) __cd_ag!! else __cd_r!!
             val var22 = if (blockFlag) __cd_aq!! else __cd_p!!
@@ -173,11 +169,10 @@ data class VorbisEntryType(
                     }
                 }
             }
-            var size1 = 1
-            while (size1 < third - 1) {
-                val var47 = var24[size1]
-                if (size1 < var47) {
-                    val var48 = size1 * 8
+            for (index in 1 until third - 1) {
+                val var47 = var24[index]
+                if (index < var47) {
+                    val var48 = index * 8
                     val var49 = var47 * 8
                     var var30 = var20[var48 + 1]
                     var20[var48 + 1] = var20[var49 + 1]
@@ -192,7 +187,6 @@ data class VorbisEntryType(
                     var20[var48 + 7] = var20[var49 + 7]
                     var20[var49 + 7] = var30
                 }
-                ++size1
             }
             repeat(floorNumber) {
                 var20[it] = var20[it * 2 + 1]
@@ -233,17 +227,13 @@ data class VorbisEntryType(
             repeat(floorIndex) {
                 var20[floorNumber + it] = var20[n - it - 1]
             }
-            var var46 = leftWindowStart
-            while (var46 < leftWindowEnd) {
-                val var27 = sin(((var46 - leftWindowStart).toDouble() + 0.5) / var10.toDouble() * 0.5 * 3.141592653589793).toFloat()
-                window!![var46] *= sin(1.5707963267948966 * var27.toDouble() * var27.toDouble()).toFloat()
-                ++var46
+            for (index in leftWindowStart until leftWindowEnd) {
+                val var27 = sin(((index - leftWindowStart).toDouble() + 0.5) / var10.toDouble() * 0.5 * 3.141592653589793).toFloat()
+                window!![index] *= sin(1.5707963267948966 * var27.toDouble() * var27.toDouble()).toFloat()
             }
-            var46 = rightWindowStart
-            while (var46 < rightWindowEnd) {
-                val var27 = sin(((var46 - rightWindowStart).toDouble() + 0.5) / var13.toDouble() * 0.5 * 3.141592653589793 + 1.5707963267948966).toFloat()
-                window!![var46] *= sin(1.5707963267948966 * var27.toDouble() * var27.toDouble()).toFloat()
-                ++var46
+            for (index in rightWindowStart until rightWindowEnd) {
+                val var27 = sin(((index - rightWindowStart).toDouble() + 0.5) / var13.toDouble() * 0.5 * 3.141592653589793 + 1.5707963267948966).toFloat()
+                window!![index] *= sin(1.5707963267948966 * var27.toDouble() * var27.toDouble()).toFloat()
             }
         }
 
@@ -257,10 +247,8 @@ data class VorbisEntryType(
                 }
             }
             if (!hasReadFloor) {
-                var var19 = leftWindowStart
-                while (var19 < n shr 1) {
-                    var41[var41.size - (n shr 1) + var19] += window!![var19]
-                    ++var19
+                for (index in leftWindowStart until (n shr 1)) {
+                    var41[var41.size - (n shr 1) + index] += window!![index]
                 }
             }
         }
