@@ -82,6 +82,7 @@ class VorbisEntryTypeProvider : EntryTypeProvider<VorbisEntryType>() {
                 readBits(16)
                 vorbisBlockMapping!![it] = readBits(8)
             }
+            assertEmptyAndRelease()
             return type
         }
         type.sampleRate = readInt()
@@ -101,7 +102,7 @@ class VorbisEntryTypeProvider : EntryTypeProvider<VorbisEntryType>() {
             } while (opcode >= 255)
 
             val bytes = ByteArray(size)
-            readBytes(size).copyInto(bytes, 0)
+            readBytes(size).copyInto(bytes, 0, 0, size)
             bytes
         }
         assertEmptyAndRelease()

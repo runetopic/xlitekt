@@ -41,10 +41,10 @@ internal class SoundFont {
                     if (instrumentId in addedInstruments) return@repeat
                     audioBuffer = if (offset and 1 == 0) {
                         val soundEffects by inject<SoundEffectEntryTypeProvider>()
-                        soundEffects.entryType(instrumentId)?.toInstrumentSample(null)!!
+                        soundEffects.entryType(instrumentId)?.toInstrumentSample(null)
                     } else {
                         val vorbis by inject<VorbisEntryTypeProvider>()
-                        vorbis.entryType(instrumentId)?.toInstrumentSample(null)!!
+                        vorbis.entryType(instrumentId)?.toInstrumentSample(null)
                     }
                 }
 
@@ -89,13 +89,13 @@ internal class SoundFont {
                     }
 
                     keyRange[0] = key.toByte()
-                    keyRange[1] = if (nextKey == key) 127 else nextKey.toByte()
+                    keyRange[1] = (if (nextKey == key) 127 else nextKey - 1).toByte()
 
                     sf2Soundbank.addResource(sf2Sample)
                     if (sf2Instrument == null) {
                         sf2Instrument = SF2Instrument()
                         sf2Instrument!!.name = "Patch ${entry.id}"
-                        sf2Instrument!!.patch = Patch(entry.id.let { i -> if (i > 127) 127 + (entry.id / 128) else 0 }, entry.id.let { i -> if (i > 127) i - 128 else i })
+                        sf2Instrument!!.patch = Patch(entry.id.let { i -> if (i > 255) 255 + (entry.id / 256) else if (i > 127) 127 + (entry.id / 128) else 0 }, entry.id.let { i -> if (i > 255) i - 256 else if (i > 127) i - 128 else i })
                     }
 
                     if (sf2Layer == null) {
@@ -106,9 +106,19 @@ internal class SoundFont {
                     val layerRegion = SF2LayerRegion()
                     layerRegion.sample = sf2Sample
                     layerRegion.putBytes(SF2Region.GENERATOR_KEYRANGE, keyRange)
+
+                    var pitchCorrection = entry.pitchOffset!![key].toInt()
+                    while (pitchCorrection <= -256) {
+                        pitchCorrection += 256
+                    }
+
+                    while (pitchCorrection >= 256) {
+                        pitchCorrection -= 256
+                    }
+
                     layerRegion.putShort(SF2Region.GENERATOR_FINETUNE, 0)
                     layerRegion.putInteger(SF2Region.GENERATOR_SAMPLEMODES, entry.loopMode!![keyRange[0].toInt()] * -1)
-                    layerRegion.putInteger(SF2Region.GENERATOR_PAN, ((entry.panOffset!![keyRange[0].toInt()] - 64).toShort()).toInt())
+                    layerRegion.putInteger(SF2Region.GENERATOR_PAN, 0)
                     layerRegion.putInteger(SF2Region.GENERATOR_INITIALATTENUATION, ((entry.volumeOffset!![keyRange[0].toInt()] + entry.baseVelocity).toShort()).toInt())
 
                     sf2Layer!!.regions.add(layerRegion)

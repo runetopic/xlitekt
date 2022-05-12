@@ -75,10 +75,11 @@ data class VorbisEntryType(
                     var1[0] -= var3 - sampleLength
                 }
                 sampleLength = var3
-                ++soundIndices
             }
+            ++soundIndices
         }
-        return InstrumentSample(sampleRate, samples!!, start, end, field368)
+        val data = this.samples!!
+        return InstrumentSample(sampleRate, data, start, end, field368)
     }
 
     private fun getVorbisSampleData(var1: Int): FloatArray? {
@@ -108,7 +109,6 @@ data class VorbisEntryType(
         if (!hasReadFloor) {
             vorbisFloors!![vorbisMapping.submapFloor!![vorbisMapping.mappingMux]]!!.method728(window, n shr 1)
         }
-        val var20: FloatArray
         if (hasReadFloor) {
             for (index in (n shr 1) until n) {
                 window!![index] = 0.0f
@@ -117,7 +117,7 @@ data class VorbisEntryType(
             val floorNumber = n shr 1
             val floorIndex = n shr 2
             val third = n shr 3
-            var20 = window!!
+            val var20 = window!!
             repeat(floorNumber) {
                 var20[it] *= 0.5f
             }
@@ -149,12 +149,12 @@ data class VorbisEntryType(
                 var20[it * 4 + 1] = (var27 - var29) * var30 + (var26 - var28) * var31
             }
             repeat(iLog(n - 1) - 3) {
-                val var47 = n shr it + 2
+                val var47 = n shr (it + 2)
                 val var48 = 8 shl it
                 repeat(2 shl it) { var49 ->
                     val var50 = n - var47 * var49 * 2
                     val var51 = n - var47 * (var49 * 2 + 1)
-                    repeat(n shr it + 4) { var32 ->
+                    repeat(n shr (it + 4)) { var32 ->
                         val var33 = var32 * 4
                         val var34 = var20[var50 - 1 - var33]
                         val var35 = var20[var50 - 3 - var33]
@@ -239,7 +239,7 @@ data class VorbisEntryType(
 
         var var41: FloatArray? = null
         if (__y > 0) {
-            val var18 = n + __y shr 2
+            val var18 = (n + __y) shr 2
             var41 = FloatArray(var18)
             if (!this.hasReadFloor) {
                 repeat(field376) {

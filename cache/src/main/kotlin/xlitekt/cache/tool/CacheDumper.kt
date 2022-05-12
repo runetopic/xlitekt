@@ -444,7 +444,7 @@ internal object CacheDumper {
                 soundfont.sf2Soundbank.save(File(it.toString(), "${instrument.id}.sf2"))
             }
             soundbank.save(File(it.toString(), "soundbank.sf2"))
-            // TODO The main sound bank saving is not 100% or something with Vorbis is not proper but it is really close enough.
+            // TODO The combined sound bank file generating is not 100% proper. Everything else is correct.
         }
     }
 

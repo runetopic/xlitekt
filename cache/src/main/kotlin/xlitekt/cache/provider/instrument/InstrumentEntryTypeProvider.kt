@@ -27,15 +27,15 @@ class InstrumentEntryTypeProvider : EntryTypeProvider<InstrumentEntryType>() {
         type.loopMode = ByteArray(128)
         type.offsets = IntArray(128)
 
-        val firstArrayBlock = ByteArray(copy().discardUntilDelimiter(0).toInt()).map { readByte() }
+        val firstArrayBlock = ByteArray(copy().discardUntilDelimiter(0).toInt()) { readByte() }
         var firstArrayBlockPosition = firstArrayBlock.size + 1 + 1
         discard(firstArrayBlock.size + 1 + 1)
 
-        val secondArrayBlock = ByteArray(copy().discardUntilDelimiter(0).toInt()).map { readByte() }
+        val secondArrayBlock = ByteArray(copy().discardUntilDelimiter(0).toInt()) { readByte() }
         var secondArrayBlockPosition = secondArrayBlock.size + 1 + 1
         discard(secondArrayBlock.size + 1 + 1)
 
-        val thirdArrayBlock = ByteArray(copy().discardUntilDelimiter(0).toInt()).map { readByte() }
+        val thirdArrayBlock = ByteArray(copy().discardUntilDelimiter(0).toInt()) { readByte() }
         discard(1)
 
         val var36 = ByteArray(thirdArrayBlock.size + 1)
@@ -81,7 +81,7 @@ class InstrumentEntryTypeProvider : EntryTypeProvider<InstrumentEntryType>() {
         val var1412 = readUByte().toInt()
         val var16 = if (var1412 > 0) ByteArray(var1412 * 2) else null
 
-        val var18 = ByteArray(copy().discardUntilDelimiter(0).toInt()).map { readByte() }
+        val var18 = ByteArray(copy().discardUntilDelimiter(0).toInt()) { readByte() }
         discard(1)
 
         var var19 = 0

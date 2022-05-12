@@ -181,18 +181,13 @@ data class SoundEffectInstrument(
                 if (var13 > var1 - var12) {
                     var151 = var1 - var12
                 }
-                var var17: Int
                 while (var14 < var151) {
                     var var16 = (Instrument_samples[var14 + var12].toLong() * SoundEffectAudioFilter.forwardMultiplier.toLong() shr 16).toInt()
-                    var17 = 0
-                    while (var17 < var12) {
+                    repeat(var12) { var17 ->
                         var16 += (Instrument_samples[var14 + var12 - 1 - var17].toLong() * SoundEffectAudioFilter.coefficients[0]!![var17].toLong() shr 16).toInt()
-                        ++var17
                     }
-                    var17 = 0
-                    while (var17 < var14) {
+                    repeat(var14) { var17 ->
                         var16 -= (Instrument_samples[var14 - 1 - var17].toLong() * SoundEffectAudioFilter.coefficients[1]!![var17].toLong() shr 16).toInt()
-                        ++var17
                     }
                     Instrument_samples[var14] = var16
                     var11 = filterEnvelope!!.doStep(var1 + 1)
@@ -204,7 +199,7 @@ data class SoundEffectInstrument(
                         var151 = var1 - var12
                     }
                     while (var14 < var151) {
-                        var17 = (Instrument_samples[var14 + var12].toLong() * SoundEffectAudioFilter.forwardMultiplier.toLong() shr 16).toInt()
+                        var var17 = (Instrument_samples[var14 + var12].toLong() * SoundEffectAudioFilter.forwardMultiplier.toLong() shr 16).toInt()
                         repeat(var12) {
                             var17 += (Instrument_samples[var14 + var12 - 1 - it].toLong() * SoundEffectAudioFilter.coefficients[0]!![it].toLong() shr 16).toInt()
                         }
@@ -217,7 +212,7 @@ data class SoundEffectInstrument(
                     }
                     if (var14 >= var1 - var12) {
                         while (var14 < var1) {
-                            var17 = 0
+                            var var17 = 0
                             for (index in (var14 + var12 - var1) until var12) {
                                 var17 += (Instrument_samples[var14 + var12 - 1 - index].toLong() * SoundEffectAudioFilter.coefficients[0]!![index].toLong() shr 16).toInt()
                             }

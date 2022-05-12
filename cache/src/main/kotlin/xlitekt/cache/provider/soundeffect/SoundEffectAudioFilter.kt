@@ -67,8 +67,7 @@ data class SoundEffectAudioFilter(
             field407[var1]!![0] = -2.0f * var3 * cos(method1091(var1, 0, var2).toDouble()).toFloat()
             field407[var1]!![1] = var3 * var3
             var var10000: FloatArray
-            var var4 = 1
-            while (var4 < pairs[var1]) {
+            for (var4 in 1 until pairs[var1]) {
                 val var31 = method1097(var1, var4, var2)
                 val var5 = -2.0f * var31 * cos(method1091(var1, var4, var2).toDouble()).toFloat()
                 val var6 = var31 * var31
@@ -82,8 +81,8 @@ data class SoundEffectAudioFilter(
                 var10000[1] += field407[var1]!![0] * var5 + var6
                 var10000 = field407[var1]!!
                 var10000[0] += var5
-                ++var4
             }
+            val var4 = pairs[var1] - 1
             if (var1 == 0) {
                 repeat(pairs[0] * 2) {
                     var10000 = field407[0]!!
