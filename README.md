@@ -17,7 +17,7 @@ obvious reasons._
 
 Download a cache and xteas (JSON) from [archive.openrs2.org](https://archive.openrs2.org/).
 
-Place the cache you downloaded into the ``./cache/`` folder inside of the project. This path is configurable in
+Place the cache you downloaded into the ``./cache/data/`` folder inside of the project. This path is configurable in
 the [application.conf](/src/main/resources/application.conf).
 
 **Generate RSA tokens and update your application.conf file**
