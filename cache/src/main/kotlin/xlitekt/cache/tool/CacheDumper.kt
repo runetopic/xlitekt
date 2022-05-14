@@ -1,5 +1,6 @@
 package xlitekt.cache.tool
 
+import com.github.michaelbull.logging.InlineLogger
 import com.sun.media.SF2Soundbank
 import kotlinx.serialization.ContextualSerializer
 import kotlinx.serialization.KSerializer
@@ -12,32 +13,59 @@ import kotlinx.serialization.modules.SerializersModule
 import org.koin.core.context.loadKoinModules
 import org.koin.core.context.startKoin
 import xlitekt.cache.cacheModule
+import xlitekt.cache.provider.EntryType
+import xlitekt.cache.provider.binary.title.TitleEntryType
 import xlitekt.cache.provider.binary.title.TitleEntryTypeProvider
+import xlitekt.cache.provider.config.enum.EnumEntryType
 import xlitekt.cache.provider.config.enum.EnumEntryTypeProvider
+import xlitekt.cache.provider.config.hitbar.HitBarEntryType
 import xlitekt.cache.provider.config.hitbar.HitBarEntryTypeProvider
+import xlitekt.cache.provider.config.hitsplat.HitSplatEntryType
 import xlitekt.cache.provider.config.hitsplat.HitSplatEntryTypeProvider
+import xlitekt.cache.provider.config.inv.InvEntryType
 import xlitekt.cache.provider.config.inv.InvEntryTypeProvider
+import xlitekt.cache.provider.config.kit.KitEntryType
 import xlitekt.cache.provider.config.kit.KitEntryTypeProvider
+import xlitekt.cache.provider.config.loc.LocEntryType
 import xlitekt.cache.provider.config.loc.LocEntryTypeProvider
+import xlitekt.cache.provider.config.npc.NPCEntryType
 import xlitekt.cache.provider.config.npc.NPCEntryTypeProvider
+import xlitekt.cache.provider.config.obj.ObjEntryType
 import xlitekt.cache.provider.config.obj.ObjEntryTypeProvider
+import xlitekt.cache.provider.config.overlay.FloorOverlayEntryType
 import xlitekt.cache.provider.config.overlay.FloorOverlayEntryTypeProvider
+import xlitekt.cache.provider.config.param.ParamEntryType
 import xlitekt.cache.provider.config.param.ParamEntryTypeProvider
+import xlitekt.cache.provider.config.sequence.SequenceEntryType
 import xlitekt.cache.provider.config.sequence.SequenceEntryTypeProvider
+import xlitekt.cache.provider.config.spotanimation.SpotAnimationEntryType
 import xlitekt.cache.provider.config.spotanimation.SpotAnimationEntryTypeProvider
+import xlitekt.cache.provider.config.struct.StructEntryType
 import xlitekt.cache.provider.config.struct.StructEntryTypeProvider
+import xlitekt.cache.provider.config.underlay.FloorUnderlayEntryType
 import xlitekt.cache.provider.config.underlay.FloorUnderlayEntryTypeProvider
+import xlitekt.cache.provider.config.varbit.VarBitEntryType
 import xlitekt.cache.provider.config.varbit.VarBitEntryTypeProvider
+import xlitekt.cache.provider.config.varc.VarcEntryType
 import xlitekt.cache.provider.config.varc.VarcEntryTypeProvider
+import xlitekt.cache.provider.config.varp.VarpEntryType
 import xlitekt.cache.provider.config.varp.VarpEntryTypeProvider
+import xlitekt.cache.provider.config.worldmap.WorldMapElementEntryType
 import xlitekt.cache.provider.config.worldmap.WorldMapElementEntryTypeProvider
+import xlitekt.cache.provider.font.FontEntryType
 import xlitekt.cache.provider.font.FontEntryTypeProvider
+import xlitekt.cache.provider.instrument.InstrumentEntryType
 import xlitekt.cache.provider.instrument.InstrumentEntryTypeProvider
+import xlitekt.cache.provider.music.MusicEntryType
 import xlitekt.cache.provider.music.MusicEntryTypeProvider
 import xlitekt.cache.provider.sprite.Sprite
+import xlitekt.cache.provider.sprite.SpriteEntryType
 import xlitekt.cache.provider.sprite.SpriteEntryTypeProvider
+import xlitekt.cache.provider.sprite.titlescreen.TitleScreenEntryType
 import xlitekt.cache.provider.sprite.titlescreen.TitleScreenEntryTypeProvider
+import xlitekt.cache.provider.texture.TextureEntryType
 import xlitekt.cache.provider.texture.TextureEntryTypeProvider
+import xlitekt.cache.provider.ui.InterfaceEntryType
 import xlitekt.cache.provider.ui.InterfaceEntryTypeProvider
 import xlitekt.cache.tool.util.SoundFont
 import xlitekt.shared.inject
@@ -51,25 +79,19 @@ import javax.imageio.ImageIO
 import kotlin.io.path.createDirectories
 import kotlin.io.path.notExists
 import kotlin.io.path.outputStream
+import kotlin.time.measureTime
 
 /**
  * @author Jordan Abraham
  */
 fun main() {
+    val logger = InlineLogger()
     startKoin {
         loadKoinModules(cacheModule)
     }
-    CacheDumper.dumpJson()
-    CacheDumper.dumpSprites()
-    CacheDumper.dumpTextures()
-    CacheDumper.dumpTitleScreen()
-    CacheDumper.dumpFonts()
-    CacheDumper.dumpHitBars()
-    CacheDumper.dumpHitSplats()
-    CacheDumper.dumpWorldMapElements()
-    CacheDumper.dumpChatBoxIcons()
-    CacheDumper.dumpMusicTracks()
-    CacheDumper.dumpSoundBank()
+    logger.info { "Dumping..." }
+    val time = measureTime(CacheDumper::dump)
+    logger.info { "Took $time to complete." }
 }
 
 internal object CacheDumper {
@@ -101,357 +123,187 @@ internal object CacheDumper {
     private val musics by inject<MusicEntryTypeProvider>()
     private val instruments by inject<InstrumentEntryTypeProvider>()
 
-    fun dumpJson() {
-        val json = Json {
-            prettyPrint = true
-            encodeDefaults = true
-            serializersModule = SerializersModule {
-                contextual(Any::class, AnySerializer)
-            }
-        }
-
-        Path.of("./cache/data/dump/varbits/").apply {
-            if (notExists()) createDirectories()
-        }.also { path ->
-            varbits.entries().parallelStream().forEach {
-                json.encodeToStream(it, Path.of("$path/${it.id}.json").outputStream())
-            }
-        }
-
-        Path.of("./cache/data/dump/interfaces/").apply {
-            if (notExists()) createDirectories()
-        }.also { path ->
-            interfaces.entries().parallelStream().forEach {
-                json.encodeToStream(it, Path.of("$path/${it.id}.json").outputStream())
-            }
-        }
-
-        Path.of("./cache/data/dump/enums/").apply {
-            if (notExists()) createDirectories()
-        }.also { path ->
-            enums.entries().parallelStream().forEach {
-                json.encodeToStream(it, Path.of("$path/${it.id}.json").outputStream())
-            }
-        }
-
-        Path.of("./cache/data/dump/objs/").apply {
-            if (notExists()) createDirectories()
-        }.also { path ->
-            objs.entries().parallelStream().forEach {
-                json.encodeToStream(it, Path.of("$path/${it.id}.json").outputStream())
-            }
-        }
-
-        Path.of("./cache/data/dump/npcs/").apply {
-            if (notExists()) createDirectories()
-        }.also { path ->
-            npcs.entries().parallelStream().forEach {
-                json.encodeToStream(it, Path.of("$path/${it.id}.json").outputStream())
-            }
-        }
-
-        Path.of("./cache/data/dump/locs/").apply {
-            if (notExists()) createDirectories()
-        }.also { path ->
-            locs.entries().parallelStream().forEach {
-                json.encodeToStream(it, Path.of("$path/${it.id}.json").outputStream())
-            }
-        }
-
-        Path.of("./cache/data/dump/sequences/").apply {
-            if (notExists()) createDirectories()
-        }.also { path ->
-            sequences.entries().parallelStream().forEach {
-                json.encodeToStream(it, Path.of("$path/${it.id}.json").outputStream())
-            }
-        }
-
-        Path.of("./cache/data/dump/hitSplats/").apply {
-            if (notExists()) createDirectories()
-        }.also { path ->
-            hitSplats.entries().parallelStream().forEach {
-                json.encodeToStream(it, Path.of("$path/${it.id}.json").outputStream())
-            }
-        }
-
-        Path.of("./cache/data/dump/params/").apply {
-            if (notExists()) createDirectories()
-        }.also { path ->
-            params.entries().parallelStream().forEach {
-                json.encodeToStream(it, Path.of("$path/${it.id}.json").outputStream())
-            }
-        }
-
-        Path.of("./cache/data/dump/hitBars/").apply {
-            if (notExists()) createDirectories()
-        }.also { path ->
-            hitBars.entries().parallelStream().forEach {
-                json.encodeToStream(it, Path.of("$path/${it.id}.json").outputStream())
-            }
-        }
-
-        Path.of("./cache/data/dump/structs/").apply {
-            if (notExists()) createDirectories()
-        }.also { path ->
-            structs.entries().parallelStream().forEach {
-                json.encodeToStream(it, Path.of("$path/${it.id}.json").outputStream())
-            }
-        }
-
-        Path.of("./cache/data/dump/kits/").apply {
-            if (notExists()) createDirectories()
-        }.also { path ->
-            kits.entries().parallelStream().forEach {
-                json.encodeToStream(it, Path.of("$path/${it.id}.json").outputStream())
-            }
-        }
-
-        Path.of("./cache/data/dump/invs/").apply {
-            if (notExists()) createDirectories()
-        }.also { path ->
-            invs.entries().parallelStream().forEach {
-                json.encodeToStream(it, Path.of("$path/${it.id}.json").outputStream())
-            }
-        }
-
-        Path.of("./cache/data/dump/spotAnimations/").apply {
-            if (notExists()) createDirectories()
-        }.also { path ->
-            spotAnimations.entries().parallelStream().forEach {
-                json.encodeToStream(it, Path.of("$path/${it.id}.json").outputStream())
-            }
-        }
-
-        Path.of("./cache/data/dump/varps/").apply {
-            if (notExists()) createDirectories()
-        }.also { path ->
-            varps.entries().parallelStream().forEach {
-                json.encodeToStream(it, Path.of("$path/${it.id}.json").outputStream())
-            }
-        }
-
-        Path.of("./cache/data/dump/floorOverlays/").apply {
-            if (notExists()) createDirectories()
-        }.also { path ->
-            floorOverlays.entries().parallelStream().forEach {
-                json.encodeToStream(it, Path.of("$path/${it.id}.json").outputStream())
-            }
-        }
-
-        Path.of("./cache/data/dump/floorUnderlays/").apply {
-            if (notExists()) createDirectories()
-        }.also { path ->
-            floorUnderlays.entries().parallelStream().forEach {
-                json.encodeToStream(it, Path.of("$path/${it.id}.json").outputStream())
-            }
-        }
-
-        Path.of("./cache/data/dump/varcs/").apply {
-            if (notExists()) createDirectories()
-        }.also { path ->
-            varcs.entries().parallelStream().forEach {
-                json.encodeToStream(it, Path.of("$path/${it.id}.json").outputStream())
-            }
-        }
-
-        Path.of("./cache/data/dump/worldmap/").apply {
-            if (notExists()) createDirectories()
-        }.also { path ->
-            worldmap.entries().parallelStream().forEach {
-                json.encodeToStream(it, Path.of("$path/${it.id}.json").outputStream())
-            }
-        }
-
-        Path.of("./cache/data/dump/textures/").apply {
-            if (notExists()) createDirectories()
-        }.also { path ->
-            textures.entries().parallelStream().forEach {
-                json.encodeToStream(it, Path.of("$path/${it.id}.json").outputStream())
-            }
-        }
-
-        Path.of("./cache/data/dump/fonts/").apply {
-            if (notExists()) createDirectories()
-        }.also { path ->
-            fonts.entries().parallelStream().forEach {
-                json.encodeToStream(it, Path.of("$path/${it.name ?: it.id}.json").outputStream())
-            }
+    private val json = Json {
+        prettyPrint = true
+        encodeDefaults = true
+        serializersModule = SerializersModule {
+            contextual(Any::class, AnySerializer)
         }
     }
 
-    fun dumpSprites() {
-        Path.of("./cache/data/dump/sprites/").apply {
-            if (notExists()) createDirectories()
-        }.also {
-            for (entry in sprites.entries()) {
-                for (sprite in entry.sprites.filter(Sprite::renderable)) {
-                    sprite.write(it, "png", "${entry.id}_${sprite.id}")
+    private val soundbank = SF2Soundbank().apply {
+        name = "Old School RuneScape SoundFont"
+        romName = "osrs"
+        creationDate = LocalDateTime.now().run {
+            "${month.name}, $dayOfMonth, $year"
+        }
+        vendor = "Old School RuneScape"
+        copyright = "1999 - 2022 Jagex Ltd. 220 Science Park, Cambridge, CB4 0WA, United Kingdom"
+    }
+    private val addedInstruments = mutableListOf<Int>()
+
+    fun dump() {
+        mapOf(
+            "varbits" to varbits,
+            "interfaces" to interfaces,
+            "enums" to enums,
+            "objs" to objs,
+            "npcs" to npcs,
+            "locs" to locs,
+            "sequences" to sequences,
+            "hitSplats" to hitSplats,
+            "hitBars" to hitBars,
+            "params" to params,
+            "structs" to structs,
+            "kits" to kits,
+            "invs" to invs,
+            "spotAnimations" to spotAnimations,
+            "varps" to varps,
+            "floorOverlays" to floorOverlays,
+            "floorUnderlays" to floorUnderlays,
+            "varcs" to varcs,
+            "worldmap" to worldmap,
+            "sprites" to sprites,
+            "textures" to textures,
+            "title" to title,
+            "titlescreen" to titlescreen,
+            "fonts" to fonts,
+            "musics" to musics,
+            "instruments" to instruments
+        ).entries.parallelStream().forEach {
+            val path = Path.of("./cache/data/dump/${it.key}/")
+            if (path.notExists()) path.createDirectories()
+            it.value.entries().forEach { entry ->
+                entry.writeToPath(path)
+            }
+        }
+
+        // The soundbank.
+        // TODO The combined soundbank file generating is not 100% proper. Everything else is correct.
+        val soundbankPath = Path.of("./cache/data/dump/soundbank/")
+        if (soundbankPath.notExists()) soundbankPath.createDirectories()
+        soundbank.save(File(soundbankPath.toString(), "soundbank.sf2"))
+
+        // The chatbox icons.
+        val entry = sprites.entryType(423) ?: return
+        for (sprite in entry.sprites.filter(Sprite::renderable)) {
+            sprite.write(Path.of("./cache/data/dump/chatboxicons/"), "${entry.id}_${sprite.id}")
+        }
+    }
+
+    private fun EntryType.writeToPath(path: Path) {
+        when (this) {
+            is VarBitEntryType -> json.encodeToStream(this, Path.of("$path/$id.json").outputStream())
+            is EnumEntryType -> json.encodeToStream(this, Path.of("$path/$id.json").outputStream())
+            is InterfaceEntryType -> json.encodeToStream(this, Path.of("$path/$id.json").outputStream())
+            is ObjEntryType -> json.encodeToStream(this, Path.of("$path/$id.json").outputStream())
+            is NPCEntryType -> json.encodeToStream(this, Path.of("$path/$id.json").outputStream())
+            is LocEntryType -> json.encodeToStream(this, Path.of("$path/$id.json").outputStream())
+            is SequenceEntryType -> json.encodeToStream(this, Path.of("$path/$id.json").outputStream())
+            is HitSplatEntryType -> {
+                json.encodeToStream(this, Path.of("$path/$id.json").outputStream())
+                if (sprites.entryType(backgroundSprite)?.sprites == null) return
+                for (sprite in sprites.entryType(backgroundSprite)?.sprites!!.filter(Sprite::renderable)) {
+                    sprite.write(Path.of("$path/sprites/"), "${id}_${sprite.id}")
+                }
+
+                if (sprites.entryType(leftSpriteId)?.sprites == null) return
+                for (sprite in sprites.entryType(leftSpriteId)?.sprites!!.filter(Sprite::renderable)) {
+                    sprite.write(Path.of("$path/sprites/"), "${id}_${sprite.id}")
+                }
+
+                if (sprites.entryType(rightSpriteId)?.sprites == null) return
+                for (sprite in sprites.entryType(rightSpriteId)?.sprites!!.filter(Sprite::renderable)) {
+                    sprite.write(Path.of("$path/sprites/"), "${id}_${sprite.id}")
+                }
+
+                if (sprites.entryType(spriteId2)?.sprites == null) return
+                for (sprite in sprites.entryType(spriteId2)?.sprites!!.filter(Sprite::renderable)) {
+                    sprite.write(Path.of("$path/sprites/"), "${id}_${sprite.id}")
                 }
             }
-        }
-    }
+            is HitBarEntryType -> {
+                json.encodeToStream(this, Path.of("$path/$id.json").outputStream())
+                if (sprites.entryType(frontSpriteId)?.sprites == null) return
+                for (sprite in sprites.entryType(frontSpriteId)?.sprites!!.filter(Sprite::renderable)) {
+                    sprite.write(Path.of("$path/sprites/"), "${id}_${sprite.id}")
+                }
 
-    fun dumpTextures() {
-        Path.of("./cache/data/dump/textures/sprites/").apply {
-            if (notExists()) createDirectories()
-        }.also {
-            for (texture in textures.entries().filter { ids -> ids.textureIds != null }) {
-                for (id in texture.textureIds!!) {
-                    val entry = sprites.entryType(id) ?: continue
-                    for (sprite in entry.sprites.filter(Sprite::renderable)) {
-                        sprite.write(it, "png", "${texture.id}_${entry.id}_${sprite.id}")
+                if (sprites.entryType(backgroundSpriteId)?.sprites == null) return
+                for (sprite in sprites.entryType(backgroundSpriteId)?.sprites!!.filter(Sprite::renderable)) {
+                    sprite.write(Path.of("$path/sprites/"), "${id}_${sprite.id}")
+                }
+            }
+            is ParamEntryType -> json.encodeToStream(this, Path.of("$path/$id.json").outputStream())
+            is StructEntryType -> json.encodeToStream(this, Path.of("$path/$id.json").outputStream())
+            is KitEntryType -> json.encodeToStream(this, Path.of("$path/$id.json").outputStream())
+            is InvEntryType -> json.encodeToStream(this, Path.of("$path/$id.json").outputStream())
+            is SpotAnimationEntryType -> json.encodeToStream(this, Path.of("$path/$id.json").outputStream())
+            is VarpEntryType -> json.encodeToStream(this, Path.of("$path/$id.json").outputStream())
+            is FloorOverlayEntryType -> json.encodeToStream(this, Path.of("$path/$id.json").outputStream())
+            is FloorUnderlayEntryType -> json.encodeToStream(this, Path.of("$path/$id.json").outputStream())
+            is VarcEntryType -> json.encodeToStream(this, Path.of("$path/$id.json").outputStream())
+            is WorldMapElementEntryType -> {
+                json.encodeToStream(this, Path.of("$path/$id.json").outputStream())
+                if (sprites.entryType(sprite1)?.sprites == null) return
+                for (sprite in sprites.entryType(sprite1)?.sprites!!.filter(Sprite::renderable)) {
+                    sprite.write(Path.of("$path/sprites/"), "${id}_${sprite.id}")
+                }
+
+                if (sprites.entryType(sprite2)?.sprites == null) return
+                for (sprite in sprites.entryType(sprite2)?.sprites!!.filter(Sprite::renderable)) {
+                    sprite.write(Path.of("$path/sprites/"), "${id}_${sprite.id}")
+                }
+            }
+            is SpriteEntryType -> {
+                for (sprite in sprites.filter(Sprite::renderable)) {
+                    sprite.write(path, "${id}_${sprite.id}")
+                }
+            }
+            is TextureEntryType -> {
+                json.encodeToStream(this, Path.of("$path/$id.json").outputStream())
+                for (textureId in textureIds ?: intArrayOf()) {
+                    val spriteEntry = sprites.entryType(textureId) ?: continue
+                    for (sprite in spriteEntry.sprites.filter(Sprite::renderable)) {
+                        sprite.write(Path.of("$path/sprites/"), "${id}_${spriteEntry.id}_${sprite.id}")
                     }
                 }
             }
-        }
-    }
-
-    fun dumpTitleScreen() {
-        Path.of("./cache/data/dump/titlescreen/").apply {
-            if (notExists()) createDirectories()
-        }.also {
-            // Background.
-            ImageIO.write(ImageIO.read(ByteArrayInputStream(title.entries().first().pixels!!)), "jpg", File(it.toString(), "title.jpg"))
-
-            // Title screen.
-            for (entry in titlescreen.entries()) {
-                if (sprites.entryType(entry.id)?.sprites == null) continue
-                for (sprite in sprites.entryType(entry.id)?.sprites!!.filter(Sprite::renderable)) {
-                    sprite.write(it, "png", "${entry.name}_${entry.id}_${sprite.id}")
+            is TitleEntryType -> {
+                ImageIO.write(ImageIO.read(ByteArrayInputStream(pixels!!)), "jpg", File(path.toString(), "title.jpg"))
+            }
+            is TitleScreenEntryType -> {
+                if (sprites.entryType(id)?.sprites == null) return
+                for (sprite in sprites.entryType(id)?.sprites!!.filter(Sprite::renderable)) {
+                    sprite.write(path, "${name}_${id}_${sprite.id}")
                 }
             }
-        }
-    }
-
-    fun dumpFonts() {
-        Path.of("./cache/data/dump/fonts/sprites/").apply {
-            if (notExists()) createDirectories()
-        }.also {
-            for (entry in fonts.entries()) {
-                if (sprites.entryType(entry.id)?.sprites == null) continue
-                for (sprite in sprites.entryType(entry.id)?.sprites!!.filter(Sprite::renderable)) {
-                    sprite.write(it, "png", "${entry.name}_${entry.id}_${sprite.id}")
+            is FontEntryType -> {
+                json.encodeToStream(this, Path.of("$path/$id.json").outputStream())
+                if (sprites.entryType(id)?.sprites == null) return
+                for (sprite in sprites.entryType(id)?.sprites!!.filter(Sprite::renderable)) {
+                    sprite.write(Path.of("$path/sprites/"), "${name}_${id}_${sprite.id}")
                 }
             }
-        }
-    }
-
-    fun dumpHitBars() {
-        Path.of("./cache/data/dump/hitBars/sprites/").apply {
-            if (notExists()) createDirectories()
-        }.also {
-            for (entry in hitBars.entries()) {
-                if (sprites.entryType(entry.frontSpriteId)?.sprites == null) continue
-                for (sprite in sprites.entryType(entry.frontSpriteId)?.sprites!!.filter(Sprite::renderable)) {
-                    sprite.write(it, "png", "${entry.id}_${entry.frontSpriteId}")
-                }
-
-                if (sprites.entryType(entry.backgroundSpriteId)?.sprites == null) continue
-                for (sprite in sprites.entryType(entry.backgroundSpriteId)?.sprites!!.filter(Sprite::renderable)) {
-                    sprite.write(it, "png", "${entry.id}_${entry.backgroundSpriteId}")
-                }
+            is MusicEntryType -> {
+                val name = if (name != null) "$name!!_$id" else "$id"
+                bytes?.let { Files.write(Path.of(path.toString(), "$name.midi"), it) }
             }
-        }
-    }
-
-    fun dumpHitSplats() {
-        Path.of("./cache/data/dump/hitSplats/sprites/").apply {
-            if (notExists()) createDirectories()
-        }.also {
-            for (entry in hitSplats.entries()) {
-                if (sprites.entryType(entry.backgroundSprite)?.sprites == null) continue
-                for (sprite in sprites.entryType(entry.backgroundSprite)?.sprites!!.filter(Sprite::renderable)) {
-                    sprite.write(it, "png", "${entry.id}_${entry.backgroundSprite}")
-                }
-
-                if (sprites.entryType(entry.leftSpriteId)?.sprites == null) continue
-                for (sprite in sprites.entryType(entry.leftSpriteId)?.sprites!!.filter(Sprite::renderable)) {
-                    sprite.write(it, "png", "${entry.id}_${entry.leftSpriteId}")
-                }
-
-                if (sprites.entryType(entry.rightSpriteId)?.sprites == null) continue
-                for (sprite in sprites.entryType(entry.rightSpriteId)?.sprites!!.filter(Sprite::renderable)) {
-                    sprite.write(it, "png", "${entry.id}_${entry.rightSpriteId}")
-                }
-
-                if (sprites.entryType(entry.spriteId2)?.sprites == null) continue
-                for (sprite in sprites.entryType(entry.spriteId2)?.sprites!!.filter(Sprite::renderable)) {
-                    sprite.write(it, "png", "${entry.id}_${entry.spriteId2}")
-                }
-            }
-        }
-    }
-
-    fun dumpWorldMapElements() {
-        Path.of("./cache/data/dump/worldmap/sprites/").apply {
-            if (notExists()) createDirectories()
-        }.also {
-            for (entry in worldmap.entries()) {
-                if (sprites.entryType(entry.sprite1)?.sprites == null) continue
-                for (sprite in sprites.entryType(entry.sprite1)?.sprites!!.filter(Sprite::renderable)) {
-                    sprite.write(it, "png", "${entry.id}_${entry.sprite1}")
-                }
-
-                if (sprites.entryType(entry.sprite2)?.sprites == null) continue
-                for (sprite in sprites.entryType(entry.sprite2)?.sprites!!.filter(Sprite::renderable)) {
-                    sprite.write(it, "png", "${entry.id}_${entry.sprite2}")
-                }
-            }
-        }
-    }
-
-    fun dumpChatBoxIcons() {
-        Path.of("./cache/data/dump/chatboxicons/").apply {
-            if (notExists()) createDirectories()
-        }.also {
-            val entry = sprites.entryType(423) ?: return
-            for (sprite in entry.sprites.filter(Sprite::renderable)) {
-                sprite.write(it, "png", "${entry.id}_${sprite.id}")
-            }
-        }
-    }
-
-    fun dumpMusicTracks() {
-        Path.of("./cache/data/dump/music/").apply {
-            if (notExists()) createDirectories()
-        }.also {
-            for (entry in musics.entries()) {
-                val name = if (entry.name != null) "${entry.name!!}_${entry.id}" else "${entry.id}"
-                entry.bytes?.let { bytes -> Files.write(Path.of(it.toString(), "$name.midi"), bytes) }
-            }
-        }
-    }
-
-    fun dumpSoundBank() {
-        Path.of("./cache/data/dump/soundbank/").apply {
-            if (notExists()) createDirectories()
-        }.also {
-            val soundbank = SF2Soundbank().apply {
-                name = "Old School RuneScape SoundFont"
-                romName = "osrs"
-                creationDate = LocalDateTime.now().run {
-                    "${month.name}, $dayOfMonth, $year"
-                }
-                vendor = "Old School RuneScape"
-                copyright = "1999 - 2022 Jagex Ltd. 220 Science Park, Cambridge, CB4 0WA, United Kingdom"
-            }
-            val addedInstruments = mutableListOf<Int>()
-            instruments.entries().forEach { instrument ->
+            is InstrumentEntryType -> {
                 val soundfont = SoundFont()
-                soundfont.addSamples(instrument, addedInstruments)
+                soundfont.addSamples(this, addedInstruments)
                 soundfont.sf2Soundbank.instruments.forEach(soundbank::addInstrument)
                 soundfont.sf2Soundbank.resources.forEach(soundbank::addResource)
-                soundfont.sf2Soundbank.save(File(it.toString(), "${instrument.id}.sf2"))
+                soundfont.sf2Soundbank.save(File(path.toString(), "$id.sf2"))
             }
-            soundbank.save(File(it.toString(), "soundbank.sf2"))
-            // TODO The combined sound bank file generating is not 100% proper. Everything else is correct.
         }
     }
 
-    private fun Sprite.write(path: Path, format: String, name: String) {
+    private fun Sprite.write(path: Path, name: String) {
+        if (path.notExists()) path.createDirectories()
         val image = BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB)
         image.setRGB(0, 0, width, height, pixels, 0, width)
-        ImageIO.write(image, format, File(path.toString(), "$name.$format"))
+        ImageIO.write(image, "png", File(path.toString(), "$name.png"))
     }
 
     object AnySerializer : KSerializer<Any> {

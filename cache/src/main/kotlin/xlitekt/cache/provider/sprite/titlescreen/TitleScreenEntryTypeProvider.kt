@@ -9,7 +9,7 @@ import xlitekt.cache.provider.EntryTypeProvider
 class TitleScreenEntryTypeProvider : EntryTypeProvider<TitleScreenEntryType>() {
 
     override fun load(): Map<Int, TitleScreenEntryType> {
-        val names = listOf(
+        val glossary = listOf(
             "logo",
             "logo_deadman_mode",
             "logo_seasonal_mode",
@@ -32,9 +32,9 @@ class TitleScreenEntryTypeProvider : EntryTypeProvider<TitleScreenEntryType>() {
             "leftarrow",
             "rightarrow"
         )
-        val groups = names.map(store.index(SPRITE_INDEX)::group)
+        val groups = glossary.map(store.index(SPRITE_INDEX)::group)
         return groups.mapIndexed { index, group ->
-            ByteReadPacket(group.data).loadEntryType(TitleScreenEntryType(group.id, name = names[index]))
+            ByteReadPacket(group.data).loadEntryType(TitleScreenEntryType(group.id, name = glossary[index]))
         }.associateBy(TitleScreenEntryType::id)
     }
 
