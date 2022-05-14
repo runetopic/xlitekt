@@ -12,7 +12,7 @@ Xlite is currently built by two developers:
  - [tyler27 (me)](https://github.com/tyler27)
  - [ultraviolet-jordan](https://github.com/ultraviolet-jordan)
 # Getting Started
-_Make sure to download the Jan 6th #202 cache version from one of the archives below. We don't push this to github for
+_Make sure to download the latest #202 cache version from one of the archives below. We don't push this to github for
 obvious reasons._
 
 Download a cache and xteas (JSON) from [archive.openrs2.org](https://archive.openrs2.org/).
