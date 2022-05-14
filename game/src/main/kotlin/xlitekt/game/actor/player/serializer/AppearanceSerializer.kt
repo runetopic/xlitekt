@@ -40,7 +40,7 @@ class AppearanceSerializer : KSerializer<Render.Appearance> {
         appearance.bodyParts.putAll(bodyParts)
         appearance.bodyPartColors.putAll(bodyPartColors)
         appearance.displayName = displayName
-        return appearance
+        return@decodeStructure appearance
     }
 
     override fun serialize(encoder: Encoder, value: Render.Appearance) = encoder.encodeStructure(descriptor) {

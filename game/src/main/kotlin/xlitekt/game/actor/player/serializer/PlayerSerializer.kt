@@ -53,7 +53,7 @@ class PlayerSerializer : KSerializer<Player> {
             skills = skills
         )
         player.vars.putAll(vars)
-        return player
+        return@decodeStructure player
     }
 
     override fun serialize(encoder: Encoder, value: Player) = encoder.encodeStructure(descriptor) {

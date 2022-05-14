@@ -36,7 +36,7 @@ class SkillsSerializer : KSerializer<Skills> {
             1,
             MapSerializer(String.serializer(), Double.serializer()),
         ).values.toDoubleArray()
-        return Skills(levels, experience)
+        return@decodeStructure Skills(levels, experience)
     }
 
     override fun serialize(encoder: Encoder, value: Skills) = encoder.encodeStructure(descriptor) {

@@ -25,7 +25,7 @@ class LocationSerializer : KSerializer<Location> {
         val x = decodeIntElement(descriptor, decodeElementIndex(descriptor))
         val z = decodeIntElement(descriptor, decodeElementIndex(descriptor))
         val level = decodeIntElement(descriptor, decodeElementIndex(descriptor))
-        return Location(x, z, level)
+        return@decodeStructure Location(x, z, level)
     }
 
     override fun serialize(encoder: Encoder, value: Location) = encoder.encodeStructure(descriptor) {

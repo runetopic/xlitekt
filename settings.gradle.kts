@@ -13,7 +13,7 @@ dependencyResolutionManagement {
             version("slf4j", "1.7.36")
             version("cache", "1.4.24-SNAPSHOT")
             version("cryptography", "1.0.10-SNAPSHOT")
-            version("kotlinx", "1.3.2")
+            version("kotlinx", "1.3.3")
             version("kotlin-inline-logger", "1.0.4")
             version("classgraph", "4.8.146")
             version("shadowjar", "7.1.2")
