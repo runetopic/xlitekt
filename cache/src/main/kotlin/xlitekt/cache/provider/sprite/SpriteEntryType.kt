@@ -7,6 +7,7 @@ import xlitekt.cache.provider.EntryType
  */
 data class SpriteEntryType(
     override val id: Int,
+    var name: String? = null,
     var offsetsX: IntArray? = null,
     var offsetsY: IntArray? = null,
     var widths: IntArray? = null,
