@@ -13,20 +13,12 @@ class FontEntryTypeProvider : EntryTypeProvider<FontEntryType>() {
 
     private val sprites by inject<SpriteEntryTypeProvider>()
 
-    override fun load(): Map<Int, FontEntryType> {
-        val names = listOf(
-            "verdana_15pt_regular",
-            "p11_full",
-            "verdana_11pt_regular",
-            "p12_full",
-            "verdana_13pt_regular",
-            "b12_full"
-        )
-        val groups = names.map(store.index(SPRITE_INDEX)::group)
-        return groups.flatMapIndexed { index, group ->
-            store.index(FONT_INDEX).group(group.id).files().map { ByteReadPacket(it.data).loadEntryType(FontEntryType(group.id, name = names[index])) }
-        }.associateBy(FontEntryType::id)
-    }
+    override fun load(): Map<Int, FontEntryType> = store
+        .index(FONT_INDEX)
+        .groups()
+        .onEach { require((glossary[it.nameHash]?.toNameHash() ?: it.nameHash) == it.nameHash) }
+        .map { ByteReadPacket(it.data).loadEntryType(FontEntryType(it.id, name = glossary[it.nameHash] ?: it.nameHash.toString())) }
+        .associateBy(FontEntryType::id)
 
     override fun ByteReadPacket.loadEntryType(type: FontEntryType): FontEntryType {
         val sprite = sprites.entryType(type.id) ?: return type
@@ -141,5 +133,25 @@ class FontEntryTypeProvider : EntryTypeProvider<FontEntryType>() {
             }
         }
         return -kerning
+    }
+
+    private companion object {
+        val glossary = mapOf(
+            -342013218 to "p11_full",
+            -313384067 to "p12_full",
+            1057075019 to "b12_full",
+            -1097177625 to "q8_full",
+            1787935731 to "quill_oblique_large",
+            -365283881 to "quill_caps_large",
+            1157777820 to "lunar_alphabet",
+            24702590 to "lunar_alphabet_lrg",
+            -1757037376 to "barbassault_font",
+            1851754626 to "surok_font",
+            -174800339 to "verdana_11pt_regular",
+            1583090068 to "verdana_11pt_bold",
+            526264239 to "verdana_13pt_regular",
+            773743442 to "verdana_13pt_bold",
+            1227328817 to "verdana_15pt_regular"
+        )
     }
 }

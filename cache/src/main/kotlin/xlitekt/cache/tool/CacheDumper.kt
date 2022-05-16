@@ -204,34 +204,34 @@ internal object CacheDumper {
                 json.encodeToStream(this, Path.of("$path/$id.json").outputStream())
                 if (sprites.entryType(backgroundSprite)?.sprites == null) return
                 for (sprite in sprites.entryType(backgroundSprite)?.sprites!!.filter(Sprite::renderable)) {
-                    sprite.write(Path.of("$path/sprites/"), "${id}_${sprite.id}")
+                    sprite.write(Path.of("$path/sprites/"), "${id}_$backgroundSprite")
                 }
 
                 if (sprites.entryType(leftSpriteId)?.sprites == null) return
                 for (sprite in sprites.entryType(leftSpriteId)?.sprites!!.filter(Sprite::renderable)) {
-                    sprite.write(Path.of("$path/sprites/"), "${id}_${sprite.id}")
+                    sprite.write(Path.of("$path/sprites/"), "${id}_$leftSpriteId")
                 }
 
                 if (sprites.entryType(rightSpriteId)?.sprites == null) return
                 for (sprite in sprites.entryType(rightSpriteId)?.sprites!!.filter(Sprite::renderable)) {
-                    sprite.write(Path.of("$path/sprites/"), "${id}_${sprite.id}")
+                    sprite.write(Path.of("$path/sprites/"), "${id}_$rightSpriteId")
                 }
 
                 if (sprites.entryType(spriteId2)?.sprites == null) return
                 for (sprite in sprites.entryType(spriteId2)?.sprites!!.filter(Sprite::renderable)) {
-                    sprite.write(Path.of("$path/sprites/"), "${id}_${sprite.id}")
+                    sprite.write(Path.of("$path/sprites/"), "${id}_$spriteId2")
                 }
             }
             is HitBarEntryType -> {
                 json.encodeToStream(this, Path.of("$path/$id.json").outputStream())
                 if (sprites.entryType(frontSpriteId)?.sprites == null) return
                 for (sprite in sprites.entryType(frontSpriteId)?.sprites!!.filter(Sprite::renderable)) {
-                    sprite.write(Path.of("$path/sprites/"), "${id}_${sprite.id}")
+                    sprite.write(Path.of("$path/sprites/"), "${id}_$frontSpriteId")
                 }
 
                 if (sprites.entryType(backgroundSpriteId)?.sprites == null) return
                 for (sprite in sprites.entryType(backgroundSpriteId)?.sprites!!.filter(Sprite::renderable)) {
-                    sprite.write(Path.of("$path/sprites/"), "${id}_${sprite.id}")
+                    sprite.write(Path.of("$path/sprites/"), "${id}_$backgroundSpriteId")
                 }
             }
             is ParamEntryType -> json.encodeToStream(this, Path.of("$path/$id.json").outputStream())
@@ -279,15 +279,14 @@ internal object CacheDumper {
                 }
             }
             is FontEntryType -> {
-                json.encodeToStream(this, Path.of("$path/$id.json").outputStream())
+                json.encodeToStream(this, Path.of("$path/$name.json").outputStream())
                 if (sprites.entryType(id)?.sprites == null) return
                 for (sprite in sprites.entryType(id)?.sprites!!.filter(Sprite::renderable)) {
-                    sprite.write(Path.of("$path/sprites/"), "${name}_${id}_${sprite.id}")
+                    sprite.write(Path.of("$path/sprites/$name"), "${name}_${id}_${sprite.id}")
                 }
             }
             is MusicEntryType -> {
-                val name = if (name != null) "$name!!_$id" else "$id"
-                bytes?.let { Files.write(Path.of(path.toString(), "$name.midi"), it) }
+                bytes?.let { Files.write(Path.of(path.toString(), "${name}_$id.midi"), it) }
             }
             is InstrumentEntryType -> {
                 val soundfont = SoundFont()
