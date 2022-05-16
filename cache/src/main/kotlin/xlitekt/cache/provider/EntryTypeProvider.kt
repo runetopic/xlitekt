@@ -15,7 +15,7 @@ abstract class EntryTypeProvider<R : EntryType> {
 
     protected abstract fun load(): Map<Int, R>
     protected abstract fun ByteReadPacket.loadEntryType(type: R): R
-    protected open fun postLoadEntryType(type: R) {}
+    internal open fun postLoadEntryType(type: R) {}
 
     fun size() = entries.size
     fun entryType(id: Int): R? = entries[id]
@@ -35,7 +35,7 @@ abstract class EntryTypeProvider<R : EntryType> {
 
     protected fun String.toNameHash(): Int = fold(0) { hash, next -> next.code + ((hash shl 5) - hash) }
 
-    protected companion object {
+    internal companion object {
         // Indexes.
         const val CONFIG_INDEX = 2
         const val INTERFACE_INDEX = 3
