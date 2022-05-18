@@ -2275,6 +2275,7 @@ class SpriteEntryTypeProvider : EntryTypeProvider<SpriteEntryType>() {
             1859383576 to "square_button,0",
             1859383577 to "square_button,1",
             965112423 to "tradebacking_grey",
+            2068756832 to "logo_seasonal_mode",
             1375004274 to "hitmark,17",
             -1434843594 to "headicons_pk_interface,15",
             1083716759 to "achievement_diary_icons,5",
