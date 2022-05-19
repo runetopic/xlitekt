@@ -71,43 +71,38 @@ class MapEntryTypeProvider : EntryTypeProvider<MapSquareEntryType>() {
 
     private tailrec fun ByteReadPacket.loadLocIds(type: MapSquareEntryType, objectId: Int) {
         val offset = readIncrSmallSmart()
-        when (offset) {
-            0 -> return
-            else -> loadLocCollision(type, objectId + offset, 0)
-        }
+        if (offset == 0) return
+        loadLocCollision(type, objectId + offset, 0)
         return loadLocIds(type, objectId + offset)
     }
 
     private tailrec fun ByteReadPacket.loadLocCollision(type: MapSquareEntryType, objectId: Int, packedLocation: Int) {
         val opcode = readUShortSmart()
-        when (opcode) {
-            0 -> return
-            else -> {
-                val attributes = readUByte().toInt()
-                val shape = attributes shr 2
-                val rotation = attributes and 0x3
+        if (opcode == 0) return
+        val attributes = readUByte().toInt()
+        val shape = attributes shr 2
+        val rotation = attributes and 0x3
 
-                val localX = (packedLocation + opcode - 1) shr 6 and 0x3f
-                val localZ = (packedLocation + opcode - 1) and 0x3f
-                val level = ((packedLocation + opcode - 1) shr 12).let {
-                    if (type.collision[1][localX][localZ].toInt() and BRIDGE_TILE_BIT.toInt() == 2) it - 1 else it
-                }
-
-                if (level >= 0) {
-                    type.locations[level][localX][localZ].add(
-                        MapSquareEntryType.MapSquareLocation(
-                            id = objectId,
-                            x = localX,
-                            z = localZ,
-                            level = level,
-                            shape = shape,
-                            rotation = rotation
-                        )
-                    )
-                }
-            }
+        val packed = packedLocation + opcode - 1
+        val localX = packed shr 6 and 0x3f
+        val localZ = packed and 0x3f
+        val level = (packed shr 12).let {
+            if (type.collision[1][localX][localZ].toInt() and BRIDGE_TILE_BIT.toInt() == 2) it - 1 else it
         }
-        return loadLocCollision(type, objectId, packedLocation + opcode - 1)
+
+        if (level >= 0) {
+            type.locations[level][localX][localZ].add(
+                MapSquareEntryType.MapSquareLocation(
+                    id = objectId,
+                    x = localX,
+                    z = localZ,
+                    level = level,
+                    shape = shape,
+                    rotation = rotation
+                )
+            )
+        }
+        return loadLocCollision(type, objectId, packed)
     }
 
     companion object {
