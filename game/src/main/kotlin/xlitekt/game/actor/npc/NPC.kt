@@ -16,8 +16,5 @@ class NPC(
     override fun totalHitpoints(): Int = 100
     override fun currentHitpoints(): Int = 100
 
-    fun faceAngle(location: Location) = renderer.faceLocation(location)
-    fun setCustomCombatLevel(level: Int) = renderer.setCustomCombatLevel(level)
-
     override fun toString(): String = "NPC(id=$id, entry=$entry)"
 }

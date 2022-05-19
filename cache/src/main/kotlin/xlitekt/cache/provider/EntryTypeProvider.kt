@@ -29,8 +29,8 @@ abstract class EntryTypeProvider<R : EntryType> {
     }
 
     protected fun ByteReadPacket.assertEmptyAndRelease() {
-        if (remaining.toInt() != 0) throw IllegalStateException("The remaining buffer is not empty.")
-        else release()
+        check(remaining.toInt() == 0) { "The remaining buffer is not empty." }
+        release()
     }
 
     protected fun String.toNameHash(): Int = fold(0) { hash, next -> next.code + ((hash shl 5) - hash) }

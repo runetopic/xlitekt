@@ -16,7 +16,9 @@ sealed class Render {
     data class Sequence(
         val id: Int,
         val delay: Int
-    ) : Render()
+    ) : Render() {
+        constructor(id: Int) : this(id, 0)
+    }
 
     data class UsernameOverride(
         val prefix: String,
@@ -30,6 +32,7 @@ sealed class Render {
         val height: Int,
         val rotation: Int
     ) : Render() {
+        constructor(id: Int) : this(id, 0, 0, 0)
         fun packedMetaData(): Int = speed and 0xffff or (height shl 16) // TODO rotation is used?
     }
 

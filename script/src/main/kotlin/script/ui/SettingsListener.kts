@@ -38,6 +38,6 @@ onInterface<Settings> {
     }
 
     onClick("Toggle Run") {
-        movement.toggleRun()
+        toggleMovementSpeed()
     }
 }

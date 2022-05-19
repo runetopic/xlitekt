@@ -58,5 +58,5 @@ onPacketHandler<OpLocPacket> {
         objShape = gameObject.shape,
         z = location.level
     )
-    player.movement.route(pf.coords.map { Location(it.x, it.y, location.level) })
+    player.route(pf.coords.map { Location(it.x, it.y, location.level) })
 }

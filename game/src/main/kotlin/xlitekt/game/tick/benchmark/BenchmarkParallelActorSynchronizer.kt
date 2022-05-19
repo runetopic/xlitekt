@@ -7,6 +7,7 @@ import org.rsmod.pathfinder.PathFinder
 import org.rsmod.pathfinder.Route
 import org.rsmod.pathfinder.SmartPathFinder
 import org.rsmod.pathfinder.ZoneFlags
+import xlitekt.game.actor.chat
 import xlitekt.game.actor.movement.MovementStep
 import xlitekt.game.actor.npc.NPC
 import xlitekt.game.actor.player.Player
@@ -59,7 +60,7 @@ class BenchmarkParallelActorSynchronizer : Synchronizer() {
                     z = it.location.level
                 )
                 queue.put(pf)
-                it.publicChat("Hello Xlite.", 0, it.rights)
+                it.chat(it.rights, 0) { "Hello Xlite." }
             }
         }
         logger.debug { "Pathfinders took $finders for ${players.size} players. [TICK=$tick]" }
@@ -87,13 +88,13 @@ class BenchmarkParallelActorSynchronizer : Synchronizer() {
             players.parallelStream().forEach {
                 val path = paths[it]
                 if (path != null) {
-                    it.movement.route(path.coords.map { c -> Location(c.x, c.y, it.location.level) })
+                    it.route(path.coords.map { c -> Location(c.x, c.y, it.location.level) })
                 }
             }
             npcs.parallelStream().forEach {
                 val path = npcPaths[it]
                 if (path != null) {
-                    it.movement.route(path.coords.map { c -> Location(c.x, c.y, it.location.level) })
+                    it.route(path.coords.map { c -> Location(c.x, c.y, it.location.level) })
                 }
             }
         }

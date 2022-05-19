@@ -90,19 +90,21 @@ class MapEntryTypeProvider : EntryTypeProvider<MapSquareEntryType>() {
                 val localX = (packedLocation + opcode - 1) shr 6 and 0x3f
                 val localZ = (packedLocation + opcode - 1) and 0x3f
                 val level = ((packedLocation + opcode - 1) shr 12).let {
-                    if (it - 1 >= 0 && type.collision[1][localX][localZ].toInt() and BRIDGE_TILE_BIT.toInt() == 2) it - 1 else it
+                    if (type.collision[1][localX][localZ].toInt() and BRIDGE_TILE_BIT.toInt() == 2) it - 1 else it
                 }
 
-                type.locations[level][localX][localZ].add(
-                    MapSquareEntryType.MapSquareLocation(
-                        id = objectId,
-                        x = localX,
-                        z = localZ,
-                        level = level,
-                        shape = shape,
-                        rotation = rotation
+                if (level >= 0) {
+                    type.locations[level][localX][localZ].add(
+                        MapSquareEntryType.MapSquareLocation(
+                            id = objectId,
+                            x = localX,
+                            z = localZ,
+                            level = level,
+                            shape = shape,
+                            rotation = rotation
+                        )
                     )
-                )
+                }
             }
         }
         return loadLocCollision(type, objectId, packedLocation + opcode - 1)

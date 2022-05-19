@@ -2,6 +2,7 @@ package xlitekt.game.actor.player
 
 import kotlinx.serialization.Serializable
 import xlitekt.game.actor.Actor
+import xlitekt.game.actor.movementType
 import xlitekt.game.actor.player.PlayerEncoder.encodeToJson
 import xlitekt.game.actor.player.serializer.PlayerSerializer
 import xlitekt.game.actor.render.Render
@@ -66,11 +67,10 @@ class Player(
     private fun login() {
         vars.login()
         interfaces.login()
-
-        updateAppearance()
-        movementType(false)
+        render(appearance)
+        movementType { false }
         sendUpdateRunEnergy()
-        if (VarPlayer.ToggleRun in vars) movement.toggleRun()
+        if (VarPlayer.ToggleRun in vars) toggleMovementSpeed()
         inject<EventBus>().value.notify(Events.OnLoginEvent(this))
 
         // Set the player online here, so they start processing by the main game loop.
@@ -97,8 +97,6 @@ class Player(
         inject<World>().value.players.remove(this)
         encodeToJson()
     }
-
-    fun updateAppearance() = renderer.appearance(appearance)
 
     fun write(packet: Packet) = client?.poolPacket(packet)
     fun flushPool() = client?.flushPool()

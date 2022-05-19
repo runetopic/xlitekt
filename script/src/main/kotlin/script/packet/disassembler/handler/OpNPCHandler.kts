@@ -1,11 +1,15 @@
+package script.packet.disassembler.handler
+
 import com.github.michaelbull.logging.InlineLogger
 import org.rsmod.pathfinder.SmartPathFinder
 import org.rsmod.pathfinder.ZoneFlags
+import xlitekt.game.actor.faceActor
 import xlitekt.game.packet.OpNPCPacket
 import xlitekt.game.packet.disassembler.handler.onPacketHandler
 import xlitekt.game.world.World
 import xlitekt.game.world.map.location.Location
 import xlitekt.game.world.map.location.zones
+import xlitekt.game.world.map.zone.Zone
 import xlitekt.shared.inject
 
 private val logger = InlineLogger()
@@ -18,7 +22,7 @@ onPacketHandler<OpNPCPacket> {
         return@onPacketHandler
     }
 
-    val npc = player.location.zones().flatMap { it.npcs }.firstOrNull { it?.index == this.packet.npcIndex } ?: return@onPacketHandler
+    val npc = player.location.zones().flatMap(Zone::npcs).firstOrNull { it?.index == this.packet.npcIndex } ?: return@onPacketHandler
 
     if (npc.entry == null) {
         logger.debug { "Invalid NPC clicked $npc" }
@@ -41,6 +45,6 @@ onPacketHandler<OpNPCPacket> {
         z = npc.location.level,
     )
 
-    player.movement.route(pf.coords.map { Location(it.x, it.y, npc.location.level) })
-    player.faceActor(npc.index) // this may need to have some sort of requirement like within distance checks or not.
+    player.route(pf.coords.map { Location(it.x, it.y, npc.location.level) })
+    player.faceActor(npc::index) // this may need to have some sort of requirement like within distance checks or not.
 }

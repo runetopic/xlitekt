@@ -1,5 +1,7 @@
 package script.ui
 
+import xlitekt.game.actor.animate
+import xlitekt.game.actor.spotAnimate
 import xlitekt.game.content.ui.InterfaceEvent.CLICK_OPTION_1
 import xlitekt.game.content.ui.UserInterface.Emotes
 import xlitekt.game.content.ui.onInterface
@@ -78,10 +80,10 @@ onInterface<Emotes> {
         // Not every emote has a spot animation associated with it.
         val spotAnimation = spotAnimations[emote.emoteName]
 
-        animate(sequence.id)
+        animate(sequence::id)
         if (spotAnimation != null) {
             // If the emote has an associated spot animation, use it here.
-            spotAnimate(spotAnimation.id)
+            spotAnimate(spotAnimation::id)
         }
     }
 }

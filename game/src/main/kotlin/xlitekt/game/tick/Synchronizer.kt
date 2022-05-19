@@ -34,6 +34,6 @@ abstract class Synchronizer : Runnable {
         write(PlayerInfoPacket(viewport, updates, previousLocations, locations, playerSteps))
         write(NPCInfoPacket(viewport, locations, npcSteps))
         flushPool()
-        reset()
+        clearPendingUpdates()
     }
 }

@@ -2,6 +2,7 @@ package xlitekt.game.actor
 
 import io.ktor.utils.io.core.ByteReadPacket
 import xlitekt.game.actor.movement.Movement
+import xlitekt.game.actor.movement.MovementSpeed
 import xlitekt.game.actor.movement.MovementStep
 import xlitekt.game.actor.movement.isValid
 import xlitekt.game.actor.player.Player
@@ -17,43 +18,56 @@ import xlitekt.game.world.map.location.Location
 abstract class Actor(
     open var location: Location
 ) {
-    protected val renderer by lazy { ActorRenderer(this) }
-    val movement by lazy { Movement(this) }
+    private val renderer = ActorRenderer()
+    private val movement = Movement()
 
     var previousLocation: Location? = null
     var index = 0
 
+    private var facingActorIndex = -1
+
     abstract fun totalHitpoints(): Int
     abstract fun currentHitpoints(): Int
 
-    fun processMovement(): MovementStep = movement.process(location).also {
+    /**
+     * Routes the actor movement waypoints to the input list.
+     */
+    fun route(locations: List<Location>) {
+        actionReset()
+        movement.route(locations)
+    }
+
+    /**
+     * Routes the actor movement to a single waypoint with optional teleport speed.
+     */
+    fun route(location: Location, teleport: Boolean = false) {
+        actionReset()
+        movement.route(location, teleport)
+    }
+
+    /**
+     * Toggles the actor movement speed between walking and running.
+     * If the actor is a Player then this will also flag for movement and temporary movement type updates.
+     */
+    fun toggleMovementSpeed() {
+        movement.movementSpeed = if (movement.movementSpeed.isRunning()) MovementSpeed.WALKING else MovementSpeed.RUNNING
         if (this is Player) {
-            if (it.isValid() && shouldRebuildMap()) sendRebuildNormal(false)
+            movementType(movement.movementSpeed::isRunning)
+            temporaryMovementType(movement.movementSpeed::id)
         }
     }
 
-    fun hit(hitBarType: HitBarType, source: Actor?, type: HitType, damage: Int, delay: Int) {
-        renderer.hit(
-            Render.Hit(
-                actor = this,
-                hits = listOf(HitDamage(source, type, damage, delay)),
-                bars = listOf(hitBarType)
-            )
-        )
+    /**
+     * Processes any pending movement this actor may have. This happens every tick.
+     */
+    fun processMovement(): MovementStep = movement.process(this, location).also {
+        if (this is Player) {
+            if (facingActorIndex != -1 && !it.isValid()) {
+                faceActor { -1 }
+            }
+            if (it.isValid() && shouldRebuildMap()) sendRebuildNormal(false)
+        }
     }
-
-    fun publicChat(message: String, packedEffects: Int, rights: Int) = renderer.publicChat(message, packedEffects, rights)
-    fun customOptions(prefix: String, infix: String, suffix: String) = renderer.customOptions(prefix, infix, suffix)
-    fun animate(id: Int, delay: Int = 0) = renderer.sequence(id, delay)
-    fun faceActor(index: Int) = renderer.faceActor(index)
-    fun faceAngle(direction: Int) = renderer.faceAngle(direction)
-    // fun forceMove(forceMovement: Render.ForceMovement) = renderer.forceMove(forceMovement)
-    fun overheadChat(text: String) = renderer.overheadChat(text)
-    // fun recolor(recolor: Render.Recolor) = renderer.recolor(recolor)
-    fun spotAnimate(id: Int, speed: Int = 0, height: Int = 0, rotation: Int = 0) = renderer.spotAnimation(id, speed, height, rotation)
-    fun transmog(id: Int) = renderer.transmog(id)
-    fun temporaryMovementType(id: Int) = renderer.temporaryMovementType(id)
-    fun movementType(running: Boolean) = renderer.movementType(running)
 
     fun hasPendingUpdate() = renderer.hasPendingUpdate()
     fun pendingUpdates() = renderer.pendingUpdates.values.toList()
@@ -62,8 +76,62 @@ abstract class Actor(
         renderer.cachedUpdates[render] = block
     }
     fun cachedUpdates() = renderer.cachedUpdates
+    fun clearPendingUpdates() = renderer.clearUpdates()
 
-    fun reset() {
-        renderer.clearUpdates()
+    /**
+     * Use this when the player does an action. This will need work.
+     */
+    private fun actionReset() {
+        movement.reset()
+        if (facingActorIndex != -1 && this is Player) {
+            faceActor { -1 }
+            facingActorIndex = -1
+        }
     }
+
+    fun render(render: Render) {
+        renderer.pendingUpdates[render::class] = render
+        when (render) {
+            is Render.FaceActor -> facingActorIndex = render.index
+            else -> {}
+        }
+    }
+}
+
+inline fun Actor.faceActor(index: () -> Int) {
+    render(Render.FaceActor(index.invoke()))
+}
+
+inline fun Actor.faceAngle(angle: () -> Int) {
+    render(Render.FaceAngle(angle.invoke()))
+}
+
+inline fun Actor.animate(sequenceId: () -> Int) {
+    render(Render.Sequence(sequenceId.invoke()))
+}
+
+inline fun Actor.spotAnimate(spotAnimationId: () -> Int) {
+    render(Render.SpotAnimation(spotAnimationId.invoke()))
+}
+
+inline fun Actor.movementType(running: () -> Boolean) {
+    render(Render.MovementType(running.invoke()))
+}
+
+inline fun Actor.temporaryMovementType(id: () -> Int) {
+    render(Render.TemporaryMovementType(id.invoke()))
+}
+
+fun Actor.hit(hitBarType: HitBarType, source: Actor?, type: HitType, damage: Int, delay: Int) {
+    render(
+        Render.Hit(
+            actor = this,
+            hits = listOf(HitDamage(source, type, damage, delay)),
+            bars = listOf(hitBarType)
+        )
+    )
+}
+
+inline fun Actor.chat(rights: Int, effects: Int, message: () -> String) {
+    render(Render.PublicChat(message.invoke(), effects, rights))
 }

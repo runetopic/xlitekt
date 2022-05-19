@@ -22,5 +22,5 @@ onPacketHandler<MovementPacket> {
         destY = packet.destinationZ,
         z = player.location.level
     )
-    player.movement.route(path.coords.map { Location(it.x, it.y, player.location.level) })
+    player.route(path.coords.map { Location(it.x, it.y, player.location.level) })
 }

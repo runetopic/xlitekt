@@ -7,6 +7,6 @@ import xlitekt.game.content.vars.VarPlayer
 onInterface<MiniMap> {
     onClick("Toggle Run") {
         vars.flip(VarPlayer.ToggleRun)
-        movement.toggleRun()
+        toggleMovementSpeed()
     }
 }
