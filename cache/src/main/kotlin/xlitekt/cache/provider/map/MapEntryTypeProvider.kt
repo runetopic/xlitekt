@@ -9,112 +9,89 @@ import xlitekt.shared.buffer.readIncrSmallSmart
 import xlitekt.shared.buffer.readUShortSmart
 import xlitekt.shared.inject
 import xlitekt.shared.resource.MapSquares
-import java.util.Collections
-import java.util.concurrent.CountDownLatch
-import java.util.concurrent.Executors
 import java.util.zip.ZipException
-import kotlin.time.measureTime
 
 /**
  * @author Tyler Telis
+ * @author Jordan Abraham
  */
 class MapEntryTypeProvider : EntryTypeProvider<MapSquareEntryType>() {
+
     private val logger = InlineLogger()
-    private val latch = CountDownLatch(VALID_X * VALID_Z)
-    private val pool = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors() - 2)
-    private val xteas by inject<MapSquares>()
 
     override fun load(): Map<Int, MapSquareEntryType> {
-        val mapSquares = Collections.synchronizedMap<Int, MapSquareEntryType>(mutableMapOf())
-        var count = 0
-        var missingXteasCount = 0
-
         val index = store.index(MAP_INDEX)
-
-        val time = measureTime {
-            repeat(VALID_X) { regionX ->
-                repeat(VALID_Z) { regionZ ->
-                    val regionId = (regionX shl 8) or regionZ
-
-                    pool.execute {
-                        val mapData = index.group("m${regionX}_$regionZ").data
-                        val locData = index.group("l${regionX}_$regionZ").data
-
-                        if (mapData.isEmpty()) {
-                            latch.countDown()
-                            return@execute
-                        }
-
-                        val mapSquare = ByteReadPacket(mapData.decompress()).loadEntryType(MapSquareEntryType(regionId, regionX, regionZ))
-                        mapSquares[regionId] = mapSquare
-                        count++
-
-                        val xteas = xteas[regionId]?.key?.toIntArray() ?: intArrayOf()
-
-                        if (xteas.isEmpty() || locData.isEmpty()) {
-                            missingXteasCount++
-                            latch.countDown()
-                            return@execute
-                        }
-
-                        try {
-                            ByteReadPacket(locData.decompress(xteas)).loadMapEntryLocations(mapSquare)
-                        } catch (exception: ZipException) {
-                            logger.error(exception) { "Perhaps the xtea keys are incorrect." }
-                        }
-                        latch.countDown()
+        // We only care about loading maps that we have configured in the xteas resource file.
+        val mapSquares by inject<MapSquares>()
+        val groups = index.groups().associateWith { mapSquares.values.firstOrNull { mapSquareResource -> mapSquareResource.group == it.id } }.filterValues { it != null }
+        return groups.entries.parallelStream().map {
+            val region = it.value!!.mapsquare
+            val regionX = region shr 8
+            val regionZ = region and 0xff
+            ByteReadPacket(index.group("m${regionX}_$regionZ").data.decompress()).loadEntryType(MapSquareEntryType(region, regionX, regionZ)).also { type ->
+                check(it.value!!.name == "l${regionX}_$regionZ")
+                check(it.value!!.nameHash == it.key.nameHash)
+                if (it.key.data.isNotEmpty() && it.value!!.key.isNotEmpty()) {
+                    try {
+                        ByteReadPacket(it.key.data.decompress(it.value!!.key.toIntArray())).loadLocs(type)
+                    } catch (exception: ZipException) {
+                        logger.warn { "Could not decompress locs. Perhaps the xtea keys are incorrect. GroupId=${it.key.id}, Region=$region." }
                     }
                 }
             }
-        }
-        latch.await()
-        pool.shutdown()
-        logger.debug { "Took $time to finish. Loaded $count maps. ($missingXteasCount are missing xteas or landscape data.)" }
-        return mapSquares
+        }.toList().associateBy(MapSquareEntryType::id)
     }
 
     override fun ByteReadPacket.loadEntryType(type: MapSquareEntryType): MapSquareEntryType {
         for (level in 0 until LEVELS) {
             for (x in 0 until MAP_SIZE) {
                 for (z in 0 until MAP_SIZE) {
-                    while (true) {
-                        when (val opcode = readUByte().toInt()) {
-                            0 -> break
-                            1 -> { // Tile height
-                                discard(1)
-                                break
-                            }
-                            in 50..81 -> type.collision[level][x][z] = ((opcode - 49).toByte())
-                        }
-                    }
+                    loadTerrain(type, level, x, z)
                 }
             }
         }
+        assertEmptyAndRelease()
         return type
     }
 
-    private fun ByteReadPacket.loadMapEntryLocations(type: MapSquareEntryType) {
-        var objectId = -1
-        var offset: Int
+    private tailrec fun ByteReadPacket.loadTerrain(type: MapSquareEntryType, level: Int, x: Int, z: Int) {
+        when (val opcode = readUByte().toInt()) {
+            0 -> return
+            1 -> { discard(1); return }
+            in 2..49 -> discard(1)
+            in 50..81 -> type.collision[level][x][z] = ((opcode - 49).toByte())
+        }
+        return loadTerrain(type, level, x, z)
+    }
 
-        while (readIncrSmallSmart().also { offset = it } != 0) {
-            objectId += offset
-            var packedCoordinates = 0
-            var locOffset: Int
-            while (readUShortSmart().also { locOffset = it } != 0) {
-                packedCoordinates += locOffset - 1
-                val localX = packedCoordinates shr 6 and 0x3f
-                val localZ = packedCoordinates and 0x3f
-                var level = packedCoordinates shr 12
+    private fun ByteReadPacket.loadLocs(type: MapSquareEntryType) {
+        loadLocIds(type, -1)
+        assertEmptyAndRelease()
+    }
+
+    private tailrec fun ByteReadPacket.loadLocIds(type: MapSquareEntryType, objectId: Int) {
+        val offset = readIncrSmallSmart()
+        when (offset) {
+            0 -> return
+            else -> loadLocCollision(type, objectId + offset, 0)
+        }
+        return loadLocIds(type, objectId + offset)
+    }
+
+    private tailrec fun ByteReadPacket.loadLocCollision(type: MapSquareEntryType, objectId: Int, packedLocation: Int) {
+        val opcode = readUShortSmart()
+        when (opcode) {
+            0 -> return
+            else -> {
                 val attributes = readUByte().toInt()
                 val shape = attributes shr 2
                 val rotation = attributes and 0x3
 
-                if (type.collision[1][localX][localZ].toInt() and 2 == 2) {
-                    level--
+                val localX = (packedLocation + opcode - 1) shr 6 and 0x3f
+                val localZ = (packedLocation + opcode - 1) and 0x3f
+                val level = ((packedLocation + opcode - 1) shr 12).let {
+                    if (it - 1 >= 0 && type.collision[1][localX][localZ].toInt() and BRIDGE_TILE_BIT.toInt() == 2) it - 1 else it
                 }
-
-                if (level < 0) continue
 
                 type.locations[level][localX][localZ].add(
                     MapSquareEntryType.MapSquareLocation(
@@ -128,14 +105,12 @@ class MapEntryTypeProvider : EntryTypeProvider<MapSquareEntryType>() {
                 )
             }
         }
+        return loadLocCollision(type, objectId, packedLocation + opcode - 1)
     }
 
     companion object {
         const val BLOCKED_TILE_BIT = 0x1.toByte()
         const val BRIDGE_TILE_BIT = 0x2.toByte()
-
-        const val VALID_X = 100
-        const val VALID_Z = 256
 
         const val LEVELS = 4
         const val MAP_SIZE = 64

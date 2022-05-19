@@ -50,11 +50,11 @@ fun ByteReadPacket.readUShortSmart() = if (tryPeek() < 128) readUByte().toInt() 
 fun ByteReadPacket.readUIntSmart() = if (tryPeek() < 0) readInt() and Integer.MAX_VALUE else readUShort().toShort().let { if (it == Short.MAX_VALUE) -1 else it }.toInt()
 
 fun ByteReadPacket.readVarInt(): Int {
-    var var1 = readByte().toInt()
-    var var2 = 0
-    while (var1 < 0) {
-        var2 = (var2 or (var1 and 127)) shl 7
-        var1 = readByte().toInt()
+    var increment = readByte().toInt()
+    var offset = 0
+    while (increment < 0) {
+        offset = (offset or (increment and 127)) shl 7
+        increment = readByte().toInt()
     }
-    return var2 or var1
+    return offset or increment
 }

@@ -25,7 +25,7 @@ class Interfaces(
     var currentInterfaceLayout = InterfaceLayout.FIXED
 
     fun login() {
-        player.message("Welcome to Xlitekt.")
+        player.message("Welcome to XliteKt.")
         gameInterfaces.forEach(::openInterface)
         player.write(VarpSmallPacket(1737, -1)) // TODO TEMP until i write a var system
     }
