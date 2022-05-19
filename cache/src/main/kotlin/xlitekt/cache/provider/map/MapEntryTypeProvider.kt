@@ -4,6 +4,8 @@ import com.github.michaelbull.logging.InlineLogger
 import com.runetopic.cache.codec.decompress
 import io.ktor.utils.io.core.ByteReadPacket
 import io.ktor.utils.io.core.readUByte
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.toList
 import xlitekt.cache.provider.EntryTypeProvider
 import xlitekt.shared.buffer.readIncrSmallSmart
 import xlitekt.shared.buffer.readUShortSmart
@@ -18,36 +20,37 @@ import java.util.zip.ZipException
 class MapEntryTypeProvider : EntryTypeProvider<MapSquareEntryType>() {
 
     private val logger = InlineLogger()
+    private val mapSquareResource by inject<MapSquares>()
 
     override fun load(): Map<Int, MapSquareEntryType> {
         val index = store.index(MAP_INDEX)
         // We only care about loading maps that we have configured in the xteas resource file.
-        val mapSquares by inject<MapSquares>()
-        val groups = index.groups().associateWith { mapSquares.values.firstOrNull { mapSquareResource -> mapSquareResource.group == it.id } }.filterValues { it != null }
-        return groups.entries.parallelStream().map {
-            val region = it.value!!.mapsquare
-            val regionX = region shr 8
-            val regionZ = region and 0xff
-            ByteReadPacket(index.group("m${regionX}_$regionZ").data.decompress()).loadEntryType(MapSquareEntryType(region, regionX, regionZ)).also { type ->
-                check(it.value!!.name == "l${regionX}_$regionZ")
-                check(it.value!!.nameHash == it.key.nameHash)
-                if (it.key.data.isNotEmpty() && it.value!!.key.isNotEmpty()) {
-                    try {
-                        ByteReadPacket(it.key.data.decompress(it.value!!.key.toIntArray())).loadLocs(type)
-                    } catch (exception: ZipException) {
-                        logger.warn { "Could not decompress locs. Perhaps the xtea keys are incorrect. GroupId=${it.key.id}, Region=$region." }
-                    }
-                }
-            }
-        }.toList().associateBy(MapSquareEntryType::id)
+        return mapSquareResource.values
+            .parallelStream()
+            .map { ByteReadPacket(index.group("m${it.mapsquare shr 8}_${it.mapsquare and 0xff}").data.decompress()).loadEntryType(MapSquareEntryType(it.mapsquare, it.mapsquare shr 8, it.mapsquare and 0xff)) }
+            .toList()
+            .associateBy(MapSquareEntryType::id)
     }
 
     override fun ByteReadPacket.loadEntryType(type: MapSquareEntryType): MapSquareEntryType {
+        // Load the map file first.
         for (level in 0 until LEVELS) {
             for (x in 0 until MAP_SIZE) {
                 for (z in 0 until MAP_SIZE) {
                     loadTerrain(type, level, x, z)
                 }
+            }
+        }
+        // Load the loc file next.
+        val resource = mapSquareResource[type.id]!!
+        check(resource.name == "l${type.regionX}_${type.regionZ}")
+        val locs = store.index(MAP_INDEX).group("l${type.regionX}_${type.regionZ}")
+        check(resource.nameHash == locs.nameHash)
+        if (locs.data.isNotEmpty() && resource.key.isNotEmpty()) {
+            try {
+                ByteReadPacket(locs.data.decompress(resource.key.toIntArray())).loadLocs(type)
+            } catch (exception: ZipException) {
+                logger.warn { "Could not decompress and load locs. Perhaps the xtea keys are incorrect. GroupId=${locs.id}, MapSquare=${type.id}." }
             }
         }
         assertEmptyAndRelease()
