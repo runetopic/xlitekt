@@ -4,8 +4,6 @@ import com.github.michaelbull.logging.InlineLogger
 import com.runetopic.cache.codec.decompress
 import io.ktor.utils.io.core.ByteReadPacket
 import io.ktor.utils.io.core.readUByte
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.toList
 import xlitekt.cache.provider.EntryTypeProvider
 import xlitekt.shared.buffer.readIncrSmallSmart
 import xlitekt.shared.buffer.readUShortSmart
@@ -42,9 +40,10 @@ class MapEntryTypeProvider : EntryTypeProvider<MapSquareEntryType>() {
             }
         }
         // Load the loc file next.
+        val groupName = "l${type.regionX}_${type.regionZ}"
         val resource = mapSquareResource[type.id]!!
-        check(resource.name == "l${type.regionX}_${type.regionZ}")
-        val locs = store.index(MAP_INDEX).group("l${type.regionX}_${type.regionZ}")
+        check(resource.name == groupName)
+        val locs = store.index(MAP_INDEX).group(groupName)
         check(resource.nameHash == locs.nameHash)
         if (locs.data.isNotEmpty() && resource.key.isNotEmpty()) {
             try {
@@ -72,21 +71,21 @@ class MapEntryTypeProvider : EntryTypeProvider<MapSquareEntryType>() {
         assertEmptyAndRelease()
     }
 
-    private tailrec fun ByteReadPacket.loadLocIds(type: MapSquareEntryType, objectId: Int) {
+    private tailrec fun ByteReadPacket.loadLocIds(type: MapSquareEntryType, locId: Int) {
         val offset = readIncrSmallSmart()
         if (offset == 0) return
-        loadLocCollision(type, objectId + offset, 0)
-        return loadLocIds(type, objectId + offset)
+        loadLocCollision(type, locId + offset, 0)
+        return loadLocIds(type, locId + offset)
     }
 
     private tailrec fun ByteReadPacket.loadLocCollision(type: MapSquareEntryType, objectId: Int, packedLocation: Int) {
-        val opcode = readUShortSmart()
-        if (opcode == 0) return
+        val offset = readUShortSmart()
+        if (offset == 0) return
         val attributes = readUByte().toInt()
         val shape = attributes shr 2
         val rotation = attributes and 0x3
 
-        val packed = packedLocation + opcode - 1
+        val packed = packedLocation + offset - 1
         val localX = packed shr 6 and 0x3f
         val localZ = packed and 0x3f
         val level = (packed shr 12).let {
