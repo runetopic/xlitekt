@@ -43,7 +43,7 @@ fun ByteReadPacket.readShortSmart() = if (tryPeek() < 128) readUByte().toInt() -
 fun ByteReadPacket.readUShortSmart() = if (tryPeek() < 128) readUByte().toInt() else readUShort().toInt() - (Short.MAX_VALUE + 1)
 fun ByteReadPacket.readUIntSmart() = if (tryPeek() < 0) readInt() and Integer.MAX_VALUE else readUShort().toShort().let { if (it == Short.MAX_VALUE) -1 else it }.toInt()
 
-tailrec fun ByteReadPacket.readVarInt(increment: Int = readUByte().toInt(), offset: Int = 0): Int {
+tailrec fun ByteReadPacket.readVarInt(increment: Int = readByte().toInt(), offset: Int = 0): Int {
     if (increment >= 0) return offset or increment
     return readVarInt(offset = (offset or (increment and 127)) shl 7)
 }
