@@ -125,7 +125,7 @@ game {
 
 If you wish to benchmark this server on your machine, you can set this field in the application.conf file.
 
-####Sample Benchmarking Results
+#### Sample Benchmarking Results
 ```
 - BenchmarkParallelActorSynchronizer
 - AMD Ryzen 9 3900X 12-Core Processor               4.20 GHz
