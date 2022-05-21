@@ -28,24 +28,22 @@ class Viewport(
         writeBits(30, player.location::packedLocation)
         players[player.index] = player
         highDefinitions[highDefinitionsCount++] = player.index
-        (1 until MAX_PLAYERS).forEach {
-            if (it == player.index) return@forEach
-            val otherRegionCoordinates = world.players[it]?.location?.regionLocation ?: 0
+        for (index in 1 until MAX_PLAYERS) {
+            if (index == player.index) continue
+            val otherRegionCoordinates = world.players[index]?.location?.regionLocation ?: 0
             writeBits(18) { otherRegionCoordinates }
-            locations[it] = otherRegionCoordinates
-            lowDefinitions[lowDefinitionsCount++] = it
+            locations[index] = otherRegionCoordinates
+            lowDefinitions[lowDefinitionsCount++] = index
         }
     }
 
     fun update() {
         highDefinitionsCount = 0
         lowDefinitionsCount = 0
-        (1 until MAX_PLAYERS).forEach {
-            when (players[it]) {
-                null -> lowDefinitions[lowDefinitionsCount++] = it
-                else -> highDefinitions[highDefinitionsCount++] = it
-            }
-            nsnFlags[it] = (nsnFlags[it] shr 1)
+        for (index in 1 until MAX_PLAYERS) {
+            if (players[index] == null) lowDefinitions[lowDefinitionsCount++] = index
+            else highDefinitions[highDefinitionsCount++] = index
+            nsnFlags[index] = (nsnFlags[index] shr 1)
         }
     }
 
