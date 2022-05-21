@@ -21,7 +21,7 @@ fun ByteReadPacket.readStringCp1252NullCircumfixed(): String {
 
 fun ByteReadPacket.readUByteSubtract() = readUByte().toInt() - 128 and 0xff
 fun ByteReadPacket.readUByteAdd() = readUByte().toInt() + 128 and 0xff
-fun ByteReadPacket.readUByteNegate() = 0 - readByte().toInt() and 0xff
+fun ByteReadPacket.readUByteNegate() = -readByte().toInt() and 0xff
 
 fun ByteReadPacket.readUShortAdd() = (readUByte().toInt() shl 8) or readUByteAdd()
 fun ByteReadPacket.readUShortSubtract() = (readUByte().toInt() shl 8) or readUByteSubtract()
