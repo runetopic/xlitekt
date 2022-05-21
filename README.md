@@ -11,6 +11,22 @@ documented.
 Xlite is currently built by two developers:
  - [tyler27 (me)](https://github.com/tyler27)
  - [ultraviolet-jordan](https://github.com/ultraviolet-jordan)
+
+# Features
+- Embedded HTTP server to deliver client configuration files.
+- Cache data loading.
+- Client cache files updating.
+- Client game login.
+- ISAAC and RSA.
+- Full synchronization between connected clients and game server.
+- Full clipping.
+- Player updating.
+- Npc updating.
+- Basic UI support.
+- Basic vars support.
+- Basic commands support.
+- And more!
+
 # Getting Started
 _Make sure to download the latest #202 cache version from one of the archives below. We don't push this to github for
 obvious reasons._
@@ -95,6 +111,34 @@ Maps are loaded using the xteas provided from OpenRS2, which follows this format
     ]
   }
 ]
+```
+
+# Benchmarking & Performance
+XliteKt aims to be a very fast server which can easily handle thousands of players simultaneously and scales very well with better hardware. 
+Even though XliteKt can run on low end machines, we highly suggest using a machine with a computer processor that has atleast 4 cores.
+
+```shell
+game {
+    benchmarking = true
+}
+```
+
+If you wish to benchmark this server on your machine, you can set this field in the application.conf file.
+
+####Sample Benchmarking Results
+```
+- BenchmarkParallelActorSynchronizer
+- AMD Ryzen 9 3900X 12-Core Processor               4.20 GHz
+- Windows 11 Pro 21H2 22000.675 
+============================================================
+- Pathfinders took 15.417400ms for 2000 players. [TICK=1258]
+- Pathfinders took 1.402100ms for 22472 npcs. [TICK=1258]
+- Movement routing took 920.6us for all entities. [TICK=1258]
+- Pre tick took 3.079500ms for 2000 players. [TICK=1258]
+- Main tick took 24.448800ms for 2000 players. [TICK=1258]
+============================================================
+- Synchronization completed in 45.760100ms.
+============================================================
 ```
 
 ## Documentation
