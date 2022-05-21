@@ -70,13 +70,16 @@ abstract class Actor(
     }
 
     fun hasPendingUpdate() = renderer.hasPendingUpdate()
-    fun pendingUpdates() = renderer.pendingUpdates.values.toList()
+    fun pendingUpdates() = renderer.pendingUpdates()
     fun cacheUpdateBlock(render: Render, block: ByteReadPacket) {
-        renderer.cachedUpdates.entries.removeIf { it.key::class == render::class }
-        renderer.cachedUpdates[render] = block
+        renderer.cachedUpdates().entries.removeIf { it.key::class == render::class }
+        renderer.cachedUpdates()[render] = block
     }
-    fun cachedUpdates() = renderer.cachedUpdates
-    fun clearPendingUpdates() = renderer.clearUpdates()
+    fun cachedUpdates() = renderer.cachedUpdates()
+    fun postSync() {
+        renderer.clearPendingUpdates()
+        renderer.persistCachedUpdates()
+    }
 
     /**
      * Use this when the player does an action. This will need work.
@@ -90,10 +93,10 @@ abstract class Actor(
     }
 
     fun render(render: Render) {
-        renderer.pendingUpdates[render::class] = render
+        renderer.addPendingUpdate(render)
         when (render) {
             is Render.FaceActor -> facingActorIndex = render.index
-            else -> {}
+            else -> {} // TODO
         }
     }
 }

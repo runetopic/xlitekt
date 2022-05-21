@@ -29,7 +29,7 @@ abstract class EntryTypeProvider<R : EntryType> {
     }
 
     protected fun ByteReadPacket.assertEmptyAndRelease() {
-        check(remaining.toInt() == 0) { "The remaining buffer is not empty." }
+        check(remaining.toInt() == 0) { "The remaining buffer is not empty. Remaining=$remaining" }
         release()
     }
 

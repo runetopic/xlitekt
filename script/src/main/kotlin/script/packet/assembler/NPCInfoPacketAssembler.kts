@@ -9,7 +9,6 @@ import script.packet.assembler.NPCInfoPacketAssembler.ActivityUpdateType.Updatin
 import xlitekt.game.actor.movement.MovementStep
 import xlitekt.game.actor.movement.isValid
 import xlitekt.game.actor.npc.NPC
-import xlitekt.game.actor.player.Player
 import xlitekt.game.actor.player.Viewport
 import xlitekt.game.actor.render.block.buildNPCUpdateBlocks
 import xlitekt.game.packet.NPCInfoPacket
@@ -29,8 +28,8 @@ onPacketAssembler<NPCInfoPacket>(opcode = 78, size = -2) {
         val blocks = BytePacketBuilder()
         withBitAccess {
             writeBits(8, viewport.npcs::size)
-            highDefinition(viewport, blocks, playerLocations, steps)
-            lowDefinition(viewport, blocks, playerLocations)
+            highDefinition(viewport, blocks, steps)
+            lowDefinition(viewport, blocks)
             if (blocks.size > 0) {
                 writeBits(15, Short.MAX_VALUE::toInt)
             }
@@ -42,10 +41,9 @@ onPacketAssembler<NPCInfoPacket>(opcode = 78, size = -2) {
 fun BitAccess.highDefinition(
     viewport: Viewport,
     blocks: BytePacketBuilder,
-    playerLocations: Map<Player, Location>,
     steps: Map<NPC, MovementStep>
 ) {
-    val playerLocation = playerLocations[viewport.player] ?: viewport.player.location
+    val playerLocation = viewport.player.location
     viewport.npcs.forEach {
         // Check the activities this npc is doing.
         val activity = highDefinitionActivities(it, playerLocation, steps)
@@ -63,8 +61,8 @@ fun BitAccess.highDefinition(
     viewport.npcs.removeAll { !it.location.withinDistance(playerLocation) }
 }
 
-fun BitAccess.lowDefinition(viewport: Viewport, blocks: BytePacketBuilder, playerLocations: Map<Player, Location>) {
-    val playerLocation = playerLocations[viewport.player] ?: viewport.player.location
+fun BitAccess.lowDefinition(viewport: Viewport, blocks: BytePacketBuilder) {
+    val playerLocation = viewport.player.location
     playerLocation.zones().forEach { zone ->
         zone.npcs.forEach {
             // Check the activities this npc is doing.

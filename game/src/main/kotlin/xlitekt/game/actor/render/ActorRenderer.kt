@@ -9,9 +9,21 @@ import kotlin.reflect.KClass
  * @author Jordan Abraham
  */
 class ActorRenderer {
-    val pendingUpdates = mutableMapOf<KClass<*>, Render>()
-    val cachedUpdates = mutableMapOf<Render, ByteReadPacket>()
+    private val pendingUpdates = mutableMapOf<KClass<*>, Render>()
+    private val cachedUpdates = mutableMapOf<Render, ByteReadPacket>()
 
     fun hasPendingUpdate(): Boolean = pendingUpdates.isNotEmpty()
-    fun clearUpdates() = pendingUpdates.clear()
+    fun clearPendingUpdates() = pendingUpdates.clear()
+    fun pendingUpdates() = pendingUpdates.values.toList()
+    fun addPendingUpdate(render: Render) {
+        pendingUpdates[render::class] = render
+    }
+    fun cachedUpdates() = cachedUpdates
+    fun persistCachedUpdates() {
+        cachedUpdates.entries.removeIf {
+            it.key::class != Render.Appearance::class &&
+                it.key::class != Render.FaceAngle::class &&
+                it.key::class != Render.MovementType::class
+        }
+    }
 }

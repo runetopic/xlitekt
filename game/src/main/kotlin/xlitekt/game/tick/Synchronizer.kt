@@ -9,7 +9,6 @@ import xlitekt.game.actor.render.block.buildPlayerUpdateBlocks
 import xlitekt.game.packet.NPCInfoPacket
 import xlitekt.game.packet.PlayerInfoPacket
 import xlitekt.game.world.World
-import xlitekt.game.world.map.location.Location
 import xlitekt.shared.inject
 
 /**
@@ -25,15 +24,15 @@ abstract class Synchronizer : Runnable {
     }
 
     protected fun Player.sync(
-        updates: Map<Player, ByteReadPacket>,
-        previousLocations: Map<Player, Location?>,
-        locations: Map<Player, Location>,
+        players: Map<Int, Player>,
+        pendingUpdates: Map<Player, ByteReadPacket>,
+        cachedUpdates: Map<Player, ByteArray>,
         playerSteps: Map<Player, MovementStep?>,
         npcSteps: Map<NPC, MovementStep>
     ) {
-        write(PlayerInfoPacket(viewport, updates, previousLocations, locations, playerSteps))
-        write(NPCInfoPacket(viewport, locations, npcSteps))
+        write(PlayerInfoPacket(players, viewport, pendingUpdates, cachedUpdates, playerSteps))
+        write(NPCInfoPacket(viewport, npcSteps))
         flushPool()
-        clearPendingUpdates()
+        postSync()
     }
 }

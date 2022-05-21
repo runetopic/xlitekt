@@ -2,6 +2,10 @@ package xlitekt.shared.buffer
 
 import io.ktor.utils.io.core.BytePacketBuilder
 import io.ktor.utils.io.core.writeFully
+import io.ktor.utils.io.core.writeInt
+import io.ktor.utils.io.core.writeIntLittleEndian
+import io.ktor.utils.io.core.writeShort
+import io.ktor.utils.io.core.writeShortLittleEndian
 import xlitekt.shared.toInt
 
 inline fun BytePacketBuilder.writeStringCp1252NullTerminated(value: () -> String) {
@@ -21,15 +25,8 @@ inline fun BytePacketBuilder.writeByteNegate(value: () -> Int) = writeByte((-val
 inline fun BytePacketBuilder.writeByteSubtract(value: () -> Int) = writeByte((128 - value.invoke().toByte()).toByte())
 inline fun BytePacketBuilder.writeByteAdd(value: () -> Int) = writeByte((value.invoke().toByte() + 128).toByte())
 
-inline fun BytePacketBuilder.writeShort(value: () -> Int) = value.invoke().also {
-    writeByte { it shr 8 }
-    writeByte { it }
-}
-
-inline fun BytePacketBuilder.writeShortLittleEndian(value: () -> Int) = value.invoke().also {
-    writeByte { it }
-    writeByte { it shr 8 }
-}
+inline fun BytePacketBuilder.writeShort(value: () -> Int) = writeShort(value.invoke().toShort())
+inline fun BytePacketBuilder.writeShortLittleEndian(value: () -> Int) = writeShortLittleEndian(value.invoke().toShort())
 
 inline fun BytePacketBuilder.writeShortAdd(value: () -> Int) = value.invoke().also {
     writeByte { it shr 8 }
@@ -46,17 +43,8 @@ inline fun BytePacketBuilder.writeMedium(value: () -> Int) = value.invoke().also
     writeShort { it }
 }
 
-inline fun BytePacketBuilder.writeInt(value: () -> Int) = value.invoke().also {
-    writeByte { it shr 24 }
-    writeByte { it shr 16 }
-    writeShort { it }
-}
-
-inline fun BytePacketBuilder.writeIntLittleEndian(value: () -> Int) = value.invoke().also {
-    writeShortLittleEndian { it }
-    writeByte { it shr 16 }
-    writeByte { it shr 24 }
-}
+inline fun BytePacketBuilder.writeInt(value: () -> Int) = writeInt(value.invoke())
+inline fun BytePacketBuilder.writeIntLittleEndian(value: () -> Int) = writeIntLittleEndian(value.invoke())
 
 inline fun BytePacketBuilder.writeIntV1(value: () -> Int) = value.invoke().also {
     writeShort { it }
@@ -91,29 +79,24 @@ class BitAccess {
         var bitOffset = 8 - (bitIndex and 7)
         bitIndex += numBits
 
-        var tmp: Int
-        var max: Int
         while (numBits > bitOffset) {
-            tmp = data[byteIndex].toInt()
-            max = masks[bitOffset]
-            tmp = tmp and max.inv() or (it shr numBits - bitOffset and max)
+            val max = masks[bitOffset]
+            val tmp = data[byteIndex].toInt() and max.inv() or (it shr numBits - bitOffset and max)
             data[byteIndex++] = tmp.toByte()
             numBits -= bitOffset
             bitOffset = 8
         }
 
-        tmp = data[byteIndex].toInt()
-        max = masks[numBits]
+        var dataValue = data[byteIndex].toInt()
+        val mask = masks[numBits]
         if (numBits == bitOffset) {
-            tmp = tmp and max.inv() or (it and max)
+            dataValue = dataValue and mask.inv() or (it and mask)
         } else {
-            tmp = tmp and (max shl bitOffset - numBits).inv()
-            tmp = tmp or (it and max shl bitOffset - numBits)
+            dataValue = dataValue and (mask shl bitOffset - numBits).inv()
+            dataValue = dataValue or (it and mask shl bitOffset - numBits)
         }
-        data[byteIndex] = tmp.toByte()
+        data[byteIndex] = dataValue.toByte()
     }
-
-    fun write(builder: BytePacketBuilder) = builder.writeFully(data, 0, (bitIndex + 7) / 8)
 
     companion object {
         val masks = IntArray(32)

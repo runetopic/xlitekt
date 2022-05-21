@@ -2,6 +2,7 @@ package xlitekt.game.tick.benchmark
 
 import com.github.michaelbull.logging.InlineLogger
 import io.ktor.utils.io.core.ByteReadPacket
+import io.ktor.utils.io.core.readBytes
 import org.rsmod.pathfinder.DumbPathFinder
 import org.rsmod.pathfinder.PathFinder
 import org.rsmod.pathfinder.Route
@@ -11,6 +12,7 @@ import xlitekt.game.actor.chat
 import xlitekt.game.actor.movement.MovementStep
 import xlitekt.game.actor.npc.NPC
 import xlitekt.game.actor.player.Player
+import xlitekt.game.actor.render.block.buildPlayerUpdateBlocks
 import xlitekt.game.tick.Synchronizer
 import xlitekt.game.world.map.location.Location
 import xlitekt.shared.inject
@@ -55,8 +57,8 @@ class BenchmarkParallelActorSynchronizer : Synchronizer() {
                 paths[it] = pf.findPath(
                     srcX = it.location.x,
                     srcY = it.location.z,
-                    destX = Random.nextInt(3210, 3240),
-                    destY = Random.nextInt(3210, 3240),
+                    destX = Random.nextInt(first!!.location.x - 5, first.location.x + 5),
+                    destY = Random.nextInt(first.location.z - 5, first.location.z + 5),
                     z = it.location.level
                 )
                 queue.put(pf)
@@ -103,11 +105,13 @@ class BenchmarkParallelActorSynchronizer : Synchronizer() {
         // Pre process.
         val playerSteps = ConcurrentHashMap<Player, MovementStep>()
         val npcSteps = ConcurrentHashMap<NPC, MovementStep>()
-        val updates = ConcurrentHashMap<Player, ByteReadPacket>()
+        val pendingUpdates = ConcurrentHashMap<Player, ByteReadPacket>()
+        val cachedUpdates = ConcurrentHashMap<Player, ByteArray>()
         val pre = measureTime {
             players.parallelStream().forEach {
                 playerSteps[it] = it.processMovement()
-                updates[it] = it.processUpdateBlocks(it.pendingUpdates())
+                pendingUpdates[it] = it.processUpdateBlocks(it.pendingUpdates())
+                cachedUpdates[it] = it.cachedUpdates().keys.buildPlayerUpdateBlocks(it, false).readBytes()
             }
             npcs.parallelStream().forEach {
                 npcSteps[it] = it.processMovement()
@@ -117,10 +121,9 @@ class BenchmarkParallelActorSynchronizer : Synchronizer() {
 
         val main = measureTime {
             // Main process.
-            val previousLocations = players.associateWith(Player::previousLocation)
-            val currentLocations = players.associateWith(Player::location)
+            val syncPlayers = players.associateBy(Player::index)
             players.parallelStream().forEach {
-                it.sync(updates, previousLocations, currentLocations, playerSteps, npcSteps)
+                it.sync(syncPlayers, pendingUpdates, cachedUpdates, playerSteps, npcSteps)
             }
         }
         logger.debug { "Main tick took $main for ${players.size} players. [TICK=$tick]" }

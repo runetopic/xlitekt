@@ -18,22 +18,22 @@ data class RenderingBlock(
 )
 
 fun Collection<Render>.buildPlayerUpdateBlocks(player: Player, cache: Boolean = true) = buildPacket {
-    val blocks = this@buildPlayerUpdateBlocks.toSortedPlayerBlocks()
-    writePlayerMasks(blocks.values)
-    for (block in blocks) {
-        // If (cache == true) then it will create a new block buffer and cache the new one to the player.
-        val packet = if (cache) block.value.packet.invoke(block.key) else player.cachedUpdates()[block.key]
-        if (packet != null) {
-            if (cache) player.cacheUpdateBlock(block.key, packet)
-            writeBytes(packet.copy()::readBytes)
+    with(toSortedPlayerBlocks()) {
+        writePlayerMasks(values)
+        for (block in this) {
+            // If (cache == true) then it will create a new block buffer and cache the new one to the player.
+            val packet = if (cache) block.value.packet.invoke(block.key) else player.cachedUpdates()[block.key]
+            if (packet != null) {
+                if (cache) player.cacheUpdateBlock(block.key, packet)
+                writeBytes(packet.copy()::readBytes)
+            }
         }
     }
 }
 
-fun BytePacketBuilder.buildNPCUpdateBlocks(npc: NPC) {
-    val blocks = npc.pendingUpdates().toSortedNPCBlocks()
-    writeNPCMasks(blocks.values)
-    for (block in blocks) {
+fun BytePacketBuilder.buildNPCUpdateBlocks(npc: NPC) = with(npc.pendingUpdates().toSortedNPCBlocks()) {
+    writeNPCMasks(values)
+    for (block in this) {
         writeBytes(block.value.packet.invoke(block.key)::readBytes)
     }
 }

@@ -1,3 +1,5 @@
+package script.command
+
 import xlitekt.game.actor.player.message
 import xlitekt.game.content.command.Commands.onCommand
 import xlitekt.game.world.map.location.Location
