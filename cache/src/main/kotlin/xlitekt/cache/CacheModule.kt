@@ -27,7 +27,7 @@ import xlitekt.cache.provider.config.varp.VarpEntryTypeProvider
 import xlitekt.cache.provider.config.worldmap.WorldMapElementEntryTypeProvider
 import xlitekt.cache.provider.font.FontEntryTypeProvider
 import xlitekt.cache.provider.instrument.InstrumentEntryTypeProvider
-import xlitekt.cache.provider.map.MapEntryTypeProvider
+import xlitekt.cache.provider.map.MapSquareEntryTypeProvider
 import xlitekt.cache.provider.music.MusicEntryTypeProvider
 import xlitekt.cache.provider.soundeffect.SoundEffectEntryTypeProvider
 import xlitekt.cache.provider.sprite.SpriteEntryTypeProvider
@@ -65,7 +65,7 @@ val cacheModule = module(createdAtStart = true) {
     }
     single { NPCEntryTypeProvider() }
     single { LocEntryTypeProvider() }
-    single { MapEntryTypeProvider() }
+    single { MapSquareEntryTypeProvider() }
     single { SequenceEntryTypeProvider() }
     single { HitSplatEntryTypeProvider() }
     single { ParamEntryTypeProvider() }

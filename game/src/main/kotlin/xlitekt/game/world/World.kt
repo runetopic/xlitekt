@@ -1,6 +1,6 @@
 package xlitekt.game.world
 
-import xlitekt.cache.provider.map.MapEntryTypeProvider
+import xlitekt.cache.provider.map.MapSquareEntryTypeProvider
 import xlitekt.game.actor.NPCList
 import xlitekt.game.actor.PlayerList
 import xlitekt.game.actor.npc.NPC
@@ -20,7 +20,7 @@ class World(
     val loginRequests: ConcurrentMap<Player, Client> = ConcurrentHashMap(),
     val logoutRequests: ConcurrentHashMap.KeySetView<Player, Boolean> = ConcurrentHashMap.newKeySet()
 ) {
-    private val maps by inject<MapEntryTypeProvider>()
+    private val maps by inject<MapSquareEntryTypeProvider>()
     private val npcSpawns by inject<NPCSpawns>()
 
     /**

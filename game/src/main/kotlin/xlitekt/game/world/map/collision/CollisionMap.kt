@@ -31,26 +31,25 @@ import org.rsmod.pathfinder.flag.CollisionFlag.WALL_WEST
 import org.rsmod.pathfinder.flag.CollisionFlag.WALL_WEST_PROJECTILE_BLOCKER
 import org.rsmod.pathfinder.flag.CollisionFlag.WALL_WEST_ROUTE_BLOCKER
 import xlitekt.cache.provider.config.loc.LocEntryTypeProvider
-import xlitekt.cache.provider.map.MapEntryTypeProvider
 import xlitekt.cache.provider.map.MapSquareEntryType
+import xlitekt.cache.provider.map.MapSquareEntryTypeProvider
 import xlitekt.game.world.map.location.Location
 import xlitekt.game.world.map.obj.GameObject
 import xlitekt.game.world.map.obj.GameObjectShape
 import xlitekt.game.world.map.zone.Zones
 import xlitekt.shared.inject
-import kotlin.experimental.and
 
 object CollisionMap {
     private val locs by inject<LocEntryTypeProvider>()
     private val zoneFlags by inject<ZoneFlags>()
 
     fun applyCollision(type: MapSquareEntryType) {
-        for (level in 0 until MapEntryTypeProvider.LEVELS) {
-            for (x in 0 until MapEntryTypeProvider.MAP_SIZE) {
-                for (z in 0 until MapEntryTypeProvider.MAP_SIZE) {
-                    if ((type.terrain[level][x][z]!!.collision and MapEntryTypeProvider.BLOCKED_TILE_BIT) != MapEntryTypeProvider.BLOCKED_TILE_BIT) continue
+        for (level in 0 until MapSquareEntryTypeProvider.LEVELS) {
+            for (x in 0 until MapSquareEntryTypeProvider.MAP_SIZE) {
+                for (z in 0 until MapSquareEntryTypeProvider.MAP_SIZE) {
+                    if ((type.terrain[level][x][z]!!.collision and MapSquareEntryTypeProvider.BLOCKED_TILE_BIT) != MapSquareEntryTypeProvider.BLOCKED_TILE_BIT) continue
 
-                    val actualLevel = if ((type.terrain[1][x][z]!!.collision and MapEntryTypeProvider.BRIDGE_TILE_BIT) == MapEntryTypeProvider.BRIDGE_TILE_BIT) level - 1 else level
+                    val actualLevel = if ((type.terrain[1][x][z]!!.collision and MapSquareEntryTypeProvider.BRIDGE_TILE_BIT) == MapSquareEntryTypeProvider.BRIDGE_TILE_BIT) level - 1 else level
 
                     if (actualLevel < 0) continue
 
@@ -64,9 +63,9 @@ object CollisionMap {
             }
         }
 
-        for (level in 0 until MapEntryTypeProvider.LEVELS) {
-            for (x in 0 until MapEntryTypeProvider.MAP_SIZE) {
-                for (z in 0 until MapEntryTypeProvider.MAP_SIZE) {
+        for (level in 0 until MapSquareEntryTypeProvider.LEVELS) {
+            for (x in 0 until MapSquareEntryTypeProvider.MAP_SIZE) {
+                for (z in 0 until MapSquareEntryTypeProvider.MAP_SIZE) {
                     val baseX = type.regionX shl 6
                     val baseZ = type.regionZ shl 6
 

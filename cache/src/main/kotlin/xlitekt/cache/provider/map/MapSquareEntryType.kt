@@ -1,8 +1,8 @@
 package xlitekt.cache.provider.map
 
 import xlitekt.cache.provider.EntryType
-import xlitekt.cache.provider.map.MapEntryTypeProvider.Companion.LEVELS
-import xlitekt.cache.provider.map.MapEntryTypeProvider.Companion.MAP_SIZE
+import xlitekt.cache.provider.map.MapSquareEntryTypeProvider.Companion.LEVELS
+import xlitekt.cache.provider.map.MapSquareEntryTypeProvider.Companion.MAP_SIZE
 
 /**
  * @author Tyler Telis
