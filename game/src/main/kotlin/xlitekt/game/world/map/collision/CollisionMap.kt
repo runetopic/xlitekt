@@ -48,9 +48,9 @@ object CollisionMap {
         for (level in 0 until MapEntryTypeProvider.LEVELS) {
             for (x in 0 until MapEntryTypeProvider.MAP_SIZE) {
                 for (z in 0 until MapEntryTypeProvider.MAP_SIZE) {
-                    if ((type.collision[level][x][z] and MapEntryTypeProvider.BLOCKED_TILE_BIT) != MapEntryTypeProvider.BLOCKED_TILE_BIT) continue
+                    if ((type.terrain[level][x][z]!!.collision and MapEntryTypeProvider.BLOCKED_TILE_BIT) != MapEntryTypeProvider.BLOCKED_TILE_BIT) continue
 
-                    val actualLevel = if ((type.collision[1][x][z] and MapEntryTypeProvider.BRIDGE_TILE_BIT) == MapEntryTypeProvider.BRIDGE_TILE_BIT) level - 1 else level
+                    val actualLevel = if ((type.terrain[1][x][z]!!.collision and MapEntryTypeProvider.BRIDGE_TILE_BIT) == MapEntryTypeProvider.BRIDGE_TILE_BIT) level - 1 else level
 
                     if (actualLevel < 0) continue
 
@@ -70,7 +70,7 @@ object CollisionMap {
                     val baseX = type.regionX shl 6
                     val baseZ = type.regionZ shl 6
 
-                    type.locations[level][x][z].forEach {
+                    type.locs[level][x][z].forEach {
                         val location = Location(it.x + baseX, it.z + baseZ, it.level)
                         val entry = locs.entryType(it.id) ?: return@forEach
                         val gameObject = GameObject(entry, location, it.shape, it.rotation)

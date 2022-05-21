@@ -11,8 +11,8 @@ data class MapSquareEntryType(
     override val id: Int,
     val regionX: Int,
     val regionZ: Int,
-    var collision: Array<Array<ByteArray>> = Array(LEVELS) { Array(MAP_SIZE) { ByteArray(MAP_SIZE) } },
-    val locations: Array<Array<Array<MutableList<MapSquareLocation>>>> = Array(LEVELS) {
+    var terrain: Array<Array<Array<MapSquareTerrainLocation?>>> = Array(LEVELS) { Array(MAP_SIZE) { arrayOfNulls(MAP_SIZE) } },
+    val locs: Array<Array<Array<MutableList<MapSquareLocLocation>>>> = Array(LEVELS) {
         Array(MAP_SIZE) {
             Array(MAP_SIZE) {
                 mutableListOf()
@@ -21,7 +21,16 @@ data class MapSquareEntryType(
     }
 ) : EntryType(id) {
 
-    data class MapSquareLocation(
+    data class MapSquareTerrainLocation(
+        val height: Int,
+        val overlayId: Int,
+        val overlayPath: Int,
+        val overlayRotation: Int,
+        val collision: Int,
+        val underlayId: Int
+    )
+
+    data class MapSquareLocLocation(
         val id: Int,
         val x: Int,
         val z: Int,
@@ -39,8 +48,8 @@ data class MapSquareEntryType(
         if (id != other.id) return false
         if (regionX != other.regionX) return false
         if (regionZ != other.regionZ) return false
-        if (!collision.contentDeepEquals(other.collision)) return false
-        if (!locations.contentDeepEquals(other.locations)) return false
+        if (!terrain.contentDeepEquals(other.terrain)) return false
+        if (!locs.contentDeepEquals(other.locs)) return false
 
         return true
     }
@@ -49,7 +58,8 @@ data class MapSquareEntryType(
         var result = id
         result = 31 * result + regionX
         result = 31 * result + regionZ
-        result = 31 * result + collision.contentDeepHashCode()
+        result = 31 * result + terrain.contentDeepHashCode()
+        result = 31 * result + locs.contentDeepHashCode()
         return result
     }
 }

@@ -35,7 +35,7 @@ class MapEntryTypeProvider : EntryTypeProvider<MapSquareEntryType>() {
         for (level in 0 until LEVELS) {
             for (x in 0 until MAP_SIZE) {
                 for (z in 0 until MAP_SIZE) {
-                    loadTerrain(type, level, x, z)
+                    type.terrain[level][x][z] = loadTerrain(type, level, x, z)
                 }
             }
         }
@@ -56,14 +56,34 @@ class MapEntryTypeProvider : EntryTypeProvider<MapSquareEntryType>() {
         return type
     }
 
-    private tailrec fun ByteReadPacket.loadTerrain(type: MapSquareEntryType, level: Int, x: Int, z: Int) {
-        when (val opcode = readUByte().toInt()) {
-            0 -> return
-            1 -> { discard(1); return }
-            in 2..49 -> discard(1)
-            in 50..81 -> type.collision[level][x][z] = ((opcode - 49).toByte())
+    private tailrec fun ByteReadPacket.loadTerrain(
+        type: MapSquareEntryType,
+        level: Int,
+        x: Int,
+        z: Int,
+        height: Int = 0,
+        overlayId: Int = 0,
+        overlayPath: Int = 0,
+        overlayRotation: Int = 0,
+        collision: Int = 0,
+        underlayId: Int = 0
+    ): MapSquareEntryType.MapSquareTerrainLocation {
+        return when (val opcode = readUByte().toInt()) {
+            0 -> MapSquareEntryType.MapSquareTerrainLocation(height, overlayId, overlayPath, overlayRotation, collision, underlayId)
+            1 -> MapSquareEntryType.MapSquareTerrainLocation(readUByte().toInt(), overlayId, overlayPath, overlayRotation, collision, underlayId)
+            else -> loadTerrain(
+                type = type,
+                level = level,
+                x = x,
+                z = z,
+                height = height,
+                overlayId = if (opcode in 2..49) readUByte().toInt() else overlayId,
+                overlayPath = if (opcode in 2..49) (opcode - 2) / 4 else overlayPath,
+                overlayRotation = if (opcode in 2..49) opcode - 2 and 3 else overlayRotation,
+                collision = if (opcode in 50..81) opcode - 49 else collision,
+                underlayId = if (opcode > 81) opcode - 81 else underlayId
+            )
         }
-        return loadTerrain(type, level, x, z)
     }
 
     private fun ByteReadPacket.loadLocs(type: MapSquareEntryType) {
@@ -89,12 +109,12 @@ class MapEntryTypeProvider : EntryTypeProvider<MapSquareEntryType>() {
         val localX = packed shr 6 and 0x3f
         val localZ = packed and 0x3f
         val level = (packed shr 12).let {
-            if (type.collision[1][localX][localZ].toInt() and BRIDGE_TILE_BIT.toInt() == 2) it - 1 else it
+            if (type.terrain[1][localX][localZ]!!.collision and BRIDGE_TILE_BIT == 2) it - 1 else it
         }
 
         if (level >= 0) {
-            type.locations[level][localX][localZ].add(
-                MapSquareEntryType.MapSquareLocation(
+            type.locs[level][localX][localZ].add(
+                MapSquareEntryType.MapSquareLocLocation(
                     id = objectId,
                     x = localX,
                     z = localZ,
@@ -108,8 +128,8 @@ class MapEntryTypeProvider : EntryTypeProvider<MapSquareEntryType>() {
     }
 
     companion object {
-        const val BLOCKED_TILE_BIT = 0x1.toByte()
-        const val BRIDGE_TILE_BIT = 0x2.toByte()
+        const val BLOCKED_TILE_BIT = 0x1
+        const val BRIDGE_TILE_BIT = 0x2
 
         const val LEVELS = 4
         const val MAP_SIZE = 64
