@@ -266,7 +266,7 @@ private suspend fun Client.readLogin() {
             PlayerDecoder.decodeFromJson(username, password).let {
                 it.interfaces.currentInterfaceLayout = if (clientResizeable) InterfaceLayout.RESIZABLE else InterfaceLayout.FIXED
                 this.player = it
-                world.players.add(it)
+                world.addPlayerToList(it)
             }.also { if (it) writeLogin(LOGIN_SUCCESS_OPCODE) else writeLogin(BAD_SESSION_OPCODE) }
         }
         else -> throw IllegalStateException("Unhandled login opcode $opcode")

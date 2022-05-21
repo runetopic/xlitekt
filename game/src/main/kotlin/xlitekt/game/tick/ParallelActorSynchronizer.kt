@@ -14,24 +14,23 @@ import java.util.concurrent.ConcurrentHashMap
 class ParallelActorSynchronizer : Synchronizer() {
 
     override fun run() {
-        val players = world.players.filterNotNull().filter(Player::online)
-        val npcs = world.npcs.filterNotNull()
+        val players = world.players()
+        val npcs = world.npcs()
         val playerSteps = ConcurrentHashMap<Player, MovementStep>()
         val npcSteps = ConcurrentHashMap<NPC, MovementStep>()
         val pendingUpdates = ConcurrentHashMap<Player, ByteReadPacket>()
         val cachedUpdates = ConcurrentHashMap<Player, ByteArray>()
+        val syncPlayers = players.associateBy(Player::index)
 
         players.parallelStream().forEach {
-            playerSteps[it] = it.processMovement()
+            playerSteps[it] = it.processMovement(syncPlayers)
             pendingUpdates[it] = it.processUpdateBlocks(it.pendingUpdates())
             cachedUpdates[it] = it.cachedUpdates().keys.buildPlayerUpdateBlocks(it, false).readBytes()
         }
 
         npcs.parallelStream().forEach {
-            npcSteps[it] = it.processMovement()
+            npcSteps[it] = it.processMovement(syncPlayers)
         }
-
-        val syncPlayers = players.associateBy(Player::index)
 
         players.parallelStream().forEach {
             it.sync(syncPlayers, pendingUpdates, cachedUpdates, playerSteps, npcSteps)

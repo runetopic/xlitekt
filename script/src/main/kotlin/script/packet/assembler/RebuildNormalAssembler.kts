@@ -21,7 +21,7 @@ private val mapSquares by inject<MapSquares>()
 onPacketAssembler<RebuildNormalPacket>(opcode = 54, size = -2) {
     buildPacket {
         if (update) {
-            viewport.init(this)
+            viewport.init(this, players)
         }
 
         val zoneX = location.zoneX

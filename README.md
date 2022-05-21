@@ -124,6 +124,7 @@ game {
 ```
 
 If you wish to benchmark this server on your machine, you can set this field in the application.conf file.
+Then use the ::benchmark command in-game.
 
 #### Sample Benchmarking Results
 ```

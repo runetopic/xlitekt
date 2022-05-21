@@ -24,9 +24,8 @@ import xlitekt.game.packet.VarpLargePacket
 import xlitekt.game.packet.VarpSmallPacket
 import xlitekt.game.world.World
 import xlitekt.game.world.map.location.Location
-import xlitekt.shared.inject
+import xlitekt.shared.lazy
 import kotlin.math.abs
-import kotlin.random.Random.Default.nextInt
 
 /**
  * @author Jordan Abraham
@@ -54,11 +53,11 @@ class Player(
     override fun totalHitpoints(): Int = 100
     override fun currentHitpoints(): Int = 100
 
-    fun init(client: Client) {
+    fun init(client: Client, players: Map<Int, Player>) {
         this.client = client
         previousLocation = location
         lastLoadedLocation = location
-        sendRebuildNormal(true)
+        sendRebuildNormal(true, players)
         interfaces.openTop(interfaces.currentInterfaceLayout.interfaceId)
         flushPool()
         login()
@@ -71,21 +70,9 @@ class Player(
         movementType { false }
         sendUpdateRunEnergy()
         if (VarPlayer.ToggleRun in vars) toggleMovementSpeed()
-        inject<EventBus>().value.notify(Events.OnLoginEvent(this))
-
+        lazy<EventBus>().notify(Events.OnLoginEvent(this))
         // Set the player online here, so they start processing by the main game loop.
         online = true
-
-        if (username == "jordan") {
-            repeat(1999) {
-                val bot = Player(username = "", password = "")
-                bot.location = Location(nextInt(3200, 3280), nextInt(3200, 3280), 0)
-                val world by inject<World>()
-                world.players.add(bot)
-                bot.vars.flip(VarPlayer.ToggleRun)
-                world.requestLogin(bot, Client())
-            }
-        }
     }
 
     fun logout() {
@@ -94,7 +81,7 @@ class Player(
         write(LogoutPacket(0))
         flushPool()
         client?.socket?.close()
-        inject<World>().value.players.remove(this)
+        lazy<World>().removePlayerFromList(this)
         encodeToJson()
     }
 
@@ -125,7 +112,7 @@ fun Player.shouldRebuildMap(): Boolean {
     return abs(lastZoneX - zoneX) >= size || abs(lastZoneZ - zoneZ) >= size
 }
 
-fun Player.sendRebuildNormal(update: Boolean) {
-    write(RebuildNormalPacket(viewport, location, update))
+fun Player.sendRebuildNormal(update: Boolean, players: Map<Int, Player>) {
+    write(RebuildNormalPacket(viewport, location, update, players))
     lastLoadedLocation = location
 }

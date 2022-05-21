@@ -15,10 +15,10 @@ import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.ConcurrentMap
 
 class World(
-    val players: PlayerList = PlayerList(MAX_PLAYERS),
-    val npcs: NPCList = NPCList(MAX_NPCs),
-    val loginRequests: ConcurrentMap<Player, Client> = ConcurrentHashMap(),
-    val logoutRequests: ConcurrentHashMap.KeySetView<Player, Boolean> = ConcurrentHashMap.newKeySet()
+    private val players: PlayerList = PlayerList(MAX_PLAYERS),
+    private val npcs: NPCList = NPCList(MAX_NPCs),
+    internal val loginRequests: ConcurrentMap<Player, Client> = ConcurrentHashMap(),
+    internal val logoutRequests: ConcurrentHashMap.KeySetView<Player, Boolean> = ConcurrentHashMap.newKeySet()
 ) {
     private val maps by inject<MapSquareEntryTypeProvider>()
     private val npcSpawns by inject<NPCSpawns>()
@@ -67,6 +67,12 @@ class World(
     fun requestLogout(player: Player) {
         logoutRequests += player
     }
+
+    fun players() = players.filterNotNull().filter(Player::online)
+    fun addPlayerToList(player: Player) = players.add(player)
+    fun removePlayerFromList(player: Player) = players.remove(player)
+
+    fun npcs() = npcs.filterNotNull()
 
     companion object {
         const val MAX_PLAYERS = 2048

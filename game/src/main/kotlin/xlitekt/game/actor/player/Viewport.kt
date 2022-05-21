@@ -2,10 +2,8 @@ package xlitekt.game.actor.player
 
 import io.ktor.utils.io.core.BytePacketBuilder
 import xlitekt.game.actor.npc.NPC
-import xlitekt.game.world.World
 import xlitekt.game.world.World.Companion.MAX_PLAYERS
 import xlitekt.shared.buffer.withBitAccess
-import xlitekt.shared.inject
 import java.util.LinkedList
 
 class Viewport(
@@ -24,13 +22,13 @@ class Viewport(
 
     private var resizeTickCount = 0
 
-    fun init(builder: BytePacketBuilder) = builder.withBitAccess {
+    fun init(builder: BytePacketBuilder, players: Map<Int, Player>) = builder.withBitAccess {
         writeBits(30, player.location::packedLocation)
-        players[player.index] = player
+        this@Viewport.players[player.index] = player
         highDefinitions[highDefinitionsCount++] = player.index
         for (index in 1 until MAX_PLAYERS) {
             if (index == player.index) continue
-            val otherRegionCoordinates = world.players[index]?.location?.regionLocation ?: 0
+            val otherRegionCoordinates = players[index]?.location?.regionLocation ?: 0
             writeBits(18) { otherRegionCoordinates }
             locations[index] = otherRegionCoordinates
             lowDefinitions[lowDefinitionsCount++] = index
@@ -101,7 +99,5 @@ class Viewport(
         const val RESIZE_CHECK_INTERVAL = 10
         const val PREFERRED_PLAYER_COUNT = 250
         const val PREFERRED_VIEW_DISTANCE = 15
-
-        val world by inject<World>()
     }
 }

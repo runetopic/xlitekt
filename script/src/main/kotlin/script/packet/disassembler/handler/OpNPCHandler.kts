@@ -17,7 +17,7 @@ private val zoneFlags by inject<ZoneFlags>()
 private val world by inject<World>()
 
 onPacketHandler<OpNPCPacket> {
-    if (world.npcs.indices.none { it == packet.npcIndex }) {
+    if (world.npcs().indices.none { it == packet.npcIndex }) {
         logger.debug { "World does not contain NPC Index = ${packet.npcIndex}" }
         return@onPacketHandler
     }

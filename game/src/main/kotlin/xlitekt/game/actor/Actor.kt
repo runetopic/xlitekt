@@ -60,12 +60,12 @@ abstract class Actor(
     /**
      * Processes any pending movement this actor may have. This happens every tick.
      */
-    fun processMovement(): MovementStep = movement.process(this, location).also {
+    fun processMovement(players: Map<Int, Player>): MovementStep = movement.process(this, location).also {
         if (this is Player) {
             if (facingActorIndex != -1 && !it.isValid()) {
                 faceActor { -1 }
             }
-            if (it.isValid() && shouldRebuildMap()) sendRebuildNormal(false)
+            if (it.isValid() && shouldRebuildMap()) sendRebuildNormal(false, players)
         }
     }
 

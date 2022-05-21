@@ -47,8 +47,8 @@ class BenchmarkParallelActorSynchronizer : Synchronizer() {
     private var tick = 0
 
     override fun run() {
-        val players = world.players.filterNotNull().filter(Player::online)
-        val npcs = world.npcs.filterNotNull()
+        val players = world.players()
+        val npcs = world.npcs()
         val paths = ConcurrentHashMap<Player, Route>()
         val finders = measureTime {
             val first = players.firstOrNull()
@@ -107,21 +107,22 @@ class BenchmarkParallelActorSynchronizer : Synchronizer() {
         val npcSteps = ConcurrentHashMap<NPC, MovementStep>()
         val pendingUpdates = ConcurrentHashMap<Player, ByteReadPacket>()
         val cachedUpdates = ConcurrentHashMap<Player, ByteArray>()
+        val syncPlayers = players.associateBy(Player::index)
+
         val pre = measureTime {
             players.parallelStream().forEach {
-                playerSteps[it] = it.processMovement()
+                playerSteps[it] = it.processMovement(syncPlayers)
                 pendingUpdates[it] = it.processUpdateBlocks(it.pendingUpdates())
                 cachedUpdates[it] = it.cachedUpdates().keys.buildPlayerUpdateBlocks(it, false).readBytes()
             }
             npcs.parallelStream().forEach {
-                npcSteps[it] = it.processMovement()
+                npcSteps[it] = it.processMovement(syncPlayers)
             }
         }
         logger.debug { "Pre tick took $pre for ${players.size} players. [TICK=$tick]" }
 
         val main = measureTime {
             // Main process.
-            val syncPlayers = players.associateBy(Player::index)
             players.parallelStream().forEach {
                 it.sync(syncPlayers, pendingUpdates, cachedUpdates, playerSteps, npcSteps)
             }
