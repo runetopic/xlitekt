@@ -126,20 +126,21 @@ fun BitAccess.skipPlayers(count: Int): Int {
     if (count == -1) return count
     // This player has no activity update (false).
     writeBit { false }
-    when {
-        count == 0 -> writeBits(2) { 0 }
-        count < 32 -> {
+    when (count) {
+        0 -> writeBits(2) { 0 }
+        in 1 until 32 -> {
             writeBits(2) { 1 }
             writeBits(5) { count }
         }
-        count < 256 -> {
+        in 32 until 256 -> {
             writeBits(2) { 2 }
             writeBits(8) { count }
         }
-        count < 2048 -> {
+        in 256 until 2048 -> {
             writeBits(2) { 3 }
             writeBits(11) { count }
         }
+        else -> throw IllegalArgumentException("Skip count is not within range of 0-2047.")
     }
     return -1
 }
@@ -252,15 +253,13 @@ sealed class ActivityUpdateType {
 
     fun BitAccess.updateLocation(viewport: Viewport, index: Int, location: Location) {
         val current = viewport.locations[index]
-        when (val next = location.regionLocation) {
-            // Write there is no location change.
-            current -> writeBit { false }
-            else -> {
-                // Write the new location.
-                writeLocation(current, next)
-                // Update server with new location.
-                viewport.locations[index] = next
-            }
+        val next = location.regionLocation
+        if (next == current) writeBit { false }
+        else {
+            // Write the new location.
+            writeLocation(current, next)
+            // Update server with new location.
+            viewport.locations[index] = next
         }
     }
 
