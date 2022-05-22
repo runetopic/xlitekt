@@ -8,10 +8,14 @@ import org.rsmod.pathfinder.Route
 import org.rsmod.pathfinder.SmartPathFinder
 import org.rsmod.pathfinder.ZoneFlags
 import xlitekt.game.actor.chat
+import xlitekt.game.actor.hit
 import xlitekt.game.actor.movement.MovementStep
 import xlitekt.game.actor.npc.NPC
 import xlitekt.game.actor.player.Player
+import xlitekt.game.actor.render.HitBarType
+import xlitekt.game.actor.render.HitType
 import xlitekt.game.actor.render.block.buildPlayerUpdateBlocks
+import xlitekt.game.actor.spotAnimate
 import xlitekt.game.tick.Synchronizer
 import xlitekt.game.world.map.location.Location
 import xlitekt.shared.inject
@@ -47,6 +51,8 @@ class BenchmarkSequentialActorSynchronizer : Synchronizer() {
                     z = it.location.level
                 )
                 it.chat(it.rights, 0) { "Hello Xlite." }
+                it.spotAnimate { 574 }
+                it.hit(HitBarType.DEFAULT, null, HitType.POISON_DAMAGE, 10, 0)
             }
         }
         logger.debug { "Pathfinders took $finders for ${players.size} players. [TICK=$tick]" }

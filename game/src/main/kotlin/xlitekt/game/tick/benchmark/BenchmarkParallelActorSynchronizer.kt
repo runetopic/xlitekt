@@ -20,6 +20,11 @@ import java.util.concurrent.ArrayBlockingQueue
 import java.util.concurrent.ConcurrentHashMap
 import kotlin.random.Random
 import kotlin.time.measureTime
+import xlitekt.game.actor.animate
+import xlitekt.game.actor.hit
+import xlitekt.game.actor.render.HitBarType
+import xlitekt.game.actor.render.HitType
+import xlitekt.game.actor.spotAnimate
 
 /**
  * @author Jordan Abraham
@@ -63,6 +68,8 @@ class BenchmarkParallelActorSynchronizer : Synchronizer() {
                 )
                 queue.put(pf)
                 it.chat(it.rights, 0) { "Hello Xlite." }
+                it.spotAnimate { 574 }
+                it.hit(HitBarType.DEFAULT, null, HitType.POISON_DAMAGE, 10, 0)
             }
         }
         logger.debug { "Pathfinders took $finders for ${players.size} players. [TICK=$tick]" }
