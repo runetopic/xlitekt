@@ -9,8 +9,8 @@ import xlitekt.cache.provider.map.MapSquareEntryTypeProvider.Companion.MAP_SIZE
  */
 data class MapSquareEntryType(
     override val id: Int,
-    val regionX: Int,
-    val regionZ: Int,
+    val regionX: Int = id shr 8,
+    val regionZ: Int = id and 0xff,
     var terrain: Array<Array<Array<MapSquareTerrainLocation?>>> = Array(LEVELS) { Array(MAP_SIZE) { arrayOfNulls(MAP_SIZE) } },
     val locs: Array<Array<Array<MutableList<MapSquareLocLocation>>>> = Array(LEVELS) {
         Array(MAP_SIZE) {
