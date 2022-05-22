@@ -15,7 +15,7 @@ import kotlin.random.Random
 private val world by inject<World>()
 
 onCommand("benchmark").use {
-    repeat(World.MAX_PLAYERS - world.players().size + 1) {
+    repeat(World.MAX_PLAYERS) {
         val bot = Player(username = it.toString(), password = "")
         bot.location = Location(Random.nextInt(3200, 3280), Random.nextInt(3200, 3280), 0)
         world.addPlayerToList(bot)
