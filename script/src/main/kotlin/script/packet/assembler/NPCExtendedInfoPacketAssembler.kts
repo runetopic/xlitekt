@@ -54,7 +54,7 @@ fun BitAccess.highDefinition(
         }
         // This npc has an activity update (true).
         writeBit { true }
-        val updating = it.hasPendingUpdate()
+        val updating = it.hasHighDefinitionRenderingBlocks()
         activity.writeBits(this, it, updating, playerLocation, steps[it])
         if (updating) blocks.buildNPCUpdateBlocks(it)
     }
@@ -73,7 +73,7 @@ fun BitAccess.lowDefinition(viewport: Viewport, blocks: BytePacketBuilder) {
                 when (activity) {
                     Adding -> {
                         viewport.npcs += it
-                        if (it.hasPendingUpdate()) blocks.buildNPCUpdateBlocks(it)
+                        if (it.hasHighDefinitionRenderingBlocks()) blocks.buildNPCUpdateBlocks(it)
                     }
                     else -> throw IllegalStateException("Low definition npc had an activity type of $activity")
                 }
@@ -91,7 +91,7 @@ fun highDefinitionActivities(
         // If the npc is not within normal distance of the player.
         !npc.location.withinDistance(playerLocation) -> Removing
         // If the npc has a block update.
-        npc.hasPendingUpdate() -> Updating
+        npc.hasHighDefinitionRenderingBlocks() -> Updating
         // If the npc is moving.
         steps[npc]?.isValid() == true -> Moving
         else -> null

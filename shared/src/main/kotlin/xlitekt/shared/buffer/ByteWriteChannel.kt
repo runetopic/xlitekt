@@ -10,7 +10,7 @@ suspend fun ByteWriteChannel.writePacketOpcode(isaac: ISAAC, opcode: Int) {
     writeByte((0xff and opcode + isaac.getNext()).toByte())
 }
 
-suspend fun ByteWriteChannel.writePacketSize(input: Int, size: Long) = when (input) {
+suspend fun ByteWriteChannel.writePacketSize(input: Int, size: Int) = when (input) {
     -1 -> writeByte(size.toByte())
     -2 -> writeShort(size.toShort())
     else -> throw IllegalArgumentException("Attempting to write a packet with size failed. Size was $size.")

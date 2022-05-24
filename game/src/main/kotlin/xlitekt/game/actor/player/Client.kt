@@ -9,7 +9,8 @@ import io.ktor.util.reflect.instanceOf
 import io.ktor.utils.io.ByteReadChannel
 import io.ktor.utils.io.ByteWriteChannel
 import io.ktor.utils.io.ClosedWriteChannelException
-import io.ktor.utils.io.core.ByteReadPacket
+import io.ktor.utils.io.core.readBytes
+import io.ktor.utils.io.writeFully
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.TimeoutCancellationException
 import kotlinx.coroutines.channels.ClosedReceiveChannelException
@@ -73,21 +74,22 @@ class Client(
             val assembler = PacketAssemblerListener.listeners[it::class] ?: return@forEach disconnect("Unhandled packet found when trying to write. Packet was $it.")
             val packet = assembler.packet.invoke(it)
             runBlocking(Dispatchers.IO) {
-                writePacket(assembler.opcode, assembler.size, packet)
+                writePacket(assembler.opcode, assembler.size, packet.readBytes())
+                packet.release()
             }
         }
         writeChannel?.flush()
         pool.clear()
     }
 
-    private suspend fun writePacket(opcode: Int, size: Int, packet: ByteReadPacket) = writeChannel?.apply {
+    private suspend fun writePacket(opcode: Int, size: Int, packet: ByteArray) = writeChannel?.apply {
         if (isClosedForWrite) return@apply disconnect("Write channel closed.")
         // This write channel is null checked because bot client can use this.
         writePacketOpcode(serverCipher!!, opcode)
         if (size == -1 || size == -2) {
-            writePacketSize(size, packet.remaining)
+            writePacketSize(size, packet.size)
         }
-        writePacket(packet)
+        writeFully(packet)
     }
 
     companion object {

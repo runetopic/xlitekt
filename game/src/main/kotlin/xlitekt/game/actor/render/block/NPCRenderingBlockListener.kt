@@ -7,11 +7,11 @@ import kotlin.reflect.KClass
 /**
  * @author Jordan Abraham
  */
-object NPCUpdateBlockListener {
+object NPCRenderingBlockListener {
     val listeners = mutableMapOf<KClass<*>, RenderingBlock>()
 }
 
 @Suppress("UNCHECKED_CAST")
 inline fun <reified R : Render> onNPCUpdateBlock(index: Int, mask: Int, noinline packet: R.() -> ByteReadPacket) {
-    NPCUpdateBlockListener.listeners[R::class] = RenderingBlock(index, mask, packet as Render.() -> ByteReadPacket)
+    NPCRenderingBlockListener.listeners[R::class] = RenderingBlock(index, mask, packet as Render.() -> ByteReadPacket)
 }

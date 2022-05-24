@@ -1,11 +1,10 @@
 package xlitekt.game.tick
 
-import io.ktor.utils.io.core.ByteReadPacket
-import io.ktor.utils.io.core.readBytes
 import xlitekt.game.actor.movement.MovementStep
 import xlitekt.game.actor.npc.NPC
 import xlitekt.game.actor.player.Player
-import xlitekt.game.actor.render.block.buildPlayerUpdateBlocks
+import xlitekt.game.actor.render.block.createHighDefinitionUpdatesBuffer
+import xlitekt.game.actor.render.block.createLowDefinitionUpdatesBuffer
 
 /**
  * @author Jordan Abraham
@@ -17,14 +16,14 @@ class SequentialActorSynchronizer : Synchronizer() {
         val npcs = world.npcs()
         val playerSteps = mutableMapOf<Player, MovementStep>()
         val npcSteps = mutableMapOf<NPC, MovementStep>()
-        val pendingUpdates = mutableMapOf<Player, ByteReadPacket>()
-        val cachedUpdates = mutableMapOf<Player, ByteArray>()
+        val highDefinitionUpdates = mutableMapOf<Player, ByteArray>()
+        val lowDefinitionUpdates = mutableMapOf<Player, ByteArray>()
         val syncPlayers = players.associateBy(Player::index)
 
         players.forEach {
             playerSteps[it] = it.processMovement(syncPlayers)
-            pendingUpdates[it] = it.processUpdateBlocks(it.pendingUpdates())
-            cachedUpdates[it] = it.cachedUpdates().keys.buildPlayerUpdateBlocks(it, false).readBytes()
+            highDefinitionUpdates[it] = it.highDefinitionRenderingBlocks().createHighDefinitionUpdatesBuffer(it)
+            lowDefinitionUpdates[it] = it.lowDefinitionRenderingBlocks().createLowDefinitionUpdatesBuffer()
         }
 
         npcs.forEach {
@@ -32,7 +31,7 @@ class SequentialActorSynchronizer : Synchronizer() {
         }
 
         players.forEach {
-            it.sync(syncPlayers, pendingUpdates, cachedUpdates, playerSteps, npcSteps)
+            it.sync(syncPlayers, highDefinitionUpdates, lowDefinitionUpdates, playerSteps, npcSteps)
         }
     }
 }

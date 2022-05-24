@@ -1,8 +1,6 @@
 package xlitekt.game.tick.benchmark
 
 import com.github.michaelbull.logging.InlineLogger
-import io.ktor.utils.io.core.ByteReadPacket
-import io.ktor.utils.io.core.readBytes
 import org.rsmod.pathfinder.DumbPathFinder
 import org.rsmod.pathfinder.Route
 import org.rsmod.pathfinder.SmartPathFinder
@@ -14,7 +12,8 @@ import xlitekt.game.actor.npc.NPC
 import xlitekt.game.actor.player.Player
 import xlitekt.game.actor.render.HitBarType
 import xlitekt.game.actor.render.HitType
-import xlitekt.game.actor.render.block.buildPlayerUpdateBlocks
+import xlitekt.game.actor.render.block.createHighDefinitionUpdatesBuffer
+import xlitekt.game.actor.render.block.createLowDefinitionUpdatesBuffer
 import xlitekt.game.actor.spotAnimate
 import xlitekt.game.tick.Synchronizer
 import xlitekt.game.world.map.location.Location
@@ -52,7 +51,7 @@ class BenchmarkSequentialActorSynchronizer : Synchronizer() {
                 )
                 it.chat(it.rights, 0) { "Hello Xlite." }
                 it.spotAnimate { 574 }
-                it.hit(HitBarType.DEFAULT, null, HitType.POISON_DAMAGE, 10, 0)
+                it.hit(HitBarType.DEFAULT, null, HitType.POISON_DAMAGE, 0) { 10 }
             }
         }
         logger.debug { "Pathfinders took $finders for ${players.size} players. [TICK=$tick]" }
@@ -95,15 +94,15 @@ class BenchmarkSequentialActorSynchronizer : Synchronizer() {
         // Pre process.
         val playerSteps = mutableMapOf<Player, MovementStep>()
         val npcSteps = mutableMapOf<NPC, MovementStep>()
-        val pendingUpdates = mutableMapOf<Player, ByteReadPacket>()
-        val cachedUpdates = mutableMapOf<Player, ByteArray>()
+        val highDefinitionUpdates = mutableMapOf<Player, ByteArray>()
+        val lowDefinitionUpdates = mutableMapOf<Player, ByteArray>()
         val syncPlayers = players.associateBy(Player::index)
 
         val pre = measureTime {
             players.forEach {
                 playerSteps[it] = it.processMovement(syncPlayers)
-                pendingUpdates[it] = it.processUpdateBlocks(it.pendingUpdates())
-                cachedUpdates[it] = it.cachedUpdates().keys.buildPlayerUpdateBlocks(it, false).readBytes()
+                highDefinitionUpdates[it] = it.highDefinitionRenderingBlocks().createHighDefinitionUpdatesBuffer(it)
+                lowDefinitionUpdates[it] = it.lowDefinitionRenderingBlocks().createLowDefinitionUpdatesBuffer()
             }
             npcs.forEach {
                 npcSteps[it] = it.processMovement(syncPlayers)
@@ -114,7 +113,7 @@ class BenchmarkSequentialActorSynchronizer : Synchronizer() {
         val main = measureTime {
             // Main process.
             players.forEach {
-                it.sync(syncPlayers, pendingUpdates, cachedUpdates, playerSteps, npcSteps)
+                it.sync(syncPlayers, highDefinitionUpdates, lowDefinitionUpdates, playerSteps, npcSteps)
             }
         }
         logger.debug { "Main tick took $main for ${players.size} players. [TICK=$tick]" }

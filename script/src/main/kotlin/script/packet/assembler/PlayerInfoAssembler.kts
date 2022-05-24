@@ -1,10 +1,7 @@
 package script.packet.assembler
 
 import io.ktor.utils.io.core.BytePacketBuilder
-import io.ktor.utils.io.core.ByteReadPacket
 import io.ktor.utils.io.core.buildPacket
-import io.ktor.utils.io.core.isNotEmpty
-import io.ktor.utils.io.core.readBytes
 import script.packet.assembler.PlayerInfoAssembler.ActivityUpdateType.Adding
 import script.packet.assembler.PlayerInfoAssembler.ActivityUpdateType.Moving
 import script.packet.assembler.PlayerInfoAssembler.ActivityUpdateType.Removing
@@ -32,8 +29,8 @@ onPacketAssembler<PlayerInfoPacket>(opcode = 80, size = -2) {
     buildPacket {
         val blocks = BytePacketBuilder()
         viewport.resize()
-        repeat(2) { nsn -> highDefinition(viewport, blocks, pendingUpdates, steps, nsn == 0) }
-        repeat(2) { nsn -> lowDefinition(viewport, blocks, cachedUpdates, players, nsn == 0) }
+        repeat(2) { nsn -> highDefinition(viewport, blocks, highDefinitionUpdates, steps, nsn == 0) }
+        repeat(2) { nsn -> lowDefinition(viewport, blocks, lowDefinitionUpdates, players, nsn == 0) }
         viewport.update()
         writePacket(blocks.build())
     }
@@ -42,7 +39,7 @@ onPacketAssembler<PlayerInfoPacket>(opcode = 80, size = -2) {
 fun BytePacketBuilder.highDefinition(
     viewport: Viewport,
     blocks: BytePacketBuilder,
-    pendingUpdates: Map<Player, ByteReadPacket>,
+    highDefinitionUpdates: Map<Player, ByteArray>,
     steps: Map<Player, MovementStep?>,
     nsn: Boolean
 ) = withBitAccess {
@@ -52,7 +49,7 @@ fun BytePacketBuilder.highDefinition(
         if (viewport.isNsn(index) == nsn) return@repeat
         val other = viewport.players[index]
         // Check the activities this player is doing.
-        val activity = highDefinitionActivities(viewport, other, pendingUpdates, steps)
+        val activity = highDefinitionActivities(viewport, other, highDefinitionUpdates[other], steps)
         if (other == null || activity == null || blocks.size >= Short.MAX_VALUE) {
             // If this is true, then we update our viewport nsn flag for this player and skip them.
             viewport.setNsn(index)
@@ -66,7 +63,7 @@ fun BytePacketBuilder.highDefinition(
         // We have to hard check if the player is updating here because the highDefinitionActivities()
         // can only return one activity and this is in a specific order. So if the player is doing any
         // other activity, then we will not know they need a blocks update unless we do this.
-        val updating = pendingUpdates[other]?.isNotEmpty == true
+        val updating = highDefinitionUpdates[other]?.isNotEmpty() == true
         // Write corresponding bits depending on the activity type the player is doing.
         activity.writeBits(this@withBitAccess, viewport, index, updating, other.location, other.previousLocation ?: other.location, steps[other])
         if (activity is Removing) {
@@ -78,7 +75,7 @@ fun BytePacketBuilder.highDefinition(
             }
             if (updating) {
                 // Since we hard check if the player has a blocks update, write the buffer here.
-                blocks.writeBytes(pendingUpdates[other]!!.copy()::readBytes)
+                blocks.writeBytes { highDefinitionUpdates[other]!! }
             }
         }
     }
@@ -88,7 +85,7 @@ fun BytePacketBuilder.highDefinition(
 fun BytePacketBuilder.lowDefinition(
     viewport: Viewport,
     blocks: BytePacketBuilder,
-    cachedUpdates: Map<Player, ByteArray>,
+    lowDefinitionUpdates: Map<Player, ByteArray>,
     players: Map<Int, Player>,
     nsn: Boolean
 ) = withBitAccess {
@@ -112,7 +109,7 @@ fun BytePacketBuilder.lowDefinition(
         // Write corresponding bits depending on the activity type the player is doing.
         activity.writeBits(this@withBitAccess, viewport, index, current = other.location, previous = other.previousLocation ?: other.location)
         if (activity is Adding) {
-            blocks.writeBytes { cachedUpdates[other]!! }
+            blocks.writeBytes { lowDefinitionUpdates[other]!! }
             // Add them to our array.
             viewport.players[index] = other
             viewport.setNsn(index)
@@ -148,18 +145,18 @@ fun BitAccess.skipPlayers(count: Int): Int {
 fun highDefinitionActivities(
     viewport: Viewport,
     other: Player?,
-    pendingUpdates: Map<Player, ByteReadPacket>,
+    highDefinitionUpdate: ByteArray?,
     steps: Map<Player, MovementStep?>
 ): ActivityUpdateType? {
     val ourLocation = viewport.player.location
     val theirLocation = other?.location
     return when {
         // If the player needs to be removed from high definition to low definition.
-        theirLocation == null || !theirLocation.withinDistance(ourLocation, viewport.viewDistance) -> Removing
+        other?.online == false || theirLocation == null || !theirLocation.withinDistance(ourLocation, viewport.viewDistance) -> Removing
         // If the player is moving (Teleporting, Walking, Running).
         steps[other]?.isValid() == true -> if (steps[other]?.speed == MovementSpeed.TELEPORTING) Teleporting else Moving
         // If the player has block updates.
-        pendingUpdates[other]?.isNotEmpty == true -> Updating
+        highDefinitionUpdate?.isNotEmpty() == true -> Updating
         else -> null
     }
 }
