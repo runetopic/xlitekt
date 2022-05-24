@@ -4,6 +4,7 @@ import io.ktor.server.application.ApplicationEnvironment
 import org.koin.dsl.module
 import org.rsmod.pathfinder.ZoneFlags
 import xlitekt.game.event.EventBus
+import xlitekt.game.fs.PlayerJsonEncoderService
 import xlitekt.game.tick.ParallelActorSynchronizer
 import xlitekt.game.tick.SequentialActorSynchronizer
 import xlitekt.game.tick.WorldLoginSynchronizer
@@ -39,4 +40,5 @@ val gameModule = module(createdAtStart = true) {
             )
         )
     }
+    single { PlayerJsonEncoderService(Executors.newSingleThreadScheduledExecutor()) }
 }

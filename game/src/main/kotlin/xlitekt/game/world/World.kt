@@ -69,8 +69,8 @@ class World(
     }
 
     fun players() = players.filterNotNull().filter(Player::online)
-    fun addPlayerToList(player: Player) = players.add(player)
-    fun removePlayerFromList(player: Player) = players.remove(player)
+    fun addPlayer(player: Player) = players.add(player)
+    fun removePlayer(player: Player) = players.remove(player)
 
     fun npcs() = npcs.filterNotNull()
 

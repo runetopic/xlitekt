@@ -3,7 +3,6 @@ package xlitekt.game.actor.player
 import kotlinx.serialization.Serializable
 import xlitekt.game.actor.Actor
 import xlitekt.game.actor.movementType
-import xlitekt.game.actor.player.PlayerEncoder.encodeToJson
 import xlitekt.game.actor.player.serializer.PlayerSerializer
 import xlitekt.game.actor.render.Render
 import xlitekt.game.content.skill.Skill
@@ -13,6 +12,7 @@ import xlitekt.game.content.vars.VarPlayer
 import xlitekt.game.content.vars.Vars
 import xlitekt.game.event.EventBus
 import xlitekt.game.event.impl.Events
+import xlitekt.game.fs.PlayerJsonEncoderService
 import xlitekt.game.packet.LogoutPacket
 import xlitekt.game.packet.MessageGamePacket
 import xlitekt.game.packet.Packet
@@ -81,8 +81,8 @@ class Player(
         write(LogoutPacket(0))
         flushPool()
         client?.socket?.close()
-        lazy<World>().removePlayerFromList(this)
-        encodeToJson()
+        lazy<World>().removePlayer(this)
+        lazy<PlayerJsonEncoderService>().requestSave(this)
     }
 
     fun write(packet: Packet) = client?.poolPacket(packet)
