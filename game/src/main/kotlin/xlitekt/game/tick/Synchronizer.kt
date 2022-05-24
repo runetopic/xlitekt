@@ -8,7 +8,6 @@ import xlitekt.game.packet.PlayerInfoPacket
 import xlitekt.game.world.World
 import xlitekt.shared.inject
 import java.util.Optional
-import java.util.concurrent.ConcurrentHashMap
 
 /**
  * @author Jordan Abraham
@@ -37,49 +36,41 @@ abstract class Synchronizer : Runnable {
 }
 
 class HighDefinitionUpdates(
-    private val updates: ConcurrentHashMap<Int, Optional<ByteArray>> = ConcurrentHashMap<Int, Optional<ByteArray>>(World.MAX_PLAYERS)
+    private val updates: HashMap<Int, Optional<ByteArray>> = HashMap()
 ) : Map<Int, Optional<ByteArray>> by updates {
     internal fun add(player: Player, bytes: ByteArray?) {
         updates[player.index] = Optional.ofNullable(bytes)
     }
 
-    internal fun clear() {
-        updates.clear()
-    }
+    internal fun clear() = updates.clear()
 }
 
 class LowDefinitionUpdates(
-    private val updates: ConcurrentHashMap<Int, Optional<ByteArray>> = ConcurrentHashMap<Int, Optional<ByteArray>>(World.MAX_PLAYERS)
+    private val updates: HashMap<Int, Optional<ByteArray>> = HashMap()
 ) : Map<Int, Optional<ByteArray>> by updates {
     internal fun add(player: Player, bytes: ByteArray?) {
         updates[player.index] = Optional.ofNullable(bytes)
     }
 
-    internal fun clear() {
-        updates.clear()
-    }
+    internal fun clear() = updates.clear()
 }
 
 class PlayerMovementStepsUpdates(
-    private val updates: ConcurrentHashMap<Int, Optional<MovementStep>> = ConcurrentHashMap<Int, Optional<MovementStep>>(World.MAX_PLAYERS)
+    private val updates: HashMap<Int, Optional<MovementStep>> = HashMap()
 ) : Map<Int, Optional<MovementStep>> by updates {
     internal fun add(player: Player, movementStep: MovementStep?) {
         updates[player.index] = Optional.ofNullable(movementStep)
     }
 
-    internal fun clear() {
-        updates.clear()
-    }
+    internal fun clear() = updates.clear()
 }
 
 class NPCMovementStepsUpdates(
-    private val updates: ConcurrentHashMap<Int, Optional<MovementStep>> = ConcurrentHashMap<Int, Optional<MovementStep>>()
+    private val updates: HashMap<Int, Optional<MovementStep>> = HashMap()
 ) : Map<Int, Optional<MovementStep>> by updates {
     internal fun add(npc: NPC, movementStep: MovementStep?) {
         updates[npc.index] = Optional.ofNullable(movementStep)
     }
 
-    internal fun clear() {
-        updates.clear()
-    }
+    internal fun clear() = updates.clear()
 }
