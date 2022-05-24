@@ -27,56 +27,27 @@ import java.util.TreeMap
 abstract class Actor(
     open var location: Location
 ) {
-    private val movement = Movement()
+    val movement = Movement()
 
     private val highDefinitionRenderingBlocks = TreeMap<Int, HighDefinitionRenderingBlock>()
     private val lowDefinitionRenderingBlocks = TreeMap<Int, LowDefinitionRenderingBlock>()
 
     var previousLocation: Location? = null
     var index = 0
-
-    private var facingActorIndex = -1
+    var facingActorIndex = -1
 
     abstract fun totalHitpoints(): Int
     abstract fun currentHitpoints(): Int
 
     /**
-     * Routes the actor movement waypoints to the input list.
-     */
-    fun route(locations: List<Location>) {
-        actionReset()
-        movement.route(locations)
-    }
-
-    /**
-     * Routes the actor movement to a single waypoint with optional teleport speed.
-     */
-    fun route(location: Location, teleport: Boolean = false) {
-        actionReset()
-        movement.route(location, teleport)
-    }
-
-    /**
-     * Toggles the actor movement speed between walking and running.
-     * If the actor is a Player then this will also flag for movement and temporary movement type updates.
-     */
-    fun toggleMovementSpeed() {
-        movement.movementSpeed = if (movement.movementSpeed.isRunning()) MovementSpeed.WALKING else MovementSpeed.RUNNING
-        if (this is Player) {
-            movementType(movement.movementSpeed::isRunning)
-            temporaryMovementType(movement.movementSpeed::id)
-        }
-    }
-
-    /**
      * Processes any pending movement this actor may have. This happens every tick.
      */
-    fun processMovement(players: Map<Int, Player>): MovementStep? = movement.process(this, location).also {
+    internal fun processMovement(players: Map<Int, Player>): MovementStep? = movement.process(this, location).also {
         if (it != null && this is Player) {
             if (facingActorIndex != -1) {
                 faceActor { -1 }
             }
-            if (shouldRebuildMap()) sendRebuildNormal(false, players)
+            if (shouldRebuildMap()) sendRebuildNormal(players) { false }
         }
     }
 
@@ -111,7 +82,7 @@ abstract class Actor(
     /**
      * Happens after this actor has finished processing by the game loop.
      */
-    fun postSync() {
+    internal fun postSync() {
         // Clear the high definition blocks.
         highDefinitionRenderingBlocks.clear()
         // We only want to persist these types of low definition blocks.
@@ -119,17 +90,6 @@ abstract class Actor(
             it.render::class != Appearance::class &&
                 it.render::class != FaceAngle::class &&
                 it.render::class != MovementType::class
-        }
-    }
-
-    /**
-     * Use this when the player does an action. This will need work.
-     */
-    private fun actionReset() {
-        movement.reset()
-        if (facingActorIndex != -1 && this is Player) {
-            faceActor { -1 }
-            facingActorIndex = -1
         }
     }
 
@@ -144,6 +104,53 @@ abstract class Actor(
             is FaceActor -> facingActorIndex = render.index
             else -> {} // TODO
         }
+    }
+}
+
+/**
+ * Use this when the player does an action. This will need work.
+ */
+fun Actor.actionReset() {
+    movement.reset()
+    if (facingActorIndex != -1 && this is Player) {
+        faceActor { -1 }
+        facingActorIndex = -1
+    }
+}
+
+/**
+ * Routes the actor movement waypoints to the input list.
+ */
+inline fun Actor.route(locations: () -> List<Location>) {
+    actionReset()
+    movement.route(locations.invoke())
+}
+
+/**
+ * Routes the actor movement to a specified location.
+ */
+inline fun Actor.routeTo(location: () -> Location) {
+    actionReset()
+    movement.route(location.invoke(), false)
+}
+
+/**
+ * Routes the actor movement to a single location with teleport speed.
+ */
+inline fun Actor.routeTeleport(location: () -> Location) {
+    actionReset()
+    movement.route(location.invoke(), true)
+}
+
+/**
+ * Toggles the actor movement speed between walking and running.
+ * If the actor is a Player then this will also flag for movement and temporary movement type updates.
+ */
+fun Actor.toggleMovementSpeed() {
+    movement.movementSpeed = if (movement.movementSpeed.isRunning()) MovementSpeed.WALKING else MovementSpeed.RUNNING
+    if (this is Player) {
+        movementType(movement.movementSpeed::isRunning)
+        temporaryMovementType(movement.movementSpeed::id)
     }
 }
 

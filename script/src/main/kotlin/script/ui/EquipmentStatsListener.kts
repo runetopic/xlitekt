@@ -7,7 +7,7 @@ import xlitekt.game.content.ui.onInterface
 
 onInterface<EquipmentStats> {
     onCreate {
-        script(917, listOf(-1, -1))
+        script(917, -1, -1)
     }
 
     onOpen {

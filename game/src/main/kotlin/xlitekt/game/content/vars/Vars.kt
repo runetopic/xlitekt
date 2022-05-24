@@ -21,7 +21,7 @@ class Vars(
      */
     fun login() {
         if (isEmpty()) return
-        forEach { player.sendVarp(it.key, it.value) }
+        forEach { player.sendVarp(it.key, it::value) }
     }
 
     /**
@@ -33,7 +33,7 @@ class Vars(
                 0 -> vars.remove(key.info.id)
                 else -> vars[key.info.id] = value
             }
-            player.sendVarp(key.info.id, value)
+            player.sendVarp(key.info.id) { value }
             value
         }
         VarType.VAR_BIT -> {
@@ -43,7 +43,7 @@ class Vars(
                     0 -> vars.remove(index)
                     else -> vars[index] = parentValue
                 }
-                player.sendVarp(index, parentValue)
+                player.sendVarp(index) { parentValue }
                 parentValue
             } ?: -1
         }

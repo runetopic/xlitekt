@@ -26,5 +26,7 @@ onInterface<WornEquipment> {
     onClick("View items kept on death") {
         interfaces += UserInterface.ItemsKeptOnDeath
     }
-    onClick("Call follower") { message("You do not have a follower.") }
+    onClick("Call follower") {
+        message { "You do not have a follower." }
+    }
 }

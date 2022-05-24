@@ -8,6 +8,7 @@ import xlitekt.game.packet.PlayerInfoPacket
 import xlitekt.game.world.World
 import xlitekt.shared.inject
 import java.util.Optional
+import java.util.concurrent.ConcurrentHashMap
 
 /**
  * @author Jordan Abraham
@@ -36,7 +37,7 @@ abstract class Synchronizer : Runnable {
 }
 
 class HighDefinitionUpdates(
-    private val updates: HashMap<Int, Optional<ByteArray>> = HashMap()
+    private val updates: ConcurrentHashMap<Int, Optional<ByteArray>> = ConcurrentHashMap(World.MAX_PLAYERS)
 ) : Map<Int, Optional<ByteArray>> by updates {
     internal fun add(player: Player, bytes: ByteArray?) {
         updates[player.index] = Optional.ofNullable(bytes)
@@ -46,7 +47,7 @@ class HighDefinitionUpdates(
 }
 
 class LowDefinitionUpdates(
-    private val updates: HashMap<Int, Optional<ByteArray>> = HashMap()
+    private val updates: ConcurrentHashMap<Int, Optional<ByteArray>> = ConcurrentHashMap(World.MAX_PLAYERS)
 ) : Map<Int, Optional<ByteArray>> by updates {
     internal fun add(player: Player, bytes: ByteArray?) {
         updates[player.index] = Optional.ofNullable(bytes)
@@ -56,7 +57,7 @@ class LowDefinitionUpdates(
 }
 
 class PlayerMovementStepsUpdates(
-    private val updates: HashMap<Int, Optional<MovementStep>> = HashMap()
+    private val updates: ConcurrentHashMap<Int, Optional<MovementStep>> = ConcurrentHashMap(World.MAX_PLAYERS)
 ) : Map<Int, Optional<MovementStep>> by updates {
     internal fun add(player: Player, movementStep: MovementStep?) {
         updates[player.index] = Optional.ofNullable(movementStep)
@@ -66,7 +67,7 @@ class PlayerMovementStepsUpdates(
 }
 
 class NPCMovementStepsUpdates(
-    private val updates: HashMap<Int, Optional<MovementStep>> = HashMap()
+    private val updates: ConcurrentHashMap<Int, Optional<MovementStep>> = ConcurrentHashMap()
 ) : Map<Int, Optional<MovementStep>> by updates {
     internal fun add(npc: NPC, movementStep: MovementStep?) {
         updates[npc.index] = Optional.ofNullable(movementStep)

@@ -4,6 +4,7 @@ import com.github.michaelbull.logging.InlineLogger
 import org.rsmod.pathfinder.SmartPathFinder
 import org.rsmod.pathfinder.ZoneFlags
 import xlitekt.cache.provider.config.loc.LocEntryTypeProvider
+import xlitekt.game.actor.route
 import xlitekt.game.packet.OpLocPacket
 import xlitekt.game.packet.disassembler.handler.onPacketHandler
 import xlitekt.game.world.map.location.Location
@@ -16,6 +17,11 @@ import xlitekt.shared.inject
 private val logger = InlineLogger()
 private val locEntryTypeProvider by inject<LocEntryTypeProvider>()
 private val zoneFlags by inject<ZoneFlags>()
+private val pathfinder = SmartPathFinder(
+    flags = zoneFlags.flags,
+    defaultFlag = 0,
+    useRouteBlockerFlags = true
+)
 
 onPacketHandler<OpLocPacket> {
     val objectId = packet.objectId
@@ -43,11 +49,7 @@ onPacketHandler<OpLocPacket> {
         it?.id == objectId && it.location.packedLocation == location.packedLocation
     } ?: return@onPacketHandler
 
-    val pf = SmartPathFinder(
-        flags = zoneFlags.flags,
-        defaultFlag = 0,
-        useRouteBlockerFlags = true
-    ).findPath(
+    val path = pathfinder.findPath(
         srcX = player.location.x,
         srcY = player.location.z,
         destX = location.x,
@@ -58,5 +60,5 @@ onPacketHandler<OpLocPacket> {
         objShape = gameObject.shape,
         z = location.level
     )
-    player.route(pf.coords.map { Location(it.x, it.y, location.level) })
+    player.route { path.coords.map { Location(it.x, it.y, location.level) } }
 }

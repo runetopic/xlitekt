@@ -14,6 +14,7 @@ import xlitekt.game.actor.render.HitBarType
 import xlitekt.game.actor.render.HitType
 import xlitekt.game.actor.render.block.createHighDefinitionUpdatesBuffer
 import xlitekt.game.actor.render.block.createLowDefinitionUpdatesBuffer
+import xlitekt.game.actor.route
 import xlitekt.game.actor.spotAnimate
 import xlitekt.game.tick.Synchronizer
 import xlitekt.game.world.map.location.Location
@@ -31,7 +32,7 @@ class BenchmarkParallelActorSynchronizer : Synchronizer() {
     private val logger = InlineLogger()
     private val zoneFlags by inject<ZoneFlags>()
     private val threads = Runtime.getRuntime().availableProcessors()
-    private val queue: ArrayBlockingQueue<PathFinder> = ArrayBlockingQueue(
+    private val smartPathFinders: ArrayBlockingQueue<PathFinder> = ArrayBlockingQueue(
         threads, false,
         buildList {
             repeat(threads) {
@@ -46,6 +47,11 @@ class BenchmarkParallelActorSynchronizer : Synchronizer() {
         }
     )
 
+    private val dumbPathFinder = DumbPathFinder(
+        flags = zoneFlags.flags,
+        defaultFlag = 0
+    )
+
     private var tick = 0
 
     override fun run() {
@@ -55,7 +61,7 @@ class BenchmarkParallelActorSynchronizer : Synchronizer() {
         val finders = measureTime {
             val first = players.firstOrNull()
             players.filter { it != first }.parallelStream().forEach {
-                val pf = queue.take()
+                val pf = smartPathFinders.take()
                 paths[it] = pf.findPath(
                     srcX = it.location.x,
                     srcY = it.location.z,
@@ -63,7 +69,7 @@ class BenchmarkParallelActorSynchronizer : Synchronizer() {
                     destY = Random.nextInt(first.location.z - 5, first.location.z + 5),
                     z = it.location.level
                 )
-                queue.put(pf)
+                smartPathFinders.put(pf)
                 it.chat(it.rights, 0) { "Hello Xlite." }
                 it.spotAnimate { 574 }
                 it.hit(HitBarType.DEFAULT, null, HitType.POISON_DAMAGE, 0) { 10 }
@@ -75,10 +81,7 @@ class BenchmarkParallelActorSynchronizer : Synchronizer() {
         var count = 0
         val npcFinders = measureTime {
             npcs.parallelStream().forEach {
-                npcPaths[it] = DumbPathFinder(
-                    flags = zoneFlags.flags,
-                    defaultFlag = 0
-                ).findPath(
+                npcPaths[it] = dumbPathFinder.findPath(
                     srcX = it.location.x,
                     srcY = it.location.z,
                     destX = Random.nextInt(it.location.x - 5, it.location.x + 5),
@@ -94,13 +97,13 @@ class BenchmarkParallelActorSynchronizer : Synchronizer() {
             players.parallelStream().forEach {
                 val path = paths[it]
                 if (path != null) {
-                    it.route(path.coords.map { c -> Location(c.x, c.y, it.location.level) })
+                    it.route { path.coords.map { c -> Location(c.x, c.y, it.location.level) } }
                 }
             }
             npcs.parallelStream().forEach {
                 val path = npcPaths[it]
                 if (path != null) {
-                    it.route(path.coords.map { c -> Location(c.x, c.y, it.location.level) })
+                    it.route { path.coords.map { c -> Location(c.x, c.y, it.location.level) } }
                 }
             }
         }

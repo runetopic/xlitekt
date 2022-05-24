@@ -5,6 +5,7 @@ import xlitekt.game.actor.Actor
 import xlitekt.game.actor.movementType
 import xlitekt.game.actor.player.serializer.PlayerSerializer
 import xlitekt.game.actor.render.Render
+import xlitekt.game.actor.toggleMovementSpeed
 import xlitekt.game.content.skill.Skill
 import xlitekt.game.content.skill.Skills
 import xlitekt.game.content.ui.Interfaces
@@ -57,7 +58,7 @@ class Player(
         this.client = client
         previousLocation = location
         lastLoadedLocation = location
-        sendRebuildNormal(true, players)
+        sendRebuildNormal(players) { true }
         interfaces.openTop(interfaces.currentInterfaceLayout.interfaceId)
         flushPool()
         login()
@@ -89,18 +90,22 @@ class Player(
     fun flushPool() = client?.flushPool()
 }
 
-fun Player.sendVarp(id: Int, value: Int) = if (value < Byte.MIN_VALUE || value > Byte.MAX_VALUE) {
-    write(VarpLargePacket(id, value))
-} else {
-    write(VarpSmallPacket(id, value))
+inline fun Player.sendVarp(id: Int, value: () -> Int) {
+    value.invoke().also {
+        if (it < Byte.MIN_VALUE || it > Byte.MAX_VALUE) {
+            write(VarpLargePacket(id, it))
+        } else {
+            write(VarpSmallPacket(id, it))
+        }
+    }
 }
 
 fun Player.updateStat(skill: Skill, level: Int, experience: Double) {
     write(UpdateStatPacket(skill.id, level, experience))
 }
 
-fun Player.message(message: String) = write(MessageGamePacket(0, message, false)) // TODO build messaging system
-fun Player.script(scriptId: Int, parameters: List<Any>) = write(RunClientScriptPacket(scriptId, parameters))
+inline fun Player.message(message: () -> String) = write(MessageGamePacket(0, message.invoke(), false)) // TODO build messaging system
+fun Player.script(scriptId: Int, vararg parameters: Any) = write(RunClientScriptPacket(scriptId, parameters))
 fun Player.sendUpdateRunEnergy() = write(UpdateRunEnergyPacket(runEnergy / 100))
 
 fun Player.shouldRebuildMap(): Boolean {
@@ -112,7 +117,7 @@ fun Player.shouldRebuildMap(): Boolean {
     return abs(lastZoneX - zoneX) >= size || abs(lastZoneZ - zoneZ) >= size
 }
 
-fun Player.sendRebuildNormal(update: Boolean, players: Map<Int, Player>) {
-    write(RebuildNormalPacket(viewport, location, update, players))
+inline fun Player.sendRebuildNormal(players: Map<Int, Player>, update: () -> Boolean) {
+    write(RebuildNormalPacket(viewport, location, update.invoke(), players))
     lastLoadedLocation = location
 }

@@ -13,6 +13,7 @@ import xlitekt.game.actor.render.HitBarType
 import xlitekt.game.actor.render.HitType
 import xlitekt.game.actor.render.block.createHighDefinitionUpdatesBuffer
 import xlitekt.game.actor.render.block.createLowDefinitionUpdatesBuffer
+import xlitekt.game.actor.route
 import xlitekt.game.actor.spotAnimate
 import xlitekt.game.tick.Synchronizer
 import xlitekt.game.world.map.location.Location
@@ -27,6 +28,16 @@ class BenchmarkSequentialActorSynchronizer : Synchronizer() {
 
     private val logger = InlineLogger()
     private val zoneFlags by inject<ZoneFlags>()
+    private val smartPathFinder = SmartPathFinder(
+        flags = zoneFlags.flags,
+        defaultFlag = 0,
+        useRouteBlockerFlags = true
+    )
+
+    private val dumbPathFinder = DumbPathFinder(
+        flags = zoneFlags.flags,
+        defaultFlag = 0
+    )
 
     private var tick = 0
 
@@ -37,11 +48,7 @@ class BenchmarkSequentialActorSynchronizer : Synchronizer() {
         val finders = measureTime {
             val first = players.firstOrNull()
             players.filter { it != first }.forEach {
-                paths[it] = SmartPathFinder(
-                    flags = zoneFlags.flags,
-                    defaultFlag = 0,
-                    useRouteBlockerFlags = true
-                ).findPath(
+                paths[it] = smartPathFinder.findPath(
                     srcX = it.location.x,
                     srcY = it.location.z,
                     destX = Random.nextInt(first!!.location.x - 5, first.location.x + 5),
@@ -59,10 +66,7 @@ class BenchmarkSequentialActorSynchronizer : Synchronizer() {
         var count = 0
         val npcFinders = measureTime {
             npcs.forEach {
-                npcPaths[it] = DumbPathFinder(
-                    flags = zoneFlags.flags,
-                    defaultFlag = 0
-                ).findPath(
+                npcPaths[it] = dumbPathFinder.findPath(
                     srcX = it.location.x,
                     srcY = it.location.z,
                     destX = Random.nextInt(it.location.x - 5, it.location.x + 5),
@@ -78,13 +82,13 @@ class BenchmarkSequentialActorSynchronizer : Synchronizer() {
             players.forEach {
                 val path = paths[it]
                 if (path != null) {
-                    it.route(path.coords.map { c -> Location(c.x, c.y, it.location.level) })
+                    it.route { path.coords.map { c -> Location(c.x, c.y, it.location.level) } }
                 }
             }
             npcs.forEach {
                 val path = npcPaths[it]
                 if (path != null) {
-                    it.route(path.coords.map { c -> Location(c.x, c.y, it.location.level) })
+                    it.route { path.coords.map { c -> Location(c.x, c.y, it.location.level) } }
                 }
             }
         }

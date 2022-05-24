@@ -1,6 +1,7 @@
 package script.ui
 
 import xlitekt.game.actor.player.script
+import xlitekt.game.actor.toggleMovementSpeed
 import xlitekt.game.content.ui.InterfaceEvent.CLICK_OPTION_1
 import xlitekt.game.content.ui.InterfaceLayout
 import xlitekt.game.content.ui.UserInterface
@@ -28,8 +29,8 @@ onInterface<Settings> {
     onClick(layoutDropDownChildId) {
         val interfaceLayout = enumValues<InterfaceLayout>().find { layout -> layout.id == it.slotId } ?: return@onClick
         vars[VarBit.SideStonesArrangement] = (it.slotId == 3).toInt()
-        script(clientModeCS2Id, listOf(it.slotId - 1))
-        script(interfaceScalingCS2Id, listOf(0))
+        script(clientModeCS2Id, it.slotId - 1)
+        script(interfaceScalingCS2Id, 0)
         interfaces.switchLayout(interfaceLayout)
     }
 

@@ -18,7 +18,7 @@ import kotlin.math.sign
 class Movement(
     private val checkpoints: LinkedList<Location> = LinkedList(),
 ) : Deque<Location> by checkpoints {
-    var movementSpeed = MovementSpeed.WALKING
+    internal var movementSpeed = MovementSpeed.WALKING
 
     private val steps = LinkedList<Location>()
     private var teleporting = false
@@ -114,6 +114,7 @@ class Movement(
             currentX += xSign
             currentZ += zSign
             steps += Location(currentX, currentZ, location.level)
+            if (steps.size >= 25) break
         }
     }
 

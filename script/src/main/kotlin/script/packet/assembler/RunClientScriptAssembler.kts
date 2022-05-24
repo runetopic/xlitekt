@@ -35,7 +35,7 @@ onPacketAssembler<RunClientScriptPacket>(opcode = 71, size = -2) {
     }
 }
 
-fun mapParameterType(it: List<Any>, count: Int) = when (it[count]) {
+fun mapParameterType(it: Array<out Any>, count: Int) = when (it[count]) {
     is String -> "s"
     is Item -> "o"
     is Container -> "v"

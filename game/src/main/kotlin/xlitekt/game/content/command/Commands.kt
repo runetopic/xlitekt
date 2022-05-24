@@ -21,7 +21,7 @@ object Commands {
         }
 
         if (player.rights >= 2) {
-            player.message("Unhandled client cheat command: $input")
+            player.message { "Unhandled client cheat command: $input" }
         }
         return false
     }
