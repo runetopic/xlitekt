@@ -22,6 +22,7 @@ import xlitekt.game.actor.render.block.HighDefinitionRenderingBlock
 import xlitekt.game.actor.render.block.LowDefinitionRenderingBlock
 import xlitekt.game.actor.render.block.PlayerRenderingBlockListener
 import xlitekt.game.world.map.location.Location
+import java.util.Optional
 import java.util.TreeMap
 
 abstract class Actor(
@@ -29,12 +30,12 @@ abstract class Actor(
 ) {
     val movement = Movement()
 
-    private val highDefinitionRenderingBlocks = TreeMap<Int, HighDefinitionRenderingBlock>()
-    private val lowDefinitionRenderingBlocks = TreeMap<Int, LowDefinitionRenderingBlock>()
-
     var previousLocation: Location? = null
     var index = 0
-    var facingActorIndex = -1
+    var facingActorIndex = Optional.empty<Int>()
+
+    private val highDefinitionRenderingBlocks = TreeMap<Int, HighDefinitionRenderingBlock>()
+    private val lowDefinitionRenderingBlocks = TreeMap<Int, LowDefinitionRenderingBlock>()
 
     abstract fun totalHitpoints(): Int
     abstract fun currentHitpoints(): Int
@@ -42,12 +43,17 @@ abstract class Actor(
     /**
      * Processes any pending movement this actor may have. This happens every tick.
      */
-    internal fun processMovement(players: Map<Int, Player>): MovementStep? = movement.process(this, location).also {
-        if (it != null && this is Player) {
-            if (facingActorIndex != -1) {
-                faceActor { -1 }
+    internal fun processMovement(players: Map<Int, Player>, location: Location): MovementStep? = movement.process(this, location).also {
+        if (this is Player) {
+            if (it == null) {
+                // When the player is not processing movement steps.
+                if (facingActorIndex.isPresent) {
+                    faceActor { -1 }
+                }
+            } else {
+                // When the player is processing movement steps.
+                if (shouldRebuildMap()) sendRebuildNormal(players) { false }
             }
-            if (shouldRebuildMap()) sendRebuildNormal(players) { false }
         }
     }
 
@@ -101,7 +107,7 @@ abstract class Actor(
         // Insert the rendering block into the TreeMap based on its index. This is to preserve order based on the client.
         highDefinitionRenderingBlocks[renderingBlock.index] = HighDefinitionRenderingBlock(render, renderingBlock)
         when (render) {
-            is FaceActor -> facingActorIndex = render.index
+            is FaceActor -> facingActorIndex = Optional.of(render.index)
             else -> {} // TODO
         }
     }
@@ -112,9 +118,9 @@ abstract class Actor(
  */
 fun Actor.actionReset() {
     movement.reset()
-    if (facingActorIndex != -1 && this is Player) {
+    if (facingActorIndex.isPresent && this is Player) {
         faceActor { -1 }
-        facingActorIndex = -1
+        facingActorIndex = Optional.empty()
     }
 }
 

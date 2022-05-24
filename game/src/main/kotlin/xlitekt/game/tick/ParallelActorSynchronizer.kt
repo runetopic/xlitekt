@@ -15,13 +15,13 @@ class ParallelActorSynchronizer : Synchronizer() {
         val syncPlayers = players.associateBy(Player::index)
 
         players.parallelStream().forEach {
-            playerMovementStepsUpdates.add(it, it.processMovement(syncPlayers))
+            playerMovementStepsUpdates.add(it, it.processMovement(syncPlayers, it.location))
             highDefinitionUpdates.add(it, it.highDefinitionRenderingBlocks().createHighDefinitionUpdatesBuffer(it))
             lowDefinitionUpdates.add(it, it.lowDefinitionRenderingBlocks().createLowDefinitionUpdatesBuffer())
         }
 
         npcs.parallelStream().forEach {
-            npcMovementStepsUpdates.add(it, it.processMovement(syncPlayers))
+            npcMovementStepsUpdates.add(it, it.processMovement(syncPlayers, it.location))
         }
 
         players.parallelStream().forEach {

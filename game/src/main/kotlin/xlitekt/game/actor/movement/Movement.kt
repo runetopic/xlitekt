@@ -83,7 +83,11 @@ class Movement(
             Zones[currentLocation]?.npcs?.remove(actor)
             Zones[actor.location]?.npcs?.add(actor)
         }
-        return MovementStep(modifiedSpeed, step, if (initialSpeed == MovementSpeed.TELEPORTING) Direction.South else currentLocation.directionTo(step))
+        return MovementStep(
+            speed = modifiedSpeed,
+            location = step,
+            direction = if (initialSpeed == MovementSpeed.TELEPORTING) Direction.South else currentLocation.directionTo(step)
+        )
     }
 
     fun route(list: List<Location>) {
@@ -114,6 +118,7 @@ class Movement(
             currentX += xSign
             currentZ += zSign
             steps += Location(currentX, currentZ, location.level)
+            // https://oldschool.runescape.wiki/w/Pathfinding#The_checkpoint_tiles_and_destination_tile
             if (steps.size >= 25) break
         }
     }
