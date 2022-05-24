@@ -14,6 +14,9 @@ import xlitekt.game.actor.player.Player
 import xlitekt.game.actor.player.Viewport
 import xlitekt.game.packet.PlayerInfoPacket
 import xlitekt.game.packet.assembler.onPacketAssembler
+import xlitekt.game.tick.HighDefinitionUpdates
+import xlitekt.game.tick.LowDefinitionUpdates
+import xlitekt.game.tick.PlayerMovementStepsUpdates
 import xlitekt.game.world.map.location.Location
 import xlitekt.game.world.map.location.withinDistance
 import xlitekt.shared.buffer.BitAccess
@@ -29,7 +32,7 @@ onPacketAssembler<PlayerInfoPacket>(opcode = 80, size = -2) {
     buildPacket {
         val blocks = BytePacketBuilder()
         viewport.resize()
-        repeat(2) { highDefinition(viewport, blocks, highDefinitionUpdates, steps, it == 0) }
+        repeat(2) { highDefinition(viewport, blocks, highDefinitionUpdates, movementStepsUpdates, it == 0) }
         repeat(2) { lowDefinition(viewport, blocks, lowDefinitionUpdates, players, it == 0) }
         viewport.update()
         writePacket(blocks.build())
@@ -39,8 +42,8 @@ onPacketAssembler<PlayerInfoPacket>(opcode = 80, size = -2) {
 fun BytePacketBuilder.highDefinition(
     viewport: Viewport,
     blocks: BytePacketBuilder,
-    highDefinitionUpdates: Map<Player, Optional<ByteArray>>,
-    steps: Map<Player, Optional<MovementStep>>,
+    highDefinitionUpdates: HighDefinitionUpdates,
+    movementStepsUpdates: PlayerMovementStepsUpdates,
     nsn: Boolean
 ) = withBitAccess {
     var skip = -1
@@ -48,8 +51,8 @@ fun BytePacketBuilder.highDefinition(
         val index = viewport.highDefinitions[it]
         if (viewport.isNsn(index) == nsn) continue
         val other = viewport.players[index]
-        val updates = highDefinitionUpdates[other]
-        val movementStep = steps[other]
+        val updates = highDefinitionUpdates[other?.index]
+        val movementStep = movementStepsUpdates[other?.index]
         // Check the activities this player is doing.
         val activity = highDefinitionActivities(viewport, other, updates, movementStep)
         if (other == null || activity == null || blocks.size >= Short.MAX_VALUE) {
@@ -82,7 +85,7 @@ fun BytePacketBuilder.highDefinition(
 fun BytePacketBuilder.lowDefinition(
     viewport: Viewport,
     blocks: BytePacketBuilder,
-    lowDefinitionUpdates: Map<Player, Optional<ByteArray>>,
+    lowDefinitionUpdates: LowDefinitionUpdates,
     players: Map<Int, Player>,
     nsn: Boolean
 ) = withBitAccess {
@@ -98,7 +101,7 @@ fun BytePacketBuilder.lowDefinition(
             skip++
             continue
         }
-        val updates = lowDefinitionUpdates[other]
+        val updates = lowDefinitionUpdates[other.index]
         if (updates == null) {
             viewport.setNsn(index)
             skip++

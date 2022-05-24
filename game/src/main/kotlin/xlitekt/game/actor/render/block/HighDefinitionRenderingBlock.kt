@@ -9,7 +9,7 @@ import xlitekt.game.actor.render.Render
  * Once a HighDefinitionRenderingBlock is used, it is then converted into a LowDefinitionRenderingBlock.
  * This is used by the player info packet for high definition updates.
  */
-data class HighDefinitionRenderingBlock(
+internal data class HighDefinitionRenderingBlock(
     val render: Render,
     val renderingBlock: RenderingBlock
 )

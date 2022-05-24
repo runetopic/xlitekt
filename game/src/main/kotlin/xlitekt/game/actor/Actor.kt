@@ -88,12 +88,12 @@ abstract class Actor(
     /**
      * Returns a list of this actors high definition rendering blocks.
      */
-    fun highDefinitionRenderingBlocks() = highDefinitionRenderingBlocks.values.toList()
+    internal fun highDefinitionRenderingBlocks() = highDefinitionRenderingBlocks.values.toList()
 
     /**
      * Adds a high definition rendering block to a low definition one.
      */
-    fun addLowDefinitionRenderingBlock(highDefinitionRenderingBlock: HighDefinitionRenderingBlock, block: ByteArray) {
+    internal fun addLowDefinitionRenderingBlock(highDefinitionRenderingBlock: HighDefinitionRenderingBlock, block: ByteArray) {
         val lowDefinitionRenderingBlock = LowDefinitionRenderingBlock(
             render = highDefinitionRenderingBlock.render,
             mask = highDefinitionRenderingBlock.renderingBlock.mask,
@@ -106,7 +106,7 @@ abstract class Actor(
     /**
      * Returns a list of this actors low definition rendering blocks.
      */
-    fun lowDefinitionRenderingBlocks() = lowDefinitionRenderingBlocks.values.toList()
+    internal fun lowDefinitionRenderingBlocks() = lowDefinitionRenderingBlocks.values.toList()
 
     /**
      * Happens after this actor has finished processing by the game loop.

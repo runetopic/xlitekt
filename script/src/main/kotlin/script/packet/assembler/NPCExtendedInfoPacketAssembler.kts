@@ -12,6 +12,7 @@ import xlitekt.game.actor.player.Viewport
 import xlitekt.game.actor.render.block.buildNPCUpdateBlocks
 import xlitekt.game.packet.NPCInfoPacket
 import xlitekt.game.packet.assembler.onPacketAssembler
+import xlitekt.game.tick.NPCMovementStepsUpdates
 import xlitekt.game.world.map.location.Location
 import xlitekt.game.world.map.location.withinDistance
 import xlitekt.game.world.map.location.zones
@@ -28,7 +29,7 @@ onPacketAssembler<NPCInfoPacket>(opcode = 90, size = -2) {
         val blocks = BytePacketBuilder()
         withBitAccess {
             writeBits(8, viewport.npcs::size)
-            highDefinition(viewport, blocks, steps)
+            highDefinition(viewport, blocks, npcMovementStepsUpdates)
             lowDefinition(viewport, blocks)
             if (blocks.size > 0) {
                 writeBits(15, Short.MAX_VALUE::toInt)
@@ -41,12 +42,12 @@ onPacketAssembler<NPCInfoPacket>(opcode = 90, size = -2) {
 fun BitAccess.highDefinition(
     viewport: Viewport,
     blocks: BytePacketBuilder,
-    steps: Map<NPC, Optional<MovementStep>>
+    npcMovementStepsUpdates: NPCMovementStepsUpdates
 ) {
     val playerLocation = viewport.player.location
     viewport.npcs.forEach {
         // Check the activities this npc is doing.
-        val activity = highDefinitionActivities(it, playerLocation, steps[it]!!)
+        val activity = highDefinitionActivities(it, playerLocation, npcMovementStepsUpdates[it.index]!!)
         if (activity == null) {
             // This npc has no activity update (false).
             writeBit { false }
@@ -55,7 +56,7 @@ fun BitAccess.highDefinition(
         // This npc has an activity update (true).
         writeBit { true }
         val updating = it.hasHighDefinitionRenderingBlocks()
-        activity.writeBits(this, it, updating, playerLocation, steps[it]!!)
+        activity.writeBits(this, it, updating, playerLocation, npcMovementStepsUpdates[it.index]!!)
         if (updating) blocks.buildNPCUpdateBlocks(it)
     }
     viewport.npcs.removeAll { !it.location.withinDistance(playerLocation) }

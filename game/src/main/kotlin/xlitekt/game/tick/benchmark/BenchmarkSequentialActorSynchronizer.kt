@@ -7,7 +7,6 @@ import org.rsmod.pathfinder.SmartPathFinder
 import org.rsmod.pathfinder.ZoneFlags
 import xlitekt.game.actor.chat
 import xlitekt.game.actor.hit
-import xlitekt.game.actor.movement.MovementStep
 import xlitekt.game.actor.npc.NPC
 import xlitekt.game.actor.player.Player
 import xlitekt.game.actor.render.HitBarType
@@ -18,7 +17,6 @@ import xlitekt.game.actor.spotAnimate
 import xlitekt.game.tick.Synchronizer
 import xlitekt.game.world.map.location.Location
 import xlitekt.shared.inject
-import java.util.Optional
 import kotlin.random.Random
 import kotlin.time.measureTime
 
@@ -93,20 +91,16 @@ class BenchmarkSequentialActorSynchronizer : Synchronizer() {
         logger.debug { "Movement routing took $moves for all entities. [TICK=$tick]" }
 
         // Pre process.
-        val playerSteps = mutableMapOf<Player, Optional<MovementStep>>()
-        val npcSteps = mutableMapOf<NPC, Optional<MovementStep>>()
-        val highDefinitionUpdates = mutableMapOf<Player, Optional<ByteArray>>()
-        val lowDefinitionUpdates = mutableMapOf<Player, Optional<ByteArray>>()
         val syncPlayers = players.associateBy(Player::index)
 
         val pre = measureTime {
             players.forEach {
-                playerSteps[it] = Optional.ofNullable(it.processMovement(syncPlayers))
-                highDefinitionUpdates[it] = Optional.ofNullable(it.highDefinitionRenderingBlocks().createHighDefinitionUpdatesBuffer(it))
-                lowDefinitionUpdates[it] = Optional.ofNullable(it.lowDefinitionRenderingBlocks().createLowDefinitionUpdatesBuffer())
+                playerMovementStepsUpdates.add(it, it.processMovement(syncPlayers))
+                highDefinitionUpdates.add(it, it.highDefinitionRenderingBlocks().createHighDefinitionUpdatesBuffer(it))
+                lowDefinitionUpdates.add(it, it.lowDefinitionRenderingBlocks().createLowDefinitionUpdatesBuffer())
             }
             npcs.forEach {
-                npcSteps[it] = Optional.ofNullable(it.processMovement(syncPlayers))
+                npcMovementStepsUpdates.add(it, it.processMovement(syncPlayers))
             }
         }
         logger.debug { "Pre tick took $pre for ${players.size} players. [TICK=$tick]" }
@@ -114,8 +108,9 @@ class BenchmarkSequentialActorSynchronizer : Synchronizer() {
         val main = measureTime {
             // Main process.
             players.forEach {
-                it.sync(syncPlayers, highDefinitionUpdates, lowDefinitionUpdates, playerSteps, npcSteps)
+                it.sync(syncPlayers)
             }
+            resetSynchronizer()
         }
         logger.debug { "Main tick took $main for ${players.size} players. [TICK=$tick]" }
 

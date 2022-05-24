@@ -34,6 +34,7 @@ onPlayerUpdateBlock<Appearance>(5, 0x1) {
         }
         writeByte(appearance.remaining::toInt)
         writeBytesAdd(appearance::readBytes)
+        appearance.release()
     }
 }
 
@@ -53,7 +54,7 @@ fun BytePacketBuilder.writeIdentityKit(render: Appearance) {
         // TODO We will need to add support for the item worn in the specific body slot.
         val bodyPartBuilder = BodyPartBuilder(render.bodyParts.getOrDefault(it.value.bodyPart, 0), render.gender)
         it.value.builder.invoke(bodyPartBuilder)
-        writeBytes(bodyPartBuilder.data!!::readBytes)
+        writeBytes { bodyPartBuilder.data!! }
     }
 }
 

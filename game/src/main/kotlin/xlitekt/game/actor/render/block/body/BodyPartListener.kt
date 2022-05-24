@@ -1,8 +1,8 @@
 package xlitekt.game.actor.render.block.body
 
 import io.ktor.utils.io.core.BytePacketBuilder
-import io.ktor.utils.io.core.ByteReadPacket
 import io.ktor.utils.io.core.buildPacket
+import io.ktor.utils.io.core.readBytes
 import xlitekt.game.actor.render.Render
 
 /**
@@ -26,13 +26,15 @@ class BodyPartBuilder(
     val gender: Render.Appearance.Gender
 ) {
     var equipmentIndex: Int? = null
-    var data: ByteReadPacket? = null
+    var data: ByteArray? = null
 
     inline fun equipmentSlot(equipmentIndex: () -> Int) {
         this.equipmentIndex = equipmentIndex.invoke()
     }
 
     inline fun bodyPart(builder: BytePacketBuilder.(Int) -> Unit) {
-        this.data = buildPacket { builder.invoke(this, kit) }
+        val bodyPart = buildPacket { builder.invoke(this, kit) }
+        this.data = bodyPart.readBytes()
+        bodyPart.release()
     }
 }

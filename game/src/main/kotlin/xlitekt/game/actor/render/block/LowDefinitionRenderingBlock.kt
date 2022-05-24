@@ -8,7 +8,7 @@ import xlitekt.game.actor.render.Render
  * A LowDefinitionRenderingBlock is to represent a rendering block that is cached to this player.
  * This is used by the player info packet for low definition updates.
  */
-data class LowDefinitionRenderingBlock(
+internal data class LowDefinitionRenderingBlock(
     val render: Render,
     val mask: Int,
     val block: ByteArray

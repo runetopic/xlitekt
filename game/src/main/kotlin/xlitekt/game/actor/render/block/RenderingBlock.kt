@@ -23,7 +23,7 @@ data class RenderingBlock(
 /**
  * Creates a new buffer from a collection of HighDefinitionRenderingBlock's to be consumed by the player info packet.
  */
-fun Collection<HighDefinitionRenderingBlock>.createHighDefinitionUpdatesBuffer(player: Player): ByteArray? {
+internal fun Collection<HighDefinitionRenderingBlock>.createHighDefinitionUpdatesBuffer(player: Player): ByteArray? {
     if (isEmpty()) return null
     val packet = buildPacket {
         writeMask(this@createHighDefinitionUpdatesBuffer.fold(0) { current, next -> current or next.renderingBlock.mask }.let { if (it > 0xff) it or 0x10 else it })
@@ -43,7 +43,7 @@ fun Collection<HighDefinitionRenderingBlock>.createHighDefinitionUpdatesBuffer(p
 /**
  * Creates a new buffer from a collection of LowDefinitionRenderingBlock's to be consumed by the player info packet.
  */
-fun Collection<LowDefinitionRenderingBlock>.createLowDefinitionUpdatesBuffer(): ByteArray? {
+internal fun Collection<LowDefinitionRenderingBlock>.createLowDefinitionUpdatesBuffer(): ByteArray? {
     if (isEmpty()) return null
     val packet = buildPacket {
         writeMask(this@createLowDefinitionUpdatesBuffer.fold(0) { current, next -> current or next.mask }.let { if (it > 0xff) it or 0x10 else it })
