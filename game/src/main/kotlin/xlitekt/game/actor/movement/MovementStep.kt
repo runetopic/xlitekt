@@ -6,10 +6,7 @@ import xlitekt.game.world.map.location.Location
  * @author Jordan Abraham
  */
 data class MovementStep(
-    val speed: MovementSpeed? = null,
-    val location: Location? = null,
-    val direction: Direction? = null
+    val speed: MovementSpeed,
+    val location: Location,
+    val direction: Direction
 )
-
-fun emptyStep() = MovementStep()
-fun MovementStep.isValid() = speed != null && location != null && direction != null

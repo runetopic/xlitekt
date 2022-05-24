@@ -24,11 +24,11 @@ class Movement(
     private var teleporting = false
     private var direction: Direction = Direction.South
 
-    fun process(actor: Actor, currentLocation: Location): MovementStep {
+    fun process(actor: Actor, currentLocation: Location): MovementStep? {
         val previousLocation = actor.previousLocation
         actor.previousLocation = currentLocation
         if (isEmpty() && steps.isEmpty()) {
-            return emptyStep()
+            return null
         }
         if (steps.isEmpty()) {
             queueDestinationSteps(currentLocation)
@@ -41,7 +41,7 @@ class Movement(
             }
         }
         // Poll the first step to move to.
-        var step = steps.poll() ?: return emptyStep()
+        var step = steps.poll() ?: return null
         // The current speed of the first step.
         val initialSpeed = if (teleporting) MovementSpeed.TELEPORTING else movementSpeed
         var modifiedSpeed = initialSpeed

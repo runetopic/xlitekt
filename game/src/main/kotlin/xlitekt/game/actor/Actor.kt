@@ -3,7 +3,6 @@ package xlitekt.game.actor
 import xlitekt.game.actor.movement.Movement
 import xlitekt.game.actor.movement.MovementSpeed
 import xlitekt.game.actor.movement.MovementStep
-import xlitekt.game.actor.movement.isValid
 import xlitekt.game.actor.player.Player
 import xlitekt.game.actor.player.sendRebuildNormal
 import xlitekt.game.actor.player.shouldRebuildMap
@@ -72,12 +71,12 @@ abstract class Actor(
     /**
      * Processes any pending movement this actor may have. This happens every tick.
      */
-    fun processMovement(players: Map<Int, Player>): MovementStep = movement.process(this, location).also {
-        if (this is Player) {
-            if (facingActorIndex != -1 && !it.isValid()) {
+    fun processMovement(players: Map<Int, Player>): MovementStep? = movement.process(this, location).also {
+        if (it != null && this is Player) {
+            if (facingActorIndex != -1) {
                 faceActor { -1 }
             }
-            if (it.isValid() && shouldRebuildMap()) sendRebuildNormal(false, players)
+            if (shouldRebuildMap()) sendRebuildNormal(false, players)
         }
     }
 

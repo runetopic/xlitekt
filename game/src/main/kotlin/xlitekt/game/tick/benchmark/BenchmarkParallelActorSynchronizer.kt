@@ -19,6 +19,7 @@ import xlitekt.game.actor.spotAnimate
 import xlitekt.game.tick.Synchronizer
 import xlitekt.game.world.map.location.Location
 import xlitekt.shared.inject
+import java.util.Optional
 import java.util.concurrent.ArrayBlockingQueue
 import java.util.concurrent.ConcurrentHashMap
 import kotlin.random.Random
@@ -108,20 +109,20 @@ class BenchmarkParallelActorSynchronizer : Synchronizer() {
         logger.debug { "Movement routing took $moves for all entities. [TICK=$tick]" }
 
         // Pre process.
-        val playerSteps = ConcurrentHashMap<Player, MovementStep>()
-        val npcSteps = ConcurrentHashMap<NPC, MovementStep>()
-        val highDefinitionUpdates = ConcurrentHashMap<Player, ByteArray>()
-        val lowDefinitionUpdates = ConcurrentHashMap<Player, ByteArray>()
+        val playerSteps = ConcurrentHashMap<Player, Optional<MovementStep>>()
+        val npcSteps = ConcurrentHashMap<NPC, Optional<MovementStep>>()
+        val highDefinitionUpdates = ConcurrentHashMap<Player, Optional<ByteArray>>()
+        val lowDefinitionUpdates = ConcurrentHashMap<Player, Optional<ByteArray>>()
         val syncPlayers = players.associateBy(Player::index)
 
         val pre = measureTime {
             players.parallelStream().forEach {
-                playerSteps[it] = it.processMovement(syncPlayers)
-                highDefinitionUpdates[it] = it.highDefinitionRenderingBlocks().createHighDefinitionUpdatesBuffer(it)
-                lowDefinitionUpdates[it] = it.lowDefinitionRenderingBlocks().createLowDefinitionUpdatesBuffer()
+                playerSteps[it] = Optional.ofNullable(it.processMovement(syncPlayers))
+                highDefinitionUpdates[it] = Optional.ofNullable(it.highDefinitionRenderingBlocks().createHighDefinitionUpdatesBuffer(it))
+                lowDefinitionUpdates[it] = Optional.ofNullable(it.lowDefinitionRenderingBlocks().createLowDefinitionUpdatesBuffer())
             }
             npcs.parallelStream().forEach {
-                npcSteps[it] = it.processMovement(syncPlayers)
+                npcSteps[it] = Optional.ofNullable(it.processMovement(syncPlayers))
             }
         }
         logger.debug { "Pre tick took $pre for ${players.size} players. [TICK=$tick]" }

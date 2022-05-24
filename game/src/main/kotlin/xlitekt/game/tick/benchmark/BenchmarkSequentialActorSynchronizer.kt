@@ -18,6 +18,7 @@ import xlitekt.game.actor.spotAnimate
 import xlitekt.game.tick.Synchronizer
 import xlitekt.game.world.map.location.Location
 import xlitekt.shared.inject
+import java.util.Optional
 import kotlin.random.Random
 import kotlin.time.measureTime
 
@@ -92,20 +93,20 @@ class BenchmarkSequentialActorSynchronizer : Synchronizer() {
         logger.debug { "Movement routing took $moves for all entities. [TICK=$tick]" }
 
         // Pre process.
-        val playerSteps = mutableMapOf<Player, MovementStep>()
-        val npcSteps = mutableMapOf<NPC, MovementStep>()
-        val highDefinitionUpdates = mutableMapOf<Player, ByteArray>()
-        val lowDefinitionUpdates = mutableMapOf<Player, ByteArray>()
+        val playerSteps = mutableMapOf<Player, Optional<MovementStep>>()
+        val npcSteps = mutableMapOf<NPC, Optional<MovementStep>>()
+        val highDefinitionUpdates = mutableMapOf<Player, Optional<ByteArray>>()
+        val lowDefinitionUpdates = mutableMapOf<Player, Optional<ByteArray>>()
         val syncPlayers = players.associateBy(Player::index)
 
         val pre = measureTime {
             players.forEach {
-                playerSteps[it] = it.processMovement(syncPlayers)
-                highDefinitionUpdates[it] = it.highDefinitionRenderingBlocks().createHighDefinitionUpdatesBuffer(it)
-                lowDefinitionUpdates[it] = it.lowDefinitionRenderingBlocks().createLowDefinitionUpdatesBuffer()
+                playerSteps[it] = Optional.ofNullable(it.processMovement(syncPlayers))
+                highDefinitionUpdates[it] = Optional.ofNullable(it.highDefinitionRenderingBlocks().createHighDefinitionUpdatesBuffer(it))
+                lowDefinitionUpdates[it] = Optional.ofNullable(it.lowDefinitionRenderingBlocks().createLowDefinitionUpdatesBuffer())
             }
             npcs.forEach {
-                npcSteps[it] = it.processMovement(syncPlayers)
+                npcSteps[it] = Optional.ofNullable(it.processMovement(syncPlayers))
             }
         }
         logger.debug { "Pre tick took $pre for ${players.size} players. [TICK=$tick]" }

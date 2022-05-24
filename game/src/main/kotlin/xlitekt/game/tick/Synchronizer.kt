@@ -7,6 +7,7 @@ import xlitekt.game.packet.NPCInfoPacket
 import xlitekt.game.packet.PlayerInfoPacket
 import xlitekt.game.world.World
 import xlitekt.shared.inject
+import java.util.Optional
 
 /**
  * @author Jordan Abraham
@@ -17,10 +18,10 @@ abstract class Synchronizer : Runnable {
 
     protected fun Player.sync(
         players: Map<Int, Player>,
-        highDefinitionUpdates: Map<Player, ByteArray>,
-        lowDefinitionUpdates: Map<Player, ByteArray>,
-        playerSteps: Map<Player, MovementStep?>,
-        npcSteps: Map<NPC, MovementStep>
+        highDefinitionUpdates: Map<Player, Optional<ByteArray>>,
+        lowDefinitionUpdates: Map<Player, Optional<ByteArray>>,
+        playerSteps: Map<Player, Optional<MovementStep>>,
+        npcSteps: Map<NPC, Optional<MovementStep>>
     ) {
         write(PlayerInfoPacket(players, viewport, highDefinitionUpdates, lowDefinitionUpdates, playerSteps))
         write(NPCInfoPacket(viewport, npcSteps))
