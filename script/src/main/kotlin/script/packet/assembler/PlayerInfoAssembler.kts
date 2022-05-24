@@ -50,14 +50,9 @@ fun BytePacketBuilder.highDefinition(
         val other = viewport.players[index]
         val updates = highDefinitionUpdates[other]
         val movementStep = steps[other]
-        if (other == null || updates == null || movementStep == null || blocks.size >= Short.MAX_VALUE) {
-            viewport.setNsn(index)
-            skip++
-            continue
-        }
         // Check the activities this player is doing.
         val activity = highDefinitionActivities(viewport, other, updates, movementStep)
-        if (activity == null) {
+        if (other == null || activity == null || blocks.size >= Short.MAX_VALUE) {
             viewport.setNsn(index)
             skip++
             continue
@@ -67,7 +62,7 @@ fun BytePacketBuilder.highDefinition(
         // This player has an activity update (true).
         writeBit { true }
         // Write corresponding bits depending on the activity type the player is doing.
-        activity.writeBits(this@withBitAccess, viewport, index, updates.isPresent, other.location, other.previousLocation ?: other.location, movementStep)
+        activity.writeBits(this@withBitAccess, viewport, index, updates?.isPresent == true, other.location, other.previousLocation ?: other.location, movementStep)
         if (activity is Removing) {
             viewport.players[index] = null
         } else {
@@ -75,7 +70,7 @@ fun BytePacketBuilder.highDefinition(
                 // Update server with new location if this player moved.
                 viewport.locations[index] = other.location.regionLocation
             }
-            if (updates.isPresent) {
+            if (updates?.isPresent == true) {
                 // Since we hard check if the player has a blocks update, write the buffer here.
                 blocks.writeBytes(updates::get)
             }
@@ -152,8 +147,8 @@ fun BitAccess.skipPlayers(count: Int): Int {
 fun highDefinitionActivities(
     viewport: Viewport,
     other: Player?,
-    highDefinitionUpdate: Optional<ByteArray>,
-    movementStep: Optional<MovementStep>
+    highDefinitionUpdate: Optional<ByteArray>?,
+    movementStep: Optional<MovementStep>?
 ): ActivityUpdateType? {
     val ourLocation = viewport.player.location
     val theirLocation = other?.location
@@ -161,9 +156,9 @@ fun highDefinitionActivities(
         // If the player needs to be removed from high definition to low definition.
         other?.online == false || theirLocation == null || !theirLocation.withinDistance(ourLocation, viewport.viewDistance) -> Removing
         // If the player is moving (Teleporting, Walking, Running).
-        movementStep.isPresent -> if (movementStep.get().speed == MovementSpeed.TELEPORTING) Teleporting else Moving
+        movementStep?.isPresent == true -> if (movementStep.get().speed == MovementSpeed.TELEPORTING) Teleporting else Moving
         // If the player has block updates.
-        highDefinitionUpdate.isPresent -> Updating
+        highDefinitionUpdate?.isPresent == true -> Updating
         else -> null
     }
 }
