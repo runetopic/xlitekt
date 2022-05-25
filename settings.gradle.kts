@@ -15,7 +15,7 @@ dependencyResolutionManagement {
             version("cryptography", "1.0.10-SNAPSHOT")
             version("kotlinx", "1.3.3")
             version("kotlin-inline-logger", "1.0.4")
-            version("classgraph", "4.8.146")
+            version("classgraph", "4.8.147")
             version("shadowjar", "7.1.2")
             version("versions", "0.42.0")
             version("pathfinder", "2.1.4")
