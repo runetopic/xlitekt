@@ -19,7 +19,7 @@ onCommand("benchmark").use {
         val bot = Player(username = it.toString(), password = "")
         bot.location = Location(Random.nextInt(3200, 3280), Random.nextInt(3200, 3280), 0)
         world.addPlayer(bot)
-        bot.vars.flip(VarPlayer.ToggleRun)
+        bot.vars.flip { VarPlayer.ToggleRun }
         world.requestLogin(bot, Client())
     }
 }

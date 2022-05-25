@@ -69,29 +69,29 @@ fun UserInterfaceEvent.ButtonClickEvent.onAudioClick(vars: Vars) {
 
 fun UserInterfaceEvent.ButtonClickEvent.onChatClick(vars: Vars) {
     when (slotId) {
-        1 -> vars.flip(VarPlayer.ProfanityFilter)
-        3 -> vars.flip(VarPlayer.ChatEffects)
-        4 -> vars.flip(VarPlayer.SplitFriendsPrivateChat)
+        1 -> vars.flip { VarPlayer.ProfanityFilter }
+        3 -> vars.flip { VarPlayer.ChatEffects }
+        4 -> vars.flip { VarPlayer.SplitFriendsPrivateChat }
         5 -> if (VarPlayer.SplitFriendsPrivateChat in vars) {
-            vars.flip(VarBit.HidePrivateChatWhenChatboxHidden)
+            vars.flip { VarBit.HidePrivateChatWhenChatboxHidden }
         }
     }
 }
 
 fun UserInterfaceEvent.ButtonClickEvent.onControlsClick(vars: Vars) {
     when (slotId) {
-        4 -> vars.flip(VarPlayer.SingleMouseButtonMode)
-        5 -> vars.flip(VarBit.MiddleMouseButtonCameraControl)
-        6 -> vars.flip(VarBit.ShiftClickDropItems)
-        8 -> vars.flip(VarBit.MoveFollowerOptionsLowerDown)
-        30 -> vars.flip(VarBit.EscClosesCurrentModal)
+        4 -> vars.flip { VarPlayer.SingleMouseButtonMode }
+        5 -> vars.flip { VarBit.MiddleMouseButtonCameraControl }
+        6 -> vars.flip { VarBit.ShiftClickDropItems }
+        8 -> vars.flip { VarBit.MoveFollowerOptionsLowerDown }
+        30 -> vars.flip { VarBit.EscClosesCurrentModal }
     }
 }
 
 fun UserInterfaceEvent.ButtonClickEvent.onDisplayClick(vars: Vars) {
     when (childId) {
         firstLayerChildId -> when (slotId) {
-            5 -> vars.flip(VarBit.ScrollWheelChangesZoomDistance)
+            5 -> vars.flip { VarBit.ScrollWheelChangesZoomDistance }
         }
         secondLayerChildId -> when (slotId) {
             0, 5, 10, 15, 20 -> {

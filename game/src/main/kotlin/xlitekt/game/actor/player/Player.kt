@@ -5,7 +5,7 @@ import xlitekt.game.actor.Actor
 import xlitekt.game.actor.movementType
 import xlitekt.game.actor.player.serializer.PlayerSerializer
 import xlitekt.game.actor.render.Render
-import xlitekt.game.actor.toggleMovementSpeed
+import xlitekt.game.actor.speed
 import xlitekt.game.content.skill.Skill
 import xlitekt.game.content.skill.Skills
 import xlitekt.game.content.ui.Interfaces
@@ -49,8 +49,7 @@ class Player(
     var lastLoadedLocation: Location? = null
 
     private var client: Client? = null
-
-    var online = false
+    private var online = false
 
     override fun totalHitpoints(): Int = 100
     override fun currentHitpoints(): Int = 100
@@ -59,11 +58,11 @@ class Player(
      * Initiates this player when logging into the game world.
      * This happens before anything else.
      */
-    fun init(client: Client, players: Map<Int, Player>) {
+    internal fun init(client: Client, players: Map<Int, Player>) {
         this.client = client
         previousLocation = location
         lastLoadedLocation = location
-        sendRebuildNormal(players) { true }
+        rebuildNormal(players) { true }
         interfaces.openTop(interfaces.currentInterfaceLayout.interfaceId)
         invokeAndClearWritePool()
         login()
@@ -77,8 +76,8 @@ class Player(
         interfaces.login()
         render(appearance)
         movementType { false }
-        sendUpdateRunEnergy()
-        if (VarPlayer.ToggleRun in vars) toggleMovementSpeed()
+        updateRunEnergy()
+        speed { VarPlayer.ToggleRun in vars }
         lazy<EventBus>().notify(Events.OnLoginEvent(this))
         // Set the player online here, so they start processing by the main game loop.
         online = true
@@ -96,6 +95,8 @@ class Player(
         lazy<World>().removePlayer(this)
         lazy<PlayerJsonEncoderService>().requestSave(this)
     }
+
+    fun isOnline() = online
 
     /**
      * Pools a packet to be sent to the client.
@@ -121,15 +122,22 @@ class Player(
      * This happens every tick.
      */
     internal fun invokeAndClearReadPool() = client?.invokeAndClearReadPool()
+
+    internal fun shouldRebuildMap(): Boolean {
+        val lastZoneX = lastLoadedLocation?.zoneX ?: 0
+        val lastZoneZ = lastLoadedLocation?.zoneZ ?: 0
+        val zoneX = location.zoneX
+        val zoneZ = location.zoneZ
+        val size = ((104 shr 3) / 2) - 1
+        return abs(lastZoneX - zoneX) >= size || abs(lastZoneZ - zoneZ) >= size
+    }
 }
 
-inline fun Player.sendVarp(id: Int, value: () -> Int) {
-    value.invoke().also {
-        if (it < Byte.MIN_VALUE || it > Byte.MAX_VALUE) {
-            write(VarpLargePacket(id, it))
-        } else {
-            write(VarpSmallPacket(id, it))
-        }
+inline fun Player.varp(id: Int, value: () -> Int) = value.invoke().also {
+    if (it < Byte.MIN_VALUE || it > Byte.MAX_VALUE) {
+        write(VarpLargePacket(id, it))
+    } else {
+        write(VarpSmallPacket(id, it))
     }
 }
 
@@ -139,18 +147,9 @@ fun Player.updateStat(skill: Skill, level: Int, experience: Double) {
 
 inline fun Player.message(message: () -> String) = write(MessageGamePacket(0, message.invoke(), false)) // TODO build messaging system
 fun Player.script(scriptId: Int, vararg parameters: Any) = write(RunClientScriptPacket(scriptId, parameters))
-fun Player.sendUpdateRunEnergy() = write(UpdateRunEnergyPacket(runEnergy / 100))
+fun Player.updateRunEnergy() = write(UpdateRunEnergyPacket(runEnergy / 100))
 
-fun Player.shouldRebuildMap(): Boolean {
-    val lastZoneX = lastLoadedLocation?.zoneX ?: 0
-    val lastZoneZ = lastLoadedLocation?.zoneZ ?: 0
-    val zoneX = location.zoneX
-    val zoneZ = location.zoneZ
-    val size = ((104 shr 3) / 2) - 1
-    return abs(lastZoneX - zoneX) >= size || abs(lastZoneZ - zoneZ) >= size
-}
-
-inline fun Player.sendRebuildNormal(players: Map<Int, Player>, update: () -> Boolean) {
+inline fun Player.rebuildNormal(players: Map<Int, Player>, update: () -> Boolean) {
     write(RebuildNormalPacket(viewport, location, update.invoke(), players))
     lastLoadedLocation = location
 }

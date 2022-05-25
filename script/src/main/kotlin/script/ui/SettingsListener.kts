@@ -1,13 +1,14 @@
 package script.ui
 
 import xlitekt.game.actor.player.script
-import xlitekt.game.actor.toggleMovementSpeed
+import xlitekt.game.actor.speed
 import xlitekt.game.content.ui.InterfaceEvent.CLICK_OPTION_1
 import xlitekt.game.content.ui.InterfaceLayout
 import xlitekt.game.content.ui.UserInterface
 import xlitekt.game.content.ui.UserInterface.Settings
 import xlitekt.game.content.ui.onInterface
 import xlitekt.game.content.vars.VarBit
+import xlitekt.game.content.vars.VarPlayer
 import xlitekt.shared.toInt
 
 private val layoutDropDownChildId = 84
@@ -39,6 +40,7 @@ onInterface<Settings> {
     }
 
     onClick("Toggle Run") {
-        toggleMovementSpeed()
+        vars.flip { VarPlayer.ToggleRun }
+        speed { VarPlayer.ToggleRun in vars }
     }
 }

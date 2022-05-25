@@ -4,7 +4,7 @@ import xlitekt.cache.provider.config.varbit.VarBitEntryType
 import xlitekt.cache.provider.config.varbit.VarBitEntryTypeProvider
 import xlitekt.cache.provider.config.varbit.VarBitEntryTypeProvider.Companion.mersennePrime
 import xlitekt.game.actor.player.Player
-import xlitekt.game.actor.player.sendVarp
+import xlitekt.game.actor.player.varp
 import xlitekt.shared.inject
 
 /**
@@ -21,7 +21,7 @@ class Vars(
      */
     fun login() {
         if (isEmpty()) return
-        forEach { player.sendVarp(it.key, it::value) }
+        forEach { player.varp(it.key, it::value) }
     }
 
     /**
@@ -33,7 +33,7 @@ class Vars(
                 0 -> vars.remove(key.info.id)
                 else -> vars[key.info.id] = value
             }
-            player.sendVarp(key.info.id) { value }
+            player.varp(key.info.id) { value }
             value
         }
         VarType.VAR_BIT -> {
@@ -43,7 +43,7 @@ class Vars(
                     0 -> vars.remove(index)
                     else -> vars[index] = parentValue
                 }
-                player.sendVarp(index) { parentValue }
+                player.varp(index) { parentValue }
                 parentValue
             } ?: -1
         }
@@ -68,7 +68,7 @@ class Vars(
     /**
      * Flips a var from 0 -> 1 or 1 -> 0 only.
      */
-    fun flip(key: Var) = if (get(key) == 0) set(key, 1) else set(key, 0)
+    inline fun flip(key: () -> Var) = key.invoke().also { if (get(it) == 0) set(it, 1) else set(it, 0) }
 
     /**
      * Gets the value of a varbit from the parent varp.

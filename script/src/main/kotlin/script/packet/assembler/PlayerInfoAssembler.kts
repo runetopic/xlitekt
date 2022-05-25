@@ -150,7 +150,7 @@ fun Viewport.highDefinitionActivities(other: Player?, highDefinitionUpdate: Opti
     val theirLocation = other?.location
     return when {
         // If the player needs to be removed from high definition to low definition.
-        other?.online == false || theirLocation == null || !theirLocation.withinDistance(ourLocation, viewDistance) -> Removing
+        other?.isOnline() == false || theirLocation == null || !theirLocation.withinDistance(ourLocation, viewDistance) -> Removing
         // If the player is moving (Teleporting, Walking, Running).
         movementStep?.isPresent == true -> if (movementStep.get().speed == MovementSpeed.TELEPORTING) Teleporting else Moving
         // If the player has block updates.

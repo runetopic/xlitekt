@@ -26,7 +26,7 @@ class World(
     /**
      * Builds the game world including but not limited to map collision and npc spawns.
      */
-    fun build() {
+    internal fun build() {
         // Apply collision map.
         maps.entries().forEach(CollisionMap::applyCollision)
         // Apply npc spawns.
@@ -68,7 +68,7 @@ class World(
         logoutRequests += player
     }
 
-    fun players() = players.filterNotNull().filter(Player::online)
+    fun players() = players.filterNotNull().filter(Player::isOnline)
     fun addPlayer(player: Player) = players.add(player)
     fun removePlayer(player: Player) = players.remove(player)
 

@@ -4,8 +4,7 @@ import xlitekt.game.actor.movement.Movement
 import xlitekt.game.actor.movement.MovementSpeed
 import xlitekt.game.actor.movement.MovementStep
 import xlitekt.game.actor.player.Player
-import xlitekt.game.actor.player.sendRebuildNormal
-import xlitekt.game.actor.player.shouldRebuildMap
+import xlitekt.game.actor.player.rebuildNormal
 import xlitekt.game.actor.render.HitBarType
 import xlitekt.game.actor.render.HitDamage
 import xlitekt.game.actor.render.HitType
@@ -32,7 +31,7 @@ abstract class Actor(
 
     var previousLocation: Location? = null
     var index = 0
-    var facingActorIndex = Optional.empty<Int>()
+    internal var facingActorIndex = Optional.empty<Int>()
 
     private val highDefinitionRenderingBlocks = TreeMap<Int, HighDefinitionRenderingBlock>()
     private val lowDefinitionRenderingBlocks = TreeMap<Int, LowDefinitionRenderingBlock>()
@@ -52,7 +51,7 @@ abstract class Actor(
                 }
             } else {
                 // When the player is processing movement steps.
-                if (shouldRebuildMap()) sendRebuildNormal(players) { false }
+                if (shouldRebuildMap()) rebuildNormal(players) { false }
             }
         }
     }
@@ -152,10 +151,10 @@ inline fun Actor.routeTeleport(location: () -> Location) {
  * Toggles the actor movement speed between walking and running.
  * If the actor is a Player then this will also flag for movement and temporary movement type updates.
  */
-fun Actor.toggleMovementSpeed() {
-    movement.movementSpeed = if (movement.movementSpeed.isRunning()) MovementSpeed.WALKING else MovementSpeed.RUNNING
+inline fun Actor.speed(running: () -> Boolean) = running.invoke().also {
+    movement.movementSpeed = if (it) MovementSpeed.RUNNING else MovementSpeed.WALKING
     if (this is Player) {
-        movementType(movement.movementSpeed::isRunning)
+        movementType { it }
         temporaryMovementType(movement.movementSpeed::id)
     }
 }
