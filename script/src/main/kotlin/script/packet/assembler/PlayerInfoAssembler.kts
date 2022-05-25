@@ -7,6 +7,9 @@ import script.packet.assembler.PlayerInfoAssembler.ActivityUpdateType.Moving
 import script.packet.assembler.PlayerInfoAssembler.ActivityUpdateType.Removing
 import script.packet.assembler.PlayerInfoAssembler.ActivityUpdateType.Teleporting
 import script.packet.assembler.PlayerInfoAssembler.ActivityUpdateType.Updating
+import script.packet.assembler.PlayerInfoAssembler.RegionLocationChange.FullLocationChange
+import script.packet.assembler.PlayerInfoAssembler.RegionLocationChange.LevelLocationChange
+import script.packet.assembler.PlayerInfoAssembler.RegionLocationChange.PartialLocationChange
 import xlitekt.game.actor.movement.Direction
 import xlitekt.game.actor.movement.MovementSpeed
 import xlitekt.game.actor.movement.MovementStep
@@ -54,8 +57,8 @@ fun BytePacketBuilder.highDefinition(
         val updates = highDefinitionUpdates[other?.index]
         val movementStep = movementStepsUpdates[other?.index]
         // Check the activities this player is doing.
-        val activity = highDefinitionActivities(viewport, other, updates, movementStep)
-        if (other == null || activity == null || blocks.size >= Short.MAX_VALUE) {
+        val activity = viewport.highDefinitionActivities(other, updates, movementStep)
+        if (other == null || activity == null || blocks.size > Short.MAX_VALUE) {
             viewport.setNsn(index)
             skip++
             continue
@@ -95,8 +98,8 @@ fun BytePacketBuilder.lowDefinition(
         if (!viewport.isNsn(index) == nsn) continue
         val other = players[index]
         // Check the activities this player is doing.
-        val activity = lowDefinitionActivities(viewport, other)
-        if (other == null || activity == null || blocks.size >= Short.MAX_VALUE) {
+        val activity = viewport.lowDefinitionActivities(other)
+        if (other == null || activity == null || blocks.size > Short.MAX_VALUE) {
             viewport.setNsn(index)
             skip++
             continue
@@ -147,17 +150,12 @@ fun BitAccess.skipPlayers(count: Int): Int {
     return -1
 }
 
-fun highDefinitionActivities(
-    viewport: Viewport,
-    other: Player?,
-    highDefinitionUpdate: Optional<ByteArray>?,
-    movementStep: Optional<MovementStep>?
-): ActivityUpdateType? {
-    val ourLocation = viewport.player.location
+fun Viewport.highDefinitionActivities(other: Player?, highDefinitionUpdate: Optional<ByteArray>?, movementStep: Optional<MovementStep>?): ActivityUpdateType? {
+    val ourLocation = player.location
     val theirLocation = other?.location
     return when {
         // If the player needs to be removed from high definition to low definition.
-        other?.online == false || theirLocation == null || !theirLocation.withinDistance(ourLocation, viewport.viewDistance) -> Removing
+        other?.online == false || theirLocation == null || !theirLocation.withinDistance(ourLocation, viewDistance) -> Removing
         // If the player is moving (Teleporting, Walking, Running).
         movementStep?.isPresent == true -> if (movementStep.get().speed == MovementSpeed.TELEPORTING) Teleporting else Moving
         // If the player has block updates.
@@ -166,15 +164,12 @@ fun highDefinitionActivities(
     }
 }
 
-fun lowDefinitionActivities(
-    viewport: Viewport,
-    other: Player?
-): ActivityUpdateType? {
-    val ourLocation = viewport.player.location
+fun Viewport.lowDefinitionActivities(other: Player?): ActivityUpdateType? {
+    val ourLocation = player.location
     val theirLocation = other?.location
     return when {
         // If the player needs to be added from low definition to high definition.
-        theirLocation != null && theirLocation.withinDistance(ourLocation, viewport.viewDistance) -> Adding
+        theirLocation != null && theirLocation.withinDistance(ourLocation, viewDistance) -> Adding
         else -> null
     }
 }
@@ -254,42 +249,53 @@ sealed class ActivityUpdateType {
     )
 
     fun BitAccess.updateLocation(viewport: Viewport, index: Int, location: Location) {
-        val current = viewport.locations[index]
-        val next = location.regionLocation
-        if (next == current) writeBit { false }
-        else {
-            // Write the new location.
-            writeLocation(current, next)
+        val previous = RegionLocation(viewport.locations[index])
+        val current = RegionLocation(location.regionLocation)
+        val changed = writeBit { previous !in current }
+        if (changed) {
+            val regionLocationChange = when {
+                previous.x == current.x && previous.z == current.z -> LevelLocationChange
+                abs(current.x - previous.x) <= 1 && abs(current.z - previous.z) <= 1 -> PartialLocationChange
+                else -> FullLocationChange
+            }
+            // Write the location change type in bits.
+            regionLocationChange.writeBits(this, current.level - previous.level, current.x - previous.x, current.z - previous.z)
             // Update server with new location.
-            viewport.locations[index] = next
+            viewport.locations[index] = current.packedLocation
+        }
+    }
+}
+
+@JvmInline
+value class RegionLocation(val packedLocation: Int) {
+    val level: Int get() = packedLocation shr 16
+    val x: Int get() = packedLocation shr 8
+    val z: Int get() = packedLocation and 0xff
+
+    operator fun contains(regionLocation: RegionLocation): Boolean = regionLocation.packedLocation == packedLocation
+}
+
+sealed class RegionLocationChange {
+    object LevelLocationChange : RegionLocationChange() {
+        override fun writeBits(bits: BitAccess, level: Int, x: Int, z: Int) {
+            bits.writeBits(2) { 1 }
+            bits.writeBits(2) { level }
         }
     }
 
-    private fun BitAccess.writeLocation(previous: Int, current: Int) {
-        // Write there is a location change.
-        writeBit { true }
-        val previousLevel = previous shr 16
-        val previousX = previous shr 8
-        val previousZ = previous and 0xff
-        val currentLevel = current shr 16
-        val currentX = current shr 8
-        val currentZ = current and 0xff
-        val deltaLevel = currentLevel - previousLevel
-        val deltaX = currentX - previousX
-        val deltaZ = currentZ - previousZ
-        when {
-            previousX == currentX && previousZ == currentZ -> {
-                writeBits(2) { 1 }
-                writeBits(2) { deltaLevel }
-            }
-            abs(currentX - previousX) <= 1 && abs(currentZ - previousZ) <= 1 -> {
-                writeBits(2) { 2 }
-                writeBits(5) { (deltaLevel shl 3) or (Direction.directionFromDelta(deltaX, deltaZ).playerOpcode() and 0x7) }
-            }
-            else -> {
-                writeBits(2) { 3 }
-                writeBits(18) { (deltaZ and 0xff) or (deltaX and 0xff shl 8) or (deltaLevel shl 16) }
-            }
+    object PartialLocationChange : RegionLocationChange() {
+        override fun writeBits(bits: BitAccess, level: Int, x: Int, z: Int) {
+            bits.writeBits(2) { 2 }
+            bits.writeBits(5) { (level shl 3) or (Direction.directionFromDelta(x, z).playerOpcode() and 0x7) }
         }
     }
+
+    object FullLocationChange : RegionLocationChange() {
+        override fun writeBits(bits: BitAccess, level: Int, x: Int, z: Int) {
+            bits.writeBits(2) { 3 }
+            bits.writeBits(18) { (z and 0xff) or (x and 0xff shl 8) or (level shl 16) }
+        }
+    }
+
+    abstract fun writeBits(bits: BitAccess, level: Int, x: Int, z: Int)
 }
