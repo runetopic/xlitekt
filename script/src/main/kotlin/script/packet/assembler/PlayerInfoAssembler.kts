@@ -97,15 +97,10 @@ fun BytePacketBuilder.lowDefinition(
         val index = viewport.lowDefinitions[it]
         if (!viewport.isNsn(index) == nsn) continue
         val other = players[index]
+        val updates = lowDefinitionUpdates[other?.index]
         // Check the activities this player is doing.
-        val activity = viewport.lowDefinitionActivities(other)
+        val activity = viewport.lowDefinitionActivities(other, updates)
         if (other == null || activity == null || blocks.size > Short.MAX_VALUE) {
-            viewport.setNsn(index)
-            skip++
-            continue
-        }
-        val updates = lowDefinitionUpdates[other.index]
-        if (updates == null) {
             viewport.setNsn(index)
             skip++
             continue
@@ -117,7 +112,7 @@ fun BytePacketBuilder.lowDefinition(
         // Write corresponding bits depending on the activity type the player is doing.
         activity.writeBits(this@withBitAccess, viewport, index, current = other.location, previous = other.previousLocation ?: other.location)
         if (activity is Adding) {
-            blocks.writeBytes(updates::get)
+            blocks.writeBytes(updates!!::get)
             // Add them to our array.
             viewport.players[index] = other
             viewport.setNsn(index)
@@ -164,12 +159,13 @@ fun Viewport.highDefinitionActivities(other: Player?, highDefinitionUpdate: Opti
     }
 }
 
-fun Viewport.lowDefinitionActivities(other: Player?): ActivityUpdateType? {
+fun Viewport.lowDefinitionActivities(other: Player?, updates: Optional<ByteArray>?): ActivityUpdateType? {
     val ourLocation = player.location
     val theirLocation = other?.location
     return when {
         // If the player needs to be added from low definition to high definition.
         theirLocation != null && theirLocation.withinDistance(ourLocation, viewDistance) -> Adding
+        updates?.isPresent == false -> null
         else -> null
     }
 }
