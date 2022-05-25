@@ -23,6 +23,7 @@ import xlitekt.game.packet.UpdateRunEnergyPacket
 import xlitekt.game.packet.UpdateStatPacket
 import xlitekt.game.packet.VarpLargePacket
 import xlitekt.game.packet.VarpSmallPacket
+import xlitekt.game.packet.disassembler.handler.PacketHandler
 import xlitekt.game.world.World
 import xlitekt.game.world.map.location.Location
 import xlitekt.shared.lazy
@@ -54,16 +55,23 @@ class Player(
     override fun totalHitpoints(): Int = 100
     override fun currentHitpoints(): Int = 100
 
+    /**
+     * Initiates this player when logging into the game world.
+     * This happens before anything else.
+     */
     fun init(client: Client, players: Map<Int, Player>) {
         this.client = client
         previousLocation = location
         lastLoadedLocation = location
         sendRebuildNormal(players) { true }
         interfaces.openTop(interfaces.currentInterfaceLayout.interfaceId)
-        flushPool()
+        invokeAndClearWritePool()
         login()
     }
 
+    /**
+     * Login the player into the game world.
+     */
     private fun login() {
         vars.login()
         interfaces.login()
@@ -76,18 +84,43 @@ class Player(
         online = true
     }
 
+    /**
+     * Logout the player from the game world.
+     */
     fun logout() {
         if (!online) return
         online = false
         write(LogoutPacket(0))
-        flushPool()
+        invokeAndClearWritePool()
         client?.socket?.close()
         lazy<World>().removePlayer(this)
         lazy<PlayerJsonEncoderService>().requestSave(this)
     }
 
-    fun write(packet: Packet) = client?.poolPacket(packet)
-    fun flushPool() = client?.flushPool()
+    /**
+     * Pools a packet to be sent to the client.
+     */
+    fun write(packet: Packet) = client?.addToWritePool(packet)
+
+    /**
+     * Pools a disassembled packet from the connected client.
+     */
+    fun read(packetHandler: PacketHandler<Packet>) = client?.addToReadPool(packetHandler)
+
+    /**
+     * Invokes and writes the pooled packets to the connected client.
+     * The pool is then cleared after operation.
+     * This happens every tick.
+     */
+    internal fun invokeAndClearWritePool() = client?.invokeAndClearWritePool()
+
+    /**
+     * Invokes and handles the pooled packets sent from the connected client.
+     * This is used to keep the player synchronized with the game loop no matter their actions from the client.
+     * The pool is then cleared after operation.
+     * This happens every tick.
+     */
+    internal fun invokeAndClearReadPool() = client?.invokeAndClearReadPool()
 }
 
 inline fun Player.sendVarp(id: Int, value: () -> Int) {

@@ -15,6 +15,7 @@ class SequentialActorSynchronizer : Synchronizer() {
         val syncPlayers = players.associateBy(Player::index)
 
         players.forEach {
+            it.invokeAndClearReadPool()
             playerMovementStepsUpdates.add(it, it.processMovement(syncPlayers, it.location))
             highDefinitionUpdates.add(it, it.highDefinitionRenderingBlocks().createHighDefinitionUpdatesBuffer(it))
             lowDefinitionUpdates.add(it, it.lowDefinitionRenderingBlocks().createLowDefinitionUpdatesBuffer())

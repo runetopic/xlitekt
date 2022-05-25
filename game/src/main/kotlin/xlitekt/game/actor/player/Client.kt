@@ -17,12 +17,15 @@ import kotlinx.coroutines.channels.ClosedReceiveChannelException
 import kotlinx.coroutines.runBlocking
 import xlitekt.game.packet.Packet
 import xlitekt.game.packet.assembler.PacketAssemblerListener
+import xlitekt.game.packet.disassembler.handler.PacketHandler
+import xlitekt.game.packet.disassembler.handler.PacketHandlerListener
 import xlitekt.game.world.World
 import xlitekt.shared.buffer.writePacketOpcode
 import xlitekt.shared.buffer.writePacketSize
 import xlitekt.shared.inject
 import java.io.IOException
 import java.net.SocketException
+import kotlin.reflect.KClass
 
 /**
  * @author Jordan Abraham
@@ -38,7 +41,8 @@ class Client(
     var serverCipher: ISAAC? = null
     var player: Player? = null // TODO Figure out a way to not have the player here.
 
-    private val pool = mutableListOf<Packet>()
+    private val writePool = mutableListOf<Packet>()
+    private val readPool = mutableMapOf<KClass<*>, PacketHandler<Packet>>()
 
     fun disconnect(reason: String) {
         logger.debug { "Client disconnected for reason={$reason}." }
@@ -65,16 +69,21 @@ class Client(
         }
     }
 
-    fun poolPacket(packet: Packet) {
-        pool += packet
+    fun addToWritePool(packet: Packet) {
+        writePool += packet
     }
 
-    fun flushPool() {
-        for (it in pool) {
+    fun addToReadPool(packetHandler: PacketHandler<Packet>) {
+        // We use a map because we can replace keys if there are multiple requests of the same type.
+        readPool[packetHandler.packet::class] = packetHandler
+    }
+
+    fun invokeAndClearWritePool() {
+        writePool.forEach {
             val assembler = PacketAssemblerListener.listeners[it::class]
             if (assembler == null) {
                 disconnect("Unhandled packet found when trying to write. Packet was $it.")
-                continue
+                return@forEach
             }
             val packet = assembler.packet.invoke(it)
             runBlocking(Dispatchers.IO) {
@@ -84,7 +93,12 @@ class Client(
             packet.release()
         }
         writeChannel?.flush()
-        pool.clear()
+        writePool.clear()
+    }
+
+    fun invokeAndClearReadPool() {
+        readPool.values.forEach { PacketHandlerListener.listeners[it.packet::class]?.invoke(it) }
+        readPool.clear()
     }
 
     private suspend fun writePacket(opcode: Int, size: Int, packet: ByteArray, cipher: ISAAC) = writeChannel?.apply {

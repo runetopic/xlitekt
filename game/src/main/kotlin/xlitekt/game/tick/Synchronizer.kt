@@ -24,8 +24,8 @@ abstract class Synchronizer : Runnable {
     protected fun Player.sync(players: Map<Int, Player>) {
         write(PlayerInfoPacket(players, viewport, highDefinitionUpdates, lowDefinitionUpdates, playerMovementStepsUpdates))
         write(NPCInfoPacket(viewport, npcMovementStepsUpdates))
-        flushPool()
-        postSync()
+        invokeAndClearWritePool()
+        resetDefinitionRenderingBlocks()
     }
 
     protected fun resetSynchronizer() {

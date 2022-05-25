@@ -114,6 +114,7 @@ class BenchmarkParallelActorSynchronizer : Synchronizer() {
 
         val pre = measureTime {
             players.parallelStream().forEach {
+                it.invokeAndClearReadPool()
                 playerMovementStepsUpdates.add(it, it.processMovement(syncPlayers, it.location))
                 highDefinitionUpdates.add(it, it.highDefinitionRenderingBlocks().createHighDefinitionUpdatesBuffer(it))
                 lowDefinitionUpdates.add(it, it.lowDefinitionRenderingBlocks().createLowDefinitionUpdatesBuffer())

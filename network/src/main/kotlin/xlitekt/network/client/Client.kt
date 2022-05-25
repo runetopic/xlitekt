@@ -24,7 +24,6 @@ import xlitekt.game.actor.player.PlayerDecoder
 import xlitekt.game.content.ui.InterfaceLayout
 import xlitekt.game.packet.disassembler.PacketDisassemblerListener
 import xlitekt.game.packet.disassembler.handler.PacketHandler
-import xlitekt.game.packet.disassembler.handler.PacketHandlerListener
 import xlitekt.network.client.ClientRequestOpcode.HANDSHAKE_JS5_OPCODE
 import xlitekt.network.client.ClientRequestOpcode.HANDSHAKE_LOGIN_OPCODE
 import xlitekt.network.client.ClientRequestOpcode.JS5_ENCRYPTION_OPCODE
@@ -321,12 +320,7 @@ private suspend fun Client.readPackets(player: Player) = try {
             logger.debug { "Disassembled packet returned null. Opcode was $opcode." }
             continue
         }
-        val handler = PacketHandlerListener.listeners[disassembled::class]
-        if (handler == null) {
-            logger.debug { "No packet handler found for disassembled packet. Opcode was $opcode." }
-            continue
-        }
-        handler.invoke(PacketHandler(player, disassembled))
+        player.read(PacketHandler(player, disassembled))
     }
 } catch (exception: Exception) {
     handleException(exception)

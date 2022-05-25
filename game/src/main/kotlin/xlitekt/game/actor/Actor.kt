@@ -88,7 +88,7 @@ abstract class Actor(
     /**
      * Happens after this actor has finished processing by the game loop.
      */
-    internal fun postSync() {
+    internal fun resetDefinitionRenderingBlocks() {
         // Clear the high definition blocks.
         highDefinitionRenderingBlocks.clear()
         // We only want to persist these types of low definition blocks.
