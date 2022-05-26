@@ -12,12 +12,11 @@ import xlitekt.shared.buffer.writeSmart
  */
 onNPCUpdateBlock<Hit>(2, 0x1) {
     buildPacket {
-        writeByteAdd(hits::size)
-        hits.forEach {
+        writeByteAdd(splats::size)
+        splats.forEach {
             val type = it.type
             val interacting = it.isInteracting(actor, it.source)
-            val tinted = type.isTinted()
-            writeSmart { if (!interacting && tinted) type.id + 1 else type.id }
+            writeSmart { if (!interacting) type.id + 1 else type.id }
             writeSmart(it::damage)
             writeSmart(it::delay)
         }

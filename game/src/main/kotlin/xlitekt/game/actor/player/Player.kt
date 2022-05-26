@@ -48,7 +48,21 @@ class Player(
     val vars = Vars(this)
     var lastLoadedLocation: Location? = null
 
+    /**
+     * Alternative rendering blocks used for both local and non-local updates.
+     * This is only used for blocks that requires the outside player perspective.
+     * Example of this is for hit splat tinting as the hit block requires the outside player to check for the varbit.
+     */
+    private val alternativeRenderingBlocks = mutableMapOf<Render, ByteArray>()
+
+    /**
+     * This players connected client. This client is used for reading and writing packets.
+     */
     private var client: Client? = null
+
+    /**
+     * This players online var. If true this player is processed by the game loop.
+     */
     private var online = false
 
     override fun totalHitpoints(): Int = 100
@@ -123,6 +137,9 @@ class Player(
      */
     internal fun invokeAndClearReadPool() = client?.invokeAndClearReadPool()
 
+    /**
+     * Returns if this player needs a map rebuild.
+     */
     internal fun shouldRebuildMap(): Boolean {
         val lastZoneX = lastLoadedLocation?.zoneX ?: 0
         val lastZoneZ = lastLoadedLocation?.zoneZ ?: 0
@@ -130,6 +147,26 @@ class Player(
         val zoneZ = location.zoneZ
         val size = ((104 shr 3) / 2) - 1
         return abs(lastZoneX - zoneX) >= size || abs(lastZoneZ - zoneZ) >= size
+    }
+
+    /**
+     * Adds an alternative rendering block to this player.
+     */
+    internal fun addAlternativeRenderingBlock(render: Render, block: ByteArray) {
+        alternativeRenderingBlocks[render] = block
+    }
+
+    /**
+     * Returns a map of this players alternative rendering blocks.
+     */
+    internal fun alternativeRenderingBlocks() = alternativeRenderingBlocks
+
+    /**
+     * Happens after this player has finished processing by the game loop.
+     */
+    override fun resetDefinitionRenderingBlocks() {
+        super.resetDefinitionRenderingBlocks()
+        alternativeRenderingBlocks.clear()
     }
 }
 

@@ -8,6 +8,7 @@ import xlitekt.game.world.World
 import xlitekt.game.world.map.location.Location
 import xlitekt.shared.inject
 import kotlin.random.Random
+import xlitekt.game.content.vars.VarBit
 
 /**
  * @author Jordan Abraham
@@ -20,6 +21,7 @@ onCommand("benchmark").use {
         bot.location = Location(Random.nextInt(3200, 3280), Random.nextInt(3200, 3280), 0)
         world.addPlayer(bot)
         bot.vars.flip { VarPlayer.ToggleRun }
+        bot.vars.flip { VarBit.HitSplatTinting }
         world.requestLogin(bot, Client())
     }
 }

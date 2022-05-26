@@ -5,7 +5,7 @@ import xlitekt.game.actor.Actor
 /**
  * @author Jordan Abraham
  */
-data class HitDamage(
+data class HitSplat(
     val source: Actor?,
     val type: HitType,
     val damage: Int,

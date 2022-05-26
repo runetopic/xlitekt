@@ -1,8 +1,6 @@
 package xlitekt.game.tick
 
 import xlitekt.game.actor.player.Player
-import xlitekt.game.actor.render.block.createHighDefinitionUpdatesBuffer
-import xlitekt.game.actor.render.block.createLowDefinitionUpdatesBuffer
 
 /**
  * @author Jordan Abraham
@@ -16,17 +14,16 @@ class SequentialActorSynchronizer : Synchronizer() {
 
         players.forEach {
             it.invokeAndClearReadPool()
-            playerMovementStepsUpdates.add(it, it.processMovement(syncPlayers, it.location))
-            highDefinitionUpdates.add(it, it.highDefinitionRenderingBlocks().createHighDefinitionUpdatesBuffer(it))
-            lowDefinitionUpdates.add(it, it.lowDefinitionRenderingBlocks().createLowDefinitionUpdatesBuffer())
+            it.syncMovement(syncPlayers)
+            it.syncRenderingBlocks()
         }
 
         npcs.forEach {
-            npcMovementStepsUpdates.add(it, it.processMovement(syncPlayers, it.location))
+            it.syncMovement(syncPlayers)
         }
 
         players.forEach {
-            it.sync(syncPlayers)
+            it.syncClient(syncPlayers)
         }
 
         resetSynchronizer()

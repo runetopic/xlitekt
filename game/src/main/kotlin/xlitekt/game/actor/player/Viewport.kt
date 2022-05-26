@@ -17,7 +17,7 @@ class Viewport(
     val npcs = LinkedList<NPC>()
     var highDefinitionsCount = 0
     var lowDefinitionsCount = 0
-    private var forceViewDistance = false
+    var forceViewDistance = false
     var viewDistance = PREFERRED_VIEW_DISTANCE
 
     private var resizeTickCount = 0
@@ -95,7 +95,7 @@ class Viewport(
         return result
     }
 
-    private companion object {
+    companion object {
         const val RESIZE_CHECK_INTERVAL = 10
         const val PREFERRED_PLAYER_COUNT = 250
         const val PREFERRED_VIEW_DISTANCE = 15

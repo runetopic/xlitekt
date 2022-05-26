@@ -21,39 +21,42 @@ data class RenderingBlock(
 )
 
 /**
- * Creates a new buffer from a collection of HighDefinitionRenderingBlock's to be consumed by the player info packet.
+ * Creates a new ByteArray for the mask information of this players high definition rendering blocks.
  */
-internal fun Collection<HighDefinitionRenderingBlock>.createHighDefinitionUpdatesBuffer(player: Player): ByteArray? {
-    if (isEmpty()) return null
-    val packet = buildPacket {
-        writeMask(this@createHighDefinitionUpdatesBuffer.fold(0) { current, next -> current or next.renderingBlock.mask }.let { if (it > 0xff) it or 0x10 else it })
-        for (update in this@createHighDefinitionUpdatesBuffer) {
-            val packet = update.renderingBlock.packet.invoke(update.render)
-            val bytes = packet.readBytes()
-            packet.release()
-            player.addLowDefinitionRenderingBlock(update, bytes)
-            writeBytes { bytes }
-        }
-    }
-    val bytes = packet.readBytes()
-    packet.release()
-    return bytes
+internal fun Collection<HighDefinitionRenderingBlock>.createHighDefinitionsMask(): ByteArray {
+    return buildPacket {
+        writeMask(fold(0) { current, next -> current or next.renderingBlock.mask }.let { if (it > 0xff) it or 0x10 else it })
+    }.readBytes()
 }
 
 /**
- * Creates a new buffer from a collection of LowDefinitionRenderingBlock's to be consumed by the player info packet.
+ * Creates a new ByteArray for the mask information of this players low definition rendering blocks.
  */
-internal fun Collection<LowDefinitionRenderingBlock>.createLowDefinitionUpdatesBuffer(): ByteArray? {
-    if (isEmpty()) return null
-    val packet = buildPacket {
-        writeMask(this@createLowDefinitionUpdatesBuffer.fold(0) { current, next -> current or next.mask }.let { if (it > 0xff) it or 0x10 else it })
-        for (update in this@createLowDefinitionUpdatesBuffer) {
-            writeBytes(update::block)
+internal fun Collection<LowDefinitionRenderingBlock>.createLowDefinitionsMask(): ByteArray {
+    return buildPacket {
+        writeMask(fold(0) { current, next -> current or next.renderingBlock.mask }.let { if (it > 0xff) it or 0x10 else it })
+    }.readBytes()
+}
+
+/**
+ * Creates a new ByteArray of this HighDefinitionRenderingBlock.
+ * This also converts the HighDefinitionRenderingBlock into a LowDefinitionRenderingBlock and sets it to the player.
+ * This also invokes an alternative rendering block if applicable to this players HighDefinitionRenderingBlock.
+ *
+ * Alternative rendering blocks are for rendering blocks that requires the outside player perspective.
+ * An example of an alternative rendering block is for hit splat tinting as it requires the check of the outside player varbit.
+ */
+internal fun HighDefinitionRenderingBlock.invokeHighDefinitionRenderingBlock(player: Player): ByteArray {
+    return buildPacket {
+        val bytes = renderingBlock.packet.invoke(render).readBytes()
+        if (render.hasAlternative()) {
+            player.addLowDefinitionRenderingBlock(this@invokeHighDefinitionRenderingBlock, bytes.copyOfRange(0, bytes.size / 2))
+            player.addAlternativeRenderingBlock(render, bytes.copyOfRange(bytes.size / 2, bytes.size))
+        } else {
+            player.addLowDefinitionRenderingBlock(this@invokeHighDefinitionRenderingBlock, bytes)
         }
-    }
-    val bytes = packet.readBytes()
-    packet.release()
-    return bytes
+        writeBytes { bytes }
+    }.readBytes()
 }
 
 fun BytePacketBuilder.buildNPCUpdateBlocks(npc: NPC) = with(npc.highDefinitionRenderingBlocks()) {

@@ -9,10 +9,8 @@ import xlitekt.game.actor.chat
 import xlitekt.game.actor.hit
 import xlitekt.game.actor.npc.NPC
 import xlitekt.game.actor.player.Player
-import xlitekt.game.actor.render.HitBarType
+import xlitekt.game.actor.render.HitBar
 import xlitekt.game.actor.render.HitType
-import xlitekt.game.actor.render.block.createHighDefinitionUpdatesBuffer
-import xlitekt.game.actor.render.block.createLowDefinitionUpdatesBuffer
 import xlitekt.game.actor.route
 import xlitekt.game.actor.spotAnimate
 import xlitekt.game.tick.Synchronizer
@@ -57,7 +55,7 @@ class BenchmarkSequentialActorSynchronizer : Synchronizer() {
                 )
                 it.chat(it.rights, 0) { "Hello Xlite." }
                 it.spotAnimate { 574 }
-                it.hit(HitBarType.DEFAULT, null, HitType.POISON_DAMAGE, 0) { 10 }
+                it.hit(HitBar.DEFAULT, null, HitType.POISON_DAMAGE, 0) { 10 }
             }
         }
         logger.debug { "Pathfinders took $finders for ${players.size} players. [TICK=$tick]" }
@@ -100,12 +98,11 @@ class BenchmarkSequentialActorSynchronizer : Synchronizer() {
         val pre = measureTime {
             players.forEach {
                 it.invokeAndClearReadPool()
-                playerMovementStepsUpdates.add(it, it.processMovement(syncPlayers, it.location))
-                highDefinitionUpdates.add(it, it.highDefinitionRenderingBlocks().createHighDefinitionUpdatesBuffer(it))
-                lowDefinitionUpdates.add(it, it.lowDefinitionRenderingBlocks().createLowDefinitionUpdatesBuffer())
+                it.syncMovement(syncPlayers)
+                it.syncRenderingBlocks()
             }
             npcs.forEach {
-                npcMovementStepsUpdates.add(it, it.processMovement(syncPlayers, it.location))
+                it.syncMovement(syncPlayers)
             }
         }
         logger.debug { "Pre tick took $pre for ${players.size} players. [TICK=$tick]" }
@@ -113,7 +110,7 @@ class BenchmarkSequentialActorSynchronizer : Synchronizer() {
         val main = measureTime {
             // Main process.
             players.forEach {
-                it.sync(syncPlayers)
+                it.syncClient(syncPlayers)
             }
             resetSynchronizer()
         }

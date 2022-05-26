@@ -5,8 +5,8 @@ import xlitekt.game.actor.movement.MovementSpeed
 import xlitekt.game.actor.movement.MovementStep
 import xlitekt.game.actor.player.Player
 import xlitekt.game.actor.player.rebuildNormal
-import xlitekt.game.actor.render.HitBarType
-import xlitekt.game.actor.render.HitDamage
+import xlitekt.game.actor.render.HitBar
+import xlitekt.game.actor.render.HitSplat
 import xlitekt.game.actor.render.HitType
 import xlitekt.game.actor.render.Render
 import xlitekt.game.actor.render.Render.Appearance
@@ -33,7 +33,16 @@ abstract class Actor(
     var index = 0
     internal var facingActorIndex = Optional.empty<Int>()
 
+    /**
+     * High definition rendering blocks used for local updates.
+     * The key represents the index this rendering block should be placed to. This ordering is the same as the client implementation.
+     */
     private val highDefinitionRenderingBlocks = TreeMap<Int, HighDefinitionRenderingBlock>()
+
+    /**
+     * Low definition rendering blocks used for non-local updates.
+     * The key represents the index this rendering block should be placed to. This ordering is the same as the client implementation.
+     */
     private val lowDefinitionRenderingBlocks = TreeMap<Int, LowDefinitionRenderingBlock>()
 
     abstract fun totalHitpoints(): Int
@@ -64,7 +73,7 @@ abstract class Actor(
     /**
      * Returns a list of this actors high definition rendering blocks.
      */
-    internal fun highDefinitionRenderingBlocks() = highDefinitionRenderingBlocks.values.toList()
+    internal fun highDefinitionRenderingBlocks() = highDefinitionRenderingBlocks.values
 
     /**
      * Adds a high definition rendering block to a low definition one.
@@ -72,8 +81,8 @@ abstract class Actor(
     internal fun addLowDefinitionRenderingBlock(highDefinitionRenderingBlock: HighDefinitionRenderingBlock, block: ByteArray) {
         val lowDefinitionRenderingBlock = LowDefinitionRenderingBlock(
             render = highDefinitionRenderingBlock.render,
-            mask = highDefinitionRenderingBlock.renderingBlock.mask,
-            block = block
+            renderingBlock = highDefinitionRenderingBlock.renderingBlock,
+            bytes = block
         )
         // Insert the rendering block into the TreeMap based on its index. This is to preserve order based on the client.
         lowDefinitionRenderingBlocks[highDefinitionRenderingBlock.renderingBlock.index] = lowDefinitionRenderingBlock
@@ -82,12 +91,12 @@ abstract class Actor(
     /**
      * Returns a list of this actors low definition rendering blocks.
      */
-    internal fun lowDefinitionRenderingBlocks() = lowDefinitionRenderingBlocks.values.toList()
+    internal fun lowDefinitionRenderingBlocks() = lowDefinitionRenderingBlocks.values
 
     /**
      * Happens after this actor has finished processing by the game loop.
      */
-    internal fun resetDefinitionRenderingBlocks() {
+    internal open fun resetDefinitionRenderingBlocks() {
         // Clear the high definition blocks.
         highDefinitionRenderingBlocks.clear()
         // We only want to persist these types of low definition blocks.
@@ -183,12 +192,12 @@ inline fun Actor.temporaryMovementType(id: () -> Int) {
     render(TemporaryMovementType(id.invoke()))
 }
 
-inline fun Actor.hit(hitBarType: HitBarType, source: Actor?, type: HitType, delay: Int, damage: () -> Int) {
+inline fun Actor.hit(hitBar: HitBar, source: Actor?, type: HitType, delay: Int, damage: () -> Int) {
     render(
         Hit(
             actor = this,
-            hits = listOf(HitDamage(source, type, damage.invoke(), delay)),
-            bars = listOf(hitBarType)
+            hits = listOf(HitSplat(source, type, damage.invoke(), delay)),
+            bars = listOf(hitBar)
         )
     )
 }

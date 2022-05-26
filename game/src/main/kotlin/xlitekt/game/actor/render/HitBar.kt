@@ -2,7 +2,7 @@ package xlitekt.game.actor.render
 
 import xlitekt.game.actor.Actor
 
-enum class HitBarType(val id: Int) {
+enum class HitBar(val id: Int) {
     DEFAULT(0), MEDIUM(10), LARGE(20);
 
     fun percentage(e: Actor): Int {

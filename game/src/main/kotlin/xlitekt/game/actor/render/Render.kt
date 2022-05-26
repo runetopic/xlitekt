@@ -86,9 +86,12 @@ sealed class Render {
 
     data class Hit(
         val actor: Actor,
-        val hits: List<HitDamage>,
-        val bars: List<HitBarType>
-    ) : Render()
+        val splats: List<HitSplat>,
+        val bars: List<HitBar>,
+        val tint: Boolean
+    ) : Render() {
+        constructor(actor: Actor, hits: List<HitSplat>, bars: List<HitBar>) : this(actor, hits, bars, false)
+    }
 
     data class MovementType(
         val running: Boolean
@@ -129,4 +132,9 @@ sealed class Render {
 
         enum class Gender(val mask: Int) { MALE(0x0), FEMALE(0x1); }
     }
+
+    /**
+     * Returns if a render has an alternative update.
+     */
+    fun hasAlternative() = this is Hit
 }
