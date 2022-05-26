@@ -34,5 +34,9 @@
   {
     "id": 9656,
     "name": "advanced_settings_category"
+  },
+  {
+    "id": 10236,
+    "name": "hit_splat_tinting"
   }
 ]

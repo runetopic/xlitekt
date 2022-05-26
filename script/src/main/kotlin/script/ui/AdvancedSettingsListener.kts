@@ -62,6 +62,9 @@ onInterface<AdvancedSettings> {
 }
 
 fun UserInterfaceEvent.ButtonClickEvent.onActivitiesClick(vars: Vars) {
+    when (slotId) {
+        29 -> vars.flip { VarBit.HitSplatTinting }
+    }
 }
 
 fun UserInterfaceEvent.ButtonClickEvent.onAudioClick(vars: Vars) {

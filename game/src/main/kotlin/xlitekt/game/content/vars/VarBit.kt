@@ -14,4 +14,5 @@ sealed class VarBit(override val name: String) : Var(name) {
     object MoveFollowerOptionsLowerDown : VarBit("move_follower_options_lower_down")
     object EscClosesCurrentModal : VarBit("esc_closes_current_modal")
     object ScrollWheelChangesZoomDistance : VarBit("scroll_wheel_changes_zoom_distance")
+    object HitSplatTinting : VarBit("hit_splat_tinting")
 }
