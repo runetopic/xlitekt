@@ -11,6 +11,7 @@ import xlitekt.shared.buffer.writeByteAdd
 import xlitekt.shared.buffer.writeByteNegate
 import xlitekt.shared.buffer.writeShort
 import xlitekt.shared.buffer.writeSmart
+import xlitekt.shared.formatChatMessage
 import xlitekt.shared.inject
 
 /**
@@ -24,9 +25,10 @@ onPlayerUpdateBlock<PublicChat>(7, 0x20) {
         writeByteNegate { rights }
         writeByteAdd { 0 } // Auto chat
         val bytes = ByteArray(256)
-        message.toHuffman(provider.entries().first().huffman!!, bytes).also {
+        val formatted = message.formatChatMessage()
+        formatted.toHuffman(provider.entries().first().huffman!!, bytes).also {
             writeByte { it + 1 }
-            writeSmart(message::length)
+            writeSmart(formatted::length)
             writeFully(bytes, 0, it)
         }
     }
