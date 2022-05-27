@@ -2,7 +2,6 @@ package xlitekt.shared.buffer
 
 import io.ktor.utils.io.core.ByteReadPacket
 import io.ktor.utils.io.core.discardUntilDelimiter
-import io.ktor.utils.io.core.readBytes
 import io.ktor.utils.io.core.readInt
 import io.ktor.utils.io.core.readUByte
 import io.ktor.utils.io.core.readUShort
@@ -10,7 +9,7 @@ import io.ktor.utils.io.core.readUShort
 /**
  * @author Jordan Abraham
  */
-fun ByteReadPacket.readStringCp1252NullTerminated() = String(readBytes(copy().discardUntilDelimiter(0).toInt())).also {
+fun ByteReadPacket.readStringCp1252NullTerminated() = String(readUChars(copy().discardUntilDelimiter(0).toInt())).also {
     discard(1)
 }
 
@@ -18,6 +17,8 @@ fun ByteReadPacket.readStringCp1252NullCircumfixed(): String {
     if (readByte().toInt() != 0) throw IllegalArgumentException()
     return readStringCp1252NullTerminated()
 }
+
+fun ByteReadPacket.readUChars(n: Int) = CharArray(n) { readUByte().toInt().toChar() }
 
 fun ByteReadPacket.readUByteSubtract() = readUByte().toInt() - 128 and 0xff
 fun ByteReadPacket.readUByteAdd() = readUByte().toInt() + 128 and 0xff
