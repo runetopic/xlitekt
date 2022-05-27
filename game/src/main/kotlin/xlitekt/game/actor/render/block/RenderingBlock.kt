@@ -28,51 +28,32 @@ data class RenderingBlock(
  * Alternative rendering blocks are for rendering blocks that requires the outside player perspective.
  * An example of an alternative rendering block is for hit splat tinting as it requires the check of the outside player varbit.
  */
-internal fun Collection<HighDefinitionRenderingBlock>.invokeHighDefinitionRenderingBlock(player: Player): ByteArray? {
-    if (isEmpty()) return null
-    return buildPacket {
-        writeMask(fold(0) { current, next -> current or next.renderingBlock.mask }.let { if (it > 0xff) it or 0x10 else it })
-        for (block in this@invokeHighDefinitionRenderingBlock) {
-            val bytes = block.renderingBlock.packet.invoke(block.render).readBytes()
-            if (block.render.hasAlternative()) {
-                player.addLowDefinitionRenderingBlock(block, bytes.copyOfRange(0, bytes.size / 2))
-                player.addAlternativeRenderingBlock(block.render, block.renderingBlock, bytes.copyOfRange(bytes.size / 2, bytes.size))
-            } else {
-                player.addLowDefinitionRenderingBlock(block, bytes)
-                player.addAlternativeRenderingBlock(block.render, block.renderingBlock, bytes)
-            }
-            writeBytes { bytes }
-        }
-    }.readBytes()
-}
+internal fun Collection<HighDefinitionRenderingBlock>.invokeHighDefinitionRenderingBlock(player: Player): ByteArray = buildPacket {
+    writeMask(fold(0) { current, next -> current or next.renderingBlock.mask }.let { if (it > 0xff) it or 0x10 else it })
+    associateWith { it.renderingBlock.packet.invoke(it.render).readBytes() }.forEach {
+        player.setLowDefinitionRenderingBlock(it.key, it.value)
+        player.setAlternativeRenderingBlock(it.key.render, it.key.renderingBlock, it.value)
+        writeBytes(it::value)
+    }
+}.readBytes()
 
 /**
  * Creates a new ByteArray from a collection of LowDefinitionRenderingBlock.
  * This is used by the player info packet for building low definition blocks for players.
  */
-internal fun Collection<LowDefinitionRenderingBlock>.invokeLowDefinitionRenderingBlock(): ByteArray? {
-    if (isEmpty()) return null
-    return buildPacket {
-        writeMask(fold(0) { current, next -> current or next.renderingBlock.mask }.let { if (it > 0xff) it or 0x10 else it })
-        for (block in this@invokeLowDefinitionRenderingBlock) {
-            writeBytes(block::bytes)
-        }
-    }.readBytes()
-}
+internal fun Collection<LowDefinitionRenderingBlock>.invokeLowDefinitionRenderingBlock(): ByteArray = buildPacket {
+    writeMask(fold(0) { current, next -> current or next.renderingBlock.mask }.let { if (it > 0xff) it or 0x10 else it })
+    map(LowDefinitionRenderingBlock::bytes).forEach { writeBytes { it } }
+}.readBytes()
 
 /**
  * Creates a new ByteArray from a collection of AlternativeDefinitionRenderingBlock.
  * This is used by the player update for both high and low definition updates that require outside player checks.
  */
-internal fun Collection<AlternativeDefinitionRenderingBlock>.invokeAlternativeDefinitionRenderingBlock(): ByteArray? {
-    if (isEmpty()) return null
-    return buildPacket {
-        writeMask(fold(0) { current, next -> current or next.renderingBlock.mask }.let { if (it > 0xff) it or 0x10 else it })
-        for (block in this@invokeAlternativeDefinitionRenderingBlock) {
-            writeBytes(block::bytes)
-        }
-    }.readBytes()
-}
+internal fun Collection<AlternativeDefinitionRenderingBlock>.invokeAlternativeDefinitionRenderingBlock(): ByteArray = buildPacket {
+    writeMask(fold(0) { current, next -> current or next.renderingBlock.mask }.let { if (it > 0xff) it or 0x10 else it })
+    map(AlternativeDefinitionRenderingBlock::bytes).forEach { writeBytes { it } }
+}.readBytes()
 
 fun BytePacketBuilder.buildNPCUpdateBlocks(npc: NPC) = with(npc.highDefinitionRenderingBlocks()) {
     writeMask(fold(0) { current, next -> current or next.renderingBlock.mask }.let { if (it > 0xff) it or 0x4 else it })

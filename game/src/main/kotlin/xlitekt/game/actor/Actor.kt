@@ -17,9 +17,11 @@ import xlitekt.game.actor.render.Render.MovementType
 import xlitekt.game.actor.render.Render.Sequence
 import xlitekt.game.actor.render.Render.SpotAnimation
 import xlitekt.game.actor.render.Render.TemporaryMovementType
+import xlitekt.game.actor.render.block.AlternativeDefinitionRenderingBlock
 import xlitekt.game.actor.render.block.HighDefinitionRenderingBlock
 import xlitekt.game.actor.render.block.LowDefinitionRenderingBlock
 import xlitekt.game.actor.render.block.PlayerRenderingBlockListener
+import xlitekt.game.actor.render.block.RenderingBlock
 import xlitekt.game.world.map.location.Location
 import java.util.Optional
 import java.util.TreeMap
@@ -44,6 +46,16 @@ abstract class Actor(
      * The key represents the index this rendering block should be placed to. This ordering is the same as the client implementation.
      */
     private val lowDefinitionRenderingBlocks = TreeMap<Int, LowDefinitionRenderingBlock>()
+
+    /**
+     * Alternative rendering blocks used for both local and non-local updates.
+     * This is only used for blocks that requires the outside player perspective.
+     * Example of this is for hit splat tinting as the hit block requires the outside player to check for the varbit.
+     *
+     * The key represents the index this rendering block should be placed to. This ordering is the same as the client implementation.
+     */
+    private val alternativeHighDefinitionRenderingBlocks = TreeMap<Int, AlternativeDefinitionRenderingBlock>()
+    private val alternativeLowDefinitionRenderingBlocks = TreeMap<Int, AlternativeDefinitionRenderingBlock>()
 
     abstract fun totalHitpoints(): Int
     abstract fun currentHitpoints(): Int
@@ -78,11 +90,11 @@ abstract class Actor(
     /**
      * Adds a high definition rendering block to a low definition one.
      */
-    internal fun addLowDefinitionRenderingBlock(highDefinitionRenderingBlock: HighDefinitionRenderingBlock, block: ByteArray) {
+    internal fun setLowDefinitionRenderingBlock(highDefinitionRenderingBlock: HighDefinitionRenderingBlock, bytes: ByteArray) {
         val lowDefinitionRenderingBlock = LowDefinitionRenderingBlock(
             render = highDefinitionRenderingBlock.render,
             renderingBlock = highDefinitionRenderingBlock.renderingBlock,
-            bytes = block
+            bytes = if (highDefinitionRenderingBlock.render.hasAlternative()) bytes.copyOfRange(0, bytes.size / 2) else bytes
         )
         // Insert the rendering block into the TreeMap based on its index. This is to preserve order based on the client.
         lowDefinitionRenderingBlocks[highDefinitionRenderingBlock.renderingBlock.index] = lowDefinitionRenderingBlock
@@ -96,14 +108,38 @@ abstract class Actor(
     /**
      * Happens after this actor has finished processing by the game loop.
      */
-    internal open fun resetDefinitionRenderingBlocks() {
+    internal fun resetDefinitionRenderingBlocks() {
         // Clear the high definition blocks.
         highDefinitionRenderingBlocks.clear()
         // We only want to persist these types of low definition blocks.
         lowDefinitionRenderingBlocks.values.removeIf {
             it.render !is Appearance && it.render !is FaceAngle && it.render !is MovementType
         }
+        alternativeHighDefinitionRenderingBlocks.clear()
+        // We only want to persist these types of low definition blocks.
+        alternativeLowDefinitionRenderingBlocks.values.removeIf {
+            it.render !is Appearance && it.render !is FaceAngle && it.render !is MovementType
+        }
     }
+
+    /**
+     * Adds an alternative rendering block to this player.
+     */
+    internal fun setAlternativeRenderingBlock(render: Render, renderingBlock: RenderingBlock, bytes: ByteArray) {
+        val alternativeDefinitionRenderingBlock = AlternativeDefinitionRenderingBlock(
+            render = render,
+            renderingBlock = renderingBlock,
+            bytes = if (render.hasAlternative()) bytes.copyOfRange(bytes.size / 2, bytes.size) else bytes
+        )
+        alternativeHighDefinitionRenderingBlocks[renderingBlock.index] = alternativeDefinitionRenderingBlock
+        alternativeLowDefinitionRenderingBlocks[renderingBlock.index] = alternativeDefinitionRenderingBlock
+    }
+
+    /**
+     * Returns a map of this players alternative rendering blocks.
+     */
+    internal fun alternativeHighDefinitionRenderingBlocks() = alternativeHighDefinitionRenderingBlocks.values
+    internal fun alternativeLowDefinitionRenderingBlocks() = alternativeLowDefinitionRenderingBlocks.values
 
     /**
      * Flags this actor with a new pending rendering block.

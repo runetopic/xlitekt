@@ -2,11 +2,11 @@ package xlitekt.game.packet
 
 import xlitekt.game.actor.player.Player
 import xlitekt.game.actor.player.Viewport
-import xlitekt.game.tick.AlternativeHighDefinitionUpdates
-import xlitekt.game.tick.AlternativeLowDefinitionUpdates
-import xlitekt.game.tick.HighDefinitionUpdates
-import xlitekt.game.tick.LowDefinitionUpdates
-import xlitekt.game.tick.PlayerMovementStepsUpdates
+import xlitekt.game.tick.PlayerUpdates.AlternativeHighDefinitionPlayerUpdates
+import xlitekt.game.tick.PlayerUpdates.AlternativeLowDefinitionPlayerUpdates
+import xlitekt.game.tick.PlayerUpdates.HighDefinitionPlayerUpdates
+import xlitekt.game.tick.PlayerUpdates.LowDefinitionPlayerUpdates
+import xlitekt.game.tick.PlayerUpdates.MovementStepsPlayerUpdates
 
 /**
  * @author Jordan Abraham
@@ -15,9 +15,9 @@ import xlitekt.game.tick.PlayerMovementStepsUpdates
 data class PlayerInfoPacket(
     val players: Map<Int, Player>,
     val viewport: Viewport,
-    val highDefinitionUpdates: HighDefinitionUpdates,
-    val lowDefinitionUpdates: LowDefinitionUpdates,
-    val alternativeHighDefinitionUpdates: AlternativeHighDefinitionUpdates,
-    val alternativeLowDefinitionUpdates: AlternativeLowDefinitionUpdates,
-    val movementStepsUpdates: PlayerMovementStepsUpdates
+    val highDefinitionUpdates: HighDefinitionPlayerUpdates,
+    val lowDefinitionUpdates: LowDefinitionPlayerUpdates,
+    val alternativeHighDefinitionUpdates: AlternativeHighDefinitionPlayerUpdates,
+    val alternativeLowDefinitionUpdates: AlternativeLowDefinitionPlayerUpdates,
+    val movementStepsUpdates: MovementStepsPlayerUpdates
 ) : Packet

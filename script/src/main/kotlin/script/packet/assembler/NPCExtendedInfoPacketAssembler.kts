@@ -12,7 +12,7 @@ import xlitekt.game.actor.player.Viewport
 import xlitekt.game.actor.render.block.buildNPCUpdateBlocks
 import xlitekt.game.packet.NPCInfoPacket
 import xlitekt.game.packet.assembler.onPacketAssembler
-import xlitekt.game.tick.NPCMovementStepsUpdates
+import xlitekt.game.tick.NPCUpdates.MovementStepsNPCUpdates
 import xlitekt.game.world.map.location.Location
 import xlitekt.game.world.map.location.withinDistance
 import xlitekt.game.world.map.location.zones
@@ -42,12 +42,12 @@ onPacketAssembler<NPCInfoPacket>(opcode = 90, size = -2) {
 fun BitAccess.highDefinition(
     viewport: Viewport,
     blocks: BytePacketBuilder,
-    npcMovementStepsUpdates: NPCMovementStepsUpdates
+    npcMovementStepsUpdates: MovementStepsNPCUpdates
 ) {
     val playerLocation = viewport.player.location
     viewport.npcs.forEach {
         // Check the activities this npc is doing.
-        val activity = highDefinitionActivities(it, playerLocation, npcMovementStepsUpdates[it.index]!!)
+        val activity = highDefinitionActivities(it, playerLocation, npcMovementStepsUpdates[it.index])
         if (activity == null) {
             // This npc has no activity update (false).
             writeBit { false }
@@ -56,7 +56,7 @@ fun BitAccess.highDefinition(
         // This npc has an activity update (true).
         writeBit { true }
         val updating = it.hasHighDefinitionRenderingBlocks()
-        activity.writeBits(this, it, updating, playerLocation, npcMovementStepsUpdates[it.index]!!)
+        activity.writeBits(this, it, updating, playerLocation, npcMovementStepsUpdates[it.index])
         if (updating) blocks.buildNPCUpdateBlocks(it)
     }
     viewport.npcs.removeAll { !it.location.withinDistance(playerLocation) }
@@ -86,7 +86,7 @@ fun BitAccess.lowDefinition(viewport: Viewport, blocks: BytePacketBuilder) {
 fun highDefinitionActivities(
     npc: NPC,
     playerLocation: Location,
-    step: Optional<MovementStep>
+    step: Optional<MovementStep>?
 ): ActivityUpdateType? {
     return when {
         // If the npc is not within normal distance of the player.
@@ -94,7 +94,7 @@ fun highDefinitionActivities(
         // If the npc has a block update.
         npc.hasHighDefinitionRenderingBlocks() -> Updating
         // If the npc is moving.
-        step.isPresent -> Moving
+        step?.isPresent == true -> Moving
         else -> null
     }
 }

@@ -70,7 +70,7 @@ class BenchmarkParallelActorSynchronizer : Synchronizer() {
                 smartPathFinders.put(pf)
                 it.chat(it.rights, 0) { "Hello Xlite." }
                 it.spotAnimate { 574 }
-                it.hit(HitBar.DEFAULT, null, HitType.REGULAR_DAMAGE, 0) { 10 }
+                it.hit(HitBar.DEFAULT, null, HitType.values().random(), 0) { Random.nextInt(1, 127) }
             }
         }
         logger.debug { "Pathfinders took $finders for ${players.size} players. [TICK=$tick]" }

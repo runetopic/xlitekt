@@ -17,11 +17,11 @@ import xlitekt.game.actor.player.Player
 import xlitekt.game.actor.player.Viewport
 import xlitekt.game.packet.PlayerInfoPacket
 import xlitekt.game.packet.assembler.onPacketAssembler
-import xlitekt.game.tick.AlternativeHighDefinitionUpdates
-import xlitekt.game.tick.AlternativeLowDefinitionUpdates
-import xlitekt.game.tick.HighDefinitionUpdates
-import xlitekt.game.tick.LowDefinitionUpdates
-import xlitekt.game.tick.PlayerMovementStepsUpdates
+import xlitekt.game.tick.PlayerUpdates.AlternativeHighDefinitionPlayerUpdates
+import xlitekt.game.tick.PlayerUpdates.AlternativeLowDefinitionPlayerUpdates
+import xlitekt.game.tick.PlayerUpdates.HighDefinitionPlayerUpdates
+import xlitekt.game.tick.PlayerUpdates.LowDefinitionPlayerUpdates
+import xlitekt.game.tick.PlayerUpdates.MovementStepsPlayerUpdates
 import xlitekt.game.world.map.location.Location
 import xlitekt.game.world.map.location.withinDistance
 import xlitekt.shared.buffer.BitAccess
@@ -47,9 +47,9 @@ onPacketAssembler<PlayerInfoPacket>(opcode = 80, size = -2) {
 fun BytePacketBuilder.highDefinition(
     viewport: Viewport,
     blocks: BytePacketBuilder,
-    highDefinitionUpdates: HighDefinitionUpdates,
-    movementStepsUpdates: PlayerMovementStepsUpdates,
-    alternativeHighDefinitionUpdates: AlternativeHighDefinitionUpdates,
+    highDefinitionUpdates: HighDefinitionPlayerUpdates,
+    movementStepsUpdates: MovementStepsPlayerUpdates,
+    alternativeHighDefinitionUpdates: AlternativeHighDefinitionPlayerUpdates,
     nsn: Boolean
 ) = withBitAccess {
     var skip = -1
@@ -90,9 +90,9 @@ fun BytePacketBuilder.highDefinition(
 fun BytePacketBuilder.lowDefinition(
     viewport: Viewport,
     blocks: BytePacketBuilder,
-    lowDefinitionUpdates: LowDefinitionUpdates,
+    lowDefinitionUpdates: LowDefinitionPlayerUpdates,
     players: Map<Int, Player>,
-    alternativeLowDefinitionUpdates: AlternativeLowDefinitionUpdates,
+    alternativeLowDefinitionUpdates: AlternativeLowDefinitionPlayerUpdates,
     nsn: Boolean
 ) = withBitAccess {
     var skip = -1

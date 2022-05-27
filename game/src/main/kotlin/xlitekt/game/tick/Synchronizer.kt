@@ -1,5 +1,6 @@
 package xlitekt.game.tick
 
+import xlitekt.game.actor.Actor
 import xlitekt.game.actor.movement.MovementStep
 import xlitekt.game.actor.npc.NPC
 import xlitekt.game.actor.player.Player
@@ -8,6 +9,12 @@ import xlitekt.game.actor.render.block.invokeHighDefinitionRenderingBlock
 import xlitekt.game.actor.render.block.invokeLowDefinitionRenderingBlock
 import xlitekt.game.packet.NPCInfoPacket
 import xlitekt.game.packet.PlayerInfoPacket
+import xlitekt.game.tick.NPCUpdates.MovementStepsNPCUpdates
+import xlitekt.game.tick.PlayerUpdates.AlternativeHighDefinitionPlayerUpdates
+import xlitekt.game.tick.PlayerUpdates.AlternativeLowDefinitionPlayerUpdates
+import xlitekt.game.tick.PlayerUpdates.HighDefinitionPlayerUpdates
+import xlitekt.game.tick.PlayerUpdates.LowDefinitionPlayerUpdates
+import xlitekt.game.tick.PlayerUpdates.MovementStepsPlayerUpdates
 import xlitekt.game.world.World
 import xlitekt.shared.inject
 import java.util.Optional
@@ -19,19 +26,19 @@ import java.util.concurrent.ConcurrentHashMap
 abstract class Synchronizer : Runnable {
 
     protected val world by inject<World>()
-    private val playerMovementStepsUpdates = PlayerMovementStepsUpdates()
-    private val npcMovementStepsUpdates = NPCMovementStepsUpdates()
-    private val highDefinitionUpdates = HighDefinitionUpdates()
-    private val lowDefinitionUpdates = LowDefinitionUpdates()
-    private val alternativeHighDefinitionUpdates = AlternativeHighDefinitionUpdates()
-    private val alternativeLowDefinitionUpdates = AlternativeLowDefinitionUpdates()
+    private val playerMovementStepsUpdates = MovementStepsPlayerUpdates()
+    private val npcMovementStepsUpdates = MovementStepsNPCUpdates()
+    private val highDefinitionUpdates = HighDefinitionPlayerUpdates()
+    private val lowDefinitionUpdates = LowDefinitionPlayerUpdates()
+    private val alternativeHighDefinitionUpdates = AlternativeHighDefinitionPlayerUpdates()
+    private val alternativeLowDefinitionUpdates = AlternativeLowDefinitionPlayerUpdates()
 
     protected fun Player.syncMovement(players: Map<Int, Player>) {
-        playerMovementStepsUpdates.add(this, processMovement(players))
+        processMovement(players)?.let { playerMovementStepsUpdates.add(this, it) }
     }
 
     protected fun NPC.syncMovement(players: Map<Int, Player>) {
-        npcMovementStepsUpdates.add(this, processMovement(players))
+        processMovement(players)?.let { npcMovementStepsUpdates.add(this, it) }
     }
 
     protected fun Player.syncRenderingBlocks() {
@@ -58,62 +65,54 @@ abstract class Synchronizer : Runnable {
     }
 }
 
-class HighDefinitionUpdates(
-    private val updates: ConcurrentHashMap<Int, Optional<ByteArray>> = ConcurrentHashMap(World.MAX_PLAYERS)
-) : Map<Int, Optional<ByteArray>> by updates {
-    internal fun add(player: Player, bytes: ByteArray?) {
-        updates[player.index] = Optional.ofNullable(bytes)
+sealed class PlayerUpdates<A : Actor, T : Any>(
+    protected val updates: ConcurrentHashMap<Int, Optional<T>> = ConcurrentHashMap(World.MAX_PLAYERS)
+) {
+    class HighDefinitionPlayerUpdates : PlayerUpdates<Player, ByteArray>() {
+        override fun add(actor: Player, any: ByteArray) {
+            updates[actor.index] = Optional.of(any)
+        }
     }
 
-    internal fun clear() = updates.clear()
+    class LowDefinitionPlayerUpdates : PlayerUpdates<Player, ByteArray>() {
+        override fun add(actor: Player, any: ByteArray) {
+            updates[actor.index] = Optional.of(any)
+        }
+    }
+
+    class AlternativeHighDefinitionPlayerUpdates : PlayerUpdates<Player, ByteArray>() {
+        override fun add(actor: Player, any: ByteArray) {
+            updates[actor.index] = Optional.of(any)
+        }
+    }
+
+    class AlternativeLowDefinitionPlayerUpdates : PlayerUpdates<Player, ByteArray>() {
+        override fun add(actor: Player, any: ByteArray) {
+            updates[actor.index] = Optional.of(any)
+        }
+    }
+
+    class MovementStepsPlayerUpdates : PlayerUpdates<Player, MovementStep>() {
+        override fun add(actor: Player, any: MovementStep) {
+            updates[actor.index] = Optional.of(any)
+        }
+    }
+
+    abstract fun add(actor: A, any: T)
+    operator fun get(index: Int?) = if (index == null) null else updates[index]
+    fun clear() = updates.clear()
 }
 
-class LowDefinitionUpdates(
-    private val updates: ConcurrentHashMap<Int, Optional<ByteArray>> = ConcurrentHashMap(World.MAX_PLAYERS)
-) : Map<Int, Optional<ByteArray>> by updates {
-    internal fun add(player: Player, bytes: ByteArray?) {
-        updates[player.index] = Optional.ofNullable(bytes)
+sealed class NPCUpdates<A : Actor, T : Any?>(
+    protected val updates: ConcurrentHashMap<Int, Optional<T>> = ConcurrentHashMap()
+) {
+    class MovementStepsNPCUpdates : NPCUpdates<NPC, MovementStep>() {
+        override fun add(actor: NPC, any: MovementStep) {
+            updates[actor.index] = Optional.of(any)
+        }
     }
 
-    internal fun clear() = updates.clear()
-}
-
-class AlternativeHighDefinitionUpdates(
-    private val updates: ConcurrentHashMap<Int, Optional<ByteArray>> = ConcurrentHashMap(World.MAX_PLAYERS)
-) : Map<Int, Optional<ByteArray>> by updates {
-    internal fun add(player: Player, bytes: ByteArray?) {
-        updates[player.index] = Optional.ofNullable(bytes)
-    }
-
-    internal fun clear() = updates.clear()
-}
-
-class AlternativeLowDefinitionUpdates(
-    private val updates: ConcurrentHashMap<Int, Optional<ByteArray>> = ConcurrentHashMap(World.MAX_PLAYERS)
-) : Map<Int, Optional<ByteArray>> by updates {
-    internal fun add(player: Player, bytes: ByteArray?) {
-        updates[player.index] = Optional.ofNullable(bytes)
-    }
-
-    internal fun clear() = updates.clear()
-}
-
-class PlayerMovementStepsUpdates(
-    private val updates: ConcurrentHashMap<Int, Optional<MovementStep>> = ConcurrentHashMap(World.MAX_PLAYERS)
-) : Map<Int, Optional<MovementStep>> by updates {
-    internal fun add(player: Player, movementStep: MovementStep?) {
-        updates[player.index] = Optional.ofNullable(movementStep)
-    }
-
-    internal fun clear() = updates.clear()
-}
-
-class NPCMovementStepsUpdates(
-    private val updates: ConcurrentHashMap<Int, Optional<MovementStep>> = ConcurrentHashMap()
-) : Map<Int, Optional<MovementStep>> by updates {
-    internal fun add(npc: NPC, movementStep: MovementStep?) {
-        updates[npc.index] = Optional.ofNullable(movementStep)
-    }
-
-    internal fun clear() = updates.clear()
+    abstract fun add(actor: A, any: T)
+    operator fun get(index: Int?) = if (index == null) null else updates[index]
+    fun clear() = updates.clear()
 }
