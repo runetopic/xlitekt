@@ -2,7 +2,8 @@ package xlitekt.game.packet
 
 import xlitekt.game.actor.player.Player
 import xlitekt.game.actor.player.Viewport
-import xlitekt.game.tick.AlternativeUpdates
+import xlitekt.game.tick.AlternativeHighDefinitionUpdates
+import xlitekt.game.tick.AlternativeLowDefinitionUpdates
 import xlitekt.game.tick.HighDefinitionUpdates
 import xlitekt.game.tick.LowDefinitionUpdates
 import xlitekt.game.tick.PlayerMovementStepsUpdates
@@ -16,6 +17,7 @@ data class PlayerInfoPacket(
     val viewport: Viewport,
     val highDefinitionUpdates: HighDefinitionUpdates,
     val lowDefinitionUpdates: LowDefinitionUpdates,
-    val alternativeUpdates: AlternativeUpdates,
+    val alternativeHighDefinitionUpdates: AlternativeHighDefinitionUpdates,
+    val alternativeLowDefinitionUpdates: AlternativeLowDefinitionUpdates,
     val movementStepsUpdates: PlayerMovementStepsUpdates
 ) : Packet

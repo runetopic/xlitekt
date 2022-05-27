@@ -3,12 +3,9 @@ package xlitekt.game.tick
 import xlitekt.game.actor.movement.MovementStep
 import xlitekt.game.actor.npc.NPC
 import xlitekt.game.actor.player.Player
-import xlitekt.game.actor.render.Render
-import xlitekt.game.actor.render.block.HighDefinitionRenderingBlock
-import xlitekt.game.actor.render.block.LowDefinitionRenderingBlock
-import xlitekt.game.actor.render.block.createHighDefinitionsMask
-import xlitekt.game.actor.render.block.createLowDefinitionsMask
+import xlitekt.game.actor.render.block.invokeAlternativeDefinitionRenderingBlock
 import xlitekt.game.actor.render.block.invokeHighDefinitionRenderingBlock
+import xlitekt.game.actor.render.block.invokeLowDefinitionRenderingBlock
 import xlitekt.game.packet.NPCInfoPacket
 import xlitekt.game.packet.PlayerInfoPacket
 import xlitekt.game.world.World
@@ -26,32 +23,26 @@ abstract class Synchronizer : Runnable {
     private val npcMovementStepsUpdates = NPCMovementStepsUpdates()
     private val highDefinitionUpdates = HighDefinitionUpdates()
     private val lowDefinitionUpdates = LowDefinitionUpdates()
-    private val alternativeUpdates = AlternativeUpdates()
+    private val alternativeHighDefinitionUpdates = AlternativeHighDefinitionUpdates()
+    private val alternativeLowDefinitionUpdates = AlternativeLowDefinitionUpdates()
 
     protected fun Player.syncMovement(players: Map<Int, Player>) {
-        playerMovementStepsUpdates.add(this, processMovement(players, location))
+        playerMovementStepsUpdates.add(this, processMovement(players))
     }
 
     protected fun NPC.syncMovement(players: Map<Int, Player>) {
-        npcMovementStepsUpdates.add(this, processMovement(players, location))
+        npcMovementStepsUpdates.add(this, processMovement(players))
     }
 
     protected fun Player.syncRenderingBlocks() {
-        for (block in highDefinitionRenderingBlocks()) {
-            highDefinitionUpdates.add(this, block, block.invokeHighDefinitionRenderingBlock(this))
-        }
-        highDefinitionUpdates.addMask(this, highDefinitionRenderingBlocks().createHighDefinitionsMask())
-        for (block in lowDefinitionRenderingBlocks()) {
-            lowDefinitionUpdates.add(this, block, block.bytes)
-        }
-        lowDefinitionUpdates.addMask(this, lowDefinitionRenderingBlocks().createLowDefinitionsMask())
-        for (block in alternativeRenderingBlocks()) {
-            alternativeUpdates.add(this, block.key, block.value)
-        }
+        highDefinitionUpdates.add(this, highDefinitionRenderingBlocks().invokeHighDefinitionRenderingBlock(this))
+        lowDefinitionUpdates.add(this, lowDefinitionRenderingBlocks().invokeLowDefinitionRenderingBlock())
+        alternativeHighDefinitionUpdates.add(this, alternativeHighDefinitionRenderingBlocks().invokeAlternativeDefinitionRenderingBlock())
+        alternativeLowDefinitionUpdates.add(this, alternativeLowDefinitionRenderingBlocks().invokeAlternativeDefinitionRenderingBlock())
     }
 
     protected fun Player.syncClient(players: Map<Int, Player>) {
-        write(PlayerInfoPacket(players, viewport, highDefinitionUpdates, lowDefinitionUpdates, alternativeUpdates, playerMovementStepsUpdates))
+        write(PlayerInfoPacket(players, viewport, highDefinitionUpdates, lowDefinitionUpdates, alternativeHighDefinitionUpdates, alternativeLowDefinitionUpdates, playerMovementStepsUpdates))
         write(NPCInfoPacket(viewport, npcMovementStepsUpdates))
         invokeAndClearWritePool()
         resetDefinitionRenderingBlocks()
@@ -62,63 +53,46 @@ abstract class Synchronizer : Runnable {
         npcMovementStepsUpdates.clear()
         highDefinitionUpdates.clear()
         lowDefinitionUpdates.clear()
-        alternativeUpdates.clear()
+        alternativeHighDefinitionUpdates.clear()
+        alternativeLowDefinitionUpdates.clear()
     }
 }
 
 class HighDefinitionUpdates(
-    private val updates: ConcurrentHashMap<Int, MutableMap<HighDefinitionRenderingBlock, ByteArray>> = ConcurrentHashMap(World.MAX_PLAYERS)
-) : Map<Int, MutableMap<HighDefinitionRenderingBlock, ByteArray>> by updates {
-    val masks: ConcurrentHashMap<Int, ByteArray> = ConcurrentHashMap(World.MAX_PLAYERS)
-
-    internal fun add(player: Player, block: HighDefinitionRenderingBlock, bytes: ByteArray) {
-        if (updates[player.index] == null) {
-            updates[player.index] = mutableMapOf()
-        }
-        updates[player.index]!![block] = bytes
+    private val updates: ConcurrentHashMap<Int, Optional<ByteArray>> = ConcurrentHashMap(World.MAX_PLAYERS)
+) : Map<Int, Optional<ByteArray>> by updates {
+    internal fun add(player: Player, bytes: ByteArray?) {
+        updates[player.index] = Optional.ofNullable(bytes)
     }
 
-    internal fun addMask(player: Player, bytes: ByteArray) {
-        masks[player.index] = bytes
-    }
-
-    internal fun clear() {
-        updates.clear()
-        masks.clear()
-    }
+    internal fun clear() = updates.clear()
 }
 
 class LowDefinitionUpdates(
-    private val updates: ConcurrentHashMap<Int, MutableMap<LowDefinitionRenderingBlock, ByteArray>> = ConcurrentHashMap(World.MAX_PLAYERS)
-) : Map<Int, MutableMap<LowDefinitionRenderingBlock, ByteArray>> by updates {
-    val masks: ConcurrentHashMap<Int, ByteArray> = ConcurrentHashMap(World.MAX_PLAYERS)
-
-    internal fun add(player: Player, block: LowDefinitionRenderingBlock, bytes: ByteArray) {
-        if (updates[player.index] == null) {
-            updates[player.index] = mutableMapOf()
-        }
-        updates[player.index]!![block] = bytes
+    private val updates: ConcurrentHashMap<Int, Optional<ByteArray>> = ConcurrentHashMap(World.MAX_PLAYERS)
+) : Map<Int, Optional<ByteArray>> by updates {
+    internal fun add(player: Player, bytes: ByteArray?) {
+        updates[player.index] = Optional.ofNullable(bytes)
     }
 
-    internal fun addMask(player: Player, bytes: ByteArray) {
-        masks[player.index] = bytes
-    }
-
-    internal fun clear() {
-        updates.clear()
-        masks.clear()
-    }
+    internal fun clear() = updates.clear()
 }
 
-class AlternativeUpdates(
-    private val updates: ConcurrentHashMap<Int, MutableMap<Render, ByteArray>> = ConcurrentHashMap(World.MAX_PLAYERS)
-) : Map<Int, MutableMap<Render, ByteArray>> by updates {
+class AlternativeHighDefinitionUpdates(
+    private val updates: ConcurrentHashMap<Int, Optional<ByteArray>> = ConcurrentHashMap(World.MAX_PLAYERS)
+) : Map<Int, Optional<ByteArray>> by updates {
+    internal fun add(player: Player, bytes: ByteArray?) {
+        updates[player.index] = Optional.ofNullable(bytes)
+    }
 
-    internal fun add(player: Player, render: Render, bytes: ByteArray) {
-        if (updates[player.index] == null) {
-            updates[player.index] = mutableMapOf()
-        }
-        updates[player.index]!![render] = bytes
+    internal fun clear() = updates.clear()
+}
+
+class AlternativeLowDefinitionUpdates(
+    private val updates: ConcurrentHashMap<Int, Optional<ByteArray>> = ConcurrentHashMap(World.MAX_PLAYERS)
+) : Map<Int, Optional<ByteArray>> by updates {
+    internal fun add(player: Player, bytes: ByteArray?) {
+        updates[player.index] = Optional.ofNullable(bytes)
     }
 
     internal fun clear() = updates.clear()
@@ -137,7 +111,6 @@ class PlayerMovementStepsUpdates(
 class NPCMovementStepsUpdates(
     private val updates: ConcurrentHashMap<Int, Optional<MovementStep>> = ConcurrentHashMap()
 ) : Map<Int, Optional<MovementStep>> by updates {
-
     internal fun add(npc: NPC, movementStep: MovementStep?) {
         updates[npc.index] = Optional.ofNullable(movementStep)
     }

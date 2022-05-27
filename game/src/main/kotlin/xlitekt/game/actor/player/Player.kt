@@ -5,6 +5,8 @@ import xlitekt.game.actor.Actor
 import xlitekt.game.actor.movementType
 import xlitekt.game.actor.player.serializer.PlayerSerializer
 import xlitekt.game.actor.render.Render
+import xlitekt.game.actor.render.block.AlternativeDefinitionRenderingBlock
+import xlitekt.game.actor.render.block.RenderingBlock
 import xlitekt.game.actor.speed
 import xlitekt.game.content.skill.Skill
 import xlitekt.game.content.skill.Skills
@@ -27,6 +29,7 @@ import xlitekt.game.packet.disassembler.handler.PacketHandler
 import xlitekt.game.world.World
 import xlitekt.game.world.map.location.Location
 import xlitekt.shared.lazy
+import java.util.TreeMap
 import kotlin.math.abs
 
 /**
@@ -52,8 +55,11 @@ class Player(
      * Alternative rendering blocks used for both local and non-local updates.
      * This is only used for blocks that requires the outside player perspective.
      * Example of this is for hit splat tinting as the hit block requires the outside player to check for the varbit.
+     *
+     * The key represents the index this rendering block should be placed to. This ordering is the same as the client implementation.
      */
-    private val alternativeRenderingBlocks = mutableMapOf<Render, ByteArray>()
+    private val alternativeHighDefinitionRenderingBlocks = TreeMap<Int, AlternativeDefinitionRenderingBlock>()
+    private val alternativeLowDefinitionRenderingBlocks = TreeMap<Int, AlternativeDefinitionRenderingBlock>()
 
     /**
      * This players connected client. This client is used for reading and writing packets.
@@ -152,21 +158,28 @@ class Player(
     /**
      * Adds an alternative rendering block to this player.
      */
-    internal fun addAlternativeRenderingBlock(render: Render, block: ByteArray) {
-        alternativeRenderingBlocks[render] = block
+    internal fun addAlternativeRenderingBlock(render: Render, renderingBlock: RenderingBlock, bytes: ByteArray) {
+        val alternativeDefinitionRenderingBlock = AlternativeDefinitionRenderingBlock(render, renderingBlock, bytes)
+        alternativeHighDefinitionRenderingBlocks[renderingBlock.index] = alternativeDefinitionRenderingBlock
+        alternativeLowDefinitionRenderingBlocks[renderingBlock.index] = alternativeDefinitionRenderingBlock
     }
 
     /**
      * Returns a map of this players alternative rendering blocks.
      */
-    internal fun alternativeRenderingBlocks() = alternativeRenderingBlocks
+    internal fun alternativeHighDefinitionRenderingBlocks() = alternativeHighDefinitionRenderingBlocks.values
+    internal fun alternativeLowDefinitionRenderingBlocks() = alternativeLowDefinitionRenderingBlocks.values
 
     /**
      * Happens after this player has finished processing by the game loop.
      */
     override fun resetDefinitionRenderingBlocks() {
         super.resetDefinitionRenderingBlocks()
-        alternativeRenderingBlocks.clear()
+        alternativeHighDefinitionRenderingBlocks.clear()
+        // We only want to persist these types of low definition blocks.
+        alternativeLowDefinitionRenderingBlocks.values.removeIf {
+            it.render !is Render.Appearance && it.render !is Render.FaceAngle && it.render !is Render.MovementType
+        }
     }
 }
 

@@ -51,7 +51,7 @@ abstract class Actor(
     /**
      * Processes any pending movement this actor may have. This happens every tick.
      */
-    internal fun processMovement(players: Map<Int, Player>, location: Location): MovementStep? = movement.process(this, location).also {
+    internal fun processMovement(players: Map<Int, Player>): MovementStep? = movement.process(this, location).also {
         if (this is Player) {
             if (it == null) {
                 // When the player is not processing movement steps.
@@ -101,9 +101,7 @@ abstract class Actor(
         highDefinitionRenderingBlocks.clear()
         // We only want to persist these types of low definition blocks.
         lowDefinitionRenderingBlocks.values.removeIf {
-            it.render::class != Appearance::class &&
-                it.render::class != FaceAngle::class &&
-                it.render::class != MovementType::class
+            it.render !is Appearance && it.render !is FaceAngle && it.render !is MovementType
         }
     }
 
