@@ -23,10 +23,11 @@ onPlayerUpdateBlock<PublicChat>(7, 0x20) {
         writeShort { packedEffects }
         writeByteNegate { rights }
         writeByteAdd { 0 } // Auto chat
-        val compressed = ByteArray(256)
-        val compressedLength = message.toHuffman(provider.entryType(0)?.huffman!!, compressed)
-        writeByte { compressedLength + 1 }
-        writeSmart(message::length)
-        writeFully(compressed, 0, compressedLength)
+        val bytes = ByteArray(256)
+        message.toHuffman(provider.entries().first().huffman!!, bytes).also {
+            writeByte { it + 1 }
+            writeSmart(message::length)
+            writeFully(bytes, 0, it)
+        }
     }
 }
