@@ -1,12 +1,13 @@
 package xlitekt.game.packet
 
+import xlitekt.game.actor.movement.MovementStep
 import xlitekt.game.actor.player.Viewport
-import xlitekt.game.tick.NPCUpdates.MovementStepsNPCUpdates
+import java.util.Optional
 
 /**
  * @author Jordan Abraham
  */
 data class NPCInfoPacket(
     val viewport: Viewport,
-    val npcMovementStepsUpdates: MovementStepsNPCUpdates
+    val movementStepsUpdates: Map<Int, Optional<MovementStep>>
 ) : Packet

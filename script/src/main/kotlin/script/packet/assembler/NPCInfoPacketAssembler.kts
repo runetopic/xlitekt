@@ -12,7 +12,6 @@ import xlitekt.game.actor.player.Viewport
 import xlitekt.game.actor.render.block.buildNPCUpdateBlocks
 import xlitekt.game.packet.NPCInfoPacket
 import xlitekt.game.packet.assembler.onPacketAssembler
-import xlitekt.game.tick.NPCUpdates.MovementStepsNPCUpdates
 import xlitekt.game.world.map.location.Location
 import xlitekt.game.world.map.location.withinDistance
 import xlitekt.game.world.map.location.zones
@@ -29,7 +28,7 @@ onPacketAssembler<NPCInfoPacket>(opcode = 78, size = -2) {
         val blocks = BytePacketBuilder()
         withBitAccess {
             writeBits(8, viewport.npcs::size)
-            highDefinition(viewport, blocks, npcMovementStepsUpdates)
+            highDefinition(viewport, blocks, movementStepsUpdates)
             lowDefinition(viewport, blocks)
             if (blocks.size > 0) {
                 writeBits(15, Short.MAX_VALUE::toInt)
@@ -42,12 +41,12 @@ onPacketAssembler<NPCInfoPacket>(opcode = 78, size = -2) {
 fun BitAccess.highDefinition(
     viewport: Viewport,
     blocks: BytePacketBuilder,
-    npcMovementStepsUpdates: MovementStepsNPCUpdates
+    movementStepsUpdates: Map<Int, Optional<MovementStep>>
 ) {
     val playerLocation = viewport.player.location
     viewport.npcs.forEach {
         // Check the activities this npc is doing.
-        val activity = highDefinitionActivities(it, playerLocation, npcMovementStepsUpdates[it.index])
+        val activity = highDefinitionActivities(it, playerLocation, movementStepsUpdates[it.index])
         if (activity == null) {
             // This npc has no activity update (false).
             writeBit { false }
@@ -56,7 +55,7 @@ fun BitAccess.highDefinition(
         // This npc has an activity update (true).
         writeBit { true }
         val updating = it.hasHighDefinitionRenderingBlocks()
-        activity.writeBits(this, it, updating, playerLocation, npcMovementStepsUpdates[it.index])
+        activity.writeBits(this, it, updating, playerLocation, movementStepsUpdates[it.index])
         if (updating) blocks.buildNPCUpdateBlocks(it)
     }
     viewport.npcs.removeAll { !it.location.withinDistance(playerLocation) }

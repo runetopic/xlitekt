@@ -1,6 +1,5 @@
 package xlitekt.game.tick
 
-import xlitekt.game.actor.Actor
 import xlitekt.game.actor.movement.MovementStep
 import xlitekt.game.actor.npc.NPC
 import xlitekt.game.actor.player.Player
@@ -9,12 +8,12 @@ import xlitekt.game.actor.render.block.invokeHighDefinitionRenderingBlock
 import xlitekt.game.actor.render.block.invokeLowDefinitionRenderingBlock
 import xlitekt.game.packet.NPCInfoPacket
 import xlitekt.game.packet.PlayerInfoPacket
-import xlitekt.game.tick.NPCUpdates.MovementStepsNPCUpdates
-import xlitekt.game.tick.PlayerUpdates.AlternativeHighDefinitionPlayerUpdates
-import xlitekt.game.tick.PlayerUpdates.AlternativeLowDefinitionPlayerUpdates
-import xlitekt.game.tick.PlayerUpdates.HighDefinitionPlayerUpdates
-import xlitekt.game.tick.PlayerUpdates.LowDefinitionPlayerUpdates
-import xlitekt.game.tick.PlayerUpdates.MovementStepsPlayerUpdates
+import xlitekt.game.tick.NPCInfoUpdates.MovementStepsNPCUpdates
+import xlitekt.game.tick.PlayerInfoUpdates.AlternativeHighDefinitionPlayerUpdates
+import xlitekt.game.tick.PlayerInfoUpdates.AlternativeLowDefinitionPlayerUpdates
+import xlitekt.game.tick.PlayerInfoUpdates.HighDefinitionPlayerUpdates
+import xlitekt.game.tick.PlayerInfoUpdates.LowDefinitionPlayerUpdates
+import xlitekt.game.tick.PlayerInfoUpdates.MovementStepsPlayerUpdates
 import xlitekt.game.world.World
 import xlitekt.shared.inject
 import java.util.Optional
@@ -26,93 +25,78 @@ import java.util.concurrent.ConcurrentHashMap
 abstract class Synchronizer : Runnable {
 
     protected val world by inject<World>()
-    private val playerMovementStepsUpdates = MovementStepsPlayerUpdates()
-    private val npcMovementStepsUpdates = MovementStepsNPCUpdates()
-    private val highDefinitionUpdates = HighDefinitionPlayerUpdates()
-    private val lowDefinitionUpdates = LowDefinitionPlayerUpdates()
-    private val alternativeHighDefinitionUpdates = AlternativeHighDefinitionPlayerUpdates()
-    private val alternativeLowDefinitionUpdates = AlternativeLowDefinitionPlayerUpdates()
 
     protected fun Player.syncMovement(players: Map<Int, Player>) {
-        processMovement(players)?.let { playerMovementStepsUpdates.add(this, it) }
+        processMovement(players)?.let { MovementStepsPlayerUpdates.add(index, it) }
     }
 
     protected fun NPC.syncMovement(players: Map<Int, Player>) {
-        processMovement(players)?.let { npcMovementStepsUpdates.add(this, it) }
+        processMovement(players)?.let { MovementStepsNPCUpdates.add(index, it) }
     }
 
     protected fun Player.syncRenderingBlocks() {
-        highDefinitionUpdates.add(this, highDefinitionRenderingBlocks().invokeHighDefinitionRenderingBlock(this))
-        lowDefinitionUpdates.add(this, lowDefinitionRenderingBlocks().invokeLowDefinitionRenderingBlock())
-        alternativeHighDefinitionUpdates.add(this, alternativeHighDefinitionRenderingBlocks().invokeAlternativeDefinitionRenderingBlock())
-        alternativeLowDefinitionUpdates.add(this, alternativeLowDefinitionRenderingBlocks().invokeAlternativeDefinitionRenderingBlock())
+        HighDefinitionPlayerUpdates.add(index, highDefinitionRenderingBlocks().invokeHighDefinitionRenderingBlock(this))
+        LowDefinitionPlayerUpdates.add(index, lowDefinitionRenderingBlocks().invokeLowDefinitionRenderingBlock())
+        AlternativeHighDefinitionPlayerUpdates.add(index, alternativeHighDefinitionRenderingBlocks().invokeAlternativeDefinitionRenderingBlock())
+        AlternativeLowDefinitionPlayerUpdates.add(index, alternativeLowDefinitionRenderingBlocks().invokeAlternativeDefinitionRenderingBlock())
     }
 
     protected fun Player.syncClient(players: Map<Int, Player>) {
-        write(PlayerInfoPacket(players, viewport, highDefinitionUpdates, lowDefinitionUpdates, alternativeHighDefinitionUpdates, alternativeLowDefinitionUpdates, playerMovementStepsUpdates))
-        write(NPCInfoPacket(viewport, npcMovementStepsUpdates))
+        write(
+            PlayerInfoPacket(
+                players = players,
+                viewport = viewport,
+                highDefinitionUpdates = HighDefinitionPlayerUpdates,
+                lowDefinitionUpdates = LowDefinitionPlayerUpdates,
+                alternativeHighDefinitionUpdates = AlternativeHighDefinitionPlayerUpdates,
+                alternativeLowDefinitionUpdates = AlternativeLowDefinitionPlayerUpdates,
+                movementStepsUpdates = MovementStepsPlayerUpdates
+            )
+        )
+        write(
+            NPCInfoPacket(
+                viewport = viewport,
+                movementStepsUpdates = MovementStepsNPCUpdates
+            )
+        )
         invokeAndClearWritePool()
         resetDefinitionRenderingBlocks()
     }
 
     protected fun resetSynchronizer() {
-        playerMovementStepsUpdates.clear()
-        npcMovementStepsUpdates.clear()
-        highDefinitionUpdates.clear()
-        lowDefinitionUpdates.clear()
-        alternativeHighDefinitionUpdates.clear()
-        alternativeLowDefinitionUpdates.clear()
+        MovementStepsPlayerUpdates.clear()
+        MovementStepsNPCUpdates.clear()
+        HighDefinitionPlayerUpdates.clear()
+        LowDefinitionPlayerUpdates.clear()
+        AlternativeHighDefinitionPlayerUpdates.clear()
+        AlternativeLowDefinitionPlayerUpdates.clear()
     }
 }
 
-sealed class PlayerUpdates<A : Actor, T : Any>(
-    protected val updates: ConcurrentHashMap<Int, Optional<T>> = ConcurrentHashMap(World.MAX_PLAYERS)
-) {
-    class HighDefinitionPlayerUpdates : PlayerUpdates<Player, ByteArray>() {
-        override fun add(actor: Player, any: ByteArray) {
-            updates[actor.index] = Optional.of(any)
-        }
-    }
+internal sealed class PlayerInfoUpdates<T : Any>(
+    private val updates: ConcurrentHashMap<Int, Optional<T>> = ConcurrentHashMap(World.MAX_PLAYERS)
+) : Map<Int, Optional<T>> by updates {
 
-    class LowDefinitionPlayerUpdates : PlayerUpdates<Player, ByteArray>() {
-        override fun add(actor: Player, any: ByteArray) {
-            updates[actor.index] = Optional.of(any)
-        }
-    }
+    object HighDefinitionPlayerUpdates : PlayerInfoUpdates<ByteArray>()
+    object LowDefinitionPlayerUpdates : PlayerInfoUpdates<ByteArray>()
+    object AlternativeHighDefinitionPlayerUpdates : PlayerInfoUpdates<ByteArray>()
+    object AlternativeLowDefinitionPlayerUpdates : PlayerInfoUpdates<ByteArray>()
+    object MovementStepsPlayerUpdates : PlayerInfoUpdates<MovementStep>()
 
-    class AlternativeHighDefinitionPlayerUpdates : PlayerUpdates<Player, ByteArray>() {
-        override fun add(actor: Player, any: ByteArray) {
-            updates[actor.index] = Optional.of(any)
-        }
+    fun add(index: Int, update: T) {
+        updates[index] = Optional.of(update)
     }
-
-    class AlternativeLowDefinitionPlayerUpdates : PlayerUpdates<Player, ByteArray>() {
-        override fun add(actor: Player, any: ByteArray) {
-            updates[actor.index] = Optional.of(any)
-        }
-    }
-
-    class MovementStepsPlayerUpdates : PlayerUpdates<Player, MovementStep>() {
-        override fun add(actor: Player, any: MovementStep) {
-            updates[actor.index] = Optional.of(any)
-        }
-    }
-
-    abstract fun add(actor: A, any: T)
-    operator fun get(index: Int?) = if (index == null) null else updates[index]
     fun clear() = updates.clear()
 }
 
-sealed class NPCUpdates<A : Actor, T : Any?>(
-    protected val updates: ConcurrentHashMap<Int, Optional<T>> = ConcurrentHashMap()
-) {
-    class MovementStepsNPCUpdates : NPCUpdates<NPC, MovementStep>() {
-        override fun add(actor: NPC, any: MovementStep) {
-            updates[actor.index] = Optional.of(any)
-        }
-    }
+internal sealed class NPCInfoUpdates<T : Any>(
+    private val updates: ConcurrentHashMap<Int, Optional<T>> = ConcurrentHashMap()
+) : Map<Int, Optional<T>> by updates {
 
-    abstract fun add(actor: A, any: T)
-    operator fun get(index: Int?) = if (index == null) null else updates[index]
+    object MovementStepsNPCUpdates : NPCInfoUpdates<MovementStep>()
+
+    fun add(index: Int, update: T) {
+        updates[index] = Optional.of(update)
+    }
     fun clear() = updates.clear()
 }

@@ -17,11 +17,6 @@ import xlitekt.game.actor.player.Player
 import xlitekt.game.actor.player.Viewport
 import xlitekt.game.packet.PlayerInfoPacket
 import xlitekt.game.packet.assembler.onPacketAssembler
-import xlitekt.game.tick.PlayerUpdates.AlternativeHighDefinitionPlayerUpdates
-import xlitekt.game.tick.PlayerUpdates.AlternativeLowDefinitionPlayerUpdates
-import xlitekt.game.tick.PlayerUpdates.HighDefinitionPlayerUpdates
-import xlitekt.game.tick.PlayerUpdates.LowDefinitionPlayerUpdates
-import xlitekt.game.tick.PlayerUpdates.MovementStepsPlayerUpdates
 import xlitekt.game.world.map.location.Location
 import xlitekt.game.world.map.location.withinDistance
 import xlitekt.shared.buffer.BitAccess
@@ -47,9 +42,9 @@ onPacketAssembler<PlayerInfoPacket>(opcode = 80, size = -2) {
 fun BytePacketBuilder.highDefinition(
     viewport: Viewport,
     blocks: BytePacketBuilder,
-    highDefinitionUpdates: HighDefinitionPlayerUpdates,
-    movementStepsUpdates: MovementStepsPlayerUpdates,
-    alternativeHighDefinitionUpdates: AlternativeHighDefinitionPlayerUpdates,
+    highDefinitionUpdates: Map<Int, Optional<ByteArray>>,
+    movementStepsUpdates: Map<Int, Optional<MovementStep>>,
+    alternativeHighDefinitionUpdates: Map<Int, Optional<ByteArray>>,
     nsn: Boolean
 ) = withBitAccess {
     var skip = -1
@@ -90,9 +85,9 @@ fun BytePacketBuilder.highDefinition(
 fun BytePacketBuilder.lowDefinition(
     viewport: Viewport,
     blocks: BytePacketBuilder,
-    lowDefinitionUpdates: LowDefinitionPlayerUpdates,
+    lowDefinitionUpdates: Map<Int, Optional<ByteArray>>,
     players: Map<Int, Player>,
-    alternativeLowDefinitionUpdates: AlternativeLowDefinitionPlayerUpdates,
+    alternativeLowDefinitionUpdates: Map<Int, Optional<ByteArray>>,
     nsn: Boolean
 ) = withBitAccess {
     var skip = -1
