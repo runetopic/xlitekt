@@ -27,18 +27,19 @@ onCommand("delete").use {
 }
 
 onCommand("addall").use {
-    val zone = world.zone(Location(3222, 3222, 0))!!
-    val location = zone.location
-    repeat(8) { x ->
-        repeat(8) { z ->
-            message { "${zone.requestAddItem(FloorItem(4151, 1, Location(location.x + x, location.z + z, 0)))}" }
+    zones().forEach {
+        repeat(8) { x ->
+            repeat(8) { z ->
+                it.requestAddItem(FloorItem(4151, 1, Location(it.location.x + x, it.location.z + z, 0)))
+            }
         }
     }
 }
 
 onCommand("deleteall").use {
-    val zone = world.zone(Location(3222, 3222, 0))!!
-    zone.items.forEach(zone::requestRemoveItem)
+    zones().forEach {
+        it.items.forEach(it::requestRemoveItem)
+    }
 }
 
 onCommand("test").use {

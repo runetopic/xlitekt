@@ -9,8 +9,9 @@ import io.ktor.util.reflect.instanceOf
 import io.ktor.utils.io.ByteReadChannel
 import io.ktor.utils.io.ByteWriteChannel
 import io.ktor.utils.io.ClosedWriteChannelException
+import io.ktor.utils.io.core.ByteReadPacket
+import io.ktor.utils.io.core.buildPacket
 import io.ktor.utils.io.core.readBytes
-import io.ktor.utils.io.writeFully
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.TimeoutCancellationException
 import kotlinx.coroutines.channels.ClosedReceiveChannelException
@@ -20,11 +21,13 @@ import xlitekt.game.packet.assembler.PacketAssemblerListener
 import xlitekt.game.packet.disassembler.handler.PacketHandler
 import xlitekt.game.packet.disassembler.handler.PacketHandlerListener
 import xlitekt.game.world.World
-import xlitekt.shared.buffer.writePacketOpcode
-import xlitekt.shared.buffer.writePacketSize
+import xlitekt.shared.buffer.writeByte
+import xlitekt.shared.buffer.writeBytes
+import xlitekt.shared.buffer.writeShort
 import xlitekt.shared.inject
 import java.io.IOException
 import java.net.SocketException
+import java.util.Collections
 import kotlin.reflect.KClass
 
 /**
@@ -41,7 +44,7 @@ class Client(
     var serverCipher: ISAAC? = null
     var player: Player? = null // TODO Figure out a way to not have the player here.
 
-    private val writePool = mutableListOf<Packet>()
+    private val writePool = Collections.synchronizedList(mutableListOf<Packet>())
     private val readPool = mutableMapOf<KClass<*>, PacketHandler<Packet>>()
 
     fun disconnect(reason: String) {
@@ -85,12 +88,21 @@ class Client(
                 disconnect("Unhandled packet found when trying to write. Packet was $it.")
                 return@onEach
             }
-            val packet = assembler.packet.invoke(it)
-            runBlocking(Dispatchers.IO) {
-                if (serverCipher == null) return@runBlocking
-                writePacket(assembler.opcode, assembler.size, packet.readBytes(), serverCipher!!)
+            if (serverCipher == null) return@onEach
+            val packet = buildPacket {
+                val invoke = assembler.packet.invoke(it)
+                if (assembler.opcode > Byte.MAX_VALUE) {
+                    writeByte { (Byte.MAX_VALUE + 1) + serverCipher!!.getNext() }
+                }
+                writeByte { 0xff and assembler.opcode + serverCipher!!.getNext() }
+                val size = assembler.size
+                if (size == -1) writeByte(invoke.remaining::toInt)
+                else if (size == -2) writeShort(invoke.remaining::toInt)
+                writeBytes(invoke::readBytes)
             }
-            packet.release()
+            runBlocking(Dispatchers.IO) {
+                writePacket(packet)
+            }
         }.also(MutableList<Packet>::clear)
         writeChannel?.flush()
     }
@@ -99,14 +111,9 @@ class Client(
         readPool.values.onEach { PacketHandlerListener.listeners[it.packet::class]?.invoke(it) }.also(MutableCollection<PacketHandler<Packet>>::clear)
     }
 
-    private suspend fun writePacket(opcode: Int, size: Int, packet: ByteArray, cipher: ISAAC) = writeChannel?.apply {
-        // if (isClosedForWrite) return@apply disconnect("Write channel closed.")
-        // This write channel is null checked because bot client can use this.
-        writePacketOpcode(cipher, opcode)
-        if (size == -1 || size == -2) {
-            writePacketSize(size, packet.size)
-        }
-        writeFully(packet)
+    private suspend fun writePacket(packet: ByteReadPacket) = writeChannel?.apply {
+        if (isClosedForWrite) return@apply disconnect("Write channel closed.")
+        writePacket(packet)
     }
 
     companion object {

@@ -14,7 +14,6 @@ import xlitekt.game.world.map.zone.ZoneUpdateType.ObjAddType
 import xlitekt.game.world.map.zone.ZoneUpdateType.ObjDeleteType
 import xlitekt.shared.inject
 import java.util.Collections
-import java.util.Optional
 
 class Zone(
     val location: Location,
@@ -47,13 +46,13 @@ class Zone(
     }
 
     fun enterZone(actor: Actor) {
+        val zones = actor.zones()
         val neighboring = neighboringZones()
-        val removed = actor.zones.filter { it !in neighboring }
-        val changed = neighboring.filter { it !in actor.zones }
-        actor.zones.removeAll(removed.toSet())
-        actor.zones.addAll(changed)
+        val removed = zones.filter { it !in neighboring }
+        val added = neighboring.filter { it !in zones }
+        actor.setZones(removed, added)
         if (actor is Player) {
-            changed.forEach {
+            added.forEach {
                 // Clear the zone for updates.
                 actor.write(UpdateZoneFullFollowsPacket(it.location.localX(actor.lastLoadedLocation!!), it.location.localZ(actor.lastLoadedLocation!!)))
 
@@ -66,7 +65,7 @@ class Zone(
         } else if (actor is NPC) {
             npcs += actor
         }
-        actor.activeZone = Optional.of(this)
+        actor.setZone(this)
     }
 
     fun leaveZone(actor: Actor) {
@@ -94,7 +93,7 @@ class Zone(
     fun active() = players.isNotEmpty() || items.isNotEmpty() || itemsToRemove.isNotEmpty() || itemsToAdd.isNotEmpty()
     fun updating(): Boolean = itemsToAdd.isNotEmpty() || itemsToRemove.isNotEmpty()
 
-    private fun neighboringZones(width: Int = 2, height: Int = 2): List<Zone> = (width.inv() + 1..width).flatMap { x ->
+    private fun neighboringZones(width: Int = 2, height: Int = 2) = (width.inv() + 1..width).flatMap { x ->
         (height.inv() + 1..height).map { z ->
             location.toZoneLocation().transform(x, z)
         }

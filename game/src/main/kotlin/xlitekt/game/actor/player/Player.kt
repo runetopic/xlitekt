@@ -99,6 +99,7 @@ class Player(
         write(LogoutPacket(0))
         invokeAndClearWritePool()
         client?.socket?.close()
+        lazy<World>().zone(location)?.leaveZone(this)
         lazy<World>().removePlayer(this)
         lazy<PlayerJsonEncoderService>().requestSave(this)
     }

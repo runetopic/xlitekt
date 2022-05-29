@@ -75,7 +75,6 @@ class World(
 
     fun npcs() = npcs.filterNotNull()
 
-    fun zonesUpdating() = zones.updating()
     fun zone(location: Location) = zones[location]
     internal fun createZone(zoneLocation: ZoneLocation) = zones.createZone(zoneLocation)
 

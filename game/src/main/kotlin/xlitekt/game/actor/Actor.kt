@@ -38,8 +38,8 @@ abstract class Actor(
     var index = 0
 
     internal var facingActorIndex = Optional.empty<Int>()
-    internal var activeZone = Optional.empty<Zone>()
-    internal val zones = mutableListOf<Zone>()
+    private var activeZone = Optional.empty<Zone>()
+    private val zones = mutableListOf<Zone>()
 
     /**
      * High definition rendering blocks used for local updates.
@@ -180,8 +180,15 @@ abstract class Actor(
             activeZone = Optional.of(this)
         }
     }
+    fun setZone(zone: Zone) {
+        activeZone = Optional.of(zone)
+    }
 
     fun zones() = zones.toList()
+    fun setZones(removed: List<Zone>, added: List<Zone>) {
+        zones.removeAll(removed)
+        zones.addAll(added)
+    }
 
     private companion object {
         val world by inject<World>()

@@ -11,7 +11,7 @@ class ParallelActorSynchronizer : Synchronizer() {
     override fun run() {
         val players = world.players()
         val npcs = world.npcs()
-        val zones = world.zonesUpdating()
+        val zones = players.flatMap(Player::zones).distinct().filter(Zone::updating)
         val syncPlayers = players.associateBy(Player::index)
 
         players.parallelStream().forEach {
