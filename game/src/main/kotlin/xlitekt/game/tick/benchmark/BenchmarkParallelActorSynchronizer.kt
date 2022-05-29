@@ -16,6 +16,7 @@ import xlitekt.game.actor.route
 import xlitekt.game.actor.spotAnimate
 import xlitekt.game.tick.Synchronizer
 import xlitekt.game.world.map.location.Location
+import xlitekt.game.world.map.zone.Zone
 import xlitekt.shared.inject
 import java.util.concurrent.ArrayBlockingQueue
 import java.util.concurrent.ConcurrentHashMap
@@ -55,6 +56,7 @@ class BenchmarkParallelActorSynchronizer : Synchronizer() {
     override fun run() {
         val players = world.players()
         val npcs = world.npcs()
+        val zones = world.zonesUpdating()
         val paths = ConcurrentHashMap<Player, Route>()
         val finders = measureTime {
             val first = players.firstOrNull()
@@ -116,6 +118,7 @@ class BenchmarkParallelActorSynchronizer : Synchronizer() {
                 it.syncMovement(syncPlayers)
                 it.syncRenderingBlocks()
             }
+
             npcs.parallelStream().forEach {
                 it.syncMovement(syncPlayers)
             }
@@ -123,6 +126,8 @@ class BenchmarkParallelActorSynchronizer : Synchronizer() {
         logger.debug { "Pre tick took $pre for ${players.size} players. [TICK=$tick]" }
 
         val main = measureTime {
+            zones.parallelStream().forEach(Zone::update)
+
             // Main process.
             players.parallelStream().forEach {
                 it.syncClient(syncPlayers)

@@ -8,5 +8,6 @@ import xlitekt.game.world.map.location.Location
 data class MovementStep(
     val speed: MovementSpeed,
     val location: Location,
+    val previousLocation: Location,
     val direction: Direction
 )

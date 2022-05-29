@@ -11,6 +11,7 @@ import xlitekt.game.tick.WorldLoginSynchronizer
 import xlitekt.game.tick.WorldLogoutSynchronizer
 import xlitekt.game.tick.benchmark.BenchmarkParallelActorSynchronizer
 import xlitekt.game.world.World
+import xlitekt.game.world.map.zone.Zones
 import xlitekt.shared.lazy
 import java.util.concurrent.Executors
 
@@ -41,4 +42,5 @@ val gameModule = module(createdAtStart = true) {
         )
     }
     single { PlayerJsonEncoderService(Executors.newSingleThreadScheduledExecutor()) }
+    single { Zones() }
 }

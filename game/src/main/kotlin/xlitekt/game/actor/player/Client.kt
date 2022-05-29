@@ -79,11 +79,11 @@ class Client(
     }
 
     fun invokeAndClearWritePool() {
-        writePool.forEach {
+        writePool.onEach {
             val assembler = PacketAssemblerListener.listeners[it::class]
             if (assembler == null) {
                 disconnect("Unhandled packet found when trying to write. Packet was $it.")
-                return@forEach
+                return@onEach
             }
             val packet = assembler.packet.invoke(it)
             runBlocking(Dispatchers.IO) {
@@ -91,14 +91,12 @@ class Client(
                 writePacket(assembler.opcode, assembler.size, packet.readBytes(), serverCipher!!)
             }
             packet.release()
-        }
+        }.also(MutableList<Packet>::clear)
         writeChannel?.flush()
-        writePool.clear()
     }
 
     fun invokeAndClearReadPool() {
-        readPool.values.forEach { PacketHandlerListener.listeners[it.packet::class]?.invoke(it) }
-        readPool.clear()
+        readPool.values.onEach { PacketHandlerListener.listeners[it.packet::class]?.invoke(it) }.also(MutableCollection<PacketHandler<Packet>>::clear)
     }
 
     private suspend fun writePacket(opcode: Int, size: Int, packet: ByteArray, cipher: ISAAC) = writeChannel?.apply {

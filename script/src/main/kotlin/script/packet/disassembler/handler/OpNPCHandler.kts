@@ -9,7 +9,6 @@ import xlitekt.game.packet.OpNPCPacket
 import xlitekt.game.packet.disassembler.handler.onPacketHandler
 import xlitekt.game.world.World
 import xlitekt.game.world.map.location.Location
-import xlitekt.game.world.map.location.zones
 import xlitekt.game.world.map.zone.Zone
 import xlitekt.shared.inject
 
@@ -28,7 +27,7 @@ onPacketHandler<OpNPCPacket> {
         return@onPacketHandler
     }
 
-    val npc = player.location.zones().flatMap(Zone::npcs).firstOrNull { it?.index == this.packet.npcIndex } ?: return@onPacketHandler
+    val npc = player.zones().flatMap(Zone::npcs).firstOrNull { it.index == this.packet.npcIndex } ?: return@onPacketHandler
 
     if (npc.entry == null) {
         logger.debug { "Invalid NPC clicked $npc" }

@@ -68,8 +68,8 @@ class Player(
     internal fun init(client: Client, players: Map<Int, Player>) {
         this.client = client
         previousLocation = location
-        lastLoadedLocation = location
         rebuildNormal(players) { true }
+        lazy<World>().zone(location)?.enterZone(this)
         interfaces.openTop(interfaces.currentInterfaceLayout.interfaceId)
         invokeAndClearWritePool()
         login()

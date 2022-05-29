@@ -22,7 +22,10 @@ import xlitekt.game.actor.render.block.HighDefinitionRenderingBlock
 import xlitekt.game.actor.render.block.LowDefinitionRenderingBlock
 import xlitekt.game.actor.render.block.PlayerRenderingBlockListener
 import xlitekt.game.actor.render.block.RenderingBlock
+import xlitekt.game.world.World
 import xlitekt.game.world.map.location.Location
+import xlitekt.game.world.map.zone.Zone
+import xlitekt.shared.inject
 import java.util.Optional
 import java.util.TreeMap
 
@@ -33,7 +36,10 @@ abstract class Actor(
 
     var previousLocation: Location? = null
     var index = 0
+
     internal var facingActorIndex = Optional.empty<Int>()
+    internal var activeZone = Optional.empty<Zone>()
+    internal val zones = mutableListOf<Zone>()
 
     /**
      * High definition rendering blocks used for local updates.
@@ -64,6 +70,7 @@ abstract class Actor(
      * Processes any pending movement this actor may have. This happens every tick.
      */
     internal fun processMovement(players: Map<Int, Player>): MovementStep? = movement.process(this, location).also {
+        location = it?.location ?: location
         if (this is Player) {
             if (it == null) {
                 // When the player is not processing movement steps.
@@ -74,6 +81,12 @@ abstract class Actor(
                 // When the player is processing movement steps.
                 if (shouldRebuildMap()) rebuildNormal(players) { false }
             }
+        }
+        if (shouldRebuildZones() && activeZone.isPresent) {
+            if (activeZone.isPresent) {
+                activeZone.get().leaveZone(this)
+            }
+            world.zone(location)?.enterZone(this)
         }
     }
 
@@ -141,6 +154,13 @@ abstract class Actor(
     internal fun alternativeHighDefinitionRenderingBlocks() = alternativeHighDefinitionRenderingBlocks.values
     internal fun alternativeLowDefinitionRenderingBlocks() = alternativeLowDefinitionRenderingBlocks.values
 
+    private fun shouldRebuildZones(): Boolean {
+        if (activeZone.isPresent) {
+            return location.zoneId != activeZone.get().location.zoneId
+        }
+        return true
+    }
+
     /**
      * Flags this actor with a new pending rendering block.
      */
@@ -152,6 +172,19 @@ abstract class Actor(
             is FaceActor -> facingActorIndex = Optional.of(render.index)
             else -> {} // TODO
         }
+    }
+
+    fun zone() = if (activeZone.isPresent) activeZone.get() else {
+        world.zone(location)?.apply {
+            // Should never happen but this is a safe measure.
+            activeZone = Optional.of(this)
+        }
+    }
+
+    fun zones() = zones.toList()
+
+    private companion object {
+        val world by inject<World>()
     }
 }
 

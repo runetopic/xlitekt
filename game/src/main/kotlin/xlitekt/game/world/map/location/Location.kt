@@ -3,8 +3,6 @@ package xlitekt.game.world.map.location
 import kotlinx.serialization.Serializable
 import xlitekt.game.actor.movement.Direction
 import xlitekt.game.actor.player.serializer.LocationSerializer
-import xlitekt.game.world.map.zone.Zone
-import xlitekt.game.world.map.zone.Zones
 
 @Serializable(with = LocationSerializer::class)
 @JvmInline
@@ -22,6 +20,8 @@ value class Location(val packedLocation: Int) {
     val regionId: Int get() = (regionX shl 8) or regionZ
     val regionLocation: Int get() = z shr 13 or (x shr 13 shl 8) or (level shl 16)
 
+    fun localX(location: Location) = x - 8 * (location.zoneX - (104 shr 4))
+    fun localZ(location: Location) = z - 8 * (location.zoneZ - (104 shr 4))
     fun toZoneLocation(): ZoneLocation = ZoneLocation(x shr 3, z shr 3, level)
 
     fun transform(xOffset: Int, yOffset: Int, levelOffset: Int = 0) = Location(
@@ -43,5 +43,3 @@ fun Location.withinDistance(other: Location?, distance: Int = 14): Boolean {
     val deltaZ = other.z - z
     return deltaX <= distance && deltaX >= -distance && deltaZ <= distance && deltaZ >= -distance
 }
-
-fun Location.zones(): List<Zone> = (-2..2).flatMap { x -> (-2..2).map { z -> toZoneLocation().transform(x, z) } }.mapNotNull { Zones[it.toFullLocation()] }

@@ -7,8 +7,8 @@ import xlitekt.cache.provider.config.loc.LocEntryTypeProvider
 import xlitekt.game.actor.route
 import xlitekt.game.packet.OpLocPacket
 import xlitekt.game.packet.disassembler.handler.onPacketHandler
+import xlitekt.game.world.World
 import xlitekt.game.world.map.location.Location
-import xlitekt.game.world.map.zone.Zones
 import xlitekt.shared.inject
 
 /**
@@ -22,6 +22,7 @@ private val pathfinder = SmartPathFinder(
     defaultFlag = 0,
     useRouteBlockerFlags = true
 )
+private val world by inject<World>()
 
 onPacketHandler<OpLocPacket> {
     val objectId = packet.objectId
@@ -39,14 +40,14 @@ onPacketHandler<OpLocPacket> {
     // The location of the object clicked.
     val location = Location(x, z, player.location.level)
     // The zone the object location is in.
-    val zone = Zones[location] ?: return@onPacketHandler
+    val zone = world.zone(location) ?: return@onPacketHandler
     // The objects in this zone.
     val objects = zone.objects
     // Server check if this zone objects contains the clicked object id.
-    if (objects.none { it?.id == objectId }) return@onPacketHandler
+    if (objects.none { it.id == objectId }) return@onPacketHandler
 
     val gameObject = objects.firstOrNull {
-        it?.id == objectId && it.location.packedLocation == location.packedLocation
+        it.id == objectId && it.location.packedLocation == location.packedLocation
     } ?: return@onPacketHandler
 
     val path = pathfinder.findPath(

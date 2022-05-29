@@ -8,6 +8,7 @@ import xlitekt.game.actor.player.Client
 import xlitekt.game.actor.player.Player
 import xlitekt.game.world.map.collision.CollisionMap
 import xlitekt.game.world.map.location.Location
+import xlitekt.game.world.map.location.ZoneLocation
 import xlitekt.game.world.map.zone.Zones
 import xlitekt.shared.inject
 import xlitekt.shared.resource.NPCSpawns
@@ -22,6 +23,7 @@ class World(
 ) {
     private val maps by inject<MapSquareEntryTypeProvider>()
     private val npcSpawns by inject<NPCSpawns>()
+    private val zones by inject<Zones>()
 
     /**
      * Builds the game world including but not limited to map collision and npc spawns.
@@ -31,10 +33,7 @@ class World(
         maps.entries().forEach(CollisionMap::applyCollision)
         // Apply npc spawns.
         npcSpawns.forEach {
-            val location = Location(it.x, it.z, it.level)
-            val npc = NPC(it.id, location)
-            npc.previousLocation = location
-            spawn(npc)
+            spawn(NPC(it.id, Location(it.x, it.z, it.level)))
         }
     }
 
@@ -43,7 +42,7 @@ class World(
      */
     fun spawn(npc: NPC) {
         npcs.add(npc)
-        Zones[npc.location]?.npcs?.add(npc)
+        npc.init()
     }
 
     /**
@@ -68,11 +67,17 @@ class World(
         logoutRequests += player
     }
 
-    fun players() = players.filterNotNull().filter(Player::isOnline)
+    @Suppress("UNCHECKED_CAST")
+    // Doing it this way to reduce cpu time.
+    fun players() = players.filter { it != null && it.isOnline() } as List<Player>
     fun addPlayer(player: Player) = players.add(player)
     fun removePlayer(player: Player) = players.remove(player)
 
     fun npcs() = npcs.filterNotNull()
+
+    fun zonesUpdating() = zones.updating()
+    fun zone(location: Location) = zones[location]
+    internal fun createZone(zoneLocation: ZoneLocation) = zones.createZone(zoneLocation)
 
     companion object {
         const val MAX_PLAYERS = 2048
