@@ -42,7 +42,7 @@ onPacketHandler<OpLocPacket> {
     // The zone the object location is in.
     val zone = world.zone(location) ?: return@onPacketHandler
     // The objects in this zone.
-    val objects = zone.objects
+    val objects = zone.locs
     // Server check if this zone objects contains the clicked object id.
     if (objects.none { it.id == objectId }) return@onPacketHandler
 

@@ -10,6 +10,7 @@ import xlitekt.game.packet.UpdateZonePartialEnclosedPacket
 import xlitekt.game.world.World
 import xlitekt.game.world.map.location.Location
 import xlitekt.game.world.map.obj.GameObject
+import xlitekt.game.world.map.zone.ZoneUpdateType.LocAddType
 import xlitekt.game.world.map.zone.ZoneUpdateType.ObjAddType
 import xlitekt.game.world.map.zone.ZoneUpdateType.ObjDeleteType
 import xlitekt.shared.inject
@@ -19,30 +20,38 @@ class Zone(
     val location: Location,
     val players: MutableList<Player> = Collections.synchronizedList(mutableListOf()),
     val npcs: MutableList<NPC> = Collections.synchronizedList(mutableListOf()),
-    val objects: MutableList<GameObject> = Collections.synchronizedList(mutableListOf()),
-    val items: MutableList<FloorItem> = Collections.synchronizedList(mutableListOf()),
+    val locs: MutableList<GameObject> = Collections.synchronizedList(mutableListOf()),
+    val objs: MutableList<FloorItem> = Collections.synchronizedList(mutableListOf()),
 ) {
-    private val itemsToRemove = mutableListOf<FloorItem>()
-    private val itemsToAdd = mutableListOf<FloorItem>()
+    private val objsToRemove = mutableListOf<FloorItem>()
+    private val objsToAdd = mutableListOf<FloorItem>()
+    private val locsToAdd = mutableListOf<GameObject>()
 
     /**
      * Updates this zone every tick.
      */
     fun update() {
         val neighboring = neighboringPlayers()
-        itemsToRemove.onEach {
+        objsToRemove.onEach {
             neighboring.forEach { player ->
                 player.writeObjDelete(it)
             }
-            items -= it
-        }.also(itemsToRemove::removeAll)
+            objs -= it
+        }.also(objsToRemove::removeAll)
 
-        itemsToAdd.onEach {
+        objsToAdd.onEach {
             neighboring.forEach { player ->
                 player.writeObjAdd(it)
             }
-            items += it
-        }.also(itemsToAdd::removeAll)
+            objs += it
+        }.also(objsToAdd::removeAll)
+
+        locsToAdd.onEach {
+            neighboring.forEach { player ->
+                player.writeLocAdd(it)
+            }
+            locs += it
+        }.also(locsToAdd::removeAll)
     }
 
     fun enterZone(actor: Actor) {
@@ -59,7 +68,8 @@ class Zone(
                 if (!it.active()) return@forEach
 
                 // If zone contains any of the following, send them to the client.
-                it.items.forEach(actor::writeObjAdd)
+                it.objs.forEach(actor::writeObjAdd)
+                it.locs.filter(GameObject::spawned).forEach(actor::writeLocAdd)
             }
             players += actor
         } else if (actor is NPC) {
@@ -77,24 +87,30 @@ class Zone(
     }
 
     fun requestRemoveItem(floorItem: FloorItem): Boolean {
-        if (floorItem in itemsToRemove) return false
-        itemsToRemove += floorItem
+        if (floorItem in objsToRemove) return false
+        objsToRemove += floorItem
         return true
     }
 
     fun requestAddItem(floorItem: FloorItem): Boolean {
-        if (floorItem in itemsToAdd) return false
-        itemsToAdd += floorItem
+        if (floorItem in objsToAdd) return false
+        objsToAdd += floorItem
+        return true
+    }
+
+    fun requestAddObject(gameObject: GameObject): Boolean {
+        if (gameObject in locsToAdd) return false
+        locsToAdd += gameObject
         return true
     }
 
     fun neighboringPlayers() = neighboringZones().filter(Zone::active).map(Zone::players).flatten()
     fun neighboringNpcs() = neighboringZones().filter(Zone::active).map(Zone::npcs).flatten()
-    fun neighboringObjects() = neighboringZones().filter(Zone::active).map(Zone::objects).flatten()
-    fun neighboringItems() = neighboringZones().filter(Zone::active).map(Zone::items).flatten()
+    fun neighboringObjects() = neighboringZones().filter(Zone::active).map(Zone::locs).flatten()
+    fun neighboringItems() = neighboringZones().filter(Zone::active).map(Zone::objs).flatten()
 
-    fun active() = players.isNotEmpty() || npcs.isNotEmpty() || items.isNotEmpty() || objects.isNotEmpty() || itemsToRemove.isNotEmpty() || itemsToAdd.isNotEmpty()
-    fun updating(): Boolean = itemsToAdd.isNotEmpty() || itemsToRemove.isNotEmpty()
+    fun active() = players.isNotEmpty() || npcs.isNotEmpty() || objs.isNotEmpty() || locs.any(GameObject::spawned) || updating()
+    fun updating(): Boolean = objsToAdd.isNotEmpty() || objsToRemove.isNotEmpty() || locsToAdd.isNotEmpty()
 
     private fun neighboringZones(width: Int = 2, height: Int = 2) = (width.inv() + 1..width).flatMap { x ->
         (height.inv() + 1..height).map { z ->
@@ -130,6 +146,14 @@ private fun Player.writeObjDelete(floorItem: FloorItem) {
         floorItem.location.localZ(lastLoadedLocation!!)
     )
     invokeAndWriteUpdate(ObjDeleteType(floorItem.id, local.packedOffset), local)
+}
+
+private fun Player.writeLocAdd(gameObject: GameObject) {
+    val local = LocalLocation(
+        gameObject.location.localX(lastLoadedLocation!!),
+        gameObject.location.localZ(lastLoadedLocation!!)
+    )
+    invokeAndWriteUpdate(LocAddType(gameObject.id, gameObject.shape, gameObject.rotation, local.packedOffset), local)
 }
 
 private fun Player.invokeAndWriteUpdate(type: ZoneUpdateType, local: LocalLocation) {

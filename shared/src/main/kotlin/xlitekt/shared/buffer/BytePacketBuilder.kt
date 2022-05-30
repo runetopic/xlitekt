@@ -38,6 +38,11 @@ inline fun BytePacketBuilder.writeShortLittleEndianAdd(value: () -> Int) = value
     writeByte { it shr 8 }
 }
 
+inline fun BytePacketBuilder.writeShortLittleEndianSubtract(value: () -> Int) = value.invoke().also {
+    writeByteSubtract { it }
+    writeByte { it shr 8 }
+}
+
 inline fun BytePacketBuilder.writeMedium(value: () -> Int) = value.invoke().also {
     writeByte { it shr 16 }
     writeShort { it }

@@ -72,10 +72,10 @@ object CollisionMap {
 
                     type.locs[level][x][z].forEach {
                         val location = Location(it.x + baseX, it.z + baseZ, it.level)
-                        val entry = locs.entryType(it.id) ?: return@forEach
-                        val gameObject = GameObject(entry, location, it.shape, it.rotation)
+                        if (!locs.exists(it.id)) return@forEach
+                        val gameObject = GameObject(it.id, location, it.shape, it.rotation, false)
                         addObjectCollision(gameObject)
-                        world.createZone(location.toZoneLocation()).objects.add(gameObject)
+                        world.createZone(location.toZoneLocation()).locs.add(gameObject)
                     }
                 }
             }
@@ -83,7 +83,7 @@ object CollisionMap {
     }
 
     fun collisionFlag(location: Location) = zoneFlags[location.x, location.z, location.level]
-    private fun addObjectCollision(obj: GameObject) = changeNormalCollision(obj, true)
+    fun addObjectCollision(obj: GameObject) = changeNormalCollision(obj, true)
     fun removeObjectCollision(obj: GameObject) = changeNormalCollision(obj, false)
 
     private fun changeNormalCollision(obj: GameObject, add: Boolean) {
