@@ -6,7 +6,8 @@ import xlitekt.game.actor.movementType
 import xlitekt.game.actor.player.serializer.PlayerSerializer
 import xlitekt.game.actor.render.Render
 import xlitekt.game.actor.speed
-import xlitekt.game.content.inventory.Inventory
+import xlitekt.game.content.container.equipment.Equipment
+import xlitekt.game.content.container.inventory.Inventory
 import xlitekt.game.content.skill.Skill
 import xlitekt.game.content.skill.Skills
 import xlitekt.game.content.ui.Interfaces
@@ -49,6 +50,7 @@ class Player(
     val interfaces = Interfaces(this)
     val vars = Vars(this)
     val inventory: Inventory = Inventory(this)
+    val equipment: Equipment = Equipment(this)
     var lastLoadedLocation: Location? = null
 
     /**
@@ -85,6 +87,7 @@ class Player(
         vars.login()
         interfaces.login()
         inventory.login()
+        equipment.login()
         render(appearance)
         movementType { false }
         updateRunEnergy()

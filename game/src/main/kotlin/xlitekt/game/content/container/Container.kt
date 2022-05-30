@@ -6,7 +6,7 @@ data class Container(
     val id: Int,
     val capacity: Int,
     private val items: MutableList<Item?> = MutableList(capacity) { null },
-    val stackable: Boolean = true
+    val alwaysStack: Boolean = false
 ) : List<Item?> by items {
     /**
      * Replaces every item with null to clear out the container.
@@ -21,14 +21,17 @@ data class Container(
         function.invoke()
     }
 
+    fun setItem(slotId: Int, item: Item, function: (Item).(Int) -> Unit) {
+        items[slotId] = item
+        function.invoke(item, slotId)
+    }
+
     /**
      * Adds an item to the container and invokes a function with the item.
      * If an existing item is found, and it's stackable we just increment the existing item's amount.
      * If the item's amount exceeds Int.MAX_VALUE, we go ahead and do nothing because of an overflow exception.
      */
-    fun add(item: Item, function: (Item).(IntRange) -> Unit): Boolean {
-        val slotId = slotId(item)
-
+    fun add(item: Item, slotId: Int = slotId(item), function: (Item).(IntRange) -> Unit): Boolean {
         when {
             item.isStackable() && slotId == -1 -> {
                 val nextSlot = nextAvailableSlot()
@@ -103,7 +106,7 @@ data class Container(
      * @param id The item id to look up.
      */
     fun slotId(id: Int) = items.indexOfFirst { it?.id == id }
-    
+
     /**
      * Gets the slotId for the provided item id.
      * @param item The item to lookup

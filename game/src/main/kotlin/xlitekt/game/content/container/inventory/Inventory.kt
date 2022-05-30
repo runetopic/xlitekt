@@ -1,4 +1,4 @@
-package xlitekt.game.content.inventory
+package xlitekt.game.content.container.inventory
 
 import xlitekt.game.actor.player.Player
 import xlitekt.game.actor.player.message
@@ -7,6 +7,8 @@ import xlitekt.game.content.item.Item
 import xlitekt.game.packet.UpdateContainerFullPacket
 import xlitekt.game.packet.UpdateContainerPartialPacket
 
+const val INVENTORY_ID = 149
+const val PACKED_INVENTORY_ID = INVENTORY_ID shl 16 or 65536
 const val INVENTORY_CONTAINER_KEY = 93
 const val INVENTORY_CAPACITY = 28
 
@@ -31,8 +33,8 @@ class Inventory(
     fun login() {
         player.write(
             UpdateContainerFullPacket(
-                149 shl 16 or 65536,
-                93,
+                PACKED_INVENTORY_ID,
+                INVENTORY_CONTAINER_KEY,
                 container,
             )
         )
@@ -44,8 +46,8 @@ class Inventory(
     fun empty() = container.empty {
         player.write(
             UpdateContainerFullPacket(
-                149 shl 16 or 65536,
-                93,
+                PACKED_INVENTORY_ID,
+                INVENTORY_CONTAINER_KEY,
                 container,
             )
         )
@@ -83,14 +85,26 @@ class Inventory(
     }
 
     /**
+     * Grabs the slot id from the container.
+     * @param item The item to find the slot id for.
+     */
+    fun slotId(item: Item) = container.slotId(item)
+
+    /**
+     * Grabs the slot id from the container.
+     * @param itemId The item id to find the slot id for.
+     */
+    fun slotId(itemId: Int) = container.slotId(itemId)
+
+    /**
      * Refreshes specific slots within the inventory container.
      * This leverages the UpdateContainerPartialPacket
      */
     private fun refreshSlots(slots: IntRange) {
         player.write(
             UpdateContainerPartialPacket(
-                149 shl 16 or 65536,
-                93,
+                PACKED_INVENTORY_ID,
+                INVENTORY_CONTAINER_KEY,
                 container,
                 slots
             )
