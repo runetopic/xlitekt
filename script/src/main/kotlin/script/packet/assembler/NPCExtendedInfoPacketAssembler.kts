@@ -15,8 +15,8 @@ import xlitekt.game.world.map.location.Location
 import xlitekt.game.world.map.location.withinDistance
 import xlitekt.shared.buffer.BitAccess
 import xlitekt.shared.buffer.withBitAccess
-import java.util.Optional
 import xlitekt.shared.buffer.writeBytes
+import java.util.Optional
 
 /**
  * @author Jordan Abraham

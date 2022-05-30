@@ -89,7 +89,11 @@ class Zone(
     }
 
     fun neighboringPlayers() = neighboringZones().filter(Zone::active).map(Zone::players).flatten()
-    fun active() = players.isNotEmpty() || items.isNotEmpty() || itemsToRemove.isNotEmpty() || itemsToAdd.isNotEmpty()
+    fun neighboringNpcs() = neighboringZones().filter(Zone::active).map(Zone::npcs).flatten()
+    fun neighboringObjects() = neighboringZones().filter(Zone::active).map(Zone::objects).flatten()
+    fun neighboringItems() = neighboringZones().filter(Zone::active).map(Zone::items).flatten()
+
+    fun active() = players.isNotEmpty() || npcs.isNotEmpty() || items.isNotEmpty() || objects.isNotEmpty() || itemsToRemove.isNotEmpty() || itemsToAdd.isNotEmpty()
     fun updating(): Boolean = itemsToAdd.isNotEmpty() || itemsToRemove.isNotEmpty()
 
     private fun neighboringZones(width: Int = 2, height: Int = 2) = (width.inv() + 1..width).flatMap { x ->

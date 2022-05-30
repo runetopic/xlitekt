@@ -11,9 +11,6 @@ import xlitekt.shared.buffer.writeByteAdd
  */
 onPacketAssembler<UpdateZoneFullFollowsPacket>(opcode = 16, size = 2) {
     buildPacket {
-//        println("PACKET")
-//        println(((localX shr 3) shl 3).toByte())
-//        println(((localZ shr 3) shl 3).toByte())
         writeByteAdd { (localX shr 3) shl 3 }
         writeByte { (localZ shr 3) shl 3 }
     }

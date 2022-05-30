@@ -12,6 +12,9 @@ class Varps(list: Map<String, VarInfoResource>) : HashMap<String, VarInfoResourc
 class VarBits(list: Map<String, VarInfoResource>) : HashMap<String, VarInfoResource>(list)
 class InterfaceInfoMap(list: Map<String, InterfaceInfoResource>) : HashMap<String, InterfaceInfoResource>(list)
 class NPCSpawns(list: List<NPCSpawnsResource>) : ArrayList<NPCSpawnsResource>(list)
+class NPCExamines(list: Map<Int, ExamineNPCResource>) : HashMap<Int, ExamineNPCResource>(list)
+class ObjectExamines(list: Map<Int, ExamineObjectResource>) : HashMap<Int, ExamineObjectResource>(list)
+class ItemExamines(list: Map<Int, ExamineItemResource>) : HashMap<Int, ExamineItemResource>(list)
 
 object Resource {
     private val json = Json { allowStructuredMapKeys = true; ignoreUnknownKeys = true }
@@ -23,6 +26,9 @@ object Resource {
     fun varBitsResource(): VarBits = VarBits(loadResource<List<VarInfoResource>>("game.resources.varbits").associateBy(VarInfoResource::name))
     fun interfaceInfoResource(): InterfaceInfoMap = InterfaceInfoMap(loadResource<List<InterfaceInfoResource>>("game.resources.interface_info").associateBy(InterfaceInfoResource::name))
     fun npcInfoResource(): NPCSpawns = NPCSpawns(loadResource("game.resources.npc_info"))
+    fun examineNPCResource(): NPCExamines = NPCExamines(loadResource<List<ExamineNPCResource>>("game.resources.npc_examines").associateBy(ExamineNPCResource::npcID))
+    fun examineObjectResource(): ObjectExamines = ObjectExamines(loadResource<List<ExamineObjectResource>>("game.resources.object_examines").associateBy(ExamineObjectResource::objectID))
+    fun examineItemResource(): ItemExamines = ItemExamines(loadResource<List<ExamineItemResource>>("game.resources.item_examines").associateBy(ExamineItemResource::itemID))
 
     private inline fun <reified T> loadResource(path: String): T =
         json.decodeFromStream(Resource::class.java.getResourceAsStream(lazy<ApplicationEnvironment>().config.property(path).getString())!!)

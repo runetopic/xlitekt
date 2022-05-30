@@ -7,14 +7,11 @@ import xlitekt.game.actor.faceActor
 import xlitekt.game.actor.route
 import xlitekt.game.packet.OpNPCPacket
 import xlitekt.game.packet.disassembler.handler.onPacketHandler
-import xlitekt.game.world.World
 import xlitekt.game.world.map.location.Location
-import xlitekt.game.world.map.zone.Zone
 import xlitekt.shared.inject
 
 private val logger = InlineLogger()
 private val zoneFlags by inject<ZoneFlags>()
-private val world by inject<World>()
 private val pathfinder = SmartPathFinder(
     flags = zoneFlags.flags,
     defaultFlag = 0,
@@ -22,12 +19,14 @@ private val pathfinder = SmartPathFinder(
 )
 
 onPacketHandler<OpNPCPacket> {
-    if (world.npcs().indices.none { it == packet.npcIndex }) {
+    val neighboringNpcs = player.zone()?.neighboringNpcs()
+
+    if (neighboringNpcs?.isEmpty() == true || neighboringNpcs?.indices?.none { it == packet.npcIndex } == true) {
         logger.debug { "World does not contain NPC Index = ${packet.npcIndex}" }
         return@onPacketHandler
     }
 
-    val npc = player.zones().flatMap(Zone::npcs).firstOrNull { it.index == this.packet.npcIndex } ?: return@onPacketHandler
+    val npc = neighboringNpcs?.firstOrNull { it.index == this.packet.npcIndex } ?: return@onPacketHandler
 
     if (npc.entry == null) {
         logger.debug { "Invalid NPC clicked $npc" }

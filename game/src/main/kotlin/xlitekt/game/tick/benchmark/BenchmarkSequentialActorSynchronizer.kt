@@ -105,6 +105,7 @@ class BenchmarkSequentialActorSynchronizer : Synchronizer() {
             }
             npcs.forEach {
                 it.syncMovement(syncPlayers)
+                it.syncRenderingBlocks()
             }
         }
         logger.debug { "Pre tick took $pre for ${players.size} players. [TICK=$tick]" }

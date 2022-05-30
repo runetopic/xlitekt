@@ -22,6 +22,7 @@ class SequentialActorSynchronizer : Synchronizer() {
 
         npcs.forEach {
             it.syncMovement(syncPlayers)
+            it.syncRenderingBlocks()
         }
 
         zones.parallelStream().forEach(Zone::update)

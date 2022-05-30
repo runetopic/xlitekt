@@ -19,6 +19,7 @@ abstract class EntryTypeProvider<R : EntryType> {
 
     fun size() = entries.size
     fun entryType(id: Int): R? = entries[id]
+    fun exists(id: Int): Boolean = entries.containsKey(id)
     fun entries(): Collection<R> = entries.values
 
     protected fun ByteReadPacket.readStringIntParameters(): Map<Int, Any> = buildMap {
