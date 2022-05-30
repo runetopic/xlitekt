@@ -1,5 +1,7 @@
 package xlitekt.game.tick
 
+import kotlin.random.Random
+import xlitekt.game.actor.overheadChat
 import xlitekt.game.actor.player.Player
 import xlitekt.game.world.map.zone.Zone
 
@@ -22,6 +24,7 @@ class ParallelActorSynchronizer : Synchronizer() {
 
         npcs.parallelStream().forEach {
             it.syncMovement(syncPlayers)
+            it.syncRenderingBlocks()
         }
 
         zones.parallelStream().forEach(Zone::update)

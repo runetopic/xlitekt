@@ -3,6 +3,7 @@ package xlitekt.game.actor
 import xlitekt.game.actor.movement.Movement
 import xlitekt.game.actor.movement.MovementSpeed
 import xlitekt.game.actor.movement.MovementStep
+import xlitekt.game.actor.npc.NPC
 import xlitekt.game.actor.player.Player
 import xlitekt.game.actor.player.rebuildNormal
 import xlitekt.game.actor.render.HitBar
@@ -20,6 +21,7 @@ import xlitekt.game.actor.render.Render.TemporaryMovementType
 import xlitekt.game.actor.render.block.AlternativeDefinitionRenderingBlock
 import xlitekt.game.actor.render.block.HighDefinitionRenderingBlock
 import xlitekt.game.actor.render.block.LowDefinitionRenderingBlock
+import xlitekt.game.actor.render.block.NPCRenderingBlockListener
 import xlitekt.game.actor.render.block.PlayerRenderingBlockListener
 import xlitekt.game.actor.render.block.RenderingBlock
 import xlitekt.game.world.World
@@ -93,7 +95,7 @@ abstract class Actor(
     /**
      * Returns if this actor has any high definition rendering blocks.
      */
-    fun hasHighDefinitionRenderingBlocks() = highDefinitionRenderingBlocks.isNotEmpty()
+    internal fun hasHighDefinitionRenderingBlocks() = highDefinitionRenderingBlocks.isNotEmpty()
 
     /**
      * Returns a list of this actors high definition rendering blocks.
@@ -165,12 +167,18 @@ abstract class Actor(
      * Flags this actor with a new pending rendering block.
      */
     fun render(render: Render) {
-        val renderingBlock = PlayerRenderingBlockListener.listeners[render::class] ?: return
-        // Insert the rendering block into the TreeMap based on its index. This is to preserve order based on the client.
-        highDefinitionRenderingBlocks[renderingBlock.index] = HighDefinitionRenderingBlock(render, renderingBlock)
-        when (render) {
-            is FaceActor -> facingActorIndex = Optional.of(render.index)
-            else -> {} // TODO
+        if (this is NPC) {
+            val renderingBlock = NPCRenderingBlockListener.listeners[render::class] ?: return
+            // Insert the rendering block into the TreeMap based on its index. This is to preserve order based on the client.
+            highDefinitionRenderingBlocks[renderingBlock.index] = HighDefinitionRenderingBlock(render, renderingBlock)
+        } else if (this is Player) {
+            val renderingBlock = PlayerRenderingBlockListener.listeners[render::class] ?: return
+            // Insert the rendering block into the TreeMap based on its index. This is to preserve order based on the client.
+            highDefinitionRenderingBlocks[renderingBlock.index] = HighDefinitionRenderingBlock(render, renderingBlock)
+            when (render) {
+                is FaceActor -> facingActorIndex = Optional.of(render.index)
+                else -> {} // TODO
+            }
         }
     }
 
@@ -278,4 +286,8 @@ inline fun Actor.hit(hitBar: HitBar, source: Actor?, type: HitType, delay: Int, 
 
 inline fun Actor.chat(rights: Int, effects: Int, message: () -> String) {
     render(Render.PublicChat(message.invoke(), effects, rights))
+}
+
+inline fun Actor.overheadChat(message: () -> String) {
+    render(Render.OverheadChat(message.invoke()))
 }

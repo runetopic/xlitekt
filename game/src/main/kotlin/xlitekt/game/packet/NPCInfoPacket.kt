@@ -9,5 +9,6 @@ import java.util.Optional
  */
 data class NPCInfoPacket(
     val viewport: Viewport,
+    val highDefinitionUpdates: Map<Int, Optional<ByteArray>>,
     val movementStepsUpdates: Map<Int, Optional<MovementStep>>
 ) : Packet
