@@ -5,10 +5,16 @@ import xlitekt.game.actor.routeTeleport
 import xlitekt.game.content.command.Commands.onCommand
 import xlitekt.game.world.map.location.Location
 
-// TODO make a color system so we're not using arbitrary hex codes throughout our app
-private val invalidSyntaxMessage = "Please use syntax: <col=FF0000>::tele x, z, level (Level is optional).</col>"
+private val teleportDescription = "Teleports the Player to the specified coordinates."
+private val teleportSyntax = setOf<String>(
+    "::tele x z",
+    "::tele x z level"
+)
 
-onCommand("tele").use { arguments ->
+// TODO make a color system so we're not using arbitrary hex codes throughout our app
+private val invalidSyntaxMessage = "Invalid syntax - Please use: ${teleportSyntax.map { "<col=FF0000>$it</col>" }.joinToString(" or ")}."
+
+onCommand("tele", description = teleportDescription, syntax = teleportSyntax).use { arguments ->
     if (arguments.isEmpty()) {
         message { invalidSyntaxMessage }
         return@use
