@@ -89,7 +89,6 @@ class Zone(
     }
 
     fun neighboringPlayers() = neighboringZones().filter(Zone::active).map(Zone::players).flatten()
-
     fun active() = players.isNotEmpty() || items.isNotEmpty() || itemsToRemove.isNotEmpty() || itemsToAdd.isNotEmpty()
     fun updating(): Boolean = itemsToAdd.isNotEmpty() || itemsToRemove.isNotEmpty()
 

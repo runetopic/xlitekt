@@ -6,6 +6,7 @@ import xlitekt.game.actor.movementType
 import xlitekt.game.actor.player.serializer.PlayerSerializer
 import xlitekt.game.actor.render.Render
 import xlitekt.game.actor.speed
+import xlitekt.game.content.inventory.Inventory
 import xlitekt.game.content.skill.Skill
 import xlitekt.game.content.skill.Skills
 import xlitekt.game.content.ui.Interfaces
@@ -41,11 +42,13 @@ class Player(
     val rights: Int = 0,
     val appearance: Render.Appearance = Render.Appearance().also { it.displayName = username },
     val skills: Skills = Skills(),
-    var runEnergy: Float = 10_000f
+    var runEnergy: Float = 10_000f,
+
 ) : Actor(location) {
     val viewport = Viewport(this)
     val interfaces = Interfaces(this)
     val vars = Vars(this)
+    val inventory: Inventory = Inventory(this)
     var lastLoadedLocation: Location? = null
 
     /**
@@ -81,6 +84,7 @@ class Player(
     private fun login() {
         vars.login()
         interfaces.login()
+        inventory.login()
         render(appearance)
         movementType { false }
         updateRunEnergy()

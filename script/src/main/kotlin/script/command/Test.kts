@@ -3,6 +3,7 @@ package script.command
 import xlitekt.game.actor.player.message
 import xlitekt.game.content.command.Commands.onCommand
 import xlitekt.game.content.item.FloorItem
+import xlitekt.game.content.item.Item
 import xlitekt.game.world.World
 import xlitekt.game.world.map.location.Location
 import xlitekt.shared.inject
@@ -11,6 +12,12 @@ import xlitekt.shared.inject
  * @author Jordan Abraham
  */
 private val world by inject<World>()
+
+onCommand("gp").use {
+    inventory.add(Item(995, Int.MAX_VALUE)) {
+        message { "Spawned max cash." }
+    }
+}
 
 onCommand("add").use {
     val location = Location(3222, 3222, 0)
