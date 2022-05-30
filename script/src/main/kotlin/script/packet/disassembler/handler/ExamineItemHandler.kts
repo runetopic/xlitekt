@@ -18,7 +18,7 @@ private val provider by inject<ObjEntryTypeProvider>()
 onPacketHandler<ExamineItemPacket> {
     if (!provider.exists(packet.itemID)) return@onPacketHandler
 
-    val neighboringItems = player.zone()?.neighboringItems()
+    val neighboringItems = player.zone()?.neighboringFloorItems()
 
     if (neighboringItems?.isEmpty() == true || neighboringItems?.none { it.id == packet.itemID } == true) {
         logger.debug { "Item-Examine Item id ${packet.itemID} not found" }

@@ -28,7 +28,8 @@ class Zone(
     private val locsToAdd = mutableListOf<GameObject>()
 
     /**
-     * Updates this zone every tick.
+     * Updates this zone to the neighboring players including players in this zone.
+     * This happens every tick.
      */
     fun update() {
         val neighboring = neighboringPlayers()
@@ -54,10 +55,17 @@ class Zone(
         }.also(locsToAdd::removeAll)
     }
 
+    /**
+     * Make an actor enter this zone.
+     */
     fun enterZone(actor: Actor) {
+        // This actor current zones.
         val zones = actor.zones()
+        // This zone neighboring zones.
         val neighboring = neighboringZones()
+        // Zones that are being removed from this actor current zones.
         val removed = zones.filter { it !in neighboring }
+        // Zones that are being added to this actor current zones.
         val added = neighboring.filter { it !in zones }
         actor.setZones(removed, added)
         if (actor is Player) {
@@ -78,42 +86,85 @@ class Zone(
         actor.setZone(this)
     }
 
-    fun leaveZone(actor: Actor) {
+    /**
+     * Make an actor leave this zone.
+     * The actor is immediately required to enter a new zone upon leaving.
+     */
+    fun leaveZone(actor: Actor, nextZone: Zone? = null) {
         if (actor is Player) {
             players -= actor
         } else if (actor is NPC) {
             npcs -= actor
         }
+        nextZone?.enterZone(actor)
     }
 
+    /**
+     * Requests a floor item to be removed from this zone.
+     * Returns true if this floor item is able to be removed.
+     */
     fun requestRemoveItem(floorItem: FloorItem): Boolean {
         if (floorItem in objsToRemove) return false
         objsToRemove += floorItem
         return true
     }
 
+    /**
+     * Requests a floor item to be added to this zone.
+     * Returns true if this floor item is able to be added.
+     */
     fun requestAddItem(floorItem: FloorItem): Boolean {
         if (floorItem in objsToAdd) return false
         objsToAdd += floorItem
         return true
     }
 
+    /**
+     * Requests a game object to be added to this zone.
+     * Returns true if this game object is able to be added.
+     */
     fun requestAddObject(gameObject: GameObject): Boolean {
         if (gameObject in locsToAdd) return false
         locsToAdd += gameObject
         return true
     }
 
+    /**
+     * Returns a list of players that are inside this zone and neighboring zones.
+     */
     fun neighboringPlayers() = neighboringZones().filter(Zone::active).map(Zone::players).flatten()
-    fun neighboringNpcs() = neighboringZones().filter(Zone::active).map(Zone::npcs).flatten()
-    fun neighboringObjects() = neighboringZones().filter(Zone::active).map(Zone::locs).flatten()
-    fun neighboringItems() = neighboringZones().filter(Zone::active).map(Zone::objs).flatten()
 
+    /**
+     * Returns a list of npcs that are inside this zone and neighboring zones.
+     */
+    fun neighboringNpcs() = neighboringZones().filter(Zone::active).map(Zone::npcs).flatten()
+
+    /**
+     * Returns a list of game objects that are inside this zone and neighboring zones.
+     */
+    fun neighboringObjects() = neighboringZones().filter(Zone::active).map(Zone::locs).flatten()
+
+    /**
+     * Returns a list of floor items that are inside this zone and neighboring zones.
+     */
+    fun neighboringFloorItems() = neighboringZones().filter(Zone::active).map(Zone::objs).flatten()
+
+    /**
+     * Returns if this zone is active or not.
+     */
     fun active() = players.isNotEmpty() || npcs.isNotEmpty() || objs.isNotEmpty() || locs.any(GameObject::spawned) || updating()
+
+    /**
+     * Returns if this zone needs updating or not.
+     */
     fun updating(): Boolean = objsToAdd.isNotEmpty() || objsToRemove.isNotEmpty() || locsToAdd.isNotEmpty()
 
-    private fun neighboringZones(width: Int = 2, height: Int = 2) = (width.inv() + 1..width).flatMap { x ->
-        (height.inv() + 1..height).map { z ->
+    /**
+     * Returns a list of zones that are neighboring this zone including this zone.
+     * This will always be in a 5x5 square area with this zone in the middle.
+     */
+    private fun neighboringZones() = (2.inv() + 1..2).flatMap { x ->
+        (2.inv() + 1..2).map { z ->
             location.toZoneLocation().transform(x, z)
         }
     }.mapNotNull { world.zone(it.toFullLocation()) }
