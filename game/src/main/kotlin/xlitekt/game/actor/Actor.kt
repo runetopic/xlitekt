@@ -86,9 +86,8 @@ abstract class Actor(
         }
         if (shouldRebuildZones() && activeZone.isPresent) {
             if (activeZone.isPresent) {
-                activeZone.get().leaveZone(this)
+                activeZone.get().leaveZone(this, world.zone(location))
             }
-            world.zone(location)?.enterZone(this)
         }
     }
 

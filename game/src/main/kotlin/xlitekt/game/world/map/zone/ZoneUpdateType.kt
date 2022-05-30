@@ -14,4 +14,11 @@ sealed class ZoneUpdateType {
         val itemId: Int,
         val packedOffset: Int
     ) : ZoneUpdateType()
+
+    class LocAddType(
+        val locId: Int,
+        val shape: Int,
+        val rotation: Int,
+        val packedOffset: Int
+    ) : ZoneUpdateType()
 }
