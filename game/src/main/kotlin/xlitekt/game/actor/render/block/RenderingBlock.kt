@@ -20,7 +20,7 @@ data class RenderingBlock(
 )
 
 /**
- * Creates a new ByteArray of from a collection of HighDefinitionRenderingBlock.
+ * Creates a new ByteArray of from a collection of HighDefinitionRenderingBlock for players.
  * This also converts the HighDefinitionRenderingBlock into a LowDefinitionRenderingBlock and sets it to the player.
  * This also invokes an alternative rendering block if applicable to this players HighDefinitionRenderingBlock.
  *
@@ -37,7 +37,7 @@ internal fun Collection<HighDefinitionRenderingBlock>.invokeHighDefinitionPlayer
 }.readBytes()
 
 /**
- * Creates a new ByteArray from a collection of LowDefinitionRenderingBlock.
+ * Creates a new ByteArray from a collection of LowDefinitionRenderingBlock for players.
  * This is used by the player info packet for building low definition blocks for players.
  */
 internal fun Collection<LowDefinitionRenderingBlock>.invokeLowDefinitionPlayerRenderingBlocks() = buildPacket {
@@ -46,7 +46,7 @@ internal fun Collection<LowDefinitionRenderingBlock>.invokeLowDefinitionPlayerRe
 }.readBytes()
 
 /**
- * Creates a new ByteArray from a collection of AlternativeDefinitionRenderingBlock.
+ * Creates a new ByteArray from a collection of AlternativeDefinitionRenderingBlock for players.
  * This is used by the player update for both high and low definition updates that require outside player checks.
  */
 internal fun Collection<AlternativeDefinitionRenderingBlock>.invokeAlternativeDefinitionPlayerRenderingBlocks() = buildPacket {
@@ -54,6 +54,10 @@ internal fun Collection<AlternativeDefinitionRenderingBlock>.invokeAlternativeDe
     map(AlternativeDefinitionRenderingBlock::bytes).forEach { writeBytes { it } }
 }.readBytes()
 
+/**
+ * Creates a new ByteArray from a collection of HighDefinitionRenderingBlock for npcs.
+ * This is used by the npc update.
+ */
 internal fun Collection<HighDefinitionRenderingBlock>.invokeHighDefinitionNPCRenderingBlocks() = buildPacket {
     writeMask(fold(0) { current, next -> current or next.renderingBlock.mask }.let { if (it > 0xff) it or 0x4 else it })
     map { it.renderingBlock.packet.invoke(it.render).readBytes() }.forEach { writeBytes { it } }

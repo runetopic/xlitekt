@@ -37,9 +37,10 @@ abstract class Synchronizer : Runnable {
     }
 
     protected fun Player.syncRenderingBlocks() {
-        HighDefinitionPlayerUpdates.add(index, highDefinitionRenderingBlocks().invokeHighDefinitionPlayerRenderingBlocks(this))
+        val highDefinition = highDefinitionRenderingBlocks()
+        if (highDefinition.isNotEmpty()) HighDefinitionPlayerUpdates.add(index, highDefinition.invokeHighDefinitionPlayerRenderingBlocks(this))
         LowDefinitionPlayerUpdates.add(index, lowDefinitionRenderingBlocks().invokeLowDefinitionPlayerRenderingBlocks())
-        AlternativeHighDefinitionPlayerUpdates.add(index, alternativeHighDefinitionRenderingBlocks().invokeAlternativeDefinitionPlayerRenderingBlocks())
+        if (highDefinition.isNotEmpty()) AlternativeHighDefinitionPlayerUpdates.add(index, alternativeHighDefinitionRenderingBlocks().invokeAlternativeDefinitionPlayerRenderingBlocks())
         AlternativeLowDefinitionPlayerUpdates.add(index, alternativeLowDefinitionRenderingBlocks().invokeAlternativeDefinitionPlayerRenderingBlocks())
     }
 
