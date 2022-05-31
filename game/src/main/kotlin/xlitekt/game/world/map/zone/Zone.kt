@@ -32,11 +32,9 @@ class Zone(
     val locs: MutableList<GameObject> = Collections.synchronizedList(mutableListOf()),
     val objs: MutableList<FloorItem> = Collections.synchronizedList(mutableListOf()),
 ) {
-    private val objsToRemove = mutableListOf<FloorItem>()
-    private val objsToAdd = mutableListOf<FloorItem>()
-    private val locsToAdd = mutableListOf<GameObject>()
-    private val locsToRemove = mutableListOf<GameObject>()
-    private val projectilesToAdd = mutableListOf<Projectile>()
+    private val objRequests = mutableMapOf<FloorItem, Boolean>()
+    private val locRequests = mutableMapOf<GameObject, Boolean>()
+    private val mapProjRequests = mutableListOf<Projectile>()
 
     /**
      * Updates this zone to the neighboring players including players in this zone.
@@ -46,63 +44,62 @@ class Zone(
         val updates = mutableMapOf<Player, MutableList<Packet>>()
 
         val neighboring = neighboringPlayers()
-        if (projectilesToAdd.isNotEmpty()) {
-            for (player in neighboring) {
-                for (projectile in projectilesToAdd) {
+        if (mapProjRequests.isNotEmpty()) {
+            for (projectile in mapProjRequests) {
+                for (player in neighboring) {
                     updates.addMapProjAnim(player, projectile)
                 }
             }
-            projectilesToAdd.clear()
+            mapProjRequests.clear()
         }
 
-        if (objsToRemove.isNotEmpty()) {
-            for (player in neighboring) {
-                for (floorItem in objsToRemove) {
-                    updates.delObj(player, floorItem)
+        if (objRequests.isNotEmpty()) {
+            val removing = objRequests.filterValues { !it }
+            val adding = objRequests.filterValues { it }
+
+            if (removing.isNotEmpty()) {
+                for (floorItem in removing.keys) {
+                    for (player in neighboring) {
+                        updates.delObj(player, floorItem)
+                    }
+                    objs.removeAt(objs.lastIndexOf(floorItem))
                 }
             }
-            for (floorItem in objsToRemove) {
-                objs.removeAt(objs.lastIndexOf(floorItem))
-            }
-            objsToRemove.clear()
-        }
 
-        if (objsToAdd.isNotEmpty()) {
-            for (player in neighboring) {
-                for (floorItem in objsToAdd) {
-                    updates.addObj(player, floorItem)
+            if (adding.isNotEmpty()) {
+                for (floorItem in adding.keys) {
+                    for (player in neighboring) {
+                        updates.addObj(player, floorItem)
+                    }
+                    objs.add(0, floorItem)
                 }
             }
-            for (floorItem in objsToAdd) {
-                objs.add(0, floorItem)
-            }
-            objsToAdd.clear()
+            objRequests.clear()
         }
 
-        if (locsToRemove.isNotEmpty()) {
-            for (player in neighboring) {
-                for (gameObject in locsToRemove) {
-                    updates.delLoc(player, gameObject)
+        if (locRequests.isNotEmpty()) {
+            val removing = locRequests.filterValues { !it }
+            val adding = locRequests.filterValues { it }
+
+            if (removing.isNotEmpty()) {
+                for (gameObject in removing.keys) {
+                    for (player in neighboring) {
+                        updates.delLoc(player, gameObject)
+                    }
+                    locs.removeAt(locs.filter(GameObject::spawned).lastIndexOf(gameObject))
                 }
             }
-            for (gameObject in locsToRemove) {
-                locs.removeAt(locs.filter(GameObject::spawned).lastIndexOf(gameObject))
-            }
-            locsToRemove.clear()
-        }
 
-        if (locsToAdd.isNotEmpty()) {
-            for (player in neighboring) {
-                for (gameObject in locsToAdd) {
-                    updates.addLoc(player, gameObject)
+            if (adding.isNotEmpty()) {
+                for (gameObject in adding.keys) {
+                    for (player in neighboring) {
+                        updates.addLoc(player, gameObject)
+                    }
+                    locs.add(0, gameObject)
                 }
             }
-            for (gameObject in locsToAdd) {
-                locs.add(0, gameObject)
-            }
-            locsToAdd.clear()
+            locRequests.clear()
         }
-
         updates.write(location)
     }
 
@@ -133,7 +130,6 @@ class Zone(
 
                 if (!zone.active()) return@forEach
 
-                // actor.write(UpdateZonePartialFollowsPacket(local.x, local.z))
                 val updates = mutableMapOf<Player, MutableList<Packet>>()
                 // If zone contains any of the following, send them to the client.
                 zone.objs.forEach {
@@ -171,8 +167,8 @@ class Zone(
      * Returns false if this floor item is already requested to be removed.
      */
     fun requestRemoveObj(floorItem: FloorItem): Boolean {
-        if (floorItem in objsToRemove) return false
-        objsToRemove += floorItem
+        if (objRequests.containsKey(floorItem)) return false
+        objRequests[floorItem] = false
         return true
     }
 
@@ -181,8 +177,8 @@ class Zone(
      * Returns true if this floor item is able to be added.
      */
     fun requestAddObj(floorItem: FloorItem): Boolean {
-        if (floorItem in objsToAdd) return false
-        objsToAdd += floorItem
+        if (objRequests.containsKey(floorItem)) return false
+        objRequests[floorItem] = true
         return true
     }
 
@@ -191,9 +187,9 @@ class Zone(
      * Returns true if this game object is able to be removed.
      * Returns false if this game object is already requested to be removed.
      */
-    fun requestDeleteLoc(gameObject: GameObject): Boolean {
-        if (gameObject in locsToRemove) return false
-        locsToRemove += gameObject
+    fun requestRemoveLoc(gameObject: GameObject): Boolean {
+        if (locRequests.containsKey(gameObject)) return false
+        locRequests[gameObject] = false
         return true
     }
 
@@ -202,8 +198,8 @@ class Zone(
      * Returns true if this game object is able to be added.
      */
     fun requestAddLoc(gameObject: GameObject): Boolean {
-        if (gameObject in locsToAdd) return false
-        locsToAdd += gameObject
+        if (locRequests.containsKey(gameObject)) return false
+        locRequests[gameObject] = true
         return true
     }
 
@@ -212,8 +208,8 @@ class Zone(
      * Returns true if this map proj anim is able to be added.
      */
     fun requestAddMapProjAnim(projectile: Projectile): Boolean {
-        if (projectile in projectilesToAdd) return false
-        projectilesToAdd += projectile
+        if (projectile in mapProjRequests) return false
+        mapProjRequests += projectile
         return true
     }
 
@@ -245,7 +241,7 @@ class Zone(
     /**
      * Returns if this zone needs updating or not.
      */
-    fun updating() = objsToAdd.isNotEmpty() || objsToRemove.isNotEmpty() || locsToAdd.isNotEmpty() || locsToRemove.isNotEmpty() || projectilesToAdd.isNotEmpty()
+    fun updating() = objRequests.isNotEmpty() || locRequests.isNotEmpty() || mapProjRequests.isNotEmpty()
 
     /**
      * Returns a list of zones that are neighboring this zone including this zone.

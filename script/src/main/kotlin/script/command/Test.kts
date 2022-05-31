@@ -46,7 +46,7 @@ onCommand("delete").use {
     val zone = world.zone(Location(3222, 3222, 0))
     val loc = zone?.locs?.first()
     if (loc != null) {
-        if (zone.requestDeleteLoc(loc)) {
+        if (zone.requestRemoveLoc(loc)) {
             CollisionMap.removeObjectCollision(loc)
             message { "true" }
         }
