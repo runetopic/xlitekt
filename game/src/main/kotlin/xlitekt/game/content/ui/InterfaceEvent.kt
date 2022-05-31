@@ -1,6 +1,7 @@
 package xlitekt.game.content.ui
 
 enum class InterfaceEvent(val value: Int) {
+    NONE(0),
     CONTINUE(1 shl 0),
     CLICK_OPTION_1(1 shl 1),
     CLICK_OPTION_2(1 shl 2),

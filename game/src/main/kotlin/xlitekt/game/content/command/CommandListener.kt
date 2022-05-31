@@ -7,8 +7,8 @@ import xlitekt.game.actor.player.Player
  */
 class CommandListener(
     val command: Array<out String>,
-    var description: String,
-    var syntax: Set<String>,
+    val description: String,
+    val syntax: Set<String>,
     var filter: Player.() -> Boolean = { true },
     var use: Player.(List<String>) -> Unit = {},
 ) {

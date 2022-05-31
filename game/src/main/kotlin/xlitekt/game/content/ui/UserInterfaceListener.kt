@@ -76,6 +76,10 @@ class UserInterfaceListener(
         texts[userInterface.interfaceInfo.id.packInterface(childId)] = text
     }
 
+    fun setEvent(interfaceId: Int, childId: Int, slots: IntRange, event: InterfaceEvent) {
+        events[interfaceId.packInterface(childId)] = UserInterfaceEvent.IfEvent(slots, event)
+    }
+
     fun setEvent(childId: Int, slots: IntRange, event: InterfaceEvent) {
         events[userInterface.interfaceInfo.id.packInterface(childId)] = UserInterfaceEvent.IfEvent(slots, event)
     }
