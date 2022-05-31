@@ -1,11 +1,7 @@
 package xlitekt.game.tick.benchmark
 
 import com.github.michaelbull.logging.InlineLogger
-import org.rsmod.pathfinder.DumbPathFinder
-import org.rsmod.pathfinder.PathFinder
-import org.rsmod.pathfinder.Route
-import org.rsmod.pathfinder.SmartPathFinder
-import org.rsmod.pathfinder.ZoneFlags
+import org.rsmod.pathfinder.*
 import xlitekt.game.actor.chat
 import xlitekt.game.actor.hit
 import xlitekt.game.actor.npc.NPC
@@ -109,7 +105,7 @@ class BenchmarkParallelActorSynchronizer : Synchronizer() {
         logger.debug { "Movement routing took $moves for all entities. [TICK=$tick]" }
 
         // Pre process.
-        val syncPlayers = players.associateBy(Player::index)
+        val syncPlayers = world.playersMapped()
 
         val pre = measureTime {
             players.parallelStream().forEach {

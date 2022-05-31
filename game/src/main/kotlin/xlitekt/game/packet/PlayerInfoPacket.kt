@@ -1,20 +1,21 @@
 package xlitekt.game.packet
 
+import org.jctools.maps.NonBlockingHashMapLong
 import xlitekt.game.actor.movement.MovementStep
 import xlitekt.game.actor.player.Player
 import xlitekt.game.actor.player.Viewport
-import java.util.Optional
+import java.util.*
 
 /**
  * @author Jordan Abraham
  * @author Tyler Telis
  */
 data class PlayerInfoPacket(
-    val players: Map<Int, Player>,
+    val players: NonBlockingHashMapLong<Player>,
     val viewport: Viewport,
-    val highDefinitionUpdates: Map<Int, Optional<ByteArray>>,
-    val lowDefinitionUpdates: Map<Int, Optional<ByteArray>>,
-    val alternativeHighDefinitionUpdates: Map<Int, Optional<ByteArray>>,
-    val alternativeLowDefinitionUpdates: Map<Int, Optional<ByteArray>>,
-    val movementStepsUpdates: Map<Int, Optional<MovementStep>>
+    val highDefinitionUpdates: NonBlockingHashMapLong<Optional<ByteArray>>,
+    val lowDefinitionUpdates: NonBlockingHashMapLong<Optional<ByteArray>>,
+    val alternativeHighDefinitionUpdates: NonBlockingHashMapLong<Optional<ByteArray>>,
+    val alternativeLowDefinitionUpdates: NonBlockingHashMapLong<Optional<ByteArray>>,
+    val movementStepsUpdates: NonBlockingHashMapLong<Optional<MovementStep>>
 ) : Packet

@@ -94,7 +94,7 @@ class BenchmarkSequentialActorSynchronizer : Synchronizer() {
         logger.debug { "Movement routing took $moves for all entities. [TICK=$tick]" }
 
         // Pre process.
-        val syncPlayers = players.associateBy(Player::index)
+        val syncPlayers = world.playersMapped()
 
         val pre = measureTime {
             players.forEach {

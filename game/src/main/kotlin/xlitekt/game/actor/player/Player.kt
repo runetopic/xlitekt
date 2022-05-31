@@ -1,6 +1,7 @@
 package xlitekt.game.actor.player
 
 import kotlinx.serialization.Serializable
+import org.jctools.maps.NonBlockingHashMapLong
 import xlitekt.game.actor.Actor
 import xlitekt.game.actor.movementType
 import xlitekt.game.actor.player.serializer.PlayerSerializer
@@ -16,15 +17,7 @@ import xlitekt.game.content.vars.Vars
 import xlitekt.game.event.EventBus
 import xlitekt.game.event.impl.Events
 import xlitekt.game.fs.PlayerJsonEncoderService
-import xlitekt.game.packet.LogoutPacket
-import xlitekt.game.packet.MessageGamePacket
-import xlitekt.game.packet.Packet
-import xlitekt.game.packet.RebuildNormalPacket
-import xlitekt.game.packet.RunClientScriptPacket
-import xlitekt.game.packet.UpdateRunEnergyPacket
-import xlitekt.game.packet.UpdateStatPacket
-import xlitekt.game.packet.VarpLargePacket
-import xlitekt.game.packet.VarpSmallPacket
+import xlitekt.game.packet.*
 import xlitekt.game.packet.disassembler.handler.PacketHandler
 import xlitekt.game.world.World
 import xlitekt.game.world.map.location.Location
@@ -69,7 +62,7 @@ class Player(
      * Initiates this player when logging into the game world.
      * This happens before anything else.
      */
-    internal fun init(client: Client, players: Map<Int, Player>) {
+    internal fun init(client: Client, players: NonBlockingHashMapLong<Player>) {
         this.client = client
         previousLocation = location
         rebuildNormal(players) { true }
@@ -166,7 +159,7 @@ inline fun Player.message(message: () -> String) = write(MessageGamePacket(0, me
 fun Player.script(scriptId: Int, vararg parameters: Any) = write(RunClientScriptPacket(scriptId, parameters))
 fun Player.updateRunEnergy() = write(UpdateRunEnergyPacket(runEnergy / 100))
 
-inline fun Player.rebuildNormal(players: Map<Int, Player>, update: () -> Boolean) {
+inline fun Player.rebuildNormal(players: NonBlockingHashMapLong<Player>, update: () -> Boolean) {
     write(RebuildNormalPacket(viewport, location, update.invoke(), players))
     lastLoadedLocation = location
 }

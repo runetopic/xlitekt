@@ -11,7 +11,7 @@ class SequentialActorSynchronizer : Synchronizer() {
     override fun run() {
         val players = world.players()
         val npcs = world.npcs()
-        val syncPlayers = players.associateBy(Player::index)
+        val syncPlayers = world.playersMapped()
 
         players.forEach {
             it.invokeAndClearReadPool()
