@@ -92,11 +92,6 @@ abstract class Actor(
     }
 
     /**
-     * Returns if this actor has any high definition rendering blocks.
-     */
-    internal fun hasHighDefinitionRenderingBlocks() = highDefinitionRenderingBlocks.isNotEmpty()
-
-    /**
      * Returns a list of this actors high definition rendering blocks.
      */
     internal fun highDefinitionRenderingBlocks() = highDefinitionRenderingBlocks.values
