@@ -88,19 +88,18 @@ class Client(
                 disconnect("Unhandled packet found when trying to write. Packet was $it.")
                 return@onEach
             }
-            if (serverCipher == null) return@onEach
-            val packet = buildPacket {
-                val invoke = assembler.packet.invoke(it)
-                if (assembler.opcode > Byte.MAX_VALUE) {
-                    writeByte { (Byte.MAX_VALUE + 1) + serverCipher!!.getNext() }
-                }
-                writeByte { 0xff and assembler.opcode + serverCipher!!.getNext() }
-                val size = assembler.size
-                if (size == -1) writeByte(invoke.remaining::toInt)
-                else if (size == -2) writeShort(invoke.remaining::toInt)
-                writeBytes(invoke::readBytes)
-            }
             runBlocking(Dispatchers.IO) {
+                val packet = buildPacket {
+                    val invoke = assembler.packet.invoke(it)
+                    if (assembler.opcode > Byte.MAX_VALUE) {
+                        writeByte { (Byte.MAX_VALUE + 1) + (serverCipher?.getNext() ?: 0) }
+                    }
+                    writeByte { 0xff and assembler.opcode + (serverCipher?.getNext() ?: 0) }
+                    val size = assembler.size
+                    if (size == -1) writeByte(invoke.remaining::toInt)
+                    else if (size == -2) writeShort(invoke.remaining::toInt)
+                    writeBytes(invoke::readBytes)
+                }
                 writePacket(packet)
             }
         }.also(MutableList<Packet>::clear)
