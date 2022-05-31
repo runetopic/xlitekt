@@ -99,9 +99,11 @@ class BenchmarkParallelActorSynchronizer : Synchronizer() {
                         list
                     }
                 }
-                npcs.parallelStream().forEach {
-                    val path = npcPaths[it]
-                    if (path != null) {
+            }
+            npcs.parallelStream().forEach {
+                val path = npcPaths[it]
+                if (path != null) {
+                    it.route {
                         val list = IntArrayList(path.coords.size)
                         path.coords.forEach { c -> list.add(Location(c.x, c.y, it.location.level).packedLocation) }
                         list
