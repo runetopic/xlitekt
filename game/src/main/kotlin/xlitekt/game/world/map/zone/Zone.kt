@@ -117,7 +117,18 @@ class Zone(
         // Zones that are being removed from this actor current zones.
         val removed = zones.filter { it !in neighboring }
         // Zones that are being added to this actor current zones.
-        val added = neighboring.filter { it !in zones }
+        val added = neighboring.filter { it !in zones }.filter {
+            return@filter if (actor is Player) {
+                val localX = it.location.localX(actor.lastLoadedLocation!!)
+                val localZ = it.location.localZ(actor.lastLoadedLocation!!)
+                localX in 0 until 104 && localZ in 0 until 104
+            } else true
+        }
+        added.forEach {
+            if (actor is Player) {
+                println("${it.location.localX(actor.lastLoadedLocation!!)}, ${it.location.localZ(actor.lastLoadedLocation!!)}")
+            }
+        }
         actor.setZones(removed, added)
 
         if (actor is Player) {
