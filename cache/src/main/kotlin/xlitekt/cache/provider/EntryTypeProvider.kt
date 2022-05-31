@@ -19,6 +19,7 @@ abstract class EntryTypeProvider<R : EntryType> {
 
     fun size() = entries.size
     fun entryType(id: Int): R? = entries[id]
+    fun exists(id: Int): Boolean = entries.containsKey(id)
     fun entries(): Collection<R> = entries.values
 
     protected fun ByteReadPacket.readStringIntParameters(): Map<Int, Any> = buildMap {
@@ -33,7 +34,7 @@ abstract class EntryTypeProvider<R : EntryType> {
         release()
     }
 
-    protected fun String.toNameHash(): Int = fold(0) { hash, next -> next.code + ((hash shl 5) - hash) }
+    protected fun String.toNameHash() = fold(0) { hash, next -> next.code + ((hash shl 5) - hash) }
 
     internal companion object {
         // Indexes.

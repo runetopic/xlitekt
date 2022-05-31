@@ -1,6 +1,7 @@
 package xlitekt.game.tick
 
 import xlitekt.game.actor.player.Player
+import xlitekt.game.world.map.zone.Zone
 
 /**
  * @author Jordan Abraham
@@ -20,7 +21,13 @@ class SequentialActorSynchronizer : Synchronizer() {
 
         npcs.forEach {
             it.syncMovement(syncPlayers)
+            it.syncRenderingBlocks()
         }
+
+        players.flatMap(Player::zones)
+            .distinct()
+            .filter(Zone::updating)
+            .forEach(Zone::update)
 
         players.forEach {
             it.syncClient(syncPlayers)

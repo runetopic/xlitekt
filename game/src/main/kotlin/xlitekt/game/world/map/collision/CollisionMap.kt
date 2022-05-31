@@ -33,15 +33,16 @@ import org.rsmod.pathfinder.flag.CollisionFlag.WALL_WEST_ROUTE_BLOCKER
 import xlitekt.cache.provider.config.loc.LocEntryTypeProvider
 import xlitekt.cache.provider.map.MapSquareEntryType
 import xlitekt.cache.provider.map.MapSquareEntryTypeProvider
+import xlitekt.game.world.World
 import xlitekt.game.world.map.location.Location
 import xlitekt.game.world.map.obj.GameObject
 import xlitekt.game.world.map.obj.GameObjectShape
-import xlitekt.game.world.map.zone.Zones
 import xlitekt.shared.inject
 
 object CollisionMap {
     private val locs by inject<LocEntryTypeProvider>()
     private val zoneFlags by inject<ZoneFlags>()
+    private val world by inject<World>()
 
     fun applyCollision(type: MapSquareEntryType) {
         for (level in 0 until MapSquareEntryTypeProvider.LEVELS) {
@@ -58,7 +59,7 @@ object CollisionMap {
 
                     val location = Location(x + baseX, z + baseZ, level)
                     addFloorCollision(location)
-                    Zones.createZone(location.toZoneLocation())
+                    world.createZone(location.toZoneLocation())
                 }
             }
         }
@@ -71,11 +72,10 @@ object CollisionMap {
 
                     type.locs[level][x][z].forEach {
                         val location = Location(it.x + baseX, it.z + baseZ, it.level)
-                        val entry = locs.entryType(it.id) ?: return@forEach
-                        val gameObject = GameObject(entry, location, it.shape, it.rotation)
+                        if (!locs.exists(it.id)) return@forEach
+                        val gameObject = GameObject(it.id, location, it.shape, it.rotation, false)
                         addObjectCollision(gameObject)
-                        val zone = Zones.createZone(location.toZoneLocation())
-                        zone.objects.add(gameObject)
+                        world.createZone(location.toZoneLocation()).locs.add(gameObject)
                     }
                 }
             }
@@ -83,7 +83,7 @@ object CollisionMap {
     }
 
     fun collisionFlag(location: Location) = zoneFlags[location.x, location.z, location.level]
-    private fun addObjectCollision(obj: GameObject) = changeNormalCollision(obj, true)
+    fun addObjectCollision(obj: GameObject) = changeNormalCollision(obj, true)
     fun removeObjectCollision(obj: GameObject) = changeNormalCollision(obj, false)
 
     private fun changeNormalCollision(obj: GameObject, add: Boolean) {

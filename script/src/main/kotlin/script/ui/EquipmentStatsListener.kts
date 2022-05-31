@@ -5,6 +5,9 @@ import xlitekt.game.content.ui.UserInterface
 import xlitekt.game.content.ui.UserInterface.EquipmentStats
 import xlitekt.game.content.ui.onInterface
 
+/**
+ * @author Tyler Telis
+ */
 onInterface<EquipmentStats> {
     onCreate {
         script(917, -1, -1)

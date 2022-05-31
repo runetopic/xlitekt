@@ -8,6 +8,9 @@ import xlitekt.shared.buffer.readUShortLittleEndian
 import xlitekt.shared.buffer.readUShortLittleEndianAdd
 import xlitekt.shared.toBoolean
 
+/**
+ * @author Jordan Abraham
+ */
 onPacketDisassembler(opcode = 81, size = 7) {
     OpLocPacket(
         index = 1,

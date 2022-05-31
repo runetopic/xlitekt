@@ -6,6 +6,8 @@ import xlitekt.game.actor.movementType
 import xlitekt.game.actor.player.serializer.PlayerSerializer
 import xlitekt.game.actor.render.Render
 import xlitekt.game.actor.speed
+import xlitekt.game.content.container.equipment.Equipment
+import xlitekt.game.content.container.inventory.Inventory
 import xlitekt.game.content.skill.Skill
 import xlitekt.game.content.skill.Skills
 import xlitekt.game.content.ui.Interfaces
@@ -46,6 +48,8 @@ class Player(
     val viewport = Viewport(this)
     val interfaces = Interfaces(this)
     val vars = Vars(this)
+    val inventory: Inventory = Inventory(this)
+    val equipment: Equipment = Equipment(this)
     var lastLoadedLocation: Location? = null
 
     /**
@@ -68,8 +72,8 @@ class Player(
     internal fun init(client: Client, players: Map<Int, Player>) {
         this.client = client
         previousLocation = location
-        lastLoadedLocation = location
         rebuildNormal(players) { true }
+        lazy<World>().zone(location)?.enterZone(this)
         interfaces.openTop(interfaces.currentInterfaceLayout.interfaceId)
         invokeAndClearWritePool()
         login()
@@ -81,6 +85,8 @@ class Player(
     private fun login() {
         vars.login()
         interfaces.login()
+        inventory.login()
+        equipment.login()
         render(appearance)
         movementType { false }
         updateRunEnergy()
@@ -99,6 +105,7 @@ class Player(
         write(LogoutPacket(0))
         invokeAndClearWritePool()
         client?.socket?.close()
+        lazy<World>().zone(location)?.leaveZone(this)
         lazy<World>().removePlayer(this)
         lazy<PlayerJsonEncoderService>().requestSave(this)
     }

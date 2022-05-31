@@ -3,6 +3,7 @@ package xlitekt.game.actor
 import xlitekt.game.actor.movement.Movement
 import xlitekt.game.actor.movement.MovementSpeed
 import xlitekt.game.actor.movement.MovementStep
+import xlitekt.game.actor.npc.NPC
 import xlitekt.game.actor.player.Player
 import xlitekt.game.actor.player.rebuildNormal
 import xlitekt.game.actor.render.HitBar
@@ -20,9 +21,13 @@ import xlitekt.game.actor.render.Render.TemporaryMovementType
 import xlitekt.game.actor.render.block.AlternativeDefinitionRenderingBlock
 import xlitekt.game.actor.render.block.HighDefinitionRenderingBlock
 import xlitekt.game.actor.render.block.LowDefinitionRenderingBlock
+import xlitekt.game.actor.render.block.NPCRenderingBlockListener
 import xlitekt.game.actor.render.block.PlayerRenderingBlockListener
 import xlitekt.game.actor.render.block.RenderingBlock
+import xlitekt.game.world.World
 import xlitekt.game.world.map.location.Location
+import xlitekt.game.world.map.zone.Zone
+import xlitekt.shared.inject
 import java.util.Optional
 import java.util.TreeMap
 
@@ -33,7 +38,10 @@ abstract class Actor(
 
     var previousLocation: Location? = null
     var index = 0
+
     internal var facingActorIndex = Optional.empty<Int>()
+    private var activeZone = Optional.empty<Zone>()
+    private val zones = mutableListOf<Zone>()
 
     /**
      * High definition rendering blocks used for local updates.
@@ -64,6 +72,7 @@ abstract class Actor(
      * Processes any pending movement this actor may have. This happens every tick.
      */
     internal fun processMovement(players: Map<Int, Player>): MovementStep? = movement.process(this, location).also {
+        location = it?.location ?: location
         if (this is Player) {
             if (it == null) {
                 // When the player is not processing movement steps.
@@ -75,12 +84,17 @@ abstract class Actor(
                 if (shouldRebuildMap()) rebuildNormal(players) { false }
             }
         }
+        if (shouldRebuildZones() && activeZone.isPresent) {
+            if (activeZone.isPresent) {
+                activeZone.get().leaveZone(this, world.zone(location))
+            }
+        }
     }
 
     /**
      * Returns if this actor has any high definition rendering blocks.
      */
-    fun hasHighDefinitionRenderingBlocks() = highDefinitionRenderingBlocks.isNotEmpty()
+    internal fun hasHighDefinitionRenderingBlocks() = highDefinitionRenderingBlocks.isNotEmpty()
 
     /**
      * Returns a list of this actors high definition rendering blocks.
@@ -141,17 +155,50 @@ abstract class Actor(
     internal fun alternativeHighDefinitionRenderingBlocks() = alternativeHighDefinitionRenderingBlocks.values
     internal fun alternativeLowDefinitionRenderingBlocks() = alternativeLowDefinitionRenderingBlocks.values
 
+    private fun shouldRebuildZones(): Boolean {
+        if (activeZone.isPresent) {
+            return location.zoneId != activeZone.get().location.zoneId
+        }
+        return true
+    }
+
     /**
      * Flags this actor with a new pending rendering block.
      */
     fun render(render: Render) {
-        val renderingBlock = PlayerRenderingBlockListener.listeners[render::class] ?: return
-        // Insert the rendering block into the TreeMap based on its index. This is to preserve order based on the client.
-        highDefinitionRenderingBlocks[renderingBlock.index] = HighDefinitionRenderingBlock(render, renderingBlock)
-        when (render) {
-            is FaceActor -> facingActorIndex = Optional.of(render.index)
-            else -> {} // TODO
+        if (this is NPC) {
+            val renderingBlock = NPCRenderingBlockListener.listeners[render::class] ?: return
+            // Insert the rendering block into the TreeMap based on its index. This is to preserve order based on the client.
+            highDefinitionRenderingBlocks[renderingBlock.index] = HighDefinitionRenderingBlock(render, renderingBlock)
+        } else if (this is Player) {
+            val renderingBlock = PlayerRenderingBlockListener.listeners[render::class] ?: return
+            // Insert the rendering block into the TreeMap based on its index. This is to preserve order based on the client.
+            highDefinitionRenderingBlocks[renderingBlock.index] = HighDefinitionRenderingBlock(render, renderingBlock)
+            when (render) {
+                is FaceActor -> facingActorIndex = Optional.of(render.index)
+                else -> {} // TODO
+            }
         }
+    }
+
+    fun zone() = if (activeZone.isPresent) activeZone.get() else {
+        world.zone(location)?.apply {
+            // Should never happen but this is a safe measure.
+            activeZone = Optional.of(this)
+        }
+    }
+    fun setZone(zone: Zone) {
+        activeZone = Optional.of(zone)
+    }
+
+    fun zones() = zones.toList()
+    fun setZones(removed: List<Zone>, added: List<Zone>) {
+        zones.removeAll(removed)
+        zones.addAll(added)
+    }
+
+    private companion object {
+        val world by inject<World>()
     }
 }
 
@@ -238,4 +285,8 @@ inline fun Actor.hit(hitBar: HitBar, source: Actor?, type: HitType, delay: Int, 
 
 inline fun Actor.chat(rights: Int, effects: Int, message: () -> String) {
     render(Render.PublicChat(message.invoke(), effects, rights))
+}
+
+inline fun Actor.overheadChat(message: () -> String) {
+    render(Render.OverheadChat(message.invoke()))
 }

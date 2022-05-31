@@ -1,6 +1,47 @@
 package xlitekt.game.content.container.equipment
 
-class Equipment {
+import xlitekt.game.actor.player.Player
+import xlitekt.game.content.container.Container
+import xlitekt.game.content.item.Item
+import xlitekt.game.packet.UpdateContainerFullPacket
+import xlitekt.game.packet.UpdateContainerPartialPacket
+
+const val EQUIPMENT_KEY = 94
+const val EQUIPMENT_CAPACITY = 15
+
+class Equipment(
+    val player: Player
+) : Container(-1, EQUIPMENT_CAPACITY) {
+    /**
+     * Sends the initial player's equipment on login.
+     */
+    fun login() {
+        setItem(SLOT_MAINHAND, Item(4151, 1)) {
+            player.write(
+                UpdateContainerFullPacket(
+                    -1,
+                    EQUIPMENT_KEY,
+                    this@Equipment
+                )
+            )
+        }
+    }
+
+    /**
+     * Refreshes specific slots within the equipment container.
+     * This leverages the UpdateContainerPartialPacket
+     */
+    private fun refreshSlots(slots: IntRange) {
+        player.write(
+            UpdateContainerPartialPacket(
+                -1,
+                EQUIPMENT_KEY,
+                this,
+                slots
+            )
+        )
+    }
+
     companion object {
         const val SLOT_HEAD = 0
         const val SLOT_BACK = 1

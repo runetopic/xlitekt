@@ -15,6 +15,7 @@ import xlitekt.game.actor.route
 import xlitekt.game.actor.spotAnimate
 import xlitekt.game.tick.Synchronizer
 import xlitekt.game.world.map.location.Location
+import xlitekt.game.world.map.zone.Zone
 import xlitekt.shared.inject
 import kotlin.random.Random
 import kotlin.time.measureTime
@@ -103,9 +104,18 @@ class BenchmarkSequentialActorSynchronizer : Synchronizer() {
             }
             npcs.forEach {
                 it.syncMovement(syncPlayers)
+                it.syncRenderingBlocks()
             }
         }
         logger.debug { "Pre tick took $pre for ${players.size} players. [TICK=$tick]" }
+
+        val zonesTime = measureTime {
+            players.flatMap(Player::zones)
+                .distinct()
+                .filter(Zone::updating)
+                .forEach(Zone::update)
+        }
+        logger.debug { "Zones took $zonesTime to update. [TICK=$tick]" }
 
         val main = measureTime {
             // Main process.

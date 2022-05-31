@@ -3,11 +3,13 @@ package xlitekt.game.tick
 import xlitekt.game.actor.movement.MovementStep
 import xlitekt.game.actor.npc.NPC
 import xlitekt.game.actor.player.Player
-import xlitekt.game.actor.render.block.invokeAlternativeDefinitionRenderingBlock
-import xlitekt.game.actor.render.block.invokeHighDefinitionRenderingBlock
-import xlitekt.game.actor.render.block.invokeLowDefinitionRenderingBlock
+import xlitekt.game.actor.render.block.invokeAlternativeDefinitionPlayerRenderingBlocks
+import xlitekt.game.actor.render.block.invokeHighDefinitionNPCRenderingBlocks
+import xlitekt.game.actor.render.block.invokeHighDefinitionPlayerRenderingBlocks
+import xlitekt.game.actor.render.block.invokeLowDefinitionPlayerRenderingBlocks
 import xlitekt.game.packet.NPCInfoPacket
 import xlitekt.game.packet.PlayerInfoPacket
+import xlitekt.game.tick.NPCInfoUpdates.HighDefinitionNPCUpdates
 import xlitekt.game.tick.NPCInfoUpdates.MovementStepsNPCUpdates
 import xlitekt.game.tick.PlayerInfoUpdates.AlternativeHighDefinitionPlayerUpdates
 import xlitekt.game.tick.PlayerInfoUpdates.AlternativeLowDefinitionPlayerUpdates
@@ -35,10 +37,18 @@ abstract class Synchronizer : Runnable {
     }
 
     protected fun Player.syncRenderingBlocks() {
-        HighDefinitionPlayerUpdates.add(index, highDefinitionRenderingBlocks().invokeHighDefinitionRenderingBlock(this))
-        LowDefinitionPlayerUpdates.add(index, lowDefinitionRenderingBlocks().invokeLowDefinitionRenderingBlock())
-        AlternativeHighDefinitionPlayerUpdates.add(index, alternativeHighDefinitionRenderingBlocks().invokeAlternativeDefinitionRenderingBlock())
-        AlternativeLowDefinitionPlayerUpdates.add(index, alternativeLowDefinitionRenderingBlocks().invokeAlternativeDefinitionRenderingBlock())
+        val highDefinition = highDefinitionRenderingBlocks()
+        if (highDefinition.isNotEmpty()) HighDefinitionPlayerUpdates.add(index, highDefinition.invokeHighDefinitionPlayerRenderingBlocks(this))
+        LowDefinitionPlayerUpdates.add(index, lowDefinitionRenderingBlocks().invokeLowDefinitionPlayerRenderingBlocks())
+        if (highDefinition.isNotEmpty()) AlternativeHighDefinitionPlayerUpdates.add(index, alternativeHighDefinitionRenderingBlocks().invokeAlternativeDefinitionPlayerRenderingBlocks())
+        AlternativeLowDefinitionPlayerUpdates.add(index, alternativeLowDefinitionRenderingBlocks().invokeAlternativeDefinitionPlayerRenderingBlocks())
+    }
+
+    protected fun NPC.syncRenderingBlocks() {
+        val blocks = highDefinitionRenderingBlocks()
+        if (blocks.isEmpty()) return
+        HighDefinitionNPCUpdates.add(index, blocks.invokeHighDefinitionNPCRenderingBlocks())
+        resetDefinitionRenderingBlocks()
     }
 
     protected fun Player.syncClient(players: Map<Int, Player>) {
@@ -56,6 +66,7 @@ abstract class Synchronizer : Runnable {
         write(
             NPCInfoPacket(
                 viewport = viewport,
+                highDefinitionUpdates = HighDefinitionNPCUpdates,
                 movementStepsUpdates = MovementStepsNPCUpdates
             )
         )
@@ -64,12 +75,15 @@ abstract class Synchronizer : Runnable {
     }
 
     protected fun resetSynchronizer() {
+        // Player
         MovementStepsPlayerUpdates.clear()
-        MovementStepsNPCUpdates.clear()
         HighDefinitionPlayerUpdates.clear()
         LowDefinitionPlayerUpdates.clear()
         AlternativeHighDefinitionPlayerUpdates.clear()
         AlternativeLowDefinitionPlayerUpdates.clear()
+        // NPC
+        HighDefinitionNPCUpdates.clear()
+        MovementStepsNPCUpdates.clear()
     }
 }
 
@@ -93,6 +107,7 @@ internal sealed class NPCInfoUpdates<T : Any>(
     private val updates: ConcurrentHashMap<Int, Optional<T>> = ConcurrentHashMap()
 ) : Map<Int, Optional<T>> by updates {
 
+    object HighDefinitionNPCUpdates : NPCInfoUpdates<ByteArray>()
     object MovementStepsNPCUpdates : NPCInfoUpdates<MovementStep>()
 
     fun add(index: Int, update: T) {

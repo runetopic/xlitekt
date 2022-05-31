@@ -1,6 +1,9 @@
 package xlitekt.shared
 
 import org.koin.dsl.module
+import xlitekt.shared.resource.Resource.examineItemResource
+import xlitekt.shared.resource.Resource.examineNPCResource
+import xlitekt.shared.resource.Resource.examineObjectResource
 import xlitekt.shared.resource.Resource.interfaceInfoResource
 import xlitekt.shared.resource.Resource.mapSquaresResource
 import xlitekt.shared.resource.Resource.npcInfoResource
@@ -20,4 +23,7 @@ val sharedModule = module(true) {
     single { varBitsResource() }
     single { interfaceInfoResource() }
     single { npcInfoResource() }
+    single { examineNPCResource() }
+    single { examineObjectResource() }
+    single { examineItemResource() }
 }

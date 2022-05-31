@@ -15,6 +15,9 @@ private val layoutDropDownChildId = 84
 private val clientModeCS2Id = 3998
 private val interfaceScalingCS2Id = 2358
 
+/**
+ * @author Tyler Telis
+ */
 onInterface<Settings> {
     onOpen {
         setEvent(childId = 41, slots = 0..21, event = CLICK_OPTION_1)
