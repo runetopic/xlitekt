@@ -25,6 +25,7 @@ import xlitekt.shared.buffer.writeByte
 import xlitekt.shared.buffer.writeBytes
 import xlitekt.shared.buffer.writeShort
 import xlitekt.shared.inject
+import xlitekt.shared.lazy
 import java.io.IOException
 import java.net.SocketException
 import java.util.Collections
@@ -49,7 +50,7 @@ class Client(
 
     fun disconnect(reason: String) {
         logger.debug { "Client disconnected for reason={$reason}." }
-        player?.let(world::requestLogout)
+        player?.let(lazy<World>()::requestLogout)
     }
 
     fun setIsaacCiphers(clientCipher: ISAAC, serverCipher: ISAAC) {
@@ -92,9 +93,9 @@ class Client(
                 val packet = buildPacket {
                     val invoke = assembler.packet.invoke(it)
                     if (assembler.opcode > Byte.MAX_VALUE) {
-                        writeByte { (Byte.MAX_VALUE + 1) + (serverCipher?.getNext() ?: 0) }
+                        writeByte { 128 + (serverCipher?.getNext() ?: 0) }
                     }
-                    writeByte { 0xff and assembler.opcode + (serverCipher?.getNext() ?: 0) }
+                    writeByte { assembler.opcode + (serverCipher?.getNext() ?: 0) and 0xff }
                     val size = assembler.size
                     if (size == -1) writeByte(invoke.remaining::toInt)
                     else if (size == -2) writeShort(invoke.remaining::toInt)
@@ -126,7 +127,5 @@ class Client(
 
         val store by inject<Js5Store>()
         val checksums = store.checksumsWithoutRSA()
-
-        val world by inject<World>()
     }
 }
