@@ -124,11 +124,6 @@ class Zone(
                 localX in 0 until 104 && localZ in 0 until 104
             } else true
         }
-        added.forEach {
-            if (actor is Player) {
-                println("${it.location.localX(actor.lastLoadedLocation!!)}, ${it.location.localZ(actor.lastLoadedLocation!!)}")
-            }
-        }
         actor.setZones(removed, added)
 
         if (actor is Player) {
