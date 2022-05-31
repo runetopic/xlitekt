@@ -43,7 +43,6 @@ class BenchmarkSequentialActorSynchronizer : Synchronizer() {
     override fun run() {
         val players = world.players()
         val npcs = world.npcs()
-        val zones = players.flatMap(Player::zones).distinct().filter(Zone::updating)
         val paths = mutableMapOf<Player, Route>()
         val finders = measureTime {
             val first = players.firstOrNull()
@@ -111,7 +110,10 @@ class BenchmarkSequentialActorSynchronizer : Synchronizer() {
         logger.debug { "Pre tick took $pre for ${players.size} players. [TICK=$tick]" }
 
         val zonesTime = measureTime {
-            zones.forEach(Zone::update)
+            players.flatMap(Player::zones)
+                .distinct()
+                .filter(Zone::updating)
+                .forEach(Zone::update)
         }
         logger.debug { "Zones took $zonesTime to update. [TICK=$tick]" }
 

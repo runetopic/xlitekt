@@ -11,7 +11,6 @@ class SequentialActorSynchronizer : Synchronizer() {
     override fun run() {
         val players = world.players()
         val npcs = world.npcs()
-        val zones = players.flatMap(Player::zones).distinct().filter(Zone::updating)
         val syncPlayers = players.associateBy(Player::index)
 
         players.forEach {
@@ -25,7 +24,10 @@ class SequentialActorSynchronizer : Synchronizer() {
             it.syncRenderingBlocks()
         }
 
-        zones.parallelStream().forEach(Zone::update)
+        players.flatMap(Player::zones)
+            .distinct()
+            .filter(Zone::updating)
+            .forEach(Zone::update)
 
         players.forEach {
             it.syncClient(syncPlayers)
