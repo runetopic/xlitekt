@@ -38,7 +38,7 @@ onInterface<WornEquipment> {
                 }
                 if (slot < 0 || slot > 13) return@onClick
 
-                val item = equipment.findFirstBySlot(slot) ?: return@onClick
+                val item = equipment.firstBySlot(slot) ?: return@onClick
                 message { itemExamines[item.id]?.message ?: "It's a ${item.entry?.name}" }
             }
         }

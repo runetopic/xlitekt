@@ -17,15 +17,8 @@ const val INVENTORY_CAPACITY = 28
  * @author Tyler Telis
  */
 class Inventory(
-    val player: Player
-) {
-    /**
-     * The backing item container used to emit updates to the client.
-     */
-    private val container = Container(
-        INVENTORY_CONTAINER_KEY,
-        INVENTORY_CAPACITY,
-    )
+    val player: Player,
+) : Container(INVENTORY_CONTAINER_KEY, INVENTORY_CAPACITY) {
 
     /**
      * Refresh the player's inventory slots upon login to the world.
@@ -35,7 +28,7 @@ class Inventory(
             UpdateContainerFullPacket(
                 PACKED_INVENTORY_ID,
                 INVENTORY_CONTAINER_KEY,
-                container,
+                this,
             )
         )
     }
@@ -43,12 +36,12 @@ class Inventory(
     /**
      * Empties the player's inventory and then pools the packet to the client.
      */
-    fun empty() = container.empty {
+    fun empty() = this.clear {
         player.write(
             UpdateContainerFullPacket(
                 PACKED_INVENTORY_ID,
                 INVENTORY_CONTAINER_KEY,
-                container,
+                this,
             )
         )
         player.message { "Your inventory has been cleared." }
@@ -57,8 +50,8 @@ class Inventory(
     /**
      * Adds an item to the player's inventory, and if the item is added we invoke a function with the slotId of the newly added item.
      */
-    fun add(item: Item, function: (Item).(Int) -> Unit) {
-        if (add(item)) function.invoke(item, container.slotId(item))
+    fun addItem(item: Item, function: (Item).(Int) -> Unit) {
+        if (addItem(item)) function.invoke(item, slotId(item))
     }
 
     /**
@@ -66,13 +59,13 @@ class Inventory(
      * @param item The item being added to the inventory.
      * @return whether of not the item has been added to the inventory.
      */
-    fun add(item: Item): Boolean {
-        if (container.isFull() && !item.isStackable()) {
+    private fun addItem(item: Item): Boolean {
+        if (isFull() && !item.isStackable()) {
             player.message { "You don't have enough inventory space." }
             return false
         }
 
-        val added = container.add(item) { slots ->
+        val added = add(item) { slots ->
             refreshSlots(slots)
         }
 
@@ -85,18 +78,6 @@ class Inventory(
     }
 
     /**
-     * Grabs the slot id from the container.
-     * @param item The item to find the slot id for.
-     */
-    fun slotId(item: Item) = container.slotId(item)
-
-    /**
-     * Grabs the slot id from the container.
-     * @param itemId The item id to find the slot id for.
-     */
-    fun slotId(itemId: Int) = container.slotId(itemId)
-
-    /**
      * Refreshes specific slots within the inventory container.
      * This leverages the UpdateContainerPartialPacket
      */
@@ -105,7 +86,7 @@ class Inventory(
             UpdateContainerPartialPacket(
                 PACKED_INVENTORY_ID,
                 INVENTORY_CONTAINER_KEY,
-                container,
+                this,
                 slots
             )
         )

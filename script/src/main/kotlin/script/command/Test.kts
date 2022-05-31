@@ -16,7 +16,7 @@ import xlitekt.shared.inject
 private val world by inject<World>()
 
 onCommand("gp").use {
-    inventory.add(Item(995, Int.MAX_VALUE)) {
+    inventory.addItem(Item(995, Int.MAX_VALUE)) {
         message { "Spawned max cash." }
     }
 }
