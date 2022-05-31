@@ -31,6 +31,10 @@ import xlitekt.shared.inject
 import java.util.Optional
 import java.util.TreeMap
 
+/**
+ * @author Tyler Telis
+ * @author Jordan Abraham
+ */
 abstract class Actor(
     open var location: Location
 ) {
