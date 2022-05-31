@@ -66,7 +66,7 @@ class Player(
         this.client = client
         previousLocation = location
         rebuildNormal(players) { true }
-        lazy<World>().zone(location)?.enterZone(this)
+        lazy<World>().zone(location).enterZone(this)
         interfaces.openTop(interfaces.currentInterfaceLayout.interfaceId)
         invokeAndClearWritePool()
         login()
@@ -98,7 +98,7 @@ class Player(
         write(LogoutPacket(0))
         invokeAndClearWritePool()
         client?.socket?.close()
-        lazy<World>().zone(location)?.leaveZone(this)
+        lazy<World>().zone(location).leaveZone(this)
         lazy<World>().removePlayer(this)
         lazy<PlayerJsonEncoderService>().requestSave(this)
     }

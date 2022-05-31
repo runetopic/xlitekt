@@ -66,8 +66,10 @@ fun BytePacketBuilder.highDefinition(
         // This player has an activity update (true).
         writeBit { true }
         // Write corresponding bits depending on the activity type the player is doing.
-        activity.writeBits(this@withBitAccess, viewport, index,
-            updates.isPresent, other.location, other.previousLocation ?: other.location, movementStep)
+        activity.writeBits(
+            this@withBitAccess, viewport, index,
+            updates.isPresent, other.location, other.previousLocation, movementStep
+        )
         if (activity is Removing) {
             viewport.players[index] = null
         } else {

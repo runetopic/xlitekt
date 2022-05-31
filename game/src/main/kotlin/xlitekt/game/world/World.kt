@@ -77,7 +77,7 @@ class World(
         val map = NonBlockingHashMapLong<Player>(list.size)
         for (i in 0..list.lastIndex) {
             val player = list[i]
-            map.put(player.indexL, player)
+            map[player.indexL] = player
         }
         return map
     }

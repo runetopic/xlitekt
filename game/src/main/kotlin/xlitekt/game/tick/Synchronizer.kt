@@ -83,8 +83,7 @@ abstract class Synchronizer : Runnable {
     }
 }
 
-internal sealed class PlayerInfoUpdates<T : Any>(
-) : NonBlockingHashMapLong<Optional<T>>(World.MAX_PLAYERS) {
+internal sealed class PlayerInfoUpdates<T : Any> : NonBlockingHashMapLong<Optional<T>>(World.MAX_PLAYERS) {
 
     object HighDefinitionPlayerUpdates : PlayerInfoUpdates<ByteArray>()
     object LowDefinitionPlayerUpdates : PlayerInfoUpdates<ByteArray>()
@@ -92,14 +91,17 @@ internal sealed class PlayerInfoUpdates<T : Any>(
     object AlternativeLowDefinitionPlayerUpdates : PlayerInfoUpdates<ByteArray>()
     object MovementStepsPlayerUpdates : PlayerInfoUpdates<MovementStep>()
 
-    fun add(index: Int, update: T) = put(index.toLong(), Optional.of(update))
+    fun add(index: Int, update: T) {
+        put(index.toLong(), Optional.of(update))
+    }
 }
 
-internal sealed class NPCInfoUpdates<T : Any>(
-) : NonBlockingHashMapLong<Optional<T>>() {
+internal sealed class NPCInfoUpdates<T : Any> : NonBlockingHashMapLong<Optional<T>>() {
 
     object HighDefinitionNPCUpdates : NPCInfoUpdates<ByteArray>()
     object MovementStepsNPCUpdates : NPCInfoUpdates<MovementStep>()
 
-    fun add(index: Int, update: T) = put(index.toLong(), Optional.of(update))
+    fun add(index: Int, update: T) {
+        put(index.toLong(), Optional.of(update))
+    }
 }

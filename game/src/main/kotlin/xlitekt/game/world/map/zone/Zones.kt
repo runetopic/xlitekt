@@ -8,9 +8,9 @@ private const val ZONES = 2048 * 2048 * 4
 class Zones {
     private val zones: Array<Zone?> = arrayOfNulls(ZONES)
 
-    operator fun get(location: Location): Zone? {
+    operator fun get(location: Location): Zone {
         val zoneLocation = location.toZoneLocation()
-        return zones[zoneLocation.packedCoordinates]
+        return zones[zoneLocation.packedCoordinates] ?: createZone(zoneLocation)
     }
 
     fun createZone(location: ZoneLocation): Zone {

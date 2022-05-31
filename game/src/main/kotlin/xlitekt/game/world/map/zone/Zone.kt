@@ -247,11 +247,15 @@ class Zone(
      * Returns a list of zones that are neighboring this zone including this zone.
      * This will always be in a 7x7 square area with this zone in the middle.
      */
-    private fun neighboringZones() = (-3..3).flatMap { x ->
-        (-3..3).map { z ->
-            location.toZoneLocation().transform(x, z)
+    private fun neighboringZones(): List<Zone> {
+        val zones = mutableListOf<Zone>()
+        for (x in -3..3) {
+            for (z in -3..3) {
+                zones.add(world.zone(location.toZoneLocation().transform(x, z).toFullLocation()))
+            }
         }
-    }.mapNotNull { world.zone(it.toFullLocation()) }
+        return zones
+    }
 
     private companion object {
         val world by inject<World>()

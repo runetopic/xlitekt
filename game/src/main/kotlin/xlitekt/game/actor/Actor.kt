@@ -171,12 +171,8 @@ abstract class Actor(
         }
     }
 
-    fun zone() = if (activeZone.isPresent) activeZone.get() else {
-        world.zone(location)?.apply {
-            // Should never happen but this is a safe measure.
-            activeZone = Optional.of(this)
-        }
-    }
+    fun zone() = if (activeZone.isPresent) activeZone.get() else world.zone(location)
+
     fun setZone(zone: Zone) {
         activeZone = Optional.of(zone)
     }
@@ -274,9 +270,9 @@ inline fun Actor.hit(hitBar: HitBar, source: Actor?, type: HitType, delay: Int, 
 }
 
 inline fun Actor.chat(rights: Int, effects: Int, message: () -> String) {
-    render(Render.PublicChat(message.invoke(), effects, rights))
+    render(PublicChat(message.invoke(), effects, rights))
 }
 
 inline fun Actor.overheadChat(message: () -> String) {
-    render(Render.OverheadChat(message.invoke()))
+    render(OverheadChat(message.invoke()))
 }

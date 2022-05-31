@@ -21,14 +21,14 @@ private val pathfinder = SmartPathFinder(
 )
 
 onPacketHandler<OpNPCPacket> {
-    val neighboringNpcs = player.zone()?.neighboringNpcs()
+    val neighboringNpcs = player.zone().neighboringNpcs()
 
-    if (neighboringNpcs?.isEmpty() == true || neighboringNpcs?.indices?.none { it == packet.npcIndex } == true) {
+    if (neighboringNpcs.isEmpty() || neighboringNpcs.indices.none { it == packet.npcIndex }) {
         logger.debug { "World does not contain NPC Index = ${packet.npcIndex}" }
         return@onPacketHandler
     }
 
-    val npc = neighboringNpcs?.firstOrNull { it.index == this.packet.npcIndex } ?: return@onPacketHandler
+    val npc = neighboringNpcs.firstOrNull { it.index == this.packet.npcIndex } ?: return@onPacketHandler
 
     if (npc.entry == null) {
         logger.debug { "Invalid NPC clicked $npc" }
