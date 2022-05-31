@@ -1,5 +1,7 @@
 package script.packet.disassembler.handler
 
+import it.unimi.dsi.fastutil.ints.IntArrayList
+import it.unimi.dsi.fastutil.ints.IntList
 import org.rsmod.pathfinder.SmartPathFinder
 import org.rsmod.pathfinder.ZoneFlags
 import xlitekt.game.actor.route
@@ -22,5 +24,9 @@ onPacketHandler<MovementPacket> {
         destY = packet.destinationZ,
         z = player.location.level
     )
-    player.route { path.coords.map { Location(it.x, it.y, player.location.level) } }
+    player.route {
+        val list: IntList = IntArrayList(path.coords.size)
+        path.coords.forEach { list.add(Location(it.x, it.y, player.location.level).packedLocation) }
+        list
+    }
 }

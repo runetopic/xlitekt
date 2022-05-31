@@ -1,6 +1,7 @@
 package xlitekt.game.tick.benchmark
 
 import com.github.michaelbull.logging.InlineLogger
+import it.unimi.dsi.fastutil.ints.IntArrayList
 import org.rsmod.pathfinder.*
 import xlitekt.game.actor.chat
 import xlitekt.game.actor.hit
@@ -92,13 +93,19 @@ class BenchmarkParallelActorSynchronizer : Synchronizer() {
             players.parallelStream().forEach {
                 val path = paths[it]
                 if (path != null) {
-                    it.route { path.coords.map { c -> Location(c.x, c.y, it.location.level) } }
+                    it.route {
+                        val list = IntArrayList(path.coords.size)
+                        path.coords.forEach { c -> list.add(Location(c.x, c.y, it.location.level).packedLocation) }
+                        list
+                    }
                 }
-            }
-            npcs.parallelStream().forEach {
-                val path = npcPaths[it]
-                if (path != null) {
-                    it.route { path.coords.map { c -> Location(c.x, c.y, it.location.level) } }
+                npcs.parallelStream().forEach {
+                    val path = npcPaths[it]
+                    if (path != null) {
+                        val list = IntArrayList(path.coords.size)
+                        path.coords.forEach { c -> list.add(Location(c.x, c.y, it.location.level).packedLocation) }
+                        list
+                    }
                 }
             }
         }

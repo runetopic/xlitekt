@@ -1,6 +1,7 @@
 package xlitekt.game.tick.benchmark
 
 import com.github.michaelbull.logging.InlineLogger
+import it.unimi.dsi.fastutil.ints.IntArrayList
 import org.rsmod.pathfinder.DumbPathFinder
 import org.rsmod.pathfinder.Route
 import org.rsmod.pathfinder.SmartPathFinder
@@ -81,13 +82,21 @@ class BenchmarkSequentialActorSynchronizer : Synchronizer() {
             players.forEach {
                 val path = paths[it]
                 if (path != null) {
-                    it.route { path.coords.map { c -> Location(c.x, c.y, it.location.level) } }
+                    it.route {
+                        val list = IntArrayList(path.coords.size)
+                        path.coords.forEach { c -> list.add(Location(c.x, c.y, it.location.level).packedLocation) }
+                        list
+                    }
                 }
             }
             npcs.forEach {
                 val path = npcPaths[it]
                 if (path != null) {
-                    it.route { path.coords.map { c -> Location(c.x, c.y, it.location.level) } }
+                    it.route {
+                        val list = IntArrayList(path.coords.size)
+                        path.coords.forEach { c -> list.add(Location(c.x, c.y, it.location.level).packedLocation) }
+                        list
+                    }
                 }
             }
         }

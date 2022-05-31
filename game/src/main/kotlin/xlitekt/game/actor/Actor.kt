@@ -1,5 +1,6 @@
 package xlitekt.game.actor
 
+import it.unimi.dsi.fastutil.ints.IntList
 import org.jctools.maps.NonBlockingHashMapLong
 import xlitekt.game.actor.movement.Movement
 import xlitekt.game.actor.movement.MovementSpeed
@@ -205,7 +206,7 @@ fun Actor.actionReset() {
 /**
  * Routes the actor movement waypoints to the input list.
  */
-inline fun Actor.route(locations: () -> List<Location>) {
+inline fun Actor.route(locations: () -> IntList) {
     actionReset()
     movement.route(locations.invoke())
 }

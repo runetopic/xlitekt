@@ -1,6 +1,8 @@
 package script.packet.disassembler.handler
 
 import com.github.michaelbull.logging.InlineLogger
+import it.unimi.dsi.fastutil.ints.IntArrayList
+import it.unimi.dsi.fastutil.ints.IntList
 import org.rsmod.pathfinder.SmartPathFinder
 import org.rsmod.pathfinder.ZoneFlags
 import xlitekt.game.actor.faceActor
@@ -45,6 +47,10 @@ onPacketHandler<OpNPCPacket> {
         z = npc.location.level,
     )
 
-    player.route { path.coords.map { Location(it.x, it.y, npc.location.level) } }
+    player.route {
+        val list: IntList = IntArrayList(path.coords.size)
+        path.coords.forEach { list.add(Location(it.x, it.y, npc.location.level).packedLocation) }
+        list
+    }
     player.faceActor(npc::index) // this may need to have some sort of requirement like within distance checks or not.
 }
