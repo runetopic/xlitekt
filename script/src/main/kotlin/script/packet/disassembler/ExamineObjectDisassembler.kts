@@ -5,7 +5,7 @@ import xlitekt.game.packet.disassembler.onPacketDisassembler
 import xlitekt.shared.buffer.readUShortAdd
 
 /**
- * @author
+ * @author Justin Kenney
  */
 onPacketDisassembler(opcode = 13, size = 2) {
     ExamineObjectPacket(

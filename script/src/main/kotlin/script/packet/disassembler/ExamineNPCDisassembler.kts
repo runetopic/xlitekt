@@ -5,7 +5,7 @@ import xlitekt.game.packet.disassembler.onPacketDisassembler
 import xlitekt.shared.buffer.readUShortLittleEndian
 
 /**
- * @author
+ * @author Justin Kenney
  */
 onPacketDisassembler(opcode = 22, size = 2) {
     ExamineNPCPacket(
