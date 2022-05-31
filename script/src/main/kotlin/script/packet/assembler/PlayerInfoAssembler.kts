@@ -1,7 +1,7 @@
 package script.packet.assembler
 
-import io.ktor.utils.io.core.BytePacketBuilder
-import io.ktor.utils.io.core.buildPacket
+import io.ktor.utils.io.core.*
+import org.jctools.maps.NonBlockingHashMapLong
 import script.packet.assembler.PlayerInfoAssembler.ActivityUpdateType.Adding
 import script.packet.assembler.PlayerInfoAssembler.ActivityUpdateType.Moving
 import script.packet.assembler.PlayerInfoAssembler.ActivityUpdateType.Removing
@@ -22,7 +22,7 @@ import xlitekt.game.world.map.location.withinDistance
 import xlitekt.shared.buffer.BitAccess
 import xlitekt.shared.buffer.withBitAccess
 import xlitekt.shared.buffer.writeBytes
-import java.util.Optional
+import java.util.*
 import kotlin.math.abs
 
 /**
@@ -42,9 +42,9 @@ onPacketAssembler<PlayerInfoPacket>(opcode = 80, size = -2) {
 fun BytePacketBuilder.highDefinition(
     viewport: Viewport,
     blocks: BytePacketBuilder,
-    highDefinitionUpdates: Map<Int, Optional<ByteArray>>,
-    movementStepsUpdates: Map<Int, Optional<MovementStep>>,
-    alternativeHighDefinitionUpdates: Map<Int, Optional<ByteArray>>,
+    highDefinitionUpdates: NonBlockingHashMapLong<Optional<ByteArray>>,
+    movementStepsUpdates: NonBlockingHashMapLong<Optional<MovementStep>>,
+    alternativeHighDefinitionUpdates: NonBlockingHashMapLong<Optional<ByteArray>>,
     nsn: Boolean
 ) = withBitAccess {
     var skip = -1
@@ -52,8 +52,8 @@ fun BytePacketBuilder.highDefinition(
         val index = viewport.highDefinitions[it]
         if (viewport.isNsn(index) == nsn) continue
         val other = viewport.players[index]
-        val updates = highDefinitionUpdates[other?.index]
-        val movementStep = movementStepsUpdates[other?.index]
+        val updates = other?.let { highDefinitionUpdates[other.indexL] } ?: Optional.empty()
+        val movementStep = other?.let { movementStepsUpdates[other.indexL] } ?: Optional.empty()
         // Check the activities this player is doing.
         val activity = viewport.highDefinitionActivities(other, updates, movementStep)
         if (other == null || activity == null) {
@@ -66,7 +66,8 @@ fun BytePacketBuilder.highDefinition(
         // This player has an activity update (true).
         writeBit { true }
         // Write corresponding bits depending on the activity type the player is doing.
-        activity.writeBits(this@withBitAccess, viewport, index, updates?.isPresent == true, other.location, other.previousLocation ?: other.location, movementStep)
+        activity.writeBits(this@withBitAccess, viewport, index,
+            updates.isPresent, other.location, other.previousLocation ?: other.location, movementStep)
         if (activity is Removing) {
             viewport.players[index] = null
         } else {
@@ -74,8 +75,8 @@ fun BytePacketBuilder.highDefinition(
                 // Update server with new location if this player moved.
                 viewport.locations[index] = other.location.regionLocation
             }
-            if (updates?.isPresent == true) {
-                blocks.writeBytes { alternativeHighDefinitionUpdates[other.index]?.orElse(updates.get())!! }
+            if (updates.isPresent) {
+                blocks.writeBytes { alternativeHighDefinitionUpdates[other.indexL]?.orElse(updates.get())!! }
             }
         }
     }
@@ -85,17 +86,17 @@ fun BytePacketBuilder.highDefinition(
 fun BytePacketBuilder.lowDefinition(
     viewport: Viewport,
     blocks: BytePacketBuilder,
-    lowDefinitionUpdates: Map<Int, Optional<ByteArray>>,
-    players: Map<Int, Player>,
-    alternativeLowDefinitionUpdates: Map<Int, Optional<ByteArray>>,
+    lowDefinitionUpdates: NonBlockingHashMapLong<Optional<ByteArray>>,
+    players: NonBlockingHashMapLong<Player>,
+    alternativeLowDefinitionUpdates: NonBlockingHashMapLong<Optional<ByteArray>>,
     nsn: Boolean
 ) = withBitAccess {
     var skip = -1
     for (it in 0 until viewport.lowDefinitionsCount) {
         val index = viewport.lowDefinitions[it]
         if (!viewport.isNsn(index) == nsn) continue
-        val other = players[index]
-        val updates = lowDefinitionUpdates[other?.index]
+        val other = players[index.toLong()]
+        val updates = other?.let { lowDefinitionUpdates[other.indexL] } ?: Optional.empty()
         // Check the activities this player is doing.
         val activity = viewport.lowDefinitionActivities(other, updates, blocks.size + ((bitIndex + 7) / 8))
         if (other == null || activity == null) {
@@ -108,9 +109,9 @@ fun BytePacketBuilder.lowDefinition(
         // This player has an activity update (true).
         writeBit { true }
         // Write corresponding bits depending on the activity type the player is doing.
-        activity.writeBits(this@withBitAccess, viewport, index, current = other.location, previous = other.previousLocation ?: other.location)
+        activity.writeBits(this@withBitAccess, viewport, index, current = other.location, previous = if (other.previousLocation == Location.None) other.location else other.previousLocation)
         if (activity is Adding) {
-            blocks.writeBytes { alternativeLowDefinitionUpdates[other.index]?.orElse(updates!!.get())!! }
+            blocks.writeBytes { alternativeLowDefinitionUpdates[other.indexL]?.orElse(updates.get())!! }
             // Add them to our array.
             viewport.players[index] = other
             viewport.setNsn(index)
@@ -159,10 +160,10 @@ fun Viewport.highDefinitionActivities(other: Player?, highDefinitionUpdate: Opti
 
 fun Viewport.lowDefinitionActivities(other: Player?, updates: Optional<ByteArray>?, size: Int): ActivityUpdateType? {
     val ourLocation = player.location
-    val theirLocation = other?.location
+    val theirLocation = other?.location ?: Location.None
     return when {
         // If the player needs to be added from low definition to high definition.
-        size <= Short.MAX_VALUE && other?.isOnline() == true && theirLocation != null && theirLocation.withinDistance(ourLocation, viewDistance) -> Adding
+        size <= Short.MAX_VALUE && other?.isOnline() == true && theirLocation != Location.None && theirLocation.withinDistance(ourLocation, viewDistance) -> Adding
         updates?.isPresent == false -> null
         else -> null
     }

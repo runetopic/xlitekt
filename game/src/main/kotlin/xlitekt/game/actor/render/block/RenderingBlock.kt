@@ -1,9 +1,6 @@
 package xlitekt.game.actor.render.block
 
-import io.ktor.utils.io.core.BytePacketBuilder
-import io.ktor.utils.io.core.ByteReadPacket
-import io.ktor.utils.io.core.buildPacket
-import io.ktor.utils.io.core.readBytes
+import io.ktor.utils.io.core.*
 import xlitekt.game.actor.player.Player
 import xlitekt.game.actor.render.Render
 import xlitekt.shared.buffer.writeByte
@@ -16,7 +13,9 @@ import xlitekt.shared.buffer.writeShortLittleEndian
 data class RenderingBlock(
     val index: Int,
     val mask: Int,
-    val packet: Render.() -> ByteReadPacket
+    val packet: Render.() -> ByteReadPacket,
+
+    val indexL: Long = index.toLong()
 )
 
 /**

@@ -1,5 +1,6 @@
 package xlitekt.game.world
 
+import org.jctools.maps.NonBlockingHashMapLong
 import xlitekt.cache.provider.map.MapSquareEntryTypeProvider
 import xlitekt.game.actor.NPCList
 import xlitekt.game.actor.PlayerList
@@ -70,6 +71,17 @@ class World(
     @Suppress("UNCHECKED_CAST")
     // Doing it this way to reduce cpu time.
     fun players() = players.filter { it != null && it.isOnline() } as List<Player>
+
+    fun playersMapped(): NonBlockingHashMapLong<Player> {
+        val list = players()
+        val map = NonBlockingHashMapLong<Player>(list.size)
+        for (i in 0..list.lastIndex) {
+            val player = list[i]
+            map.put(player.indexL, player)
+        }
+        return map
+    }
+
     fun addPlayer(player: Player) = players.add(player)
     fun removePlayer(player: Player) = players.remove(player)
 

@@ -23,6 +23,8 @@ allprojects {
             implementation(deps.bundles.ktor)
             implementation(deps.bundles.koin)
             implementation(deps.kotlinx.serialization.json)
+            implementation(deps.fastutil)
+            implementation(deps.jctools)
         }
     }
 

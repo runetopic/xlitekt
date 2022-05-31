@@ -32,6 +32,10 @@ value class Location(val packedLocation: Int) {
 
     override fun toString(): String =
         "Location(packedCoordinates=$packedLocation, x=$x, z=$z, level=$level, zoneX=$zoneX, zoneZ=$zoneZ, zoneId=$zoneId, regionX=$regionX, regionZ=$regionZ, regionId=$regionId)"
+
+    companion object {
+        val None = Location(-1, -1, -1)
+    }
 }
 
 fun Location.directionTo(end: Location): Direction = Direction.directionFromDelta(end.x - x, end.z - z)

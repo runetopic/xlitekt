@@ -1,5 +1,7 @@
 package xlitekt.game.actor
 
+import it.unimi.dsi.fastutil.ints.IntList
+import org.jctools.maps.NonBlockingHashMapLong
 import xlitekt.game.actor.movement.Movement
 import xlitekt.game.actor.movement.MovementSpeed
 import xlitekt.game.actor.movement.MovementStep
@@ -10,26 +12,13 @@ import xlitekt.game.actor.render.HitBar
 import xlitekt.game.actor.render.HitSplat
 import xlitekt.game.actor.render.HitType
 import xlitekt.game.actor.render.Render
-import xlitekt.game.actor.render.Render.Appearance
-import xlitekt.game.actor.render.Render.FaceActor
-import xlitekt.game.actor.render.Render.FaceAngle
-import xlitekt.game.actor.render.Render.Hit
-import xlitekt.game.actor.render.Render.MovementType
-import xlitekt.game.actor.render.Render.Sequence
-import xlitekt.game.actor.render.Render.SpotAnimation
-import xlitekt.game.actor.render.Render.TemporaryMovementType
-import xlitekt.game.actor.render.block.AlternativeDefinitionRenderingBlock
-import xlitekt.game.actor.render.block.HighDefinitionRenderingBlock
-import xlitekt.game.actor.render.block.LowDefinitionRenderingBlock
-import xlitekt.game.actor.render.block.NPCRenderingBlockListener
-import xlitekt.game.actor.render.block.PlayerRenderingBlockListener
-import xlitekt.game.actor.render.block.RenderingBlock
+import xlitekt.game.actor.render.Render.*
+import xlitekt.game.actor.render.block.*
 import xlitekt.game.world.World
 import xlitekt.game.world.map.location.Location
 import xlitekt.game.world.map.zone.Zone
 import xlitekt.shared.inject
-import java.util.Optional
-import java.util.TreeMap
+import java.util.*
 
 /**
  * @author Tyler Telis
@@ -40,8 +29,10 @@ abstract class Actor(
 ) {
     val movement = Movement()
 
-    var previousLocation: Location? = null
+    var previousLocation: Location = Location.None
     var index = 0
+
+    inline val indexL get() = index.toLong()
 
     internal var facingActorIndex = Optional.empty<Int>()
     private var activeZone = Optional.empty<Zone>()
@@ -51,13 +42,13 @@ abstract class Actor(
      * High definition rendering blocks used for local updates.
      * The key represents the index this rendering block should be placed to. This ordering is the same as the client implementation.
      */
-    private val highDefinitionRenderingBlocks = TreeMap<Int, HighDefinitionRenderingBlock>()
+    private val highDefinitionRenderingBlocks = NonBlockingHashMapLong<HighDefinitionRenderingBlock>()
 
     /**
      * Low definition rendering blocks used for non-local updates.
      * The key represents the index this rendering block should be placed to. This ordering is the same as the client implementation.
      */
-    private val lowDefinitionRenderingBlocks = TreeMap<Int, LowDefinitionRenderingBlock>()
+    private val lowDefinitionRenderingBlocks = NonBlockingHashMapLong<LowDefinitionRenderingBlock>()
 
     /**
      * Alternative rendering blocks used for both local and non-local updates.
@@ -66,8 +57,8 @@ abstract class Actor(
      *
      * The key represents the index this rendering block should be placed to. This ordering is the same as the client implementation.
      */
-    private val alternativeHighDefinitionRenderingBlocks = TreeMap<Int, AlternativeDefinitionRenderingBlock>()
-    private val alternativeLowDefinitionRenderingBlocks = TreeMap<Int, AlternativeDefinitionRenderingBlock>()
+    private val alternativeHighDefinitionRenderingBlocks = NonBlockingHashMapLong<AlternativeDefinitionRenderingBlock>()
+    private val alternativeLowDefinitionRenderingBlocks = NonBlockingHashMapLong<AlternativeDefinitionRenderingBlock>()
 
     abstract fun totalHitpoints(): Int
     abstract fun currentHitpoints(): Int
@@ -75,7 +66,7 @@ abstract class Actor(
     /**
      * Processes any pending movement this actor may have. This happens every tick.
      */
-    internal fun processMovement(players: Map<Int, Player>): MovementStep? = movement.process(this, location).also {
+    internal fun processMovement(players: NonBlockingHashMapLong<Player>): MovementStep? = movement.process(this, location).also {
         location = it?.location ?: location
         if (this is Player) {
             if (it == null) {
@@ -110,7 +101,7 @@ abstract class Actor(
             bytes = if (highDefinitionRenderingBlock.render.hasAlternative()) bytes.copyOfRange(0, bytes.size / 2) else bytes
         )
         // Insert the rendering block into the TreeMap based on its index. This is to preserve order based on the client.
-        lowDefinitionRenderingBlocks[highDefinitionRenderingBlock.renderingBlock.index] = lowDefinitionRenderingBlock
+        lowDefinitionRenderingBlocks[highDefinitionRenderingBlock.renderingBlock.indexL] = lowDefinitionRenderingBlock
     }
 
     /**
@@ -144,8 +135,8 @@ abstract class Actor(
             renderingBlock = renderingBlock,
             bytes = if (render.hasAlternative()) bytes.copyOfRange(bytes.size / 2, bytes.size) else bytes
         )
-        alternativeHighDefinitionRenderingBlocks[renderingBlock.index] = alternativeDefinitionRenderingBlock
-        alternativeLowDefinitionRenderingBlocks[renderingBlock.index] = alternativeDefinitionRenderingBlock
+        alternativeHighDefinitionRenderingBlocks[renderingBlock.indexL] = alternativeDefinitionRenderingBlock
+        alternativeLowDefinitionRenderingBlocks[renderingBlock.indexL] = alternativeDefinitionRenderingBlock
     }
 
     /**
@@ -168,11 +159,11 @@ abstract class Actor(
         if (this is NPC) {
             val renderingBlock = NPCRenderingBlockListener.listeners[render::class] ?: return
             // Insert the rendering block into the TreeMap based on its index. This is to preserve order based on the client.
-            highDefinitionRenderingBlocks[renderingBlock.index] = HighDefinitionRenderingBlock(render, renderingBlock)
+            highDefinitionRenderingBlocks[renderingBlock.indexL] = HighDefinitionRenderingBlock(render, renderingBlock)
         } else if (this is Player) {
             val renderingBlock = PlayerRenderingBlockListener.listeners[render::class] ?: return
             // Insert the rendering block into the TreeMap based on its index. This is to preserve order based on the client.
-            highDefinitionRenderingBlocks[renderingBlock.index] = HighDefinitionRenderingBlock(render, renderingBlock)
+            highDefinitionRenderingBlocks[renderingBlock.indexL] = HighDefinitionRenderingBlock(render, renderingBlock)
             when (render) {
                 is FaceActor -> facingActorIndex = Optional.of(render.index)
                 else -> {} // TODO
@@ -215,7 +206,7 @@ fun Actor.actionReset() {
 /**
  * Routes the actor movement waypoints to the input list.
  */
-inline fun Actor.route(locations: () -> List<Location>) {
+inline fun Actor.route(locations: () -> IntList) {
     actionReset()
     movement.route(locations.invoke())
 }
