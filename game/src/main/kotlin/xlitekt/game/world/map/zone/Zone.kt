@@ -6,6 +6,7 @@ import xlitekt.game.actor.npc.NPC
 import xlitekt.game.actor.player.Player
 import xlitekt.game.content.item.FloorItem
 import xlitekt.game.packet.LocAddPacket
+import xlitekt.game.packet.LocDelPacket
 import xlitekt.game.packet.ObjAddPacket
 import xlitekt.game.packet.ObjDelPacket
 import xlitekt.game.packet.Packet
@@ -18,7 +19,6 @@ import xlitekt.game.world.map.location.Location
 import xlitekt.game.world.map.obj.GameObject
 import xlitekt.shared.inject
 import java.util.Collections
-import xlitekt.game.packet.LocDelPacket
 
 /**
  * @author Jordan Abraham
