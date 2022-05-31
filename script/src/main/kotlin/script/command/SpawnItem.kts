@@ -26,7 +26,7 @@ onCommand("item").use { arguments ->
         val amount = arguments.drop(1).firstOrNull()?.toInt() ?: 1
         val item = Item(itemId, amount)
         inventory.addItem(item) {
-            message { "Spawned x$amount ${item.entry?.name ?: item.id}" }
+            message { "Spawned x$amount ${item.entry?.name ?: item.id}." }
         }
     } catch (exception: NumberFormatException) {
         message { invalidSyntaxMessage }

@@ -7,6 +7,6 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 data class ExamineItemResource(
-    val itemID: Int,
+    val itemId: Int,
     val message: String
 )

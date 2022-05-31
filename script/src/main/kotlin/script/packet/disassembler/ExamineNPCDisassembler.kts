@@ -9,6 +9,6 @@ import xlitekt.shared.buffer.readUShortLittleEndian
  */
 onPacketDisassembler(opcode = 22, size = 2) {
     ExamineNPCPacket(
-        npcID = readUShortLittleEndian()
+        npcId = readUShortLittleEndian()
     )
 }

@@ -12,6 +12,19 @@ const val EQUIPMENT_CAPACITY = 15
 class Equipment(
     val player: Player
 ) : Container(-1, EQUIPMENT_CAPACITY) {
+
+    val ammo: Item? get() = this[SLOT_AMMO]
+    val back: Item? get() = this[SLOT_BACK]
+    val head: Item? get() = this[SLOT_HEAD]
+    val neck: Item? get() = this[SLOT_NECK]
+    val torso: Item? get() = this[SLOT_TORSO]
+    val legs: Item? get() = this[SLOT_LEG]
+    val weapon: Item? get() = this[SLOT_MAINHAND]
+    val offhand: Item? get() = this[SLOT_OFFHAND]
+    val hands: Item? get() = this[SLOT_HANDS]
+    val feet: Item? get() = this[SLOT_FEET]
+    val ring: Item? get() = this[SLOT_RING]
+
     /**
      * Sends the initial player's equipment on login.
      */
