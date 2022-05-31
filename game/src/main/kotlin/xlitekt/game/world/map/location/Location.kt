@@ -36,7 +36,7 @@ value class Location(val packedLocation: Int) {
 
 fun Location.directionTo(end: Location): Direction = Direction.directionFromDelta(end.x - x, end.z - z)
 
-fun Location.withinDistance(other: Location?, distance: Int = 14): Boolean {
+fun Location.withinDistance(other: Location?, distance: Int = 15): Boolean {
     if (other == null) return false
     if (other.level != level) return false
     val deltaX = other.x - x

@@ -56,7 +56,6 @@ class BenchmarkParallelActorSynchronizer : Synchronizer() {
     override fun run() {
         val players = world.players()
         val npcs = world.npcs()
-        val zones = players.flatMap(Player::zones).distinct().filter(Zone::updating)
         val paths = ConcurrentHashMap<Player, Route>()
         val finders = measureTime {
             val first = players.firstOrNull()
@@ -127,7 +126,11 @@ class BenchmarkParallelActorSynchronizer : Synchronizer() {
         logger.debug { "Pre tick took $pre for ${players.size} players. [TICK=$tick]" }
 
         val zonesTime = measureTime {
-            zones.parallelStream().forEach(Zone::update)
+            players.flatMap(Player::zones)
+                .distinct()
+                .filter(Zone::updating)
+                .parallelStream()
+                .forEach(Zone::update)
         }
         logger.debug { "Zones took $zonesTime to update. [TICK=$tick]" }
 

@@ -57,7 +57,7 @@ fun BitAccess.highDefinition(
         val updating = highDefinitionUpdates[it.index]?.isPresent == true
         activity.writeBits(this, it, updating, playerLocation, movementStepsUpdates[it.index])
         if (activity !is Removing) {
-            if (updating) blocks.writeBytes { highDefinitionUpdates[it.index]!!.get() }
+            if (updating) blocks.writeBytes(highDefinitionUpdates[it.index]!!::get)
         }
     }
     viewport.npcs.removeAll { !it.location.withinDistance(playerLocation) }
@@ -76,7 +76,7 @@ fun BitAccess.lowDefinition(viewport: Viewport, blocks: BytePacketBuilder, highD
                 activity.writeBits(this, it, updating, playerLocation = player.location)
                 if (activity is Adding) {
                     viewport.npcs += it
-                    if (updating) blocks.writeBytes { highDefinitionUpdates[it.index]!!.get() }
+                    if (updating) blocks.writeBytes(highDefinitionUpdates[it.index]!!::get)
                 }
             }
         }

@@ -6,6 +6,9 @@ import java.util.Random
 import java.util.Timer
 import kotlin.concurrent.timerTask
 
+/**
+ * @author Justin Kenney
+ */
 val eventBus by inject<EventBus>()
 
 eventBus.onEvent<Events.NPCSpawnEvent>().filter {

@@ -4,6 +4,10 @@ import xlitekt.game.actor.player.message
 import xlitekt.game.content.command.Commands.onCommand
 import xlitekt.game.content.item.Item
 
+/**
+ * @author Tyler Telis
+ */
+
 // TODO make a color system so we're not using arbitrary hex codes throughout our app
 private val invalidSyntaxMessage = "Please use syntax: <col=FF0000>::item item_id, amount (optional).</col>"
 
@@ -20,7 +24,10 @@ onCommand("item").use { arguments ->
             return@use
         }
         val amount = arguments.drop(1).firstOrNull()?.toInt() ?: 1
-        inventory.add(Item(itemId, amount))
+        val item = Item(itemId, amount)
+        inventory.addItem(item) {
+            message { "Spawned x$amount ${item.entry?.name ?: item.id}." }
+        }
     } catch (exception: NumberFormatException) {
         message { invalidSyntaxMessage }
     }

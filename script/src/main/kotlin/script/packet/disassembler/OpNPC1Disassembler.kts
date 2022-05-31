@@ -6,6 +6,9 @@ import xlitekt.shared.buffer.readUByteSubtract
 import xlitekt.shared.buffer.readUShortSubtract
 import xlitekt.shared.toBoolean
 
+/**
+ * @author Jordan Abraham
+ */
 onPacketDisassembler(opcode = 37, size = 3) {
     OpNPCPacket(
         index = 1,

@@ -8,10 +8,6 @@ private const val ZONES = 2048 * 2048 * 4
 class Zones {
     private val zones: Array<Zone?> = arrayOfNulls(ZONES)
 
-    @Suppress("UNCHECKED_CAST")
-    // Doing it this way to reduce cpu time.
-    fun updating() = zones.filter { it != null && it.updating() } as List<Zone>
-
     operator fun get(location: Location): Zone? {
         val zoneLocation = location.toZoneLocation()
         return zones[zoneLocation.packedCoordinates]

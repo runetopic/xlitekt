@@ -10,10 +10,6 @@ import xlitekt.shared.buffer.readStringCp1252NullTerminated
 /**
  * @author Jordan Abraham
  */
-fun main() {
-    println(0xffff)
-}
-
 class LocEntryTypeProvider : EntryTypeProvider<LocEntryType>() {
 
     override fun load(): Map<Int, LocEntryType> = store

@@ -7,52 +7,38 @@ import xlitekt.game.packet.UpdateContainerFullPacket
 import xlitekt.game.packet.UpdateContainerPartialPacket
 
 const val EQUIPMENT_KEY = 94
+const val EQUIPMENT_CAPACITY = 15
 
 class Equipment(
     val player: Player
-) {
-    /**
-     * The backing container for the equipment interfaces.
-     */
-    val container = Container(
-        -1,
-        15,
-    )
+) : Container(-1, EQUIPMENT_CAPACITY) {
+
+    val ammo: Item? get() = this[SLOT_AMMO]
+    val back: Item? get() = this[SLOT_BACK]
+    val head: Item? get() = this[SLOT_HEAD]
+    val neck: Item? get() = this[SLOT_NECK]
+    val torso: Item? get() = this[SLOT_TORSO]
+    val legs: Item? get() = this[SLOT_LEG]
+    val weapon: Item? get() = this[SLOT_MAINHAND]
+    val offhand: Item? get() = this[SLOT_OFFHAND]
+    val hands: Item? get() = this[SLOT_HANDS]
+    val feet: Item? get() = this[SLOT_FEET]
+    val ring: Item? get() = this[SLOT_RING]
 
     /**
      * Sends the initial player's equipment on login.
      */
     fun login() {
-        container.setItem(SLOT_MAINHAND, Item(4151, 1)) {
+        setItem(SLOT_MAINHAND, Item(4151, 1)) {
             player.write(
                 UpdateContainerFullPacket(
                     -1,
                     EQUIPMENT_KEY,
-                    container
+                    this@Equipment
                 )
             )
         }
     }
-
-    /**
-     * Grabs the slot id from the container.
-     * @param item The item to find the slot id for.
-     */
-    fun slotId(item: Item) = container.slotId(item)
-
-    /**
-     * Grabs the slot id from the container.
-     * @param itemId The item id to find the slot id for.
-     * @return The slot id found.
-     */
-    fun slotId(itemId: Int) = container.slotId(itemId)
-
-    /**
-     * Finds the first item by the slotId.
-     * @param slotId The slot id to search for.
-     * @return Nullable Item.
-     */
-    fun findFirstBySlot(slotId: Int) = container[slotId]
 
     /**
      * Refreshes specific slots within the equipment container.
@@ -63,7 +49,7 @@ class Equipment(
             UpdateContainerPartialPacket(
                 -1,
                 EQUIPMENT_KEY,
-                container,
+                this,
                 slots
             )
         )

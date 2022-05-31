@@ -26,9 +26,9 @@ object Resource {
     fun varBitsResource(): VarBits = VarBits(loadResource<List<VarInfoResource>>("game.resources.varbits").associateBy(VarInfoResource::name))
     fun interfaceInfoResource(): InterfaceInfoMap = InterfaceInfoMap(loadResource<List<InterfaceInfoResource>>("game.resources.interface_info").associateBy(InterfaceInfoResource::name))
     fun npcInfoResource(): NPCSpawns = NPCSpawns(loadResource("game.resources.npc_info"))
-    fun examineNPCResource(): NPCExamines = NPCExamines(loadResource<List<ExamineNPCResource>>("game.resources.npc_examines").associateBy(ExamineNPCResource::npcID))
-    fun examineObjectResource(): ObjectExamines = ObjectExamines(loadResource<List<ExamineObjectResource>>("game.resources.object_examines").associateBy(ExamineObjectResource::objectID))
-    fun examineItemResource(): ItemExamines = ItemExamines(loadResource<List<ExamineItemResource>>("game.resources.item_examines").associateBy(ExamineItemResource::itemID))
+    fun examineNPCResource(): NPCExamines = NPCExamines(loadResource<List<ExamineNPCResource>>("game.resources.npc_examines").associateBy(ExamineNPCResource::npcId))
+    fun examineObjectResource(): ObjectExamines = ObjectExamines(loadResource<List<ExamineObjectResource>>("game.resources.object_examines").associateBy(ExamineObjectResource::objectId))
+    fun examineItemResource(): ItemExamines = ItemExamines(loadResource<List<ExamineItemResource>>("game.resources.item_examines").associateBy(ExamineItemResource::itemId))
 
     private inline fun <reified T> loadResource(path: String): T =
         json.decodeFromStream(Resource::class.java.getResourceAsStream(lazy<ApplicationEnvironment>().config.property(path).getString())!!)

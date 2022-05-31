@@ -8,5 +8,5 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class ExamineObjectResource(
     val message: String,
-    val objectID: Int
+    val objectId: Int
 )

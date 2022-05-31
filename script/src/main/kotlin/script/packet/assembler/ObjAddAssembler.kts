@@ -1,9 +1,8 @@
-package script.zone
+package script.packet.assembler
 
 import io.ktor.utils.io.core.buildPacket
-import xlitekt.game.world.map.zone.ZoneUpdateType.ObjAddType
-import xlitekt.game.world.map.zone.onZoneUpdate
-import xlitekt.shared.buffer.writeByte
+import xlitekt.game.packet.ObjAddPacket
+import xlitekt.game.packet.assembler.onPacketAssembler
 import xlitekt.shared.buffer.writeByteSubtract
 import xlitekt.shared.buffer.writeShort
 import xlitekt.shared.buffer.writeShortLittleEndian
@@ -11,10 +10,9 @@ import xlitekt.shared.buffer.writeShortLittleEndian
 /**
  * @author Jordan Abraham
  */
-onZoneUpdate<ObjAddType> {
+onPacketAssembler<ObjAddPacket>(opcode = 61, size = 5) {
     buildPacket {
-        writeByte { 4 }
-        writeShort { itemId }
+        writeShort { id }
         writeByteSubtract { packedOffset }
         writeShortLittleEndian { amount }
     }

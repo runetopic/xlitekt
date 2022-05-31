@@ -34,7 +34,7 @@ abstract class EntryTypeProvider<R : EntryType> {
         release()
     }
 
-    protected fun String.toNameHash(): Int = fold(0) { hash, next -> next.code + ((hash shl 5) - hash) }
+    protected fun String.toNameHash() = fold(0) { hash, next -> next.code + ((hash shl 5) - hash) }
 
     internal companion object {
         // Indexes.

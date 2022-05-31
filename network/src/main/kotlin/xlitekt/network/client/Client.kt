@@ -18,12 +18,12 @@ import xlitekt.game.actor.player.Client.Companion.rsaExponent
 import xlitekt.game.actor.player.Client.Companion.rsaModulus
 import xlitekt.game.actor.player.Client.Companion.sizes
 import xlitekt.game.actor.player.Client.Companion.store
-import xlitekt.game.actor.player.Client.Companion.world
 import xlitekt.game.actor.player.Player
 import xlitekt.game.actor.player.PlayerDecoder
 import xlitekt.game.content.ui.InterfaceLayout
 import xlitekt.game.packet.disassembler.PacketDisassemblerListener
 import xlitekt.game.packet.disassembler.handler.PacketHandler
+import xlitekt.game.world.World
 import xlitekt.network.client.ClientRequestOpcode.HANDSHAKE_JS5_OPCODE
 import xlitekt.network.client.ClientRequestOpcode.HANDSHAKE_LOGIN_OPCODE
 import xlitekt.network.client.ClientRequestOpcode.JS5_ENCRYPTION_OPCODE
@@ -43,6 +43,7 @@ import xlitekt.shared.buffer.readPacketSize
 import xlitekt.shared.buffer.readStringCp1252NullCircumfixed
 import xlitekt.shared.buffer.readStringCp1252NullTerminated
 import xlitekt.shared.buffer.readUMedium
+import xlitekt.shared.lazy
 import xlitekt.shared.toBoolean
 import java.math.BigInteger
 import java.nio.ByteBuffer
@@ -266,7 +267,7 @@ private suspend fun Client.readLogin() {
                 PlayerDecoder.decodeFromJson(username, password).let {
                     it.interfaces.currentInterfaceLayout = if (clientResizeable) InterfaceLayout.RESIZABLE else InterfaceLayout.FIXED
                     this.player = it
-                    world.addPlayer(it)
+                    lazy<World>().addPlayer(it)
                 }.also { if (it) writeLogin(LOGIN_SUCCESS_OPCODE) else writeLogin(BAD_SESSION_OPCODE) }
             } catch (exception: Exception) {
                 handleException(exception)
@@ -293,7 +294,7 @@ private suspend fun Client.writeLogin(response: Int) {
         writeByte(0)
     }.flush()
 
-    world.requestLogin(player, this)
+    lazy<World>().requestLogin(player, this)
     readPackets(player)
 }
 

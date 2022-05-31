@@ -112,8 +112,6 @@ class Movement(
             currentX += xSign
             currentZ += zSign
             steps += Location(currentX, currentZ, location.level)
-            // https://oldschool.runescape.wiki/w/Pathfinding#The_checkpoint_tiles_and_destination_tile
-            if (steps.size >= 25) break
         }
     }
 
