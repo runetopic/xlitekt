@@ -43,8 +43,7 @@ class Player(
     val rights: Int = 0,
     val appearance: Render.Appearance = Render.Appearance().also { it.displayName = username },
     val skills: Skills = Skills(),
-    var runEnergy: Float = 10_000f,
-
+    var runEnergy: Float = 10_000f
 ) : Actor(location) {
     val viewport = Viewport(this)
     val interfaces = Interfaces(this)
