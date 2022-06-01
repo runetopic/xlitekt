@@ -94,7 +94,7 @@ class Inventory(
                 PACKED_INVENTORY_ID,
                 INVENTORY_CONTAINER_KEY,
                 this,
-                slots.toList()
+                slots
             )
         )
     }

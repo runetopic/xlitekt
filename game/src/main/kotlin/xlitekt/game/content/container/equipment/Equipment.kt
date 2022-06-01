@@ -50,7 +50,7 @@ class Equipment(
                 -1,
                 EQUIPMENT_KEY,
                 this,
-                slots.toList()
+                slots
             )
         )
     }
