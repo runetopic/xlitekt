@@ -1,7 +1,7 @@
 package script.packet.assembler
 
-import io.ktor.utils.io.core.BytePacketBuilder
-import io.ktor.utils.io.core.buildPacket
+import io.ktor.utils.io.core.*
+import org.jctools.maps.NonBlockingHashMapLong
 import script.packet.assembler.NPCExtendedInfoPacketAssembler.ActivityUpdateType.Adding
 import script.packet.assembler.NPCExtendedInfoPacketAssembler.ActivityUpdateType.Moving
 import script.packet.assembler.NPCExtendedInfoPacketAssembler.ActivityUpdateType.Removing
@@ -16,7 +16,7 @@ import xlitekt.game.world.map.location.withinDistance
 import xlitekt.shared.buffer.BitAccess
 import xlitekt.shared.buffer.withBitAccess
 import xlitekt.shared.buffer.writeBytes
-import java.util.Optional
+import java.util.*
 
 /**
  * @author Jordan Abraham
@@ -40,13 +40,13 @@ onPacketAssembler<NPCInfoPacket>(opcode = 90, size = -2) {
 fun BitAccess.highDefinition(
     viewport: Viewport,
     blocks: BytePacketBuilder,
-    highDefinitionUpdates: Map<Int, Optional<ByteArray>>,
-    movementStepsUpdates: Map<Int, Optional<MovementStep>>
+    highDefinitionUpdates: NonBlockingHashMapLong<Optional<ByteArray>>,
+    movementStepsUpdates: NonBlockingHashMapLong<Optional<MovementStep>>
 ) {
     val playerLocation = viewport.player.location
     viewport.npcs.forEach {
         // Check the activities this npc is doing.
-        val activity = highDefinitionActivities(it, playerLocation, highDefinitionUpdates[it.index], movementStepsUpdates[it.index])
+        val activity = highDefinitionActivities(it, playerLocation, highDefinitionUpdates[it.indexL], movementStepsUpdates[it.indexL])
         if (activity == null) {
             // This npc has no activity update (false).
             writeBit { false }
@@ -54,20 +54,20 @@ fun BitAccess.highDefinition(
         }
         // This npc has an activity update (true).
         writeBit { true }
-        val updating = highDefinitionUpdates[it.index]?.isPresent == true
-        activity.writeBits(this, it, updating, playerLocation, movementStepsUpdates[it.index])
+        val updating = highDefinitionUpdates[it.indexL]?.isPresent == true
+        activity.writeBits(this, it, updating, playerLocation, movementStepsUpdates[it.indexL])
         if (activity !is Removing) {
-            if (updating) blocks.writeBytes(highDefinitionUpdates[it.index]!!::get)
+            if (updating) blocks.writeBytes(highDefinitionUpdates[it.indexL]!!::get)
         }
     }
     viewport.npcs.removeAll { !it.location.withinDistance(playerLocation) }
 }
 
-fun BitAccess.lowDefinition(viewport: Viewport, blocks: BytePacketBuilder, highDefinitionUpdates: Map<Int, Optional<ByteArray>>) {
+fun BitAccess.lowDefinition(viewport: Viewport, blocks: BytePacketBuilder, highDefinitionUpdates: NonBlockingHashMapLong<Optional<ByteArray>>) {
     val player = viewport.player
     player.zones().forEach { zone ->
         zone.npcs.forEach {
-            val updates = highDefinitionUpdates[it.index]
+            val updates = highDefinitionUpdates[it.indexL]
             // Check the activities this npc is doing.
             val activity = lowDefinitionActivities(viewport, it, player.location, updates)
             if (activity != null) {
@@ -76,7 +76,7 @@ fun BitAccess.lowDefinition(viewport: Viewport, blocks: BytePacketBuilder, highD
                 activity.writeBits(this, it, updating, playerLocation = player.location)
                 if (activity is Adding) {
                     viewport.npcs += it
-                    if (updating) blocks.writeBytes(highDefinitionUpdates[it.index]!!::get)
+                    if (updating) blocks.writeBytes(highDefinitionUpdates[it.indexL]!!::get)
                 }
             }
         }

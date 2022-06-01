@@ -1,5 +1,6 @@
 package xlitekt.game.tick
 
+import org.jctools.maps.NonBlockingHashMapLong
 import xlitekt.game.actor.movement.MovementStep
 import xlitekt.game.actor.npc.NPC
 import xlitekt.game.actor.player.Player
@@ -11,15 +12,10 @@ import xlitekt.game.packet.NPCInfoPacket
 import xlitekt.game.packet.PlayerInfoPacket
 import xlitekt.game.tick.NPCInfoUpdates.HighDefinitionNPCUpdates
 import xlitekt.game.tick.NPCInfoUpdates.MovementStepsNPCUpdates
-import xlitekt.game.tick.PlayerInfoUpdates.AlternativeHighDefinitionPlayerUpdates
-import xlitekt.game.tick.PlayerInfoUpdates.AlternativeLowDefinitionPlayerUpdates
-import xlitekt.game.tick.PlayerInfoUpdates.HighDefinitionPlayerUpdates
-import xlitekt.game.tick.PlayerInfoUpdates.LowDefinitionPlayerUpdates
-import xlitekt.game.tick.PlayerInfoUpdates.MovementStepsPlayerUpdates
+import xlitekt.game.tick.PlayerInfoUpdates.*
 import xlitekt.game.world.World
 import xlitekt.shared.inject
-import java.util.Optional
-import java.util.concurrent.ConcurrentHashMap
+import java.util.*
 
 /**
  * @author Jordan Abraham
@@ -28,11 +24,11 @@ abstract class Synchronizer : Runnable {
 
     protected val world by inject<World>()
 
-    protected fun Player.syncMovement(players: Map<Int, Player>) {
+    protected fun Player.syncMovement(players: NonBlockingHashMapLong<Player>) {
         processMovement(players)?.let { MovementStepsPlayerUpdates.add(index, it) }
     }
 
-    protected fun NPC.syncMovement(players: Map<Int, Player>) {
+    protected fun NPC.syncMovement(players: NonBlockingHashMapLong<Player>) {
         processMovement(players)?.let { MovementStepsNPCUpdates.add(index, it) }
     }
 
@@ -51,7 +47,7 @@ abstract class Synchronizer : Runnable {
         resetDefinitionRenderingBlocks()
     }
 
-    protected fun Player.syncClient(players: Map<Int, Player>) {
+    protected fun Player.syncClient(players: NonBlockingHashMapLong<Player>) {
         write(
             PlayerInfoPacket(
                 players = players,
@@ -87,9 +83,7 @@ abstract class Synchronizer : Runnable {
     }
 }
 
-internal sealed class PlayerInfoUpdates<T : Any>(
-    private val updates: ConcurrentHashMap<Int, Optional<T>> = ConcurrentHashMap(World.MAX_PLAYERS)
-) : Map<Int, Optional<T>> by updates {
+internal sealed class PlayerInfoUpdates<T : Any> : NonBlockingHashMapLong<Optional<T>>(World.MAX_PLAYERS) {
 
     object HighDefinitionPlayerUpdates : PlayerInfoUpdates<ByteArray>()
     object LowDefinitionPlayerUpdates : PlayerInfoUpdates<ByteArray>()
@@ -98,20 +92,16 @@ internal sealed class PlayerInfoUpdates<T : Any>(
     object MovementStepsPlayerUpdates : PlayerInfoUpdates<MovementStep>()
 
     fun add(index: Int, update: T) {
-        updates[index] = Optional.of(update)
+        put(index.toLong(), Optional.of(update))
     }
-    fun clear() = updates.clear()
 }
 
-internal sealed class NPCInfoUpdates<T : Any>(
-    private val updates: ConcurrentHashMap<Int, Optional<T>> = ConcurrentHashMap()
-) : Map<Int, Optional<T>> by updates {
+internal sealed class NPCInfoUpdates<T : Any> : NonBlockingHashMapLong<Optional<T>>() {
 
     object HighDefinitionNPCUpdates : NPCInfoUpdates<ByteArray>()
     object MovementStepsNPCUpdates : NPCInfoUpdates<MovementStep>()
 
     fun add(index: Int, update: T) {
-        updates[index] = Optional.of(update)
+        put(index.toLong(), Optional.of(update))
     }
-    fun clear() = updates.clear()
 }

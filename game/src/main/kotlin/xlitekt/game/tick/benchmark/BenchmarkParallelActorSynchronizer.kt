@@ -1,11 +1,8 @@
 package xlitekt.game.tick.benchmark
 
 import com.github.michaelbull.logging.InlineLogger
-import org.rsmod.pathfinder.DumbPathFinder
-import org.rsmod.pathfinder.PathFinder
-import org.rsmod.pathfinder.Route
-import org.rsmod.pathfinder.SmartPathFinder
-import org.rsmod.pathfinder.ZoneFlags
+import it.unimi.dsi.fastutil.ints.IntArrayList
+import org.rsmod.pathfinder.*
 import xlitekt.game.actor.chat
 import xlitekt.game.actor.hit
 import xlitekt.game.actor.npc.NPC
@@ -96,20 +93,28 @@ class BenchmarkParallelActorSynchronizer : Synchronizer() {
             players.parallelStream().forEach {
                 val path = paths[it]
                 if (path != null) {
-                    it.route { path.coords.map { c -> Location(c.x, c.y, it.location.level) } }
+                    it.route {
+                        val list = IntArrayList(path.coords.size)
+                        path.coords.forEach { c -> list.add(Location(c.x, c.y, it.location.level).packedLocation) }
+                        list
+                    }
                 }
             }
             npcs.parallelStream().forEach {
                 val path = npcPaths[it]
                 if (path != null) {
-                    it.route { path.coords.map { c -> Location(c.x, c.y, it.location.level) } }
+                    it.route {
+                        val list = IntArrayList(path.coords.size)
+                        path.coords.forEach { c -> list.add(Location(c.x, c.y, it.location.level).packedLocation) }
+                        list
+                    }
                 }
             }
         }
         logger.debug { "Movement routing took $moves for all entities. [TICK=$tick]" }
 
         // Pre process.
-        val syncPlayers = players.associateBy(Player::index)
+        val syncPlayers = world.playersMapped()
 
         val pre = measureTime {
             players.parallelStream().forEach {

@@ -19,6 +19,8 @@ dependencyResolutionManagement {
             version("shadowjar", "7.1.2")
             version("versions", "0.42.0")
             version("pathfinder", "2.1.4")
+            version("fastutil", "8.5.8")
+            version("jctools", "3.3.0")
 
             library("ktor-server-netty", "io.ktor", "ktor-server-netty").versionRef("ktor")
             library("koin-core", "io.insert-koin", "koin-core").versionRef("koin")
@@ -33,6 +35,8 @@ dependencyResolutionManagement {
             library("kotlin-reflect", "org.jetbrains.kotlin", "kotlin-reflect").versionRef("kotlin")
             library("kotlinx-serialization-json", "org.jetbrains.kotlinx", "kotlinx-serialization-json").versionRef("kotlinx")
             library("kotlin-inline-logger", "com.michael-bull.kotlin-inline-logger", "kotlin-inline-logger").versionRef("kotlin-inline-logger")
+            library("fastutil", "it.unimi.dsi", "fastutil").versionRef("fastutil")
+            library("jctools", "org.jctools", "jctools-core").versionRef("jctools")
 
             bundle("kts", listOf("kscripting", "kruntime"))
             bundle("ktor", listOf("ktor-server-netty"))

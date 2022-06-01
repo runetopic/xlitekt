@@ -1,6 +1,8 @@
 package script.packet.disassembler.handler
 
 import com.github.michaelbull.logging.InlineLogger
+import it.unimi.dsi.fastutil.ints.IntArrayList
+import it.unimi.dsi.fastutil.ints.IntList
 import org.rsmod.pathfinder.SmartPathFinder
 import org.rsmod.pathfinder.ZoneFlags
 import xlitekt.game.actor.faceActor
@@ -19,14 +21,14 @@ private val pathfinder = SmartPathFinder(
 )
 
 onPacketHandler<OpNPCPacket> {
-    val neighboringNpcs = player.zone()?.neighboringNpcs()
+    val neighboringNpcs = player.zone().neighboringNpcs()
 
-    if (neighboringNpcs?.isEmpty() == true || neighboringNpcs?.indices?.none { it == packet.npcIndex } == true) {
+    if (neighboringNpcs.isEmpty() || neighboringNpcs.indices.none { it == packet.npcIndex }) {
         logger.debug { "World does not contain NPC Index = ${packet.npcIndex}" }
         return@onPacketHandler
     }
 
-    val npc = neighboringNpcs?.firstOrNull { it.index == this.packet.npcIndex } ?: return@onPacketHandler
+    val npc = neighboringNpcs.firstOrNull { it.index == this.packet.npcIndex } ?: return@onPacketHandler
 
     if (npc.entry == null) {
         logger.debug { "Invalid NPC clicked $npc" }
@@ -45,6 +47,10 @@ onPacketHandler<OpNPCPacket> {
         z = npc.location.level,
     )
 
-    player.route { path.coords.map { Location(it.x, it.y, npc.location.level) } }
+    player.route {
+        val list: IntList = IntArrayList(path.coords.size)
+        path.coords.forEach { list.add(Location(it.x, it.y, npc.location.level).packedLocation) }
+        list
+    }
     player.faceActor(npc::index) // this may need to have some sort of requirement like within distance checks or not.
 }

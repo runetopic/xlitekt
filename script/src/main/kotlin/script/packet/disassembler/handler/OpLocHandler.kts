@@ -1,6 +1,8 @@
 package script.packet.disassembler.handler
 
 import com.github.michaelbull.logging.InlineLogger
+import it.unimi.dsi.fastutil.ints.IntArrayList
+import it.unimi.dsi.fastutil.ints.IntList
 import org.rsmod.pathfinder.SmartPathFinder
 import org.rsmod.pathfinder.ZoneFlags
 import xlitekt.cache.provider.config.loc.LocEntryTypeProvider
@@ -61,5 +63,9 @@ onPacketHandler<OpLocPacket> {
         objShape = gameObject.shape,
         z = location.level
     )
-    player.route { path.coords.map { Location(it.x, it.y, location.level) } }
+    player.route {
+        val list: IntList = IntArrayList(path.coords.size)
+        path.coords.forEach { list.add(Location(it.x, it.y, location.level).packedLocation) }
+        list
+    }
 }
