@@ -14,7 +14,7 @@ onPacketDisassembler(opcode = 94, size = 7) {
     OpLocPacket(
         index = 2,
         z = readShortLittleEndian().toInt(),
-        running = readByte().toInt().toBoolean(),
+        isModifiedClick = readByte().toInt().toBoolean(),
         x = readUShortAdd(),
         objectId = readUShortLittleEndian()
     )
