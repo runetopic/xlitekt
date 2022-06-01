@@ -3,7 +3,6 @@ import xlitekt.game.content.ui.InterfaceEvent
 import xlitekt.game.content.ui.UserInterface
 import xlitekt.game.content.ui.onInterface
 import xlitekt.game.content.vars.VarBit
-import xlitekt.shared.packInterface
 
 private val skillBits = mapOf(
     1 to 1,
