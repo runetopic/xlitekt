@@ -44,7 +44,7 @@ class Equipment(
      * Refreshes specific slots within the equipment container.
      * This leverages the UpdateContainerPartialPacket
      */
-    private fun refreshSlots(slots: IntRange) {
+    private fun refreshSlots(slots: List<Int>) {
         player.write(
             UpdateContainerPartialPacket(
                 -1,
