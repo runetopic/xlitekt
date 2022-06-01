@@ -35,8 +35,8 @@ abstract class Actor(
     inline val indexL get() = index.toLong()
 
     internal var facingActorIndex = Optional.empty<Int>()
-    private var activeZone = Optional.empty<Zone>()
-    private val zones = mutableListOf<Zone>()
+    protected var activeZone = Optional.empty<Zone>()
+    private val zones = mutableSetOf<Zone>()
 
     /**
      * High definition rendering blocks used for local updates.
@@ -171,14 +171,27 @@ abstract class Actor(
         }
     }
 
+    /**
+     * Returns the current zone this actor is inside of.
+     */
     fun zone() = if (activeZone.isPresent) activeZone.get() else world.zone(location)
 
+    /**
+     * Set this actor current zone.
+     */
     fun setZone(zone: Zone) {
         activeZone = Optional.of(zone)
     }
 
-    fun zones() = zones.toList()
-    fun setZones(removed: List<Zone>, added: List<Zone>) {
+    /**
+     * Returns a list of this actor zones.
+     */
+    fun zones() = zones
+
+    /**
+     * Set this actor zones with a list of zones being removed and a list of zones being added.
+     */
+    fun setZones(removed: Set<Zone>, added: Set<Zone>) {
         zones.removeAll(removed)
         zones.addAll(added)
     }
@@ -228,7 +241,7 @@ inline fun Actor.routeTeleport(location: () -> Location) {
  * If the actor is a Player then this will also flag for movement and temporary movement type updates.
  */
 inline fun Actor.speed(running: () -> Boolean) = running.invoke().also {
-    movement.movementSpeed = if (it) MovementSpeed.RUNNING else MovementSpeed.WALKING
+    movement.movementSpeed = if (it) MovementSpeed.Running else MovementSpeed.Walking
     if (this is Player) {
         movementType { it }
         temporaryMovementType(movement.movementSpeed::id)

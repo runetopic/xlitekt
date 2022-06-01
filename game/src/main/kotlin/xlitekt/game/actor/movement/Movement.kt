@@ -16,10 +16,9 @@ import kotlin.math.sign
  * @author Jordan Abraham
  */
 class Movement {
-    var movementSpeed = MovementSpeed.WALKING
+    var movementSpeed = MovementSpeed.None
 
     private val checkpoints: IntPriorityQueue = IntArrayFIFOQueue()
-
     private val steps: IntPriorityQueue = IntArrayFIFOQueue()
     private var teleporting = false
     private var direction: Direction = Direction.South
@@ -43,36 +42,36 @@ class Movement {
         // Poll the first step to move to.
         var step = if (steps.isEmpty) return null else steps.dequeueInt()
         // The current speed of the first step.
-        val initialSpeed = if (teleporting) MovementSpeed.TELEPORTING else movementSpeed
+        val initialSpeed = if (teleporting) MovementSpeed.Teleporting else movementSpeed
         var modifiedSpeed = initialSpeed
         when (initialSpeed) {
-            MovementSpeed.TELEPORTING -> {
+            MovementSpeed.Teleporting -> {
                 teleporting = false
                 val direction = Direction.South
                 this.direction = direction
                 // Only players will do this.
                 if (actor is Player) {
-                    actor.temporaryMovementType(MovementSpeed.TELEPORTING::id)
+                    actor.temporaryMovementType(MovementSpeed.Teleporting::id)
                     actor.faceAngle(direction::angle)
                 }
             }
-            MovementSpeed.WALKING, MovementSpeed.RUNNING -> if (initialSpeed == MovementSpeed.RUNNING) {
+            MovementSpeed.Walking, MovementSpeed.Running -> if (initialSpeed == MovementSpeed.Running) {
                 // If the player is running, then we poll the second step to move to.
                 step = if (steps.isEmpty) {
                     // If the second step is unavailable, then we try to queue more and poll for the second step again.
                     queueDestinationSteps(Location(step))
                     if (steps.isEmpty) {
                         // If a second step is not able to be found, then we adjust the step the player has to walking.
-                        modifiedSpeed = MovementSpeed.WALKING
+                        modifiedSpeed = MovementSpeed.Walking
                         // Apply this mask to the player to show them actually walking.
-                        actor.temporaryMovementType(MovementSpeed.WALKING::id)
+                        actor.temporaryMovementType(MovementSpeed.Walking::id)
                         step
                     } else {
                         val it = steps.dequeueInt()
                         // If the new-found second step is within walking distance, then we have to adjust the step speed to walking instead of running.
                         // We do not use the movement type mask here because we want the player to look like they are running but using walking opcodes.
                         if (currentLocation.directionTo(Location(it)).fourPointCardinalDirection()) {
-                            modifiedSpeed = MovementSpeed.WALKING
+                            modifiedSpeed = MovementSpeed.Walking
                         }
                         it
                     }
@@ -83,7 +82,7 @@ class Movement {
             speed = modifiedSpeed,
             location = Location(step),
             previousLocation = previousLocation,
-            direction = if (initialSpeed == MovementSpeed.TELEPORTING) Direction.South else currentLocation.directionTo(Location(step))
+            direction = if (initialSpeed == MovementSpeed.Teleporting) Direction.South else currentLocation.directionTo(Location(step))
         )
     }
 

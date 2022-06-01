@@ -11,7 +11,7 @@ import xlitekt.game.packet.ObjDelPacket
  */
 @JvmInline
 internal value class ZoneUpdateIndex(
-    val index: Byte
+    val index: Int
 )
 
 object ZoneUpdate {

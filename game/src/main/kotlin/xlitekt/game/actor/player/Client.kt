@@ -9,13 +9,15 @@ import io.ktor.util.reflect.instanceOf
 import io.ktor.utils.io.ByteReadChannel
 import io.ktor.utils.io.ByteWriteChannel
 import io.ktor.utils.io.ClosedWriteChannelException
-import io.ktor.utils.io.core.ByteReadPacket
 import io.ktor.utils.io.core.buildPacket
 import io.ktor.utils.io.core.readBytes
+import it.unimi.dsi.fastutil.objects.ObjectArraySet
+import it.unimi.dsi.fastutil.objects.ObjectSets
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.TimeoutCancellationException
 import kotlinx.coroutines.channels.ClosedReceiveChannelException
 import kotlinx.coroutines.runBlocking
+import org.jctools.maps.NonBlockingHashMap
 import xlitekt.game.packet.Packet
 import xlitekt.game.packet.assembler.PacketAssemblerListener
 import xlitekt.game.packet.disassembler.handler.PacketHandler
@@ -28,7 +30,6 @@ import xlitekt.shared.inject
 import xlitekt.shared.lazy
 import java.io.IOException
 import java.net.SocketException
-import java.util.Collections
 import kotlin.reflect.KClass
 
 /**
@@ -41,22 +42,22 @@ class Client(
 ) {
     val logger = InlineLogger()
     val seed = ((Math.random() * 99999999.0).toLong() shl 32) + (Math.random() * 99999999.0).toLong()
-    var clientCipher: ISAAC? = null
-    var serverCipher: ISAAC? = null
-    var player: Player? = null // TODO Figure out a way to not have the player here.
+    lateinit var clientCipher: ISAAC
+    lateinit var serverCipher: ISAAC
+    lateinit var player: Player
 
-    private val writePool = Collections.synchronizedList(mutableListOf<Packet>())
-    private val readPool = mutableMapOf<KClass<*>, PacketHandler<Packet>>()
+    private val writePool = ObjectSets.synchronize(ObjectArraySet<Packet>(64))
+    private val readPool = NonBlockingHashMap<KClass<*>, PacketHandler<Packet>>(64)
 
     fun disconnect(reason: String) {
         logger.debug { "Client disconnected for reason={$reason}." }
-        player?.let(lazy<World>()::requestLogout)
+        if (::player.isInitialized) {
+            player.let(lazy<World>()::requestLogout)
+        }
+        socket?.close()
     }
 
     fun setIsaacCiphers(clientCipher: ISAAC, serverCipher: ISAAC) {
-        if (this.clientCipher != null || this.serverCipher != null) {
-            return disconnect("Client or server cipher is already set.")
-        }
         this.clientCipher = clientCipher
         this.serverCipher = serverCipher
     }
@@ -73,47 +74,45 @@ class Client(
         }
     }
 
-    fun addToWritePool(packet: Packet) {
-        writePool += packet
+    internal fun addToWritePool(packet: Packet) {
+        writePool.add(packet)
     }
 
-    fun addToReadPool(packetHandler: PacketHandler<Packet>) {
+    internal fun addToReadPool(packetHandler: PacketHandler<Packet>) {
         // We use a map because we can replace keys if there are multiple requests of the same type.
         readPool[packetHandler.packet::class] = packetHandler
     }
 
-    fun invokeAndClearWritePool() {
-        writePool.onEach {
-            val assembler = PacketAssemblerListener.listeners[it::class]
+    internal fun invokeAndClearWritePool() {
+        for (packet in writePool) {
+            val assembler = PacketAssemblerListener.listeners[packet::class]
             if (assembler == null) {
-                disconnect("Unhandled packet found when trying to write. Packet was $it.")
-                return@onEach
+                disconnect("Unhandled packet found when trying to write. Packet was $packet.")
+                return
             }
             runBlocking(Dispatchers.IO) {
-                val packet = buildPacket {
-                    val invoke = assembler.packet.invoke(it)
+                val readPacket = buildPacket {
+                    val invoke = assembler.packet.invoke(packet)
                     if (assembler.opcode > Byte.MAX_VALUE) {
-                        writeByte { 128 + (serverCipher?.getNext() ?: 0) }
+                        writeByte { 128 + serverCipher.getNext() }
                     }
-                    writeByte { assembler.opcode + (serverCipher?.getNext() ?: 0) and 0xff }
-                    val size = assembler.size
-                    if (size == -1) writeByte(invoke.remaining::toInt)
-                    else if (size == -2) writeShort(invoke.remaining::toInt)
+                    writeByte { assembler.opcode + serverCipher.getNext() and 0xff }
+                    if (assembler.size == -1) writeByte(invoke.remaining::toInt)
+                    else if (assembler.size == -2) writeShort(invoke.remaining::toInt)
                     writeBytes(invoke::readBytes)
                 }
-                writePacket(packet)
+                writeChannel?.writePacket(readPacket)
             }
-        }.also(MutableList<Packet>::clear)
+        }
+        writePool.clear()
         writeChannel?.flush()
     }
 
-    fun invokeAndClearReadPool() {
-        readPool.values.onEach { PacketHandlerListener.listeners[it.packet::class]?.invoke(it) }.also(MutableCollection<PacketHandler<Packet>>::clear)
-    }
-
-    private suspend fun writePacket(packet: ByteReadPacket) = writeChannel?.apply {
-        if (isClosedForWrite) return@apply disconnect("Write channel closed.")
-        writePacket(packet)
+    internal fun invokeAndClearReadPool() {
+        for (packet in readPool.values) {
+            PacketHandlerListener.listeners[packet.packet::class]?.invoke(packet)
+        }
+        readPool.clear()
     }
 
     companion object {

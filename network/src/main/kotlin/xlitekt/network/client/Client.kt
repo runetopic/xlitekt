@@ -282,8 +282,6 @@ private suspend fun Client.writeLogin(response: Int) {
     if (response != LOGIN_SUCCESS_OPCODE) {
         return disconnect("Unsuccessful login.")
     }
-    val player = player ?: return disconnect("Login write event does not have an established player.")
-
     writeChannel!!.apply {
         writeByte(11)
         writeByte(0)
@@ -293,7 +291,6 @@ private suspend fun Client.writeLogin(response: Int) {
         writeShort(player.index.toShort())
         writeByte(0)
     }.flush()
-
     lazy<World>().requestLogin(player, this)
     readPackets(player)
 }
@@ -302,7 +299,7 @@ private suspend fun Client.readPackets(player: Player) = try {
     while (true) {
         val readChannel = readChannel ?: break
         if (readChannel.isClosedForRead) break
-        val opcode = readChannel.readPacketOpcode(clientCipher!!)
+        val opcode = readChannel.readPacketOpcode(clientCipher)
         if (opcode < 0 || opcode >= sizes.size) continue
         val size = readChannel.readPacketSize(sizes[opcode])
         // Take the bytes from the read channel before doing any checks.
