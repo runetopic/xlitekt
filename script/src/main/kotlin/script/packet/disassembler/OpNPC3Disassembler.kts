@@ -10,7 +10,7 @@ import xlitekt.shared.toBoolean
  */
 onPacketDisassembler(opcode = 70, size = 3) {
     OpNPCPacket(
-        index = 2,
+        index = 3,
         npcIndex = readShort().toInt(),
         isModifiedClick = readByte().toInt().toBoolean()
     )

@@ -10,7 +10,6 @@ import xlitekt.shared.toBoolean
 /**
  * @author Justin Kenney
  */
-
 onPacketDisassembler(opcode = 54, size = 7) {
     OpLocPacket(
         index = 3,
