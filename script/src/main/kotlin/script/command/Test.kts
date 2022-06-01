@@ -58,8 +58,8 @@ onCommand("delete2").use {
 }
 
 onCommand("addall").use {
-//    val zone = world.zone(Location(3222, 3222, 0))!!
-//    zone?.requestAddItem(FloorItem(4151, 1, Location(3222, 3222, 0)))
+//    val zone = world.zone(Location(3222, 3222, 0))
+//    zone.requestAddObj(FloorItem(4151, 1, Location(3222, 3222, 0)))
     zones().forEach { zone ->
         repeat(8) { x ->
             repeat(8) { z ->

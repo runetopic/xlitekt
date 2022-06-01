@@ -25,8 +25,8 @@ onPacketAssembler<UpdateContainerPartialPacket>(opcode = 84, size = -2) {
             val item = items[slot]
             val id = item?.id ?: -1
             val amount = item?.amount ?: 0
+            writeShort { id + 1 }
             if (id != -1) {
-                writeShort { id + 1 }
                 writeByte { min(amount, 0xff) }
                 if (amount >= 0xff) {
                     writeInt { amount }

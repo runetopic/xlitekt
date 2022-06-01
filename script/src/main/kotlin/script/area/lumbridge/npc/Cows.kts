@@ -14,10 +14,10 @@ val eventBus by inject<EventBus>()
 eventBus.onEvent<Events.NPCSpawnEvent>().filter {
     this.npc.entry?.name == "Cow"
 }.use {
-    quack()
+    moo()
 }
 
-fun Events.NPCSpawnEvent.quack() {
+fun Events.NPCSpawnEvent.moo() {
     val npc = this.npc
     Timer().scheduleAtFixedRate(
         timerTask {

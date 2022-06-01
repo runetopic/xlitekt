@@ -43,7 +43,7 @@ class Player(
     val vars = Vars(this)
     val inventory: Inventory = Inventory(this)
     val equipment: Equipment = Equipment(this)
-    var lastLoadedLocation: Location? = null
+    var lastLoadedLocation = Location.None
 
     /**
      * This players connected client. This client is used for reading and writing packets.
@@ -66,9 +66,9 @@ class Player(
         this.client = client
         previousLocation = location
         rebuildNormal(players) { true }
-        lazy<World>().zone(location).enterZone(this)
         interfaces.openTop(interfaces.currentInterfaceLayout.interfaceId)
         invokeAndClearWritePool()
+        lazy<World>().zone(location).enterZone(this)
         login()
     }
 
@@ -97,8 +97,7 @@ class Player(
         online = false
         write(LogoutPacket(0))
         invokeAndClearWritePool()
-        client?.socket?.close()
-        lazy<World>().zone(location).leaveZone(this)
+        activeZone.get().leaveZone(this)
         lazy<World>().removePlayer(this)
         lazy<PlayerJsonEncoderService>().requestSave(this)
     }
@@ -134,8 +133,8 @@ class Player(
      * Returns if this player needs a map rebuild.
      */
     internal fun shouldRebuildMap(): Boolean {
-        val lastZoneX = lastLoadedLocation?.zoneX ?: 0
-        val lastZoneZ = lastLoadedLocation?.zoneZ ?: 0
+        val lastZoneX = lastLoadedLocation.zoneX
+        val lastZoneZ = lastLoadedLocation.zoneZ
         val zoneX = location.zoneX
         val zoneZ = location.zoneZ
         val size = ((104 shr 3) / 2) - 1

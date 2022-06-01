@@ -24,18 +24,32 @@ abstract class Container(
      * Adds an item to the container and invokes a function with the item.
      * If the item's amount exceeds Int.MAX_VALUE, we go ahead and do nothing because of an overflow exception.
      */
-    protected fun add(item: Item, slotId: Int = slotId(item), function: (Item).(IntRange) -> Unit): Boolean {
+    protected fun add(item: Item, slotId: Int = slotId(item), function: (Item).(List<Int>) -> Unit): Boolean {
         when {
             item.isStackable() && slotId == -1 -> {
                 val nextSlot = nextAvailableSlot()
                 if (nextSlot == -1) return false
                 items[nextSlot] = item
-                function.invoke(item, 0..nextSlot)
+                function.invoke(item, listOf(nextSlot))
                 return true
             }
             slotId != -1 -> return replaceItem(slotId, item, function)
             else -> return addItemNonStacking(item, function)
         }
+    }
+
+    protected fun remove(slotId: Int, item: Item, amount: Int = item.amount, function: ContainerUpdate): Boolean {
+        if (slotId == -1) return false
+
+        if (item.amount - amount <= 0) {
+            items[slotId] = null
+            function.invoke(item, listOf(slotId))
+            return true
+        }
+
+        items[slotId] = item.copy(id = id, amount = item.amount - amount)
+        function.invoke(item, listOf(slotId))
+        return true
     }
 
     /**
@@ -46,40 +60,25 @@ abstract class Container(
      */
     private fun addItemNonStacking(
         item: Item,
-        function: Item.(IntRange) -> Unit
+        function: ContainerUpdate
     ): Boolean {
         if (item.isStackable()) return false
 
-        var lastSlot = -1
+        val slotsChanged = mutableListOf<Int>()
 
         repeat(item.amount) {
             val nextSlot = nextAvailableSlot()
 
             if (nextSlot == -1) {
-                function.invoke(item, 0..lastSlot)
+                function.invoke(item, slotsChanged)
                 return false
             }
 
-            lastSlot = nextSlot
+            slotsChanged.add(nextSlot)
             items[nextSlot] = item.copy(id = item.id, amount = 1)
         }
 
-        function.invoke(item, 0..lastSlot)
-        return true
-    }
-
-    /**
-     * Deletes an item at a specified slot.
-     * If the slot is not specified it will automatically figure out the slot id based on the items in the container.
-     * @param item The item to delete
-     * @param slotId The slot id of the item in the container.
-     * @param function This is the function we invoke with the item deleted and slot effected.
-     */
-    protected fun remove(item: Item, slotId: Int = slotId(item), function: (Item).(Int) -> Unit): Boolean {
-        if (slotId == -1) return false
-
-        items[slotId] = null
-        function.invoke(item, slotId)
+        function.invoke(item, slotsChanged)
         return true
     }
 
@@ -122,7 +121,7 @@ abstract class Container(
     private fun replaceItem(
         slotId: Int,
         item: Item,
-        function: Item.(IntRange) -> Unit
+        function: ContainerUpdate
     ): Boolean {
         val existingItem = items[slotId] ?: return false
 
@@ -134,7 +133,7 @@ abstract class Container(
                     id = item.id,
                     amount = item.amount + existingItem.amount
                 )
-                function.invoke(item, 0..slotId)
+                function.invoke(item, listOf(slotId))
                 true
             }
             else -> addItemNonStacking(item, function)
@@ -171,3 +170,5 @@ abstract class Container(
      */
     fun firstBySlot(slot: Int): Item? = items[slot]
 }
+
+typealias ContainerUpdate = (Item).(List<Int>) -> Unit

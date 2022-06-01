@@ -1,5 +1,6 @@
 package xlitekt.game.content.ui
 
+import com.github.michaelbull.logging.InlineLogger
 import xlitekt.cache.provider.config.enum.EnumEntryTypeProvider
 import xlitekt.game.actor.player.Player
 import xlitekt.game.actor.player.message
@@ -20,6 +21,8 @@ class Interfaces(
     private val player: Player,
     private val interfaces: MutableList<UserInterface> = mutableListOf()
 ) : MutableList<UserInterface> by interfaces {
+    private val logger = InlineLogger()
+
     val listeners = mutableListOf<UserInterfaceListener>()
 
     var currentInterfaceLayout = InterfaceLayout.FIXED
