@@ -54,6 +54,13 @@ class Inventory(
         if (addItem(item)) function.invoke(item, slotId(item))
     }
 
+    fun removeItem(slotId: Int, item: Item, function: (Item).(List<Int>) -> Unit) {
+        remove(slotId, item) { slots ->
+            refreshSlots(slots)
+            function.invoke(item, slots)
+        }
+    }
+
     /**
      * Add an item to the player's inventory and sends the client a message if the item cannot be added.
      * @param item The item being added to the inventory.
@@ -81,13 +88,13 @@ class Inventory(
      * Refreshes specific slots within the inventory container.
      * This leverages the UpdateContainerPartialPacket
      */
-    private fun refreshSlots(slots: IntRange) {
+    private fun refreshSlots(slots: List<Int>) {
         player.write(
             UpdateContainerPartialPacket(
                 PACKED_INVENTORY_ID,
                 INVENTORY_CONTAINER_KEY,
                 this,
-                slots
+                slots.toList()
             )
         )
     }

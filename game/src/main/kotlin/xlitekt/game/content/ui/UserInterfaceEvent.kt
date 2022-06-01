@@ -34,9 +34,22 @@ sealed class UserInterfaceEvent {
         val interfaceId: Int,
         val items: List<Item?>
     ) : UserInterfaceEvent()
+
+    data class OpHeldEvent(
+        val index: Int,
+        val fromInterfaceId: Int,
+        val fromChildId: Int,
+        val fromSlotId: Int,
+        val fromItemId: Int,
+        val toInterfaceId: Int,
+        val toChildId: Int,
+        val toSlotId: Int,
+        val toItemId: Int
+    ) : UserInterfaceEvent()
 }
 
 typealias OnButtonClickEvent = (Player).(UserInterfaceEvent.ButtonClickEvent) -> Unit
 typealias OnOpenEvent = (Player).(UserInterfaceEvent.OpenEvent) -> Unit
 typealias OnCreateEvent = (Player).(UserInterfaceEvent.CreateEvent) -> Unit
 typealias OnCloseEvent = (Player).(UserInterfaceEvent.CloseEvent) -> Unit
+typealias OnOpHeldEvent = (Player).(UserInterfaceEvent.OpHeldEvent) -> Unit

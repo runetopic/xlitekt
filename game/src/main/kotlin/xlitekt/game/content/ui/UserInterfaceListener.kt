@@ -15,8 +15,10 @@ class UserInterfaceListener(
     private var onOpenEvent: OnOpenEvent? = null
     private var onCloseEvent: OnCloseEvent? = null
     private var onButtonClickEvent: OnButtonClickEvent? = null
+    private var onOperation: OnOpHeldEvent? = null
     private val children = mutableMapOf<Int, OnButtonClickEvent>()
     private val actions = mutableMapOf<String, OnButtonClickEvent>()
+    private val operations = mutableMapOf<Int, OnOpHeldEvent>()
     private val texts = mutableMapOf<Int, String>()
     private val items = mutableMapOf<Int, UserInterfaceEvent.ContainerUpdateFullEvent>()
     private val events = mutableMapOf<Int, UserInterfaceEvent.IfEvent>()
@@ -60,6 +62,11 @@ class UserInterfaceListener(
         this.actions[buttonClickEvent.action]?.invoke(player, buttonClickEvent)
     }
 
+    fun opHeld(opHeldEvent: UserInterfaceEvent.OpHeldEvent) {
+        this.onOperation?.invoke(player, opHeldEvent)
+        this.operations[opHeldEvent.fromInterfaceId]?.invoke(player, opHeldEvent)
+    }
+
     fun onClick(onButtonClickEvent: OnButtonClickEvent) {
         this.onButtonClickEvent = onButtonClickEvent
     }
@@ -70,6 +77,10 @@ class UserInterfaceListener(
 
     fun onClick(action: String, onButtonClickEvent: OnButtonClickEvent) {
         this.actions[action] = onButtonClickEvent
+    }
+
+    fun onOpHeld(event: OnOpHeldEvent) {
+        this.onOperation = event
     }
 
     fun setText(childId: Int, text: String) {
