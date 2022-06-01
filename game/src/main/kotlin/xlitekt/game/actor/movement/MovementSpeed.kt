@@ -3,14 +3,16 @@ package xlitekt.game.actor.movement
 /**
  * @author Jordan Abraham
  */
-enum class MovementSpeed(
-    val id: Int
-) {
-    WALKING(1),
-    RUNNING(2),
-    TELEPORTING(Byte.MAX_VALUE.toInt());
+@JvmInline
+value class MovementSpeed(val id: Int) {
+    val walking get() = id == 1
+    val running get() = id == 2
+    val teleporting get() = id == 127
 
-    fun isWalking() = this == WALKING
-    fun isRunning() = this == RUNNING
-    fun isTeleporting() = this == TELEPORTING
+    companion object {
+        val None = MovementSpeed(0)
+        val Walking = MovementSpeed(1)
+        val Running = MovementSpeed(2)
+        val Teleporting = MovementSpeed(127)
+    }
 }

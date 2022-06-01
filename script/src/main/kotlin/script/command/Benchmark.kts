@@ -1,5 +1,6 @@
 package script.command
 
+import com.runetopic.cryptography.toISAAC
 import xlitekt.game.actor.player.Client
 import xlitekt.game.actor.player.Player
 import xlitekt.game.content.command.Commands.onCommand
@@ -22,6 +23,8 @@ onCommand("benchmark").use {
         world.addPlayer(bot)
         bot.vars.flip { VarPlayer.ToggleRun }
         bot.vars.flip { VarBit.HitSplatTinting }
-        world.requestLogin(bot, Client())
+        val client = Client()
+        client.setIsaacCiphers(intArrayOf(0, 0, 0, 0).toISAAC(), intArrayOf(0, 0, 0, 0).toISAAC())
+        world.requestLogin(bot, client)
     }
 }

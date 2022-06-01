@@ -25,25 +25,25 @@ abstract class Synchronizer : Runnable {
     protected val world by inject<World>()
 
     protected fun Player.syncMovement(players: NonBlockingHashMapLong<Player>) {
-        processMovement(players)?.let { MovementStepsPlayerUpdates.add(index, it) }
+        processMovement(players)?.let { MovementStepsPlayerUpdates.add(indexL, it) }
     }
 
     protected fun NPC.syncMovement(players: NonBlockingHashMapLong<Player>) {
-        processMovement(players)?.let { MovementStepsNPCUpdates.add(index, it) }
+        processMovement(players)?.let { MovementStepsNPCUpdates.add(indexL, it) }
     }
 
     protected fun Player.syncRenderingBlocks() {
         val highDefinition = highDefinitionRenderingBlocks()
-        if (highDefinition.isNotEmpty()) HighDefinitionPlayerUpdates.add(index, highDefinition.invokeHighDefinitionPlayerRenderingBlocks(this))
-        LowDefinitionPlayerUpdates.add(index, lowDefinitionRenderingBlocks().invokeLowDefinitionPlayerRenderingBlocks())
-        if (highDefinition.isNotEmpty()) AlternativeHighDefinitionPlayerUpdates.add(index, alternativeHighDefinitionRenderingBlocks().invokeAlternativeDefinitionPlayerRenderingBlocks())
-        AlternativeLowDefinitionPlayerUpdates.add(index, alternativeLowDefinitionRenderingBlocks().invokeAlternativeDefinitionPlayerRenderingBlocks())
+        if (highDefinition.isNotEmpty()) HighDefinitionPlayerUpdates.add(indexL, highDefinition.invokeHighDefinitionPlayerRenderingBlocks(this))
+        LowDefinitionPlayerUpdates.add(indexL, lowDefinitionRenderingBlocks().invokeLowDefinitionPlayerRenderingBlocks())
+        if (highDefinition.isNotEmpty()) AlternativeHighDefinitionPlayerUpdates.add(indexL, alternativeHighDefinitionRenderingBlocks().invokeAlternativeDefinitionPlayerRenderingBlocks())
+        AlternativeLowDefinitionPlayerUpdates.add(indexL, alternativeLowDefinitionRenderingBlocks().invokeAlternativeDefinitionPlayerRenderingBlocks())
     }
 
     protected fun NPC.syncRenderingBlocks() {
         val blocks = highDefinitionRenderingBlocks()
         if (blocks.isEmpty()) return
-        HighDefinitionNPCUpdates.add(index, blocks.invokeHighDefinitionNPCRenderingBlocks())
+        HighDefinitionNPCUpdates.add(indexL, blocks.invokeHighDefinitionNPCRenderingBlocks())
         resetDefinitionRenderingBlocks()
     }
 
@@ -91,8 +91,8 @@ internal sealed class PlayerInfoUpdates<T : Any> : NonBlockingHashMapLong<Option
     object AlternativeLowDefinitionPlayerUpdates : PlayerInfoUpdates<ByteArray>()
     object MovementStepsPlayerUpdates : PlayerInfoUpdates<MovementStep>()
 
-    fun add(index: Int, update: T) {
-        put(index.toLong(), Optional.of(update))
+    fun add(index: Long, update: T) {
+        put(index, Optional.of(update))
     }
 }
 
@@ -101,7 +101,7 @@ internal sealed class NPCInfoUpdates<T : Any> : NonBlockingHashMapLong<Optional<
     object HighDefinitionNPCUpdates : NPCInfoUpdates<ByteArray>()
     object MovementStepsNPCUpdates : NPCInfoUpdates<MovementStep>()
 
-    fun add(index: Int, update: T) {
-        put(index.toLong(), Optional.of(update))
+    fun add(index: Long, update: T) {
+        put(index, Optional.of(update))
     }
 }
