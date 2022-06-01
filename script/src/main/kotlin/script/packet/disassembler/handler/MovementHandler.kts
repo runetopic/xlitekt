@@ -27,11 +27,11 @@ onPacketHandler<MovementPacket> {
         return@onPacketHandler
     }
 
-    // TODO toggle actor speed only for the duration of the movement (if movementType=1)
-    // currently treats movementType 1 as toggling run
+    // Toggles Actor's speed only for the duration of the movement (if movementType=1)
+    val currentSpeed = VarPlayer.ToggleRun in player.vars
+    player.speed { currentSpeed }
     if (packet.movementType == 1) {
-        player.vars.flip { VarPlayer.ToggleRun }
-        player.speed { VarPlayer.ToggleRun in player.vars }
+        player.speed { !currentSpeed }
     }
 
     // Normal movement
@@ -42,14 +42,10 @@ onPacketHandler<MovementPacket> {
         destY = packet.destinationZ,
         z = player.location.level
     )
-<<<<<<< Updated upstream
+
     player.route {
         val list: IntList = IntArrayList(path.coords.size)
         path.coords.forEach { list.add(Location(it.x, it.y, player.location.level).packedLocation) }
         list
     }
-=======
-
-    player.route { path.coords.map { Location(it.x, it.y, player.location.level) } }
->>>>>>> Stashed changes
 }
