@@ -1,3 +1,5 @@
+package script.packet.disassembler
+
 import io.ktor.utils.io.core.*
 import xlitekt.game.packet.OpNPCPacket
 import xlitekt.game.packet.disassembler.onPacketDisassembler
