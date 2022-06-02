@@ -5,6 +5,8 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 enum class EquipmentSlot {
+    @SerialName("")
+    NONE,
     @SerialName("2h")
     TWO_HAND,
     @SerialName("weapon")
@@ -32,47 +34,49 @@ enum class EquipmentSlot {
 }
 
 @Serializable
-data class ItemInfoResource(
-    @SerialName("itemId")
-    val id: Int,
-    @SerialName("name")
-    val name: String,
-    @SerialName("equipable")
-    val equipable: Boolean,
-    @SerialName("destroyOption")
-    val destroyOption: String,
-    @SerialName("examine")
-    val examine: String,
-    @SerialName("weight")
-    val weight: Double,
-    @SerialName("attack_stab")
+data class EquipmentInfoResource(
+    @SerialName("attackStab")
     val attackStab: Int,
-    @SerialName("attack_slash")
+    @SerialName("attackSlash")
     val attackSlash: Int,
-    @SerialName("attack_crush")
+    @SerialName("attackCrush")
     val attackCrush: Int,
-    @SerialName("attack_magic")
+    @SerialName("attackMagic")
     val attackMagic: Int,
-    @SerialName("attack_ranged")
+    @SerialName("attackRanged")
     val attackRanged: Int,
-    @SerialName("defence_stab")
+    @SerialName("defenceStab")
     val defenceStab: Int,
-    @SerialName("defence_slash")
+    @SerialName("defenceSlash")
     val defenceSlash: Int,
-    @SerialName("defence_crush")
+    @SerialName("defenceCrush")
     val defenceCrush: Int,
-    @SerialName("defence_magic")
+    @SerialName("defenceMagic")
     val defenceMagic: Int,
-    @SerialName("defence_ranged")
+    @SerialName("defenceRanged")
     val defenceRanged: Int,
-    @SerialName("melee_strength")
+    @SerialName("strengthBonus")
     val meleeStrength: Int,
-    @SerialName("magic_damage")
+    @SerialName("magicDamage")
     val magicDamage: Int,
     @SerialName("prayer")
     val prayer: Int,
     @SerialName("equipmentSlot")
     val equipmentSlot: EquipmentSlot,
     @SerialName("attackSpeed")
-    val attackSpeed: Int
+    val attackSpeed: Int,
+    @SerialName("attackRange")
+    val attackRange: Int
+)
+
+@Serializable
+data class ItemInfoResource(
+    @SerialName("itemId")
+    val id: Int,
+    @SerialName("name")
+    val name: String,
+    @SerialName("equipable")
+    val equipable: Boolean = false,
+    @SerialName("equipment")
+    val equipment: EquipmentInfoResource? = null
 )

@@ -46,7 +46,8 @@ class Equipment(
      * @param function This is the function we invoke if we successfully removed an item.
      */
     fun removeItem(slotId: Int, item: Item, amount: Int = item.amount, function: (Item).(Int) -> Unit) {
-        remove(slotId, item, amount) {
+        remove(slotId, item, amount) { slots ->
+            refreshSlots(slots)
             function.invoke(item, slotId)
         }
     }

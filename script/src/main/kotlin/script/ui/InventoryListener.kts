@@ -45,7 +45,7 @@ onInterface<UserInterface.Inventory> {
     }
 }
 
-fun mapEquipmentSlot(itemInfo: ItemInfoResource): Int? = when (itemInfo.equipmentSlot) {
+fun mapEquipmentSlot(itemInfo: ItemInfoResource): Int? = when (itemInfo.equipment?.equipmentSlot) {
     EquipmentSlot.WEAPON, EquipmentSlot.TWO_HAND -> Equipment.SLOT_WEAPON
     EquipmentSlot.AMMO -> Equipment.SLOT_AMMO
     EquipmentSlot.BODY -> Equipment.SLOT_TORSO

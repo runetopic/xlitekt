@@ -46,7 +46,7 @@ onInterface<WornEquipment> {
                     }
                 }
             }
-            10 -> {// examine tiem
+            10 -> { // examine item
                 message { itemExamines[item.id]?.message ?: "It's a ${item.entry?.name}" }
             }
         }
