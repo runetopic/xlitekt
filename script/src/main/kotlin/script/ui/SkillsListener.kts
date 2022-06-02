@@ -8,6 +8,5 @@ import xlitekt.game.content.ui.onInterface
 onInterface<UserInterface.Skills> {
     onClick(childId = 1) {
         message { "Clicked on attack" }
-        interfaces += UserInterface.AdvancedSettings
     }
 }
