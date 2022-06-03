@@ -27,20 +27,38 @@ onInterface<WornEquipment> {
         message { "You do not have a follower." }
     }
     onClick("*") {
-        when (it.index) {
-            10 -> {
-                val offset = it.childId - 15
-                val slot = when {
-                    offset >= 9 -> offset + 3
-                    offset >= 7 -> offset + 2
-                    offset >= 6 -> offset + 1
-                    else -> offset
-                }
-                if (slot < 0 || slot > 13) return@onClick
+        val slot = mapEquipmentSlotIds(it.childId)
+        if (slot < 0 || slot > 13) return@onClick
 
-                val item = equipment.firstBySlot(slot) ?: return@onClick
+        val item = equipment[slot] ?: return@onClick
+
+        when (it.index) {
+            1 -> {
+                // remove item
+                if (inventory.isFull()) {
+                    message { "You don't have enough free space to do that." }
+                    return@onClick
+                }
+
+                equipment.removeItem(slot, item) {
+                    inventory.addItem(item) {
+                        // play removing sound
+                    }
+                }
+            }
+            10 -> { // examine item
                 message { itemExamines[item.id]?.message ?: "It's a ${item.entry?.name}" }
             }
         }
+    }
+}
+
+fun mapEquipmentSlotIds(childId: Int): Int {
+    val offset = childId - 15
+    return when {
+        offset >= 9 -> offset + 3
+        offset >= 7 -> offset + 2
+        offset >= 6 -> offset + 1
+        else -> offset
     }
 }
