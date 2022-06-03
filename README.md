@@ -11,6 +11,7 @@ documented.
 Xlite is currently built by two developers:
  - [tyler27 (me)](https://github.com/tyler27)
  - [ultraviolet-jordan](https://github.com/ultraviolet-jordan)
+ - [justin51]https://github.com/justin51)
 
 # Features
 - Embedded HTTP server to deliver client configuration files.
