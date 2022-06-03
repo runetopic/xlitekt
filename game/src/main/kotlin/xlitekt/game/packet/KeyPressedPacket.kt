@@ -5,5 +5,5 @@ package xlitekt.game.packet
  */
 data class KeyPressedPacket(
     val time: Long,
-    val keycodes: Array<Int>
+    val keycodes: IntArray
 ) : Packet

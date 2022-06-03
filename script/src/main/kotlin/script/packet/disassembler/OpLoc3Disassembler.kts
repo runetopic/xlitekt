@@ -16,6 +16,6 @@ onPacketDisassembler(opcode = 54, size = 7) {
         objectId = readUShortLittleEndianAdd(),
         z = readUShortLittleEndianAdd(),
         x = readShort().toInt(),
-        isModifiedClick = readUByteSubtract().toBoolean()
+        isModified = readUByteSubtract().toBoolean()
     )
 }

@@ -30,14 +30,16 @@ onPacketHandler<OpLocPacket> {
     val objectId = packet.objectId
     val x = packet.x
     val z = packet.z
-    val isModifiedClick = packet.isModifiedClick
+    val isModified = packet.isModified
 
     if (locEntryTypeProvider.entryType(objectId) == null) {
-        logger.debug { "Invalid loc op objectId=$objectId, x=$x, z=$z, isModifiedClick=$isModifiedClick" }
+//        logger.debug { "Invalid loc op objectId=$objectId, x=$x, z=$z, isModifiedClick=$isModified" }
+        logger.debug { packet }
         return@onPacketHandler
     }
 
-    logger.debug { "Clicked loc op objectId=$objectId, x=$x, z=$z, isModifiedClick=$isModifiedClick" }
+//    logger.debug { "Clicked loc op objectId=$objectId, x=$x, z=$z, isModifiedClick=$isModifiedClick" }
+    logger.debug { packet }
 
     // The location of the object clicked.
     val location = Location(x, z, player.location.level)

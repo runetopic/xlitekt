@@ -11,6 +11,7 @@ class SpotAnimations(list: Map<String, SpotAnimationResource>) : HashMap<String,
 class Varps(list: Map<String, VarInfoResource>) : HashMap<String, VarInfoResource>(list)
 class VarBits(list: Map<String, VarInfoResource>) : HashMap<String, VarInfoResource>(list)
 class InterfaceInfoMap(list: Map<String, InterfaceInfoResource>) : HashMap<String, InterfaceInfoResource>(list)
+class ItemInfoMap(list: Map<Int, ItemInfoResource>) : HashMap<Int, ItemInfoResource>(list)
 class NPCSpawns(list: List<NPCSpawnsResource>) : ArrayList<NPCSpawnsResource>(list)
 class NPCExamines(list: Map<Int, ExamineNPCResource>) : HashMap<Int, ExamineNPCResource>(list)
 class ObjectExamines(list: Map<Int, ExamineObjectResource>) : HashMap<Int, ExamineObjectResource>(list)
@@ -29,6 +30,7 @@ object Resource {
     fun examineNPCResource(): NPCExamines = NPCExamines(loadResource<List<ExamineNPCResource>>("game.resources.npc_examines").associateBy(ExamineNPCResource::npcId))
     fun examineObjectResource(): ObjectExamines = ObjectExamines(loadResource<List<ExamineObjectResource>>("game.resources.object_examines").associateBy(ExamineObjectResource::objectId))
     fun examineItemResource(): ItemExamines = ItemExamines(loadResource<List<ExamineItemResource>>("game.resources.item_examines").associateBy(ExamineItemResource::itemId))
+    fun itemInfoResource(): ItemInfoMap = ItemInfoMap(loadResource<List<ItemInfoResource>>("game.resources.item_info").associateBy(ItemInfoResource::id))
 
     private inline fun <reified T> loadResource(path: String): T =
         json.decodeFromStream(Resource::class.java.getResourceAsStream(lazy<ApplicationEnvironment>().config.property(path).getString())!!)

@@ -1,7 +1,7 @@
 package script.packet.disassembler
 
 import com.github.michaelbull.logging.InlineLogger
-import io.ktor.utils.io.core.readShort
+import io.ktor.utils.io.core.readUShort
 import xlitekt.game.packet.MouseClickPacket
 import xlitekt.game.packet.disassembler.onPacketDisassembler
 
@@ -11,12 +11,13 @@ import xlitekt.game.packet.disassembler.onPacketDisassembler
 val logger = InlineLogger()
 
 onPacketDisassembler(opcode = 35, size = 6) {
+    val packet = MouseClickPacket(
+        time = readUShort().toLong(),
+        x = readUShort().toInt(),
+        y = readUShort().toInt()
+    )
 
-    val lastTime = readShort().toLong()
-    val x = readShort().toInt()
-    val y = readShort().toInt()
+//    logger.debug { packet }
 
-    logger.debug { "Mouse Clicked: lastTime=$lastTime position=($x, $y)" }
-
-    MouseClickPacket(lastTime, x, y)
+    packet
 }

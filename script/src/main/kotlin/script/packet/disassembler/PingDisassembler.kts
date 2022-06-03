@@ -8,7 +8,7 @@ val logger = InlineLogger()
 
 onPacketDisassembler(opcode = 12, size = 0) {
 
-    logger.debug { "Ping Received" }
+//    logger.debug { "Ping Received" }
 
     PingPacket()
 }

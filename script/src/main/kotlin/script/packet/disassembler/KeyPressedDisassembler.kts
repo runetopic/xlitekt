@@ -10,7 +10,7 @@ import xlitekt.shared.buffer.readUMedium
  * @author Justin Kenney
  */
 val logger = InlineLogger()
-//        var c = -1
+//        var c = -1 // -1 = logic does not support keycode
 //        if (keycode in 1..12) c = Integer.parseInt("7${Integer.toHexString(keycode - 1)}", 16)
 //        else if (keycode in 16..24) c = keycode + 33
 //        else if (keycode == 25) c = 48
@@ -26,7 +26,12 @@ onPacketDisassembler(opcode = 97, size = -2) {
         keycodes.add(readByteSubtract())
     }
 
-    logger.debug { "Key(s) Press: lastTime=$lastTime keycodes=$keycodes" }
+    val packet = KeyPressedPacket(
+        time = lastTime,
+        keycodes = keycodes.toIntArray()
+    )
 
-    KeyPressedPacket(lastTime, keycodes.toTypedArray())
+//    logger.debug { packet }
+
+    packet
 }

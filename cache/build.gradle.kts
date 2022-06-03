@@ -7,5 +7,6 @@ plugins {
 
 dependencies {
     implementation(deps.kotlinx.serialization.json)
+    implementation(deps.jsoup)
     implementation(project(":shared"))
 }

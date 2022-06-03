@@ -5,5 +5,5 @@ data class OpLocPacket(
     val objectId: Int,
     val x: Int,
     val z: Int,
-    val isModifiedClick: Boolean
+    val isModified: Boolean
 ) : Packet
