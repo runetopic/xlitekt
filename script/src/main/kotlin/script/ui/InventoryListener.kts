@@ -36,10 +36,6 @@ onInterface<UserInterface.Inventory> {
                 inventory.removeItem(slot, item) {
                     world.zone(location).requestAddObj(FloorItem(item.id, item.amount, location))
                 }
-
-                message {
-                    itemInfoMap[item.id].toString()
-                }
             }
         }
     }
