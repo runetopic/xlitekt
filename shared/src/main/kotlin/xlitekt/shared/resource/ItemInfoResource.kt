@@ -62,11 +62,11 @@ data class EquipmentInfoResource(
     @SerialName("prayer")
     val prayer: Int,
     @SerialName("equipmentSlot")
-    val equipmentSlot: EquipmentSlot,
+    val equipmentSlot: EquipmentSlot?,
     @SerialName("attackSpeed")
-    val attackSpeed: Int,
+    val attackSpeed: Int? = null,
     @SerialName("attackRange")
-    val attackRange: Int
+    val attackRange: Int? = null
 )
 
 @Serializable
@@ -74,7 +74,7 @@ data class ItemInfoResource(
     @SerialName("itemId")
     val id: Int,
     @SerialName("name")
-    val name: String,
+    val name: String? = null,
     @SerialName("equipable")
     val equipable: Boolean = false,
     @SerialName("equipment")

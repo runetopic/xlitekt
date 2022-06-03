@@ -9,7 +9,7 @@ import xlitekt.shared.buffer.readUShortLittleEndian
  * @author Jordan Abraham
  */
 onPacketDisassembler(opcode = 31, size = 8) {
-    val packet = OpHeldPacket(
+    OpHeldPacket(
         index = 2,
         fromItemId = readUShortLittleEndian(),
         fromSlotId = readUShortLittleEndian(),
@@ -18,6 +18,4 @@ onPacketDisassembler(opcode = 31, size = 8) {
         toSlotId = 0xffff,
         toItemId = 0xffff
     )
-
-    packet
 }
