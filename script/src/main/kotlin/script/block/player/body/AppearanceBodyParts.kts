@@ -48,7 +48,7 @@ onBodyPart(index = 2) {
  * The main-hand.
  */
 onBodyPart(index = 3) {
-    equipmentSlot(Equipment.Companion::SLOT_MAINHAND)
+    equipmentSlot(Equipment.Companion::SLOT_WEAPON)
 
     bodyPart {
         writeByte { kit }
@@ -70,7 +70,7 @@ onBodyPart(index = 4, BodyPart.TORSO) {
  * The off-hand.
  */
 onBodyPart(index = 5) {
-    equipmentSlot(Equipment.Companion::SLOT_OFFHAND)
+    equipmentSlot(Equipment.Companion::SLOT_SHIELD)
 
     bodyPart {
         writeByte { kit }
@@ -92,7 +92,7 @@ onBodyPart(index = 6, BodyPart.ARMS) {
  * The legs.
  */
 onBodyPart(index = 7, BodyPart.LEGS) {
-    equipmentSlot(Equipment.Companion::SLOT_LEG)
+    equipmentSlot(Equipment.Companion::SLOT_LEGS)
 
     bodyPart {
         writeShort { 0x100 + kit }

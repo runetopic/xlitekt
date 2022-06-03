@@ -1,5 +1,6 @@
 package xlitekt.cache.tool
 
+import kotlinx.coroutines.delay
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.encodeToStream
@@ -15,7 +16,7 @@ import kotlin.system.exitProcess
 /**
  * @author Jordan Abraham
  */
-fun main() {
+suspend fun main() {
     startKoin {
         loadKoinModules(cacheModule)
     }
@@ -24,11 +25,11 @@ fun main() {
 
 private val wikiItems = mutableListOf<WikiItem>()
 
-private fun scrapeItems(baseUrl: String) {
+private suspend fun scrapeItems(baseUrl: String) {
     val baseDocument = Jsoup.connect("https://oldschool.runescape.wiki$baseUrl").get()
     val nextPage = baseDocument.getElementById("mw-pages")?.select("a")?.last()?.attr("href")
 
-    generatePageLinks(baseDocument).drop(1).forEach { link ->
+    generatePageLinks(baseDocument).drop(1).parallelStream().forEach { link ->
         val itemPage = Jsoup.connect("https://oldschool.runescape.wiki$link")
         println("https://oldschool.runescape.wiki$link")
         val document = itemPage.get()
@@ -40,31 +41,34 @@ private fun scrapeItems(baseUrl: String) {
             wikiItem.equipable = generateEquipableFromElements(elements)
             wikiItem.destroyOption = generateDestroyOptionFromElements(elements)
             wikiItem.examine = generateExamineFromElements(elements)
-            wikiItem.weight = generateWeightFromElements(elements)?.toFloatOrNull()
+            wikiItem.weight = generateWeightFromElements(elements)?.toFloatOrNull() ?: 0F
             wikiItem.itemId = generateItemIdFromElements(elements)?.toIntOrNull()
         }
         if (infoboxes.hasClass("infobox infobox-bonuses infobox")) {
             val elements = infoboxes.flatMap { it.getElementsByClass("infobox infobox-bonuses infobox") }.flatMap { it.select("tr") }
             val attackBonuses = generateAttackBonusesFromElement(elements[3])
-            wikiItem.attackStab = attackBonuses[0]
-            wikiItem.attackSlash = attackBonuses[1]
-            wikiItem.attackCrush = attackBonuses[2]
-            wikiItem.attackMagic = attackBonuses[3]
-            wikiItem.attackRanged = attackBonuses[4]
             val defenceBonuses = generateDefenceBonusesFromElement(elements[8])
-            wikiItem.defenceStab = defenceBonuses[0]
-            wikiItem.defenceSlash = defenceBonuses[1]
-            wikiItem.defenceCrush = defenceBonuses[2]
-            wikiItem.defenceMagic = defenceBonuses[3]
-            wikiItem.defenceRanged = defenceBonuses[4]
             val otherBonuses = generateOtherBonusesFromElement(elements[13])
-            wikiItem.strengthBonus = otherBonuses[0]
-            wikiItem.rangedStrength = otherBonuses[1]
-            wikiItem.magicDamage = otherBonuses[2]
-            wikiItem.prayer = otherBonuses[3]
-            wikiItem.equipmentSlot = generateEquipmentSlotFromElement(elements[13])
-            wikiItem.attackSpeed = generateSpeedFromElement(elements.getOrNull(17))?.toIntOrNull()
-            wikiItem.attackRange = generateAttackRangeFromElement(elements.getOrNull(17))?.toIntOrNull()
+            val equipment = ItemEquipment(
+                attackStab = attackBonuses[0] ?: 0,
+                attackSlash = attackBonuses[1] ?: 0,
+                attackCrush = attackBonuses[2] ?: 0,
+                attackMagic = attackBonuses[3] ?: 0,
+                attackRanged = attackBonuses[4] ?: 0,
+                defenceStab = defenceBonuses[0] ?: 0,
+                defenceSlash = defenceBonuses[1] ?: 0,
+                defenceCrush = defenceBonuses[2] ?: 0,
+                defenceMagic = defenceBonuses[3] ?: 0,
+                defenceRanged = defenceBonuses[4] ?: 0,
+                strengthBonus = otherBonuses[0] ?: 0,
+                rangedStrength = otherBonuses[1] ?: 0,
+                magicDamage = otherBonuses[2] ?: 0,
+                prayer = otherBonuses[3] ?: 0,
+                equipmentSlot = generateEquipmentSlotFromElement(elements[13]),
+                attackSpeed = generateSpeedFromElement(elements.getOrNull(17))?.toIntOrNull() ?: 0,
+                attackRange = generateAttackRangeFromElement(elements.getOrNull(17))?.toIntOrNull() ?: 0
+            )
+            wikiItem.equipment = equipment
         }
 
         if (wikiItem.valid()) {
@@ -74,10 +78,11 @@ private fun scrapeItems(baseUrl: String) {
     // If the bot is on the last page.
     if (baseUrl == "/w/Category:Items?pagefrom=Zamorak+full+helm#mw-pages") {
         val json = Json { prettyPrint = true }
-        json.encodeToStream(wikiItems, Path.of("./cache/data/dump/wiki/items.json").outputStream())
+        json.encodeToStream(wikiItems.sortBy { it.itemId }, Path.of("./cache/data/dump/wiki/items.json").outputStream())
         exitProcess(0)
     }
     scrapeItems(nextPage!!)
+    delay(1)
 }
 
 private fun generatePageLinks(document: Element): List<String> {
@@ -168,6 +173,27 @@ private fun generateAttackRangeFromElement(element: Element?) = element
     ?.text()
 
 @Serializable
+data class ItemEquipment(
+    var attackStab: Int,
+    var attackSlash: Int,
+    var attackCrush: Int,
+    var attackMagic: Int,
+    var attackRanged: Int,
+    var defenceStab: Int,
+    var defenceSlash: Int,
+    var defenceCrush: Int,
+    var defenceMagic: Int,
+    var defenceRanged: Int,
+    var strengthBonus: Int,
+    var rangedStrength: Int,
+    var magicDamage: Int,
+    var prayer: Int,
+    var equipmentSlot: String? = null,
+    var attackSpeed: Int,
+    var attackRange: Int
+)
+
+@Serializable
 data class WikiItem(
     var itemId: Int? = null,
     var name: String? = null,
@@ -175,24 +201,8 @@ data class WikiItem(
     var option: String? = null,
     var destroyOption: String? = null,
     var examine: String? = null,
-    var weight: Float? = null,
-    var attackStab: Int? = null,
-    var attackSlash: Int? = null,
-    var attackCrush: Int? = null,
-    var attackMagic: Int? = null,
-    var attackRanged: Int? = null,
-    var defenceStab: Int? = null,
-    var defenceSlash: Int? = null,
-    var defenceCrush: Int? = null,
-    var defenceMagic: Int? = null,
-    var defenceRanged: Int? = null,
-    var strengthBonus: Int? = null,
-    var rangedStrength: Int? = null,
-    var magicDamage: Int? = null,
-    var prayer: Int? = null,
-    var equipmentSlot: String? = null,
-    var attackSpeed: Int? = null,
-    var attackRange: Int? = null
+    var weight: Float = 0F,
+    var equipment: ItemEquipment? = null
 ) {
     fun valid() = itemId != null && name != null
 }

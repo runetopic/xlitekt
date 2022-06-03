@@ -31,6 +31,9 @@ import xlitekt.shared.lazy
 import java.io.IOException
 import java.net.SocketException
 import kotlin.reflect.KClass
+import org.jctools.maps.NonBlockingHashSet
+import xlitekt.game.packet.MovementPacket
+import xlitekt.game.packet.PublicChatPacket
 
 /**
  * @author Jordan Abraham
@@ -47,7 +50,7 @@ class Client(
     lateinit var player: Player
 
     private val writePool = ObjectSets.synchronize(ObjectArraySet<Packet>(64))
-    private val readPool = NonBlockingHashMap<KClass<*>, PacketHandler<Packet>>(64)
+    private val readPool = NonBlockingHashSet<PacketHandler<Packet>>()
 
     fun disconnect(reason: String) {
         logger.debug { "Client disconnected for reason={$reason}." }
@@ -79,8 +82,9 @@ class Client(
     }
 
     internal fun addToReadPool(packetHandler: PacketHandler<Packet>) {
-        // We use a map because we can replace keys if there are multiple requests of the same type.
-        readPool[packetHandler.packet::class] = packetHandler
+        readPool.removeIf { it::packet::class == MovementPacket::class }
+        readPool.removeIf { it::packet::class == PublicChatPacket::class }
+        readPool.add(packetHandler)
     }
 
     internal fun invokeAndClearWritePool() {
@@ -109,7 +113,7 @@ class Client(
     }
 
     internal fun invokeAndClearReadPool() {
-        for (packet in readPool.values) {
+        for (packet in readPool) {
             PacketHandlerListener.listeners[packet.packet::class]?.invoke(packet)
         }
         readPool.clear()
