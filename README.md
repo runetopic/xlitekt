@@ -8,9 +8,10 @@ update: [#202](https://oldschool.runescape.wiki/w/5_January) (Nex)
 The goal behind this project is to provide the community with a powerful, yet simple to use framework that is _heavily_
 documented. 
 
-Xlite is currently built by two developers:
+Developers:
  - [tyler27 (me)](https://github.com/tyler27)
  - [ultraviolet-jordan](https://github.com/ultraviolet-jordan)
+ - [justin51](https://github.com/justin51)
 
 # Features
 - Embedded HTTP server to deliver client configuration files.
