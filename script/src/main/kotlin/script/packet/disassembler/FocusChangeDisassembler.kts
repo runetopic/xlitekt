@@ -10,9 +10,7 @@ private val logger = InlineLogger()
 
 onPacketDisassembler(opcode = 7, size = 1) {
 
-    val isFocused = readByte().toInt().toBoolean()
-
-    val packet = FocusChangePacket(isFocused)
+    val packet = FocusChangePacket(readByte().toInt().toBoolean())
 
     logger.debug { packet }
 
