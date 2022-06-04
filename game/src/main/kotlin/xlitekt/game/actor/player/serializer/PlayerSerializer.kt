@@ -34,6 +34,7 @@ class PlayerSerializer : KSerializer<Player> {
             element<Skills>("skills")
             element<Equipment>("equipment")
             element<Inventory>("inventory")
+            element<Boolean>("brandNew")
         }
 
     override fun deserialize(decoder: Decoder): Player = decoder.decodeStructure(descriptor) {
@@ -49,6 +50,7 @@ class PlayerSerializer : KSerializer<Player> {
         val skills = decodeSerializableElement(descriptor, decodeElementIndex(descriptor), SkillsSerializer())
         val equipment = decodeSerializableElement(descriptor, decodeElementIndex(descriptor), ListSerializer(ItemSerializer()))
         val inventory = decodeSerializableElement(descriptor, decodeElementIndex(descriptor), ListSerializer(ItemSerializer()))
+        val brandNew = decodeBooleanElement(descriptor, decodeElementIndex(descriptor))
 
         val player = Player(
             location = location,
@@ -57,7 +59,8 @@ class PlayerSerializer : KSerializer<Player> {
             runEnergy = runEnergy,
             rights = rights,
             appearance = appearance,
-            skills = skills
+            skills = skills,
+            brandNew = brandNew
         )
         player.vars.putAll(vars)
         player.equipment.replaceAll(equipment)
@@ -76,5 +79,6 @@ class PlayerSerializer : KSerializer<Player> {
         encodeSerializableElement(descriptor, 7, SkillsSerializer(), value.skills)
         encodeSerializableElement(descriptor, 8, ListSerializer(ItemSerializer()), value.equipment)
         encodeSerializableElement(descriptor, 9, ListSerializer(ItemSerializer()), value.inventory)
+        encodeBooleanElement(descriptor, 10, value.brandNew)
     }
 }
