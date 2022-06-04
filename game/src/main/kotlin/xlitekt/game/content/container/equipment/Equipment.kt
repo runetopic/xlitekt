@@ -5,6 +5,9 @@ import xlitekt.game.content.container.Container
 import xlitekt.game.content.item.Item
 import xlitekt.game.packet.UpdateContainerFullPacket
 import xlitekt.game.packet.UpdateContainerPartialPacket
+import xlitekt.game.packet.UpdateWeightPacket
+import xlitekt.shared.inject
+import xlitekt.shared.resource.ItemInfoMap
 
 const val EQUIPMENT_KEY = 94
 const val EQUIPMENT_CAPACITY = 15
@@ -36,6 +39,8 @@ class Equipment(
                 this
             )
         )
+
+        updateWeight(true)
     }
 
     /**
@@ -53,10 +58,29 @@ class Equipment(
     }
 
     /**
-     * Refreshes specific slots within the equipment container.
+     * Calculates the players weight based on the worn equipment items and writes it to the client if toggled.
+     */
+    fun updateWeight(write: Boolean = false) {
+        filterNotNull().forEach {
+            val info = itemInfoMap[it.id] ?: return
+
+            player.weight += info.weight
+        }
+
+        if (write) player.write(
+            UpdateWeightPacket(player.weight)
+        )
+    }
+
+    /**
+     * Refreshes specific slots within the equipment container and calculate the newly refreshed bonuses.
      * This leverages the UpdateContainerPartialPacket
      */
     fun refreshSlots(slots: List<Int>) {
+        player
+            .bonuses
+            .calculateEquippedBonuses(player.equipment) // TODO: potentially only calculate the refreshed slots.
+
         player.write(
             UpdateContainerPartialPacket(
                 -1,
@@ -65,6 +89,8 @@ class Equipment(
                 slots
             )
         )
+
+        updateWeight(true)
     }
 
     companion object {
@@ -79,5 +105,7 @@ class Equipment(
         const val SLOT_FEET = 10
         const val SLOT_RING = 12
         const val SLOT_AMMO = 13
+
+        private val itemInfoMap by inject<ItemInfoMap>()
     }
 }

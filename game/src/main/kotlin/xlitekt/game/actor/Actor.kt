@@ -19,6 +19,7 @@ import xlitekt.game.world.map.location.Location
 import xlitekt.game.world.map.zone.Zone
 import xlitekt.shared.inject
 import java.util.*
+import xlitekt.game.actor.bonus.Bonuses
 
 /**
  * @author Tyler Telis
@@ -28,6 +29,8 @@ abstract class Actor(
     open var location: Location
 ) {
     val movement = Movement()
+
+    val bonuses = Bonuses()
 
     var previousLocation: Location = Location.None
     var index = 0

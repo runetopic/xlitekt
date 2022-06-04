@@ -4,5 +4,5 @@ package xlitekt.game.packet
  * @author Tyler Telis
  */
 data class UpdateWeightPacket(
-    val weight: Short,
+    val weight: Float,
 ) : Packet

@@ -57,8 +57,10 @@ data class EquipmentInfoResource(
     val defenceRanged: Int,
     @SerialName("strengthBonus")
     val meleeStrength: Int,
+    @SerialName("rangedStrength")
+    val rangedStrength: Int,
     @SerialName("magicDamage")
-    val magicDamage: Int,
+    val magicDamage: Double,
     @SerialName("prayer")
     val prayer: Int,
     @SerialName("equipmentSlot")
@@ -77,6 +79,8 @@ data class ItemInfoResource(
     val name: String,
     @SerialName("equipable")
     val equipable: Boolean = false,
+    @SerialName("weight")
+    val weight: Float = 0f,
     @SerialName("equipment")
     val equipment: EquipmentInfoResource? = null
 )
