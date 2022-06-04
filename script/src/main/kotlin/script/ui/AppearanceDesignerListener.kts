@@ -67,7 +67,10 @@ onInterface<PlayerAppearanceDesigner> {
                 appearance.gender = nextGender
                 vars.flip { VarBit.AppearanceDesignerGenderSelect }
             }
-            68 -> interfaces.closeModal()
+            68 -> {
+                interfaces.closeModal()
+                brandNew = false
+            }
         }
         renderAppearance()
     }
