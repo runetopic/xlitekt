@@ -5,6 +5,7 @@ import xlitekt.game.content.command.Commands.onCommand
 import xlitekt.game.content.item.FloorItem
 import xlitekt.game.content.item.Item
 import xlitekt.game.content.projectile.Projectile
+import xlitekt.game.content.ui.UserInterface
 import xlitekt.game.world.World
 import xlitekt.game.world.map.collision.CollisionMap
 import xlitekt.game.world.map.location.Location
@@ -83,4 +84,8 @@ onCommand("proj").use {
     val zone = world.zone(Location(3222, 3222, 0))
     val projectile = Projectile(1465, Location(3222, 3222, 0), Location(3216, 3216, 0), 43, 31, 36, 16, 64)
     zone.requestAddMapProjAnim(projectile)
+}
+
+onCommand("design").use {
+    interfaces += UserInterface.PlayerAppearanceDesigner
 }

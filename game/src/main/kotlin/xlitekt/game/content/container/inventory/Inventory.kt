@@ -1,5 +1,6 @@
 package xlitekt.game.content.container.inventory
 
+import kotlinx.serialization.Serializable
 import xlitekt.game.actor.player.Player
 import xlitekt.game.actor.player.message
 import xlitekt.game.content.container.Container
@@ -16,6 +17,7 @@ const val INVENTORY_CAPACITY = 28
  * This class is used to track the Player's items in their inventory.
  * @author Tyler Telis
  */
+@Serializable
 class Inventory(
     val player: Player,
 ) : Container(INVENTORY_CONTAINER_KEY, INVENTORY_CAPACITY) {

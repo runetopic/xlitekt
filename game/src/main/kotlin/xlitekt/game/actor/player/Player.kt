@@ -17,7 +17,7 @@ import xlitekt.game.content.vars.Vars
 import xlitekt.game.event.EventBus
 import xlitekt.game.event.impl.Events
 import xlitekt.game.fs.PlayerJsonEncoderService
-import xlitekt.game.packet.*
+import xlitekt.game.packet.* // ktlint-disable no-wildcard-imports
 import xlitekt.game.packet.disassembler.handler.PacketHandler
 import xlitekt.game.world.World
 import xlitekt.game.world.map.location.Location
@@ -36,7 +36,8 @@ class Player(
     val rights: Int = 0,
     val appearance: Render.Appearance = Render.Appearance().also { it.displayName = username },
     val skills: Skills = Skills(),
-    var runEnergy: Float = 10_000f
+    var runEnergy: Float = 10_000f,
+    var brandNew: Boolean = true
 ) : Actor(location) {
     val viewport = Viewport(this)
     val interfaces = Interfaces(this)
@@ -68,7 +69,7 @@ class Player(
         rebuildNormal(players) { true }
         interfaces.openTop(interfaces.currentInterfaceLayout.interfaceId)
         invokeAndClearWritePool()
-        lazy<World>().zone(location).enterZone(this)
+        zone().enterZone(this)
         login()
     }
 
@@ -80,6 +81,7 @@ class Player(
         interfaces.login()
         inventory.login()
         equipment.login()
+        appearance.equipment = equipment
         render(appearance)
         movementType { false }
         updateRunEnergy()
@@ -97,7 +99,7 @@ class Player(
         online = false
         write(LogoutPacket(0))
         invokeAndClearWritePool()
-        activeZone.get().leaveZone(this)
+        zone().leaveZone(this)
         lazy<World>().removePlayer(this)
         lazy<PlayerJsonEncoderService>().requestSave(this)
     }
@@ -162,3 +164,5 @@ inline fun Player.rebuildNormal(players: NonBlockingHashMapLong<Player>, update:
     write(RebuildNormalPacket(viewport, location, update.invoke(), players))
     lastLoadedLocation = location
 }
+
+fun Player.renderAppearance() = render(appearance)

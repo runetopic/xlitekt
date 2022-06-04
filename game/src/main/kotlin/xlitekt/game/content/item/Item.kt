@@ -1,5 +1,6 @@
 package xlitekt.game.content.item
 
+import kotlinx.serialization.Serializable
 import xlitekt.cache.provider.config.obj.ObjEntryTypeProvider
 import xlitekt.shared.inject
 
@@ -9,6 +10,7 @@ private val objEntryTypeProvider by inject<ObjEntryTypeProvider>()
  * @author Jordan Abraham
  * @author Tyler Telis
  */
+@Serializable
 data class Item(
     val id: Int,
     val amount: Int

@@ -46,7 +46,7 @@ class Zone(
     fun update() {
         val updates = mutableMapOf<Player, MutableList<Packet>>()
 
-        val neighboring = neighboringPlayers()
+        val neighboring = neighboringPlayers(-3..3)
         if (mapProjRequests.isNotEmpty()) {
             for (projectile in mapProjRequests) {
                 for (player in neighboring) {
@@ -112,8 +112,8 @@ class Zone(
     fun enterZone(actor: Actor) {
         // This actor current zones.
         val zones = actor.zones()
-        // This zone neighboring zones.
-        val neighboring = neighboringZones()
+        // Neighboring zones of this zone.
+        val neighboring = if (actor is Player) neighboringZones(-3..3) else neighboringZones(-2..2)
         // Zones that are being removed from this actor current zones.
         val removed = zones.filter { it !in neighboring }
         // Zones that are being added to this actor current zones.
@@ -218,23 +218,27 @@ class Zone(
 
     /**
      * Returns a list of players that are inside this zone and neighboring zones.
+     * By default, the range is limited to a standard 7x7 build area.
      */
-    fun neighboringPlayers() = neighboringZones().filter(Zone::active).map(Zone::players).flatten()
+    fun neighboringPlayers(range: IntRange = -3..3) = neighboringZones(range).filter(Zone::active).map(Zone::players).flatten()
 
     /**
      * Returns a list of npcs that are inside this zone and neighboring zones.
+     * By default, the range is limited to a 5x5 area since by default npcs are only visible within 15 tiles.
      */
-    fun neighboringNpcs() = neighboringZones().filter(Zone::active).map(Zone::npcs).flatten()
+    fun neighboringNpcs(range: IntRange = -2..2) = neighboringZones(range).filter(Zone::active).map(Zone::npcs).flatten()
 
     /**
      * Returns a list of game objects that are inside this zone and neighboring zones.
+     * By default, the range is limited to a standard 7x7 build area.
      */
-    fun neighboringLocs() = neighboringZones().filter(Zone::active).map(Zone::locs).flatten()
+    fun neighboringLocs(range: IntRange = -3..3) = neighboringZones(range).filter(Zone::active).map(Zone::locs).flatten()
 
     /**
      * Returns a list of floor items that are inside this zone and neighboring zones.
+     * By default, the range is limited to a standard 7x7 build area.
      */
-    fun neighboringObjs() = neighboringZones().filter(Zone::active).map(Zone::objs).flatten()
+    fun neighboringObjs(range: IntRange = -3..3) = neighboringZones(range).filter(Zone::active).map(Zone::objs).flatten()
 
     /**
      * Returns if this zone is active or not.
@@ -248,12 +252,15 @@ class Zone(
 
     /**
      * Returns a list of zones that are neighboring this zone including this zone.
-     * This will always be in a 7x7 square area with this zone in the middle.
+     * A range must be specified for the range of zones to grab.
+     *
+     * The standard range is a 7x7 (-3..3) for the default player build area.
+     * The standard range is a 5x5 (-2..2) for the default npc build area.
      */
-    private fun neighboringZones(): Set<Zone> {
+    private fun neighboringZones(range: IntRange): Set<Zone> {
         val zones = mutableSetOf<Zone>()
-        for (x in -3..3) {
-            for (z in -3..3) {
+        for (x in range) {
+            for (z in range) {
                 zones.add(world.zone(location.toZoneLocation().transform(x, z).toFullLocation()))
             }
         }
