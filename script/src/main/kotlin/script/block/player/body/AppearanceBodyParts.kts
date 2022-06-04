@@ -66,7 +66,7 @@ onBodyPart(index = Equipment.SLOT_MAINHAND) {
 /**
  * The torso.
  */
-onBodyPart(index = Equipment.SLOT_TORSO, BodyPart.TORSO) {
+onBodyPart(index = Equipment.SLOT_TORSO, BodyPart.Torso) {
     bodyPart {
         if (equipment.torso != null) {
             writeShort { 0x200 + equipment.torso!!.id }
@@ -92,7 +92,7 @@ onBodyPart(index = Equipment.SLOT_OFFHAND) {
 /**
  * The arms.
  */
-onBodyPart(index = 6, BodyPart.ARMS) {
+onBodyPart(index = 6, BodyPart.Arms) {
     bodyPart {
         if (equipment.torso != null) {
             writeByte { 0 } // Hide arms.
@@ -105,7 +105,7 @@ onBodyPart(index = 6, BodyPart.ARMS) {
 /**
  * The legs.
  */
-onBodyPart(index = Equipment.SLOT_LEGS, BodyPart.LEGS) {
+onBodyPart(index = Equipment.SLOT_LEGS, BodyPart.Legs) {
     bodyPart {
         if (equipment.legs != null) {
             writeShort { 0x200 + equipment.legs!!.id }
@@ -118,7 +118,7 @@ onBodyPart(index = Equipment.SLOT_LEGS, BodyPart.LEGS) {
 /**
  * The hair.
  */
-onBodyPart(index = 8, BodyPart.HEAD) {
+onBodyPart(index = 8, BodyPart.Head) {
     bodyPart {
         if (equipment.head != null) {
             writeByte { 0 } // Hide hair.
@@ -131,7 +131,7 @@ onBodyPart(index = 8, BodyPart.HEAD) {
 /**
  * The hands.
  */
-onBodyPart(index = Equipment.SLOT_HANDS, BodyPart.HANDS) {
+onBodyPart(index = Equipment.SLOT_HANDS, BodyPart.Hands) {
     bodyPart {
         if (equipment.hands != null) {
             writeShort { 0x200 + equipment.hands!!.id }
@@ -144,7 +144,7 @@ onBodyPart(index = Equipment.SLOT_HANDS, BodyPart.HANDS) {
 /**
  * The feet.
  */
-onBodyPart(index = Equipment.SLOT_FEET, BodyPart.FEET) {
+onBodyPart(index = Equipment.SLOT_FEET, BodyPart.Feet) {
     bodyPart {
         if (equipment.feet != null) {
             writeShort { 0x200 + equipment.feet!!.id }
@@ -157,11 +157,11 @@ onBodyPart(index = Equipment.SLOT_FEET, BodyPart.FEET) {
 /**
  * The jaw.
  */
-onBodyPart(index = 11, BodyPart.JAW) {
+onBodyPart(index = 11, BodyPart.Jaw) {
     bodyPart {
-        val slot = if (gender == Gender.MALE) Equipment.SLOT_HEAD else Equipment.SLOT_TORSO
+        val slot = if (gender == Gender.Male) Equipment.SLOT_HEAD else Equipment.SLOT_TORSO
         when (gender) {
-            Gender.MALE -> if (equipment[slot] != null) {
+            Gender.Male -> if (equipment[slot] != null) {
                 writeByte { 0 } // Hide beard.
             } else {
                 writeShort { 0x100 + kit }

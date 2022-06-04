@@ -21,7 +21,7 @@ import xlitekt.shared.buffer.writeStringCp1252NullTerminated
 onPlayerUpdateBlock<Appearance>(5, 0x1) {
     buildPacket {
         val appearance = buildPacket {
-            writeByte(gender::mask)
+            writeByte(gender::id)
             writeByte { skullIcon.orElse(-1) }
             writeByte { headIcon.orElse(-1) }
             if (transform.isPresent) writeTransmogrification(this@onPlayerUpdateBlock) else writeIdentityKit(this@onPlayerUpdateBlock)
@@ -51,11 +51,10 @@ fun BytePacketBuilder.writeTransmogrification(render: Appearance) {
 
 fun BytePacketBuilder.writeIdentityKit(render: Appearance) {
     BodyPartListener.listeners.entries.sortedBy(MutableMap.MutableEntry<Int, BodyPartInfo>::key).forEach {
-        // TODO We will need to add support for the item worn in the specific body slot.
         val bodyPartBuilder = BodyPartBuilder(render.bodyParts.getOrDefault(it.value.bodyPart, 0), render.gender, render.equipment)
         it.value.builder.invoke(bodyPartBuilder)
         writeBytes { bodyPartBuilder.data!! }
     }
 }
 
-fun BytePacketBuilder.color(colours: Set<Map.Entry<BodyPartColor, Int>>) = colours.sortedBy { it.key.id }.forEach { writeByte(it::value) }
+fun BytePacketBuilder.color(colors: Set<Map.Entry<BodyPartColor, Int>>) = colors.sortedBy { it.key.id }.forEach { writeByte(it::value) }
