@@ -1,4 +1,4 @@
-package xlitekt.game.world.map.obj
+package xlitekt.game.world.map
 
 /**
  * Kris

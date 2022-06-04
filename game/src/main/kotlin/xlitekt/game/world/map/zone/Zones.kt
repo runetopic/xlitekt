@@ -1,12 +1,13 @@
 package xlitekt.game.world.map.zone
 
-import xlitekt.game.world.map.location.Location
-import xlitekt.game.world.map.location.ZoneLocation
+import xlitekt.game.world.map.Location
 
-private const val ZONES = 2048 * 2048 * 4
-
+/**
+ * @author Tyler Telis
+ * @author Jordan Abraham
+ */
 class Zones {
-    private val zones: Array<Zone?> = arrayOfNulls(ZONES)
+    private val zones = arrayOfNulls<Zone?>(2048 * 2048 * 4)
 
     operator fun get(location: Location): Zone {
         val zoneLocation = location.toZoneLocation()
@@ -20,4 +21,6 @@ class Zones {
         zones[location.packedCoordinates] = newZone
         return newZone
     }
+
+    internal fun filterNotNull() = zones.filterNotNull()
 }

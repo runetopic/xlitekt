@@ -1,4 +1,4 @@
-package xlitekt.game.world
+package xlitekt.game.world.map
 
 import org.rsmod.pathfinder.ZoneFlags
 import org.rsmod.pathfinder.flag.CollisionFlag.FLOOR
@@ -33,9 +33,7 @@ import org.rsmod.pathfinder.flag.CollisionFlag.WALL_WEST_ROUTE_BLOCKER
 import xlitekt.cache.provider.config.loc.LocEntryTypeProvider
 import xlitekt.cache.provider.map.MapSquareEntryType
 import xlitekt.cache.provider.map.MapSquareEntryTypeProvider
-import xlitekt.game.world.map.location.Location
-import xlitekt.game.world.map.obj.GameObject
-import xlitekt.game.world.map.obj.GameObjectShape
+import xlitekt.game.world.World
 import xlitekt.shared.inject
 
 object CollisionMap {

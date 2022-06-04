@@ -1,7 +1,6 @@
-package xlitekt.game.world.map.obj
+package xlitekt.game.world.map
 
 import xlitekt.cache.provider.config.loc.LocEntryTypeProvider
-import xlitekt.game.world.map.Location
 import xlitekt.shared.inject
 
 /**

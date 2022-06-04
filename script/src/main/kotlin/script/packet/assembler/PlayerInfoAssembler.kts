@@ -17,8 +17,8 @@ import xlitekt.game.actor.player.Player
 import xlitekt.game.actor.player.Viewport
 import xlitekt.game.packet.PlayerInfoPacket
 import xlitekt.game.packet.assembler.onPacketAssembler
-import xlitekt.game.world.map.location.Location
-import xlitekt.game.world.map.location.withinDistance
+import xlitekt.game.world.map.Location
+import xlitekt.game.world.map.withinDistance
 import xlitekt.shared.buffer.BitAccess
 import xlitekt.shared.buffer.withBitAccess
 import xlitekt.shared.buffer.writeBytes

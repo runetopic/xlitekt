@@ -1,4 +1,4 @@
-package xlitekt.game.world.map.location
+package xlitekt.game.world.map.zone
 
 import xlitekt.game.world.map.Location
 

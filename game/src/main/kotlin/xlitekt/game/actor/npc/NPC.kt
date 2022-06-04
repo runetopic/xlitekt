@@ -4,12 +4,13 @@ import xlitekt.cache.provider.config.npc.NPCEntryTypeProvider
 import xlitekt.game.actor.Actor
 import xlitekt.game.event.EventBus
 import xlitekt.game.event.impl.Events
-import xlitekt.game.world.map.location.Location
+import xlitekt.game.world.map.Location
 import xlitekt.shared.inject
 
-private val npcEntryTypeProvider by inject<NPCEntryTypeProvider>()
-private val eventBus by inject<EventBus>()
-
+/**
+ * @author Tyler Telis
+ * @author Jordan Abraham
+ */
 class NPC(
     val id: Int,
     override var location: Location
@@ -26,4 +27,9 @@ class NPC(
     override fun currentHitpoints(): Int = 100
 
     override fun toString(): String = "NPC(id=$id, entry=$entry)"
+
+    private companion object {
+        val npcEntryTypeProvider by inject<NPCEntryTypeProvider>()
+        val eventBus by inject<EventBus>()
+    }
 }

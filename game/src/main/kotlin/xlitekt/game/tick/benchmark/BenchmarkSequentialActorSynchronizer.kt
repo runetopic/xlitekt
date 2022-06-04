@@ -15,7 +15,7 @@ import xlitekt.game.actor.render.HitType
 import xlitekt.game.actor.route
 import xlitekt.game.actor.spotAnimate
 import xlitekt.game.tick.Synchronizer
-import xlitekt.game.world.map.location.Location
+import xlitekt.game.world.map.Location
 import xlitekt.game.world.map.zone.Zone
 import xlitekt.shared.inject
 import kotlin.random.Random

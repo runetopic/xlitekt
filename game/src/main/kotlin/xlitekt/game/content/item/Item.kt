@@ -4,8 +4,6 @@ import kotlinx.serialization.Serializable
 import xlitekt.cache.provider.config.obj.ObjEntryTypeProvider
 import xlitekt.shared.inject
 
-private val objEntryTypeProvider by inject<ObjEntryTypeProvider>()
-
 /**
  * @author Jordan Abraham
  * @author Tyler Telis
@@ -19,4 +17,8 @@ data class Item(
 
     fun isStackable(): Boolean = entry?.isStackable == 1 || isNotable()
     fun isNotable(): Boolean = entry?.noteTemplate != -1
+
+    private companion object {
+        val objEntryTypeProvider by inject<ObjEntryTypeProvider>()
+    }
 }

@@ -16,7 +16,7 @@ import xlitekt.game.actor.render.Render
 import xlitekt.game.content.container.equipment.Equipment
 import xlitekt.game.content.container.inventory.Inventory
 import xlitekt.game.content.skill.Skills
-import xlitekt.game.world.map.location.Location
+import xlitekt.game.world.map.Location
 
 /**
  * @author Jordan Abraham

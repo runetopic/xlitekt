@@ -1,9 +1,9 @@
-package xlitekt.game.world
+package xlitekt.game.world.map
 
 import kotlinx.serialization.Serializable
 import xlitekt.game.actor.movement.Direction
 import xlitekt.game.actor.player.serializer.LocationSerializer
-import xlitekt.game.world.map.location.ZoneLocation
+import xlitekt.game.world.map.zone.ZoneLocation
 
 @Serializable(with = LocationSerializer::class)
 @JvmInline

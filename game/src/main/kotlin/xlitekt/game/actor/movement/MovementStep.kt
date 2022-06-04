@@ -1,6 +1,6 @@
 package xlitekt.game.actor.movement
 
-import xlitekt.game.world.map.location.Location
+import xlitekt.game.world.map.Location
 
 /**
  * @author Jordan Abraham

@@ -6,7 +6,7 @@ import xlitekt.game.actor.player.serializer.AppearanceSerializer
 import xlitekt.game.actor.render.block.body.BodyPart
 import xlitekt.game.actor.render.block.body.BodyPartColor
 import xlitekt.game.content.container.equipment.Equipment
-import xlitekt.game.world.map.location.Location
+import xlitekt.game.world.map.Location
 import java.util.Optional
 
 /**
