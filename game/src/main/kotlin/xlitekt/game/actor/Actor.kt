@@ -38,7 +38,7 @@ abstract class Actor(
     inline val indexL get() = index.toLong()
 
     internal var facingActorIndex = Optional.empty<Int>()
-    protected var activeZone = Optional.empty<Zone>()
+    private var activeZone = Optional.empty<Zone>()
     private val zones = mutableSetOf<Zone>()
 
     /**

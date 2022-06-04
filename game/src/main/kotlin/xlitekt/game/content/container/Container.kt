@@ -1,5 +1,6 @@
 package xlitekt.game.content.container
 
+import kotlinx.serialization.Serializable
 import xlitekt.game.content.item.Item
 
 /**
@@ -9,12 +10,14 @@ import xlitekt.game.content.item.Item
  * @param capacity The capacity of the container.
  * @param alwaysStack If this container is always stacking items within the container. (This currently has limited support. Will be adding more in the future)
  */
+@Serializable
 abstract class Container(
     val id: Int,
     val capacity: Int,
     private val items: MutableList<Item?> = MutableList(capacity) { null },
     val alwaysStack: Boolean = false
 ) : List<Item?> by items {
+
     /**
      * Counts the number of free slots in the container.
      */
@@ -169,6 +172,15 @@ abstract class Container(
      * @return The item found within the container.
      */
     fun firstBySlot(slot: Int): Item? = items[slot]
+
+    /**
+     * Hard replace this entire container with another list of items.
+     * This is only necessary for the player json serialization.
+     * @param src The src list of items to replace this container with.
+     */
+    fun replaceAll(src: List<Item?>) {
+        src.forEachIndexed(items::set)
+    }
 }
 
 typealias ContainerUpdate = (Item).(List<Int>) -> Unit

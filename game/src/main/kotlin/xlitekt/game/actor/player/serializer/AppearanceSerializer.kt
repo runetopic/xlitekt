@@ -11,9 +11,9 @@ import kotlinx.serialization.encoding.Encoder
 import kotlinx.serialization.encoding.decodeStructure
 import kotlinx.serialization.encoding.encodeStructure
 import xlitekt.game.actor.render.Render
+import xlitekt.game.actor.render.Render.Appearance.Gender
 import xlitekt.game.actor.render.block.body.BodyPart
 import xlitekt.game.actor.render.block.body.BodyPartColor
-import java.util.EnumMap
 
 /**
  * @author Jordan Abraham
@@ -28,15 +28,15 @@ class AppearanceSerializer : KSerializer<Render.Appearance> {
         }
 
     override fun deserialize(decoder: Decoder): Render.Appearance = decoder.decodeStructure(descriptor) {
-        val gender = decodeStringElement(descriptor, decodeElementIndex(descriptor))
+        val gender = decodeIntElement(descriptor, decodeElementIndex(descriptor))
         decodeElementIndex(descriptor)
-        val bodyParts = EnumMap(decoder.decodeSerializableValue(MapSerializer(String.serializer(), Int.serializer())).map { BodyPart.valueOf(it.key) to it.value }.toMap())
+        val bodyParts = decoder.decodeSerializableValue(MapSerializer(Int.serializer(), Int.serializer())).map { BodyPart(it.key) to it.value }.toMap()
         decodeElementIndex(descriptor)
-        val bodyPartColors = EnumMap(decoder.decodeSerializableValue(MapSerializer(String.serializer(), Int.serializer())).map { BodyPartColor.valueOf(it.key) to it.value }.toMap())
+        val bodyPartColors = decoder.decodeSerializableValue(MapSerializer(Int.serializer(), Int.serializer())).map { BodyPartColor.findByKey(it.key) to it.value }.toMap()
         val displayName = decodeStringElement(descriptor, decodeElementIndex(descriptor))
 
         val appearance = Render.Appearance()
-        appearance.gender = Render.Appearance.Gender.valueOf(gender)
+        appearance.gender = Gender(gender)
         appearance.bodyParts.putAll(bodyParts)
         appearance.bodyPartColors.putAll(bodyPartColors)
         appearance.displayName = displayName
@@ -44,9 +44,9 @@ class AppearanceSerializer : KSerializer<Render.Appearance> {
     }
 
     override fun serialize(encoder: Encoder, value: Render.Appearance) = encoder.encodeStructure(descriptor) {
-        encodeStringElement(descriptor, 0, value.gender.name)
-        encodeSerializableElement(descriptor, 1, MapSerializer(String.serializer(), Int.serializer()), value.bodyParts.map { it.key.name to it.value }.toMap())
-        encodeSerializableElement(descriptor, 2, MapSerializer(String.serializer(), Int.serializer()), value.bodyPartColors.map { it.key.name to it.value }.toMap())
+        encodeIntElement(descriptor, 0, value.gender.id)
+        encodeSerializableElement(descriptor, 1, MapSerializer(Int.serializer(), Int.serializer()), value.bodyParts.map { it.key.id to it.value }.toMap())
+        encodeSerializableElement(descriptor, 2, MapSerializer(Int.serializer(), Int.serializer()), value.bodyPartColors.map { it.key.id to it.value }.toMap())
         encodeStringElement(descriptor, 3, value.displayName)
     }
 }

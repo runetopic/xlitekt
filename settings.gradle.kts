@@ -21,7 +21,6 @@ dependencyResolutionManagement {
             version("pathfinder", "2.1.4")
             version("fastutil", "8.5.8")
             version("jctools", "3.3.0")
-            version("jsoup", "1.14.3")
 
             library("ktor-server-netty", "io.ktor", "ktor-server-netty").versionRef("ktor")
             library("koin-core", "io.insert-koin", "koin-core").versionRef("koin")
@@ -38,7 +37,6 @@ dependencyResolutionManagement {
             library("kotlin-inline-logger", "com.michael-bull.kotlin-inline-logger", "kotlin-inline-logger").versionRef("kotlin-inline-logger")
             library("fastutil", "it.unimi.dsi", "fastutil").versionRef("fastutil")
             library("jctools", "org.jctools", "jctools-core").versionRef("jctools")
-            library("jsoup", "org.jsoup", "jsoup").versionRef("jsoup")
 
             bundle("kts", listOf("kscripting", "kruntime"))
             bundle("ktor", listOf("ktor-server-netty"))

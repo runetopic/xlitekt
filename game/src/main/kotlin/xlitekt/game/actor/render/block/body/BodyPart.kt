@@ -2,14 +2,17 @@ package xlitekt.game.actor.render.block.body
 
 import xlitekt.game.actor.render.Render.Appearance.Gender
 
-enum class BodyPart(private val id: Int) {
-    HEAD(0),
-    JAW(1),
-    TORSO(2),
-    ARMS(3),
-    HANDS(4),
-    LEGS(5),
-    FEET(6);
+@JvmInline
+value class BodyPart(val id: Int) {
+    fun packBodyPart(gender: Gender) = id + gender.id * 7
 
-    fun bodyPart(gender: Gender): Int = id + gender.mask * 7
+    companion object {
+        val Head = BodyPart(0)
+        val Jaw = BodyPart(1)
+        val Torso = BodyPart(2)
+        val Arms = BodyPart(3)
+        val Hands = BodyPart(4)
+        val Legs = BodyPart(5)
+        val Feet = BodyPart(6)
+    }
 }

@@ -1,5 +1,6 @@
 package xlitekt.game.content.container.equipment
 
+import kotlinx.serialization.Serializable
 import xlitekt.game.actor.player.Player
 import xlitekt.game.content.container.Container
 import xlitekt.game.content.item.Item
@@ -12,6 +13,7 @@ import xlitekt.shared.resource.ItemInfoMap
 const val EQUIPMENT_KEY = 94
 const val EQUIPMENT_CAPACITY = 15
 
+@Serializable
 class Equipment(
     val player: Player
 ) : Container(-1, EQUIPMENT_CAPACITY) {
@@ -22,8 +24,8 @@ class Equipment(
     val neck: Item? get() = this[SLOT_NECK]
     val torso: Item? get() = this[SLOT_TORSO]
     val legs: Item? get() = this[SLOT_LEGS]
-    val weapon: Item? get() = this[SLOT_WEAPON]
-    val offhand: Item? get() = this[SLOT_SHIELD]
+    val mainhand: Item? get() = this[SLOT_MAINHAND]
+    val offhand: Item? get() = this[SLOT_OFFHAND]
     val hands: Item? get() = this[SLOT_HANDS]
     val feet: Item? get() = this[SLOT_FEET]
     val ring: Item? get() = this[SLOT_RING]
@@ -97,9 +99,9 @@ class Equipment(
         const val SLOT_HEAD = 0
         const val SLOT_BACK = 1
         const val SLOT_NECK = 2
-        const val SLOT_WEAPON = 3
+        const val SLOT_MAINHAND = 3
         const val SLOT_TORSO = 4
-        const val SLOT_SHIELD = 5
+        const val SLOT_OFFHAND = 5
         const val SLOT_LEGS = 7
         const val SLOT_HANDS = 9
         const val SLOT_FEET = 10
