@@ -13,6 +13,6 @@ onPacketDisassembler(opcode = 59, size = 3) {
     OpNPCPacket(
         index = 2,
         npcIndex = readUShortLittleEndianAdd(),
-        isModifiedClick = readUByteSubtract().toBoolean()
+        isModified = readUByteSubtract().toBoolean()
     )
 }

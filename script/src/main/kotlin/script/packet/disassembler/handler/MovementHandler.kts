@@ -20,19 +20,15 @@ private val pathfinder = SmartPathFinder(
 )
 
 onPacketHandler<MovementPacket> {
-    // Teleport movement
-    if (player.rights >= 2 && packet.movementType == 1) {
+    // Teleport movement (ctrl+click teleporting)
+    if (player.rights >= 2 && packet.isModified) {
         val destination = Location(packet.destinationX, packet.destinationZ, player.location.level)
         player.routeTeleport { destination }
         return@onPacketHandler
     }
 
-    // Toggles Actor's speed only for the duration of the movement (if movementType=1)
-    val currentSpeed = VarPlayer.ToggleRun in player.vars
-    player.speed { currentSpeed }
-    if (packet.movementType == 1) {
-        player.speed { !currentSpeed }
-    }
+    // Toggles Actor's speed only for the duration of the movement (if isModified=true)
+    player.speed { (VarPlayer.ToggleRun in player.vars).let { if (packet.isModified) !it else it } }
 
     // Normal movement
     val path = pathfinder.findPath(

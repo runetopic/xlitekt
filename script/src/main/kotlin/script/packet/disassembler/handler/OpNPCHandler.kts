@@ -7,6 +7,9 @@ import org.rsmod.pathfinder.SmartPathFinder
 import org.rsmod.pathfinder.ZoneFlags
 import xlitekt.game.actor.faceActor
 import xlitekt.game.actor.route
+import xlitekt.game.actor.routeTeleport
+import xlitekt.game.actor.speed
+import xlitekt.game.content.vars.VarPlayer
 import xlitekt.game.packet.OpNPCPacket
 import xlitekt.game.packet.disassembler.handler.onPacketHandler
 import xlitekt.game.world.map.location.Location
@@ -46,6 +49,16 @@ onPacketHandler<OpNPCPacket> {
         objShape = -2,
         z = npc.location.level,
     )
+
+    // ctrl+click teleporting to object
+    if (player.rights >= 2 && packet.isModified) {
+        val destination = path.coords.last()
+        player.routeTeleport { Location(destination.x, destination.y, player.location.level) }
+        return@onPacketHandler
+    }
+
+    // Toggles Actor's speed only for the duration of the movement (if movementType=1)
+    player.speed { (VarPlayer.ToggleRun in player.vars).let { if (packet.isModified) !it else it } }
 
     player.route {
         val list: IntList = IntArrayList(path.coords.size)
