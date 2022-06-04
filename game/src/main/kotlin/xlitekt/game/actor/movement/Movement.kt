@@ -7,8 +7,8 @@ import xlitekt.game.actor.Actor
 import xlitekt.game.actor.faceAngle
 import xlitekt.game.actor.player.Player
 import xlitekt.game.actor.temporaryMovementType
-import xlitekt.game.world.map.location.Location
-import xlitekt.game.world.map.location.directionTo
+import xlitekt.game.world.map.Location
+import xlitekt.game.world.map.directionTo
 import kotlin.math.min
 import kotlin.math.sign
 

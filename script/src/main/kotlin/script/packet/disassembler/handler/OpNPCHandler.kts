@@ -9,7 +9,7 @@ import xlitekt.game.actor.faceActor
 import xlitekt.game.actor.route
 import xlitekt.game.packet.OpNPCPacket
 import xlitekt.game.packet.disassembler.handler.onPacketHandler
-import xlitekt.game.world.map.location.Location
+import xlitekt.game.world.map.Location
 import xlitekt.shared.inject
 
 private val logger = InlineLogger()

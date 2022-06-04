@@ -1,6 +1,6 @@
 package xlitekt.game.content.item
 
-import xlitekt.game.world.map.location.Location
+import xlitekt.game.world.map.Location
 
 /**
  * @author Jordan Abraham

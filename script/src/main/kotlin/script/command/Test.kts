@@ -7,9 +7,9 @@ import xlitekt.game.content.item.Item
 import xlitekt.game.content.projectile.Projectile
 import xlitekt.game.content.ui.UserInterface
 import xlitekt.game.world.World
-import xlitekt.game.world.map.collision.CollisionMap
-import xlitekt.game.world.map.location.Location
-import xlitekt.game.world.map.obj.GameObject
+import xlitekt.game.world.map.CollisionMap
+import xlitekt.game.world.map.GameObject
+import xlitekt.game.world.map.Location
 import xlitekt.shared.inject
 
 /**

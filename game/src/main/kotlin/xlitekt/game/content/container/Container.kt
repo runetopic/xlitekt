@@ -88,7 +88,9 @@ abstract class Container(
     /**
      * Replaces every item with null to clear out the container.
      */
-    protected fun clear() = items.replaceAll { null }
+    protected fun clear() {
+        items.replaceAll { null }
+    }
 
     /**
      * Clears the container and invokes a function

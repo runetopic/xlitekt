@@ -86,28 +86,31 @@ class Client(
     }
 
     internal fun invokeAndClearWritePool() {
-        for (packet in writePool) {
-            val assembler = PacketAssemblerListener.listeners[packet::class]
-            if (assembler == null) {
-                disconnect("Unhandled packet found when trying to write. Packet was $packet.")
-                return
-            }
-            runBlocking(Dispatchers.IO) {
-                val readPacket = buildPacket {
-                    val invoke = assembler.packet.invoke(packet)
-                    if (assembler.opcode > Byte.MAX_VALUE) {
-                        writeByte { 128 + serverCipher.getNext() }
-                    }
-                    writeByte { assembler.opcode + serverCipher.getNext() and 0xff }
-                    if (assembler.size == -1) writeByte(invoke.remaining::toInt)
-                    else if (assembler.size == -2) writeShort(invoke.remaining::toInt)
-                    writeBytes(invoke::readBytes)
+        val readPacket = buildPacket {
+            for (packet in writePool) {
+                val assembler = PacketAssemblerListener.listeners[packet::class]
+                if (assembler == null) {
+                    disconnect("Unhandled packet found when trying to write. Packet was $packet.")
+                    return
                 }
-                writeChannel?.writePacket(readPacket)
+                val invoke = assembler.packet.invoke(packet)
+                if (assembler.opcode > Byte.MAX_VALUE) {
+                    writeByte { 128 + serverCipher.getNext() }
+                }
+                writeByte { assembler.opcode + serverCipher.getNext() and 0xff }
+                if (assembler.size == -1) writeByte(invoke.remaining::toInt)
+                else if (assembler.size == -2) writeShort(invoke.remaining::toInt)
+                writeBytes(invoke::readBytes)
+            }
+            writePool.clear()
+        }
+        writeChannel?.let {
+            // This way we only have to suspend once per client.
+            runBlocking(Dispatchers.IO) {
+                it.writePacket(readPacket)
+                it.flush()
             }
         }
-        writePool.clear()
-        writeChannel?.flush()
     }
 
     internal fun invokeAndClearReadPool() {

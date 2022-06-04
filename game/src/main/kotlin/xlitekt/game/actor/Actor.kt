@@ -15,7 +15,7 @@ import xlitekt.game.actor.render.Render
 import xlitekt.game.actor.render.Render.*
 import xlitekt.game.actor.render.block.*
 import xlitekt.game.world.World
-import xlitekt.game.world.map.location.Location
+import xlitekt.game.world.map.Location
 import xlitekt.game.world.map.zone.Zone
 import xlitekt.shared.inject
 import java.util.*

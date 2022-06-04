@@ -17,10 +17,10 @@ import xlitekt.game.content.vars.Vars
 import xlitekt.game.event.EventBus
 import xlitekt.game.event.impl.Events
 import xlitekt.game.fs.PlayerJsonEncoderService
-import xlitekt.game.packet.* // ktlint-disable no-wildcard-imports
+import xlitekt.game.packet.*
 import xlitekt.game.packet.disassembler.handler.PacketHandler
 import xlitekt.game.world.World
-import xlitekt.game.world.map.location.Location
+import xlitekt.game.world.map.Location
 import xlitekt.shared.lazy
 import kotlin.math.abs
 

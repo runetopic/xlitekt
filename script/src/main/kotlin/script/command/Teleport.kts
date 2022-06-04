@@ -3,7 +3,7 @@ package script.command
 import xlitekt.game.actor.player.message
 import xlitekt.game.actor.routeTeleport
 import xlitekt.game.content.command.Commands.onCommand
-import xlitekt.game.world.map.location.Location
+import xlitekt.game.world.map.Location
 
 // TODO make a color system so we're not using arbitrary hex codes throughout our app
 private val invalidSyntaxMessage = "Please use syntax: <col=FF0000>::tele x, z, level (Level is optional).</col>"

@@ -7,14 +7,15 @@ import xlitekt.game.actor.PlayerList
 import xlitekt.game.actor.npc.NPC
 import xlitekt.game.actor.player.Client
 import xlitekt.game.actor.player.Player
-import xlitekt.game.world.map.collision.CollisionMap
-import xlitekt.game.world.map.location.Location
-import xlitekt.game.world.map.location.ZoneLocation
+import xlitekt.game.world.map.CollisionMap
+import xlitekt.game.world.map.Location
+import xlitekt.game.world.map.zone.ZoneLocation
 import xlitekt.game.world.map.zone.Zones
 import xlitekt.shared.inject
 import xlitekt.shared.resource.NPCSpawns
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.ConcurrentMap
+import xlitekt.game.world.map.zone.Zone
 
 class World(
     private val players: PlayerList = PlayerList(MAX_PLAYERS),
@@ -32,6 +33,8 @@ class World(
     internal fun build() {
         // Apply collision map.
         maps.entries().forEach(CollisionMap::applyCollision)
+        // Set neighboring zones.
+        zones.filterNotNull().forEach(Zone::setNeighboringZones)
         // Apply npc spawns.
         npcSpawns.forEach {
             spawn(NPC(it.id, Location(it.x, it.z, it.level)))
