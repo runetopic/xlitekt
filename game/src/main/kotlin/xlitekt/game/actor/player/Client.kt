@@ -17,8 +17,10 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.TimeoutCancellationException
 import kotlinx.coroutines.channels.ClosedReceiveChannelException
 import kotlinx.coroutines.runBlocking
-import org.jctools.maps.NonBlockingHashMap
+import org.jctools.maps.NonBlockingHashSet
+import xlitekt.game.packet.MovementPacket
 import xlitekt.game.packet.Packet
+import xlitekt.game.packet.PublicChatPacket
 import xlitekt.game.packet.assembler.PacketAssemblerListener
 import xlitekt.game.packet.disassembler.handler.PacketHandler
 import xlitekt.game.packet.disassembler.handler.PacketHandlerListener
@@ -30,10 +32,6 @@ import xlitekt.shared.inject
 import xlitekt.shared.lazy
 import java.io.IOException
 import java.net.SocketException
-import kotlin.reflect.KClass
-import org.jctools.maps.NonBlockingHashSet
-import xlitekt.game.packet.MovementPacket
-import xlitekt.game.packet.PublicChatPacket
 
 /**
  * @author Jordan Abraham

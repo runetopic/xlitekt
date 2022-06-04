@@ -5,8 +5,10 @@ import xlitekt.game.actor.Actor
 import xlitekt.game.actor.player.serializer.AppearanceSerializer
 import xlitekt.game.actor.render.block.body.BodyPart
 import xlitekt.game.actor.render.block.body.BodyPartColor
+import xlitekt.game.content.container.equipment.Equipment
 import xlitekt.game.world.map.location.Location
 import java.util.EnumMap
+import java.util.Optional
 
 /**
  * @author Jordan Abraham
@@ -103,13 +105,14 @@ sealed class Render {
     class Appearance : Render() {
         val bodyParts = EnumMap<BodyPart, Int>(BodyPart::class.java)
         val bodyPartColors = EnumMap<BodyPartColor, Int>(BodyPartColor::class.java)
-
         var gender: Gender = Gender.MALE
-        var headIcon: Int = -1
-        var skullIcon: Int = -1
-        var transform: Int = -1
-        var hidden: Boolean = false
         var displayName: String = ""
+
+        var headIcon = Optional.empty<Int>()
+        var skullIcon = Optional.empty<Int>()
+        var transform = Optional.empty<Int>()
+        var hidden = Optional.empty<Boolean>()
+        lateinit var equipment: Equipment
 
         init {
             bodyParts[BodyPart.HEAD] = 0
@@ -127,9 +130,7 @@ sealed class Render {
         }
 
         fun isMale(): Boolean = gender == Gender.MALE
-
         fun isFemale(): Boolean = gender == Gender.FEMALE
-
         enum class Gender(val mask: Int) { MALE(0x0), FEMALE(0x1); }
     }
 

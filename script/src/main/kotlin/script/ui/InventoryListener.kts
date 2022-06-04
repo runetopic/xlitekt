@@ -2,6 +2,7 @@ package script.ui
 
 import xlitekt.game.actor.player.Player
 import xlitekt.game.actor.player.message
+import xlitekt.game.actor.player.renderAppearance
 import xlitekt.game.content.container.equipment.Equipment
 import xlitekt.game.content.item.FloorItem
 import xlitekt.game.content.item.Item
@@ -42,7 +43,7 @@ onInterface<UserInterface.Inventory> {
 }
 
 fun mapEquipmentSlot(itemInfo: ItemInfoResource): Int? = when (itemInfo.equipment?.equipmentSlot) {
-    EquipmentSlot.WEAPON, EquipmentSlot.TWO_HAND -> Equipment.SLOT_WEAPON
+    EquipmentSlot.WEAPON, EquipmentSlot.TWO_HAND -> Equipment.SLOT_MAINHAND
     EquipmentSlot.AMMO -> Equipment.SLOT_AMMO
     EquipmentSlot.BODY -> Equipment.SLOT_TORSO
     EquipmentSlot.CAPE -> Equipment.SLOT_BACK
@@ -52,7 +53,7 @@ fun mapEquipmentSlot(itemInfo: ItemInfoResource): Int? = when (itemInfo.equipmen
     EquipmentSlot.LEGS -> Equipment.SLOT_LEGS
     EquipmentSlot.NECK -> Equipment.SLOT_NECK
     EquipmentSlot.RING -> Equipment.SLOT_RING
-    EquipmentSlot.SHIELD -> Equipment.SLOT_SHIELD
+    EquipmentSlot.SHIELD -> Equipment.SLOT_OFFHAND
     else -> null
 }
 
@@ -76,4 +77,5 @@ fun wearItem(
             player.equipment.refreshSlots(listOf(slot))
         }
     }
+    player.renderAppearance()
 }

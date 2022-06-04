@@ -68,7 +68,7 @@ class Player(
         rebuildNormal(players) { true }
         interfaces.openTop(interfaces.currentInterfaceLayout.interfaceId)
         invokeAndClearWritePool()
-        lazy<World>().zone(location).enterZone(this)
+        zone().enterZone(this)
         login()
     }
 
@@ -80,6 +80,7 @@ class Player(
         interfaces.login()
         inventory.login()
         equipment.login()
+        appearance.equipment = equipment
         render(appearance)
         movementType { false }
         updateRunEnergy()
@@ -97,7 +98,7 @@ class Player(
         online = false
         write(LogoutPacket(0))
         invokeAndClearWritePool()
-        activeZone.get().leaveZone(this)
+        zone().leaveZone(this)
         lazy<World>().removePlayer(this)
         lazy<PlayerJsonEncoderService>().requestSave(this)
     }
@@ -162,3 +163,5 @@ inline fun Player.rebuildNormal(players: NonBlockingHashMapLong<Player>, update:
     write(RebuildNormalPacket(viewport, location, update.invoke(), players))
     lastLoadedLocation = location
 }
+
+fun Player.renderAppearance() = render(appearance)

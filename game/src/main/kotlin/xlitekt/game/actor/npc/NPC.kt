@@ -4,10 +4,8 @@ import xlitekt.cache.provider.config.npc.NPCEntryTypeProvider
 import xlitekt.game.actor.Actor
 import xlitekt.game.event.EventBus
 import xlitekt.game.event.impl.Events
-import xlitekt.game.world.World
 import xlitekt.game.world.map.location.Location
 import xlitekt.shared.inject
-import xlitekt.shared.lazy
 
 private val npcEntryTypeProvider by inject<NPCEntryTypeProvider>()
 private val eventBus by inject<EventBus>()
@@ -20,7 +18,7 @@ class NPC(
 
     fun init() {
         previousLocation = location
-        lazy<World>().zone(location)?.enterZone(this)
+        zone().enterZone(this)
         eventBus.notify(Events.NPCSpawnEvent(this))
     }
 
