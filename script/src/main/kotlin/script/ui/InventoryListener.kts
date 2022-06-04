@@ -37,9 +37,8 @@ onInterface<UserInterface.Inventory> {
                     world.zone(location).requestAddObj(FloorItem(item.id, item.amount, location))
                 }
 
-                val itemName = itemInfoMap[item.id]?.name ?: "NULL"
                 message {
-                    "You dropped $itemName"
+                    "You dropped ${itemInfo.name}"
                 }
             }
         }
