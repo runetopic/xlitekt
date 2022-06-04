@@ -42,7 +42,7 @@ onPacketHandler<OpGroundItemPacket> {
         return@onPacketHandler
     }
 
-    // Toggles Actor's speed only for the duration of the movement (if movementType=1)
+    // Toggles Actor's speed only for the duration of the movement (if isModified=true)
     player.speed { (VarPlayer.ToggleRun in player.vars).let { if (packet.isModified) !it else it } }
 
     player.route {

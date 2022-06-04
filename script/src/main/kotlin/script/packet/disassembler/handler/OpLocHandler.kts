@@ -35,14 +35,14 @@ onPacketHandler<OpLocPacket> {
     val z = packet.z
     val isModified = packet.isModified
 
+    logger.debug { packet }
+
     if (locEntryTypeProvider.entryType(objectId) == null) {
 //        logger.debug { "Invalid loc op objectId=$objectId, x=$x, z=$z, isModifiedClick=$isModified" }
-        logger.debug { packet }
         return@onPacketHandler
     }
 
 //    logger.debug { "Clicked loc op objectId=$objectId, x=$x, z=$z, isModifiedClick=$isModifiedClick" }
-    logger.debug { packet }
 
     // The location of the object clicked.
     val location = Location(x, z, player.location.level)
@@ -76,7 +76,7 @@ onPacketHandler<OpLocPacket> {
         return@onPacketHandler
     }
 
-    // Toggles Actor's speed only for the duration of the movement (if movementType=1)
+    // Toggles Actor's speed only for the duration of the movement (if isModified=true)
     player.speed { (VarPlayer.ToggleRun in player.vars).let { if (packet.isModified) !it else it } }
 
     player.route {

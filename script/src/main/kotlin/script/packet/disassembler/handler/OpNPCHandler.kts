@@ -26,6 +26,10 @@ private val pathfinder = SmartPathFinder(
 onPacketHandler<OpNPCPacket> {
     val neighboringNpcs = player.zone().neighboringNpcs()
 
+    logger.debug { packet }
+
+    println(neighboringNpcs.indices.contains(packet.npcIndex))
+
     if (neighboringNpcs.isEmpty() || neighboringNpcs.indices.none { it == packet.npcIndex }) {
         logger.debug { "World does not contain NPC Index = ${packet.npcIndex}" }
         return@onPacketHandler
@@ -57,7 +61,7 @@ onPacketHandler<OpNPCPacket> {
         return@onPacketHandler
     }
 
-    // Toggles Actor's speed only for the duration of the movement (if movementType=1)
+    // Toggles Actor's speed only for the duration of the movement (if isModified=true)
     player.speed { (VarPlayer.ToggleRun in player.vars).let { if (packet.isModified) !it else it } }
 
     player.route {
