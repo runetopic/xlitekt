@@ -1,6 +1,5 @@
 package xlitekt.game.tick
 
-import xlitekt.game.actor.player.Player
 import xlitekt.game.world.map.zone.Zone
 
 /**
@@ -24,11 +23,11 @@ class ParallelActorSynchronizer : Synchronizer() {
             it.syncRenderingBlocks()
         }
 
-        players.flatMap(Player::zones)
-            .distinct()
-            .filter(Zone::updating)
-            .parallelStream()
-            .forEach(Zone::update)
+        players.associateWith { it.zones().filter(Zone::updating) }.onEach {
+            it.value.parallelStream().forEach { zone ->
+                zone.invokeUpdateRequests(it.key)
+            }
+        }.also { it.values.flatten().distinct().parallelStream().forEach(Zone::finalizeUpdateRequests) }
 
         players.parallelStream().forEach {
             it.syncClient(syncPlayers)
