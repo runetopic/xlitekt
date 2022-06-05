@@ -210,7 +210,7 @@ sealed class ActivityUpdateType {
             bits.writeBit { updating }
             // Make the player walk or run.
             bits.writeBits(2) { if (running) 2 else 1 }
-            bits.writeBits(if (running) 4 else 3) { step.get().direction.playerOpcode(running) }
+            bits.writeBits(if (running) 4 else 3, step.get().direction::opcodeForPlayerDirection)
         }
     }
 
@@ -283,7 +283,7 @@ sealed class RegionLocationChange {
     object PartialLocationChange : RegionLocationChange() {
         override fun writeBits(bits: BitAccess, level: Int, x: Int, z: Int) {
             bits.writeBits(2) { 2 }
-            bits.writeBits(5) { (level shl 3) or (Direction.directionFromDelta(x, z).playerOpcode() and 0x7) }
+            bits.writeBits(5) { (level shl 3) or (Direction(x, z).opcodeForPlayerDirection and 0x7) }
         }
     }
 

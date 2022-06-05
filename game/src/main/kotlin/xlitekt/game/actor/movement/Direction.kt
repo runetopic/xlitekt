@@ -1,22 +1,16 @@
 package xlitekt.game.actor.movement
 
-sealed class Direction {
-    object North : Direction()
-    object East : Direction()
-    object South : Direction()
-    object West : Direction()
-    object NorthEast : Direction()
-    object SouthEast : Direction()
-    object SouthWest : Direction()
-    object NorthWest : Direction()
-    object NorthNorthEast : Direction()
-    object NorthNorthWest : Direction()
-    object WestNorthWest : Direction()
-    object WestSouthWest : Direction()
-    object EastNorthEast : Direction()
-    object EastSouthEast : Direction()
-    object SouthSouthEast : Direction()
-    object SouthSouthWest : Direction()
+/**
+ * @author Jordan Abraham
+ */
+@JvmInline
+value class Direction(
+    private val packedDirection: Int
+) {
+    constructor(dx: Int, dz: Int) : this((dx and 0xff shl 8) or (dz and 0xff))
+
+    val deltaX get() = (packedDirection shr 8 and 0xff).let { if (it > Byte.MAX_VALUE) it - 0x100 else it }
+    val deltaZ get() = (packedDirection and 0xff).let { if (it > Byte.MAX_VALUE) it - 0x100 else it }
 
     /**
      * Returns the corresponding opcode used for this direction for player movement.
@@ -38,23 +32,24 @@ sealed class Direction {
      * | [00][01][02] |
      *  --------------
      */
-    fun playerOpcode(useSixteenPoints: Boolean = false) = when (this) {
-        is NorthEast -> if (useSixteenPoints) 15 else 7
-        is NorthNorthEast -> 14
-        is North -> if (useSixteenPoints) 13 else 6
-        is NorthNorthWest -> 12
-        is NorthWest -> if (useSixteenPoints) 11 else 5
-        is EastNorthEast -> 10
-        is WestNorthWest -> 9
-        is East -> if (useSixteenPoints) 8 else 4
-        is West -> if (useSixteenPoints) 7 else 3
-        is EastSouthEast -> 6
-        is WestSouthWest -> 5
-        is SouthEast -> if (useSixteenPoints) 4 else 2
-        is SouthSouthEast -> 3
-        is South -> if (useSixteenPoints) 2 else 1
-        is SouthSouthWest -> 1
-        is SouthWest -> 0
+    val opcodeForPlayerDirection get() = when (this) {
+        NorthEast16 -> 15
+        NorthNorthEast16 -> 14
+        North16 -> 13
+        NorthNorthWest16 -> 12
+        NorthWest16 -> 11
+        EastNorthEast16 -> 10
+        WestNorthWest16 -> 9
+        East16 -> 8
+        West16, NorthEast8 -> 7
+        EastSouthEast16, North8 -> 6
+        WestSouthWest16, NorthWest8 -> 5
+        SouthEast16, East8 -> 4
+        SouthSouthEast16, West8 -> 3
+        South16, SouthEast8 -> 2
+        SouthSouthWest16, South8 -> 1
+        SouthWest16, SouthWest8 -> 0
+        else -> throw IllegalStateException("Direction opcode not found for player. Direction was $this")
     }
 
     /**
@@ -65,71 +60,90 @@ sealed class Direction {
      * | [05][06][07] |
      *  --------------
      */
-    fun npcOpcode() = when (this) {
+    val opcodeForNPCDirection get() = when (this) {
         // TODO Running support.
-        is SouthEast -> 7
-        is South -> 6
-        is SouthWest -> 5
-        is East -> 4
-        is West -> 3
-        is NorthEast -> 2
-        is North -> 1
-        is NorthWest -> 0
+        SouthEast8 -> 7
+        South8 -> 6
+        SouthWest8 -> 5
+        East8 -> 4
+        West8 -> 3
+        NorthEast8 -> 2
+        North8 -> 1
+        NorthWest8 -> 0
         else -> throw IllegalStateException("Direction opcode not found for npc. Direction was $this")
     }
 
+    /**
+     * Returns the angle associated with this direction.
+     */
     fun angle() = when (this) {
-        is NorthWest -> 768
-        is NorthNorthWest -> 896
-        is North -> 1024
-        is NorthNorthEast -> 1152
-        is NorthEast -> 1280
-        is WestNorthWest -> 640
-        is EastNorthEast -> 1408
-        is West -> 512
-        is East -> 1536
-        is WestSouthWest -> 384
-        is EastSouthEast -> 1664
-        is SouthWest -> 256
-        is SouthSouthWest -> 128
-        is South -> 2048
-        is SouthSouthEast -> 1920
-        is SouthEast -> 1792
+        NorthWest16, NorthWest8 -> 768
+        NorthNorthWest16 -> 896
+        North16, North8 -> 1024
+        NorthNorthEast16 -> 1152
+        NorthEast16, NorthEast8 -> 1280
+        WestNorthWest16 -> 640
+        EastNorthEast16 -> 1408
+        West16, West8 -> 512
+        East16, East8 -> 1536
+        WestSouthWest16 -> 384
+        EastSouthEast16 -> 1664
+        SouthWest16, SouthWest8 -> 256
+        SouthSouthWest16 -> 128
+        South16, South8 -> 2048
+        SouthSouthEast16 -> 1920
+        SouthEast16, SouthEast8 -> 1792
+        else -> 2048 // Default to south.
     }
 
     fun fourPointCardinalDirection() = angle() % 256 == 0
 
-    override fun toString(): String = javaClass.simpleName
-
     companion object {
-        fun directionFromDelta(deltaX: Int, deltaZ: Int): Direction = when {
-            // 16 point direction.
-            deltaX == 2 && deltaZ == 2 -> NorthEast // 15
-            deltaX == 1 && deltaZ == 2 -> NorthNorthEast // 14
-            deltaX == 0 && deltaZ == 2 -> North // 13
-            deltaX == -1 && deltaZ == 2 -> NorthNorthWest // 12
-            deltaX == -2 && deltaZ == 2 -> NorthWest // 11
-            deltaX == 2 && deltaZ == 1 -> EastNorthEast // 10
-            deltaX == -2 && deltaZ == 1 -> WestNorthWest // 9
-            deltaX == 2 && deltaZ == 0 -> East // 8
-            deltaX == -2 && deltaZ == 0 -> West // 7
-            deltaX == 2 && deltaZ == -1 -> EastSouthEast // 6
-            deltaX == -2 && deltaZ == -1 -> WestSouthWest // 5
-            deltaX == 2 && deltaZ == -2 -> SouthEast // 4
-            deltaX == 1 && deltaZ == -2 -> SouthSouthEast // 3
-            deltaX == 0 && deltaZ == -2 -> South // 2
-            deltaX == -1 && deltaZ == -2 -> SouthSouthWest // 1
-            deltaX == -2 && deltaZ == -2 -> SouthWest // 0
-            // 8 point direction.
-            deltaX == 1 && deltaZ == 1 -> NorthEast // 7
-            deltaX == 0 && deltaZ == 1 -> North // 6
-            deltaX == -1 && deltaZ == 1 -> NorthWest // 5
-            deltaX == 1 && deltaZ == 0 -> East // 4
-            deltaX == -1 && deltaZ == 0 -> West // 3
-            deltaX == 1 && deltaZ == -1 -> SouthEast // 2
-            deltaX == 0 && deltaZ == -1 -> South // 1
-            deltaX == -1 && deltaZ == -1 -> SouthWest // 0
-            else -> throw IllegalArgumentException("Could not find direction for deltaX $deltaX and deltaZ $deltaZ.")
-        }
+        private val NorthEast16 = Direction(2, 2)
+        private val NorthEast8 = Direction(1, 1)
+        private val NorthNorthEast16 = Direction(1, 2)
+        private val North16 = Direction(0, 2)
+        private val North8 = Direction(0, 1)
+        private val NorthNorthWest16 = Direction(-1, 2)
+        private val NorthWest16 = Direction(-2, 2)
+        private val NorthWest8 = Direction(-1, 1)
+        private val EastNorthEast16 = Direction(2, 1)
+        private val WestNorthWest16 = Direction(-2, 1)
+        private val East16 = Direction(2, 0)
+        private val East8 = Direction(1, 0)
+        private val West16 = Direction(-2, 0)
+        private val West8 = Direction(-1, 0)
+        private val EastSouthEast16 = Direction(2, -1)
+        private val WestSouthWest16 = Direction(-2, -1)
+        private val SouthEast16 = Direction(2, -2)
+        private val SouthEast8 = Direction(1, -1)
+        private val SouthSouthEast16 = Direction(1, -2)
+        private val South16 = Direction(0, -2)
+        private val South8 = Direction(0, -1)
+        private val SouthSouthWest16 = Direction(-1, -2)
+        private val SouthWest16 = Direction(-2, -2)
+        private val SouthWest8 = Direction(-1, -1)
+
+        val BasicNorth = North8
+        val BasicEast = East8
+        val BasicWest = West8
+        val BasicSouth = South8
+
+        val northEast = setOf(NorthEast16, NorthEast8)
+        val northNorthEast = setOf(NorthNorthEast16)
+        val north = listOf(North16, North8)
+        val northNorthWest = setOf(NorthNorthWest16)
+        val northWest = setOf(NorthWest16, NorthWest8)
+        val eastNorthEast = setOf(EastNorthEast16)
+        val westNorthWest = setOf(WestNorthWest16)
+        val east = setOf(East16, East8)
+        val west = setOf(West16, West8)
+        val eastSouthEast = setOf(EastSouthEast16)
+        val westSouthWest = setOf(WestSouthWest16)
+        val southEast = setOf(SouthEast16, SouthEast8)
+        val southSouthEast = setOf(SouthSouthEast16)
+        val south = setOf(South16, South8)
+        val southSouthWest = setOf(SouthSouthWest16)
+        val southWest = setOf(SouthWest16, SouthWest8)
     }
 }
