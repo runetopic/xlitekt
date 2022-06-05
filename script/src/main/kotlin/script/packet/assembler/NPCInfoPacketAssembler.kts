@@ -124,7 +124,7 @@ sealed class ActivityUpdateType {
     object Moving : ActivityUpdateType() {
         override fun writeBits(bits: BitAccess, npc: NPC, updating: Boolean, playerLocation: Location, step: Optional<MovementStep>?) {
             bits.writeBits(2) { 1 } // walk only
-            bits.writeBits(3, step!!.get().direction::npcOpcode)
+            bits.writeBits(3, step!!.get().direction::opcodeForNPCDirection)
             bits.writeBit { updating }
         }
     }

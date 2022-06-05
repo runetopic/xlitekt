@@ -21,7 +21,7 @@ class Movement {
     private val checkpoints: IntPriorityQueue = IntArrayFIFOQueue()
     private val steps: IntPriorityQueue = IntArrayFIFOQueue()
     private var teleporting = false
-    private var direction: Direction = Direction.South
+    private var direction = Direction.BasicSouth
 
     fun process(actor: Actor, currentLocation: Location): MovementStep? {
         val previousLocation = actor.previousLocation
@@ -47,8 +47,7 @@ class Movement {
         when (initialSpeed) {
             MovementSpeed.Teleporting -> {
                 teleporting = false
-                val direction = Direction.South
-                this.direction = direction
+                direction = Direction.BasicSouth
                 // Only players will do this.
                 if (actor is Player) {
                     actor.temporaryMovementType(MovementSpeed.Teleporting::id)
@@ -82,7 +81,7 @@ class Movement {
             speed = modifiedSpeed,
             location = Location(step),
             previousLocation = previousLocation,
-            direction = if (initialSpeed == MovementSpeed.Teleporting) Direction.South else currentLocation.directionTo(Location(step))
+            direction = if (initialSpeed == MovementSpeed.Teleporting) Direction.BasicSouth else currentLocation.directionTo(Location(step))
         )
     }
 

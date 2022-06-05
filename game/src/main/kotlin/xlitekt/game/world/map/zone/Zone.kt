@@ -32,21 +32,21 @@ class Zone(
     val location: Location,
     val players: NonBlockingHashSet<Player> = NonBlockingHashSet(),
     val npcs: NonBlockingHashSet<NPC> = NonBlockingHashSet(),
-    private val locs: ArrayList<GameObject> = ArrayList(64),
-    val locsSpawned: ArrayList<GameObject> = ArrayList(),
-    val objsSpawned: ArrayList<FloorItem> = ArrayList(),
+    private val locs: HashSet<GameObject> = HashSet(64),
+    val locsSpawned: HashSet<GameObject> = HashSet(),
+    val objsSpawned: HashSet<FloorItem> = HashSet(),
 ) {
     private lateinit var neighboringZones: Set<Zone>
     private val objRequests = HashMap<FloorItem, Boolean>()
     private val locRequests = HashMap<GameObject, Boolean>()
-    private val mapProjRequests = ArrayList<Projectile>()
+    private val mapProjRequests = HashSet<Projectile>()
 
     /**
      * Updates a player with updates about this zone.
      * This happens every tick.
      */
     fun invokeUpdateRequests(player: Player) {
-        val updates = ArrayList<Packet>(requestSize())
+        val updates = HashSet<Packet>(requestSize())
         for (request in mapProjRequests) {
             updates.addMapProjAnim(request)
         }
@@ -111,7 +111,7 @@ class Zone(
                 if (!zone.active()) {
                     continue
                 }
-                val updates = ArrayList<Packet>(requestSize())
+                val updates = HashSet<Packet>(requestSize())
                 // If zone contains any of the following, send them to the client.
                 for (obj in zone.objsSpawned) {
                     updates.addObj(actor, obj)
@@ -270,7 +270,7 @@ private fun Location.toLocalLocation(other: Location) = LocalLocation(localX(oth
 /**
  * Adds a ObjAddPacket to this updates map.
  */
-private fun ArrayList<Packet>.addObj(player: Player, floorItem: FloorItem) = add(
+private fun HashSet<Packet>.addObj(player: Player, floorItem: FloorItem) = add(
     ObjAddPacket(
         id = floorItem.id,
         amount = floorItem.amount,
@@ -281,7 +281,7 @@ private fun ArrayList<Packet>.addObj(player: Player, floorItem: FloorItem) = add
 /**
  * Adds a ObjDelPacket to this updates map.
  */
-private fun ArrayList<Packet>.delObj(player: Player, floorItem: FloorItem) = add(
+private fun HashSet<Packet>.delObj(player: Player, floorItem: FloorItem) = add(
     ObjDelPacket(
         id = floorItem.id,
         packedOffset = floorItem.location.toLocalLocation(player.lastLoadedLocation).packedOffset
@@ -291,7 +291,7 @@ private fun ArrayList<Packet>.delObj(player: Player, floorItem: FloorItem) = add
 /**
  * Adds a LocAddPacket to this updates map.
  */
-private fun ArrayList<Packet>.addLoc(player: Player, gameObject: GameObject) = add(
+private fun HashSet<Packet>.addLoc(player: Player, gameObject: GameObject) = add(
     LocAddPacket(
         id = gameObject.id,
         shape = gameObject.shape,
@@ -303,7 +303,7 @@ private fun ArrayList<Packet>.addLoc(player: Player, gameObject: GameObject) = a
 /**
  * Adds a LocDelPacket to this updates map.
  */
-private fun ArrayList<Packet>.delLoc(player: Player, gameObject: GameObject) = add(
+private fun HashSet<Packet>.delLoc(player: Player, gameObject: GameObject) = add(
     LocDelPacket(
         shape = gameObject.shape,
         rotation = gameObject.rotation,
@@ -314,7 +314,7 @@ private fun ArrayList<Packet>.delLoc(player: Player, gameObject: GameObject) = a
 /**
  * Adds a MapProjAnimPacket to this updates map.
  */
-private fun ArrayList<Packet>.addMapProjAnim(projectile: Projectile) = add(
+private fun HashSet<Packet>.addMapProjAnim(projectile: Projectile) = add(
     MapProjAnimPacket(
         id = projectile.id,
         distanceX = projectile.distanceX(),
@@ -332,7 +332,7 @@ private fun ArrayList<Packet>.addMapProjAnim(projectile: Projectile) = add(
 /**
  * Writes this map of updates to the players contained within this map. Uses the zone base location.
  */
-private fun ArrayList<Packet>.write(player: Player, baseLocation: Location) {
+private fun HashSet<Packet>.write(player: Player, baseLocation: Location) {
     val localX = baseLocation.localX(player.lastLoadedLocation)
     val localZ = baseLocation.localZ(player.lastLoadedLocation)
     if (size == 1) {
