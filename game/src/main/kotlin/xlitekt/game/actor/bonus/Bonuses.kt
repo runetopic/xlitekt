@@ -1,6 +1,5 @@
 package xlitekt.game.actor.bonus
 
-import xlitekt.game.actor.bonus.Bonuses.Companion.itemInfoMap
 import xlitekt.game.content.container.equipment.Equipment
 import xlitekt.shared.inject
 import xlitekt.shared.resource.EquipmentInfoResource
@@ -58,7 +57,7 @@ class Bonuses {
     }
 
     /**
-     * Calculates all of the player's worn equipment.
+     * Calculates all the player's worn equipment.
      */
     fun calculateEquippedBonuses(equipment: Equipment) {
         setDefaultBonuses()
@@ -105,7 +104,7 @@ class Bonuses {
     }
 
     override fun toString(): String {
-        return "Bonuses(attackStab=$attackStab, attackSlash=$attackSlash, attachCrush=$attackCrush, attackMagic=$attackMagic, attackRanged=$attackRanged,defenceStab=$defenceStab,defenceSlash=$defenceSlash,defenceCrush=$defenceCrush,defenceMagic=$defenceMagic,defenceRanged=$defenceRanged,meleeStrength=$meleeStrength,rangedStrength=$rangedStrength,magicDamage=$magicDamage,prayer=$prayer)"
+        return "Bonuses(attackStab=$attackStab, attackSlash=$attackSlash, attachCrush=$attackCrush, attackMagic=$attackMagic, attackRanged=$attackRanged,defenceStab=$defenceStab,defenceSlash=$defenceSlash,defenceCrush=$defenceCrush,defenceMagic=$defenceMagic,defenceRanged=$defenceRanged,meleeStrength=$meleeStrength,rangedStrength=$rangedStrength,magicDamage=$magicDamage,prayer=$prayer, slayer=$slayer, undead=$undead)"
     }
 
     private companion object {

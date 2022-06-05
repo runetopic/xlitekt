@@ -8,13 +8,10 @@ import xlitekt.game.content.item.FloorItem
 import xlitekt.game.content.item.Item
 import xlitekt.game.content.ui.UserInterface
 import xlitekt.game.content.ui.onInterface
-import xlitekt.game.world.World
 import xlitekt.shared.inject
 import xlitekt.shared.resource.EquipmentSlot
 import xlitekt.shared.resource.ItemInfoMap
 import xlitekt.shared.resource.ItemInfoResource
-
-private val world by inject<World>()
 
 val itemInfoMap by inject<ItemInfoMap>()
 
@@ -35,7 +32,7 @@ onInterface<UserInterface.Inventory> {
             5 -> {
                 // drop
                 inventory.removeItem(slot, item) {
-                    world.zone(location).requestAddObj(FloorItem(item.id, item.amount, location))
+                    zone().requestAddObj(FloorItem(item.id, item.amount, location))
                 }
             }
         }

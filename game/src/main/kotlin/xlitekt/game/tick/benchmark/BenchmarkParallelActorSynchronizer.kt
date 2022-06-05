@@ -130,14 +130,15 @@ class BenchmarkParallelActorSynchronizer : Synchronizer() {
         }
         logger.debug { "Pre tick took $pre for ${players.size} players. [TICK=$tick]" }
 
-        val zonesTime = measureTime {
-            players.flatMap(Player::zones)
-                .distinct()
-                .filter(Zone::updating)
-                .parallelStream()
-                .forEach(Zone::update)
+        // Zones process
+        val zones = measureTime {
+            players.associateWith { it.zones().filter(Zone::updating) }.onEach {
+                it.value.parallelStream().forEach { zone ->
+                    zone.invokeUpdateRequests(it.key)
+                }
+            }.also { it.values.flatten().distinct().parallelStream().forEach(Zone::finalizeUpdateRequests) }
         }
-        logger.debug { "Zones took $zonesTime to update. [TICK=$tick]" }
+        logger.debug { "Zones tick took $zones for ${players.size} players. [TICK=$tick]" }
 
         val main = measureTime {
             // Main process.

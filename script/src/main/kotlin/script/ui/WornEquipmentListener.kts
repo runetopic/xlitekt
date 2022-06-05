@@ -8,8 +8,6 @@ import xlitekt.game.content.ui.onInterface
 import xlitekt.shared.inject
 import xlitekt.shared.resource.ItemExamines
 
-private val equipmentContainerKey = 94
-private val equipmentSize = 15
 private val itemExamines by inject<ItemExamines>()
 
 onInterface<WornEquipment> {

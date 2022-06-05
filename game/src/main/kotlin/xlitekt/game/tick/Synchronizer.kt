@@ -14,6 +14,7 @@ import xlitekt.game.tick.NPCInfoUpdates.HighDefinitionNPCUpdates
 import xlitekt.game.tick.NPCInfoUpdates.MovementStepsNPCUpdates
 import xlitekt.game.tick.PlayerInfoUpdates.*
 import xlitekt.game.world.World
+import xlitekt.game.world.map.zone.Zone
 import xlitekt.shared.inject
 import java.util.*
 
@@ -45,6 +46,10 @@ abstract class Synchronizer : Runnable {
         if (blocks.isEmpty()) return
         HighDefinitionNPCUpdates.add(indexL, blocks.invokeHighDefinitionNPCRenderingBlocks())
         resetDefinitionRenderingBlocks()
+    }
+
+    protected fun Player.syncZones(zones: List<Zone>) {
+        zones.forEach { it.invokeUpdateRequests(this) }
     }
 
     protected fun Player.syncClient(players: NonBlockingHashMapLong<Player>) {

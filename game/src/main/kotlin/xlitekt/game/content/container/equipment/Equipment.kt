@@ -2,12 +2,14 @@ package xlitekt.game.content.container.equipment
 
 import kotlinx.serialization.Serializable
 import xlitekt.game.actor.player.Player
+import xlitekt.game.actor.player.message
 import xlitekt.game.content.container.Container
 import xlitekt.game.content.item.Item
 import xlitekt.game.packet.UpdateContainerFullPacket
 import xlitekt.game.packet.UpdateContainerPartialPacket
 import xlitekt.game.packet.UpdateWeightPacket
 import xlitekt.shared.inject
+import xlitekt.shared.resource.EquipmentSlot
 import xlitekt.shared.resource.ItemInfoMap
 
 const val EQUIPMENT_KEY = 94
@@ -42,7 +44,61 @@ class Equipment(
             )
         )
 
+        player.bonuses.calculateEquippedBonuses(this)
         updateWeight(true)
+    }
+
+    fun equipItem(item: Item) {
+        val invalidItemMessage = {
+            player.message { "You can't wear that!" }
+        }
+
+        val info = itemInfoMap[item.id] ?: return run {
+            invalidItemMessage.invoke()
+        }
+
+        if (!info.equipable) {
+            invalidItemMessage.invoke()
+            return
+        }
+
+        val equipmentInfo = info.equipment ?: return run {
+            invalidItemMessage.invoke()
+        }
+
+        val equipmentSlot = equipmentInfo.equipmentSlot
+
+        if (equipmentSlot == EquipmentSlot.TWO_HAND) {
+            val offhand = this[SLOT_OFFHAND]
+
+            if (offhand != null) {
+                if (player.inventory.availableSlots() < 2) {
+                    player.message { "You don't have enough free space to do that." }
+                    return
+                }
+
+                removeItem(SLOT_OFFHAND, offhand) {
+                    player.inventory.addItem(this) {
+                    }
+                }
+            }
+            return
+        }
+    }
+
+    fun mapEquipmentSlot(equipmentSlot: EquipmentSlot): Int? = when (equipmentSlot) {
+        EquipmentSlot.WEAPON, EquipmentSlot.TWO_HAND -> SLOT_MAINHAND
+        EquipmentSlot.AMMO -> SLOT_AMMO
+        EquipmentSlot.BODY -> SLOT_TORSO
+        EquipmentSlot.CAPE -> SLOT_BACK
+        EquipmentSlot.FEET -> SLOT_FEET
+        EquipmentSlot.HANDS -> SLOT_HANDS
+        EquipmentSlot.HEAD -> SLOT_HEAD
+        EquipmentSlot.LEGS -> SLOT_LEGS
+        EquipmentSlot.NECK -> SLOT_NECK
+        EquipmentSlot.RING -> SLOT_RING
+        EquipmentSlot.SHIELD -> SLOT_OFFHAND
+        else -> null
     }
 
     /**
@@ -79,9 +135,7 @@ class Equipment(
      * This leverages the UpdateContainerPartialPacket
      */
     fun refreshSlots(slots: List<Int>) {
-        player
-            .bonuses
-            .calculateEquippedBonuses(player.equipment) // TODO: potentially only calculate the refreshed slots.
+        player.bonuses.calculateEquippedBonuses(player.equipment)
 
         player.write(
             UpdateContainerPartialPacket(

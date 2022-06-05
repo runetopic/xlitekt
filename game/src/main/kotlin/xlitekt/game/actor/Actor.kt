@@ -2,6 +2,7 @@ package xlitekt.game.actor
 
 import it.unimi.dsi.fastutil.ints.IntList
 import org.jctools.maps.NonBlockingHashMapLong
+import xlitekt.game.actor.bonus.Bonuses
 import xlitekt.game.actor.movement.Movement
 import xlitekt.game.actor.movement.MovementSpeed
 import xlitekt.game.actor.movement.MovementStep
@@ -19,7 +20,7 @@ import xlitekt.game.world.map.Location
 import xlitekt.game.world.map.zone.Zone
 import xlitekt.shared.inject
 import java.util.*
-import xlitekt.game.actor.bonus.Bonuses
+import kotlin.collections.HashSet
 
 /**
  * @author Tyler Telis
@@ -31,15 +32,23 @@ abstract class Actor(
     val movement = Movement()
 
     val bonuses = Bonuses()
+    var previousLocation = Location.None
 
-    var previousLocation: Location = Location.None
+    /**
+     * This actor index.
+     */
     var index = 0
-
     inline val indexL get() = index.toLong()
 
-    internal var facingActorIndex = Optional.empty<Int>()
-    private var activeZone = Optional.empty<Zone>()
-    private val zones = mutableSetOf<Zone>()
+    /**
+     * Represents this actor current location zone.
+     */
+    private var zone = Optional.empty<Zone>()
+
+    /**
+     * Represents this actor 7x7 build area of zones.
+     */
+    private val zones = HashSet<Zone>(49)
 
     /**
      * High definition rendering blocks used for local updates.
@@ -63,6 +72,11 @@ abstract class Actor(
     private val alternativeHighDefinitionRenderingBlocks = NonBlockingHashMapLong<AlternativeDefinitionRenderingBlock>()
     private val alternativeLowDefinitionRenderingBlocks = NonBlockingHashMapLong<AlternativeDefinitionRenderingBlock>()
 
+    /**
+     * Represents the actor index that this actor is currently facing.
+     */
+    internal var facingActorIndex = Optional.empty<Int>()
+
     abstract fun totalHitpoints(): Int
     abstract fun currentHitpoints(): Int
 
@@ -82,9 +96,9 @@ abstract class Actor(
                 if (shouldRebuildMap()) rebuildNormal(players) { false }
             }
         }
-        if (shouldRebuildZones() && activeZone.isPresent) {
-            if (activeZone.isPresent) {
-                activeZone.get().leaveZone(this, world.zone(location))
+        if (shouldRebuildZones() && zone.isPresent) {
+            if (zone.isPresent) {
+                zone.get().leaveZone(this, world.zone(location))
             }
         }
     }
@@ -148,9 +162,12 @@ abstract class Actor(
     internal fun alternativeHighDefinitionRenderingBlocks() = alternativeHighDefinitionRenderingBlocks.values
     internal fun alternativeLowDefinitionRenderingBlocks() = alternativeLowDefinitionRenderingBlocks.values
 
+    /**
+     * Returns if this actor needs a zones rebuild.
+     */
     private fun shouldRebuildZones(): Boolean {
-        if (activeZone.isPresent) {
-            return location.zoneId != activeZone.get().location.zoneId
+        if (zone.isPresent) {
+            return location.zoneId != zone.get().location.zoneId
         }
         return true
     }
@@ -177,13 +194,13 @@ abstract class Actor(
     /**
      * Returns the current zone this actor is inside of.
      */
-    fun zone() = if (activeZone.isPresent) activeZone.get() else world.zone(location)
+    fun zone() = if (zone.isPresent) zone.get() else world.zone(location)
 
     /**
      * Set this actor current zone.
      */
     fun setZone(zone: Zone) {
-        activeZone = Optional.of(zone)
+        this.zone = Optional.of(zone)
     }
 
     /**

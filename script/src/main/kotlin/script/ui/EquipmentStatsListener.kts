@@ -14,48 +14,27 @@ onInterface<EquipmentStats> {
     }
 
     onOpen {
-        fun formatBonus(input: Number): String = if (input.toDouble() >= 0.0) "+${input}" else "$input"
+        fun formatBonus(input: Number) = if (input.toDouble() >= 0.0) "+$input" else "$input"
 
-        val attackStab = bonuses.attackStab
-        val attackSlash = bonuses.attackSlash
-        val attackCrush = bonuses.attackCrush
-        val attackMagic = bonuses.attackMagic
-        val attackRanged = bonuses.attackRanged
+        setText(24, "Stab: ${formatBonus(bonuses.attackStab)}")
+        setText(25, "Slash: ${formatBonus(bonuses.attackSlash)}")
+        setText(26, "Crush: ${formatBonus(bonuses.attackCrush)}")
+        setText(27, "Magic: ${formatBonus(bonuses.attackMagic)}")
+        setText(27, "Range: ${formatBonus(bonuses.attackRanged)}")
 
-        val defenceStab = bonuses.defenceStab
-        val defenceSlash = bonuses.defenceSlash
-        val defenceCrush = bonuses.defenceCrush
-        val defenceMagic = bonuses.defenceMagic
-        val defenceRanged = bonuses.defenceRanged
+        setText(30, "Stab: ${formatBonus(bonuses.defenceStab)}")
+        setText(31, "Slash: ${formatBonus(bonuses.defenceSlash)}")
+        setText(32, "Crush: ${formatBonus(bonuses.defenceCrush)}")
+        setText(33, "Magic: ${formatBonus(bonuses.defenceMagic)}")
+        setText(34, "Range: ${formatBonus(bonuses.defenceRanged)}")
 
-        val meleeStrength = bonuses.meleeStrength
-        val rangedStrength = bonuses.rangedStrength
-        val magicDamage = bonuses.magicDamage
-        val prayer = bonuses.prayer
+        setText(36, "Melee strength: ${formatBonus(bonuses.meleeStrength)}")
+        setText(37, "Ranged strength: ${formatBonus(bonuses.rangedStrength)}")
+        setText(37, "Magic damage: ${formatBonus(bonuses.magicDamage)}%")
+        setText(38, "Prayer: ${formatBonus(bonuses.prayer)}")
 
-        val undead = bonuses.undead
-        val slayer = bonuses.slayer
-
-        setText(24, "Stab: ${formatBonus(attackStab)}")
-        setText(25, "Slash: ${formatBonus(attackSlash)}")
-        setText(26, "Crush: ${formatBonus(attackCrush)}")
-        setText(27, "Magic: ${formatBonus(attackMagic)}")
-        setText(27, "Range: ${formatBonus(attackRanged)}")
-
-        setText(30, "Stab: ${formatBonus(defenceStab)}")
-        setText(31, "Slash: ${formatBonus(defenceSlash)}")
-        setText(32, "Crush: ${formatBonus(defenceCrush)}")
-        setText(33, "Magic: ${formatBonus(defenceMagic)}")
-        setText(34, "Range: ${formatBonus(defenceRanged)}")
-
-        setText(36, "Melee strength: ${formatBonus(meleeStrength)}")
-        setText(37, "Ranged strength: ${formatBonus(rangedStrength)}")
-        setText(37, "Magic damage: ${formatBonus(magicDamage)}%")
-        setText(38, "Prayer: ${formatBonus(prayer)}")
-
-        // Displaying integer versions of these
-        setText(41, "Undead: ${formatBonus(undead.toInt())}%")
-        setText(42, "Slayer: ${formatBonus(slayer)}")
+        setText(41, "Undead: ${formatBonus(bonuses.undead.toInt())}%") // Displaying integer versions of this
+        setText(42, "Slayer: ${formatBonus(bonuses.slayer)}")
         interfaces += UserInterface.EquipmentInventory
     }
 

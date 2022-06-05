@@ -11,8 +11,7 @@ data class GameObject(
     val id: Int,
     val location: Location,
     val shape: Int,
-    val rotation: Int,
-    val spawned: Boolean = true
+    val rotation: Int
 ) {
     val entry = provider.entryType(id)!!
     val name = entry.name

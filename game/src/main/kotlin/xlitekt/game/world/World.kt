@@ -9,13 +9,13 @@ import xlitekt.game.actor.player.Client
 import xlitekt.game.actor.player.Player
 import xlitekt.game.world.map.CollisionMap
 import xlitekt.game.world.map.Location
+import xlitekt.game.world.map.zone.Zone
 import xlitekt.game.world.map.zone.ZoneLocation
 import xlitekt.game.world.map.zone.Zones
 import xlitekt.shared.inject
 import xlitekt.shared.resource.NPCSpawns
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.ConcurrentMap
-import xlitekt.game.world.map.zone.Zone
 
 class World(
     private val players: PlayerList = PlayerList(MAX_PLAYERS),
@@ -75,7 +75,7 @@ class World(
     // Doing it this way to reduce cpu time.
     fun players() = players.filter { it != null && it.isOnline() } as List<Player>
 
-    fun playersMapped(): NonBlockingHashMapLong<Player> {
+    internal fun playersMapped(): NonBlockingHashMapLong<Player> {
         val list = players()
         val map = NonBlockingHashMapLong<Player>(list.size)
         for (i in 0..list.lastIndex) {
@@ -90,7 +90,7 @@ class World(
 
     fun npcs() = npcs.filterNotNull()
 
-    fun zone(location: Location) = zones[location]
+    internal fun zone(location: Location) = zones[location]
     internal fun createZone(zoneLocation: ZoneLocation) = zones.createZone(zoneLocation)
 
     companion object {
