@@ -7,19 +7,21 @@ import xlitekt.game.world.map.zone.ZoneLocation
 
 @Serializable(with = LocationSerializer::class)
 @JvmInline
-value class Location(val packedLocation: Int) {
+value class Location(
+    val packedLocation: Int
+) {
     constructor(x: Int, z: Int, level: Int = 0) : this((z and 0x3FFF) or ((x and 0x3FFF) shl 14) or ((level and 0x3) shl 28))
 
-    val x: Int get() = (packedLocation shr 14) and 0x3FFF
-    val z: Int get() = packedLocation and 0x3FFF
-    val level: Int get() = (packedLocation shr 28) and 0x3
-    val zoneX: Int get() = (x shr 3)
-    val zoneZ: Int get() = (z shr 3)
-    val zoneId: Int get() = zoneX or (zoneZ shl 11) or (level shl 22)
-    val regionX: Int get() = (x shr 6)
-    val regionZ: Int get() = (z shr 6)
-    val regionId: Int get() = (regionX shl 8) or regionZ
-    val regionLocation: Int get() = z shr 13 or (x shr 13 shl 8) or (level shl 16)
+    inline val x get() = (packedLocation shr 14) and 0x3FFF
+    inline val z: Int get() = packedLocation and 0x3FFF
+    inline val level get() = (packedLocation shr 28) and 0x3
+    inline val zoneX get() = (x shr 3)
+    inline val zoneZ get() = (z shr 3)
+    inline val zoneId get() = zoneX or (zoneZ shl 11) or (level shl 22)
+    inline val regionX get() = (x shr 6)
+    inline val regionZ get() = (z shr 6)
+    inline val regionId get() = (regionX shl 8) or regionZ
+    inline val regionLocation get() = z shr 13 or (x shr 13 shl 8) or (level shl 16)
 
     fun localX(location: Location) = x - 8 * (location.zoneX - (104 shr 4))
     fun localZ(location: Location) = z - 8 * (location.zoneZ - (104 shr 4))

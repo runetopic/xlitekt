@@ -5,12 +5,12 @@ package xlitekt.game.actor.movement
  */
 @JvmInline
 value class Direction(
-    private val packedDirection: Int
+    val packedDirection: Int
 ) {
     constructor(dx: Int, dz: Int) : this((dx and 0xff shl 8) or (dz and 0xff))
 
-    val deltaX get() = (packedDirection shr 8 and 0xff).let { if (it > Byte.MAX_VALUE) it - 0x100 else it }
-    val deltaZ get() = (packedDirection and 0xff).let { if (it > Byte.MAX_VALUE) it - 0x100 else it }
+    inline val deltaX get() = (packedDirection shr 8 and 0xff).let { if (it > Byte.MAX_VALUE) it - 0x100 else it }
+    inline val deltaZ get() = (packedDirection and 0xff).let { if (it > Byte.MAX_VALUE) it - 0x100 else it }
 
     /**
      * Returns the corresponding opcode used for this direction for player movement.
@@ -32,23 +32,23 @@ value class Direction(
      * | [00][01][02] |
      *  --------------
      */
-    val opcodeForPlayerDirection get() = when (this) {
-        NorthEast16 -> 15
-        NorthNorthEast16 -> 14
-        North16 -> 13
-        NorthNorthWest16 -> 12
-        NorthWest16 -> 11
-        EastNorthEast16 -> 10
-        WestNorthWest16 -> 9
-        East16 -> 8
-        West16, NorthEast8 -> 7
-        EastSouthEast16, North8 -> 6
-        WestSouthWest16, NorthWest8 -> 5
-        SouthEast16, East8 -> 4
-        SouthSouthEast16, West8 -> 3
-        South16, SouthEast8 -> 2
-        SouthSouthWest16, South8 -> 1
-        SouthWest16, SouthWest8 -> 0
+    inline val opcodeForPlayerDirection get() = when (packedDirection) {
+        514 -> 15
+        258 -> 14
+        2 -> 13
+        65282 -> 12
+        65026 -> 11
+        513 -> 10
+        65025 -> 9
+        512 -> 8
+        65024, 257 -> 7
+        767, 1 -> 6
+        65279, 65281 -> 5
+        766, 256 -> 4
+        510, 65280 -> 3
+        254, 511 -> 2
+        65534, 255 -> 1
+        65278, 65535 -> 0
         else -> throw IllegalStateException("Direction opcode not found for player. Direction was $this")
     }
 
@@ -60,43 +60,43 @@ value class Direction(
      * | [05][06][07] |
      *  --------------
      */
-    val opcodeForNPCDirection get() = when (this) {
+    inline val opcodeForNPCDirection get() = when (packedDirection) {
         // TODO Running support.
-        SouthEast8 -> 7
-        South8 -> 6
-        SouthWest8 -> 5
-        East8 -> 4
-        West8 -> 3
-        NorthEast8 -> 2
-        North8 -> 1
-        NorthWest8 -> 0
+        511 -> 7
+        255 -> 6
+        65535 -> 5
+        256 -> 4
+        65280 -> 3
+        257 -> 2
+        1 -> 1
+        65281 -> 0
         else -> throw IllegalStateException("Direction opcode not found for npc. Direction was $this")
     }
 
     /**
      * Returns the angle associated with this direction.
      */
-    fun angle() = when (this) {
-        NorthWest16, NorthWest8 -> 768
-        NorthNorthWest16 -> 896
-        North16, North8 -> 1024
-        NorthNorthEast16 -> 1152
-        NorthEast16, NorthEast8 -> 1280
-        WestNorthWest16 -> 640
-        EastNorthEast16 -> 1408
-        West16, West8 -> 512
-        East16, East8 -> 1536
-        WestSouthWest16 -> 384
-        EastSouthEast16 -> 1664
-        SouthWest16, SouthWest8 -> 256
-        SouthSouthWest16 -> 128
-        South16, South8 -> 2048
-        SouthSouthEast16 -> 1920
-        SouthEast16, SouthEast8 -> 1792
+    inline val angle get() = when (packedDirection) {
+        65026, 65281 -> 768
+        65282 -> 896
+        2, 1 -> 1024
+        258 -> 1152
+        514, 257 -> 1280
+        65025 -> 640
+        513 -> 1408
+        65024, 65280 -> 512
+        512, 256 -> 1536
+        65279 -> 384
+        767 -> 1664
+        65278, 65535 -> 256
+        65534 -> 128
+        254, 255 -> 2048
+        510 -> 1920
+        766, 511 -> 1792
         else -> 2048 // Default to south.
     }
 
-    fun fourPointCardinalDirection() = angle() % 256 == 0
+    inline val isFourPointCardinal get() = angle % 256 == 0
 
     companion object {
         private val NorthEast16 = Direction(2, 2)
