@@ -86,7 +86,7 @@ class Player(
         inventory.login()
         equipment.login()
         appearance.equipment = equipment
-        render(appearance)
+        renderAppearance()
         movementType { false }
         updateRunEnergy()
         speed { VarPlayer.ToggleRun in vars }
@@ -138,13 +138,13 @@ class Player(
     /**
      * Returns if this player needs a map rebuild.
      */
-    internal fun shouldRebuildMap(): Boolean {
+    internal fun shouldRebuildMap(size: Int = 104): Boolean {
         val lastZoneX = lastLoadedLocation.zoneX
         val lastZoneZ = lastLoadedLocation.zoneZ
         val zoneX = location.zoneX
         val zoneZ = location.zoneZ
-        val size = ((104 shr 3) / 2) - 1
-        return abs(lastZoneX - zoneX) >= size || abs(lastZoneZ - zoneZ) >= size
+        val limit = ((size shr 3) / 2) - 1
+        return abs(lastZoneX - zoneX) >= limit || abs(lastZoneZ - zoneZ) >= limit
     }
 }
 

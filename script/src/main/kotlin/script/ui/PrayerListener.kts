@@ -17,6 +17,6 @@ onInterface<UserInterface.Prayer> {
     }
 
     onClick {
-        this.switchPrayerById { it.childId }.message { "" }
+        this.switchPrayerById { it.childId }
     }
 }

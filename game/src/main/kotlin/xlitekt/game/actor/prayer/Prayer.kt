@@ -1,6 +1,9 @@
 package xlitekt.game.actor.prayer
 
 import xlitekt.game.actor.Actor
+import xlitekt.game.actor.player.Player
+import xlitekt.game.actor.player.message
+import xlitekt.game.content.skill.Skill
 import xlitekt.shared.inject
 import xlitekt.shared.resource.PrayerInfoMap
 import xlitekt.shared.resource.PrayerInfoResource
@@ -56,7 +59,7 @@ class Prayer(
             return
         }
 
-//        if (player.skills.levels[Skill.PRAYER.id] < prayer.requiredLevel) {
+//        if (player is Player && player.skills.levels[Skill.PRAYER.id] < prayer.requiredLevel) {
 //            player.message { "Unlocked at ${prayer.requiredLevel}" }
 //            return
 //        }
@@ -71,7 +74,6 @@ class Prayer(
             // | Turning New Prayer On |
 
             // turn off conflicting prayers
-
             getConflictingTypes(prayer.prayerType).let { if (it != null) turnOff(*it.toTypedArray()) }
 
             // turn on the new prayer
@@ -91,8 +93,8 @@ class Prayer(
         // turn on new prayer prayer.varbit
     }
 
-    private fun turnOff(vararg prayerTypeIds: PrayerType) {
-        prayerTypeIds.forEach {
+    private fun turnOff(vararg prayerTypes: PrayerType) {
+        prayerTypes.forEach {
             val prayer = activePrayerMap[it] ?: return@forEach
             activePrayerMap[it] = null
 //            println("Turned off ${prayer.name}")

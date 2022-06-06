@@ -131,7 +131,7 @@ value class Direction(
 
         val northEast = setOf(NorthEast16, NorthEast8)
         val northNorthEast = setOf(NorthNorthEast16)
-        val north = listOf(North16, North8)
+        val north = setOf(North16, North8)
         val northNorthWest = setOf(NorthNorthWest16)
         val northWest = setOf(NorthWest16, NorthWest8)
         val eastNorthEast = setOf(EastNorthEast16)

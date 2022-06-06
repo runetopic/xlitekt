@@ -11,6 +11,7 @@ import xlitekt.game.world.World
 import xlitekt.game.world.map.CollisionMap
 import xlitekt.game.world.map.GameObject
 import xlitekt.game.world.map.Location
+import xlitekt.game.world.map.transform
 import xlitekt.shared.inject
 
 /**
