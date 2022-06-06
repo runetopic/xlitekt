@@ -26,7 +26,7 @@ value class Location(
     inline val regionZ get() = (z shr 6)
     inline val regionId get() = (regionX shl 8) or regionZ
     inline val regionLocation get() = z shr 13 or (x shr 13 shl 8) or (level shl 16)
-    inline val zoneLocation get() = ZoneLocation(x shr 3, z shr 3, level)
+    inline val zoneLocation get() = ZoneLocation(zoneX, zoneZ, level)
 
     override fun toString(): String =
         "Location(packedCoordinates=$packedLocation, x=$x, z=$z, level=$level, zoneX=$zoneX, zoneZ=$zoneZ, zoneId=$zoneId, regionX=$regionX, regionZ=$regionZ, regionId=$regionId)"
@@ -38,16 +38,15 @@ value class Location(
 
 fun Location.directionTo(end: Location) = Direction(end.x - x, end.z - z)
 
-fun Location.withinDistance(other: Location?, distance: Int = 15): Boolean {
-    if (other == null) return false
+fun Location.withinDistance(other: Location, distance: Int = 15): Boolean {
     if (other.level != level) return false
     val deltaX = other.x - x
     val deltaZ = other.z - z
     return deltaX <= distance && deltaX >= -distance && deltaZ <= distance && deltaZ >= -distance
 }
 
-fun Location.localX(location: Location) = x - 8 * (location.zoneX - (104 shr 4))
-fun Location.localZ(location: Location) = z - 8 * (location.zoneZ - (104 shr 4))
+fun Location.localX(location: Location, size: Int = 104) = x - 8 * (location.zoneX - (size shr 4))
+fun Location.localZ(location: Location, size: Int = 104) = z - 8 * (location.zoneZ - (size shr 4))
 
 fun Location.transform(xOffset: Int, yOffset: Int, levelOffset: Int = 0) = Location(
     x = x + xOffset,
