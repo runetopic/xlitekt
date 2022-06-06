@@ -13,8 +13,7 @@ import kotlinx.serialization.encoding.decodeStructure
 import kotlinx.serialization.encoding.encodeStructure
 import xlitekt.game.actor.player.Player
 import xlitekt.game.actor.render.Render
-import xlitekt.game.content.container.equipment.Equipment
-import xlitekt.game.content.container.inventory.Inventory
+import xlitekt.game.content.item.Item
 import xlitekt.game.content.skill.Skills
 import xlitekt.game.world.map.Location
 
@@ -32,8 +31,8 @@ class PlayerSerializer : KSerializer<Player> {
             element<Render.Appearance>("appearance")
             element<Float>("runEnergy")
             element<Skills>("skills")
-            element<Equipment>("equipment")
-            element<Inventory>("inventory")
+            element<List<Item>>("equipment")
+            element<List<Item>>("inventory")
             element<Boolean>("brandNew")
         }
 

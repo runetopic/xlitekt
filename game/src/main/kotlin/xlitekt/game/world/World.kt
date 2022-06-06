@@ -9,7 +9,6 @@ import xlitekt.game.actor.player.Client
 import xlitekt.game.actor.player.Player
 import xlitekt.game.world.map.CollisionMap
 import xlitekt.game.world.map.Location
-import xlitekt.game.world.map.zone.Zone
 import xlitekt.game.world.map.zone.ZoneLocation
 import xlitekt.game.world.map.zone.Zones
 import xlitekt.shared.inject
@@ -33,8 +32,6 @@ class World(
     internal fun build() {
         // Apply collision map.
         maps.entries().forEach(CollisionMap::applyCollision)
-        // Set neighboring zones.
-        zones.filterNotNull().forEach(Zone::setNeighboringZones)
         // Apply npc spawns.
         npcSpawns.forEach {
             spawn(NPC(it.id, Location(it.x, it.z, it.level)))
