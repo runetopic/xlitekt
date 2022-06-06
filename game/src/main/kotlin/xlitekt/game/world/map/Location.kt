@@ -36,7 +36,7 @@ value class Location(
     }
 }
 
-fun Location.directionTo(end: Location): Direction = Direction(end.x - x, end.z - z)
+fun Location.directionTo(end: Location) = Direction(end.x - x, end.z - z)
 
 fun Location.withinDistance(other: Location?, distance: Int = 15): Boolean {
     if (other == null) return false
