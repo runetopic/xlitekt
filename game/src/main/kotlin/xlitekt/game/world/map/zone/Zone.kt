@@ -201,25 +201,25 @@ class Zone(
      * Returns a list of players that are inside this zone and neighboring zones.
      * By default, the range is limited to a standard 7x7 build area.
      */
-    fun neighboringPlayers() = neighboringZones.filter(Zone::active).map(Zone::players).flatten()
+    fun neighboringPlayers() = neighboringZones.map(Zone::players).flatten()
 
     /**
      * Returns a list of npcs that are inside this zone and neighboring zones.
-     * By default, the range is limited to a 5x5 area since by default npcs are only visible within 15 tiles.
+     * By default, the range is limited to a 7x7 area since by default npcs are only visible within 15 tiles.
      */
-    fun neighboringNpcs() = neighboringZones.filter(Zone::active).map(Zone::npcs).flatten()
+    fun neighboringNpcs() = neighboringZones.map(Zone::npcs).flatten()
 
     /**
      * Returns a list of game objects that are inside this zone and neighboring zones.
      * By default, the range is limited to a standard 7x7 build area.
      */
-    fun neighboringLocs() = neighboringZones.filter(Zone::active).map { it.locs + it.locsSpawned }.flatten()
+    fun neighboringLocs() = neighboringZones.map { it.locs + it.locsSpawned }.flatten()
 
     /**
      * Returns a list of floor items that are inside this zone and neighboring zones.
      * By default, the range is limited to a standard 7x7 build area.
      */
-    fun neighboringObjs() = neighboringZones.filter(Zone::active).map(Zone::objsSpawned).flatten()
+    fun neighboringObjs() = neighboringZones.map(Zone::objsSpawned).flatten()
 
     /**
      * Returns if this zone is active or not.
@@ -239,7 +239,7 @@ class Zone(
     /**
      * Initializes this zone neighboring zones into memory.
      */
-    internal fun setNeighboringZones() {
+    private fun setNeighboringZones() {
         val zones = HashSet<Zone>(49)
         for (x in -3..3) {
             for (z in -3..3) {

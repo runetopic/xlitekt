@@ -1,7 +1,7 @@
 package script.command
 
 import xlitekt.game.actor.player.message
-import xlitekt.game.actor.routeTeleport
+import xlitekt.game.actor.teleportTo
 import xlitekt.game.content.command.Commands.onCommand
 import xlitekt.game.world.map.Location
 
@@ -29,7 +29,7 @@ onCommand("tele").use { arguments ->
 
         val level = arguments.drop(2).firstOrNull()?.toInt() ?: location.level
 
-        routeTeleport { Location(x, z, level) }
+        teleportTo { Location(x, z, level) }
         message { "Teleported: ${Location(x, z, level)}" }
     } catch (exception: NumberFormatException) {
         message { invalidSyntaxMessage }

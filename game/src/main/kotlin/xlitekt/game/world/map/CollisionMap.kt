@@ -84,7 +84,7 @@ object CollisionMap {
     fun removeObjectCollision(obj: GameObject) = changeNormalCollision(obj, false)
 
     private fun changeNormalCollision(obj: GameObject, add: Boolean) {
-        val entry = obj.entry
+        val entry = obj.entry ?: return
         val shape = obj.shape
         val location = obj.location
         val rotation = obj.rotation

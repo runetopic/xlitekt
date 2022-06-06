@@ -1,6 +1,5 @@
 package xlitekt.game.content.container.equipment
 
-import kotlinx.serialization.Serializable
 import xlitekt.game.actor.player.Player
 import xlitekt.game.actor.player.message
 import xlitekt.game.content.container.Container
@@ -15,7 +14,6 @@ import xlitekt.shared.resource.ItemInfoMap
 const val EQUIPMENT_KEY = 94
 const val EQUIPMENT_CAPACITY = 15
 
-@Serializable
 class Equipment(
     val player: Player
 ) : Container(-1, EQUIPMENT_CAPACITY) {
