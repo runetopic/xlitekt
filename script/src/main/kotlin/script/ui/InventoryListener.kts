@@ -60,18 +60,6 @@ fun Player.wearItem(
     slot: Int,
     item: Item
 ) {
-    if (!itemInfo.equipable) {
-        message { "You can't wear that!" }
-        return
-    }
-
-    val equipmentSlot: Int = inventoryListener.mapEquipmentSlot(itemInfo) ?: return
-
-    inventory.removeItem(slot, item) {
-        // TODO this shouldn't use a set here. This needs to check for stackable items and increment the amount if so. (E.g: arrows or other ammo)
-        equipment.setItem(equipmentSlot, item) { slot ->
-            equipment.refreshSlots(listOf(slot))
-        }
-    }
+    equipment.equipItem(item)// TODO pass slots in
     renderAppearance()
 }

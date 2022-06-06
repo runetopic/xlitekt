@@ -65,26 +65,48 @@ class Equipment(
         }
 
         val equipmentSlot = equipmentInfo.equipmentSlot
+        val mappedEquipmentSlot = mapEquipmentSlot(equipmentSlot)
 
         if (equipmentSlot == EquipmentSlot.TWO_HAND) {
-            val offhand = this[SLOT_OFFHAND]
+            handleTwoHandedWeapon(mappedEquipmentSlot, item)
+            return
+        }
 
-            if (offhand != null) {
-                if (player.inventory.availableSlots() < 2) {
-                    player.message { "You don't have enough free space to do that." }
-                    return
-                }
+        val existingItem = this[mappedEquipmentSlot] ?: return run {
+            setItem(mappedEquipmentSlot, item) { slots ->
+                refreshSlots(listOf(slots))
+            }
+        }
 
-                removeItem(SLOT_OFFHAND, offhand) {
-                    player.inventory.addItem(this) {
-                    }
+        removeItem(mappedEquipmentSlot, existingItem) {
+            player.inventory.addItem(this) {
+                setItem(mappedEquipmentSlot, item) { slots ->
+                    refreshSlots(listOf(slots))
                 }
             }
-            return
         }
     }
 
-    fun mapEquipmentSlot(equipmentSlot: EquipmentSlot): Int? = when (equipmentSlot) {
+    private fun handleTwoHandedWeapon(equipmentSlot: Int, item: Item) {
+        val offhand = this[SLOT_OFFHAND]
+
+        if (offhand != null) {
+            if (player.inventory.availableSlots() < 1) {
+                player.message { "You don't have enough free inventory space to do that." }
+                return
+            }
+
+            removeItem(SLOT_OFFHAND, offhand) {
+                player.inventory.addItem(this) {
+                    setItem(equipmentSlot, item) { slots ->
+                        refreshSlots(listOf(slots))
+                    }
+                }
+            }
+        }
+    }
+
+    fun mapEquipmentSlot(equipmentSlot: EquipmentSlot): Int = when (equipmentSlot) {
         EquipmentSlot.WEAPON, EquipmentSlot.TWO_HAND -> SLOT_MAINHAND
         EquipmentSlot.AMMO -> SLOT_AMMO
         EquipmentSlot.BODY -> SLOT_TORSO
@@ -96,7 +118,7 @@ class Equipment(
         EquipmentSlot.NECK -> SLOT_NECK
         EquipmentSlot.RING -> SLOT_RING
         EquipmentSlot.SHIELD -> SLOT_OFFHAND
-        else -> null
+        else -> throw IllegalArgumentException("Unhandled equipment slot $equipmentSlot")
     }
 
     /**
