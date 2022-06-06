@@ -18,7 +18,7 @@ value class Location(
 
     inline val level get() = (packedLocation shr 28) and 0x3
     inline val x get() = (packedLocation shr 14) and 0x3fff
-    inline val z: Int get() = packedLocation and 0x3fff
+    inline val z get() = packedLocation and 0x3fff
     inline val zoneX get() = (x shr 3)
     inline val zoneZ get() = (z shr 3)
     inline val zoneId get() = zoneX or (zoneZ shl 11) or (level shl 22)
