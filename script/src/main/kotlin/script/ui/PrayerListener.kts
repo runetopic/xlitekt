@@ -18,6 +18,5 @@ onInterface<UserInterface.Prayer> {
 
     onClick {
         this.switchPrayerById { it.childId }.message { "" }
-        this.switchPrayer { Prayers.MYSTIC_MIGHT }
     }
 }
