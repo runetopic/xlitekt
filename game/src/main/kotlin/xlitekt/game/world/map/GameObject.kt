@@ -1,7 +1,7 @@
 package xlitekt.game.world.map
 
 import xlitekt.cache.provider.config.loc.LocEntryTypeProvider
-import xlitekt.shared.inject
+import xlitekt.shared.lazy
 
 /**
  * @author Tyler Telis
@@ -13,12 +13,8 @@ data class GameObject(
     val shape: Int,
     val rotation: Int
 ) {
-    val entry = provider.entryType(id)!!
-    val name = entry.name
+    inline val entry get() = lazy<LocEntryTypeProvider>().entryType(id)!!
+    inline val name get() = entry.name
 
     override fun toString(): String = "GameObject(id=$id, location=$location, shape=$shape, rotation=$rotation"
-
-    private companion object {
-        val provider by inject<LocEntryTypeProvider>()
-    }
 }

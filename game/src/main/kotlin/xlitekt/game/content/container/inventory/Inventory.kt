@@ -1,6 +1,5 @@
 package xlitekt.game.content.container.inventory
 
-import kotlinx.serialization.Serializable
 import xlitekt.game.actor.player.Player
 import xlitekt.game.actor.player.message
 import xlitekt.game.content.container.Container
@@ -17,7 +16,6 @@ const val INVENTORY_CAPACITY = 28
  * This class is used to track the Player's items in their inventory.
  * @author Tyler Telis
  */
-@Serializable
 class Inventory(
     val player: Player,
 ) : Container(INVENTORY_CONTAINER_KEY, INVENTORY_CAPACITY) {
@@ -69,7 +67,7 @@ class Inventory(
      * @return whether of not the item has been added to the inventory.
      */
     private fun addItem(item: Item): Boolean {
-        if (isFull() && !item.isStackable()) {
+        if (isFull() && !item.stackable) {
             player.message { "You don't have enough inventory space." }
             return false
         }

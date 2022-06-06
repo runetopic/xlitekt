@@ -1,6 +1,5 @@
 package xlitekt.game.content.container
 
-import kotlinx.serialization.Serializable
 import xlitekt.game.content.item.Item
 
 /**
@@ -10,7 +9,6 @@ import xlitekt.game.content.item.Item
  * @param capacity The capacity of the container.
  * @param alwaysStack If this container is always stacking items within the container. (This currently has limited support. Will be adding more in the future)
  */
-@Serializable
 abstract class Container(
     val id: Int,
     val capacity: Int,
@@ -29,7 +27,7 @@ abstract class Container(
      */
     protected fun add(item: Item, slotId: Int = slotId(item), function: (Item).(List<Int>) -> Unit): Boolean {
         when {
-            item.isStackable() && slotId == -1 -> {
+            item.stackable && slotId == -1 -> {
                 val nextSlot = nextAvailableSlot()
                 if (nextSlot == -1) return false
                 items[nextSlot] = item
@@ -65,7 +63,7 @@ abstract class Container(
         item: Item,
         function: ContainerUpdate
     ): Boolean {
-        if (item.isStackable()) return false
+        if (item.stackable) return false
 
         val slotsChanged = mutableListOf<Int>()
 
@@ -133,7 +131,7 @@ abstract class Container(
         if ((item.amount + existingItem.amount) < 0) return false
 
         return when {
-            item.isStackable() && !isFull() -> {
+            item.stackable && !isFull() -> {
                 items[slotId] = item.copy(
                     id = item.id,
                     amount = item.amount + existingItem.amount
