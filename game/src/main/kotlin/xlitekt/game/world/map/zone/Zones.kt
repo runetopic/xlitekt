@@ -10,15 +10,15 @@ class Zones {
     private val zones = arrayOfNulls<Zone?>(2048 * 2048 * 4)
 
     operator fun get(location: Location): Zone {
-        val zoneLocation = location.toZoneLocation()
-        return zones[zoneLocation.packedCoordinates] ?: createZone(zoneLocation)
+        val zoneLocation = location.zoneLocation
+        return zones[zoneLocation.packedLocation] ?: createZone(zoneLocation)
     }
 
     fun createZone(location: ZoneLocation): Zone {
-        val currentZone = zones[location.packedCoordinates]
+        val currentZone = zones[location.packedLocation]
         if (currentZone != null) return currentZone
-        val newZone = Zone(location.toFullLocation())
-        zones[location.packedCoordinates] = newZone
+        val newZone = Zone(location.location)
+        zones[location.packedLocation] = newZone
         return newZone
     }
 

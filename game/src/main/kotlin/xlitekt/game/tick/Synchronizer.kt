@@ -1,6 +1,7 @@
 package xlitekt.game.tick
 
 import org.jctools.maps.NonBlockingHashMapLong
+import org.jctools.maps.NonBlockingHashSet
 import xlitekt.game.actor.movement.MovementStep
 import xlitekt.game.actor.npc.NPC
 import xlitekt.game.actor.player.Player
@@ -14,6 +15,7 @@ import xlitekt.game.tick.NPCInfoUpdates.HighDefinitionNPCUpdates
 import xlitekt.game.tick.NPCInfoUpdates.MovementStepsNPCUpdates
 import xlitekt.game.tick.PlayerInfoUpdates.*
 import xlitekt.game.world.World
+import xlitekt.game.world.map.zone.Zone
 import xlitekt.shared.inject
 import java.util.*
 
@@ -45,6 +47,12 @@ abstract class Synchronizer : Runnable {
         if (blocks.isEmpty()) return
         HighDefinitionNPCUpdates.add(indexL, blocks.invokeHighDefinitionNPCRenderingBlocks())
         resetDefinitionRenderingBlocks()
+    }
+
+    protected fun Player.syncZones() {
+        zones().filter(Zone::updating).forEach {
+            ZoneUpdates.add(it.invokeUpdateRequests(this))
+        }
     }
 
     protected fun Player.syncClient(players: NonBlockingHashMapLong<Player>) {
@@ -80,8 +88,12 @@ abstract class Synchronizer : Runnable {
         // NPC
         HighDefinitionNPCUpdates.clear()
         MovementStepsNPCUpdates.clear()
+        // Zones
+        ZoneUpdates.clear()
     }
 }
+
+internal object ZoneUpdates : NonBlockingHashSet<Zone>()
 
 internal sealed class PlayerInfoUpdates<T : Any> : NonBlockingHashMapLong<Optional<T>>(World.MAX_PLAYERS) {
 

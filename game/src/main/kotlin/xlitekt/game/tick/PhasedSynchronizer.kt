@@ -15,6 +15,7 @@ class PhasedSynchronizer(
         try {
             val time = measureTime {
                 synchronizers.forEach(Runnable::run)
+                resetSynchronizer()
             }
             logger.debug { "Synchronization completed in $time." }
         } catch (exception: Exception) {

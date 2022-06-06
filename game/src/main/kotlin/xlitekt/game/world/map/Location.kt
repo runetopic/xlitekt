@@ -5,16 +5,20 @@ import xlitekt.game.actor.movement.Direction
 import xlitekt.game.actor.player.serializer.LocationSerializer
 import xlitekt.game.world.map.zone.ZoneLocation
 
+/**
+ * @author Jordan Abraham
+ * @author Tyler Telis
+ */
 @Serializable(with = LocationSerializer::class)
 @JvmInline
 value class Location(
     val packedLocation: Int
 ) {
-    constructor(x: Int, z: Int, level: Int = 0) : this((z and 0x3FFF) or ((x and 0x3FFF) shl 14) or ((level and 0x3) shl 28))
+    constructor(x: Int, z: Int, level: Int = 0) : this((z and 0x3fff) or ((x and 0x3fff) shl 14) or ((level and 0x3) shl 28))
 
-    inline val x get() = (packedLocation shr 14) and 0x3FFF
-    inline val z: Int get() = packedLocation and 0x3FFF
     inline val level get() = (packedLocation shr 28) and 0x3
+    inline val x get() = (packedLocation shr 14) and 0x3fff
+    inline val z: Int get() = packedLocation and 0x3fff
     inline val zoneX get() = (x shr 3)
     inline val zoneZ get() = (z shr 3)
     inline val zoneId get() = zoneX or (zoneZ shl 11) or (level shl 22)
@@ -22,16 +26,7 @@ value class Location(
     inline val regionZ get() = (z shr 6)
     inline val regionId get() = (regionX shl 8) or regionZ
     inline val regionLocation get() = z shr 13 or (x shr 13 shl 8) or (level shl 16)
-
-    fun localX(location: Location) = x - 8 * (location.zoneX - (104 shr 4))
-    fun localZ(location: Location) = z - 8 * (location.zoneZ - (104 shr 4))
-    fun toZoneLocation(): ZoneLocation = ZoneLocation(x shr 3, z shr 3, level)
-
-    fun transform(xOffset: Int, yOffset: Int, levelOffset: Int = 0) = Location(
-        x = x + xOffset,
-        z = z + yOffset,
-        level = level + levelOffset
-    )
+    inline val zoneLocation get() = ZoneLocation(x shr 3, z shr 3, level)
 
     override fun toString(): String =
         "Location(packedCoordinates=$packedLocation, x=$x, z=$z, level=$level, zoneX=$zoneX, zoneZ=$zoneZ, zoneId=$zoneId, regionX=$regionX, regionZ=$regionZ, regionId=$regionId)"
@@ -50,3 +45,12 @@ fun Location.withinDistance(other: Location?, distance: Int = 15): Boolean {
     val deltaZ = other.z - z
     return deltaX <= distance && deltaX >= -distance && deltaZ <= distance && deltaZ >= -distance
 }
+
+fun Location.localX(location: Location) = x - 8 * (location.zoneX - (104 shr 4))
+fun Location.localZ(location: Location) = z - 8 * (location.zoneZ - (104 shr 4))
+
+fun Location.transform(xOffset: Int, yOffset: Int, levelOffset: Int = 0) = Location(
+    x = x + xOffset,
+    z = z + yOffset,
+    level = level + levelOffset
+)
