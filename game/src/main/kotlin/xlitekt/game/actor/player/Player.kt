@@ -5,6 +5,8 @@ import org.jctools.maps.NonBlockingHashMapLong
 import xlitekt.game.actor.Actor
 import xlitekt.game.actor.movementType
 import xlitekt.game.actor.player.serializer.PlayerSerializer
+import xlitekt.game.actor.prayer.Prayer
+import xlitekt.game.actor.prayer.Prayers
 import xlitekt.game.actor.render.Render
 import xlitekt.game.actor.speed
 import xlitekt.game.content.container.equipment.Equipment
@@ -44,6 +46,8 @@ class Player(
     val inventory: Inventory = Inventory(this)
     val equipment: Equipment = Equipment(this)
     var lastLoadedLocation = Location.None
+
+    override val prayer = Prayer(this)
 
     /**
      * This players connected client. This client is used for reading and writing packets.
@@ -161,4 +165,12 @@ fun Player.updateRunEnergy() = write(UpdateRunEnergyPacket(runEnergy / 100))
 inline fun Player.rebuildNormal(players: NonBlockingHashMapLong<Player>, update: () -> Boolean) {
     write(RebuildNormalPacket(viewport, location, update.invoke(), players))
     lastLoadedLocation = location
+}
+
+inline fun Player.switchPrayerById(prayerId: () -> Int): Player = this.also {
+    it.prayer.switchById(prayerId.invoke())
+}
+
+inline fun Player.switchPrayer(prayer: () -> Prayers): Player = this.also {
+    it.prayer.switchById(prayer.invoke().id)
 }

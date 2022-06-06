@@ -8,6 +8,8 @@ import xlitekt.game.actor.movement.MovementStep
 import xlitekt.game.actor.npc.NPC
 import xlitekt.game.actor.player.Player
 import xlitekt.game.actor.player.rebuildNormal
+import xlitekt.game.actor.prayer.Prayer
+import xlitekt.game.actor.prayer.Prayers
 import xlitekt.game.actor.render.HitBar
 import xlitekt.game.actor.render.HitSplat
 import xlitekt.game.actor.render.HitType
@@ -28,6 +30,8 @@ abstract class Actor(
     open var location: Location
 ) {
     val movement = Movement()
+
+    abstract val prayer: Prayer
 
     var previousLocation: Location = Location.None
     var index = 0
