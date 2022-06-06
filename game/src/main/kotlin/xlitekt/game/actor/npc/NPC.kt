@@ -2,9 +2,7 @@ package xlitekt.game.actor.npc
 
 import xlitekt.cache.provider.config.npc.NPCEntryTypeProvider
 import xlitekt.game.actor.Actor
-import xlitekt.game.actor.player.Player
 import xlitekt.game.actor.prayer.Prayer
-import xlitekt.game.actor.prayer.Prayers
 import xlitekt.game.event.EventBus
 import xlitekt.game.event.impl.Events
 import xlitekt.game.world.map.Location
@@ -32,12 +30,4 @@ class NPC(
     override val prayer = Prayer(this)
 
     override fun toString(): String = "NPC(id=$id, entry=$entry)"
-}
-
-inline fun NPC.switchPrayerById(prayerId: () -> Int): NPC = this.also {
-    it.prayer.switchById(prayerId.invoke())
-}
-
-inline fun NPC.switchPrayer(prayer: () -> Prayers): NPC = this.also {
-    it.prayer.switchById(prayer.invoke().id)
 }

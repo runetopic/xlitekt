@@ -6,7 +6,6 @@ import xlitekt.game.actor.Actor
 import xlitekt.game.actor.movementType
 import xlitekt.game.actor.player.serializer.PlayerSerializer
 import xlitekt.game.actor.prayer.Prayer
-import xlitekt.game.actor.prayer.Prayers
 import xlitekt.game.actor.render.Render
 import xlitekt.game.actor.speed
 import xlitekt.game.content.container.equipment.Equipment
@@ -170,11 +169,3 @@ inline fun Player.rebuildNormal(players: NonBlockingHashMapLong<Player>, update:
 }
 
 fun Player.renderAppearance() = render(appearance)
-
-inline fun Player.switchPrayerById(prayerId: () -> Int): Player = this.also {
-    it.prayer.switchById(prayerId.invoke())
-}
-
-inline fun Player.switchPrayer(prayer: () -> Prayers): Player = this.also {
-    it.prayer.switchById(prayer.invoke().id)
-}

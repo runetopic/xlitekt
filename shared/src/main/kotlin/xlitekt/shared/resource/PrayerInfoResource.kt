@@ -17,33 +17,14 @@ enum class PrayerType(val id: Int) {
     PRESERVE(10);
 
     companion object {
-        private val conflictingPrayerTypes: Map<PrayerType, List<PrayerType>> = mapOf(
-            DEFENCE to listOf(MULTI_COMBAT, DEFENCE),
-            ATTACK to listOf(RANGE, MAGIC, MULTI_COMBAT, ATTACK),
-            STRENGTH to listOf(RANGE, MAGIC, MULTI_COMBAT, STRENGTH),
-            RANGE to listOf(
-                ATTACK,
-                STRENGTH,
-                MAGIC,
-                MULTI_COMBAT,
-                RANGE
-            ),
-            MAGIC to listOf(
-                ATTACK,
-                STRENGTH,
-                RANGE,
-                MULTI_COMBAT,
-                MAGIC
-            ),
-            UTILITY to listOf(UTILITY),
-            MULTI_COMBAT to listOf(
-                DEFENCE,
-                ATTACK,
-                STRENGTH,
-                RANGE,
-                MAGIC,
-                MULTI_COMBAT
-            )
+        private val conflictingPrayerTypes: Map<PrayerType, Array<PrayerType>> = mapOf(
+            UTILITY to arrayOf(UTILITY),
+            DEFENCE to arrayOf(MULTI_COMBAT, DEFENCE),
+            ATTACK to arrayOf(RANGE, MAGIC, MULTI_COMBAT, ATTACK),
+            STRENGTH to arrayOf(RANGE, MAGIC, MULTI_COMBAT, STRENGTH),
+            RANGE to arrayOf(ATTACK, STRENGTH, MAGIC, MULTI_COMBAT, RANGE),
+            MAGIC to arrayOf(ATTACK, STRENGTH, RANGE, MULTI_COMBAT, MAGIC),
+            MULTI_COMBAT to arrayOf(DEFENCE, ATTACK, STRENGTH, RANGE, MAGIC, MULTI_COMBAT)
         )
 
         fun getConflictingTypes(type: PrayerType) = conflictingPrayerTypes[type]

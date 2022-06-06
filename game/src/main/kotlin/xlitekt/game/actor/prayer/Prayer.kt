@@ -1,9 +1,6 @@
 package xlitekt.game.actor.prayer
 
 import xlitekt.game.actor.Actor
-import xlitekt.game.actor.player.Player
-import xlitekt.game.actor.player.message
-import xlitekt.game.content.skill.Skill
 import xlitekt.shared.inject
 import xlitekt.shared.resource.PrayerInfoMap
 import xlitekt.shared.resource.PrayerInfoResource
@@ -46,59 +43,78 @@ enum class Prayers(
     PIETY(30),
     RIGOUR(31),
     AUGURY(32),
-    PRESERVE(33)
+    PRESERVE(33);
+
+    fun info(): PrayerInfoResource? = prayerInfoMap[this.id] ?: null.also { println("Prayer ${this.id} not found in resources!") }
 }
-// PrayerTypes.values
+
 class Prayer(
     private val player: Actor,
     private val activePrayerMap: MutableMap<PrayerType, PrayerInfoResource?> = PrayerType.values().associateWith { null }.toMutableMap()
 ) {
-    fun switchById(prayerId: Int) {
-        val prayer = prayerInfoMap[prayerId] ?: run { // Should never happen as all prayers are handled
-//            player.message { "Prayer $prayerId not handled yet" }
-            return
-        }
+    fun switch(prayer: Prayers) = this.switch(prayer.id)
+
+    fun switch(prayerId: Int) {
+        val prayer = prayerInfoMap[prayerId] ?: return
 
 //        if (player is Player && player.skills.levels[Skill.PRAYER.id] < prayer.requiredLevel) {
 //            player.message { "Unlocked at ${prayer.requiredLevel}" }
 //            return
 //        }
 
-        val activePrayerByType = activePrayerMap[prayer.prayerType]
-        val isActivePrayer = activePrayerByType?.interfaceChildId == prayer.interfaceChildId
-
-        if (isActivePrayer) {
+        if (this.isActive(prayer)) {
             // | Turning Prayer Off |
-            turnOff(prayer.prayerType)
+            this.deactivate(prayer.prayerType)
         } else {
             // | Turning New Prayer On |
 
             // turn off conflicting prayers
-            getConflictingTypes(prayer.prayerType).let { if (it != null) turnOff(*it.toTypedArray()) }
+            getConflictingTypes(prayer.prayerType)?.let { this.deactivate(*it) }
 
             // turn on the new prayer
-            turnOn(prayer)
+            this.activePrayerMap[prayer.prayerType] = prayer
+            // turn on varbit
         }
 
-        println(activePrayerMap.values.filterNotNull().map { it.name })
+        println(activePrayerMap.values.mapNotNull { it?.name })
     }
 
-    private fun calculateDrainRate(): Int {
-        return activePrayerMap.values.sumOf { it?.drainRate ?: 0 }
+    fun activate(prayer: Prayers) {
+        if (!this.isActive(prayer)) this.switch(prayer)
     }
 
-    private fun turnOn(prayer: PrayerInfoResource) {
-        activePrayerMap[prayer.prayerType] = prayer
-//        println("Turned on ${prayer.name}")
-        // turn on new prayer prayer.varbit
+    fun deactivate(vararg prayers: Prayers) {
+        val prayerTypes: Array<PrayerType?> = Array(prayers.size) { prayers[it].info()?.prayerType }
+        this.deactivate(*prayerTypes)
     }
 
-    private fun turnOff(vararg prayerTypes: PrayerType) {
+    fun deactivate(vararg prayerTypes: PrayerType?) {
         prayerTypes.forEach {
-            val prayer = activePrayerMap[it] ?: return@forEach
-            activePrayerMap[it] = null
-//            println("Turned off ${prayer.name}")
+            if (it == null) return@forEach
+            this.activePrayerMap[it] = null
             // turn off varbit
         }
     }
+
+    fun turnOff() {
+        this.deactivate(*PrayerType.values())
+    }
+
+    /**
+     * Used if the varbits and activePrayerMap do not match
+     */
+    fun reset() {
+        this.deactivate(*Prayers.values())
+    }
+
+    fun isActive(prayer: Prayers): Boolean {
+        return prayer.info().let { if (it != null) this.isActive(it) else false }
+    }
+
+    private fun isActive(prayerInfo: PrayerInfoResource): Boolean {
+        val activePrayerByType = activePrayerMap[prayerInfo.prayerType]
+        return activePrayerByType?.interfaceChildId == prayerInfo.interfaceChildId
+    }
+
+    fun drainRate(): Int = activePrayerMap.values.sumOf { it?.drainRate ?: 0 }
 }

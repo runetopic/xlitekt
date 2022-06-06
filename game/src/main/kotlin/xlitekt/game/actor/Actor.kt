@@ -34,10 +34,11 @@ abstract class Actor(
 
     var previousLocation = Location.None
 
+    abstract val prayer: Prayer
+
     /**
      * This actor index.
      */
-    abstract val prayer: Prayer
     var index = 0
     inline val indexL get() = index.toLong()
 
@@ -305,3 +306,6 @@ inline fun Actor.chat(rights: Int, effects: Int, message: () -> String) {
 inline fun Actor.overheadChat(message: () -> String) {
     render(OverheadChat(message.invoke()))
 }
+
+inline fun Actor.switchPrayer(prayer: () -> Prayers) = this.prayer.switch(prayer.invoke().id)
+inline fun Actor.activatePrayer(prayer: () -> Prayers) = this.prayer.activate(prayer.invoke())

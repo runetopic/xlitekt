@@ -1,9 +1,5 @@
 package script.ui
 
-import xlitekt.game.actor.player.message
-import xlitekt.game.actor.player.switchPrayer
-import xlitekt.game.actor.player.switchPrayerById
-import xlitekt.game.actor.prayer.Prayers
 import xlitekt.game.content.ui.InterfaceEvent
 import xlitekt.game.content.ui.UserInterface
 import xlitekt.game.content.ui.onInterface
@@ -17,6 +13,6 @@ onInterface<UserInterface.Prayer> {
     }
 
     onClick {
-        this.switchPrayerById { it.childId }
+        this.prayer.switch(it.childId)
     }
 }
