@@ -10,7 +10,7 @@ import xlitekt.game.actor.speed
 import xlitekt.game.content.vars.VarPlayer
 import xlitekt.game.packet.MovementPacket
 import xlitekt.game.packet.disassembler.handler.onPacketHandler
-import xlitekt.game.world.map.location.Location
+import xlitekt.game.world.map.Location
 import xlitekt.shared.inject
 
 private val zoneFlags by inject<ZoneFlags>()

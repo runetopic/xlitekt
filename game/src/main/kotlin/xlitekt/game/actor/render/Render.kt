@@ -5,8 +5,9 @@ import xlitekt.game.actor.Actor
 import xlitekt.game.actor.player.serializer.AppearanceSerializer
 import xlitekt.game.actor.render.block.body.BodyPart
 import xlitekt.game.actor.render.block.body.BodyPartColor
-import xlitekt.game.world.map.location.Location
-import java.util.EnumMap
+import xlitekt.game.content.container.equipment.Equipment
+import xlitekt.game.world.map.Location
+import java.util.Optional
 
 /**
  * @author Jordan Abraham
@@ -101,36 +102,42 @@ sealed class Render {
 
     @Serializable(with = AppearanceSerializer::class)
     class Appearance : Render() {
-        val bodyParts = EnumMap<BodyPart, Int>(BodyPart::class.java)
-        val bodyPartColors = EnumMap<BodyPartColor, Int>(BodyPartColor::class.java)
-
-        var gender: Gender = Gender.MALE
-        var headIcon: Int = -1
-        var skullIcon: Int = -1
-        var transform: Int = -1
-        var hidden: Boolean = false
+        val bodyParts = HashMap<BodyPart, Int>(7)
+        val bodyPartColors = HashMap<BodyPartColor, Int>(5)
+        var gender = Gender.Male
         var displayName: String = ""
 
+        var headIcon = Optional.empty<Int>()
+        var skullIcon = Optional.empty<Int>()
+        var transform = Optional.empty<Int>()
+        var hidden = Optional.empty<Boolean>()
+        lateinit var equipment: Equipment
+
         init {
-            bodyParts[BodyPart.HEAD] = 0
-            bodyParts[BodyPart.JAW] = 10
-            bodyParts[BodyPart.TORSO] = 18
-            bodyParts[BodyPart.ARMS] = 26
-            bodyParts[BodyPart.HANDS] = 33
-            bodyParts[BodyPart.LEGS] = 36
-            bodyParts[BodyPart.FEET] = 42
-            bodyPartColors[BodyPartColor.HAIR] = 0
-            bodyPartColors[BodyPartColor.TORSO] = 0
-            bodyPartColors[BodyPartColor.LEGS] = 0
-            bodyPartColors[BodyPartColor.FEET] = 0
-            bodyPartColors[BodyPartColor.SKIN] = 0
+            bodyParts[BodyPart.Head] = 0
+            bodyParts[BodyPart.Jaw] = 10
+            bodyParts[BodyPart.Torso] = 18
+            bodyParts[BodyPart.Arms] = 26
+            bodyParts[BodyPart.Hands] = 33
+            bodyParts[BodyPart.Legs] = 36
+            bodyParts[BodyPart.Feet] = 42
+            bodyPartColors[BodyPartColor.Hair] = 0
+            bodyPartColors[BodyPartColor.Torso] = 0
+            bodyPartColors[BodyPartColor.Legs] = 0
+            bodyPartColors[BodyPartColor.Feet] = 0
+            bodyPartColors[BodyPartColor.Skin] = 0
         }
 
-        fun isMale(): Boolean = gender == Gender.MALE
+        fun isMale(): Boolean = gender == Gender.Male
+        fun isFemale(): Boolean = gender == Gender.Female
 
-        fun isFemale(): Boolean = gender == Gender.FEMALE
-
-        enum class Gender(val mask: Int) { MALE(0x0), FEMALE(0x1); }
+        @JvmInline
+        value class Gender(val id: Int) {
+            companion object {
+                val Male = Gender(0)
+                val Female = Gender(1)
+            }
+        }
     }
 
     /**

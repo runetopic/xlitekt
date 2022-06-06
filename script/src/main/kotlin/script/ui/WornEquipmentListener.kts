@@ -1,6 +1,7 @@
 package script.ui
 
 import xlitekt.game.actor.player.message
+import xlitekt.game.actor.player.renderAppearance
 import xlitekt.game.content.ui.UserInterface
 import xlitekt.game.content.ui.UserInterface.WornEquipment
 import xlitekt.game.content.ui.onInterface
@@ -45,6 +46,7 @@ onInterface<WornEquipment> {
                         // play removing sound
                     }
                 }
+                renderAppearance()
             }
             10 -> { // examine item
                 message { itemExamines[item.id]?.message ?: "It's a ${item.entry?.name}" }

@@ -13,7 +13,7 @@ import xlitekt.game.content.vars.VarPlayer
 import xlitekt.game.packet.OpLocPacket
 import xlitekt.game.packet.disassembler.handler.onPacketHandler
 import xlitekt.game.world.World
-import xlitekt.game.world.map.location.Location
+import xlitekt.game.world.map.Location
 import xlitekt.shared.inject
 
 /**
@@ -46,10 +46,8 @@ onPacketHandler<OpLocPacket> {
 
     // The location of the object clicked.
     val location = Location(x, z, player.location.level)
-    // The zone the object location is in.
-    val zone = world.zone(location) ?: return@onPacketHandler
-    // The objects in this zone.
-    val objects = zone.locs
+    // The objects in our zone.
+    val objects = player.zone().neighboringLocs()
     // Server check if this zone objects contains the clicked object id.
     if (objects.none { it.id == objectId }) return@onPacketHandler
 

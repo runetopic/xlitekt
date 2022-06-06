@@ -17,8 +17,8 @@ import xlitekt.game.actor.player.Player
 import xlitekt.game.actor.player.Viewport
 import xlitekt.game.packet.PlayerInfoPacket
 import xlitekt.game.packet.assembler.onPacketAssembler
-import xlitekt.game.world.map.location.Location
-import xlitekt.game.world.map.location.withinDistance
+import xlitekt.game.world.map.Location
+import xlitekt.game.world.map.withinDistance
 import xlitekt.shared.buffer.BitAccess
 import xlitekt.shared.buffer.withBitAccess
 import xlitekt.shared.buffer.writeBytes
@@ -111,7 +111,7 @@ fun BytePacketBuilder.lowDefinition(
         // This player has an activity update (true).
         writeBit { true }
         // Write corresponding bits depending on the activity type the player is doing.
-        activity.writeBits(this@withBitAccess, viewport, index, current = other.location, previous = other.previousLocation)
+        activity.writeBits(this@withBitAccess, viewport, index, current = other.location, previous = other.previousLocation, step = Optional.empty())
         if (activity is Adding) {
             blocks.writeBytes { alternativeLowDefinitionUpdates[other.indexL]?.orElse(updates.get())!! }
             // Add them to our array.
@@ -173,7 +173,7 @@ fun Viewport.lowDefinitionActivities(other: Player?, updates: Optional<ByteArray
 
 sealed class ActivityUpdateType {
     object Removing : ActivityUpdateType() {
-        override fun writeBits(bits: BitAccess, viewport: Viewport, index: Int, updating: Boolean, current: Location, previous: Location, step: Optional<MovementStep>?) {
+        override fun writeBits(bits: BitAccess, viewport: Viewport, index: Int, updating: Boolean, current: Location, previous: Location, step: Optional<MovementStep>) {
             // Player has no update.
             bits.writeBit { false }
             // The player is not moving.
@@ -183,7 +183,7 @@ sealed class ActivityUpdateType {
     }
 
     object Teleporting : ActivityUpdateType() {
-        override fun writeBits(bits: BitAccess, viewport: Viewport, index: Int, updating: Boolean, current: Location, previous: Location, step: Optional<MovementStep>?) {
+        override fun writeBits(bits: BitAccess, viewport: Viewport, index: Int, updating: Boolean, current: Location, previous: Location, step: Optional<MovementStep>) {
             // If the player has pending block updates.
             bits.writeBit { updating }
             // Make the player teleport.
@@ -204,18 +204,20 @@ sealed class ActivityUpdateType {
     }
 
     object Moving : ActivityUpdateType() {
-        override fun writeBits(bits: BitAccess, viewport: Viewport, index: Int, updating: Boolean, current: Location, previous: Location, step: Optional<MovementStep>?) {
-            val running = step!!.get().speed.running
+        override fun writeBits(bits: BitAccess, viewport: Viewport, index: Int, updating: Boolean, current: Location, previous: Location, step: Optional<MovementStep>) {
+            val movementStep = step.orElseThrow()
+            val running = movementStep.speed.running
             // If the player has pending block updates.
             bits.writeBit { updating }
             // Make the player walk or run.
             bits.writeBits(2) { if (running) 2 else 1 }
-            bits.writeBits(if (running) 4 else 3) { step.get().direction.playerOpcode(running) }
+            val opcode = movementStep.direction.opcodeForPlayerDirection
+            bits.writeBits(if (running) 4 else 3) { opcode }
         }
     }
 
     object Updating : ActivityUpdateType() {
-        override fun writeBits(bits: BitAccess, viewport: Viewport, index: Int, updating: Boolean, current: Location, previous: Location, step: Optional<MovementStep>?) {
+        override fun writeBits(bits: BitAccess, viewport: Viewport, index: Int, updating: Boolean, current: Location, previous: Location, step: Optional<MovementStep>) {
             // The player has pending block updates.
             bits.writeBit { true }
             // The player is not moving.
@@ -224,7 +226,7 @@ sealed class ActivityUpdateType {
     }
 
     object Adding : ActivityUpdateType() {
-        override fun writeBits(bits: BitAccess, viewport: Viewport, index: Int, updating: Boolean, current: Location, previous: Location, step: Optional<MovementStep>?) {
+        override fun writeBits(bits: BitAccess, viewport: Viewport, index: Int, updating: Boolean, current: Location, previous: Location, step: Optional<MovementStep>) {
             bits.writeBits(2) { 0 }
             // Update the player location.
             bits.updateLocation(viewport, index, current)
@@ -242,7 +244,7 @@ sealed class ActivityUpdateType {
         updating: Boolean = false,
         current: Location,
         previous: Location,
-        step: Optional<MovementStep>? = null
+        step: Optional<MovementStep>
     )
 
     fun BitAccess.updateLocation(viewport: Viewport, index: Int, location: Location) {
@@ -283,7 +285,7 @@ sealed class RegionLocationChange {
     object PartialLocationChange : RegionLocationChange() {
         override fun writeBits(bits: BitAccess, level: Int, x: Int, z: Int) {
             bits.writeBits(2) { 2 }
-            bits.writeBits(5) { (level shl 3) or (Direction.directionFromDelta(x, z).playerOpcode() and 0x7) }
+            bits.writeBits(5) { (level shl 3) or (Direction(x, z).opcodeForPlayerDirection and 0x7) }
         }
     }
 

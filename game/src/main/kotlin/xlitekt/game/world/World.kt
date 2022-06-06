@@ -7,9 +7,10 @@ import xlitekt.game.actor.PlayerList
 import xlitekt.game.actor.npc.NPC
 import xlitekt.game.actor.player.Client
 import xlitekt.game.actor.player.Player
-import xlitekt.game.world.map.collision.CollisionMap
-import xlitekt.game.world.map.location.Location
-import xlitekt.game.world.map.location.ZoneLocation
+import xlitekt.game.world.map.CollisionMap
+import xlitekt.game.world.map.Location
+import xlitekt.game.world.map.zone.Zone
+import xlitekt.game.world.map.zone.ZoneLocation
 import xlitekt.game.world.map.zone.Zones
 import xlitekt.shared.inject
 import xlitekt.shared.resource.NPCSpawns
@@ -32,6 +33,8 @@ class World(
     internal fun build() {
         // Apply collision map.
         maps.entries().forEach(CollisionMap::applyCollision)
+        // Set neighboring zones.
+        zones.filterNotNull().forEach(Zone::setNeighboringZones)
         // Apply npc spawns.
         npcSpawns.forEach {
             spawn(NPC(it.id, Location(it.x, it.z, it.level)))
@@ -72,7 +75,7 @@ class World(
     // Doing it this way to reduce cpu time.
     fun players() = players.filter { it != null && it.isOnline() } as List<Player>
 
-    fun playersMapped(): NonBlockingHashMapLong<Player> {
+    internal fun playersMapped(): NonBlockingHashMapLong<Player> {
         val list = players()
         val map = NonBlockingHashMapLong<Player>(list.size)
         for (i in 0..list.lastIndex) {
@@ -87,7 +90,7 @@ class World(
 
     fun npcs() = npcs.filterNotNull()
 
-    fun zone(location: Location) = zones[location]
+    internal fun zone(location: Location) = zones[location]
     internal fun createZone(zoneLocation: ZoneLocation) = zones.createZone(zoneLocation)
 
     companion object {

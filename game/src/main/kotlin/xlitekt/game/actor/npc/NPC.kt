@@ -7,14 +7,13 @@ import xlitekt.game.actor.prayer.Prayer
 import xlitekt.game.actor.prayer.Prayers
 import xlitekt.game.event.EventBus
 import xlitekt.game.event.impl.Events
-import xlitekt.game.world.World
-import xlitekt.game.world.map.location.Location
+import xlitekt.game.world.map.Location
 import xlitekt.shared.inject
-import xlitekt.shared.lazy
 
-private val npcEntryTypeProvider by inject<NPCEntryTypeProvider>()
-private val eventBus by inject<EventBus>()
-
+/**
+ * @author Tyler Telis
+ * @author Jordan Abraham
+ */
 class NPC(
     val id: Int,
     override var location: Location
@@ -23,7 +22,7 @@ class NPC(
 
     fun init() {
         previousLocation = location
-        lazy<World>().zone(location)?.enterZone(this)
+        zone().enterZone(this)
         eventBus.notify(Events.NPCSpawnEvent(this))
     }
 
@@ -33,6 +32,11 @@ class NPC(
     override val prayer = Prayer(this)
 
     override fun toString(): String = "NPC(id=$id, entry=$entry)"
+
+    private companion object {
+        val npcEntryTypeProvider by inject<NPCEntryTypeProvider>()
+        val eventBus by inject<EventBus>()
+    }
 }
 
 inline fun NPC.switchPrayerById(prayerId: () -> Int): NPC = this.also {

@@ -7,8 +7,8 @@ import xlitekt.game.actor.Actor
 import xlitekt.game.actor.faceAngle
 import xlitekt.game.actor.player.Player
 import xlitekt.game.actor.temporaryMovementType
-import xlitekt.game.world.map.location.Location
-import xlitekt.game.world.map.location.directionTo
+import xlitekt.game.world.map.Location
+import xlitekt.game.world.map.directionTo
 import kotlin.math.min
 import kotlin.math.sign
 
@@ -21,7 +21,7 @@ class Movement {
     private val checkpoints: IntPriorityQueue = IntArrayFIFOQueue()
     private val steps: IntPriorityQueue = IntArrayFIFOQueue()
     private var teleporting = false
-    private var direction: Direction = Direction.South
+    private var direction = Direction.BasicSouth
 
     fun process(actor: Actor, currentLocation: Location): MovementStep? {
         val previousLocation = actor.previousLocation
@@ -35,7 +35,8 @@ class Movement {
                 val direction = previousLocation.directionTo(currentLocation)
                 if (this.direction != direction) {
                     this.direction = direction
-                    actor.faceAngle(direction::angle)
+                    val angle = direction.angle
+                    actor.faceAngle { angle }
                 }
             }
         }
@@ -47,12 +48,13 @@ class Movement {
         when (initialSpeed) {
             MovementSpeed.Teleporting -> {
                 teleporting = false
-                val direction = Direction.South
-                this.direction = direction
+                direction = Direction.BasicSouth
                 // Only players will do this.
                 if (actor is Player) {
-                    actor.temporaryMovementType(MovementSpeed.Teleporting::id)
-                    actor.faceAngle(direction::angle)
+                    val type = MovementSpeed.Teleporting.id
+                    actor.temporaryMovementType { type }
+                    val angle = direction.angle
+                    actor.faceAngle { angle }
                 }
             }
             MovementSpeed.Walking, MovementSpeed.Running -> if (initialSpeed == MovementSpeed.Running) {
@@ -64,13 +66,14 @@ class Movement {
                         // If a second step is not able to be found, then we adjust the step the player has to walking.
                         modifiedSpeed = MovementSpeed.Walking
                         // Apply this mask to the player to show them actually walking.
-                        actor.temporaryMovementType(MovementSpeed.Walking::id)
+                        val type = MovementSpeed.Walking.id
+                        actor.temporaryMovementType { type }
                         step
                     } else {
                         val it = steps.dequeueInt()
                         // If the new-found second step is within walking distance, then we have to adjust the step speed to walking instead of running.
                         // We do not use the movement type mask here because we want the player to look like they are running but using walking opcodes.
-                        if (currentLocation.directionTo(Location(it)).fourPointCardinalDirection()) {
+                        if (currentLocation.directionTo(Location(it)).isFourPointCardinal) {
                             modifiedSpeed = MovementSpeed.Walking
                         }
                         it
@@ -82,7 +85,7 @@ class Movement {
             speed = modifiedSpeed,
             location = Location(step),
             previousLocation = previousLocation,
-            direction = if (initialSpeed == MovementSpeed.Teleporting) Direction.South else currentLocation.directionTo(Location(step))
+            direction = if (initialSpeed == MovementSpeed.Teleporting) Direction.BasicSouth else currentLocation.directionTo(Location(step))
         )
     }
 

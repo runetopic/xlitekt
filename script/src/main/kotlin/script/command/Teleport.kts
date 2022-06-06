@@ -3,7 +3,7 @@ package script.command
 import xlitekt.game.actor.player.message
 import xlitekt.game.actor.routeTeleport
 import xlitekt.game.content.command.Commands.onCommand
-import xlitekt.game.world.map.location.Location
+import xlitekt.game.world.map.Location
 
 private val teleportDescription = "Teleports the Player to the specified coordinates."
 private val teleportSyntax = setOf<String>(

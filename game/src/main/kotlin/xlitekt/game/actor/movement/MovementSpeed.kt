@@ -5,9 +5,9 @@ package xlitekt.game.actor.movement
  */
 @JvmInline
 value class MovementSpeed(val id: Int) {
-    val walking get() = id == 1
-    val running get() = id == 2
-    val teleporting get() = id == 127
+    inline val walking get() = id == 1
+    inline val running get() = id == 2
+    inline val teleporting get() = id == 127
 
     companion object {
         val None = MovementSpeed(0)

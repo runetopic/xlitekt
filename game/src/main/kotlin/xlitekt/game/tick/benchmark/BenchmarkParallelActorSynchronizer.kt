@@ -12,7 +12,7 @@ import xlitekt.game.actor.render.HitType
 import xlitekt.game.actor.route
 import xlitekt.game.actor.spotAnimate
 import xlitekt.game.tick.Synchronizer
-import xlitekt.game.world.map.location.Location
+import xlitekt.game.world.map.Location
 import xlitekt.game.world.map.zone.Zone
 import xlitekt.shared.inject
 import java.util.concurrent.ArrayBlockingQueue
@@ -130,14 +130,15 @@ class BenchmarkParallelActorSynchronizer : Synchronizer() {
         }
         logger.debug { "Pre tick took $pre for ${players.size} players. [TICK=$tick]" }
 
-        val zonesTime = measureTime {
-            players.flatMap(Player::zones)
-                .distinct()
-                .filter(Zone::updating)
-                .parallelStream()
-                .forEach(Zone::update)
+        // Zones process
+        val zones = measureTime {
+            players.associateWith { it.zones().filter(Zone::updating) }.onEach {
+                it.value.parallelStream().forEach { zone ->
+                    zone.invokeUpdateRequests(it.key)
+                }
+            }.also { it.values.flatten().distinct().parallelStream().forEach(Zone::finalizeUpdateRequests) }
         }
-        logger.debug { "Zones took $zonesTime to update. [TICK=$tick]" }
+        logger.debug { "Zones tick took $zones for ${players.size} players. [TICK=$tick]" }
 
         val main = measureTime {
             // Main process.

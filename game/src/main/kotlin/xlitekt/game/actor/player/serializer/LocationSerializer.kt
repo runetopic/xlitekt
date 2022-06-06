@@ -8,7 +8,7 @@ import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
 import kotlinx.serialization.encoding.decodeStructure
 import kotlinx.serialization.encoding.encodeStructure
-import xlitekt.game.world.map.location.Location
+import xlitekt.game.world.map.Location
 
 /**
  * @author Jordan Abraham

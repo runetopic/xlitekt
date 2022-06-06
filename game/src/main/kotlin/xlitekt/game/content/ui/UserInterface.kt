@@ -28,4 +28,5 @@ sealed class UserInterface(val name: String) {
     object UnknownOverlay : UserInterface("unknown_overlay")
     object ChatChannel : UserInterface("chat_channel")
     object AdvancedSettings : UserInterface("advanced_settings")
+    object PlayerAppearanceDesigner : UserInterface("player_appearance_designer")
 }
