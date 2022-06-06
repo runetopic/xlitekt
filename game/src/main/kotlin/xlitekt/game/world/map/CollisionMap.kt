@@ -56,7 +56,7 @@ object CollisionMap {
 
                     val location = Location(x + baseX, z + baseZ, level)
                     addFloorCollision(location)
-                    world.createZone(location.toZoneLocation())
+                    world.createZone(location.zoneLocation)
                 }
             }
         }
@@ -72,7 +72,7 @@ object CollisionMap {
                         if (!locs.exists(it.id)) return@forEach
                         val gameObject = GameObject(it.id, location, it.shape, it.rotation)
                         addObjectCollision(gameObject)
-                        world.createZone(location.toZoneLocation()).addCollisionLoc(gameObject)
+                        world.createZone(location.zoneLocation).addCollisionLoc(gameObject)
                     }
                 }
             }

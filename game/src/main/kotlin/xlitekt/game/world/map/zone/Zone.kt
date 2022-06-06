@@ -21,6 +21,8 @@ import xlitekt.game.packet.assembler.PacketAssemblerListener
 import xlitekt.game.world.World
 import xlitekt.game.world.map.GameObject
 import xlitekt.game.world.map.Location
+import xlitekt.game.world.map.localX
+import xlitekt.game.world.map.localZ
 import xlitekt.shared.buffer.writeByte
 import xlitekt.shared.buffer.writeBytes
 import xlitekt.shared.inject
@@ -45,7 +47,7 @@ class Zone(
      * Updates a player with updates about this zone.
      * This happens every tick.
      */
-    fun invokeUpdateRequests(player: Player) {
+    fun invokeUpdateRequests(player: Player): Zone {
         val updates = HashSet<Packet>(requestSize())
         for (request in mapProjRequests) {
             updates.addMapProjAnim(request)
@@ -59,6 +61,7 @@ class Zone(
             if (request.value) updates.addLoc(player, loc) else updates.delLoc(player, loc)
         }
         updates.write(player, location)
+        return this
     }
 
     /**
@@ -241,7 +244,7 @@ class Zone(
         for (x in -3..3) {
             for (z in -3..3) {
                 if (x == 0 && z == 0) zones.add(this)
-                else zones.add(world.zone(location.toZoneLocation().transform(x, z).toFullLocation()))
+                else zones.add(world.zone(location.zoneLocation.transform(x, z).location))
             }
         }
         neighboringZones = zones
@@ -258,11 +261,11 @@ class Zone(
 
 @JvmInline
 value class LocalLocation(val packedLocation: Int) {
-    private val x get() = packedLocation shr 8
-    private val z get() = packedLocation and 0xff
-    private val offsetX get() = x - ((x shr 3) shl 3)
-    private val offsetZ get() = z - ((z shr 3) shl 3)
-    val packedOffset get() = (offsetX shl 4) or offsetZ
+    inline val x get() = packedLocation shr 8
+    inline val z get() = packedLocation and 0xff
+    inline val offsetX get() = x - ((x shr 3) shl 3)
+    inline val offsetZ get() = z - ((z shr 3) shl 3)
+    inline val packedOffset get() = (offsetX shl 4) or offsetZ
 }
 
 private fun Location.toLocalLocation(other: Location) = LocalLocation(localX(other) shl 8 or localZ(other))

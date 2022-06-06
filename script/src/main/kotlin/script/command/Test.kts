@@ -9,6 +9,7 @@ import xlitekt.game.content.ui.UserInterface
 import xlitekt.game.world.map.CollisionMap
 import xlitekt.game.world.map.GameObject
 import xlitekt.game.world.map.Location
+import xlitekt.game.world.map.transform
 
 /**
  * @author Jordan Abraham

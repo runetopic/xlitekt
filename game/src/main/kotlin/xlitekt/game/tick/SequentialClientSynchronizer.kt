@@ -5,11 +5,10 @@ import xlitekt.game.world.map.zone.Zone
 /**
  * @author Jordan Abraham
  */
-class SequentialActorSynchronizer : Synchronizer() {
+class SequentialClientSynchronizer : Synchronizer() {
 
     override fun run() {
         val players = world.players()
-        val npcs = world.npcs()
         val syncPlayers = world.playersMapped()
 
         players.forEach {
@@ -18,21 +17,18 @@ class SequentialActorSynchronizer : Synchronizer() {
             it.syncRenderingBlocks()
         }
 
+        val npcs = world.npcs()
+
         npcs.forEach {
             it.syncMovement(syncPlayers)
             it.syncRenderingBlocks()
         }
 
-        players.associateWith { it.zones().filter(Zone::updating) }.onEach {
-            it.value.forEach { zone ->
-                zone.invokeUpdateRequests(it.key)
-            }
-        }.also { it.values.flatten().distinct().forEach(Zone::finalizeUpdateRequests) }
-
         players.forEach {
+            it.syncZones()
             it.syncClient(syncPlayers)
         }
 
-        resetSynchronizer()
+        ZoneUpdates.forEach(Zone::finalizeUpdateRequests)
     }
 }

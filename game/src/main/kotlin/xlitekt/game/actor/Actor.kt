@@ -165,12 +165,7 @@ abstract class Actor(
     /**
      * Returns if this actor needs a zones rebuild.
      */
-    private fun shouldRebuildZones(): Boolean {
-        if (zone.isPresent) {
-            return location.zoneId != zone.get().location.zoneId
-        }
-        return true
-    }
+    private fun shouldRebuildZones() = zone().location.zoneId != location.zoneId
 
     /**
      * Flags this actor with a new pending rendering block.

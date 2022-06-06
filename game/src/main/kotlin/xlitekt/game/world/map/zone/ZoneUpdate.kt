@@ -14,8 +14,8 @@ internal value class ZoneUpdateIndex(
     val index: Int
 )
 
-object ZoneUpdate {
-    internal val zoneUpdateMap = mapOf(
+internal object ZoneUpdate {
+    val zoneUpdateMap = mapOf(
         ObjAddPacket::class to ZoneUpdateIndex(4),
         ObjDelPacket::class to ZoneUpdateIndex(7),
         LocAddPacket::class to ZoneUpdateIndex(6),

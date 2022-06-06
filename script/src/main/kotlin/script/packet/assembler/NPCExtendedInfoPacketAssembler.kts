@@ -55,7 +55,7 @@ fun BitAccess.highDefinition(
         // This npc has an activity update (true).
         writeBit { true }
         val updating = highDefinitionUpdates[it.indexL]?.isPresent == true
-        activity.writeBits(this, it, updating, playerLocation, movementStepsUpdates[it.indexL])
+        activity.writeBits(this, it, updating, playerLocation, movementStepsUpdates[it.indexL] ?: Optional.empty())
         if (activity !is Removing) {
             if (updating) blocks.writeBytes(highDefinitionUpdates[it.indexL]!!::get)
         }
@@ -73,7 +73,7 @@ fun BitAccess.lowDefinition(viewport: Viewport, blocks: BytePacketBuilder, highD
             if (activity != null) {
                 val updating = updates?.isPresent == true
                 // Write the corresponding activity bits depending on what the npc is doing.
-                activity.writeBits(this, it, updating, playerLocation = player.location)
+                activity.writeBits(this, it, updating, playerLocation = player.location, step = Optional.empty())
                 if (activity is Adding) {
                     viewport.npcs += it
                     if (updating) blocks.writeBytes(highDefinitionUpdates[it.indexL]!!::get)
@@ -116,27 +116,29 @@ fun lowDefinitionActivities(
 
 sealed class ActivityUpdateType {
     object Removing : ActivityUpdateType() {
-        override fun writeBits(bits: BitAccess, npc: NPC, updating: Boolean, playerLocation: Location, step: Optional<MovementStep>?) {
+        override fun writeBits(bits: BitAccess, npc: NPC, updating: Boolean, playerLocation: Location, step: Optional<MovementStep>) {
             bits.writeBits(2) { 3 }
         }
     }
 
     object Moving : ActivityUpdateType() {
-        override fun writeBits(bits: BitAccess, npc: NPC, updating: Boolean, playerLocation: Location, step: Optional<MovementStep>?) {
+        override fun writeBits(bits: BitAccess, npc: NPC, updating: Boolean, playerLocation: Location, step: Optional<MovementStep>) {
             bits.writeBits(2) { 1 } // walk only
-            bits.writeBits(3, step!!.get().direction::opcodeForNPCDirection)
+            val movementStep = step.orElseThrow()
+            val opcode = movementStep.direction.opcodeForNPCDirection
+            bits.writeBits(3) { opcode }
             bits.writeBit { updating }
         }
     }
 
     object Updating : ActivityUpdateType() {
-        override fun writeBits(bits: BitAccess, npc: NPC, updating: Boolean, playerLocation: Location, step: Optional<MovementStep>?) {
+        override fun writeBits(bits: BitAccess, npc: NPC, updating: Boolean, playerLocation: Location, step: Optional<MovementStep>) {
             bits.writeBits(2) { 0 }
         }
     }
 
     object Adding : ActivityUpdateType() {
-        override fun writeBits(bits: BitAccess, npc: NPC, updating: Boolean, playerLocation: Location, step: Optional<MovementStep>?) {
+        override fun writeBits(bits: BitAccess, npc: NPC, updating: Boolean, playerLocation: Location, step: Optional<MovementStep>) {
             bits.writeBits(15, npc::index)
             bits.writeBits(1) { 0 } // if 1 == 1 read 32 bits they just don't use it atm. Looks like they're working on something
             bits.writeBit { updating }
@@ -153,6 +155,6 @@ sealed class ActivityUpdateType {
         npc: NPC,
         updating: Boolean,
         playerLocation: Location,
-        step: Optional<MovementStep>? = null
+        step: Optional<MovementStep>
     )
 }
