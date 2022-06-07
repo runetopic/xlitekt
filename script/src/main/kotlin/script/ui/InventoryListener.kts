@@ -39,27 +39,12 @@ onInterface<UserInterface.Inventory> {
     }
 }
 
-fun mapEquipmentSlot(itemInfo: ItemInfoResource): Int? = when (itemInfo.equipment?.equipmentSlot) {
-    EquipmentSlot.WEAPON, EquipmentSlot.TWO_HAND -> Equipment.SLOT_MAINHAND
-    EquipmentSlot.AMMO -> Equipment.SLOT_AMMO
-    EquipmentSlot.BODY -> Equipment.SLOT_TORSO
-    EquipmentSlot.CAPE -> Equipment.SLOT_BACK
-    EquipmentSlot.FEET -> Equipment.SLOT_FEET
-    EquipmentSlot.HANDS -> Equipment.SLOT_HANDS
-    EquipmentSlot.HEAD -> Equipment.SLOT_HEAD
-    EquipmentSlot.LEGS -> Equipment.SLOT_LEGS
-    EquipmentSlot.NECK -> Equipment.SLOT_NECK
-    EquipmentSlot.RING -> Equipment.SLOT_RING
-    EquipmentSlot.SHIELD -> Equipment.SLOT_OFFHAND
-    else -> null
-}
-
 fun Player.wearItem(
     itemInfo: ItemInfoResource,
     inventoryListener: InventoryListener,
     slot: Int,
     item: Item
 ) {
-    equipment.equipItem(item)// TODO pass slots in
+    equipment.equipItem(item, slot)// TODO pass slots in
     renderAppearance()
 }

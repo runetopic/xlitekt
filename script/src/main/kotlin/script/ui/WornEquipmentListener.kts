@@ -33,7 +33,7 @@ onInterface<WornEquipment> {
             1 -> {
                 // remove item
                 if (inventory.isFull()) {
-                    message { "You don't have enough free space to do that." }
+                    message { "You don't have enough free inventory space to do that." }
                     return@onClick
                 }
 

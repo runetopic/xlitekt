@@ -46,7 +46,7 @@ class Equipment(
         updateWeight(true)
     }
 
-    fun equipItem(item: Item) {
+    fun equipItem(item: Item, slotId: Int) {
         val invalidItemMessage = {
             player.message { "You can't wear that!" }
         }
@@ -66,44 +66,65 @@ class Equipment(
 
         val equipmentSlot = equipmentInfo.equipmentSlot
         val mappedEquipmentSlot = mapEquipmentSlot(equipmentSlot)
+        val isTwoHandedWeapon = isTwoHanded(item)
 
-        if (equipmentSlot == EquipmentSlot.TWO_HAND) {
-            handleTwoHandedWeapon(mappedEquipmentSlot, item)
+        if (isTwoHandedWeapon && player.inventory.isFull() && offhand != null) {
+            player.message { "You don't have enough free inventory space to do that." }
             return
         }
 
-        val existingItem = this[mappedEquipmentSlot] ?: return run {
-            setItem(mappedEquipmentSlot, item) { slots ->
-                refreshSlots(listOf(slots))
-            }
+        val hasTwoHandedWeapon = isTwoHanded(mainhand)
+
+        if (hasTwoHandedWeapon || isTwoHandedWeapon) {
+            equipTwoHandedItem(slotId, mappedEquipmentSlot, item)
+            return
         }
 
-        removeItem(mappedEquipmentSlot, existingItem) {
-            player.inventory.addItem(this) {
-                setItem(mappedEquipmentSlot, item) { slots ->
-                    refreshSlots(listOf(slots))
+        player.inventory.removeItem(slotId, item) {
+            val existingItem = this@Equipment[mappedEquipmentSlot] ?: return@removeItem run {
+                setItem(mappedEquipmentSlot, this) { slot ->
+                    refreshSlots(listOf(slot))
+                }
+            }
+
+            player.inventory.addItem(existingItem) {
+                setItem(mappedEquipmentSlot, item) { slot ->
+                    refreshSlots(listOf(slot))
                 }
             }
         }
     }
 
-    private fun handleTwoHandedWeapon(equipmentSlot: Int, item: Item) {
-        val offhand = this[SLOT_OFFHAND]
+    private fun equipTwoHandedItem(slotId: Int, equipmentSlot: Int, item: Item) {
+        val slotsChanged = mutableListOf<Int>()
 
-        if (offhand != null) {
-            if (player.inventory.availableSlots() < 1) {
-                player.message { "You don't have enough free inventory space to do that." }
-                return
-            }
-
-            removeItem(SLOT_OFFHAND, offhand) {
-                player.inventory.addItem(this) {
-                    setItem(equipmentSlot, item) { slots ->
-                        refreshSlots(listOf(slots))
-                    }
+        player.inventory.removeItem(slotId, item) {
+            if (mainhand != null) {
+                removeItem(SLOT_MAINHAND, mainhand!!) { slots ->
+                    player.inventory.addItem(this)
+                    slotsChanged.add(slots)
                 }
             }
+
+            if (offhand != null) {
+                removeItem(SLOT_OFFHAND, offhand!!) { slots ->
+                    player.inventory.addItem(this)
+                    slotsChanged.add(slots)
+                }
+            }
+
+            setItem(equipmentSlot, this) { slot ->
+                slotsChanged.add(slot)
+            }
         }
+
+        refreshSlots(slotsChanged)
+    }
+
+    fun isTwoHanded(item: Item?): Boolean {
+        val info = itemInfoMap[item?.id] ?: return false
+        val equipmentInfo = info.equipment ?: return false
+        return equipmentInfo.equipmentSlot == EquipmentSlot.TWO_HAND
     }
 
     fun mapEquipmentSlot(equipmentSlot: EquipmentSlot): Int = when (equipmentSlot) {
