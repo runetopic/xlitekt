@@ -4,6 +4,7 @@ import io.ktor.server.application.ApplicationEnvironment
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.decodeFromStream
 import xlitekt.shared.lazy
+import xlitekt.shared.resource.prayer.PrayerInfoResource
 
 class MapSquares(list: Map<Int, MapSquareResource>) : HashMap<Int, MapSquareResource>(list)
 class Sequences(list: Map<String, SequenceResource>) : HashMap<String, SequenceResource>(list)
@@ -32,7 +33,8 @@ object Resource {
     fun examineObjectResource(): ObjectExamines = ObjectExamines(loadResource<List<ExamineObjectResource>>("game.resources.object_examines").associateBy(ExamineObjectResource::objectId))
     fun examineItemResource(): ItemExamines = ItemExamines(loadResource<List<ExamineItemResource>>("game.resources.item_examines").associateBy(ExamineItemResource::itemId))
     fun itemInfoResource(): ItemInfoMap = ItemInfoMap(loadResource<List<ItemInfoResource>>("game.resources.item_info").associateBy(ItemInfoResource::id))
-    fun prayerInfoResource(): PrayerInfoMap = PrayerInfoMap(loadResource<List<PrayerInfoResource>>("game.resources.prayer_info").associateBy(PrayerInfoResource::interfaceChildId))
+    fun prayerInfoResource(): PrayerInfoMap = PrayerInfoMap(loadResource<List<PrayerInfoResource>>("game.resources.prayer_info").associateBy(
+        PrayerInfoResource::interfaceChildId))
 
     private inline fun <reified T> loadResource(path: String): T =
         json.decodeFromStream(Resource::class.java.getResourceAsStream(lazy<ApplicationEnvironment>().config.property(path).getString())!!)
