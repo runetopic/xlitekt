@@ -2,7 +2,7 @@ package script.ui
 
 import xlitekt.game.actor.animate
 import xlitekt.game.actor.spotAnimate
-import xlitekt.game.content.ui.InterfaceEvent.CLICK_OPTION_1
+import xlitekt.game.content.ui.InterfaceEvent.ClickOption1
 import xlitekt.game.content.ui.UserInterface.Emotes
 import xlitekt.game.content.ui.onInterface
 import xlitekt.shared.inject
@@ -71,7 +71,7 @@ private val spotAnimations by inject<SpotAnimations>()
 
 onInterface<Emotes> {
     onOpen {
-        setEvent(childId = 1, slots = 0..50, event = CLICK_OPTION_1)
+        setEvent(childId = 1, slots = 0..50, ClickOption1)
     }
 
     onClick {

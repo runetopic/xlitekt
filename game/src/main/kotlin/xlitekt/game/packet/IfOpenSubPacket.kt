@@ -6,5 +6,5 @@ package xlitekt.game.packet
 data class IfOpenSubPacket(
     val interfaceId: Int,
     val toPackedInterface: Int,
-    val alwaysOpen: Boolean
+    val walkable: Boolean
 ) : Packet

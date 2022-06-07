@@ -11,8 +11,6 @@ import xlitekt.shared.resource.ItemExamines
 private val itemExamines by inject<ItemExamines>()
 
 onInterface<WornEquipment> {
-    onOpen {
-    }
     onClick("View equipment stats") {
         interfaces += UserInterface.EquipmentStats
     }
