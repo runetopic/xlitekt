@@ -1,231 +1,208 @@
 [
   {
-    "interfaceChildId": 5,
-    "name": "Thick Skin",
+    "name": "thick_skin",
     "requiredLevel": 1,
     "drainRate": 3,
     "prayerType": "DEFENCE",
     "varbit": 4104
   },
   {
-    "interfaceChildId": 6,
-    "name": "Burst of Strength",
+    "name": "burst_of_strength",
     "requiredLevel": 4,
     "drainRate": 3,
     "prayerType": "STRENGTH",
     "varbit":4105
   },
   {
-    "interfaceChildId": 7,
-    "name": "Clarity of Thought",
+    "name": "clarity_of_thought",
     "requiredLevel": 7,
     "drainRate": 3,
     "prayerType": "ATTACK",
     "varbit": 4106
   },
   {
-    "interfaceChildId": 23,
-    "name": "Sharp Eye",
+    "name": "sharp_eye",
     "requiredLevel": 8,
     "drainRate": 3,
     "prayerType": "RANGE",
     "varbit": 4122
   },
   {
-    "interfaceChildId": 24,
-    "name": "Mystic Will",
+    "name": "mystic_will",
     "requiredLevel": 9,
     "drainRate": 3,
     "prayerType": "MAGIC",
     "varbit": 4123
   },
   {
-    "interfaceChildId": 8,
-    "name": "Rock Skin",
+    "name": "rock_skin",
     "requiredLevel": 10,
     "drainRate": 6,
     "prayerType": "DEFENCE",
     "varbit":4107
   },
   {
-    "interfaceChildId": 9,
-    "name": "Superhuman Strength",
+    "name": "superhuman_strength",
     "requiredLevel": 13,
     "drainRate": 6,
     "prayerType": "STRENGTH",
     "varbit": 4108
   },
   {
-    "interfaceChildId": 10,
-    "name": "Improved Reflexes",
+    "name": "improved_reflexes",
     "requiredLevel": 16,
     "drainRate": 6,
     "prayerType": "ATTACK",
     "varbit": 4109
   },
   {
-    "interfaceChildId": 11,
-    "name": "Rapid Restore",
+    "name": "rapid_restore",
     "requiredLevel": 19,
     "drainRate": 1,
     "prayerType": "RAPID_RESTORE",
     "varbit": 4110
   },
   {
-    "interfaceChildId": 12,
-    "name": "Rapid Heal",
+    "name": "rapid_heal",
     "requiredLevel": 22,
     "drainRate": 2,
     "prayerType": "RAPID_HEAL",
     "varbit": 4111
   },
   {
-    "interfaceChildId": 13,
-    "name": "Protect Item",
+    "name": "protect_item",
     "requiredLevel": 25,
     "drainRate": 2,
     "prayerType": "PROTECT_ITEM",
     "varbit": 4112
   },
   {
-    "interfaceChildId": 25,
-    "name": "Hawk Eye",
+    "name": "hawk_eye",
     "requiredLevel": 26,
     "drainRate": 6,
     "prayerType": "RANGE",
     "varbit": 4124
   },
   {
-    "interfaceChildId": 26,
-    "name": "Mystic Lore",
+    "name": "mystic_lore",
     "requiredLevel": 27,
     "drainRate": 6,
     "prayerType": "MAGIC",
     "varbit": 4125
   },
   {
-    "interfaceChildId": 14,
-    "name": "Steel Skin",
+    "name": "steel_skin",
     "requiredLevel": 28,
     "drainRate": 12,
     "prayerType": "DEFENCE",
     "varbit": 4113
   },
   {
-    "interfaceChildId": 15,
-    "name": "Ultimate Strength",
+    "name": "ultimate_strength",
     "requiredLevel": 31,
     "drainRate": 12,
     "prayerType": "STRENGTH",
     "varbit": 4114
   },
   {
-    "interfaceChildId": 16,
-    "name": "Incredible Reflexes",
+    "name": "incredible_reflexes",
     "requiredLevel": 34,
     "drainRate": 12,
     "prayerType": "ATTACK",
     "varbit": 4115
   },
   {
-    "interfaceChildId": 17,
-    "name": "Protect from Magic",
+    "name": "protect_from_magic",
     "requiredLevel": 37,
     "drainRate": 12,
     "prayerType": "UTILITY",
-    "varbit": 4116
+    "varbit": 4116,
+    "icon": "PROTECT_FROM_MAGIC"
   },
   {
-    "interfaceChildId": 18,
-    "name": "Protect from Missiles",
+    "name": "protect_from_missiles",
     "requiredLevel": 40,
     "drainRate": 12,
     "prayerType": "UTILITY",
-    "varbit": 4117
+    "varbit": 4117,
+    "icon": "PROTECT_FROM_MISSILES"
   },
   {
-    "interfaceChildId": 19,
-    "name": "Protect from Melee",
+    "name": "protect_from_melee",
     "requiredLevel": 43,
     "drainRate": 12,
     "prayerType": "UTILITY",
-    "varbit": 4118
+    "varbit": 4118,
+    "icon": "PROTECT_FROM_MELEE"
   },
   {
-    "interfaceChildId": 27,
-    "name": "Eagle Eye",
+    "name": "eagle_eye",
     "requiredLevel": 44,
     "drainRate": 12,
     "prayerType": "RANGE",
     "varbit": 4126
   },
   {
-    "interfaceChildId": 28,
-    "name": "Mystic Might",
+    "name": "mystic_might",
     "requiredLevel": 45,
     "drainRate": 12,
     "prayerType": "MAGIC",
     "varbit": 4127
   },
   {
-    "interfaceChildId": 20,
-    "name": "Retribution",
+    "name": "retribution",
     "requiredLevel": 46,
     "drainRate": 3,
     "prayerType": "UTILITY",
-    "varbit": 4119
+    "varbit": 4119,
+    "icon": "RETRIBUTION"
   },
   {
-    "interfaceChildId": 21,
-    "name": "Redemption",
+    "name": "redemption",
     "requiredLevel": 49,
     "drainRate": 6,
     "prayerType": "UTILITY",
-    "varbit": 4120
+    "varbit": 4120,
+    "icon": "REDEMPTION"
   },
   {
-    "interfaceChildId": 22,
-    "name": "Smite",
+    "name": "smite",
     "requiredLevel": 52,
     "drainRate": 18,
     "prayerType": "UTILITY",
-    "varbit": 4121
+    "varbit": 4121,
+    "icon": "SMITE"
   },
   {
-    "interfaceChildId": 33,
-    "name": "Preserve",
+    "name": "preserve",
     "requiredLevel": 55,
     "drainRate": 2,
     "prayerType": "PRESERVE",
     "varbit": 5466
   },
   {
-    "interfaceChildId": 29,
-    "name": "Chivalry",
+    "name": "chivalry",
     "requiredLevel": 60,
     "drainRate": 24,
     "prayerType": "MULTI_COMBAT",
     "varbit": 4128
   },
   {
-    "interfaceChildId": 30,
-    "name": "Piety",
+    "name": "piety",
     "requiredLevel": 70,
     "drainRate": 24,
     "prayerType": "MULTI_COMBAT",
     "varbit": 4129
   },
   {
-    "interfaceChildId": 31,
-    "name": "Rigour",
+    "name": "rigour",
     "requiredLevel": 74,
     "drainRate": 24,
     "prayerType": "MULTI_COMBAT",
     "varbit": 5464
   },
   {
-    "interfaceChildId": 32,
-    "name": "Augury",
+    "name": "augury",
     "requiredLevel": 77,
     "drainRate": 24,
     "prayerType": "MULTI_COMBAT",

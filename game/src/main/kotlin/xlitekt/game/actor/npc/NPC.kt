@@ -27,7 +27,7 @@ class NPC(
     override fun totalHitpoints(): Int = 100
     override fun currentHitpoints(): Int = 100
 
-    override val prayer = Prayer(this)
+    override val prayer: Prayer = Prayer(this)
 
     override fun toString(): String = "NPC(id=$id, entry=$entry)"
 }

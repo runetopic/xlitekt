@@ -1,20 +1,48 @@
 package xlitekt.game.actor.prayer
 
 import xlitekt.game.actor.Actor
-import xlitekt.shared.resource.prayer.*
+import xlitekt.game.actor.player.Player
+import xlitekt.game.actor.player.message
+import xlitekt.game.actor.prayerIcon
+import xlitekt.game.content.skill.Skill
+import xlitekt.game.content.skill.Skills
+import xlitekt.shared.resource.prayer.PrayerIconType
+import xlitekt.shared.resource.prayer.PrayerInfoResource
+import xlitekt.shared.resource.prayer.PrayerType
+import xlitekt.shared.resource.prayer.Prayers
 
 /**
  * @author Justin Kenney
  */
+
 class Prayer(
     private val player: Actor,
     private val activePrayerMap: MutableMap<PrayerType, PrayerInfoResource?> = PrayerType.values().associateWith { null }.toMutableMap()
 ) {
-    fun switch(prayer: Prayers) = this.switch(prayer.id)
+    fun process() {
+        if (this.player.currentHitpoints() <= 0 || (this.player is Player && this.player.vars[83] == 0)) {
+            // todo toggle off quick prayers
+            // todo toggle off prayers
+            return
+        }
 
-    fun switch(prayerId: Int) = Prayers.info(prayerId)?.let { this.switch(it) }
+        if (this.player is Player && this.player.skills.levels[Skill.PRAYER.id] == 0) {
+            player.message { "You need to recharge your Prayer at an altar." }
+            turnOff()
+            return
+        }
 
-    private fun switch(prayerInfo: PrayerInfoResource) {
+        if (this.drainRate() )
+
+        if (player is Player) {
+            player.message { "Ticking prayer" }
+        }
+    }
+
+    fun switch(prayer: Prayers) = Prayers.info(prayer.prayerName)?.let { this.switch(it) }
+
+    fun switch(prayerInfo: PrayerInfoResource) {
+
 //        if (player is Player && player.skills.levels[Skill.PRAYER.id] < prayer.requiredLevel) {
 //            player.message { "Unlocked at ${prayer.requiredLevel}" }
 //            return
@@ -29,9 +57,12 @@ class Prayer(
             // turn off conflicting prayers
             PrayerType.getConflictingTypes(prayerInfo.prayerType)?.let { this.deactivate(*it) }
 
-            // turn on the new prayer
             this.activePrayerMap[prayerInfo.prayerType] = prayerInfo
             // TODO turn on varbit
+//            if (this.player is Player) this.player.vars[prayerInfo.varbit] = 1
+
+//            overhead icons
+            prayerInfo.icon?.let { this.player.prayerIcon { it } }
         }
 
         println(activePrayerMap.values.mapNotNull { it?.name })
@@ -42,13 +73,21 @@ class Prayer(
     }
 
     fun deactivate(prayer: Prayers) {
-        Prayers.info(prayer.id)?.let { if (this.isActive(it)) this.deactivate(it.prayerType) }
+        Prayers.info(prayer.prayerName)?.let { if (this.isActive(it)) this.deactivate(it.prayerType) }
     }
 
     fun deactivate(vararg prayerTypes: PrayerType?) {
+//        if (this.player is Player) this.player.vars[83] = 0
         prayerTypes.forEach {
-            this.activePrayerMap[it ?: return@forEach] = null
-            // TODO turn off varbit
+            if (it == null) return@forEach
+            val current = this.activePrayerMap[it] ?: return@forEach
+            current.icon?.let { this.player.prayerIcon { PrayerIconType.NONE } }
+            if (this.player is Player) this.player.vars[current.varbit] = 0
+            this.activePrayerMap[it] = null
+
+//            this.activePrayerMap[it ?: return@forEach] = null
+//            // TODO turn off varbit
+//            if (this.player is Player) this.player.vars[prayerInfo.varbit] = 1
         }
     }
 
@@ -58,23 +97,19 @@ class Prayer(
 
     fun reset() {
         // TODO turn off all prayer varbits
-        Prayers.info().values.forEach {
-//            it.varbit
-        }
+        this.activePrayerMap.forEach { this.activePrayerMap[it.key] = null }
+//        Prayers.info().values
     }
 
-    fun overheadIcon() {
-        // TODO
-//        this.activePrayerMap[PrayerType.UTILITY]
-    }
+    fun isActive(): Boolean = this.drainRate() > 0
 
     fun isActive(prayer: Prayers): Boolean {
-        return Prayers.info(prayer.id).let { if (it != null) this.isActive(it) else false }
+        return Prayers.info(prayer.prayerName)?.let { this.isActive(it) } ?: false
     }
 
     private fun isActive(prayerInfo: PrayerInfoResource): Boolean {
         val activePrayerByType = activePrayerMap[prayerInfo.prayerType]
-        return activePrayerByType?.interfaceChildId == prayerInfo.interfaceChildId
+        return activePrayerByType?.name == prayerInfo.name
     }
 
     fun drainRate(): Int = activePrayerMap.values.sumOf { it?.drainRate ?: 0 }

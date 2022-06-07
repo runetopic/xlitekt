@@ -15,6 +15,7 @@ class ParallelClientSynchronizer : Synchronizer() {
             it.invokeAndClearReadPool()
             it.syncMovement(syncPlayers)
             it.syncRenderingBlocks()
+            it.prayer.process()
         }
 
         val npcs = world.npcs()

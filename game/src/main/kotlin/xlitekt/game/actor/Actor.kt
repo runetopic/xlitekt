@@ -8,8 +8,8 @@ import xlitekt.game.actor.movement.MovementStep
 import xlitekt.game.actor.npc.NPC
 import xlitekt.game.actor.player.Player
 import xlitekt.game.actor.player.rebuildNormal
+import xlitekt.game.actor.player.renderAppearance
 import xlitekt.game.actor.prayer.Prayer
-import xlitekt.game.actor.prayer.Prayers
 import xlitekt.game.actor.render.HitBar
 import xlitekt.game.actor.render.HitSplat
 import xlitekt.game.actor.render.HitType
@@ -20,6 +20,8 @@ import xlitekt.game.world.World
 import xlitekt.game.world.map.Location
 import xlitekt.game.world.map.zone.Zone
 import xlitekt.shared.inject
+import xlitekt.shared.resource.prayer.PrayerIconType
+import xlitekt.shared.resource.prayer.Prayers
 import java.util.*
 import kotlin.collections.HashSet
 
@@ -34,7 +36,7 @@ abstract class Actor(
 
     var previousLocation = Location.None
 
-    abstract val prayer: Prayer
+    abstract val prayer: Prayer?
 
     /**
      * This actor index.
@@ -307,5 +309,14 @@ inline fun Actor.overheadChat(message: () -> String) {
     render(OverheadChat(message.invoke()))
 }
 
-inline fun Actor.switchPrayer(prayer: () -> Prayers) = this.prayer.switch(prayer.invoke().id)
-inline fun Actor.activatePrayer(prayer: () -> Prayers) = this.prayer.activate(prayer.invoke())
+inline fun Actor.prayerIcon(prayerIcon: () -> PrayerIconType) {
+    if (this is Player) {
+        this.appearance.headIcon = Optional.of(prayerIcon.invoke().overheadId)
+        this.renderAppearance()
+    } else {
+        // npc overhead icons
+    }
+}
+
+inline fun Actor.switchPrayer(prayer: () -> Prayers) = this.prayer?.switch(prayer.invoke())
+inline fun Actor.activatePrayer(prayer: () -> Prayers) = this.prayer?.activate(prayer.invoke())

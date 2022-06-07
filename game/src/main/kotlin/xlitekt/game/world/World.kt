@@ -34,7 +34,7 @@ class World(
         maps.entries().forEach(CollisionMap::applyCollision)
         // Apply npc spawns.
         npcSpawns.forEach {
-            spawn(NPC(it.id, Location(it.x, it.z, it.level)))
+            spawn(NPC(id = it.id, location = Location(it.x, it.z, it.level)))
         }
     }
 

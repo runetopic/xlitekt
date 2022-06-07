@@ -1,51 +1,47 @@
 package xlitekt.shared.resource.prayer
 
-import kotlinx.serialization.Serializable
 import xlitekt.shared.inject
 import xlitekt.shared.resource.PrayerInfoMap
 
 /**
  * @author Justin Kenney
  */
-@Serializable
 enum class Prayers(
-    val id: Int
+    val prayerName: String
 ) {
-    THICK_SKIN(5),
-    BURST_OF_STRENGTH(6),
-    CLARITY_OF_THOUGHT(7),
-    ROCK_SKIN(8),
-    SUPERHUMAN_STRENGTH(9),
-    IMPROVED_REFLEXES(10),
-    RAPID_RESTORE(11),
-    RAPID_HEAL(12),
-    PROTECT_ITEM(13),
-    STEEL_SKIN(14),
-    ULTIMATE_STRENGTH(15),
-    INCREDIBLE_REFLEXES(16),
-    PROTECT_FROM_MAGIC(17),
-    PROTECT_FROM_MISSILES(18),
-    PROTECT_FROM_MELEE(19),
-    RETRIBUTION(20),
-    REDEMPTION(21),
-    SMITE(22),
-    SHARP_EYE(23),
-    MYSTIC_WILL(24),
-    HAWK_EYE(25),
-    MYSTIC_LORE(26),
-    EAGLE_EYE(27),
-    MYSTIC_MIGHT(28),
-    CHIVALRY(29),
-    PIETY(30),
-    RIGOUR(31),
-    AUGURY(32),
-    PRESERVE(33);
+    THICK_SKIN("thick_skin"),
+    BURST_OF_STRENGTH("burst_of_strength"),
+    CLARITY_OF_THOUGHT("clarity_of_thought"),
+    ROCK_SKIN("rock_skin"),
+    SUPERHUMAN_STRENGTH("superhuman_strength"),
+    IMPROVED_REFLEXES("improved_reflexes"),
+    RAPID_RESTORE("rapid_restore"),
+    RAPID_HEAL("rapid_heal"),
+    PROTECT_ITEM("protect_item"),
+    STEEL_SKIN("steel_skin"),
+    ULTIMATE_STRENGTH("ultimate_strength"),
+    INCREDIBLE_REFLEXES("incredible_reflexes"),
+    PROTECT_FROM_MAGIC("protect_from_magic"),
+    PROTECT_FROM_MISSILES("protect_from_missiles"),
+    PROTECT_FROM_MELEE("protect_from_melee"),
+    RETRIBUTION("retribution"),
+    REDEMPTION("redemption"),
+    SMITE("smite"),
+    SHARP_EYE("sharp_eye"),
+    MYSTIC_WILL("mystic_will"),
+    HAWK_EYE("hawk_eye"),
+    MYSTIC_LORE("mystic_lore"),
+    EAGLE_EYE("eagle_eye"),
+    MYSTIC_MIGHT("mystic_might"),
+    CHIVALRY("chivalry"),
+    PIETY("piety"),
+    RIGOUR("rigour"),
+    AUGURY("augury"),
+    PRESERVE("preserve");
 
     companion object {
         private val prayerInfoMap by inject<PrayerInfoMap>()
 
-        fun info() = prayerInfoMap.toMap()
-
-        fun info(prayerId: Int): PrayerInfoResource? = prayerInfoMap[prayerId] ?: null.also { println("Prayer $prayerId not found in resources!") }
+        fun info(name: String): PrayerInfoResource? = prayerInfoMap[name] ?: null.also { println("Prayer $name was not found in resources.") }
     }
 }
