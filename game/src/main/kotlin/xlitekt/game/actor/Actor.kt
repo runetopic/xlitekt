@@ -1,12 +1,16 @@
 package xlitekt.game.actor
 
-import it.unimi.dsi.fastutil.ints.IntList
+import it.unimi.dsi.fastutil.ints.IntArrayList
 import org.jctools.maps.NonBlockingHashMapLong
+import xlitekt.game.actor.bonus.Bonuses
 import xlitekt.game.actor.movement.Movement
+import xlitekt.game.actor.movement.MovementRequest
 import xlitekt.game.actor.movement.MovementSpeed
 import xlitekt.game.actor.movement.MovementStep
+import xlitekt.game.actor.movement.pf.PathFinders
 import xlitekt.game.actor.npc.NPC
 import xlitekt.game.actor.player.Player
+import xlitekt.game.actor.player.message
 import xlitekt.game.actor.player.rebuildNormal
 import xlitekt.game.actor.player.renderAppearance
 import xlitekt.game.actor.prayer.Prayer
@@ -14,15 +18,34 @@ import xlitekt.game.actor.render.HitBar
 import xlitekt.game.actor.render.HitSplat
 import xlitekt.game.actor.render.HitType
 import xlitekt.game.actor.render.Render
-import xlitekt.game.actor.render.Render.*
-import xlitekt.game.actor.render.block.*
+import xlitekt.game.actor.render.Render.Appearance
+import xlitekt.game.actor.render.Render.FaceActor
+import xlitekt.game.actor.render.Render.FaceAngle
+import xlitekt.game.actor.render.Render.FaceLocation
+import xlitekt.game.actor.render.Render.Hit
+import xlitekt.game.actor.render.Render.MovementType
+import xlitekt.game.actor.render.Render.OverheadChat
+import xlitekt.game.actor.render.Render.PublicChat
+import xlitekt.game.actor.render.Render.Sequence
+import xlitekt.game.actor.render.Render.SpotAnimation
+import xlitekt.game.actor.render.Render.TemporaryMovementType
+import xlitekt.game.actor.render.block.AlternativeDefinitionRenderingBlock
+import xlitekt.game.actor.render.block.HighDefinitionRenderingBlock
+import xlitekt.game.actor.render.block.LowDefinitionRenderingBlock
+import xlitekt.game.actor.render.block.NPCRenderingBlockListener
+import xlitekt.game.actor.render.block.PlayerRenderingBlockListener
+import xlitekt.game.actor.render.block.RenderingBlock
+import xlitekt.game.content.vars.VarPlayer
+import xlitekt.game.packet.SetMapFlagPacket
 import xlitekt.game.world.World
+import xlitekt.game.world.map.GameObject
 import xlitekt.game.world.map.Location
+import xlitekt.game.world.map.directionTo
 import xlitekt.game.world.map.zone.Zone
 import xlitekt.shared.inject
 import xlitekt.shared.resource.prayer.PrayerIconType
 import xlitekt.shared.resource.prayer.Prayers
-import java.util.*
+import java.util.Optional
 import kotlin.collections.HashSet
 
 /**
@@ -34,6 +57,7 @@ abstract class Actor(
 ) {
     val movement = Movement()
 
+    val bonuses = Bonuses()
     var previousLocation = Location.None
 
     abstract val prayer: Prayer?
@@ -78,6 +102,7 @@ abstract class Actor(
 
     /**
      * Represents the actor index that this actor is currently facing.
+     * This is currently only used by players.
      */
     internal var facingActorIndex = Optional.empty<Int>()
 
@@ -87,16 +112,23 @@ abstract class Actor(
     /**
      * Processes any pending movement this actor may have. This happens every tick.
      */
-    internal fun processMovement(players: NonBlockingHashMapLong<Player>): MovementStep? = movement.process(this, location).also {
-        location = it?.location ?: location
-        if (this is Player) {
-            if (it == null) {
-                // When the player is not processing movement steps.
-                if (facingActorIndex.isPresent) {
-                    faceActor { -1 }
+    internal fun processMovement(players: NonBlockingHashMapLong<Player>): MovementStep? = movement.process(this).also { step ->
+        location = step?.location ?: location
+        if (step == null) {
+            movement.movementRequest.ifPresent {
+                val reached = location.packedLocation == it.waypoints.last() && !it.alternative
+                if (this is Player && !reached) {
+                    message { "You can't reach that." }
+                    write(SetMapFlagPacket(255, 255))
                 }
-            } else {
-                // When the player is processing movement steps.
+                if (reached) {
+                    it.reachAction?.invoke()
+                }
+                movement.movementRequest = Optional.empty()
+            }
+            cancelSoft()
+        } else {
+            if (this is Player) {
                 if (shouldRebuildMap()) rebuildNormal(players) { false }
             }
         }
@@ -173,6 +205,7 @@ abstract class Actor(
 
     /**
      * Flags this actor with a new pending rendering block.
+     * @param render The render to use.
      */
     fun render(render: Render) {
         if (this is NPC) {
@@ -193,10 +226,11 @@ abstract class Actor(
     /**
      * Returns the current zone this actor is inside of.
      */
-    fun zone() = if (zone.isPresent) zone.get() else world.zone(location)
+    fun zone(): Zone = zone.orElse(world.zone(location))
 
     /**
      * Set this actor current zone.
+     * @param zone The zone to set.
      */
     fun setZone(zone: Zone) {
         this.zone = Optional.of(zone)
@@ -209,6 +243,8 @@ abstract class Actor(
 
     /**
      * Set this actor zones with a list of zones being removed and a list of zones being added.
+     * @param removed The zones being removed from this actor.
+     * @param added The zones being added to this actor.
      */
     fun setZones(removed: Set<Zone>, added: Set<Zone>) {
         zones.removeAll(removed)
@@ -221,42 +257,81 @@ abstract class Actor(
 }
 
 /**
- * Use this when the player does an action. This will need work.
+ * Angle this actor to a location.
+ * If this actor is a Player this will flag the faceAngle render.
+ * If this actor is a NPC this will flag the faceLocation render.
+ * @param location The location to angle to.
  */
-fun Actor.actionReset() {
-    movement.reset()
-    if (facingActorIndex.isPresent && this is Player) {
-        faceActor { -1 }
+fun Actor.angleTo(location: Location) {
+    if (this is Player) {
+        faceAngle(this.location.directionTo(location)::angle)
+    } else if (this is NPC) {
+        faceLocation { location }
+    }
+}
+
+/**
+ * Angle this actor to a game object.
+ * If this actor is a Player this will flag the faceAngle render.
+ * If this actor is a NPC this will flag the faceLocation render.
+ * @param gameObject The game object to angle to.
+ */
+fun Actor.angleTo(gameObject: GameObject) {
+    if (this is Player) {
+        faceAngle(location.directionTo(Location(gameObject.angleX, gameObject.angleZ))::angle)
+    } else if (this is NPC) {
+        faceLocation(gameObject::location)
+    }
+}
+
+/**
+ * Angle this actor to a npc.
+ * If this actor is a Player this will flag the faceAngle render.
+ * If this actor is a NPC this will flag the faceLocation render.
+ * @param npc The npc to angle to.
+ */
+fun Actor.angleTo(npc: NPC) {
+    if (this is Player) {
+        faceAngle(location.directionTo(npc.location)::angle)
+    } else if (this is NPC) {
+        faceLocation(npc::location)
+    }
+}
+
+/**
+ * Cancels soft actions this actor is doing.
+ * This cancels the facingActorIndex flag.
+ */
+fun Actor.cancelSoft() {
+    facingActorIndex.ifPresent {
+        if (this is Player) {
+            faceActor { -1 }
+        }
         facingActorIndex = Optional.empty()
     }
 }
 
 /**
- * Routes the actor movement waypoints to the input list.
+ * Cancels everything this actor is currently doing.
+ * This cancels soft actions.
+ * This cancels all movement.
  */
-inline fun Actor.route(locations: () -> IntList) {
-    actionReset()
-    movement.route(locations.invoke())
+fun Actor.cancelAll() {
+    cancelSoft()
+    movement.reset()
 }
 
 /**
- * Routes the actor movement to a specified location.
+ * Route the actor movement to a single location with teleport speed.
+ * @param location The location to teleport to.
  */
-inline fun Actor.routeTo(location: () -> Location) {
-    actionReset()
-    movement.route(location.invoke(), false)
-}
-
-/**
- * Routes the actor movement to a single location with teleport speed.
- */
-inline fun Actor.routeTeleport(location: () -> Location) {
-    actionReset()
+inline fun Actor.teleportTo(location: () -> Location) {
+    cancelAll()
     movement.route(location.invoke(), true)
 }
 
 /**
- * Toggles the actor movement speed between walking and running.
+ * Toggle the actor movement speed between walking and running.
  * If the actor is a Player then this will also flag for movement and temporary movement type updates.
  */
 inline fun Actor.speed(running: () -> Boolean) = running.invoke().also {
@@ -267,30 +342,161 @@ inline fun Actor.speed(running: () -> Boolean) = running.invoke().also {
     }
 }
 
+/**
+ * Route this actor to a location.
+ * @param location The location to route to.
+ * @param reachAction A callback function to invoke when the actor reaches the destination.
+ */
+fun Actor.routeTo(location: Location, reachAction: (() -> Unit)? = null) {
+    val route = PathFinders.findPath(
+        smart = this is Player,
+        srcX = this.location.x,
+        srcZ = this.location.z,
+        destX = location.x,
+        destZ = location.z,
+        level = this.location.level
+    )
+
+    movement.route(
+        MovementRequest(
+            reachAction,
+            IntArrayList(route.coords.size).also { points ->
+                route.coords.map { points.add(Location(it.x, it.y, this.location.level).packedLocation) }
+            },
+            route.failed,
+            route.alternative
+        )
+    )
+}
+
+/**
+ * Route this actor to a game object.
+ * @param gameObject The game object to route to.
+ * @param reachAction A callback function to invoke when the actor reaches the destination.
+ */
+fun Actor.routeTo(gameObject: GameObject, reachAction: (() -> Unit)? = null) {
+    val dest = gameObject.location
+    val rotation = gameObject.rotation
+    val shape = gameObject.shape
+    val width = gameObject.entry?.width
+    val height = gameObject.entry?.height
+    val route = PathFinders.findPath(
+        smart = this is Player,
+        srcX = location.x,
+        srcZ = location.z,
+        destX = dest.x,
+        destZ = dest.z,
+        level = location.level,
+        destWidth = if (rotation == 0 || rotation == 2) width else height,
+        destHeight = if (rotation == 0 || rotation == 2) height else width,
+        rotation = rotation,
+        shape = shape
+    )
+
+    movement.route(
+        MovementRequest(
+            reachAction,
+            IntArrayList(route.coords.size).also { points ->
+                route.coords.map { points.add(Location(it.x, it.y, this@routeTo.location.level).packedLocation) }
+            },
+            route.failed,
+            route.alternative
+        )
+    )
+}
+
+/**
+ * Route this actor to a npc.
+ * @param npc The npc to route to.
+ * @param reachAction A callback function to invoke when the actor reaches the destination.
+ */
+fun Actor.routeTo(npc: NPC, reachAction: (() -> Unit)? = null) {
+    val dest = npc.location
+    val route = PathFinders.findPath(
+        smart = this is Player,
+        srcX = location.x,
+        srcZ = location.z,
+        destX = dest.x,
+        destZ = dest.z,
+        level = location.level,
+        destWidth = npc.entry?.size,
+        destHeight = npc.entry?.size,
+        shape = 10
+    )
+
+    movement.route(
+        MovementRequest(
+            reachAction,
+            IntArrayList(route.coords.size).also { points ->
+                route.coords.map { points.add(Location(it.x, it.y, this@routeTo.location.level).packedLocation) }
+            },
+            route.failed,
+            route.alternative
+        )
+    )
+}
+
+/**
+ * Render this actor to face an actor.
+ * @param index The actor index to invoke.
+ */
 inline fun Actor.faceActor(index: () -> Int) {
     render(FaceActor(index.invoke()))
 }
 
-inline fun Actor.faceAngle(angle: () -> Int) {
+/**
+ * Render this actor to face an angle.
+ * This is only supported by player actors.
+ * @param angle The angle to invoke.
+ */
+private inline fun Actor.faceAngle(angle: () -> Int) {
+    if (this is NPC) throw IllegalStateException("NPC does not support this render.")
     render(FaceAngle(angle.invoke()))
 }
 
+/**
+ * Render this actor to animate a sequence.
+ * @param sequenceId The sequence to animate this actor with.
+ */
 inline fun Actor.animate(sequenceId: () -> Int) {
     render(Sequence(sequenceId.invoke()))
 }
 
+/**
+ * Render this actor to spot animate.
+ * @param spotAnimationId The spot animation to animate this actor with.
+ */
 inline fun Actor.spotAnimate(spotAnimationId: () -> Int) {
     render(SpotAnimation(spotAnimationId.invoke()))
 }
 
+/**
+ * Render this actor to update the movement type.
+ * This is only supported by player actors.
+ * @param running The running flag to invoke on.
+ */
 inline fun Actor.movementType(running: () -> Boolean) {
+    if (this is NPC) throw IllegalStateException("NPC does not support this render.")
     render(MovementType(running.invoke()))
 }
 
+/**
+ * Render this actor to temporary movement type.
+ * This is only supported by player actors.
+ * @param id The temporary movement type to invoke on.
+ */
 inline fun Actor.temporaryMovementType(id: () -> Int) {
+    if (this is NPC) throw IllegalStateException("NPC does not support this render.")
     render(TemporaryMovementType(id.invoke()))
 }
 
+/**
+ * Render this actor with hits.
+ * @param hitBar The hitbar associated with this hit.
+ * @param source The source actor performing this hit.
+ * @param type The type of hit this is.
+ * @param damage The amount of damage to invoke.
+ */
 inline fun Actor.hit(hitBar: HitBar, source: Actor?, type: HitType, delay: Int, damage: () -> Int) {
     render(
         Hit(
@@ -301,12 +507,34 @@ inline fun Actor.hit(hitBar: HitBar, source: Actor?, type: HitType, delay: Int, 
     )
 }
 
+/**
+ * Render this actor to public chat.
+ * This is only supported by player actors.
+ * @param rights The player actor rights.
+ * @param effects The chat effects.
+ * @param message The public chat message to invoke.
+ */
 inline fun Actor.chat(rights: Int, effects: Int, message: () -> String) {
+    if (this is NPC) throw IllegalStateException("NPC does not support this render.")
     render(PublicChat(message.invoke(), effects, rights))
 }
 
+/**
+ * Render this actor to overhead chat.
+ * @param message The overhead chat message to invoke.
+ */
 inline fun Actor.overheadChat(message: () -> String) {
     render(OverheadChat(message.invoke()))
+}
+
+/**
+ * Render this actor to face a location.
+ * This is only supported by npc actors.
+ * @param location The location for this npc actor to face.
+ */
+private inline fun Actor.faceLocation(location: () -> Location) {
+    if (this is Player) throw IllegalStateException("Player does not support this render.")
+    render(FaceLocation(location.invoke()))
 }
 
 inline fun Actor.prayerIcon(prayerIcon: () -> PrayerIconType) {

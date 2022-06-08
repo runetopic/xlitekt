@@ -2,7 +2,7 @@ package script.ui
 
 import xlitekt.game.actor.player.script
 import xlitekt.game.actor.speed
-import xlitekt.game.content.ui.InterfaceEvent.CLICK_OPTION_1
+import xlitekt.game.content.ui.InterfaceEvent.ClickOption1
 import xlitekt.game.content.ui.InterfaceLayout
 import xlitekt.game.content.ui.UserInterface
 import xlitekt.game.content.ui.UserInterface.Settings
@@ -20,14 +20,14 @@ private val interfaceScalingCS2Id = 2358
  */
 onInterface<Settings> {
     onOpen {
-        setEvent(childId = 41, slots = 0..21, event = CLICK_OPTION_1)
-        setEvent(childId = 55, slots = 0..21, event = CLICK_OPTION_1)
-        setEvent(childId = 69, slots = 0..21, event = CLICK_OPTION_1)
-        setEvent(childId = 81, slots = 1..5, event = CLICK_OPTION_1)
-        setEvent(childId = 82, slots = 1..4, event = CLICK_OPTION_1)
-        setEvent(childId = 84, slots = 1..3, event = CLICK_OPTION_1)
-        setEvent(childId = 23, slots = 0..21, event = CLICK_OPTION_1)
-        setEvent(childId = 83, slots = 1..5, event = CLICK_OPTION_1)
+        setEvent(childId = 41, slots = 0..21, ClickOption1)
+        setEvent(childId = 55, slots = 0..21, ClickOption1)
+        setEvent(childId = 69, slots = 0..21,  ClickOption1)
+        setEvent(childId = 81, slots = 1..5, ClickOption1)
+        setEvent(childId = 82, slots = 1..4, ClickOption1)
+        setEvent(childId = 84, slots = 1..3, ClickOption1)
+        setEvent(childId = 23, slots = 0..21, ClickOption1)
+        setEvent(childId = 83, slots = 1..5, ClickOption1)
     }
 
     onClick(layoutDropDownChildId) {

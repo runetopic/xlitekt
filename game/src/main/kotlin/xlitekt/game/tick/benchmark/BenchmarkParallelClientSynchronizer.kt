@@ -1,22 +1,17 @@
 package xlitekt.game.tick.benchmark
 
 import com.github.michaelbull.logging.InlineLogger
-import it.unimi.dsi.fastutil.ints.IntArrayList
-import org.rsmod.pathfinder.DumbPathFinder
-import org.rsmod.pathfinder.SmartPathFinder
-import org.rsmod.pathfinder.ZoneFlags
+import xlitekt.game.actor.cancelAll
 import xlitekt.game.actor.chat
 import xlitekt.game.actor.hit
 import xlitekt.game.actor.render.HitBar
 import xlitekt.game.actor.render.HitType
-import xlitekt.game.actor.route
+import xlitekt.game.actor.routeTo
 import xlitekt.game.actor.spotAnimate
 import xlitekt.game.tick.Synchronizer
 import xlitekt.game.tick.ZoneUpdates
 import xlitekt.game.world.map.Location
 import xlitekt.game.world.map.zone.Zone
-import xlitekt.shared.inject
-import java.util.concurrent.ArrayBlockingQueue
 import kotlin.random.Random
 import kotlin.time.measureTime
 
@@ -26,22 +21,7 @@ import kotlin.time.measureTime
 class BenchmarkParallelClientSynchronizer : Synchronizer() {
 
     private val logger = InlineLogger()
-    private val zoneFlags by inject<ZoneFlags>()
-    private val threads = Runtime.getRuntime().availableProcessors()
-    private val smartPathFinders = ArrayBlockingQueue<SmartPathFinder>(threads)
-
-    private val dumbPathFinder = DumbPathFinder(
-        flags = zoneFlags.flags,
-        defaultFlag = 0
-    )
-
     private var tick = 0
-
-    init {
-        repeat(threads) {
-            smartPathFinders.put(SmartPathFinder(flags = zoneFlags.flags, defaultFlag = 0))
-        }
-    }
 
     override fun run() {
         tick++
@@ -51,23 +31,17 @@ class BenchmarkParallelClientSynchronizer : Synchronizer() {
         val playerFindersTime = measureTime {
             val first = players.firstOrNull()
             players.filter { it != first }.parallelStream().forEach {
-                val pf = smartPathFinders.take()
-                val path = pf.findPath(
-                    srcX = it.location.x,
-                    srcY = it.location.z,
-                    destX = Random.nextInt(first!!.location.x - 5, first.location.x + 5),
-                    destY = Random.nextInt(first.location.z - 5, first.location.z + 5),
-                    z = it.location.level
-                )
-                smartPathFinders.put(pf)
                 it.chat(it.rights, 0) { "Hello Xlite." }
                 it.spotAnimate { 574 }
                 it.hit(HitBar.DEFAULT, null, HitType.values().random(), 0) { Random.nextInt(1, 127) }
-                it.route {
-                    val list = IntArrayList(path.coords.size)
-                    path.coords.forEach { c -> list.add(Location(c.x, c.y, it.location.level).packedLocation) }
-                    list
-                }
+                it.cancelAll()
+                it.routeTo(
+                    Location(
+                        Random.nextInt(first!!.location.x - 5, first.location.x + 5),
+                        Random.nextInt(first.location.z - 5, first.location.z + 5),
+                        0
+                    )
+                )
             }
         }
 
@@ -83,18 +57,14 @@ class BenchmarkParallelClientSynchronizer : Synchronizer() {
 
         val npcFindersTime = measureTime {
             npcs.parallelStream().forEach {
-                val path = dumbPathFinder.findPath(
-                    srcX = it.location.x,
-                    srcY = it.location.z,
-                    destX = Random.nextInt(it.location.x - 5, it.location.x + 5),
-                    destY = Random.nextInt(it.location.z - 5, it.location.z + 5),
-                    z = it.location.level
+                it.cancelAll()
+                it.routeTo(
+                    Location(
+                        Random.nextInt(it.location.x - 5, it.location.x + 5),
+                        Random.nextInt(it.location.z - 5, it.location.z + 5),
+                        it.location.level
+                    )
                 )
-                it.route {
-                    val list = IntArrayList(path.coords.size)
-                    path.coords.forEach { c -> list.add(Location(c.x, c.y, it.location.level).packedLocation) }
-                    list
-                }
             }
         }
 

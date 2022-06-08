@@ -14,6 +14,10 @@ import xlitekt.shared.buffer.writeBytes
 import xlitekt.shared.buffer.writeBytesAdd
 import xlitekt.shared.buffer.writeShort
 import xlitekt.shared.buffer.writeStringCp1252NullTerminated
+import xlitekt.shared.inject
+import xlitekt.shared.resource.ItemSequences
+
+val itemSequences by inject<ItemSequences>()
 
 /**
  * @author Jordan Abraham
@@ -39,7 +43,8 @@ onPlayerUpdateBlock<Appearance>(5, 0x1) {
 }
 
 fun BytePacketBuilder.animate(render: Appearance) = if (render.transform.isEmpty) {
-    intArrayOf(808, 823, 819, 820, 821, 822, 824).forEach { writeShort { it } }
+    val sequences = itemSequences[render.equipment.mainhand?.id]?.renderAnimations ?: intArrayOf(808, 823, 819, 820, 821, 822, 824)
+    sequences.forEach { writeShort { it } }
 } else {
     // TODO load npc defs for walking and stand anims for transmog.
 }

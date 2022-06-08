@@ -13,7 +13,7 @@ import xlitekt.shared.toBoolean
 onPacketDisassembler(opcode = 54, size = 7) {
     OpLocPacket(
         index = 3,
-        objectId = readUShortLittleEndianAdd(),
+        locId = readUShortLittleEndianAdd(),
         z = readUShortLittleEndianAdd(),
         x = readShort().toInt(),
         isModified = readUByteSubtract().toBoolean()

@@ -20,6 +20,8 @@ class Prayer(
     private val activePrayerMap: MutableMap<PrayerType, PrayerInfoResource?> = PrayerType.values().associateWith { null }.toMutableMap()
 ) {
     fun process() {
+        if (!this.isActive()) return
+
         if (this.player.currentHitpoints() <= 0 || (this.player is Player && this.player.vars[83] == 0)) {
             // todo toggle off quick prayers
             // todo toggle off prayers
@@ -31,8 +33,6 @@ class Prayer(
             turnOff()
             return
         }
-
-        if (this.drainRate() )
 
         if (player is Player) {
             player.message { "Ticking prayer" }
@@ -81,6 +81,7 @@ class Prayer(
         prayerTypes.forEach {
             if (it == null) return@forEach
             val current = this.activePrayerMap[it] ?: return@forEach
+
             current.icon?.let { this.player.prayerIcon { PrayerIconType.NONE } }
             if (this.player is Player) this.player.vars[current.varbit] = 0
             this.activePrayerMap[it] = null
@@ -101,7 +102,7 @@ class Prayer(
 //        Prayers.info().values
     }
 
-    fun isActive(): Boolean = this.drainRate() > 0
+    fun isActive(): Boolean = this.activePrayerMap.values.find { it != null } != null
 
     fun isActive(prayer: Prayers): Boolean {
         return Prayers.info(prayer.prayerName)?.let { this.isActive(it) } ?: false

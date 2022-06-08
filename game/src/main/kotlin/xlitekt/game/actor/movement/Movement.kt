@@ -1,14 +1,14 @@
 package xlitekt.game.actor.movement
 
 import it.unimi.dsi.fastutil.ints.IntArrayFIFOQueue
-import it.unimi.dsi.fastutil.ints.IntList
 import it.unimi.dsi.fastutil.ints.IntPriorityQueue
 import xlitekt.game.actor.Actor
-import xlitekt.game.actor.faceAngle
+import xlitekt.game.actor.angleTo
 import xlitekt.game.actor.player.Player
 import xlitekt.game.actor.temporaryMovementType
 import xlitekt.game.world.map.Location
 import xlitekt.game.world.map.directionTo
+import java.util.Optional
 import kotlin.math.min
 import kotlin.math.sign
 
@@ -17,28 +17,26 @@ import kotlin.math.sign
  */
 class Movement {
     var movementSpeed = MovementSpeed.None
+    var movementRequest = Optional.empty<MovementRequest>()
 
     private val checkpoints: IntPriorityQueue = IntArrayFIFOQueue()
     private val steps: IntPriorityQueue = IntArrayFIFOQueue()
     private var teleporting = false
     private var direction = Direction.BasicSouth
 
-    fun process(actor: Actor, currentLocation: Location): MovementStep? {
+    /**
+     * Process any pending movement for a actor.
+     * @param actor The actor to process this movement for.
+     */
+    fun process(actor: Actor): MovementStep? {
+        val currentLocation = actor.location
         val previousLocation = actor.previousLocation
         actor.previousLocation = currentLocation
         if (checkpoints.isEmpty && steps.isEmpty) {
             return null
         }
         if (steps.isEmpty) {
-            queueDestinationSteps(currentLocation)
-            if (steps.isEmpty && actor is Player) {
-                val direction = previousLocation.directionTo(currentLocation)
-                if (this.direction != direction) {
-                    this.direction = direction
-                    val angle = direction.angle
-                    actor.faceAngle { angle }
-                }
-            }
+            enqueueSteps(currentLocation)
         }
         // Poll the first step to move to.
         var step = if (steps.isEmpty) return null else steps.dequeueInt()
@@ -53,15 +51,14 @@ class Movement {
                 if (actor is Player) {
                     val type = MovementSpeed.Teleporting.id
                     actor.temporaryMovementType { type }
-                    val angle = direction.angle
-                    actor.faceAngle { angle }
+                    actor.angleTo(currentLocation)
                 }
             }
             MovementSpeed.Walking, MovementSpeed.Running -> if (initialSpeed == MovementSpeed.Running) {
                 // If the player is running, then we poll the second step to move to.
                 step = if (steps.isEmpty) {
                     // If the second step is unavailable, then we try to queue more and poll for the second step again.
-                    queueDestinationSteps(Location(step))
+                    enqueueSteps(Location(step))
                     if (steps.isEmpty) {
                         // If a second step is not able to be found, then we adjust the step the player has to walking.
                         modifiedSpeed = MovementSpeed.Walking
@@ -89,19 +86,39 @@ class Movement {
         )
     }
 
-    fun route(list: IntList) {
-        // https://oldschool.runescape.wiki/w/Pathfinding#The_checkpoint_tiles_and_destination_tile
-        for (i in 0..min(list.lastIndex, 24)) {
-            checkpoints.enqueue(list.getInt(i))
+    /**
+     * Routes this movement to a movement request.
+     * Queues checkpoints from this movement request.
+     * @param request The movement request.
+     */
+    fun route(request: MovementRequest) {
+        val waypoints = request.waypoints
+        if (waypoints.isEmpty) {
+            if (!request.failed && !request.alternative) {
+                request.reachAction?.invoke()
+            }
+            return
+        }
+
+        movementRequest = Optional.of(request)
+        for (i in 0..min(waypoints.lastIndex, 24)) {
+            checkpoints.enqueue(waypoints.getInt(i))
         }
     }
 
+    /**
+     * Routes this movement to a single location with optional teleport speed.
+     */
     fun route(location: Location, teleport: Boolean) {
         checkpoints.enqueue(location.packedLocation)
         if (teleport) teleporting = true
     }
 
-    private fun queueDestinationSteps(location: Location) {
+    /**
+     * Queues steps from a dequeued checkpoint.
+     * @param location The starting location to base the amount of steps from to the dequeued checkpoint.
+     */
+    private fun enqueueSteps(location: Location) {
         if (checkpoints.isEmpty) return
         steps.clear()
         val waypoint = Location(checkpoints.dequeueInt())
@@ -122,9 +139,13 @@ class Movement {
         }
     }
 
+    /**
+     * Resets this movement.
+     */
     fun reset() {
         checkpoints.clear()
         steps.clear()
         teleporting = false
+        movementRequest = Optional.empty()
     }
 }

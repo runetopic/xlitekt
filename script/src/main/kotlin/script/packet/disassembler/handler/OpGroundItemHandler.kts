@@ -1,11 +1,10 @@
 import com.github.michaelbull.logging.InlineLogger
-import it.unimi.dsi.fastutil.ints.IntArrayList
-import it.unimi.dsi.fastutil.ints.IntList
 import org.rsmod.pathfinder.SmartPathFinder
 import org.rsmod.pathfinder.ZoneFlags
-import xlitekt.game.actor.route
-import xlitekt.game.actor.routeTeleport
+import xlitekt.game.actor.cancelAll
+import xlitekt.game.actor.routeTo
 import xlitekt.game.actor.speed
+import xlitekt.game.actor.teleportTo
 import xlitekt.game.content.vars.VarPlayer
 import xlitekt.game.packet.OpGroundItemPacket
 import xlitekt.game.packet.disassembler.handler.onPacketHandler
@@ -25,29 +24,22 @@ private val pathfinder = SmartPathFinder(
 private val logger = InlineLogger()
 
 onPacketHandler<OpGroundItemPacket> {
+//    logger.debug { packet }
 
-    logger.debug { packet }
+    val destination = Location(this.packet.x, this.packet.z, player.location.level)
 
-    val path = pathfinder.findPath(
-        srcX = player.location.x,
-        srcY = player.location.z,
-        destX = packet.x,
-        destY = packet.z,
-        z = player.location.level
-    )
-
-    // ctrl+click teleporting to object
+    // Teleport movement (ctrl+click teleporting)
     if (player.rights >= 2 && packet.isModified) {
-        player.routeTeleport { Location(packet.x, packet.z, player.location.level) }
+        player.teleportTo { destination }
         return@onPacketHandler
     }
 
     // Toggles Actor's speed only for the duration of the movement (if isModified=true)
     player.speed { (VarPlayer.ToggleRun in player.vars).let { if (packet.isModified) !it else it } }
 
-    player.route {
-        val list: IntList = IntArrayList(path.coords.size)
-        path.coords.forEach { list.add(Location(it.x, it.y, player.location.level).packedLocation) }
-        list
+    // TODO change this to find the item within the zone and then angle it to the item.
+    with(player) {
+        cancelAll()
+        routeTo(destination)
     }
 }

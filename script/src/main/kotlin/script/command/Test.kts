@@ -1,7 +1,7 @@
 package script.command
 
 import xlitekt.game.actor.player.message
-import xlitekt.game.actor.routeTeleport
+import xlitekt.game.actor.teleportTo
 import xlitekt.game.content.command.Commands.onCommand
 import xlitekt.game.content.item.FloorItem
 import xlitekt.game.content.item.Item
@@ -20,23 +20,23 @@ import xlitekt.shared.inject
 private val world by inject<World>()
 
 onCommand("home").use {
-    this.routeTeleport { Location(3221, 3219, 0) }
+    this.teleportTo { Location(3221, 3219, 0) }
 }
 
 onCommand("moveup").use {
-    this.routeTeleport { Location(location.x, location.z, location.level + 1) }
+    this.teleportTo { Location(location.x, location.z, location.level + 1) }
 }
 
 onCommand("movedown").use {
-    this.routeTeleport { Location(location.x, location.z, location.level - 1) }
+    this.teleportTo { Location(location.x, location.z, location.level - 1) }
 }
 
 onCommand("climb").use {
-    this.routeTeleport { Location(location.x, location.z+6400, location.level) }
+    this.teleportTo { Location(location.x, location.z+6400, location.level) }
 }
 
 onCommand("undoclimb").use {
-    this.routeTeleport { Location(location.x, location.z-6400, location.level) }
+    this.teleportTo { Location(location.x, location.z-6400, location.level) }
 }
 
 onCommand("gp").use {

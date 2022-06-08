@@ -8,7 +8,7 @@ import xlitekt.shared.buffer.writeShort
 /**
  * @author Jordan Abraham
  */
-onPacketAssembler<UpdateWeightPacket>(opcode = 50, size = -2) {
+onPacketAssembler<UpdateWeightPacket>(opcode = 50, size = 2) {
     buildPacket {
         writeShort(weight::toInt)
     }

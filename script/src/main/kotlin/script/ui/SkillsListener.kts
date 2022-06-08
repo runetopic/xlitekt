@@ -1,7 +1,6 @@
 package script.ui
 
 import xlitekt.game.actor.player.script
-import xlitekt.game.content.ui.InterfaceEvent
 import xlitekt.game.content.ui.UserInterface
 import xlitekt.game.content.ui.onInterface
 import xlitekt.game.content.vars.VarBit
@@ -34,12 +33,6 @@ private val skillBits = mapOf(
     22 to 18,
     23 to 21
 )
-
-onInterface<UserInterface.SkillGuide> {
-    onOpen {
-        setEvent(8, 0..99, InterfaceEvent.NONE)
-    }
-}
 
 onInterface<UserInterface.Skills> {
     onClick {

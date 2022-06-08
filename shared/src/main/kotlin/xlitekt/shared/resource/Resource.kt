@@ -18,6 +18,7 @@ class NPCExamines(list: Map<Int, ExamineNPCResource>) : HashMap<Int, ExamineNPCR
 class ObjectExamines(list: Map<Int, ExamineObjectResource>) : HashMap<Int, ExamineObjectResource>(list)
 class ItemExamines(list: Map<Int, ExamineItemResource>) : HashMap<Int, ExamineItemResource>(list)
 class PrayerInfoMap(list: Map<String, PrayerInfoResource>) : HashMap<String, PrayerInfoResource>(list)
+class ItemSequences(list: Map<Int, ItemSequenceResource>) : HashMap<Int, ItemSequenceResource>(list)
 
 object Resource {
     private val json = Json { allowStructuredMapKeys = true; ignoreUnknownKeys = true }
@@ -34,6 +35,7 @@ object Resource {
     fun examineItemResource(): ItemExamines = ItemExamines(loadResource<List<ExamineItemResource>>("game.resources.item_examines").associateBy(ExamineItemResource::itemId))
     fun itemInfoResource(): ItemInfoMap = ItemInfoMap(loadResource<List<ItemInfoResource>>("game.resources.item_info").associateBy(ItemInfoResource::id))
     fun prayerInfoResource(): PrayerInfoMap = PrayerInfoMap(loadResource<List<PrayerInfoResource>>("game.resources.prayer_info").associateBy(PrayerInfoResource::name))
+    fun itemSequenceResource(): ItemSequences = ItemSequences(loadResource<List<ItemSequenceResource>>("game.resources.item_sequences").associateBy(ItemSequenceResource::id))
 
     private inline fun <reified T> loadResource(path: String): T = json.decodeFromStream(Resource::class.java.getResourceAsStream(lazy<ApplicationEnvironment>().config.property(path).getString())!!)
 }

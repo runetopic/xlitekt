@@ -6,9 +6,12 @@ import xlitekt.game.actor.player.Player
 import xlitekt.game.actor.player.message
 import xlitekt.game.content.item.Item
 import xlitekt.game.content.ui.InterfaceMap.addInterfaceListener
+import xlitekt.game.packet.IfCloseSubPacket
 import xlitekt.game.packet.IfMoveSubPacket
 import xlitekt.game.packet.IfOpenSubPacket
 import xlitekt.game.packet.IfOpenTopPacket
+import xlitekt.game.packet.IfSetEventsPacket
+import xlitekt.game.packet.IfSetTextPacket
 import xlitekt.game.packet.UpdateContainerFullPacket
 import xlitekt.game.packet.VarpSmallPacket
 import xlitekt.shared.inject
@@ -83,18 +86,18 @@ class Interfaces(
     }
 
     fun setText(packedInterface: Int, text: String) = player.write(
-        xlitekt.game.packet.IfSetTextPacket(
+        IfSetTextPacket(
             packedInterface = packedInterface,
             text = text
         )
     )
 
     fun setEvent(packedInterface: Int, ifEvent: UserInterfaceEvent.IfEvent) = player.write(
-        xlitekt.game.packet.IfSetEventsPacket(
+        IfSetEventsPacket(
             packedInterface = packedInterface,
             fromSlot = ifEvent.slots.first,
             toSlot = ifEvent.slots.last,
-            event = ifEvent.event.value
+            event = ifEvent.event
         )
     )
 
@@ -132,7 +135,7 @@ class Interfaces(
             IfOpenSubPacket(
                 interfaceId = interfaceInfo.id,
                 toPackedInterface = currentInterfaceLayout.interfaceId.packInterface(childId),
-                alwaysOpen = true
+                walkable = !isModal()
             )
         )
 
@@ -149,7 +152,7 @@ class Interfaces(
         val childId = userInterface.interfaceInfo.resizableChildId
 
         player.write(
-            xlitekt.game.packet.IfCloseSubPacket(
+            IfCloseSubPacket(
                 packedInterface = currentInterfaceLayout.interfaceId.packInterface(childId.enumChildForLayout(currentInterfaceLayout))
             )
         )

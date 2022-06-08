@@ -1,10 +1,15 @@
 package xlitekt.game.content.container.equipment
 
 import xlitekt.game.actor.player.Player
+import xlitekt.game.actor.player.message
 import xlitekt.game.content.container.Container
 import xlitekt.game.content.item.Item
 import xlitekt.game.packet.UpdateContainerFullPacket
 import xlitekt.game.packet.UpdateContainerPartialPacket
+import xlitekt.game.packet.UpdateWeightPacket
+import xlitekt.shared.inject
+import xlitekt.shared.resource.EquipmentSlot
+import xlitekt.shared.resource.ItemInfoMap
 
 const val EQUIPMENT_KEY = 94
 const val EQUIPMENT_CAPACITY = 15
@@ -36,6 +41,105 @@ class Equipment(
                 this
             )
         )
+
+        player.bonuses.calculateEquippedBonuses(this)
+        updateWeight(true)
+    }
+
+    fun equipItem(item: Item, slotId: Int) {
+        val invalidItemMessage = {
+            player.message { "You can't wear that!" }
+        }
+
+        val info = itemInfoMap[item.id] ?: return run {
+            invalidItemMessage.invoke()
+        }
+
+        if (!info.equipable) {
+            invalidItemMessage.invoke()
+            return
+        }
+
+        val equipmentInfo = info.equipment ?: return run {
+            invalidItemMessage.invoke()
+        }
+
+        val equipmentSlot = equipmentInfo.equipmentSlot
+        val mappedEquipmentSlot = mapEquipmentSlot(equipmentSlot)
+        val isTwoHandedWeapon = isTwoHanded(item)
+
+        if (isTwoHandedWeapon && player.inventory.isFull() && offhand != null) {
+            player.message { "You don't have enough free inventory space to do that." }
+            return
+        }
+
+        val hasTwoHandedWeapon = isTwoHanded(mainhand)
+
+        if (hasTwoHandedWeapon || isTwoHandedWeapon) {
+            equipTwoHandedItem(slotId, mappedEquipmentSlot, item)
+            return
+        }
+
+        player.inventory.removeItem(slotId, item) {
+            val existingItem = this@Equipment[mappedEquipmentSlot] ?: return@removeItem run {
+                setItem(mappedEquipmentSlot, this) { slot ->
+                    refreshSlots(listOf(slot))
+                }
+            }
+
+            player.inventory.addItem(existingItem) {
+                setItem(mappedEquipmentSlot, item) { slot ->
+                    refreshSlots(listOf(slot))
+                }
+            }
+        }
+    }
+
+    private fun equipTwoHandedItem(slotId: Int, equipmentSlot: Int, item: Item) {
+        val slotsChanged = mutableListOf<Int>()
+
+        player.inventory.removeItem(slotId, item) {
+            if (mainhand != null) {
+                removeItem(SLOT_MAINHAND, mainhand!!) { slots ->
+                    player.inventory.addItem(this)
+                    slotsChanged.add(slots)
+                }
+            }
+
+            if (offhand != null) {
+                removeItem(SLOT_OFFHAND, offhand!!) { slots ->
+                    player.inventory.addItem(this)
+                    slotsChanged.add(slots)
+                }
+            }
+
+            setItem(equipmentSlot, this) { slot ->
+                slotsChanged.add(slot)
+            }
+        }
+
+        refreshSlots(slotsChanged)
+    }
+
+    fun isTwoHanded(item: Item?): Boolean {
+        val info = itemInfoMap[item?.id] ?: return false
+        val equipmentInfo = info.equipment ?: return false
+        return equipmentInfo.equipmentSlot == EquipmentSlot.TWO_HAND
+    }
+
+    fun mapEquipmentSlot(equipmentSlot: EquipmentSlot): Int = when (equipmentSlot) {
+        EquipmentSlot.WEAPON, EquipmentSlot.TWO_HAND -> SLOT_MAINHAND
+        EquipmentSlot.AMMO -> SLOT_AMMO
+        EquipmentSlot.BODY -> SLOT_TORSO
+        EquipmentSlot.CAPE -> SLOT_BACK
+        EquipmentSlot.FEET -> SLOT_FEET
+        EquipmentSlot.HANDS -> SLOT_HANDS
+        EquipmentSlot.HEAD -> SLOT_HEAD
+        EquipmentSlot.LEGS -> SLOT_LEGS
+        EquipmentSlot.NECK -> SLOT_NECK
+        EquipmentSlot.RING -> SLOT_RING
+        EquipmentSlot.SHIELD -> SLOT_OFFHAND
+        else -> throw IllegalArgumentException("Unhandled equipment slot $equipmentSlot")
     }
 
     /**
@@ -53,10 +157,27 @@ class Equipment(
     }
 
     /**
-     * Refreshes specific slots within the equipment container.
+     * Calculates the players weight based on the worn equipment items and writes it to the client if toggled.
+     */
+    fun updateWeight(write: Boolean = false) {
+        filterNotNull().forEach {
+            val info = itemInfoMap[it.id] ?: return
+
+            player.weight += info.weight
+        }
+
+        if (write) player.write(
+            UpdateWeightPacket(player.weight)
+        )
+    }
+
+    /**
+     * Refreshes specific slots within the equipment container and calculate the newly refreshed bonuses.
      * This leverages the UpdateContainerPartialPacket
      */
     fun refreshSlots(slots: List<Int>) {
+        player.bonuses.calculateEquippedBonuses(player.equipment)
+
         player.write(
             UpdateContainerPartialPacket(
                 -1,
@@ -65,6 +186,8 @@ class Equipment(
                 slots
             )
         )
+
+        updateWeight(true)
     }
 
     companion object {
@@ -79,5 +202,7 @@ class Equipment(
         const val SLOT_FEET = 10
         const val SLOT_RING = 12
         const val SLOT_AMMO = 13
+
+        private val itemInfoMap by inject<ItemInfoMap>()
     }
 }
