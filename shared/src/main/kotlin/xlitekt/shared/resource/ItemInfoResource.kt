@@ -86,7 +86,7 @@ data class ItemInfoResource(
     @SerialName("equipable")
     val equipable: Boolean = false,
     @SerialName("weight")
-    val weight: Float = 0f,
+    val weight: Double = 0.0,
     @SerialName("equipment")
     val equipment: EquipmentInfoResource? = null
 )
