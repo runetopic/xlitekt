@@ -10,6 +10,7 @@ import xlitekt.game.actor.movement.MovementStep
 import xlitekt.game.actor.movement.pf.PathFinders
 import xlitekt.game.actor.npc.NPC
 import xlitekt.game.actor.player.Player
+import xlitekt.game.actor.player.drainRunEnergy
 import xlitekt.game.actor.player.message
 import xlitekt.game.actor.player.rebuildNormal
 import xlitekt.game.actor.render.HitBar
@@ -41,6 +42,8 @@ import xlitekt.game.world.map.directionTo
 import xlitekt.game.world.map.zone.Zone
 import xlitekt.shared.inject
 import java.util.Optional
+import xlitekt.game.actor.player.restoreRunEnergy
+import xlitekt.game.content.vars.VarPlayer
 
 /**
  * @author Tyler Telis
@@ -106,6 +109,7 @@ abstract class Actor(
      */
     internal fun processMovement(players: NonBlockingHashMapLong<Player>): MovementStep? = movement.process(this).also { step ->
         location = step?.location ?: location
+
         if (step == null) {
             movement.movementRequest.ifPresent {
                 val reached = location.packedLocation == it.waypoints.last() && !it.alternative
@@ -122,6 +126,8 @@ abstract class Actor(
         } else {
             if (this is Player) {
                 if (shouldRebuildMap()) rebuildNormal(players) { false }
+
+                drainRunEnergy()
             }
         }
         if (shouldRebuildZones() && zone.isPresent) {

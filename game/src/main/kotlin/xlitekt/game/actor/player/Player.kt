@@ -1,5 +1,6 @@
 package xlitekt.game.actor.player
 
+// ktlint-disable no-wildcard-imports
 import kotlinx.serialization.Serializable
 import org.jctools.maps.NonBlockingHashMapLong
 import xlitekt.game.actor.Actor
@@ -17,12 +18,21 @@ import xlitekt.game.content.vars.Vars
 import xlitekt.game.event.EventBus
 import xlitekt.game.event.impl.Events
 import xlitekt.game.fs.PlayerJsonEncoderService
-import xlitekt.game.packet.*
+import xlitekt.game.packet.LogoutPacket
+import xlitekt.game.packet.MessageGamePacket
+import xlitekt.game.packet.Packet
+import xlitekt.game.packet.RebuildNormalPacket
+import xlitekt.game.packet.RunClientScriptPacket
+import xlitekt.game.packet.UpdateRunEnergyPacket
+import xlitekt.game.packet.UpdateStatPacket
+import xlitekt.game.packet.VarpLargePacket
+import xlitekt.game.packet.VarpSmallPacket
 import xlitekt.game.packet.disassembler.handler.PacketHandler
 import xlitekt.game.world.World
 import xlitekt.game.world.map.Location
 import xlitekt.shared.lazy
 import kotlin.math.abs
+import kotlin.math.floor
 
 /**
  * @author Jordan Abraham
@@ -159,7 +169,7 @@ fun Player.updateStat(skill: Skill, level: Int, experience: Double) {
 
 inline fun Player.message(message: () -> String) = write(MessageGamePacket(0, message.invoke(), false)) // TODO build messaging system
 fun Player.script(scriptId: Int, vararg parameters: Any) = write(RunClientScriptPacket(scriptId, parameters))
-fun Player.updateRunEnergy() = write(UpdateRunEnergyPacket(runEnergy / 100))
+fun Player.updateRunEnergy() = write(UpdateRunEnergyPacket(runEnergy / 100f))
 
 inline fun Player.rebuildNormal(players: NonBlockingHashMapLong<Player>, update: () -> Boolean) {
     write(RebuildNormalPacket(viewport, location, update.invoke(), players))
@@ -167,3 +177,26 @@ inline fun Player.rebuildNormal(players: NonBlockingHashMapLong<Player>, update:
 }
 
 fun Player.renderAppearance() = render(appearance)
+
+fun Player.drainRunEnergy() {
+    if (VarPlayer.ToggleRun !in vars) return
+
+    val drain = 67.0f + ((67.0f * weight.coerceIn(0.0f, 64.0f)) / 64.0f)
+
+    runEnergy -= if (runEnergy - drain <= 0) {
+        runEnergy
+    } else {
+        drain
+    }
+
+    updateRunEnergy()
+}
+
+fun Player.restoreRunEnergy() {
+    if (movement.isMoving() && VarPlayer.ToggleRun in vars || runEnergy >= 10_000f) return
+    // TODO if the player is busy/locked we dont restore energy
+    val agilityLevel = skills.level(Skill.AGILITY)
+    val restore = (floor(agilityLevel.toFloat()) / 6f) + 8f
+    runEnergy += restore
+    updateRunEnergy()
+}
