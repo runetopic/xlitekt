@@ -27,7 +27,7 @@ sealed class UserInterfaceEvent {
 
     data class IfEvent(
         val slots: IntRange,
-        val event: InterfaceEvent
+        val event: Int,
     ) : UserInterfaceEvent()
 
     data class ContainerUpdateFullEvent(

@@ -2,6 +2,7 @@ package xlitekt.game.actor
 
 import it.unimi.dsi.fastutil.ints.IntArrayList
 import org.jctools.maps.NonBlockingHashMapLong
+import xlitekt.game.actor.bonus.Bonuses
 import xlitekt.game.actor.movement.Movement
 import xlitekt.game.actor.movement.MovementRequest
 import xlitekt.game.actor.movement.MovementSpeed
@@ -50,6 +51,7 @@ abstract class Actor(
 ) {
     val movement = Movement()
 
+    val bonuses = Bonuses()
     var previousLocation = Location.None
 
     /**

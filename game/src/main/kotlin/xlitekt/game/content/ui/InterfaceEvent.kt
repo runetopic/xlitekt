@@ -1,30 +1,30 @@
 package xlitekt.game.content.ui
 
-enum class InterfaceEvent(val value: Int) {
-    CONTINUE(1 shl 0),
-    CLICK_OPTION_1(1 shl 1),
-    CLICK_OPTION_2(1 shl 2),
-    CLICK_OPTION_3(1 shl 3),
-    CLICK_OPTION_4(1 shl 4),
-    CLICK_OPTION_5(1 shl 5),
-    CLICK_OPTION_6(1 shl 6),
-    CLICK_OPTION_7(1 shl 7),
-    CLICK_OPTION_8(1 shl 8),
-    CLICK_OPTION_9(1 shl 9),
-    CLICK_OPTION_10(1 shl 10),
-    USE_ON_GROUND_ITEM(1 shl 11),
-    USE_ON_NPC(1 shl 12),
-    USE_ON_OBJECT(1 shl 13),
-    USE_ON_PLAYER(1 shl 14),
-    USE_ON_INVENTORY(1 shl 15),
-    USER_ON_COMPONENT(1 shl 16),
-    DRAG_DEPTH_1(1 shl 17),
-    DRAG_DEPTH_2(2 shl 17),
-    DRAG_DEPTH_3(3 shl 17),
-    DRAG_DEPTH_4(4 shl 17),
-    DRAG_DEPTH_5(5 shl 17),
-    DRAG_DEPTH_6(6 shl 17),
-    DRAG_DEPTH_7(7 shl 17),
-    DRAG_TARGETABLE(1 shl 20),
-    COMPONENT_TARGETABLE(1 shl 21);
+sealed class InterfaceEvent(val value: Int) {
+    object Continue : InterfaceEvent(1 shl 0)
+    object ClickOption1 : InterfaceEvent(1 shl 1)
+    object ClickOption2 : InterfaceEvent(1 shl 2)
+    object ClickOption3 : InterfaceEvent(1 shl 3)
+    object ClickOption4 : InterfaceEvent(1 shl 4)
+    object ClickOption5 : InterfaceEvent(1 shl 5)
+    object ClickOption6 : InterfaceEvent(1 shl 6)
+    object ClickOption7 : InterfaceEvent(1 shl 7)
+    object ClickOption8 : InterfaceEvent(1 shl 8)
+    object ClickOption9 : InterfaceEvent(1 shl 9)
+    object ClickOption10 : InterfaceEvent(1 shl 10)
+    object UseOnGroundItem : InterfaceEvent(1 shl 11)
+    object UseOnNPC : InterfaceEvent(1 shl 12)
+    object UseOnObject : InterfaceEvent(1 shl 13)
+    object UseOnPlayer : InterfaceEvent(1 shl 14)
+    object UseOnInventory : InterfaceEvent(1 shl 15)
+    object UseOnComponent : InterfaceEvent(1 shl 16)
+    object DragDepth1 : InterfaceEvent(1 shl 17)
+    object DragDepth2 : InterfaceEvent(2 shl 17)
+    object DragDepth3 : InterfaceEvent(3 shl 17)
+    object DragDepth4 : InterfaceEvent(4 shl 17)
+    object DragDepth5 : InterfaceEvent(5 shl 17)
+    object DragDepth6 : InterfaceEvent(6 shl 17)
+    object DragDepth7 : InterfaceEvent(7 shl 17)
+    object DragTargetable : InterfaceEvent(1 shl 20)
+    object ComponentTargetable : InterfaceEvent(1 shl 21)
 }

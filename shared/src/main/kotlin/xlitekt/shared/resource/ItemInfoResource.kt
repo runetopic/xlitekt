@@ -57,8 +57,10 @@ data class EquipmentInfoResource(
     val defenceRanged: Int,
     @SerialName("strengthBonus")
     val meleeStrength: Int,
+    @SerialName("rangedStrength")
+    val rangedStrength: Int,
     @SerialName("magicDamage")
-    val magicDamage: Int,
+    val magicDamage: Double,
     @SerialName("prayer")
     val prayer: Int,
     @SerialName("equipmentSlot")
@@ -66,7 +68,13 @@ data class EquipmentInfoResource(
     @SerialName("attackSpeed")
     val attackSpeed: Int? = null,
     @SerialName("attackRange")
-    val attackRange: Int? = null
+    val attackRange: Int? = null,
+    @SerialName("hideArms")
+    val hideArms: Boolean? = false,
+    @SerialName("hideHair")
+    val hideHair: Boolean? = false,
+    @SerialName("showBeard")
+    val showBeard: Boolean? = false
 )
 
 @Serializable
@@ -77,6 +85,8 @@ data class ItemInfoResource(
     val name: String,
     @SerialName("equipable")
     val equipable: Boolean = false,
+    @SerialName("weight")
+    val weight: Double = 0.0,
     @SerialName("equipment")
     val equipment: EquipmentInfoResource? = null
 )

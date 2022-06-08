@@ -14,7 +14,7 @@ import xlitekt.shared.toInt
 onPacketAssembler<IfOpenSubPacket>(opcode = 2, size = 7) {
     buildPacket {
         writeShortLittleEndian { interfaceId }
-        writeByteSubtract(alwaysOpen::toInt)
+        writeByteSubtract(walkable::toInt)
         writeInt { toPackedInterface }
     }
 }

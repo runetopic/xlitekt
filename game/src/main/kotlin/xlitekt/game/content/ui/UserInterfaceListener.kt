@@ -84,11 +84,12 @@ class UserInterfaceListener(
     }
 
     fun setText(childId: Int, text: String) {
-        texts[userInterface.interfaceInfo.id.packInterface(childId)] = text
+        this.texts[userInterface.interfaceInfo.id.packInterface(childId)] = text
     }
 
-    fun setEvent(childId: Int, slots: IntRange, event: InterfaceEvent) {
-        events[userInterface.interfaceInfo.id.packInterface(childId)] = UserInterfaceEvent.IfEvent(slots, event)
+    fun setEvent(childId: Int, slots: IntRange, vararg event: InterfaceEvent) {
+        val calculatedEvent = event.toList().sumOf { it.value }
+        this.events[userInterface.interfaceInfo.id.packInterface(childId)] = UserInterfaceEvent.IfEvent(slots, calculatedEvent)
     }
 
     fun setItems(containerKey: Int, item: List<Item?>) {

@@ -8,13 +8,9 @@ import xlitekt.game.content.ui.onInterface
 import xlitekt.shared.inject
 import xlitekt.shared.resource.ItemExamines
 
-private val equipmentContainerKey = 94
-private val equipmentSize = 15
 private val itemExamines by inject<ItemExamines>()
 
 onInterface<WornEquipment> {
-    onOpen {
-    }
     onClick("View equipment stats") {
         interfaces += UserInterface.EquipmentStats
     }
@@ -37,7 +33,7 @@ onInterface<WornEquipment> {
             1 -> {
                 // remove item
                 if (inventory.isFull()) {
-                    message { "You don't have enough free space to do that." }
+                    message { "You don't have enough free inventory space to do that." }
                     return@onClick
                 }
 

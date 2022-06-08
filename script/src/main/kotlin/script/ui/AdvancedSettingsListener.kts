@@ -29,10 +29,10 @@ enum class Categories(val id: Int) {
 
 onInterface<AdvancedSettings> {
     onOpen {
-        setEvent(21, 0..147, InterfaceEvent.CLICK_OPTION_1)
-        setEvent(23, 0..7, InterfaceEvent.CLICK_OPTION_1)
-        setEvent(19, 0..240, InterfaceEvent.CLICK_OPTION_1)
-        setEvent(28, 0..122, InterfaceEvent.CLICK_OPTION_1)
+        setEvent(21, 0..147, InterfaceEvent.ClickOption1)
+        setEvent(23, 0..7, InterfaceEvent.ClickOption1)
+        setEvent(19, 0..240, InterfaceEvent.ClickOption1)
+        setEvent(28, 0..122, InterfaceEvent.ClickOption1)
     }
 
     onClick(childId = closeSettingsChildId) {

@@ -24,7 +24,7 @@ val kits by inject<KitEntryTypeProvider>()
 onInterface<PlayerAppearanceDesigner> {
     onCreate {
         repeat(69) {
-            setEvent(it, 0..68, InterfaceEvent.CLICK_OPTION_1)
+            setEvent(it, 0..68, InterfaceEvent.ClickOption1)
         }
     }
 

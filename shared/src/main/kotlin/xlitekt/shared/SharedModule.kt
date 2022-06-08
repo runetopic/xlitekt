@@ -6,6 +6,7 @@ import xlitekt.shared.resource.Resource.examineNPCResource
 import xlitekt.shared.resource.Resource.examineObjectResource
 import xlitekt.shared.resource.Resource.interfaceInfoResource
 import xlitekt.shared.resource.Resource.itemInfoResource
+import xlitekt.shared.resource.Resource.itemSequenceResource
 import xlitekt.shared.resource.Resource.mapSquaresResource
 import xlitekt.shared.resource.Resource.npcInfoResource
 import xlitekt.shared.resource.Resource.sequencesResource
@@ -28,4 +29,5 @@ val sharedModule = module(true) {
     single { examineObjectResource() }
     single { examineItemResource() }
     single { itemInfoResource() }
+    single { itemSequenceResource() }
 }

@@ -66,7 +66,7 @@ class Inventory(
      * @param item The item being added to the inventory.
      * @return whether of not the item has been added to the inventory.
      */
-    private fun addItem(item: Item): Boolean {
+    fun addItem(item: Item): Boolean {
         if (isFull() && !item.stackable) {
             player.message { "You don't have enough inventory space." }
             return false
