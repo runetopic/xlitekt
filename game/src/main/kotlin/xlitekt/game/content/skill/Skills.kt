@@ -10,8 +10,8 @@ import xlitekt.game.content.skill.Skill.Companion.getXPForLevel
 
 @Serializable(SkillsSerializer::class)
 class Skills(
-    val levels: IntArray = IntArray(MAX_SKILLS),
-    val experience: DoubleArray = DoubleArray(MAX_SKILLS)
+    private val levels: IntArray = IntArray(MAX_SKILLS),
+    private val experience: DoubleArray = DoubleArray(MAX_SKILLS)
 ) {
     init {
         val defaultExperience = getXPForLevel(DEFAULT_LEVEL)
@@ -26,4 +26,7 @@ class Skills(
             this.experience[it.id] = experience
         }
     }
+
+    fun level(skill: Skill): Int = levels[skill.id]
+    fun xp(skill: Skill): Double = experience[skill.id]
 }

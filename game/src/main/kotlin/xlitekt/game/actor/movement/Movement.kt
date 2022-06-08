@@ -138,6 +138,8 @@ class Movement {
         }
     }
 
+    fun isMoving(): Boolean = !steps.isEmpty || !checkpoints.isEmpty
+
     /**
      * Resets this movement.
      */

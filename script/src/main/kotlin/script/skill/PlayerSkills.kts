@@ -7,8 +7,8 @@ import xlitekt.game.event.onEvent
 
 onEvent<Events.OnLoginEvent> {
     Skill.values().forEach {
-        val level = player.skills.levels[it.id]
-        val experience = player.skills.experience[it.id]
+        val level = player.skills.level(it)
+        val experience = player.skills.xp(it)
         player.updateStat(it, level, experience)
     }
 }

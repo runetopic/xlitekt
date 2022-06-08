@@ -45,7 +45,7 @@ class SkillsSerializer : KSerializer<Skills> {
             0,
             MapSerializer(String.serializer(), Int.serializer()),
             Skill.values().associate {
-                it.name to value.levels[it.id]
+                it.name to value.level(it)
             }
         )
         encodeSerializableElement(
@@ -53,7 +53,7 @@ class SkillsSerializer : KSerializer<Skills> {
             1,
             MapSerializer(String.serializer(), Double.serializer()),
             Skill.values().associate {
-                it.name to value.experience[it.id]
+                it.name to value.xp(it)
             }
         )
     }
