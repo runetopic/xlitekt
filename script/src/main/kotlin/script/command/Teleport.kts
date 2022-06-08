@@ -12,7 +12,7 @@ private val teleportSyntax = setOf(
 )
 
 // TODO make a color system so we're not using arbitrary hex codes throughout our app
-private val invalidSyntaxMessage = "Invalid syntax - Please use: ${teleportSyntax.map { "<col=FF0000>$it</col>" }.joinToString(" or ")}."
+private val invalidSyntaxMessage = "Invalid syntax - Please use: ${teleportSyntax.joinToString(" or ") { "<col=FF0000>$it</col>" }}."
 
 onCommand("tele", description = teleportDescription, syntax = teleportSyntax).use { arguments ->
     if (arguments.isEmpty()) {
@@ -34,9 +34,10 @@ onCommand("tele", description = teleportDescription, syntax = teleportSyntax).us
         }
 
         val level = arguments.drop(2).firstOrNull()?.toInt() ?: location.level
+        val destination = Location(x, z, level)
 
-        teleportTo { Location(x, z, level) }
-        message { "Teleported: ${Location(x, z, level)}" }
+        teleportTo { destination }
+        message { "Teleported: $destination" }
     } catch (exception: NumberFormatException) {
         message { invalidSyntaxMessage }
     }
