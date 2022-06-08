@@ -172,9 +172,9 @@ onBodyPart(index = 11, BodyPart.Jaw) {
         val slot = if (gender == Gender.Male) Equipment.SLOT_HEAD else Equipment.SLOT_TORSO
 
         when (gender) {
-            Gender.Male -> if (equipment[slot] != null) {
+            Gender.Male -> {
                 val head = equipment.head ?: return@bodyPart writeShort { 0x100 + kit }
-                val itemInfo = itemInfoMap[head.id]?.equipment ?: return@bodyPart writeByte { 0 } // Hide hair.
+                val itemInfo = itemInfoMap[head.id]?.equipment ?: return@bodyPart writeShort { 0x100 + kit }
 
                 if (itemInfo.showBeard == false) {
                     writeByte { 0 } // Hide beard.
