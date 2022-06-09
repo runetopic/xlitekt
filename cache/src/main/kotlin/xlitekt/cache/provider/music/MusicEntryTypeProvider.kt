@@ -343,7 +343,6 @@ class MusicEntryTypeProvider : EntryTypeProvider<MusicEntryType>() {
     }
 
     private inline fun ByteBuffer.writeLengthInt(value: () -> Int) = value.invoke().also {
-        // val array = duplicate().array().copyOfRange(0, position())
         array()[position() - it - 4] = (it shr 24).toByte()
         array()[position() - it - 3] = (it shr 16).toByte()
         array()[position() - it - 2] = (it shr 8).toByte()

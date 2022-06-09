@@ -31,7 +31,6 @@ abstract class EntryTypeProvider<R : EntryType> {
 
     protected fun ByteBuffer.assertEmptyAndRelease() {
         check(remaining() == 0) { "The remaining buffer is not empty. Remaining=${remaining()}" }
-//        release()
     }
 
     protected fun String.toNameHash() = fold(0) { hash, next -> next.code + ((hash shl 5) - hash) }
