@@ -10,9 +10,8 @@ import io.ktor.utils.io.ByteReadChannel
 import io.ktor.utils.io.ByteWriteChannel
 import io.ktor.utils.io.ClosedWriteChannelException
 import io.ktor.utils.io.core.buildPacket
-import io.ktor.utils.io.core.readBytes
-import it.unimi.dsi.fastutil.objects.ObjectArraySet
-import it.unimi.dsi.fastutil.objects.ObjectSets
+import io.ktor.utils.io.core.writeFully
+import io.ktor.utils.io.core.writeShort
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.TimeoutCancellationException
 import kotlinx.coroutines.channels.ClosedReceiveChannelException
@@ -25,9 +24,6 @@ import xlitekt.game.packet.assembler.PacketAssemblerListener
 import xlitekt.game.packet.disassembler.handler.PacketHandler
 import xlitekt.game.packet.disassembler.handler.PacketHandlerListener
 import xlitekt.game.world.World
-import xlitekt.shared.buffer.writeByte
-import xlitekt.shared.buffer.writeBytes
-import xlitekt.shared.buffer.writeShort
 import xlitekt.shared.inject
 import xlitekt.shared.lazy
 import java.io.IOException
@@ -47,7 +43,7 @@ class Client(
     lateinit var serverCipher: ISAAC
     lateinit var player: Player
 
-    private val writePool = ObjectSets.synchronize(ObjectArraySet<Packet>(64))
+    private val writePool = ArrayList<Packet>(64)
     private val readPool = NonBlockingHashSet<PacketHandler<Packet>>()
 
     fun disconnect(reason: String) {
@@ -95,12 +91,12 @@ class Client(
                 }
                 val invoke = assembler.packet.invoke(packet)
                 if (assembler.opcode > Byte.MAX_VALUE) {
-                    writeByte { 128 + serverCipher.getNext() }
+                    writeByte((128 + serverCipher.getNext()).toByte())
                 }
-                writeByte { assembler.opcode + serverCipher.getNext() and 0xff }
-                if (assembler.size == -1) writeByte(invoke.remaining::toInt)
-                else if (assembler.size == -2) writeShort(invoke.remaining::toInt)
-                writeBytes(invoke::readBytes)
+                writeByte((assembler.opcode + serverCipher.getNext() and 0xff).toByte())
+                if (assembler.size == -1) writeByte(invoke.size.toByte())
+                else if (assembler.size == -2) writeShort(invoke.size.toShort())
+                writeFully(invoke)
             }
             writePool.clear()
         }
@@ -108,9 +104,10 @@ class Client(
             // This way we only have to suspend once per client.
             runBlocking(Dispatchers.IO) {
                 it.writePacket(readPacket)
-                it.flush()
             }
+            it.flush()
         }
+        readPacket.release()
     }
 
     internal fun invokeAndClearReadPool() {

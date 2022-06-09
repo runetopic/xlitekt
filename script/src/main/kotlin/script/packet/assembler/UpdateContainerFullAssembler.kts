@@ -1,8 +1,8 @@
 package script.packet.assembler
 
-import io.ktor.utils.io.core.buildPacket
 import xlitekt.game.packet.UpdateContainerFullPacket
 import xlitekt.game.packet.assembler.onPacketAssembler
+import xlitekt.shared.buffer.allocateDynamic
 import xlitekt.shared.buffer.writeByteAdd
 import xlitekt.shared.buffer.writeInt
 import xlitekt.shared.buffer.writeShort
@@ -14,7 +14,7 @@ import kotlin.math.min
  * @author Tyler Telis
  */
 onPacketAssembler<UpdateContainerFullPacket>(opcode = 88, size = -2) {
-    buildPacket {
+    allocateDynamic(256) {
         writeInt { packedInterface }
         writeShort { containerKey }
         writeShort(items::size)

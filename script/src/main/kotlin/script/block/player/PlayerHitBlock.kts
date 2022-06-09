@@ -1,9 +1,9 @@
 package script.block.player
 
-import io.ktor.utils.io.core.buildPacket
-import io.ktor.utils.io.core.readBytes
 import xlitekt.game.actor.render.Render.Hit
 import xlitekt.game.actor.render.block.onPlayerUpdateBlock
+import xlitekt.shared.buffer.allocate
+import xlitekt.shared.buffer.allocateDynamic
 import xlitekt.shared.buffer.writeByte
 import xlitekt.shared.buffer.writeByteAdd
 import xlitekt.shared.buffer.writeByteNegate
@@ -14,15 +14,15 @@ import xlitekt.shared.buffer.writeSmart
  * @author Jordan Abraham
  */
 onPlayerUpdateBlock<Hit>(1, 0x4) {
-    val splatsNormal = buildPacket {
+    val splatsNormal = allocateDynamic(splats.size * 6) {
         splats.forEach {
             writeSmart(it.type::id)
             writeSmart(it::damage)
             writeSmart(it::delay)
         }
-    }.readBytes()
+    }
 
-    val splatsTinted = buildPacket {
+    val splatsTinted = allocateDynamic(splats.size * 6) {
         splats.forEach {
             val type = it.type
             val interacting = it.isInteracting(actor, it.source)
@@ -30,18 +30,18 @@ onPlayerUpdateBlock<Hit>(1, 0x4) {
             writeSmart(it::damage)
             writeSmart(it::delay)
         }
-    }.readBytes()
+    }
 
-    val barsNormal = buildPacket {
+    val barsNormal = allocateDynamic(bars.size * 7) {
         bars.forEach {
             writeSmart(it::id)
             writeSmart { 0 }
             writeSmart { 0 }
             writeByteAdd { it.percentage(actor) }
         }
-    }.readBytes()
+    }
 
-    buildPacket {
+    allocate(splatsNormal.size + splatsTinted.size + (barsNormal.size * 2) + 4) {
         // Normal block.
         writeByte(splats::size)
         writeBytes { splatsNormal }

@@ -1,10 +1,8 @@
 package xlitekt.game.actor.render.block.body
 
-import io.ktor.utils.io.core.BytePacketBuilder
-import io.ktor.utils.io.core.buildPacket
-import io.ktor.utils.io.core.readBytes
 import xlitekt.game.actor.render.Render
 import xlitekt.game.content.container.equipment.Equipment
+import java.nio.ByteBuffer
 
 /**
  * @author Jordan Abraham
@@ -29,9 +27,12 @@ class BodyPartBuilder(
 ) {
     var data: ByteArray? = null
 
-    inline fun bodyPart(builder: BytePacketBuilder.(Int) -> Unit) {
-        val bodyPart = buildPacket { builder.invoke(this, kit) }
-        this.data = bodyPart.readBytes()
-        bodyPart.release()
+    inline fun bodyPart(builder: ByteBuffer.(Int) -> Unit) {
+        val buffer = ByteBuffer.allocate(4)
+        builder.invoke(buffer, kit)
+        val pos = buffer.position()
+        val final = ByteBuffer.allocate(pos)
+        final.put(buffer.array(), 0, pos)
+        this.data = final.array()
     }
 }

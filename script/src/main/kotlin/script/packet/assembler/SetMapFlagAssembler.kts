@@ -1,8 +1,8 @@
 package script.packet.assembler
 
-import io.ktor.utils.io.core.buildPacket
 import xlitekt.game.packet.SetMapFlagPacket
 import xlitekt.game.packet.assembler.onPacketAssembler
+import xlitekt.shared.buffer.allocate
 import xlitekt.shared.buffer.writeByte
 
 /**
@@ -10,7 +10,7 @@ import xlitekt.shared.buffer.writeByte
  * @author Tyler Telis
  */
 onPacketAssembler<SetMapFlagPacket>(opcode = 93, size = 2) {
-    buildPacket {
+    allocate(2) {
         writeByte { destinationX }
         writeByte { destinationZ }
     }

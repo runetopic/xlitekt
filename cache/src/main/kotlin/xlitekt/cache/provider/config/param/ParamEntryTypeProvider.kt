@@ -1,11 +1,11 @@
 package xlitekt.cache.provider.config.param
 
-import io.ktor.utils.io.core.ByteReadPacket
-import io.ktor.utils.io.core.readInt
-import io.ktor.utils.io.core.readUByte
 import xlitekt.cache.provider.EntryTypeProvider
 import xlitekt.cache.provider.config.ScriptType
+import xlitekt.shared.buffer.readInt
 import xlitekt.shared.buffer.readStringCp1252NullTerminated
+import xlitekt.shared.buffer.readUByte
+import java.nio.ByteBuffer
 
 /**
  * @author Jordan Abraham
@@ -15,13 +15,13 @@ class ParamEntryTypeProvider : EntryTypeProvider<ParamEntryType>() {
         .index(CONFIG_INDEX)
         .group(PARAM_CONFIG)
         .files()
-        .map { ByteReadPacket(it.data).loadEntryType(ParamEntryType(it.id)) }
+        .map { ByteBuffer.wrap(it.data).loadEntryType(ParamEntryType(it.id)) }
         .associateBy(ParamEntryType::id)
 
-    override tailrec fun ByteReadPacket.loadEntryType(type: ParamEntryType): ParamEntryType {
-        when (val opcode = readUByte().toInt()) {
+    override tailrec fun ByteBuffer.loadEntryType(type: ParamEntryType): ParamEntryType {
+        when (val opcode = readUByte()) {
             0 -> { assertEmptyAndRelease(); return type }
-            1 -> readUByte().toInt().toChar().apply {
+            1 -> readUByte().toChar().apply {
                 type.type = enumValues<ScriptType>().find { it.key == this }
             }
             2 -> type.defaultInt = readInt()

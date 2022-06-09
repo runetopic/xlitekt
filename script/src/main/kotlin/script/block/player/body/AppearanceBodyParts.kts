@@ -6,14 +6,10 @@ import xlitekt.game.actor.render.block.body.onBodyPart
 import xlitekt.game.content.container.equipment.Equipment
 import xlitekt.shared.buffer.writeByte
 import xlitekt.shared.buffer.writeShort
-import xlitekt.shared.inject
-import xlitekt.shared.resource.ItemInfoMap
 
 /**
  * @author Jordan Abraham
  */
-
-val itemInfoMap by inject<ItemInfoMap>()
 
 /**
  * The head.
@@ -98,10 +94,7 @@ onBodyPart(index = Equipment.SLOT_OFFHAND) {
  */
 onBodyPart(index = 6, BodyPart.Arms) {
     bodyPart {
-        val torso = equipment.torso ?: return@bodyPart writeShort { 0x100 + kit }
-        val info = itemInfoMap[torso.id]?.equipment ?: return@bodyPart writeShort { 0x100 + kit }
-
-        if (info.hideArms == true) {
+        if (equipment.torso != null) {
             writeByte { 0 } // Hide arms.
         } else {
             writeShort { 0x100 + kit }
@@ -127,10 +120,7 @@ onBodyPart(index = Equipment.SLOT_LEGS, BodyPart.Legs) {
  */
 onBodyPart(index = 8, BodyPart.Head) {
     bodyPart {
-        val head = equipment.head ?: return@bodyPart writeShort { 0x100 + kit }
-        val itemInfo = itemInfoMap[head.id]?.equipment ?: return@bodyPart writeByte { 0 } // Hide hair.
-
-        if (itemInfo.hideHair == true) {
+        if (equipment.head != null) {
             writeByte { 0 } // Hide hair.
         } else {
             writeShort { 0x100 + kit }
@@ -170,19 +160,13 @@ onBodyPart(index = Equipment.SLOT_FEET, BodyPart.Feet) {
 onBodyPart(index = 11, BodyPart.Jaw) {
     bodyPart {
         val slot = if (gender == Gender.Male) Equipment.SLOT_HEAD else Equipment.SLOT_TORSO
-
         when (gender) {
-            Gender.Male -> {
-                val head = equipment.head ?: return@bodyPart writeShort { 0x100 + kit }
-                val itemInfo = itemInfoMap[head.id]?.equipment ?: return@bodyPart writeShort { 0x100 + kit }
-
-                if (itemInfo.showBeard == false) {
-                    writeByte { 0 } // Hide beard.
-                } else {
-                    writeShort { 0x100 + kit }
-                }
+            Gender.Male -> if (equipment[slot] != null) {
+                writeByte { 0 } // Hide beard.
+            } else {
+                writeShort { 0x100 + kit }
             }
-            else -> writeByte(0)
+            else -> writeByte { 0 }
         }
     }
 }

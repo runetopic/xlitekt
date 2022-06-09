@@ -1,8 +1,8 @@
 package xlitekt.cache.provider.config.varc
 
-import io.ktor.utils.io.core.ByteReadPacket
-import io.ktor.utils.io.core.readUByte
 import xlitekt.cache.provider.EntryTypeProvider
+import xlitekt.shared.buffer.readUByte
+import java.nio.ByteBuffer
 
 /**
  * @author Jordan Abraham
@@ -13,11 +13,11 @@ class VarcEntryTypeProvider : EntryTypeProvider<VarcEntryType>() {
         .index(CONFIG_INDEX)
         .group(VARC_CONFIG)
         .files()
-        .map { ByteReadPacket(it.data).loadEntryType(VarcEntryType(it.id)) }
+        .map { ByteBuffer.wrap(it.data).loadEntryType(VarcEntryType(it.id)) }
         .associateBy(VarcEntryType::id)
 
-    override tailrec fun ByteReadPacket.loadEntryType(type: VarcEntryType): VarcEntryType {
-        when (val opcode = readUByte().toInt()) {
+    override tailrec fun ByteBuffer.loadEntryType(type: VarcEntryType): VarcEntryType {
+        when (val opcode = readUByte()) {
             0 -> { assertEmptyAndRelease(); return type }
             2 -> type.persist = true
             else -> throw IllegalArgumentException("Missing opcode $opcode.")

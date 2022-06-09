@@ -1,6 +1,5 @@
 package script.packet.assembler
 
-import io.ktor.utils.io.core.*
 import org.jctools.maps.NonBlockingHashMapLong
 import script.packet.assembler.NPCInfoPacketAssembler.ActivityUpdateType.Adding
 import script.packet.assembler.NPCInfoPacketAssembler.ActivityUpdateType.Moving
@@ -14,32 +13,38 @@ import xlitekt.game.packet.assembler.onPacketAssembler
 import xlitekt.game.world.map.Location
 import xlitekt.game.world.map.withinDistance
 import xlitekt.shared.buffer.BitAccess
+import xlitekt.shared.buffer.allocateDynamic
 import xlitekt.shared.buffer.withBitAccess
 import xlitekt.shared.buffer.writeBytes
-import java.util.*
+import java.nio.ByteBuffer
+import java.util.Optional
 
 /**
  * @author Jordan Abraham
  * @author Tyler Telis
  */
 onPacketAssembler<NPCInfoPacket>(opcode = 78, size = -2) {
-    buildPacket {
-        val blocks = BytePacketBuilder()
+    allocateDynamic(25_000) {
+        val blocks = ByteBuffer.allocate(5000)
         withBitAccess {
             writeBits(8, viewport.npcs::size)
             highDefinition(viewport, blocks, highDefinitionUpdates, movementStepsUpdates)
             lowDefinition(viewport, blocks, highDefinitionUpdates)
-            if (blocks.size > 0) {
+            if (blocks.position() > 0) {
                 writeBits(15, Short.MAX_VALUE::toInt)
             }
         }
-        writePacket(blocks.build())
+        val pos = blocks.position()
+        val final = ByteBuffer.allocate(pos)
+        final.put(blocks.array(), 0, pos)
+        writeBytes(final::array)
+        // writePacket(blocks.build())
     }
 }
 
 fun BitAccess.highDefinition(
     viewport: Viewport,
-    blocks: BytePacketBuilder,
+    blocks: ByteBuffer,
     highDefinitionUpdates: NonBlockingHashMapLong<Optional<ByteArray>>,
     movementStepsUpdates: NonBlockingHashMapLong<Optional<MovementStep>>
 ) {
@@ -63,7 +68,7 @@ fun BitAccess.highDefinition(
     viewport.npcs.removeAll { !it.location.withinDistance(playerLocation) }
 }
 
-fun BitAccess.lowDefinition(viewport: Viewport, blocks: BytePacketBuilder, highDefinitionUpdates: NonBlockingHashMapLong<Optional<ByteArray>>) {
+fun BitAccess.lowDefinition(viewport: Viewport, blocks: ByteBuffer, highDefinitionUpdates: NonBlockingHashMapLong<Optional<ByteArray>>) {
     val player = viewport.player
     player.zones().forEach { zone ->
         zone.npcs.forEach {

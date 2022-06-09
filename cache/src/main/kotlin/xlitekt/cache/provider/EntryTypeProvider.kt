@@ -1,20 +1,20 @@
 package xlitekt.cache.provider
 
 import com.runetopic.cache.store.Js5Store
-import io.ktor.utils.io.core.ByteReadPacket
-import io.ktor.utils.io.core.readInt
-import io.ktor.utils.io.core.readUByte
+import xlitekt.shared.buffer.readInt
 import xlitekt.shared.buffer.readStringCp1252NullTerminated
+import xlitekt.shared.buffer.readUByte
 import xlitekt.shared.buffer.readUMedium
 import xlitekt.shared.inject
 import xlitekt.shared.toBoolean
+import java.nio.ByteBuffer
 
 abstract class EntryTypeProvider<R : EntryType> {
     internal val entries by lazy(::load)
     protected val store by inject<Js5Store>()
 
     protected abstract fun load(): Map<Int, R>
-    protected abstract fun ByteReadPacket.loadEntryType(type: R): R
+    protected abstract fun ByteBuffer.loadEntryType(type: R): R
     internal open fun postLoadEntryType(type: R) {}
 
     fun size() = entries.size
@@ -22,16 +22,16 @@ abstract class EntryTypeProvider<R : EntryType> {
     fun exists(id: Int): Boolean = entries.containsKey(id)
     fun entries(): Collection<R> = entries.values
 
-    protected fun ByteReadPacket.readStringIntParameters(): Map<Int, Any> = buildMap {
-        repeat(readUByte().toInt()) {
-            val usingString = readUByte().toInt().toBoolean()
+    protected fun ByteBuffer.readStringIntParameters(): Map<Int, Any> = buildMap {
+        repeat(readUByte()) {
+            val usingString = readUByte().toBoolean()
             put(readUMedium(), if (usingString) readStringCp1252NullTerminated() else readInt())
         }
     }
 
-    protected fun ByteReadPacket.assertEmptyAndRelease() {
-        check(remaining.toInt() == 0) { "The remaining buffer is not empty. Remaining=$remaining" }
-        release()
+    protected fun ByteBuffer.assertEmptyAndRelease() {
+        check(position() == array().size) { "The remaining buffer is not empty. Remaining=${array().size - position()}" }
+//        release()
     }
 
     protected fun String.toNameHash() = fold(0) { hash, next -> next.code + ((hash shl 5) - hash) }

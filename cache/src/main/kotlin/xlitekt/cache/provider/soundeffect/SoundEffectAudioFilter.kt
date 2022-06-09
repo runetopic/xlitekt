@@ -1,8 +1,8 @@
 package xlitekt.cache.provider.soundeffect
 
-import io.ktor.utils.io.core.ByteReadPacket
-import io.ktor.utils.io.core.readUByte
-import io.ktor.utils.io.core.readUShort
+import xlitekt.shared.buffer.readUByte
+import xlitekt.shared.buffer.readUShort
+import java.nio.ByteBuffer
 import kotlin.math.cos
 import kotlin.math.pow
 
@@ -15,27 +15,27 @@ data class SoundEffectAudioFilter(
     var field405: Array<Array<IntArray?>?> = Array(2) { Array(2) { IntArray(4) } },
     var field406: IntArray = IntArray(2)
 ) {
-    fun method1089(buffer: ByteReadPacket, filterEnvelope: SoundEffectEnvelope) {
-        val var3 = buffer.readUByte().toInt()
+    fun method1089(buffer: ByteBuffer, filterEnvelope: SoundEffectEnvelope) {
+        val var3 = buffer.readUByte()
         pairs[0] = var3 shr 4
         pairs[1] = var3 and 15
         if (var3 != 0) {
-            field406[0] = buffer.readUShort().toInt()
-            field406[1] = buffer.readUShort().toInt()
-            val var7 = buffer.readUByte().toInt()
+            field406[0] = buffer.readUShort()
+            field406[1] = buffer.readUShort()
+            val var7 = buffer.readUByte()
 
             repeat(2) {
                 repeat(pairs[it]) { pair ->
-                    field404[it]!![0]!![pair] = buffer.readUShort().toInt()
-                    field405[it]!![0]!![pair] = buffer.readUShort().toInt()
+                    field404[it]!![0]!![pair] = buffer.readUShort()
+                    field405[it]!![0]!![pair] = buffer.readUShort()
                 }
             }
 
             repeat(2) {
                 repeat(pairs[it]) { pair ->
                     if (var7 and (1 shl it * 4 shl pair) != 0) {
-                        field404[it]!![1]!![pair] = buffer.readUShort().toInt()
-                        field405[it]!![1]!![pair] = buffer.readUShort().toInt()
+                        field404[it]!![1]!![pair] = buffer.readUShort()
+                        field405[it]!![1]!![pair] = buffer.readUShort()
                     } else {
                         field404[it]!![1]!![pair] = field404[it]!![0]!![pair]
                         field405[it]!![1]!![pair] = field405[it]!![0]!![pair]

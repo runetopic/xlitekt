@@ -1,7 +1,8 @@
 package xlitekt.cache.provider.sprite.titlescreen
 
-import io.ktor.utils.io.core.ByteReadPacket
 import xlitekt.cache.provider.EntryTypeProvider
+import xlitekt.shared.buffer.discard
+import java.nio.ByteBuffer
 
 /**
  * @author Jordan Abraham
@@ -34,12 +35,12 @@ class TitleScreenEntryTypeProvider : EntryTypeProvider<TitleScreenEntryType>() {
         )
         val groups = glossary.map(store.index(SPRITE_INDEX)::group)
         return groups.mapIndexed { index, group ->
-            ByteReadPacket(group.data).loadEntryType(TitleScreenEntryType(group.id, name = glossary[index]))
+            ByteBuffer.wrap(group.data).loadEntryType(TitleScreenEntryType(group.id, name = glossary[index]))
         }.associateBy(TitleScreenEntryType::id)
     }
 
-    override fun ByteReadPacket.loadEntryType(type: TitleScreenEntryType): TitleScreenEntryType {
-        discard(remaining)
+    override fun ByteBuffer.loadEntryType(type: TitleScreenEntryType): TitleScreenEntryType {
+        discard(array().size - position())
         assertEmptyAndRelease()
         return type
     }

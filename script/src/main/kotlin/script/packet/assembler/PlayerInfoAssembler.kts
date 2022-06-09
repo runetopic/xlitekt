@@ -1,6 +1,5 @@
 package script.packet.assembler
 
-import io.ktor.utils.io.core.*
 import org.jctools.maps.NonBlockingHashMapLong
 import script.packet.assembler.PlayerInfoAssembler.ActivityUpdateType.Adding
 import script.packet.assembler.PlayerInfoAssembler.ActivityUpdateType.Moving
@@ -20,28 +19,36 @@ import xlitekt.game.packet.assembler.onPacketAssembler
 import xlitekt.game.world.map.Location
 import xlitekt.game.world.map.withinDistance
 import xlitekt.shared.buffer.BitAccess
+import xlitekt.shared.buffer.allocateDynamic
 import xlitekt.shared.buffer.withBitAccess
 import xlitekt.shared.buffer.writeBytes
-import java.util.*
+import java.nio.ByteBuffer
+import java.util.Optional
 import kotlin.math.abs
 
 /**
  * @author Jordan Abraham
  */
+private val blockBufferLimit = Short.MAX_VALUE.toInt()
+
 onPacketAssembler<PlayerInfoPacket>(opcode = 80, size = -2) {
-    buildPacket {
-        val blocks = BytePacketBuilder()
+    allocateDynamic(65535) {
+        val blocks = ByteBuffer.allocate(blockBufferLimit)
         viewport.resize()
         repeat(2) { highDefinition(viewport, blocks, highDefinitionUpdates, movementStepsUpdates, alternativeHighDefinitionUpdates, it == 0) }
         repeat(2) { lowDefinition(viewport, blocks, lowDefinitionUpdates, players, alternativeLowDefinitionUpdates, it == 0) }
         viewport.update()
-        writePacket(blocks.build())
+        val pos = blocks.position()
+        val final = ByteBuffer.allocate(pos)
+        final.put(blocks.array(), 0, pos)
+        writeBytes(final::array)
+        // writePacket(blocks.build())
     }
 }
 
-fun BytePacketBuilder.highDefinition(
+fun ByteBuffer.highDefinition(
     viewport: Viewport,
-    blocks: BytePacketBuilder,
+    blocks: ByteBuffer,
     highDefinitionUpdates: NonBlockingHashMapLong<Optional<ByteArray>>,
     movementStepsUpdates: NonBlockingHashMapLong<Optional<MovementStep>>,
     alternativeHighDefinitionUpdates: NonBlockingHashMapLong<Optional<ByteArray>>,
@@ -85,9 +92,9 @@ fun BytePacketBuilder.highDefinition(
     skipPlayers(skip)
 }
 
-fun BytePacketBuilder.lowDefinition(
+fun ByteBuffer.lowDefinition(
     viewport: Viewport,
-    blocks: BytePacketBuilder,
+    blocks: ByteBuffer,
     lowDefinitionUpdates: NonBlockingHashMapLong<Optional<ByteArray>>,
     players: NonBlockingHashMapLong<Player>,
     alternativeLowDefinitionUpdates: NonBlockingHashMapLong<Optional<ByteArray>>,
@@ -100,7 +107,7 @@ fun BytePacketBuilder.lowDefinition(
         val other = players[index.toLong()]
         val updates = other?.let { lowDefinitionUpdates[other.indexL] } ?: Optional.empty()
         // Check the activities this player is doing.
-        val activity = viewport.lowDefinitionActivities(other, updates, blocks.size + ((bitIndex + 7) / 8))
+        val activity = viewport.lowDefinitionActivities(other, updates, blocks.position() + ((bitIndex + 7) / 8))
         if (other == null || activity == null) {
             viewport.setNsn(index)
             skip++
@@ -165,7 +172,7 @@ fun Viewport.lowDefinitionActivities(other: Player?, updates: Optional<ByteArray
     val theirLocation = other?.location ?: Location.None
     return when {
         // If the player needs to be added from low definition to high definition.
-        size <= Short.MAX_VALUE && other?.isOnline() == true && theirLocation != Location.None && theirLocation.withinDistance(ourLocation, viewDistance) -> Adding
+        size + (updates.orElse(byteArrayOf())?.size ?: 0) <= blockBufferLimit && other?.isOnline() == true && theirLocation != Location.None && theirLocation.withinDistance(ourLocation, viewDistance) -> Adding
         updates.isEmpty -> null
         else -> null
     }

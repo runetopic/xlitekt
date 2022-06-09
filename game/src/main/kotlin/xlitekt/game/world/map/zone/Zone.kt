@@ -1,7 +1,5 @@
 package xlitekt.game.world.map.zone
 
-import io.ktor.utils.io.core.buildPacket
-import io.ktor.utils.io.core.readBytes
 import org.jctools.maps.NonBlockingHashSet
 import xlitekt.game.actor.Actor
 import xlitekt.game.actor.npc.NPC
@@ -23,8 +21,6 @@ import xlitekt.game.world.map.GameObject
 import xlitekt.game.world.map.Location
 import xlitekt.game.world.map.localX
 import xlitekt.game.world.map.localZ
-import xlitekt.shared.buffer.writeByte
-import xlitekt.shared.buffer.writeBytes
 import xlitekt.shared.inject
 
 /**
@@ -49,17 +45,17 @@ class Zone(
      */
     fun invokeUpdateRequests(player: Player): Zone {
         val updates = HashSet<Packet>(requestSize())
-        for (request in mapProjRequests) {
-            updates.addMapProjAnim(request)
-        }
+//        for (request in mapProjRequests) {
+//            updates.addMapProjAnim(request)
+//        }
         for (request in objRequests) {
             val obj = request.key
             if (request.value) updates.addObj(player, obj) else updates.delObj(player, obj)
         }
-        for (request in locRequests) {
-            val loc = request.key
-            if (request.value) updates.addLoc(player, loc) else updates.delLoc(player, loc)
-        }
+//        for (request in locRequests) {
+//            val loc = request.key
+//            if (request.value) updates.addLoc(player, loc) else updates.delLoc(player, loc)
+//        }
         updates.write(player, location)
         return this
     }
@@ -114,15 +110,15 @@ class Zone(
                 if (!zone.active()) {
                     continue
                 }
-                val updates = HashSet<Packet>(requestSize())
+//                val updates = HashSet<Packet>(requestSize())
                 // If zone contains any of the following, send them to the client.
-                for (obj in zone.objsSpawned) {
-                    updates.addObj(actor, obj)
-                }
-                for (loc in zone.locsSpawned) {
-                    updates.addLoc(actor, loc)
-                }
-                updates.write(actor, zone.location)
+//                for (obj in zone.objsSpawned.filter { it !in objRequests }) {
+//                    updates.addObj(actor, obj)
+//                }
+//                for (loc in zone.locsSpawned.filter { it !in locRequests }) {
+//                    updates.addLoc(actor, loc)
+//                }
+//                updates.write(actor, zone.location)
             }
             players.add(actor)
         } else if (actor is NPC) {
@@ -343,12 +339,10 @@ private fun HashSet<Packet>.write(player: Player, baseLocation: Location) {
         player.write(first())
         return
     }
-    val bytes = buildPacket {
-        for (packet in this@write) {
-            writeByte(ZoneUpdate.zoneUpdateMap[packet::class]!!::index)
-            val assembler = PacketAssemblerListener.listeners[packet::class]!!
-            writeBytes(assembler.packet.invoke(packet)::readBytes)
-        }
-    }.readBytes()
+    var bytes = byteArrayOf()
+    for (packet in this) {
+        val block = PacketAssemblerListener.listeners[packet::class]!!
+        bytes += byteArrayOf(ZoneUpdate.zoneUpdateMap[packet::class]!!.index.toByte()) + block.packet.invoke(packet)
+    }
     player.write(UpdateZonePartialEnclosedPacket(localX, localZ, bytes))
 }

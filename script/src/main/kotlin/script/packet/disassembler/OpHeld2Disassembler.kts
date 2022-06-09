@@ -1,8 +1,8 @@
 package script.packet.disassembler
 
-import io.ktor.utils.io.core.readIntLittleEndian
 import xlitekt.game.packet.OpHeldPacket
 import xlitekt.game.packet.disassembler.onPacketDisassembler
+import xlitekt.shared.buffer.readIntLittleEndian
 import xlitekt.shared.buffer.readUShortLittleEndian
 
 /**

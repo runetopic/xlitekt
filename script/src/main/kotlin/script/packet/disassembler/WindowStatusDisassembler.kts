@@ -1,8 +1,9 @@
 package script.packet.disassembler
 
-import io.ktor.utils.io.core.readUShort
 import xlitekt.game.packet.WindowStatusPacket
 import xlitekt.game.packet.disassembler.onPacketDisassembler
+import xlitekt.shared.buffer.readByte
+import xlitekt.shared.buffer.readUShort
 
 /**
  * @author Jordan Abraham
@@ -10,8 +11,8 @@ import xlitekt.game.packet.disassembler.onPacketDisassembler
  */
 onPacketDisassembler(opcode = 48, size = 5) {
     WindowStatusPacket(
-        displayMode = readByte().toInt(),
-        width = readUShort().toInt(),
-        height = readUShort().toInt()
+        displayMode = readByte(),
+        width = readUShort(),
+        height = readUShort()
     )
 }
