@@ -4,8 +4,6 @@ import xlitekt.cache.provider.config.npc.NPCEntryTypeProvider
 import xlitekt.game.actor.Actor
 import xlitekt.game.event.EventBus
 import xlitekt.game.event.impl.Events
-import xlitekt.game.queue.ActorQueue
-import xlitekt.game.queue.NPCQueue
 import xlitekt.game.world.map.Location
 import xlitekt.shared.lazy
 
@@ -18,7 +16,6 @@ class NPC(
     override var location: Location,
 ) : Actor(location) {
     inline val entry get() = lazy<NPCEntryTypeProvider>().entryType(id)
-    override val queue: ActorQueue<NPC> = NPCQueue(this)
 
     fun init() {
         previousLocation = location

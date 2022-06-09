@@ -54,6 +54,13 @@ class Inventory(
         if (addItem(item)) function.invoke(item, slotId(item))
     }
 
+    fun removeItem(item: Item, slotId: Int = slotId(item), function: (Item).(List<Int>) -> Unit) {
+        remove(slotId, item) { slots ->
+            refreshSlots(slots)
+            function.invoke(item, slots)
+        }
+    }
+
     fun removeItem(slotId: Int, item: Item, function: (Item).(List<Int>) -> Unit) {
         remove(slotId, item) { slots ->
             refreshSlots(slots)

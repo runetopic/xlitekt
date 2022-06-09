@@ -1,6 +1,7 @@
 package xlitekt.game.actor
 
 import it.unimi.dsi.fastutil.ints.IntArrayList
+import java.util.Optional
 import org.jctools.maps.NonBlockingHashMapLong
 import xlitekt.game.actor.bonus.Bonuses
 import xlitekt.game.actor.movement.Movement
@@ -35,27 +36,28 @@ import xlitekt.game.actor.render.block.LowDefinitionRenderingBlock
 import xlitekt.game.actor.render.block.NPCRenderingBlockListener
 import xlitekt.game.actor.render.block.PlayerRenderingBlockListener
 import xlitekt.game.actor.render.block.RenderingBlock
-import xlitekt.game.queue.ActorQueue
+import xlitekt.game.queue.ActorScriptQueue
+import xlitekt.game.queue.QueuedScriptPriority
+import xlitekt.game.queue.SuspendableQueuedScript
 import xlitekt.game.world.World
 import xlitekt.game.world.map.GameObject
 import xlitekt.game.world.map.Location
 import xlitekt.game.world.map.directionTo
 import xlitekt.game.world.map.zone.Zone
 import xlitekt.shared.inject
-import java.util.Optional
 
 /**
  * @author Tyler Telis
  * @author Jordan Abraham
  */
 abstract class Actor(
-    open var location: Location
+    open var location: Location,
 ) {
     val movement = Movement()
     val bonuses = Bonuses()
     var previousLocation = Location.None
 
-    abstract val queue: ActorQueue<out Actor>
+    val queue = ActorScriptQueue()
 
     /**
      * This actor index.
@@ -297,11 +299,10 @@ fun Actor.angleTo(npc: NPC) {
 }
 
 /**
- * Cancels weak actions this actor is doing.
- *
+ * Cancels all the actions an actor is doing.
  */
-fun Actor.cancelWeak() {
-    queue.cancelWeak()
+fun Actor.cancelAll() {
+    queue.cancelAllScripts()
 }
 
 /**
@@ -326,7 +327,7 @@ fun Actor.resetMovement(resetFlag: Boolean = false) {
  * @param location The location to teleport to.
  */
 inline fun Actor.teleportTo(location: () -> Location) {
-    cancelWeak()
+    cancelAll()
     movement.route(location.invoke(), true)
 }
 
@@ -348,21 +349,21 @@ inline fun Actor.speed(running: () -> Boolean) = running.invoke().also {
  * @param reachAction A callback function to invoke when the actor reaches the destination.
  */
 fun Actor.routeTo(location: Location, reachAction: (() -> Unit)? = null) {
-    queue.strong {
+    this.queue(priority = QueuedScriptPriority.Strong) {
         resetMovement()
         val route = PathFinders.findPath(
-            smart = this is Player,
-            srcX = this.location.x,
-            srcZ = this.location.z,
+            smart = true,
+            srcX = executor.location.x,
+            srcZ = executor.location.z,
             destX = location.x,
             destZ = location.z,
-            level = this.location.level
+            level = executor.location.level
         )
         movement.route(
             MovementRequest(
                 reachAction,
                 IntArrayList(route.coords.size).also { points ->
-                    route.coords.map { points.add(Location(it.x, it.y, this.location.level).packedLocation) }
+                    route.coords.map { points.add(Location(it.x, it.y, executor.location.level).packedLocation) }
                 },
                 route.failed,
                 route.alternative
@@ -377,36 +378,34 @@ fun Actor.routeTo(location: Location, reachAction: (() -> Unit)? = null) {
  * @param reachAction A callback function to invoke when the actor reaches the destination.
  */
 fun Actor.routeTo(gameObject: GameObject, reachAction: (() -> Unit)? = null) {
-    queue.strong {
-        resetMovement()
-        val dest = gameObject.location
-        val rotation = gameObject.rotation
-        val shape = gameObject.shape
-        val width = gameObject.entry?.width
-        val height = gameObject.entry?.height
-        val route = PathFinders.findPath(
-            smart = this is Player,
-            srcX = location.x,
-            srcZ = location.z,
-            destX = dest.x,
-            destZ = dest.z,
-            level = location.level,
-            destWidth = if (rotation == 0 || rotation == 2) width else height,
-            destHeight = if (rotation == 0 || rotation == 2) height else width,
-            rotation = rotation,
-            shape = shape
+    resetMovement()
+    val dest = gameObject.location
+    val rotation = gameObject.rotation
+    val shape = gameObject.shape
+    val width = gameObject.entry?.width
+    val height = gameObject.entry?.height
+    val route = PathFinders.findPath(
+        smart = this is Player,
+        srcX = location.x,
+        srcZ = location.z,
+        destX = dest.x,
+        destZ = dest.z,
+        level = location.level,
+        destWidth = if (rotation == 0 || rotation == 2) width else height,
+        destHeight = if (rotation == 0 || rotation == 2) height else width,
+        rotation = rotation,
+        shape = shape
+    )
+    movement.route(
+        MovementRequest(
+            reachAction,
+            IntArrayList(route.coords.size).also { points ->
+                route.coords.map { points.add(Location(it.x, it.y, this@routeTo.location.level).packedLocation) }
+            },
+            route.failed,
+            route.alternative
         )
-        movement.route(
-            MovementRequest(
-                reachAction,
-                IntArrayList(route.coords.size).also { points ->
-                    route.coords.map { points.add(Location(it.x, it.y, this@routeTo.location.level).packedLocation) }
-                },
-                route.failed,
-                route.alternative
-            )
-        )
-    }
+    )
 }
 
 /**
@@ -415,32 +414,30 @@ fun Actor.routeTo(gameObject: GameObject, reachAction: (() -> Unit)? = null) {
  * @param reachAction A callback function to invoke when the actor reaches the destination.
  */
 fun Actor.routeTo(npc: NPC, reachAction: (() -> Unit)? = null) {
-    queue.strong {
-        faceActor(npc::index)
-        resetMovement()
-        val dest = npc.location
-        val route = PathFinders.findPath(
-            smart = this is Player,
-            srcX = location.x,
-            srcZ = location.z,
-            destX = dest.x,
-            destZ = dest.z,
-            level = location.level,
-            destWidth = npc.entry?.size,
-            destHeight = npc.entry?.size,
-            shape = 10
+    faceActor(npc::index)
+    resetMovement()
+    val dest = npc.location
+    val route = PathFinders.findPath(
+        smart = this is Player,
+        srcX = location.x,
+        srcZ = location.z,
+        destX = dest.x,
+        destZ = dest.z,
+        level = location.level,
+        destWidth = npc.entry?.size,
+        destHeight = npc.entry?.size,
+        shape = 10
+    )
+    movement.route(
+        MovementRequest(
+            reachAction,
+            IntArrayList(route.coords.size).also { points ->
+                route.coords.map { points.add(Location(it.x, it.y, this@routeTo.location.level).packedLocation) }
+            },
+            route.failed,
+            route.alternative
         )
-        movement.route(
-            MovementRequest(
-                reachAction,
-                IntArrayList(route.coords.size).also { points ->
-                    route.coords.map { points.add(Location(it.x, it.y, this@routeTo.location.level).packedLocation) }
-                },
-                route.failed,
-                route.alternative
-            )
-        )
-    }
+    )
 }
 
 /**
@@ -544,13 +541,7 @@ private inline fun Actor.faceLocation(location: () -> Location) {
     render(FaceLocation(location.invoke()))
 }
 
-/**
- * This will process the actor and go through the queued scripts to process.
- */
-fun Actor.processQueue() {
-    while (queue.isNotEmpty()) {
-        val count = queue.process()
-
-        if (count == 0) break
-    }
+fun Actor.queue(priority: QueuedScriptPriority = QueuedScriptPriority.Normal, task: SuspendableQueuedScript<Actor>): Boolean {
+    queue.queue(this, priority, task)
+    return true
 }

@@ -1,6 +1,6 @@
 package script.ui
 
-import xlitekt.game.actor.cancelWeak
+import xlitekt.game.actor.cancelAll
 import xlitekt.game.actor.player.renderAppearance
 import xlitekt.game.content.item.FloorItem
 import xlitekt.game.content.ui.UserInterface
@@ -13,7 +13,7 @@ onInterface<UserInterface.Inventory> {
 
         if (item.id != it.fromItemId) return@onOpHeld
 
-        cancelWeak()
+        cancelAll()
 
         when (it.index) {
             2 -> {

@@ -1,8 +1,7 @@
 package xlitekt.game.content.ui
 
-import com.github.michaelbull.logging.InlineLogger
 import xlitekt.cache.provider.config.enum.EnumEntryTypeProvider
-import xlitekt.game.actor.cancelWeak
+import xlitekt.game.actor.cancelAll
 import xlitekt.game.actor.player.Player
 import xlitekt.game.actor.player.message
 import xlitekt.game.actor.resetMovement
@@ -58,7 +57,7 @@ class Interfaces(
     private fun UserInterface.isInventory() = interfaceInfo.resizableChildId == INVENTORY_CHILD_ID
 
     operator fun plusAssign(userInterface: UserInterface) {
-        player.cancelWeak()
+        player.cancelAll()
         if (userInterface.isModal()) {
             if (modalOpen()) closeModal()
             player.resetMovement(true)
@@ -74,21 +73,19 @@ class Interfaces(
     }
 
     fun switchLayout(toLayout: InterfaceLayout) {
-        player.queue.soft {
-            if (toLayout == currentInterfaceLayout) return@soft
-            openTop(toLayout.interfaceId)
-            val switch = {
-                closeModal()
-                gameInterfaces.forEach { moveSub(it, toLayout) }
-                currentInterfaceLayout = toLayout
+        if (toLayout == currentInterfaceLayout) return
+        openTop(toLayout.interfaceId)
+        val switch = {
+            closeModal()
+            gameInterfaces.forEach { moveSub(it, toLayout) }
+            currentInterfaceLayout = toLayout
+        }
+        when (currentModal()) {
+            UserInterface.AdvancedSettings -> {
+                switch()
+                openInterface(UserInterface.AdvancedSettings)
             }
-            when (currentModal()) {
-                UserInterface.AdvancedSettings -> {
-                    switch()
-                    openInterface(UserInterface.AdvancedSettings)
-                }
-                else -> switch()
-            }
+            else -> switch()
         }
     }
 

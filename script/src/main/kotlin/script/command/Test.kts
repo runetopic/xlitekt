@@ -1,10 +1,14 @@
 package script.command
 
+import xlitekt.game.actor.animate
+import xlitekt.game.actor.player.addExperience
 import xlitekt.game.actor.player.message
+import xlitekt.game.actor.queue
 import xlitekt.game.content.command.Commands.onCommand
 import xlitekt.game.content.item.FloorItem
 import xlitekt.game.content.item.Item
 import xlitekt.game.content.projectile.Projectile
+import xlitekt.game.content.skill.Skill
 import xlitekt.game.content.ui.UserInterface
 import xlitekt.game.world.map.CollisionMap
 import xlitekt.game.world.map.GameObject
@@ -18,6 +22,51 @@ onCommand("gp").use {
     inventory.addItem(Item(995, Int.MAX_VALUE)) {
         message { "Spawned max cash." }
     }
+}
+
+onCommand("fletch").use {
+    queue {
+        val player = this@use
+        val inventory = player.inventory
+
+        if (!inventory.hasItem(946)) {
+            message { "You need a knife to fletch fuck face." }
+            return@queue
+        }
+
+        var logCount = inventory.count { it?.id == 1511 }
+
+        if (logCount == 0) {
+            message { "You need logs to fletch fuck face." }
+            return@queue
+        }
+
+        while (inventory.hasItem(946) && inventory.hasItem(1511)) {
+            val level = player.skills.level(Skill.FLETCHING)
+            val experience = player.skills.xp(Skill.FLETCHING)
+
+            message { "Level $level $experience" }
+
+            logCount = inventory.count { it?.id == 1511 }
+
+            message { "Logs $logCount" }
+            animate { 1280 }
+            val log = inventory.first { it?.id == 1511 } ?: return@queue
+
+            inventory.removeItem(log) {
+                inventory.addItem(Item(52, 3)) {
+                    message { "You make some fucking arrow shafts because that's all you know how to make." }
+                    addExperience(Skill.FLETCHING, 5_000.0)
+                }
+            }
+
+            wait(5)
+        }
+    }
+}
+
+onCommand("xp").use {
+    message { "${Skill.getLevelForXp(30_000.0)}" }
 }
 
 onCommand("add").use {

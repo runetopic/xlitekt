@@ -1,6 +1,8 @@
 package xlitekt.game.actor.player
 
 // ktlint-disable no-wildcard-imports
+import kotlin.math.abs
+import kotlin.math.floor
 import kotlinx.serialization.Serializable
 import org.jctools.maps.NonBlockingHashMapLong
 import xlitekt.game.actor.Actor
@@ -23,22 +25,16 @@ import xlitekt.game.packet.MessageGamePacket
 import xlitekt.game.packet.Packet
 import xlitekt.game.packet.RebuildNormalPacket
 import xlitekt.game.packet.RunClientScriptPacket
+import xlitekt.game.packet.SetMapFlagPacket
 import xlitekt.game.packet.UpdateRunEnergyPacket
 import xlitekt.game.packet.UpdateStatPacket
 import xlitekt.game.packet.VarpLargePacket
 import xlitekt.game.packet.VarpSmallPacket
 import xlitekt.game.packet.disassembler.handler.PacketHandler
+import xlitekt.game.queue.QueuedScriptPriority
 import xlitekt.game.world.World
 import xlitekt.game.world.map.Location
 import xlitekt.shared.lazy
-import kotlin.math.abs
-import kotlin.math.floor
-import xlitekt.game.actor.processQueue
-import xlitekt.game.packet.SetMapFlagPacket
-import xlitekt.game.queue.ActorQueue
-import xlitekt.game.queue.PlayerQueue
-import xlitekt.game.queue.QueuePriority
-import xlitekt.game.queue.shouldProcess
 
 /**
  * @author Jordan Abraham
@@ -52,18 +48,17 @@ class Player(
     val rights: Int = 0,
     var weight: Float = 0f,
     val appearance: Render.Appearance = Render.Appearance().also { it.displayName = username },
-    val skills: Skills = Skills(),
     var runEnergy: Float = 10_000f,
-    var brandNew: Boolean = true
+    var brandNew: Boolean = true,
+    val skills: Skills = Skills()
 ) : Actor(location) {
+
     val viewport = Viewport(this)
     val interfaces = Interfaces(this)
     val vars = Vars(this)
     val inventory: Inventory = Inventory(this)
     val equipment: Equipment = Equipment(this)
     var lastLoadedLocation = Location.None
-
-    override val queue = PlayerQueue(this)
 
     /**
      * This players connected client. This client is used for reading and writing packets.
@@ -201,25 +196,27 @@ fun Player.drainRunEnergy() {
     updateRunEnergy()
 }
 
+fun Player.addExperience(skill: Skill, experience: Double) =
+    this.skills.addExperience(skill, experience) { level, xp -> updateStat(skill, level, xp) }
+
 fun Player.restoreRunEnergy() {
     if (movement.isMoving() && VarPlayer.ToggleRun in vars || runEnergy >= 10_000f) return
     // TODO if the player is busy/locked we dont restore energy
-    val agilityLevel = skills.level(Skill.AGILITY)
+    val agilityLevel = this.skills.level(Skill.AGILITY)
     val restore = (floor(agilityLevel.toFloat()) / 6f) + 8f
     runEnergy += restore
     updateRunEnergy()
 }
 
 fun Player.process() {
-    processQueue()
+    if (queue.any { it.priority == QueuedScriptPriority.Strong }) {
+        interfaces.closeModal()
+    }
+    queue.process()
     // This makes sure they continue running and processing until the next tick, when we need to toggle their run off if the energy is depleted, and they are running
     if (runEnergy <= 0.0f && VarPlayer.ToggleRun in vars) {
         vars.flip { VarPlayer.ToggleRun }
         speed { false }
-    }
-
-    if (queue.any { it.priority == QueuePriority.Strong }) {
-        interfaces.closeModal() // This is currently only closing 1 modal interface. I dunno is OSRS supports more than 1.
     }
     restoreRunEnergy()
 }
