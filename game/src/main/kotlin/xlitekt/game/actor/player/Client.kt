@@ -9,6 +9,7 @@ import io.ktor.util.reflect.instanceOf
 import io.ktor.utils.io.ByteReadChannel
 import io.ktor.utils.io.ByteWriteChannel
 import io.ktor.utils.io.ClosedWriteChannelException
+import io.ktor.utils.io.close
 import io.ktor.utils.io.core.buildPacket
 import io.ktor.utils.io.core.writeShort
 import kotlinx.coroutines.Dispatchers
@@ -27,6 +28,7 @@ import xlitekt.shared.inject
 import xlitekt.shared.lazy
 import java.io.IOException
 import java.net.SocketException
+import java.nio.BufferOverflowException
 
 /**
  * @author Jordan Abraham
@@ -50,7 +52,10 @@ class Client(
         if (::player.isInitialized) {
             player.let(lazy<World>()::requestLogout)
         }
+        writeChannel?.close()
         socket?.close()
+        readPool.clear()
+        writePool.clear()
     }
 
     fun setIsaacCiphers(clientCipher: ISAAC, serverCipher: ISAAC) {
@@ -86,22 +91,28 @@ class Client(
                 val assembler = PacketAssemblerListener.listeners[packet::class]
                 if (assembler == null) {
                     disconnect("Unhandled packet found when trying to write. Packet was $packet.")
-                    return
+                    return@buildPacket
                 }
-                val invoke = assembler.packet.invoke(packet)
-                if (assembler.opcode > Byte.MAX_VALUE) {
-                    writeByte((128 + serverCipher.getNext()).toByte())
-                }
-                writeByte((assembler.opcode + serverCipher.getNext() and 0xff).toByte())
-                if (assembler.size == -1) writeByte(invoke.size.toByte())
-                else if (assembler.size == -2) writeShort(invoke.size.toShort())
-                repeat(invoke.size) {
-                    writeByte(invoke[it])
+                try {
+                    val invoke = assembler.packet.invoke(packet)
+                    if (assembler.opcode > Byte.MAX_VALUE) {
+                        writeByte((128 + serverCipher.getNext()).toByte())
+                    }
+                    writeByte((assembler.opcode + serverCipher.getNext() and 0xff).toByte())
+                    if (assembler.size == -1) writeByte(invoke.size.toByte())
+                    else if (assembler.size == -2) writeShort(invoke.size.toShort())
+                    repeat(invoke.size) {
+                        writeByte(invoke[it])
+                    }
+                } catch (exception: BufferOverflowException) {
+                    disconnect(exception.toString())
+                    return@buildPacket
                 }
             }
             writePool.clear()
         }
         writeChannel?.let {
+            if (it.isClosedForWrite) return
             // This way we only have to suspend once per client.
             runBlocking(Dispatchers.IO) {
                 it.writePacket(readPacket)
