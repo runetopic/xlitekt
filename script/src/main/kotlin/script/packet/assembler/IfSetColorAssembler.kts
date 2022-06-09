@@ -12,7 +12,7 @@ import xlitekt.shared.buffer.writeShortLittleEndian
  */
 onPacketAssembler<IfSetColorPacket>(opcode = 62, size = 6) {
     allocate(6) {
-        writeIntV2 { packedInterface }
-        writeShortLittleEndian { color }
+        writeIntV2(packedInterface)
+        writeShortLittleEndian(color)
     }
 }

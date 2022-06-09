@@ -11,7 +11,7 @@ import xlitekt.shared.buffer.writeByteAdd
  */
 onPacketAssembler<LocDelPacket>(opcode = 66, size = 2) {
     allocate(2) {
-        writeByte { (shape shl 2) or (rotation and 0x3) }
-        writeByteAdd { packedOffset }
+        writeByte((shape shl 2) or (rotation and 0x3))
+        writeByteAdd(packedOffset)
     }
 }

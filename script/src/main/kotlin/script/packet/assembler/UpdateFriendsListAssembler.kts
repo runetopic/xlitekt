@@ -16,18 +16,18 @@ import xlitekt.shared.toInt
 onPacketAssembler<UpdateFriendListPacket>(opcode = 38, size = -2) {
     allocateDynamic(256) {
         for (friend in friends) {
-            writeByte(friend.visible::toInt)
-            writeStringCp1252NullTerminated(friend::displayName)
-            writeStringCp1252NullTerminated { "" }
-            writeShort(friend.visible::toInt)
-            writeByte { 0x2 }
-            writeByte { 0x1 }
+            writeByte(friend.visible.toInt())
+            writeStringCp1252NullTerminated(friend.displayName)
+            writeStringCp1252NullTerminated("")
+            writeShort(friend.visible.toInt())
+            writeByte(0x2)
+            writeByte(0x1)
             if (friend.visible) {
-                writeStringCp1252NullTerminated { "" }
-                writeByte { 1 }
-                writeInt { 1 }
+                writeStringCp1252NullTerminated("")
+                writeByte(1)
+                writeInt(1)
             }
-            writeStringCp1252NullTerminated { "" }
+            writeStringCp1252NullTerminated("")
         }
     }
 }

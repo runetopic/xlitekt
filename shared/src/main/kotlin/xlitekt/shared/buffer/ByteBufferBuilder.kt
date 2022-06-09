@@ -1,91 +1,105 @@
 package xlitekt.shared.buffer
 
+import io.ktor.util.moveToByteArray
 import xlitekt.shared.toInt
 import java.nio.ByteBuffer
 
 /**
  * @author Jordan Abraham
  */
-inline fun allocate(limit: Int, block: ByteBuffer.() -> Unit): ByteArray = ByteBuffer.allocate(limit).also { block.invoke(it) }.array()
-inline fun allocateDynamic(limit: Int, block: ByteBuffer.() -> Unit): ByteArray {
-    val pool = ByteBuffer.allocate(limit)
-    block.invoke(pool)
-    return ByteBuffer.allocate(pool.position()).put(pool.array(), 0, pool.position()).array()
+inline fun allocate(limit: Int, block: ByteBuffer.() -> Unit): ByteArray = ByteBuffer
+    .allocate(limit)
+    .also(block)
+    .rewind()
+    .moveToByteArray()
+
+inline fun allocateDynamic(limit: Int, block: ByteBuffer.() -> Unit): ByteArray = ByteBuffer.allocate(limit).also(block).run {
+    limit(position())
+    rewind()
+    moveToByteArray()
 }
 
-inline fun ByteBuffer.writeStringCp1252NullTerminated(value: () -> String) {
-    value.invoke().toByteArray().forEach(::put)
+fun ByteBuffer.writeStringCp1252NullTerminated(value: String) {
+    value.toByteArray().forEach(::put)
     put(0)
 }
 
-inline fun ByteBuffer.writeBytes(bytes: () -> ByteArray) = bytes.invoke().forEach(::put)
-inline fun ByteBuffer.writeBytesAdd(bytes: () -> ByteArray) = bytes.invoke().forEach { writeByteAdd(it::toInt) }
-
-inline fun ByteBuffer.writeSmart(value: () -> Int) = value.invoke().also {
-    if (it > 128) putShort(it.toShort()) else put(it.toByte())
+fun ByteBuffer.writeBytes(bytes: ByteArray) {
+    bytes.forEach(::put)
 }
 
-inline fun ByteBuffer.writeByte(value: () -> Int) = value.invoke().toByte().also(::put)
-
-inline fun ByteBuffer.writeByteSubtract(value: () -> Int) = value.invoke().toByte().also {
-    put((128 - it).toByte())
+fun ByteBuffer.writeBytesAdd(bytes: ByteArray) {
+    bytes.forEach { writeByteAdd(it.toInt()) }
 }
 
-inline fun ByteBuffer.writeByteAdd(value: () -> Int) = value.invoke().toByte().also {
-    put((it + 128).toByte())
+fun ByteBuffer.writeSmart(value: Int) {
+    if (value > 128) putShort(value.toShort()) else put(value.toByte())
 }
 
-inline fun ByteBuffer.writeByteNegate(value: () -> Int) = value.invoke().toByte().also {
-    put((-it).toByte())
+fun ByteBuffer.writeByte(value: Int) {
+    put(value.toByte())
 }
 
-inline fun ByteBuffer.writeShort(value: () -> Int) = value.invoke().toShort().also(::putShort)
-
-inline fun ByteBuffer.writeShortAdd(value: () -> Int) = value.invoke().also {
-    put((it shr 8).toByte())
-    writeByteAdd { it }
+fun ByteBuffer.writeByteSubtract(value: Int) {
+    put((128 - value.toByte()).toByte())
 }
 
-inline fun ByteBuffer.writeShortLittleEndian(value: () -> Int) = value.invoke().also {
-    put(it.toByte())
-    put((it shr 8).toByte())
+fun ByteBuffer.writeByteAdd(value: Int) {
+    put((value.toByte() + 128).toByte())
 }
 
-inline fun ByteBuffer.writeShortLittleEndianAdd(value: () -> Int) = value.invoke().also {
-    writeByteAdd { it }
-    put((it shr 8).toByte())
+fun ByteBuffer.writeByteNegate(value: Int) {
+    put((-value.toByte()).toByte())
 }
 
-inline fun ByteBuffer.writeMedium(value: () -> Int) = value.invoke().also {
-    put((it shr 16).toByte())
-    putShort(it.toShort())
+fun ByteBuffer.writeShort(value: Int) {
+    putShort(value.toShort())
 }
 
-inline fun ByteBuffer.writeInt(value: () -> Int) = value.invoke().also(::putInt)
-
-inline fun ByteBuffer.writeIntLittleEndian(value: () -> Int) = value.invoke().also {
-    put(it.toByte())
-    put((it shr 8).toByte())
-    put((it shr 16).toByte())
-    put((it shr 24).toByte())
+fun ByteBuffer.writeShortAdd(value: Int) {
+    put((value shr 8).toByte())
+    writeByteAdd(value)
 }
 
-inline fun ByteBuffer.writeIntV1(value: () -> Int) = value.invoke().also {
-    putShort(it.toShort())
-    put((it shr 24).toByte())
-    put((it shr 16).toByte())
+fun ByteBuffer.writeShortLittleEndian(value: Int) {
+    put(value.toByte())
+    put((value shr 8).toByte())
 }
 
-inline fun ByteBuffer.writeIntV2(value: () -> Int) = value.invoke().also {
-    put((it shr 16).toByte())
-    put((it shr 24).toByte())
-    writeShortLittleEndian { it }
+fun ByteBuffer.writeShortLittleEndianAdd(value: Int) {
+    writeByteAdd(value)
+    put((value shr 8).toByte())
 }
 
-inline fun ByteBuffer.fill(n: Int, value: () -> Int) = value.invoke().also {
-    repeat(n) {
-        writeByte { it }
-    }
+fun ByteBuffer.writeMedium(value: Int) {
+    put((value shr 16).toByte())
+    putShort(value.toShort())
+}
+
+fun ByteBuffer.writeInt(value: Int) {
+    putInt(value)
+}
+
+fun ByteBuffer.writeIntLittleEndian(value: Int) {
+    writeShortLittleEndian(value)
+    put((value shr 16).toByte())
+    put((value shr 24).toByte())
+}
+
+fun ByteBuffer.writeIntV1(value: Int) {
+    putShort(value.toShort())
+    put((value shr 24).toByte())
+    put((value shr 16).toByte())
+}
+
+fun ByteBuffer.writeIntV2(value: Int) {
+    put((value shr 16).toByte())
+    put((value shr 24).toByte())
+    writeShortLittleEndian(value)
+}
+
+fun ByteBuffer.fill(n: Int, value: Int) {
+    repeat(n) { put(value.toByte()) }
 }
 
 inline fun ByteBuffer.withBitAccess(block: BitAccess.() -> Unit) {
@@ -98,11 +112,11 @@ class BitAccess {
     var bitIndex = 0
     val data = ByteArray(4096 * 2)
 
-    inline fun writeBit(value: () -> Boolean) = value.invoke().also {
-        writeBits(1, it::toInt)
+    fun writeBit(value: Boolean) {
+        writeBits(1, value.toInt())
     }
 
-    inline fun writeBits(count: Int, value: () -> Int) = value.invoke().also {
+    fun writeBits(count: Int, value: Int) {
         var numBits = count
 
         var byteIndex = bitIndex shr 3
@@ -111,7 +125,7 @@ class BitAccess {
 
         while (numBits > bitOffset) {
             val max = masks[bitOffset]
-            val tmp = data[byteIndex].toInt() and max.inv() or (it shr numBits - bitOffset and max)
+            val tmp = data[byteIndex].toInt() and max.inv() or (value shr numBits - bitOffset and max)
             data[byteIndex++] = tmp.toByte()
             numBits -= bitOffset
             bitOffset = 8
@@ -120,10 +134,10 @@ class BitAccess {
         var dataValue = data[byteIndex].toInt()
         val mask = masks[numBits]
         if (numBits == bitOffset) {
-            dataValue = dataValue and mask.inv() or (it and mask)
+            dataValue = dataValue and mask.inv() or (value and mask)
         } else {
             dataValue = dataValue and (mask shl bitOffset - numBits).inv()
-            dataValue = dataValue or (it and mask shl bitOffset - numBits)
+            dataValue = dataValue or (value and mask shl bitOffset - numBits)
         }
         data[byteIndex] = dataValue.toByte()
     }

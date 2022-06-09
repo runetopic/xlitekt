@@ -12,7 +12,7 @@ import xlitekt.shared.buffer.writeByteNegate
  */
 onPacketAssembler<UpdatePublicChatStatusPacket>(opcode = 32, size = 2) {
     allocate(2) {
-        writeByte { chatMode }
-        writeByteNegate { tradeMode }
+        writeByte(chatMode)
+        writeByteNegate(tradeMode)
     }
 }

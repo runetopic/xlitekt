@@ -10,6 +10,6 @@ import xlitekt.shared.buffer.writeByte
  */
 onPacketAssembler<LogoutPacket>(opcode = 20, size = 1) {
     allocate(1) {
-        writeByte { type }
+        writeByte(type)
     }
 }

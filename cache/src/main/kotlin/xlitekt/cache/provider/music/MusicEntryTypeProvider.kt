@@ -184,11 +184,11 @@ class MusicEntryTypeProvider : EntryTypeProvider<MusicEntryType>() {
         val bytes = moveToByteArray()
 
         val buffer = allocateDynamic(1_000_000) {
-            writeInt { 1297377380 }
-            writeInt { 6 }
-            writeShort { if (tracks > 1) 1 else 0 }
-            writeShort { tracks }
-            writeShort { division }
+            writeInt(1297377380)
+            writeInt(6)
+            writeShort(if (tracks > 1) 1 else 0)
+            writeShort(tracks)
+            writeShort(division)
 
             var channel = 0
             var note = 0
@@ -204,8 +204,8 @@ class MusicEntryTypeProvider : EntryTypeProvider<MusicEntryType>() {
 
             loop@
             for (var60 in 0 until tracks) {
-                writeInt { 1297379947 }
-                writeInt { 0 } // Temporary length.
+                writeInt(1297379947)
+                writeInt(0) // Temporary length.
 
                 val startSize = this@allocateDynamic.position()
                 var id = -1
@@ -216,41 +216,41 @@ class MusicEntryTypeProvider : EntryTypeProvider<MusicEntryType>() {
                     id = status and 15
                     if (status == 7) {
                         // if (var65) writeByte { 255 } This is in the client, but it breaks in midi player.
-                        writeByte { 255 } // This is the fix.
-                        writeByte { 47 }
-                        writeByte { 0 }
+                        writeByte(255) // This is the fix.
+                        writeByte(47)
+                        writeByte(0)
                         writeLengthInt { this@allocateDynamic.position() - startSize } // Replace the length from above.
                         continue@loop
                     }
                     if (status == 23) {
                         // if (var65) writeByte { 255 } This is in the client, but it breaks in midi player.
-                        writeByte { 255 } // This is the fix.
-                        writeByte { 81 }
-                        writeByte { 3 }
-                        writeByte(bytes[tempoOffset++]::toInt)
-                        writeByte(bytes[tempoOffset++]::toInt)
-                        writeByte(bytes[tempoOffset++]::toInt)
+                        writeByte(255) // This is the fix.
+                        writeByte(81)
+                        writeByte(3)
+                        writeByte(bytes[tempoOffset++].toInt())
+                        writeByte(bytes[tempoOffset++].toInt())
+                        writeByte(bytes[tempoOffset++].toInt())
                     } else {
                         channel = channel xor (status shr 4)
                         when (id) {
                             0 -> {
-                                if (switch) writeByte { channel + 144 }
+                                if (switch) writeByte(channel + 144)
                                 note += bytes[notesIndex++]
                                 noteOn += bytes[notesOnIndex++]
-                                writeByte { note and 127 }
-                                writeByte { noteOn and 127 }
+                                writeByte(note and 127)
+                                writeByte(noteOn and 127)
                             }
                             1 -> {
-                                if (switch) writeByte { channel + 128 }
+                                if (switch) writeByte(channel + 128)
                                 note += bytes[notesIndex++]
                                 noteOff += bytes[notesOffIndex++]
-                                writeByte { note and 127 }
-                                writeByte { noteOff and 127 }
+                                writeByte(note and 127)
+                                writeByte(noteOff and 127)
                             }
                             2 -> {
-                                if (switch) writeByte { channel + 176 }
+                                if (switch) writeByte(channel + 176)
                                 controllerNumber = controllerNumber + bytes[controlChangeIndex++] and 127
-                                writeByte { controllerNumber }
+                                writeByte(controllerNumber)
                                 val change = when (controllerNumber) {
                                     0, 32 -> bytes[programChangeIndex++]
                                     1 -> bytes[modulationWheelOffset++]
@@ -268,30 +268,30 @@ class MusicEntryTypeProvider : EntryTypeProvider<MusicEntryType>() {
                                 }
                                 val controlChange = change + var59[controllerNumber]
                                 var59[controllerNumber] = controlChange
-                                writeByte { controlChange and 127 }
+                                writeByte(controlChange and 127)
                             }
                             3 -> {
-                                if (switch) writeByte { channel + 224 }
+                                if (switch) writeByte(channel + 224)
                                 pitchWheel += bytes[pitchWheelLowIndex++]
                                 pitchWheel += bytes[pitchWheelHighIndex++].toInt() shl 7
-                                writeByte { pitchWheel and 127 }
-                                writeByte { pitchWheel shr 7 and 127 }
+                                writeByte(pitchWheel and 127)
+                                writeByte(pitchWheel shr 7 and 127)
                             }
                             4 -> {
-                                if (switch) writeByte { channel + 208 }
+                                if (switch) writeByte(channel + 208)
                                 channelPressure += bytes[channelPressureIndex++]
-                                writeByte { channelPressure and 127 }
+                                writeByte(channelPressure and 127)
                             }
                             5 -> {
-                                if (switch) writeByte { channel + 160 }
+                                if (switch) writeByte(channel + 160)
                                 note += bytes[notesIndex++]
                                 polyPressure += bytes[polyPressureIndex++]
-                                writeByte { note and 127 }
-                                writeByte { polyPressure and 127 }
+                                writeByte(note and 127)
+                                writeByte(polyPressure and 127)
                             }
                             6 -> {
-                                if (switch) writeByte { channel + 192 }
-                                writeByte(bytes[programChangeIndex++]::toInt)
+                                if (switch) writeByte(channel + 192)
+                                writeByte(bytes[programChangeIndex++].toInt())
                             }
                             else -> throw IllegalArgumentException("Out of bounds. Was $id.")
                         }
@@ -331,15 +331,15 @@ class MusicEntryTypeProvider : EntryTypeProvider<MusicEntryType>() {
             if (it and -16384 != 0) {
                 if (it and -2097152 != 0) {
                     if (it and -268435456 != 0) {
-                        writeByte { it ushr 28 or 128 }
+                        writeByte(it ushr 28 or 128)
                     }
-                    writeByte { it ushr 21 or 128 }
+                    writeByte(it ushr 21 or 128)
                 }
-                writeByte { it ushr 14 or 128 }
+                writeByte(it ushr 14 or 128)
             }
-            writeByte { it ushr 7 or 128 }
+            writeByte(it ushr 7 or 128)
         }
-        writeByte { it and 127 }
+        writeByte(it and 127)
     }
 
     private inline fun ByteBuffer.writeLengthInt(value: () -> Int) = value.invoke().also {

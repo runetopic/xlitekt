@@ -11,6 +11,6 @@ import xlitekt.shared.buffer.writeByte
  */
 onPacketAssembler<UpdateRunEnergyPacket>(opcode = 59, size = 1) {
     allocate(1) {
-        writeByte(energy::toInt)
+        writeByte(energy.toInt())
     }
 }

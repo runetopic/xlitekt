@@ -11,7 +11,7 @@ import xlitekt.shared.buffer.writeStringCp1252NullTerminated
  */
 onPacketAssembler<IfSetTextPacket>(opcode = 17, size = -2) {
     allocate(text.length + 1 + 4) {
-        writeStringCp1252NullTerminated { text }
-        writeIntLittleEndian { packedInterface }
+        writeStringCp1252NullTerminated(text)
+        writeIntLittleEndian(packedInterface)
     }
 }

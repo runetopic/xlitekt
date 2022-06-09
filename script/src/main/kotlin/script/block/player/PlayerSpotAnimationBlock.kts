@@ -11,7 +11,7 @@ import xlitekt.shared.buffer.writeShortAdd
  */
 onPlayerUpdateBlock<SpotAnimation>(10, 0x800) {
     allocate(6) {
-        writeShortAdd { id }
-        writeIntV2(::packedMetaData)
+        writeShortAdd(id)
+        writeIntV2(packedMetaData())
     }
 }

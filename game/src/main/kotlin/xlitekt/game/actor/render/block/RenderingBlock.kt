@@ -32,7 +32,7 @@ internal fun Collection<HighDefinitionRenderingBlock>.invokeHighDefinitionPlayer
     associateWith { it.renderingBlock.packet.invoke(it.render) }.forEach {
         player.setLowDefinitionRenderingBlock(it.key, it.value)
         player.setAlternativeRenderingBlock(it.key.render, it.key.renderingBlock, it.value)
-        writeBytes(it::value)
+        writeBytes(it.value)
     }
 }
 
@@ -42,7 +42,7 @@ internal fun Collection<HighDefinitionRenderingBlock>.invokeHighDefinitionPlayer
  */
 internal fun Collection<LowDefinitionRenderingBlock>.invokeLowDefinitionPlayerRenderingBlocks() = allocateDynamic(750) {
     writeMask(fold(0) { current, next -> current or next.renderingBlock.mask }.let { if (it > 0xff) it or 0x10 else it })
-    map(LowDefinitionRenderingBlock::bytes).forEach { writeBytes { it } }
+    map(LowDefinitionRenderingBlock::bytes).forEach(::writeBytes)
 }
 
 /**
@@ -51,7 +51,7 @@ internal fun Collection<LowDefinitionRenderingBlock>.invokeLowDefinitionPlayerRe
  */
 internal fun Collection<AlternativeDefinitionRenderingBlock>.invokeAlternativeDefinitionPlayerRenderingBlocks() = allocateDynamic(750) {
     writeMask(fold(0) { current, next -> current or next.renderingBlock.mask }.let { if (it > 0xff) it or 0x10 else it })
-    map(AlternativeDefinitionRenderingBlock::bytes).forEach { writeBytes { it } }
+    map(AlternativeDefinitionRenderingBlock::bytes).forEach(::writeBytes)
 }
 
 /**
@@ -60,9 +60,9 @@ internal fun Collection<AlternativeDefinitionRenderingBlock>.invokeAlternativeDe
  */
 internal fun Collection<HighDefinitionRenderingBlock>.invokeHighDefinitionNPCRenderingBlocks() = allocateDynamic(500) {
     writeMask(fold(0) { current, next -> current or next.renderingBlock.mask }.let { if (it > 0xff) it or 0x4 else it })
-    map { it.renderingBlock.packet.invoke(it.render) }.forEach { writeBytes { it } }
+    map { it.renderingBlock.packet.invoke(it.render) }.forEach(::writeBytes)
 }
 
 private fun ByteBuffer.writeMask(mask: Int) {
-    if (mask > 0xff) writeShortLittleEndian { mask } else writeByte { mask }
+    if (mask > 0xff) writeShortLittleEndian(mask) else writeByte(mask)
 }

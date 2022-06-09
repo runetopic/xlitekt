@@ -10,6 +10,6 @@ import xlitekt.shared.buffer.writeStringCp1252NullTerminated
  */
 onPlayerUpdateBlock<OverheadChat>(13, 0x8) {
     allocate(text.length + 1) {
-        writeStringCp1252NullTerminated { text }
+        writeStringCp1252NullTerminated(text)
     }
 }

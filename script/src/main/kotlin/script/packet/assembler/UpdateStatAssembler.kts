@@ -12,8 +12,8 @@ import xlitekt.shared.buffer.writeIntV1
  */
 onPacketAssembler<UpdateStatPacket>(opcode = 34, size = 6) {
     allocate(6) {
-        writeByte { level }
-        writeByteSubtract { skillId }
-        writeIntV1(xp::toInt)
+        writeByte(level)
+        writeByteSubtract(skillId)
+        writeIntV1(xp.toInt())
     }
 }

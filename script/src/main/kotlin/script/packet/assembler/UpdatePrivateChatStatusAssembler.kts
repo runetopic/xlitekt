@@ -10,6 +10,6 @@ import xlitekt.shared.buffer.writeByte
  */
 onPacketAssembler<UpdatePrivateChatStatusPacket>(opcode = 85, size = 1) {
     allocate(1) {
-        writeByte { mode }
+        writeByte(mode)
     }
 }

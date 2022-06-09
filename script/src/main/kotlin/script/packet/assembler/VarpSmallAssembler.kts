@@ -11,7 +11,7 @@ import xlitekt.shared.buffer.writeShort
  */
 onPacketAssembler<VarpSmallPacket>(opcode = 94, size = 3) {
     allocate(3) {
-        writeByteAdd { value }
-        writeShort { id }
+        writeByteAdd(value)
+        writeShort(id)
     }
 }

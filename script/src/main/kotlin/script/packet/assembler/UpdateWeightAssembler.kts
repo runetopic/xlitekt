@@ -10,6 +10,6 @@ import xlitekt.shared.buffer.writeShort
  */
 onPacketAssembler<UpdateWeightPacket>(opcode = 50, size = 2) {
     allocate(2) {
-        writeShort(weight::toInt)
+        writeShort(weight.toInt())
     }
 }

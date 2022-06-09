@@ -13,7 +13,7 @@ import xlitekt.shared.toInt
  */
 onPacketAssembler<IfSetHiddenPacket>(opcode = 57, size = 5) {
     allocate(5) {
-        writeByte(hidden::toInt)
-        writeIntV1 { packedInterface }
+        writeByte(hidden.toInt())
+        writeIntV1(packedInterface)
     }
 }

@@ -11,7 +11,7 @@ import xlitekt.shared.buffer.writeByte
  */
 onPacketAssembler<SetMapFlagPacket>(opcode = 93, size = 2) {
     allocate(2) {
-        writeByte { destinationX }
-        writeByte { destinationZ }
+        writeByte(destinationX)
+        writeByte(destinationZ)
     }
 }

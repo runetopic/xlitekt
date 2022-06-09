@@ -26,8 +26,8 @@ onPacketAssembler<RebuildNormalPacket>(opcode = 54, size = -2) {
         val zoneX = location.zoneX
         val zoneZ = location.zoneZ
 
-        writeShortAdd { zoneZ }
-        writeShortLittleEndian { zoneX }
+        writeShortAdd(zoneZ)
+        writeShortLittleEndian(zoneX)
 
         var size = 0
         val xteas = allocateDynamic(256) {
@@ -35,13 +35,13 @@ onPacketAssembler<RebuildNormalPacket>(opcode = 54, size = -2) {
                 ((zoneZ - 6) / 8..(zoneZ + 6) / 8).forEach { y ->
                     val regionId = y + (x shl 8)
                     val xteaKeys = mapSquares[regionId]?.key ?: listOf(0, 0, 0, 0)
-                    xteaKeys.forEach { writeInt { it } }
+                    xteaKeys.forEach(::writeInt)
                     ++size
                 }
             }
         }
 
-        writeShort { size }
-        writeBytes { xteas }
+        writeShort(size)
+        writeBytes(xteas)
     }
 }

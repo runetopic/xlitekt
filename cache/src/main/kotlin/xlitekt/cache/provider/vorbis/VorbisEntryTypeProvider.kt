@@ -104,7 +104,7 @@ class VorbisEntryTypeProvider : EntryTypeProvider<VorbisEntryType>() {
             } while (opcode >= 255)
 
             val bytes = ByteArray(size)
-            copy(size).array().copyInto(bytes, 0, 0, size)
+            copy(size).moveToByteArray().copyInto(bytes, 0, 0, size)
             discard(size)
             bytes
         }

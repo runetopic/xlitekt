@@ -21,9 +21,9 @@ val itemInfoMap by inject<ItemInfoMap>()
 onBodyPart(index = Equipment.SLOT_HEAD) {
     bodyPart {
         if (equipment.head != null) {
-            writeShort { 0x200 + equipment.head!!.id }
+            writeShort(0x200 + equipment.head!!.id)
         } else {
-            writeByte { kit }
+            writeByte(kit)
         }
     }
 }
@@ -34,9 +34,9 @@ onBodyPart(index = Equipment.SLOT_HEAD) {
 onBodyPart(index = Equipment.SLOT_BACK) {
     bodyPart {
         if (equipment.back != null) {
-            writeShort { 0x200 + equipment.back!!.id }
+            writeShort(0x200 + equipment.back!!.id)
         } else {
-            writeByte { kit }
+            writeByte(kit)
         }
     }
 }
@@ -47,9 +47,9 @@ onBodyPart(index = Equipment.SLOT_BACK) {
 onBodyPart(index = Equipment.SLOT_NECK) {
     bodyPart {
         if (equipment.neck != null) {
-            writeShort { 0x200 + equipment.neck!!.id }
+            writeShort(0x200 + equipment.neck!!.id)
         } else {
-            writeByte { kit }
+            writeByte(kit)
         }
     }
 }
@@ -60,9 +60,9 @@ onBodyPart(index = Equipment.SLOT_NECK) {
 onBodyPart(index = Equipment.SLOT_MAINHAND) {
     bodyPart {
         if (equipment.mainhand != null) {
-            writeShort { 0x200 + equipment.mainhand!!.id }
+            writeShort(0x200 + equipment.mainhand!!.id)
         } else {
-            writeByte { kit }
+            writeByte(kit)
         }
     }
 }
@@ -73,9 +73,9 @@ onBodyPart(index = Equipment.SLOT_MAINHAND) {
 onBodyPart(index = Equipment.SLOT_TORSO, BodyPart.Torso) {
     bodyPart {
         if (equipment.torso != null) {
-            writeShort { 0x200 + equipment.torso!!.id }
+            writeShort(0x200 + equipment.torso!!.id)
         } else {
-            writeShort { 0x100 + kit }
+            writeShort(0x100 + kit)
         }
     }
 }
@@ -86,9 +86,9 @@ onBodyPart(index = Equipment.SLOT_TORSO, BodyPart.Torso) {
 onBodyPart(index = Equipment.SLOT_OFFHAND) {
     bodyPart {
         if (equipment.offhand != null) {
-            writeShort { 0x200 + equipment.offhand!!.id }
+            writeShort(0x200 + equipment.offhand!!.id)
         } else {
-            writeByte { kit }
+            writeByte(kit)
         }
     }
 }
@@ -99,20 +99,20 @@ onBodyPart(index = Equipment.SLOT_OFFHAND) {
 onBodyPart(index = 6, BodyPart.Arms) {
     bodyPart {
         if (equipment.torso == null) {
-            writeShort { 0x100 + kit }
+            writeShort(0x100 + kit)
             return@bodyPart
         }
         val torso = equipment.torso!!
         if (itemInfoMap[torso.id]?.equipment == null) {
-            writeShort { 0x100 + kit }
+            writeShort(0x100 + kit)
             return@bodyPart
         }
         val itemInfo = itemInfoMap[torso.id]?.equipment!!
 
         if (itemInfo.hideArms == true) {
-            writeByte { 0 } // Hide arms.
+            writeByte(0) // Hide arms.
         } else {
-            writeShort { 0x100 + kit }
+            writeShort(0x100 + kit)
         }
     }
 }
@@ -123,9 +123,9 @@ onBodyPart(index = 6, BodyPart.Arms) {
 onBodyPart(index = Equipment.SLOT_LEGS, BodyPart.Legs) {
     bodyPart {
         if (equipment.legs != null) {
-            writeShort { 0x200 + equipment.legs!!.id }
+            writeShort(0x200 + equipment.legs!!.id)
         } else {
-            writeShort { 0x100 + kit }
+            writeShort(0x100 + kit)
         }
     }
 }
@@ -136,20 +136,20 @@ onBodyPart(index = Equipment.SLOT_LEGS, BodyPart.Legs) {
 onBodyPart(index = 8, BodyPart.Head) {
     bodyPart {
         if (equipment.head == null) {
-            writeShort { 0x100 + kit }
+            writeShort(0x100 + kit)
             return@bodyPart
         }
         val head = equipment.head!!
         if (itemInfoMap[head.id]?.equipment == null) {
-            writeShort { 0x100 + kit }
+            writeShort(0x100 + kit)
             return@bodyPart
         }
         val itemInfo = itemInfoMap[head.id]?.equipment!!
 
         if (itemInfo.hideHair == true) {
-            writeByte { 0 } // Hide hair.
+            writeByte(0) // Hide hair.
         } else {
-            writeShort { 0x100 + kit }
+            writeShort(0x100 + kit)
         }
     }
 }
@@ -160,9 +160,9 @@ onBodyPart(index = 8, BodyPart.Head) {
 onBodyPart(index = Equipment.SLOT_HANDS, BodyPart.Hands) {
     bodyPart {
         if (equipment.hands != null) {
-            writeShort { 0x200 + equipment.hands!!.id }
+            writeShort(0x200 + equipment.hands!!.id)
         } else {
-            writeShort { 0x100 + kit }
+            writeShort(0x100 + kit)
         }
     }
 }
@@ -173,9 +173,9 @@ onBodyPart(index = Equipment.SLOT_HANDS, BodyPart.Hands) {
 onBodyPart(index = Equipment.SLOT_FEET, BodyPart.Feet) {
     bodyPart {
         if (equipment.feet != null) {
-            writeShort { 0x200 + equipment.feet!!.id }
+            writeShort(0x200 + equipment.feet!!.id)
         } else {
-            writeShort { 0x100 + kit }
+            writeShort(0x100 + kit)
         }
     }
 }
@@ -190,23 +190,23 @@ onBodyPart(index = 11, BodyPart.Jaw) {
         when (gender) {
             Gender.Male -> {
                 if (equipment.head == null) {
-                    writeShort { 0x100 + kit }
+                    writeShort(0x100 + kit)
                     return@bodyPart
                 }
                 val head = equipment.head!!
                 if (itemInfoMap[head.id]?.equipment == null) {
-                    writeShort { 0x100 + kit }
+                    writeShort(0x100 + kit)
                     return@bodyPart
                 }
                 val itemInfo = itemInfoMap[head.id]?.equipment!!
 
                 if (itemInfo.showBeard == false) {
-                    writeByte { 0 } // Hide beard.
+                    writeByte(0) // Hide beard.
                 } else {
-                    writeShort { 0x100 + kit }
+                    writeShort(0x100 + kit)
                 }
             }
-            else -> writeByte { 0 }
+            else -> writeByte(0)
         }
     }
 }

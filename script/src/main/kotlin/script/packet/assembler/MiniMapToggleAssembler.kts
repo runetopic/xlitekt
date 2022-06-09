@@ -11,6 +11,6 @@ import xlitekt.shared.buffer.writeByte
  */
 onPacketAssembler<MiniMapTogglePacket>(opcode = 36, size = 1) {
     allocate(1) {
-        writeByte { type }
+        writeByte(type)
     }
 }

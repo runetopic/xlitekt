@@ -12,8 +12,8 @@ import xlitekt.shared.buffer.writeShort
  */
 onPacketAssembler<SoundEffectPacket>(opcode = 81, size = 5) {
     allocate(5) {
-        writeShort { id }
-        writeByte { count }
-        writeShort { delay }
+        writeShort(id)
+        writeByte(count)
+        writeShort(delay)
     }
 }

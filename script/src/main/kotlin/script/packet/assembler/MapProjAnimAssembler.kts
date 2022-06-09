@@ -15,16 +15,16 @@ import xlitekt.shared.buffer.writeShortLittleEndianAdd
  */
 onPacketAssembler<MapProjAnimPacket>(opcode = 64, size = 15) {
     allocate(15) {
-        writeByteAdd { packedOffset } // packedOffset
-        writeShortLittleEndian { -1 } // targetIndex
-        writeByteNegate { distanceX } // ?
-        writeShort { lifespan } // endCycle
-        writeByte { startHeight } // startHeight
-        writeShortLittleEndian { id }
-        writeByte { steepness } // ?
-        writeByteNegate { angle } // slope
-        writeShortLittleEndianAdd { delay } // startCycle
-        writeByte { endHeight } // endHeight
-        writeByteAdd { distanceZ } // ?
+        writeByteAdd(packedOffset) // packedOffset
+        writeShortLittleEndian(-1) // targetIndex
+        writeByteNegate(distanceX) // ?
+        writeShort(lifespan) // endCycle
+        writeByte(startHeight) // startHeight
+        writeShortLittleEndian(id)
+        writeByte(steepness) // ?
+        writeByteNegate(angle) // slope
+        writeShortLittleEndianAdd(delay) // startCycle
+        writeByte(endHeight) // endHeight
+        writeByteAdd(distanceZ) // ?
     }
 }

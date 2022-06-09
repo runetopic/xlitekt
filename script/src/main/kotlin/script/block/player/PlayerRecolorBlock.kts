@@ -13,11 +13,11 @@ import xlitekt.shared.buffer.writeShortLittleEndianAdd
  */
 onPlayerUpdateBlock<Recolor>(11, 0x200) {
     allocate(8) {
-        writeShortLittleEndianAdd { startDelay }
-        writeShortAdd { endDelay }
-        writeByte { hue }
-        writeByteSubtract { saturation }
-        writeByte { luminance }
-        writeByte { amount }
+        writeShortLittleEndianAdd(startDelay)
+        writeShortAdd(endDelay)
+        writeByte(hue)
+        writeByteSubtract(saturation)
+        writeByte(luminance)
+        writeByte(amount)
     }
 }

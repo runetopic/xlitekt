@@ -24,13 +24,13 @@ class Viewport(
     private var resizeTickCount = 0
 
     fun init(builder: ByteBuffer, players: NonBlockingHashMapLong<Player>) = builder.withBitAccess {
-        writeBits(30, player.location::packedLocation)
+        writeBits(30, player.location.packedLocation)
         this@Viewport.players[player.index] = player
         highDefinitions[highDefinitionsCount++] = player.index
         for (index in 1 until MAX_PLAYERS) {
             if (index == player.index) continue
             val otherRegionCoordinates = players[index.toLong()]?.location?.regionLocation ?: 0
-            writeBits(18) { otherRegionCoordinates }
+            writeBits(18, otherRegionCoordinates)
             locations[index] = otherRegionCoordinates
             lowDefinitions[lowDefinitionsCount++] = index
         }

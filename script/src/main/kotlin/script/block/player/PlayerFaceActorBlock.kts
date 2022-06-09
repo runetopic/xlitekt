@@ -10,6 +10,6 @@ import xlitekt.shared.buffer.writeShortLittleEndianAdd
  */
 onPlayerUpdateBlock<FaceActor>(4, 0x80) {
     allocate(2) {
-        writeShortLittleEndianAdd { index }
+        writeShortLittleEndianAdd(index)
     }
 }

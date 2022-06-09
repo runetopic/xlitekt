@@ -12,9 +12,9 @@ import xlitekt.shared.buffer.writeShortLittleEndian
  */
 onPacketAssembler<IfSetEventsPacket>(opcode = 76, size = 12) {
     allocate(12) {
-        writeIntV2 { event }
-        writeShortLittleEndian { fromSlot }
-        writeShortLittleEndian { toSlot }
-        writeInt { packedInterface }
+        writeIntV2(event)
+        writeShortLittleEndian(fromSlot)
+        writeShortLittleEndian(toSlot)
+        writeInt(packedInterface)
     }
 }

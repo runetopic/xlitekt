@@ -12,8 +12,8 @@ import xlitekt.shared.buffer.writeBytes
  */
 onPacketAssembler<UpdateZonePartialEnclosedPacket>(opcode = 56, size = -2) {
     allocate(bytes.size + 2) {
-        writeByteNegate { (localZ shr 3) shl 3 }
-        writeByte { (localX shr 3) shl 3 }
-        writeBytes { bytes }
+        writeByteNegate((localZ shr 3) shl 3)
+        writeByte((localX shr 3) shl 3)
+        writeBytes(bytes)
     }
 }

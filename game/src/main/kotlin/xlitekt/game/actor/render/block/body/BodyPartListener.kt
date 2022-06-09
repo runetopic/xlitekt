@@ -1,5 +1,6 @@
 package xlitekt.game.actor.render.block.body
 
+import io.ktor.util.moveToByteArray
 import xlitekt.game.actor.render.Render
 import xlitekt.game.content.container.equipment.Equipment
 import java.nio.ByteBuffer
@@ -30,6 +31,8 @@ class BodyPartBuilder(
     inline fun bodyPart(builder: ByteBuffer.(Int) -> Unit) {
         val buffer = ByteBuffer.allocate(4)
         builder.invoke(buffer, kit)
-        this.data = ByteBuffer.allocate(buffer.position()).put(buffer.array(), 0, buffer.position()).array()
+        buffer.limit(buffer.position())
+        buffer.rewind()
+        this.data = buffer.moveToByteArray()
     }
 }

@@ -12,8 +12,8 @@ import xlitekt.shared.toInt
  */
 onPacketAssembler<SetPlayerOpPacket>(opcode = 41, size = -1) {
     allocate(option.length + 1 + 2) {
-        writeByteAdd(priority::toInt)
-        writeByteAdd { index }
-        writeStringCp1252NullTerminated { option }
+        writeByteAdd(priority.toInt())
+        writeByteAdd(index)
+        writeStringCp1252NullTerminated(option)
     }
 }

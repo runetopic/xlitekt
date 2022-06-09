@@ -1,6 +1,7 @@
 package xlitekt.cache.provider.instrument
 
 import io.ktor.util.copy
+import io.ktor.util.moveToByteArray
 import xlitekt.cache.provider.EntryTypeProvider
 import xlitekt.shared.buffer.discard
 import xlitekt.shared.buffer.discardUntilDelimiter
@@ -118,7 +119,7 @@ class InstrumentEntryTypeProvider : EntryTypeProvider<InstrumentEntryType>() {
             if (type.offsets!![it] != 0) {
                 if (var20 == 0) {
                     var20 = if (var21 < firstArrayBlock.size) firstArrayBlock[var21++].toInt() else -1
-                    var23 = copy().array()[firstArrayBlockPosition++] - 1
+                    var23 = duplicate().moveToByteArray()[firstArrayBlockPosition++] - 1
                 }
                 type.loopMode!![it] = var23.toByte()
                 --var20
@@ -132,7 +133,7 @@ class InstrumentEntryTypeProvider : EntryTypeProvider<InstrumentEntryType>() {
             if (type.offsets!![it] != 0) {
                 if (var20 == 0) {
                     var20 = if (var21 < secondArrayBlock.size) secondArrayBlock[var21++].toInt() else -1
-                    var24 = copy().array()[secondArrayBlockPosition++] + 16 shl 2
+                    var24 = duplicate().moveToByteArray()[secondArrayBlockPosition++] + 16 shl 2
                 }
                 type.panOffset!![it] = var24.toByte()
                 --var20

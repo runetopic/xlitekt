@@ -11,7 +11,7 @@ import xlitekt.shared.buffer.writeShortLittleEndianAdd
  */
 onPacketAssembler<VarpLargePacket>(opcode = 0, size = 6) {
     allocate(6) {
-        writeIntV1 { value }
-        writeShortLittleEndianAdd { id }
+        writeIntV1(value)
+        writeShortLittleEndianAdd(id)
     }
 }

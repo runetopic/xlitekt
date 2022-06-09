@@ -13,9 +13,9 @@ import xlitekt.shared.toInt
  */
 onPacketAssembler<MessageGamePacket>(opcode = 69, size = -1) {
     allocateDynamic(message.length + prefix.length + 3) {
-        writeSmart { type }
-        writeByte(hasPrefix::toInt)
-        if (hasPrefix) writeStringCp1252NullTerminated { prefix }
-        writeStringCp1252NullTerminated { message }
+        writeSmart(type)
+        writeByte(hasPrefix.toInt())
+        if (hasPrefix) writeStringCp1252NullTerminated(prefix)
+        writeStringCp1252NullTerminated(message)
     }
 }

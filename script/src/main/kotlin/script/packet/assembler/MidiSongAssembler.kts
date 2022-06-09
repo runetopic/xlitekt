@@ -10,6 +10,6 @@ import xlitekt.shared.buffer.writeShort
  */
 onPacketAssembler<MidiSongPacket>(opcode = 45, size = 2) {
     allocate(2) {
-        writeShort { songId }
+        writeShort(songId)
     }
 }

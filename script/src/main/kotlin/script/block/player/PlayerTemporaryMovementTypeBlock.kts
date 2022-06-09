@@ -10,6 +10,6 @@ import xlitekt.shared.buffer.writeByte
  */
 onPlayerUpdateBlock<TemporaryMovementType>(2, 0x2000) {
     allocate(1) {
-        writeByte { id }
+        writeByte(id)
     }
 }

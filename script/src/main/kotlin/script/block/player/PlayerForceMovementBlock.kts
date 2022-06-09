@@ -13,12 +13,12 @@ import xlitekt.shared.buffer.writeShortLittleEndianAdd
  */
 onPlayerUpdateBlock<ForceMovement>(3, 0x4000) {
     allocate(10) {
-        writeByteNegate { firstLocation.x - currentLocation.x }
-        writeByteNegate { firstLocation.z - currentLocation.z }
-        writeByteSubtract { secondLocation?.x?.minus(currentLocation.x) ?: 0 }
-        writeByteSubtract { secondLocation?.z?.minus(currentLocation.z) ?: 0 }
-        writeShortLittleEndianAdd { firstDelay * 30 }
-        writeShortLittleEndianAdd { secondDelay * 30 }
-        writeShortAdd { rotation }
+        writeByteNegate(firstLocation.x - currentLocation.x)
+        writeByteNegate(firstLocation.z - currentLocation.z)
+        writeByteSubtract(secondLocation?.x?.minus(currentLocation.x) ?: 0)
+        writeByteSubtract(secondLocation?.z?.minus(currentLocation.z) ?: 0)
+        writeShortLittleEndianAdd(firstDelay * 30)
+        writeShortLittleEndianAdd(secondDelay * 30)
+        writeShortAdd(rotation)
     }
 }

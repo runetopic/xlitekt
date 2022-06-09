@@ -11,6 +11,6 @@ import xlitekt.shared.buffer.writeShort
  */
 onPacketAssembler<UpdateRebootTimerPacket>(opcode = 15, size = 2) {
     allocate(2) {
-        writeShort { rebootTimer }
+        writeShort(rebootTimer)
     }
 }

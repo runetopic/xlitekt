@@ -15,18 +15,18 @@ import kotlin.math.min
  */
 onPacketAssembler<UpdateContainerFullPacket>(opcode = 88, size = -2) {
     allocateDynamic(256) {
-        writeInt { packedInterface }
-        writeShort { containerKey }
-        writeShort(items::size)
+        writeInt(packedInterface)
+        writeShort(containerKey)
+        writeShort(items.size)
         repeat(items.size) {
             val item = items[it]
             val id = item?.id ?: -1
             val amount = item?.amount ?: 0
-            writeByteAdd { min(amount, 0xff) }
+            writeByteAdd(min(amount, 0xff))
             if (amount >= 0xff) {
-                writeInt { amount }
+                writeInt(amount)
             }
-            writeShortLittleEndian { id + 1 }
+            writeShortLittleEndian(id + 1)
         }
     }
 }

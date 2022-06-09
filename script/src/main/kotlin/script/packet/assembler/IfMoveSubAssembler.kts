@@ -11,7 +11,7 @@ import xlitekt.shared.buffer.writeInt
  */
 onPacketAssembler<IfMoveSubPacket>(opcode = 30, size = 8) {
     allocate(8) {
-        writeInt { fromPackedInterface }
-        writeInt { toPackedInterface }
+        writeInt(fromPackedInterface)
+        writeInt(toPackedInterface)
     }
 }

@@ -13,11 +13,11 @@ import xlitekt.shared.buffer.writeShortLittleEndian
  */
 onNPCUpdateBlock<Recolor>(9, 0x100) {
     allocate(8) {
-        writeShort { startDelay }
-        writeShortLittleEndian { endDelay }
-        writeByte { hue }
-        writeByteNegate { saturation }
-        writeByteNegate { luminance }
-        writeByte { amount }
+        writeShort(startDelay)
+        writeShortLittleEndian(endDelay)
+        writeByte(hue)
+        writeByteNegate(saturation)
+        writeByteNegate(luminance)
+        writeByte(amount)
     }
 }

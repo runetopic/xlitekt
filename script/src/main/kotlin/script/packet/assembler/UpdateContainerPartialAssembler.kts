@@ -15,21 +15,21 @@ import kotlin.math.min
  */
 onPacketAssembler<UpdateContainerPartialPacket>(opcode = 84, size = -2) {
     allocateDynamic(256) {
-        writeInt { packedInterface }
-        writeShort { containerKey }
+        writeInt(packedInterface)
+        writeShort(containerKey)
         for (slot in slots) {
             if (slot >= items.size) {
                 break
             }
-            writeSmart { slot }
+            writeSmart(slot)
             val item = items[slot]
             val id = item?.id ?: -1
             val amount = item?.amount ?: 0
-            writeShort { id + 1 }
+            writeShort(id + 1)
             if (id != -1) {
-                writeByte { min(amount, 0xff) }
+                writeByte(min(amount, 0xff))
                 if (amount >= 0xff) {
-                    writeInt { amount }
+                    writeInt(amount)
                 }
             }
         }

@@ -11,7 +11,7 @@ import xlitekt.shared.buffer.writeByteSubtract
  */
 onPacketAssembler<UpdateZonePartialFollowsPacket>(opcode = 53, size = 2) {
     allocate(2) {
-        writeByte { (localZ shr 3) shl 3 }
-        writeByteSubtract { (localX shr 3) shl 3 }
+        writeByte((localZ shr 3) shl 3)
+        writeByteSubtract((localX shr 3) shl 3)
     }
 }

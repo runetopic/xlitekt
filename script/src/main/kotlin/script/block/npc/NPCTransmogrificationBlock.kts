@@ -10,6 +10,6 @@ import xlitekt.shared.buffer.writeShortLittleEndian
  */
 onNPCUpdateBlock<NPCTransmogrification>(0, 0x20) {
     allocate(2) {
-        writeShortLittleEndian { id }
+        writeShortLittleEndian(id)
     }
 }

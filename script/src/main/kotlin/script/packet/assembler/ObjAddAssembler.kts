@@ -12,8 +12,8 @@ import xlitekt.shared.buffer.writeShortLittleEndian
  */
 onPacketAssembler<ObjAddPacket>(opcode = 61, size = 5) {
     allocate(5) {
-        writeShort { id }
-        writeByteSubtract { packedOffset }
-        writeShortLittleEndian { amount }
+        writeShort(id)
+        writeByteSubtract(packedOffset)
+        writeShortLittleEndian(amount)
     }
 }

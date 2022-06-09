@@ -10,6 +10,6 @@ import xlitekt.shared.buffer.writeShort
  */
 onPacketAssembler<IfOpenTopPacket>(opcode = 31, size = 2) {
     allocate(2) {
-        writeShort { interfaceId }
+        writeShort(interfaceId)
     }
 }

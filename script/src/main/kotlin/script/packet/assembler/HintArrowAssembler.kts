@@ -14,17 +14,17 @@ import xlitekt.shared.buffer.writeShort
  */
 onPacketAssembler<HintArrowPacket>(opcode = 43, size = 6) {
     allocate(6) {
-        writeByte(type::id)
+        writeByte(type.id)
 
         when (type) {
             HintArrowType.PLAYER, HintArrowType.NPC -> {
-                writeShort { targetIndex }
-                fill(3) { 0 }
+                writeShort(targetIndex)
+                fill(3, 0)
             }
             HintArrowType.LOCATION -> {
-                writeShort { targetX }
-                writeShort { targetZ }
-                writeByte { targetHeight }
+                writeShort(targetX)
+                writeShort(targetZ)
+                writeByte(targetHeight)
             }
         }
     }
