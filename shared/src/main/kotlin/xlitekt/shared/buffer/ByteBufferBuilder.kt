@@ -16,11 +16,9 @@ inline fun allocate(limit: Int, block: ByteBuffer.() -> Unit): ByteArray = ByteB
 inline fun allocateDynamic(limit: Int, block: ByteBuffer.() -> Unit): ByteArray = ByteBuffer
     .allocate(limit)
     .also(block)
-    .run {
-        limit(position())
-        rewind()
-        moveToByteArray()
-    }
+    .also { it.limit(it.position()) }
+    .rewind()
+    .moveToByteArray()
 
 fun ByteBuffer.writeStringCp1252NullTerminated(value: String) {
     value.toByteArray().forEach(::put)
