@@ -1,7 +1,6 @@
 package xlitekt.game.actor
 
 import it.unimi.dsi.fastutil.ints.IntArrayList
-import java.util.Optional
 import org.jctools.maps.NonBlockingHashMapLong
 import xlitekt.game.actor.bonus.Bonuses
 import xlitekt.game.actor.movement.Movement
@@ -45,6 +44,7 @@ import xlitekt.game.world.map.Location
 import xlitekt.game.world.map.directionTo
 import xlitekt.game.world.map.zone.Zone
 import xlitekt.shared.inject
+import java.util.Optional
 
 /**
  * @author Tyler Telis

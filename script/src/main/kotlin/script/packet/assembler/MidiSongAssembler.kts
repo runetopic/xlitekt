@@ -1,15 +1,15 @@
 package script.packet.assembler
 
-import io.ktor.utils.io.core.buildPacket
 import xlitekt.game.packet.MidiSongPacket
 import xlitekt.game.packet.assembler.onPacketAssembler
+import xlitekt.shared.buffer.allocate
 import xlitekt.shared.buffer.writeShort
 
 /**
  * @author Jordan Abraham
  */
 onPacketAssembler<MidiSongPacket>(opcode = 45, size = 2) {
-    buildPacket {
-        writeShort { songId }
+    allocate(2) {
+        writeShort(songId)
     }
 }

@@ -21,6 +21,4 @@ class Zones {
         zones[location.packedLocation] = newZone
         return newZone
     }
-
-    internal fun filterNotNull() = zones.filterNotNull()
 }

@@ -1,8 +1,8 @@
 package script.packet.assembler
 
-import io.ktor.utils.io.core.buildPacket
 import xlitekt.game.packet.VarpSmallPacket
 import xlitekt.game.packet.assembler.onPacketAssembler
+import xlitekt.shared.buffer.allocate
 import xlitekt.shared.buffer.writeByteAdd
 import xlitekt.shared.buffer.writeShort
 
@@ -10,8 +10,8 @@ import xlitekt.shared.buffer.writeShort
  * @author Jordan Abraham
  */
 onPacketAssembler<VarpSmallPacket>(opcode = 94, size = 3) {
-    buildPacket {
-        writeByteAdd { value }
-        writeShort { id }
+    allocate(3) {
+        writeByteAdd(value)
+        writeShort(id)
     }
 }

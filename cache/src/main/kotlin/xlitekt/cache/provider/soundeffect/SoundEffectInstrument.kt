@@ -1,9 +1,11 @@
 package xlitekt.cache.provider.soundeffect
 
-import io.ktor.utils.io.core.ByteReadPacket
-import io.ktor.utils.io.core.readUShort
+import xlitekt.shared.buffer.discard
 import xlitekt.shared.buffer.readShortSmart
+import xlitekt.shared.buffer.readUShort
 import xlitekt.shared.buffer.readUShortSmart
+import xlitekt.shared.buffer.tryPeek
+import java.nio.ByteBuffer
 import kotlin.math.pow
 import kotlin.math.sin
 import kotlin.random.Random
@@ -12,7 +14,7 @@ import kotlin.random.Random
  * @author Jordan Abraham
  */
 data class SoundEffectInstrument(
-    val buffer: ByteReadPacket,
+    val buffer: ByteBuffer,
     var oscillatorVolume: IntArray = intArrayOf(0, 0, 0, 0, 0),
     var oscillatorPitch: IntArray = intArrayOf(0, 0, 0, 0, 0),
     var oscillatorDelays: IntArray = intArrayOf(0, 0, 0, 0, 0),
@@ -64,8 +66,8 @@ data class SoundEffectInstrument(
         }
         delayTime = buffer.readUShortSmart()
         delayDecay = buffer.readUShortSmart()
-        duration = buffer.readUShort().toInt()
-        offset = buffer.readUShort().toInt()
+        duration = buffer.readUShort()
+        offset = buffer.readUShort()
         filter = SoundEffectAudioFilter()
         filterEnvelope = SoundEffectEnvelope()
         filter!!.method1089(buffer, filterEnvelope!!)

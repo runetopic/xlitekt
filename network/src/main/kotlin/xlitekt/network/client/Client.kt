@@ -2,13 +2,7 @@ package xlitekt.network.client
 
 import com.runetopic.cryptography.fromXTEA
 import com.runetopic.cryptography.toISAAC
-import io.ktor.utils.io.core.ByteReadPacket
-import io.ktor.utils.io.core.readInt
-import io.ktor.utils.io.core.readIntLittleEndian
-import io.ktor.utils.io.core.readLong
-import io.ktor.utils.io.core.readShort
-import io.ktor.utils.io.core.readUByte
-import io.ktor.utils.io.core.readUShort
+import io.ktor.utils.io.core.readBytes
 import kotlinx.coroutines.withTimeout
 import xlitekt.game.actor.player.Client
 import xlitekt.game.actor.player.Client.Companion.checksums
@@ -36,13 +30,20 @@ import xlitekt.network.client.ClientResponseOpcode.BAD_SESSION_OPCODE
 import xlitekt.network.client.ClientResponseOpcode.CLIENT_OUTDATED_OPCODE
 import xlitekt.network.client.ClientResponseOpcode.HANDSHAKE_SUCCESS_OPCODE
 import xlitekt.network.client.ClientResponseOpcode.LOGIN_SUCCESS_OPCODE
+import xlitekt.shared.buffer.discard
+import xlitekt.shared.buffer.readByte
+import xlitekt.shared.buffer.readInt
+import xlitekt.shared.buffer.readIntLittleEndian
 import xlitekt.shared.buffer.readIntV1
 import xlitekt.shared.buffer.readIntV2
 import xlitekt.shared.buffer.readPacketOpcode
 import xlitekt.shared.buffer.readPacketSize
+import xlitekt.shared.buffer.readShort
 import xlitekt.shared.buffer.readStringCp1252NullCircumfixed
 import xlitekt.shared.buffer.readStringCp1252NullTerminated
+import xlitekt.shared.buffer.readUByte
 import xlitekt.shared.buffer.readUMedium
+import xlitekt.shared.buffer.readUShort
 import xlitekt.shared.lazy
 import xlitekt.shared.toBoolean
 import java.math.BigInteger
@@ -161,13 +162,13 @@ private suspend fun Client.readLogin() {
                 writeResponse(BAD_SESSION_OPCODE)
                 return disconnect("Bad session.")
             }
-            val rsaBlock = ByteReadPacket(BigInteger(rsa).modPow(BigInteger(rsaExponent), BigInteger(rsaModulus)).toByteArray())
+            val rsaBlock = ByteBuffer.wrap(BigInteger(rsa).modPow(BigInteger(rsaExponent), BigInteger(rsaModulus)).toByteArray())
             if (!rsaBlock.readByte().toInt().toBoolean()) {
                 writeResponse(BAD_SESSION_OPCODE)
                 return disconnect("Bad session.")
             }
             val clientKeys = IntArray(4) { rsaBlock.readInt() }
-            val clientSeed = rsaBlock.readLong()
+            val clientSeed = rsaBlock.long
             if (clientSeed != seed) {
                 writeResponse(BAD_SESSION_OPCODE)
                 return disconnect("Bad Session. Client/Server seed miss-match. ClientSeed=$clientSeed Seed=$seed")
@@ -183,10 +184,9 @@ private suspend fun Client.readLogin() {
             }
             rsaBlock.discard(1) // Unknown byte #3
             val password = rsaBlock.readStringCp1252NullTerminated()
-            rsaBlock.release()
             val xtea = ByteArray(readChannel.availableForRead)
             readChannel.readAvailable(xtea, 0, xtea.size)
-            val xteaBlock = ByteReadPacket(xtea.fromXTEA(32, clientKeys))
+            val xteaBlock = ByteBuffer.wrap(xtea.fromXTEA(32, clientKeys))
             val username = xteaBlock.readStringCp1252NullTerminated()
             val clientSettings = xteaBlock.readByte().toInt()
             val clientResizeable = (clientSettings shr 1) == 1
@@ -255,7 +255,6 @@ private suspend fun Client.readLogin() {
             clientCRCs[20] = xteaBlock.readIntLittleEndian()
             clientCRCs[0] = xteaBlock.readIntLittleEndian()
             clientCRCs[16] = cacheCRCs[16] // This is -1 from the client.
-            xteaBlock.release()
             if (!IntArray(21) { store.index(it).crc }.contentEquals(clientCRCs)) {
                 writeResponse(CLIENT_OUTDATED_OPCODE)
                 return disconnect("Bad Session. Client and cache crc are mismatched.")
@@ -303,7 +302,7 @@ private suspend fun Client.readPackets(player: Player) = try {
         if (opcode < 0 || opcode >= sizes.size) continue
         val size = readChannel.readPacketSize(sizes[opcode])
         // Take the bytes from the read channel before doing any checks.
-        val packet = readChannel.readPacket(size)
+        val packet = ByteBuffer.wrap(readChannel.readPacket(size).readBytes())
         val disassembler = PacketDisassemblerListener.listeners.entries.firstOrNull { it.key == opcode }
         if (disassembler == null) {
             logger.debug { "No packet disassembler found for packet opcode $opcode." }
