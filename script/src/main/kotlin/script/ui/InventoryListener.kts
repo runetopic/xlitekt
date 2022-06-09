@@ -1,5 +1,6 @@
 package script.ui
 
+import xlitekt.game.actor.cancelWeak
 import xlitekt.game.actor.player.renderAppearance
 import xlitekt.game.content.item.FloorItem
 import xlitekt.game.content.ui.UserInterface
@@ -11,6 +12,8 @@ onInterface<UserInterface.Inventory> {
         val item = inventory[slot] ?: return@onOpHeld
 
         if (item.id != it.fromItemId) return@onOpHeld
+
+        cancelWeak()
 
         when (it.index) {
             2 -> {

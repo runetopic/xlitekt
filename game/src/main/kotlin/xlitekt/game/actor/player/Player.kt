@@ -33,6 +33,11 @@ import xlitekt.game.world.map.Location
 import xlitekt.shared.lazy
 import kotlin.math.abs
 import kotlin.math.floor
+import xlitekt.game.packet.SetMapFlagPacket
+import xlitekt.game.queue.ActorQueue
+import xlitekt.game.queue.PlayerQueue
+import xlitekt.game.queue.QueuePriority
+import xlitekt.game.queue.shouldProcess
 
 /**
  * @author Jordan Abraham
@@ -56,6 +61,8 @@ class Player(
     val inventory: Inventory = Inventory(this)
     val equipment: Equipment = Equipment(this)
     var lastLoadedLocation = Location.None
+
+    override val queue = PlayerQueue(this)
 
     /**
      * This players connected client. This client is used for reading and writing packets.
@@ -168,6 +175,7 @@ fun Player.updateStat(skill: Skill, level: Int, experience: Double) {
 }
 
 inline fun Player.message(message: () -> String) = write(MessageGamePacket(0, message.invoke(), false)) // TODO build messaging system
+fun Player.resetMiniMapFlag() = write(SetMapFlagPacket(255, 255))
 fun Player.script(scriptId: Int, vararg parameters: Any) = write(RunClientScriptPacket(scriptId, parameters))
 fun Player.updateRunEnergy() = write(UpdateRunEnergyPacket(runEnergy / 100f))
 
@@ -200,3 +208,4 @@ fun Player.restoreRunEnergy() {
     runEnergy += restore
     updateRunEnergy()
 }
+

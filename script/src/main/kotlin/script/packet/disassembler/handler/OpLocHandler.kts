@@ -3,7 +3,8 @@ package script.packet.disassembler.handler
 import com.github.michaelbull.logging.InlineLogger
 import xlitekt.cache.provider.config.loc.LocEntryTypeProvider
 import xlitekt.game.actor.angleTo
-import xlitekt.game.actor.cancelAll
+import xlitekt.game.actor.cancelWeak
+import xlitekt.game.actor.resetMovement
 import xlitekt.game.actor.routeTo
 import xlitekt.game.packet.OpLocPacket
 import xlitekt.game.packet.disassembler.handler.onPacketHandler
@@ -43,7 +44,7 @@ onPacketHandler<OpLocPacket> {
     } ?: return@onPacketHandler
 
     with(player) {
-        cancelAll()
+        cancelWeak()
         routeTo(gameObject) {
             angleTo(gameObject)
         }

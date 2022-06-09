@@ -1,5 +1,6 @@
 package script.ui
 
+import xlitekt.game.actor.cancelWeak
 import xlitekt.game.actor.player.message
 import xlitekt.game.actor.player.renderAppearance
 import xlitekt.game.content.ui.UserInterface
@@ -28,6 +29,8 @@ onInterface<WornEquipment> {
         if (slot < 0 || slot > 13) return@onClick
 
         val item = equipment[slot] ?: return@onClick
+
+        cancelWeak()
 
         when (it.index) {
             1 -> {

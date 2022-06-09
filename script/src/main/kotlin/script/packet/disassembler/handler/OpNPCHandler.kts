@@ -2,8 +2,7 @@ package script.packet.disassembler.handler
 
 import com.github.michaelbull.logging.InlineLogger
 import xlitekt.game.actor.angleTo
-import xlitekt.game.actor.cancelAll
-import xlitekt.game.actor.faceActor
+import xlitekt.game.actor.cancelWeak
 import xlitekt.game.actor.routeTo
 import xlitekt.game.packet.OpNPCPacket
 import xlitekt.game.packet.disassembler.handler.onPacketHandler
@@ -26,8 +25,7 @@ onPacketHandler<OpNPCPacket> {
     }
 
     with(player) {
-        cancelAll()
-        faceActor(npc::index)
+        cancelWeak()
         routeTo(npc) {
             angleTo(npc)
         }
