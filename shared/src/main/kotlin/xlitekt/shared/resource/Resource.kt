@@ -34,8 +34,8 @@ object Resource {
     fun examineObjectResource(): ObjectExamines = ObjectExamines(loadResource<List<ExamineObjectResource>>("game.resources.object_examines").associateBy(ExamineObjectResource::objectId))
     fun examineItemResource(): ItemExamines = ItemExamines(loadResource<List<ExamineItemResource>>("game.resources.item_examines").associateBy(ExamineItemResource::itemId))
     fun itemInfoResource(): ItemInfoMap = ItemInfoMap(loadResource<List<ItemInfoResource>>("game.resources.item_info").associateBy(ItemInfoResource::id))
-    fun prayerInfoResource(): PrayerInfoMap = PrayerInfoMap(loadResource<List<PrayerInfoResource>>("game.resources.prayer_info").associateBy(PrayerInfoResource::name))
     fun itemSequenceResource(): ItemSequences = ItemSequences(loadResource<List<ItemSequenceResource>>("game.resources.item_sequences").associateBy(ItemSequenceResource::id))
+    fun prayerInfoResource(): PrayerInfoMap = PrayerInfoMap(loadResource<List<PrayerInfoResource>>("game.resources.prayer_info").associateBy(PrayerInfoResource::name))
 
     private inline fun <reified T> loadResource(path: String): T = json.decodeFromStream(Resource::class.java.getResourceAsStream(lazy<ApplicationEnvironment>().config.property(path).getString())!!)
 }

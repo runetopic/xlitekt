@@ -6,18 +6,18 @@ import kotlinx.serialization.Serializable
  * @author Justin Kenney
  */
 @Serializable
-enum class PrayerType(val id: Int) {
-    DEFENCE(0),
-    ATTACK(1),
-    STRENGTH(2),
-    RANGE(3),
-    MAGIC(4),
-    UTILITY(5),
-    MULTI_COMBAT(6),
-    RAPID_RESTORE(7),
-    RAPID_HEAL(8),
-    PROTECT_ITEM(9),
-    PRESERVE(10);
+enum class PrayerType {
+    DEFENCE,
+    ATTACK,
+    STRENGTH,
+    RANGE,
+    MAGIC,
+    UTILITY,
+    MULTI_COMBAT,
+    RAPID_RESTORE,
+    RAPID_HEAL,
+    PROTECT_ITEM,
+    PRESERVE;
 
     companion object {
         private val conflictingPrayerTypes: Map<PrayerType, Array<PrayerType>> = mapOf(

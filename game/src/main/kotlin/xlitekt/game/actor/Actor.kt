@@ -10,6 +10,7 @@ import xlitekt.game.actor.movement.MovementStep
 import xlitekt.game.actor.movement.pf.PathFinders
 import xlitekt.game.actor.npc.NPC
 import xlitekt.game.actor.player.Player
+import xlitekt.game.actor.player.drainRunEnergy
 import xlitekt.game.actor.player.message
 import xlitekt.game.actor.player.rebuildNormal
 import xlitekt.game.actor.player.renderAppearance
@@ -35,7 +36,6 @@ import xlitekt.game.actor.render.block.LowDefinitionRenderingBlock
 import xlitekt.game.actor.render.block.NPCRenderingBlockListener
 import xlitekt.game.actor.render.block.PlayerRenderingBlockListener
 import xlitekt.game.actor.render.block.RenderingBlock
-import xlitekt.game.content.vars.VarPlayer
 import xlitekt.game.packet.SetMapFlagPacket
 import xlitekt.game.world.World
 import xlitekt.game.world.map.GameObject
@@ -46,6 +46,8 @@ import xlitekt.shared.inject
 import xlitekt.shared.resource.prayer.PrayerIconType
 import xlitekt.shared.resource.prayer.Prayers
 import java.util.Optional
+import xlitekt.game.actor.player.restoreRunEnergy
+import xlitekt.game.content.vars.VarPlayer
 import kotlin.collections.HashSet
 
 /**
@@ -114,6 +116,7 @@ abstract class Actor(
      */
     internal fun processMovement(players: NonBlockingHashMapLong<Player>): MovementStep? = movement.process(this).also { step ->
         location = step?.location ?: location
+
         if (step == null) {
             movement.movementRequest.ifPresent {
                 val reached = location.packedLocation == it.waypoints.last() && !it.alternative
@@ -130,6 +133,8 @@ abstract class Actor(
         } else {
             if (this is Player) {
                 if (shouldRebuildMap()) rebuildNormal(players) { false }
+
+                drainRunEnergy()
             }
         }
         if (shouldRebuildZones() && zone.isPresent) {

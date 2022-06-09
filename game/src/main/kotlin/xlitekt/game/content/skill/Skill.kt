@@ -34,34 +34,19 @@ enum class Skill(val id: Int) {
         const val DEFAULT_HERBLORE_LEVEL = 3
         const val DEFAULT_LEVEL = 1
 
-        fun getXPForLevel(inputLevel: Int): Double {
-            var experience = 0.0
-            var output = 0.0
-            for (level in 1..inputLevel) {
-                experience += floor(level + 300.0 * 2.0.pow(level / 7.0))
-                when {
-                    level >= inputLevel -> {
-                        return output
-                    }
-                    else -> output = floor((experience / 4.0))
-                }
-            }
-            return 0.0
+        fun getXPForLevel(level: Int): Double {
+            val summation = (1 until level.coerceIn(0, 127)).sumOf { floor(2.0.pow(it / 7.0) * 300 + it) }
+            return floor(summation / 4.0).coerceIn(0.0, 200000000.0)
         }
 
-        fun getLevelForXp(xp: Double, maxLevel: Int = 99): Int {
-            var totalXp = 0
-            var output: Int
-            for (level in 1..maxLevel) {
-                totalXp += floor(level + 300.0 * 2.0.pow(level / 7.0)).toInt()
-                output = floor(totalXp / 4.0).toInt()
-                when {
-                    output - 1 >= totalXp -> {
-                        return level
-                    }
-                }
+        fun getLevelForXp(experience: Double, includeVirtualLevels: Boolean = false): Int {
+            (0 until 126).reduce { totalXp, level ->
+                val xpForLevel = floor(2.0.pow(level / 7.0) * 300 + level).toInt()
+                if (!includeVirtualLevels && level >= 99) return level
+                if (floor((totalXp + xpForLevel) / 4.0) >= experience) return level
+                totalXp + xpForLevel
             }
-            return 99
+            return if (includeVirtualLevels) 126 else 99
         }
 
         fun valueOf(int: Int): Skill = values().first { it.id == int }

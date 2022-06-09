@@ -43,28 +43,18 @@ class Equipment(
         )
 
         player.bonuses.calculateEquippedBonuses(this)
-        updateWeight(true)
+        updateWeight()
     }
 
-    fun equipItem(item: Item, slotId: Int) {
-        val invalidItemMessage = {
+    fun equipItem(item: Item, slotId: Int, function: Item.(List<Int>) -> Unit) {
+        val info = itemInfoMap[item.id]
+        val equipmentSlot = info?.equipment?.equipmentSlot
+
+        if (info?.equipable == false || info?.equipment == null || equipmentSlot == null) {
             player.message { "You can't wear that!" }
-        }
-
-        val info = itemInfoMap[item.id] ?: return run {
-            invalidItemMessage.invoke()
-        }
-
-        if (!info.equipable) {
-            invalidItemMessage.invoke()
             return
         }
 
-        val equipmentInfo = info.equipment ?: return run {
-            invalidItemMessage.invoke()
-        }
-
-        val equipmentSlot = equipmentInfo.equipmentSlot
         val mappedEquipmentSlot = mapEquipmentSlot(equipmentSlot)
         val isTwoHandedWeapon = isTwoHanded(item)
 
@@ -76,26 +66,38 @@ class Equipment(
         val hasTwoHandedWeapon = isTwoHanded(mainhand)
 
         if (hasTwoHandedWeapon || isTwoHandedWeapon) {
-            equipTwoHandedItem(slotId, mappedEquipmentSlot, item)
+            equipTwoHandedItem(slotId, mappedEquipmentSlot, item) { slots ->
+                function.invoke(item, slots)
+            }
             return
         }
 
-        player.inventory.removeItem(slotId, item) {
-            val existingItem = this@Equipment[mappedEquipmentSlot] ?: return@removeItem run {
-                setItem(mappedEquipmentSlot, this) { slot ->
-                    refreshSlots(listOf(slot))
-                }
-            }
+        val slotsChanged = mutableListOf<Int>()
 
-            player.inventory.addItem(existingItem) {
-                setItem(mappedEquipmentSlot, item) { slot ->
-                    refreshSlots(listOf(slot))
+        player.inventory.removeItem(slotId, item) {
+            val existingItem = this@Equipment[mappedEquipmentSlot]
+
+            when {
+                existingItem != null -> {
+                    player.inventory.addItem(existingItem) {
+                        setItem(mappedEquipmentSlot, item) { slot ->
+                            slotsChanged.add(slot)
+                        }
+                    }
+                }
+                else -> {
+                    setItem(mappedEquipmentSlot, this) { slot ->
+                        slotsChanged.add(slot)
+                    }
                 }
             }
         }
+
+        function.invoke(item, slotsChanged)
+        refreshSlots(slotsChanged)
     }
 
-    private fun equipTwoHandedItem(slotId: Int, equipmentSlot: Int, item: Item) {
+    private fun equipTwoHandedItem(slotId: Int, equipmentSlot: Int, item: Item, function: Item.(List<Int>) -> Unit) {
         val slotsChanged = mutableListOf<Int>()
 
         player.inventory.removeItem(slotId, item) {
@@ -118,6 +120,7 @@ class Equipment(
             }
         }
 
+        function.invoke(item, slotsChanged)
         refreshSlots(slotsChanged)
     }
 
@@ -159,14 +162,12 @@ class Equipment(
     /**
      * Calculates the players weight based on the worn equipment items and writes it to the client if toggled.
      */
-    fun updateWeight(write: Boolean = false) {
-        filterNotNull().forEach {
-            val info = itemInfoMap[it.id] ?: return
+    fun updateWeight() {
+        val items = player.inventory + this
 
-            player.weight += info.weight
-        }
+        player.weight = items.filterNotNull().sumOf { itemInfoMap[it.id]?.weight ?: 0.0 }.toFloat()
 
-        if (write) player.write(
+        player.write(
             UpdateWeightPacket(player.weight)
         )
     }
@@ -187,7 +188,7 @@ class Equipment(
             )
         )
 
-        updateWeight(true)
+        updateWeight()
     }
 
     companion object {

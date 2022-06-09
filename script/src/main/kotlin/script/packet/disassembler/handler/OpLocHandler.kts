@@ -4,6 +4,7 @@ import com.github.michaelbull.logging.InlineLogger
 import xlitekt.cache.provider.config.loc.LocEntryTypeProvider
 import xlitekt.game.actor.angleTo
 import xlitekt.game.actor.cancelAll
+import xlitekt.game.actor.player.message
 import xlitekt.game.actor.routeTo
 import xlitekt.game.packet.OpLocPacket
 import xlitekt.game.packet.disassembler.handler.onPacketHandler
@@ -51,13 +52,18 @@ onPacketHandler<OpLocPacket> {
 //    // Toggles Actor's speed only for the duration of the movement (if isModified=true)
 //    player.speed { (VarPlayer.ToggleRun in player.vars).let { if (packet.isModified) !it else it } }
 
+    val action: () -> Unit =
+        if (gameObject.id == 409) {
+            { player.prayer.prayAtAltar(gameObject) }
+        } else {
+            { player.angleTo(gameObject) }
+        }
+
     with(player) {
         cancelAll()
         routeTo(
             gameObject = gameObject,
-            reachAction = {
-                angleTo(gameObject)
-            }
+            reachAction = action
         )
     }
 }

@@ -4,6 +4,10 @@
     "name": "active_prayers"
   },
   {
+    "id": 4103,
+    "name": "quick_prayers_active"
+  },
+  {
     "id": 166,
     "name": "screen_brightness"
   },

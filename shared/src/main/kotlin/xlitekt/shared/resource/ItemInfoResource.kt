@@ -68,7 +68,13 @@ data class EquipmentInfoResource(
     @SerialName("attackSpeed")
     val attackSpeed: Int? = null,
     @SerialName("attackRange")
-    val attackRange: Int? = null
+    val attackRange: Int? = null,
+    @SerialName("hideArms")
+    val hideArms: Boolean? = false,
+    @SerialName("hideHair")
+    val hideHair: Boolean? = false,
+    @SerialName("showBeard")
+    val showBeard: Boolean? = false
 )
 
 @Serializable
@@ -80,7 +86,7 @@ data class ItemInfoResource(
     @SerialName("equipable")
     val equipable: Boolean = false,
     @SerialName("weight")
-    val weight: Float = 0f,
+    val weight: Double = 0.0,
     @SerialName("equipment")
     val equipment: EquipmentInfoResource? = null
 )

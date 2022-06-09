@@ -18,6 +18,9 @@ import xlitekt.game.world.World
 import xlitekt.game.world.map.zone.Zone
 import xlitekt.shared.inject
 import java.util.*
+import xlitekt.game.actor.player.restoreRunEnergy
+import xlitekt.game.actor.speed
+import xlitekt.game.content.vars.VarPlayer
 
 /**
  * @author Jordan Abraham
@@ -27,7 +30,14 @@ abstract class Synchronizer : Runnable {
     protected val world by inject<World>()
 
     protected fun Player.syncMovement(players: NonBlockingHashMapLong<Player>) {
+        // This makes sure they continue running and processing until the next tick, when we need to toggle their run off if the energy is depleted, and they are running
+        if (runEnergy <= 0.0f && VarPlayer.ToggleRun in vars) {
+            vars.flip { VarPlayer.ToggleRun }
+            speed { false }
+        }
+
         processMovement(players)?.let { MovementStepsPlayerUpdates.add(indexL, it) }
+        restoreRunEnergy()
     }
 
     protected fun NPC.syncMovement(players: NonBlockingHashMapLong<Player>) {
