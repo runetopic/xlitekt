@@ -1,6 +1,6 @@
 package xlitekt.game.tick
 
-import xlitekt.game.actor.process
+import xlitekt.game.actor.player.process
 import xlitekt.game.world.map.zone.Zone
 
 /**

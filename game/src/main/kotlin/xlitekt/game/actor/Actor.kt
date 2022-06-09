@@ -1,8 +1,6 @@
 package xlitekt.game.actor
 
 import it.unimi.dsi.fastutil.ints.IntArrayList
-import kotlinx.coroutines.asCoroutineDispatcher
-import kotlinx.coroutines.delay
 import org.jctools.maps.NonBlockingHashMapLong
 import xlitekt.game.actor.bonus.Bonuses
 import xlitekt.game.actor.movement.Movement
@@ -38,8 +36,6 @@ import xlitekt.game.actor.render.block.NPCRenderingBlockListener
 import xlitekt.game.actor.render.block.PlayerRenderingBlockListener
 import xlitekt.game.actor.render.block.RenderingBlock
 import xlitekt.game.queue.ActorQueue
-import xlitekt.game.queue.QueuePriority
-import xlitekt.game.queue.shouldProcess
 import xlitekt.game.world.World
 import xlitekt.game.world.map.GameObject
 import xlitekt.game.world.map.Location
@@ -47,9 +43,6 @@ import xlitekt.game.world.map.directionTo
 import xlitekt.game.world.map.zone.Zone
 import xlitekt.shared.inject
 import java.util.Optional
-import java.util.concurrent.Executors
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 
 /**
  * @author Tyler Telis
@@ -552,38 +545,12 @@ private inline fun Actor.faceLocation(location: () -> Location) {
 }
 
 /**
- * This will process all the actor's queued scripts.
+ * This will process the actor and go through the queued scripts to process.
  */
-fun Actor.process() {
-    if (this@process is Player && queue.any { it.priority == QueuePriority.Strong }) {
-        interfaces.closeModal() // This is currently only closing 1 modal interface. I dunno is OSRS supports more than 1.
-    }
-
+fun Actor.processQueue() {
     while (queue.isNotEmpty()) {
-        val count = processQueue()
+        val count = queue.process()
 
         if (count == 0) break
     }
-}
-
-/**
- * This goes through the queue and if the script is a strong or soft type, it will close the modal interfaces before executing.
- * This also checks if the script itself should process.
- */
-fun Actor.processQueue(): Int {
-    var count = 0
-
-    queue.removeIf { script ->
-        if (this is Player && (script.priority == QueuePriority.Strong || script.priority == QueuePriority.Soft)) interfaces.closeModal()
-
-        if (script.shouldProcess()) {
-            script.process()
-            count++
-            return@removeIf true
-        }
-
-        return@removeIf false
-    }
-
-    return count
 }

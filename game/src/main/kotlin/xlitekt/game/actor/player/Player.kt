@@ -33,6 +33,7 @@ import xlitekt.game.world.map.Location
 import xlitekt.shared.lazy
 import kotlin.math.abs
 import kotlin.math.floor
+import xlitekt.game.actor.processQueue
 import xlitekt.game.packet.SetMapFlagPacket
 import xlitekt.game.queue.ActorQueue
 import xlitekt.game.queue.PlayerQueue
@@ -209,3 +210,16 @@ fun Player.restoreRunEnergy() {
     updateRunEnergy()
 }
 
+fun Player.process() {
+    processQueue()
+    // This makes sure they continue running and processing until the next tick, when we need to toggle their run off if the energy is depleted, and they are running
+    if (runEnergy <= 0.0f && VarPlayer.ToggleRun in vars) {
+        vars.flip { VarPlayer.ToggleRun }
+        speed { false }
+    }
+
+    if (queue.any { it.priority == QueuePriority.Strong }) {
+        interfaces.closeModal() // This is currently only closing 1 modal interface. I dunno is OSRS supports more than 1.
+    }
+    restoreRunEnergy()
+}

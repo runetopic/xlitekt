@@ -5,26 +5,28 @@ import xlitekt.game.actor.player.Player
 import java.util.Queue
 import java.util.concurrent.ConcurrentLinkedQueue
 
-data class QueueScript<T>(
-    val priority: QueuePriority,
-    val callback: (T).() -> Unit,
-    val actor: T
-) {
-    fun future(): Boolean {
-        return false // TODO: scripts set to execute in the future
-    }
-
-    fun process() {
-        callback.invoke(actor)
-    }
-}
-
-fun <T> QueueScript<T>.shouldProcess(): Boolean = priority == QueuePriority.Soft || this.actor is Player && !this.actor.interfaces.modalOpen() && !future()
-
 open class ActorQueue<T>(
     val actor: T,
     private val queue: ConcurrentLinkedQueue<QueueScript<T>> = ConcurrentLinkedQueue<QueueScript<T>>()
 ) : Queue<QueueScript<T>> by queue {
+
+    fun process(): Int {
+        var count = 0
+
+        queue.removeIf { script ->
+            if (actor is Player && (script.priority == QueuePriority.Strong || script.priority == QueuePriority.Soft)) actor.interfaces.closeModal()
+
+            if (script.shouldProcess()) {
+                script.process()
+                count++
+                return@removeIf true
+            }
+
+            return@removeIf false
+        }
+
+        return count
+    }
 
     fun weak(function: (T).() -> Unit) {
         queue.add(
