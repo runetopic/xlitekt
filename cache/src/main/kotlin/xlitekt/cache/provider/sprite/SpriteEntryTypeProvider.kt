@@ -1,11 +1,12 @@
 package xlitekt.cache.provider.sprite
 
-import io.ktor.utils.io.core.ByteReadPacket
-import io.ktor.utils.io.core.readFully
-import io.ktor.utils.io.core.readUByte
-import io.ktor.utils.io.core.readUShort
 import xlitekt.cache.provider.EntryTypeProvider
+import xlitekt.shared.buffer.discard
+import xlitekt.shared.buffer.readByte
+import xlitekt.shared.buffer.readUByte
 import xlitekt.shared.buffer.readUMedium
+import xlitekt.shared.buffer.readUShort
+import java.nio.ByteBuffer
 
 /**
  * @author Jordan Abraham
@@ -16,40 +17,37 @@ class SpriteEntryTypeProvider : EntryTypeProvider<SpriteEntryType>() {
         .index(SPRITE_INDEX)
         .groups()
         .onEach { require((glossary[it.nameHash]?.toNameHash() ?: it.nameHash) == it.nameHash) }
-        .map { ByteReadPacket(it.data).loadEntryType(SpriteEntryType(it.id, name = glossary[it.nameHash] ?: it.nameHash.toString())) }
+        .map { ByteBuffer.wrap(it.data).loadEntryType(SpriteEntryType(it.id, name = glossary[it.nameHash] ?: it.nameHash.toString())) }
         .associateBy(SpriteEntryType::id)
 
-    override fun ByteReadPacket.loadEntryType(type: SpriteEntryType): SpriteEntryType {
-        val header = copy().spriteHeader()
-        val spriteCount = header.readUShort().toInt()
-        header.release()
+    override fun ByteBuffer.loadEntryType(type: SpriteEntryType): SpriteEntryType {
+        val header = duplicate().spriteHeader()
+        val spriteCount = header.readUShort()
 
         val offsetsX = IntArray(spriteCount)
         val offsetsY = IntArray(spriteCount)
         val widths = IntArray(spriteCount)
         val heights = IntArray(spriteCount)
 
-        val buffer = copy().spriteBuffer(spriteCount)
+        val buffer = duplicate().spriteBuffer(spriteCount)
         buffer.discard(2) // Width
         buffer.discard(2) // Height
-        val paletteSize = (buffer.readUByte().toInt() and 0xff) + 1
-        repeat(spriteCount) { offsetsX[it] = buffer.readUShort().toInt() }
-        repeat(spriteCount) { offsetsY[it] = buffer.readUShort().toInt() }
-        repeat(spriteCount) { widths[it] = buffer.readUShort().toInt() }
-        repeat(spriteCount) { heights[it] = buffer.readUShort().toInt() }
-        buffer.release()
+        val paletteSize = (buffer.readUByte() and 0xff) + 1
+        repeat(spriteCount) { offsetsX[it] = buffer.readUShort() }
+        repeat(spriteCount) { offsetsY[it] = buffer.readUShort() }
+        repeat(spriteCount) { widths[it] = buffer.readUShort() }
+        repeat(spriteCount) { heights[it] = buffer.readUShort() }
 
         type.offsetsX = offsetsX
         type.offsetsY = offsetsY
         type.widths = widths
         type.heights = heights
 
-        val palette = copy().spritePalette(spriteCount, paletteSize)
+        val palette = duplicate().spritePalette(spriteCount, paletteSize)
         val spritePalette = IntArray(paletteSize)
         for (index in 1 until spritePalette.size) {
             spritePalette[index] = palette.readUMedium().let { if (it == 0) 1 else it }
         }
-        palette.release()
 
         // The sprites.
         repeat(spriteCount) { spriteId ->
@@ -59,14 +57,14 @@ class SpriteEntryTypeProvider : EntryTypeProvider<SpriteEntryType>() {
             val indices = ByteArray(dimension)
             val alphas = ByteArray(dimension)
 
-            val mask = readUByte().toInt()
+            val mask = readUByte()
             when {
                 mask and 1 == 0 -> repeat(dimension) {
-                    indices[it] = readByte()
+                    indices[it] = readByte().toByte()
                 }
                 else -> repeat(spriteWidth) { x ->
                     repeat(spriteHeight) { y ->
-                        indices[x + spriteWidth * y] = readByte()
+                        indices[x + spriteWidth * y] = readByte().toByte()
                     }
                 }
             }
@@ -83,30 +81,30 @@ class SpriteEntryTypeProvider : EntryTypeProvider<SpriteEntryType>() {
             }
         }
 
-        discard(remaining)
+        discard(remaining())
         assertEmptyAndRelease()
         return type
     }
 
-    private fun ByteReadPacket.spriteHeader(): ByteReadPacket {
-        discard(remaining.toInt() - 2)
-        val bytes = ByteArray(remaining.toInt())
-        readFully(bytes)
-        return ByteReadPacket(bytes)
+    private fun ByteBuffer.spriteHeader(): ByteBuffer {
+        discard(remaining() - 2)
+        val bytes = ByteArray(remaining())
+        get(bytes)
+        return ByteBuffer.wrap(bytes)
     }
 
-    private fun ByteReadPacket.spriteBuffer(spriteCount: Int): ByteReadPacket {
-        discard(remaining.toInt() - 7 - spriteCount * 8)
-        val bytes = ByteArray(remaining.toInt())
-        readFully(bytes)
-        return ByteReadPacket(bytes)
+    private fun ByteBuffer.spriteBuffer(spriteCount: Int): ByteBuffer {
+        discard(remaining() - 7 - spriteCount * 8)
+        val bytes = ByteArray(remaining())
+        get(bytes)
+        return ByteBuffer.wrap(bytes)
     }
 
-    private fun ByteReadPacket.spritePalette(spriteCount: Int, paletteSize: Int): ByteReadPacket {
-        discard(remaining.toInt() - 7 - spriteCount * 8 - (paletteSize - 1) * 3)
-        val bytes = ByteArray(remaining.toInt())
-        readFully(bytes)
-        return ByteReadPacket(bytes)
+    private fun ByteBuffer.spritePalette(spriteCount: Int, paletteSize: Int): ByteBuffer {
+        discard(remaining() - 7 - spriteCount * 8 - (paletteSize - 1) * 3)
+        val bytes = ByteArray(remaining())
+        get(bytes)
+        return ByteBuffer.wrap(bytes)
     }
 
     private companion object {

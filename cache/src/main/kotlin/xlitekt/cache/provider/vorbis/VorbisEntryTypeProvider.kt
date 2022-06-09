@@ -1,10 +1,12 @@
 package xlitekt.cache.provider.vorbis
 
-import io.ktor.utils.io.core.ByteReadPacket
-import io.ktor.utils.io.core.readBytes
-import io.ktor.utils.io.core.readInt
-import io.ktor.utils.io.core.readUByte
+import io.ktor.util.copy
+import io.ktor.util.moveToByteArray
 import xlitekt.cache.provider.EntryTypeProvider
+import xlitekt.shared.buffer.discard
+import xlitekt.shared.buffer.readInt
+import xlitekt.shared.buffer.readUByte
+import java.nio.ByteBuffer
 import kotlin.math.cos
 import kotlin.math.sin
 
@@ -17,13 +19,13 @@ class VorbisEntryTypeProvider : EntryTypeProvider<VorbisEntryType>() {
         return store
             .index(VORBIS_INDEX)
             .groups()
-            .map { ByteReadPacket(it.data).loadEntryType(VorbisEntryType(it.id)) }
+            .map { ByteBuffer.wrap(it.data).loadEntryType(VorbisEntryType(it.id)) }
             .associateBy(VorbisEntryType::id)
     }
 
-    override fun ByteReadPacket.loadEntryType(type: VorbisEntryType): VorbisEntryType {
+    override fun ByteBuffer.loadEntryType(type: VorbisEntryType): VorbisEntryType {
         if (type.id == 0) {
-            setGlobalVorbis(readBytes(), 0)
+            setGlobalVorbis(moveToByteArray(), 0)
             vorbisBlockSize0 = 1 shl readBits(4)
             vorbisBlockSize1 = 1 shl readBits(4)
             window = FloatArray(vorbisBlockSize1)
@@ -97,12 +99,13 @@ class VorbisEntryTypeProvider : EntryTypeProvider<VorbisEntryType>() {
             var size = 0
             var opcode: Int
             do {
-                opcode = readUByte().toInt()
+                opcode = readUByte()
                 size += opcode
             } while (opcode >= 255)
 
             val bytes = ByteArray(size)
-            readBytes(size).copyInto(bytes, 0, 0, size)
+            copy(size).array().copyInto(bytes, 0, 0, size)
+            discard(size)
             bytes
         }
         assertEmptyAndRelease()

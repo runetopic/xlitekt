@@ -1,9 +1,9 @@
 package xlitekt.cache.provider.config.inv
 
-import io.ktor.utils.io.core.ByteReadPacket
-import io.ktor.utils.io.core.readUByte
-import io.ktor.utils.io.core.readUShort
 import xlitekt.cache.provider.EntryTypeProvider
+import xlitekt.shared.buffer.readUByte
+import xlitekt.shared.buffer.readUShort
+import java.nio.ByteBuffer
 
 /**
  * @author Jordan Abraham
@@ -14,13 +14,13 @@ class InvEntryTypeProvider : EntryTypeProvider<InvEntryType>() {
         .index(CONFIG_INDEX)
         .group(INV_CONFIG)
         .files()
-        .map { ByteReadPacket(it.data).loadEntryType(InvEntryType(it.id)) }
+        .map { ByteBuffer.wrap(it.data).loadEntryType(InvEntryType(it.id)) }
         .associateBy(InvEntryType::id)
 
-    override fun ByteReadPacket.loadEntryType(type: InvEntryType): InvEntryType {
-        when (val opcode = readUByte().toInt()) {
+    override fun ByteBuffer.loadEntryType(type: InvEntryType): InvEntryType {
+        when (val opcode = readUByte()) {
             0 -> { assertEmptyAndRelease(); return type }
-            2 -> type.size = readUShort().toInt()
+            2 -> type.size = readUShort()
             else -> throw IllegalArgumentException("Missing opcode $opcode.")
         }
         return loadEntryType(type)

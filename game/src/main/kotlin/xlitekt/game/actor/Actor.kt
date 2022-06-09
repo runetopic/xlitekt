@@ -42,8 +42,6 @@ import xlitekt.game.world.map.directionTo
 import xlitekt.game.world.map.zone.Zone
 import xlitekt.shared.inject
 import java.util.Optional
-import xlitekt.game.actor.player.restoreRunEnergy
-import xlitekt.game.content.vars.VarPlayer
 
 /**
  * @author Tyler Telis

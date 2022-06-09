@@ -1,9 +1,9 @@
 package xlitekt.cache.provider.config.varp
 
-import io.ktor.utils.io.core.ByteReadPacket
-import io.ktor.utils.io.core.readUByte
-import io.ktor.utils.io.core.readUShort
 import xlitekt.cache.provider.EntryTypeProvider
+import xlitekt.shared.buffer.readUByte
+import xlitekt.shared.buffer.readUShort
+import java.nio.ByteBuffer
 
 /**
  * @author Jordan Abraham
@@ -14,13 +14,13 @@ class VarpEntryTypeProvider : EntryTypeProvider<VarpEntryType>() {
         .index(CONFIG_INDEX)
         .group(VARP_CONFIG)
         .files()
-        .map { ByteReadPacket(it.data).loadEntryType(VarpEntryType(it.id)) }
+        .map { ByteBuffer.wrap(it.data).loadEntryType(VarpEntryType(it.id)) }
         .associateBy(VarpEntryType::id)
 
-    override tailrec fun ByteReadPacket.loadEntryType(type: VarpEntryType): VarpEntryType {
-        when (val opcode = readUByte().toInt()) {
+    override tailrec fun ByteBuffer.loadEntryType(type: VarpEntryType): VarpEntryType {
+        when (val opcode = readUByte()) {
             0 -> { assertEmptyAndRelease(); return type }
-            5 -> type.type = readUShort().toInt()
+            5 -> type.type = readUShort()
             else -> throw IllegalArgumentException("Missing opcode $opcode.")
         }
         return loadEntryType(type)

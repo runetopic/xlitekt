@@ -1,8 +1,8 @@
 package script.packet.assembler
 
-import io.ktor.utils.io.core.buildPacket
 import xlitekt.game.packet.IfMoveSubPacket
 import xlitekt.game.packet.assembler.onPacketAssembler
+import xlitekt.shared.buffer.allocate
 import xlitekt.shared.buffer.writeInt
 
 /**
@@ -10,7 +10,7 @@ import xlitekt.shared.buffer.writeInt
  * @author Tyler Telis
  */
 onPacketAssembler<IfMoveSubPacket>(opcode = 30, size = 8) {
-    buildPacket {
+    allocate(8) {
         writeInt { fromPackedInterface }
         writeInt { toPackedInterface }
     }

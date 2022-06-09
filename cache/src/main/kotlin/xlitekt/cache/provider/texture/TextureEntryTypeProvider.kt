@@ -1,10 +1,11 @@
 package xlitekt.cache.provider.texture
 
-import io.ktor.utils.io.core.ByteReadPacket
-import io.ktor.utils.io.core.readUByte
-import io.ktor.utils.io.core.readUShort
 import xlitekt.cache.provider.EntryTypeProvider
+import xlitekt.shared.buffer.discard
+import xlitekt.shared.buffer.readUByte
+import xlitekt.shared.buffer.readUShort
 import xlitekt.shared.toBoolean
+import java.nio.ByteBuffer
 
 /**
  * @author Jordan Abraham
@@ -15,17 +16,17 @@ class TextureEntryTypeProvider : EntryTypeProvider<TextureEntryType>() {
         .index(TEXTURE_INDEX)
         .group(0)
         .files()
-        .map { ByteReadPacket(it.data).loadEntryType(TextureEntryType(it.id)) }
+        .map { ByteBuffer.wrap(it.data).loadEntryType(TextureEntryType(it.id)) }
         .associateBy(TextureEntryType::id)
 
-    override fun ByteReadPacket.loadEntryType(type: TextureEntryType): TextureEntryType {
-        type.averageRGB = readUShort().toInt()
-        type.field2206 = readUByte().toInt().toBoolean()
-        val textureCount = readUByte().toInt()
+    override fun ByteBuffer.loadEntryType(type: TextureEntryType): TextureEntryType {
+        type.averageRGB = readUShort()
+        type.field2206 = readUByte().toBoolean()
+        val textureCount = readUByte()
         if (textureCount in 1..4) {
             type.textureIds = IntArray(textureCount)
             repeat(textureCount) {
-                type.textureIds!![it] = readUShort().toInt()
+                type.textureIds!![it] = readUShort()
             }
             if (textureCount > 1) {
                 repeat(textureCount - 1) {
@@ -40,11 +41,11 @@ class TextureEntryTypeProvider : EntryTypeProvider<TextureEntryType>() {
             repeat(textureCount) {
                 discard(4)
             }
-            type.animationDirection = readUByte().toInt()
-            type.animationSpeed = readUByte().toInt()
+            type.animationDirection = readUByte()
+            type.animationSpeed = readUByte()
         }
 
-        discard(remaining)
+        discard(remaining())
         assertEmptyAndRelease()
         return type
     }

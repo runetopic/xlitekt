@@ -1,8 +1,8 @@
 package script.packet.assembler
 
-import io.ktor.utils.io.core.buildPacket
 import xlitekt.game.packet.UpdateFriendListPacket
 import xlitekt.game.packet.assembler.onPacketAssembler
+import xlitekt.shared.buffer.allocateDynamic
 import xlitekt.shared.buffer.writeByte
 import xlitekt.shared.buffer.writeInt
 import xlitekt.shared.buffer.writeShort
@@ -14,7 +14,7 @@ import xlitekt.shared.toInt
  * @author Tyler Telis
  */
 onPacketAssembler<UpdateFriendListPacket>(opcode = 38, size = -2) {
-    buildPacket {
+    allocateDynamic(256) {
         for (friend in friends) {
             writeByte(friend.visible::toInt)
             writeStringCp1252NullTerminated(friend::displayName)

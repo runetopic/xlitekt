@@ -2,14 +2,14 @@ package xlitekt.cache.provider.map
 
 import com.github.michaelbull.logging.InlineLogger
 import com.runetopic.cache.codec.decompress
-import io.ktor.utils.io.core.ByteReadPacket
-import io.ktor.utils.io.core.readUByte
 import xlitekt.cache.provider.EntryTypeProvider
 import xlitekt.cache.provider.map.MapSquareEntryType.MapSquareTerrainLocation
 import xlitekt.shared.buffer.readIncrSmallSmart
+import xlitekt.shared.buffer.readUByte
 import xlitekt.shared.buffer.readUShortSmart
 import xlitekt.shared.inject
 import xlitekt.shared.resource.MapSquares
+import java.nio.ByteBuffer
 import java.util.zip.ZipException
 
 /**
@@ -27,12 +27,12 @@ class MapSquareEntryTypeProvider : EntryTypeProvider<MapSquareEntryType>() {
         return mapSquareResource.values
             .parallelStream()
             .map { it to index.group("m${it.mapsquare shr 8}_${it.mapsquare and 0xff}") }
-            .map { ByteReadPacket(it.second.data.decompress()).loadEntryType(MapSquareEntryType(it.first.mapsquare)) }
+            .map { ByteBuffer.wrap(it.second.data.decompress()).loadEntryType(MapSquareEntryType(it.first.mapsquare)) }
             .toList()
             .associateBy(MapSquareEntryType::id)
     }
 
-    override fun ByteReadPacket.loadEntryType(type: MapSquareEntryType): MapSquareEntryType {
+    override fun ByteBuffer.loadEntryType(type: MapSquareEntryType): MapSquareEntryType {
         // Load the map file first.
         for (level in 0 until LEVELS) {
             for (x in 0 until MAP_SIZE) {
@@ -52,7 +52,7 @@ class MapSquareEntryTypeProvider : EntryTypeProvider<MapSquareEntryType>() {
         val xteas = resource.key.toIntArray()
         if (locs.data.isNotEmpty() && xteas.isNotEmpty()) {
             try {
-                ByteReadPacket(locs.data.decompress(xteas)).loadLocs(type)
+                ByteBuffer.wrap(locs.data.decompress(xteas)).loadLocs(type)
             } catch (exception: ZipException) {
                 logger.warn { "Could not decompress and load locs. Perhaps the xtea keys are incorrect. GroupId=${locs.id}, MapSquare=${type.id}." }
             }
@@ -61,19 +61,19 @@ class MapSquareEntryTypeProvider : EntryTypeProvider<MapSquareEntryType>() {
         return type
     }
 
-    private tailrec fun ByteReadPacket.loadTerrain(
+    private tailrec fun ByteBuffer.loadTerrain(
         height: Int = 0,
         overlayId: Int = 0,
         overlayPath: Int = 0,
         overlayRotation: Int = 0,
         collision: Int = 0,
         underlayId: Int = 0
-    ): MapSquareTerrainLocation = when (val opcode = readUByte().toInt()) {
+    ): MapSquareTerrainLocation = when (val opcode = readUByte()) {
         0 -> MapSquareTerrainLocation(height, overlayId, overlayPath, overlayRotation, collision, underlayId)
-        1 -> MapSquareTerrainLocation(readUByte().toInt(), overlayId, overlayPath, overlayRotation, collision, underlayId)
+        1 -> MapSquareTerrainLocation(readUByte(), overlayId, overlayPath, overlayRotation, collision, underlayId)
         else -> loadTerrain(
             height = height,
-            overlayId = if (opcode in 2..49) readUByte().toInt() else overlayId,
+            overlayId = if (opcode in 2..49) readUByte() else overlayId,
             overlayPath = if (opcode in 2..49) (opcode - 2) / 4 else overlayPath,
             overlayRotation = if (opcode in 2..49) opcode - 2 and 3 else overlayRotation,
             collision = if (opcode in 50..81) opcode - 49 else collision,
@@ -81,22 +81,22 @@ class MapSquareEntryTypeProvider : EntryTypeProvider<MapSquareEntryType>() {
         )
     }
 
-    private fun ByteReadPacket.loadLocs(type: MapSquareEntryType) {
+    private fun ByteBuffer.loadLocs(type: MapSquareEntryType) {
         loadLocIds(type, -1)
         assertEmptyAndRelease()
     }
 
-    private tailrec fun ByteReadPacket.loadLocIds(type: MapSquareEntryType, locId: Int) {
+    private tailrec fun ByteBuffer.loadLocIds(type: MapSquareEntryType, locId: Int) {
         val offset = readIncrSmallSmart()
         if (offset == 0) return
         loadLocCollision(type, locId + offset, 0)
         return loadLocIds(type, locId + offset)
     }
 
-    private tailrec fun ByteReadPacket.loadLocCollision(type: MapSquareEntryType, locId: Int, packedLocation: Int) {
+    private tailrec fun ByteBuffer.loadLocCollision(type: MapSquareEntryType, locId: Int, packedLocation: Int) {
         val offset = readUShortSmart()
         if (offset == 0) return
-        val attributes = readUByte().toInt()
+        val attributes = readUByte()
         val shape = attributes shr 2
         val rotation = attributes and 0x3
 

@@ -1,10 +1,10 @@
 package xlitekt.cache.provider.font
 
-import io.ktor.utils.io.core.ByteReadPacket
-import io.ktor.utils.io.core.readBytes
+import io.ktor.util.moveToByteArray
 import xlitekt.cache.provider.EntryTypeProvider
 import xlitekt.cache.provider.sprite.SpriteEntryTypeProvider
 import xlitekt.shared.inject
+import java.nio.ByteBuffer
 
 /**
  * @author Jordan Abraham
@@ -17,17 +17,17 @@ class FontEntryTypeProvider : EntryTypeProvider<FontEntryType>() {
         .index(FONT_INDEX)
         .groups()
         .onEach { require((glossary[it.nameHash]?.toNameHash() ?: it.nameHash) == it.nameHash) }
-        .map { ByteReadPacket(it.data).loadEntryType(FontEntryType(it.id, name = glossary[it.nameHash] ?: it.nameHash.toString())) }
+        .map { ByteBuffer.wrap(it.data).loadEntryType(FontEntryType(it.id, name = glossary[it.nameHash] ?: it.nameHash.toString())) }
         .associateBy(FontEntryType::id)
 
-    override fun ByteReadPacket.loadEntryType(type: FontEntryType): FontEntryType {
+    override fun ByteBuffer.loadEntryType(type: FontEntryType): FontEntryType {
         val sprite = sprites.entryType(type.id) ?: return type
         type.offsetsX = sprite.offsetsX
         type.offsetsY = sprite.offsetsY
         type.widths = sprite.widths
         type.heights = sprite.heights
 
-        val bytes = readBytes()
+        val bytes = moveToByteArray()
         assertEmptyAndRelease()
 
         val advances = IntArray(256)

@@ -98,10 +98,18 @@ onBodyPart(index = Equipment.SLOT_OFFHAND) {
  */
 onBodyPart(index = 6, BodyPart.Arms) {
     bodyPart {
-        val torso = equipment.torso ?: return@bodyPart writeShort { 0x100 + kit }
-        val info = itemInfoMap[torso.id]?.equipment ?: return@bodyPart writeShort { 0x100 + kit }
+        if (equipment.torso == null) {
+            writeShort { 0x100 + kit }
+            return@bodyPart
+        }
+        val torso = equipment.torso!!
+        if (itemInfoMap[torso.id]?.equipment == null) {
+            writeShort { 0x100 + kit }
+            return@bodyPart
+        }
+        val itemInfo = itemInfoMap[torso.id]?.equipment!!
 
-        if (info.hideArms == true) {
+        if (itemInfo.hideArms == true) {
             writeByte { 0 } // Hide arms.
         } else {
             writeShort { 0x100 + kit }
@@ -127,8 +135,16 @@ onBodyPart(index = Equipment.SLOT_LEGS, BodyPart.Legs) {
  */
 onBodyPart(index = 8, BodyPart.Head) {
     bodyPart {
-        val head = equipment.head ?: return@bodyPart writeShort { 0x100 + kit }
-        val itemInfo = itemInfoMap[head.id]?.equipment ?: return@bodyPart writeByte { 0 } // Hide hair.
+        if (equipment.head == null) {
+            writeShort { 0x100 + kit }
+            return@bodyPart
+        }
+        val head = equipment.head!!
+        if (itemInfoMap[head.id]?.equipment == null) {
+            writeShort { 0x100 + kit }
+            return@bodyPart
+        }
+        val itemInfo = itemInfoMap[head.id]?.equipment!!
 
         if (itemInfo.hideHair == true) {
             writeByte { 0 } // Hide hair.
@@ -173,8 +189,16 @@ onBodyPart(index = 11, BodyPart.Jaw) {
 
         when (gender) {
             Gender.Male -> {
-                val head = equipment.head ?: return@bodyPart writeShort { 0x100 + kit }
-                val itemInfo = itemInfoMap[head.id]?.equipment ?: return@bodyPart writeShort { 0x100 + kit }
+                if (equipment.head == null) {
+                    writeShort { 0x100 + kit }
+                    return@bodyPart
+                }
+                val head = equipment.head!!
+                if (itemInfoMap[head.id]?.equipment == null) {
+                    writeShort { 0x100 + kit }
+                    return@bodyPart
+                }
+                val itemInfo = itemInfoMap[head.id]?.equipment!!
 
                 if (itemInfo.showBeard == false) {
                     writeByte { 0 } // Hide beard.
@@ -182,7 +206,7 @@ onBodyPart(index = 11, BodyPart.Jaw) {
                     writeShort { 0x100 + kit }
                 }
             }
-            else -> writeByte(0)
+            else -> writeByte { 0 }
         }
     }
 }

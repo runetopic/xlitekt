@@ -2,8 +2,6 @@ package script.ui
 
 import xlitekt.game.actor.player.Player
 import xlitekt.game.actor.player.script
-import xlitekt.game.content.container.inventory.INVENTORY_CONTAINER_KEY
-import xlitekt.game.content.ui.InterfaceEvent
 import xlitekt.game.content.ui.UserInterface
 import xlitekt.game.content.ui.UserInterface.EquipmentStats
 import xlitekt.game.content.ui.UserInterfaceListener

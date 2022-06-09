@@ -1,11 +1,11 @@
 package xlitekt.game.actor.player
 
-import io.ktor.utils.io.core.*
 import org.jctools.maps.NonBlockingHashMapLong
 import xlitekt.game.actor.npc.NPC
 import xlitekt.game.world.World.Companion.MAX_PLAYERS
 import xlitekt.shared.buffer.withBitAccess
-import java.util.*
+import java.nio.ByteBuffer
+import java.util.LinkedList
 
 class Viewport(
     val player: Player,
@@ -23,7 +23,7 @@ class Viewport(
 
     private var resizeTickCount = 0
 
-    fun init(builder: BytePacketBuilder, players: NonBlockingHashMapLong<Player>) = builder.withBitAccess {
+    fun init(builder: ByteBuffer, players: NonBlockingHashMapLong<Player>) = builder.withBitAccess {
         writeBits(30, player.location::packedLocation)
         this@Viewport.players[player.index] = player
         highDefinitions[highDefinitionsCount++] = player.index
