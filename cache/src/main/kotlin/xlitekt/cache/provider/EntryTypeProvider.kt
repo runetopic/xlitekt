@@ -30,7 +30,7 @@ abstract class EntryTypeProvider<R : EntryType> {
     }
 
     protected fun ByteBuffer.assertEmptyAndRelease() {
-        check(position() == array().size) { "The remaining buffer is not empty. Remaining=${array().size - position()}" }
+        check(remaining() == 0) { "The remaining buffer is not empty. Remaining=${remaining()}" }
 //        release()
     }
 

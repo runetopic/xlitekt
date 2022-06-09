@@ -6,9 +6,9 @@ import java.nio.ByteBuffer
 /**
  * @author Jordan Abraham
  */
-inline fun allocate(size: Int, block: ByteBuffer.() -> Unit): ByteArray = ByteBuffer.allocate(size).also { block.invoke(it) }.array()
-inline fun allocateDynamic(size: Int, block: ByteBuffer.() -> Unit): ByteArray {
-    val pool = ByteBuffer.allocate(size)
+inline fun allocate(limit: Int, block: ByteBuffer.() -> Unit): ByteArray = ByteBuffer.allocate(limit).also { block.invoke(it) }.array()
+inline fun allocateDynamic(limit: Int, block: ByteBuffer.() -> Unit): ByteArray {
+    val pool = ByteBuffer.allocate(limit)
     block.invoke(pool)
     return ByteBuffer.allocate(pool.position()).put(pool.array(), 0, pool.position()).array()
 }
@@ -80,6 +80,12 @@ inline fun ByteBuffer.writeIntV2(value: () -> Int) = value.invoke().also {
     put((it shr 16).toByte())
     put((it shr 24).toByte())
     writeShortLittleEndian { it }
+}
+
+inline fun ByteBuffer.fill(n: Int, value: () -> Int) = value.invoke().also {
+    repeat(n) {
+        writeByte { it }
+    }
 }
 
 inline fun ByteBuffer.withBitAccess(block: BitAccess.() -> Unit) {

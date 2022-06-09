@@ -45,7 +45,7 @@ class TextureEntryTypeProvider : EntryTypeProvider<TextureEntryType>() {
             type.animationSpeed = readUByte()
         }
 
-        discard(array().size - position())
+        discard(remaining())
         assertEmptyAndRelease()
         return type
     }

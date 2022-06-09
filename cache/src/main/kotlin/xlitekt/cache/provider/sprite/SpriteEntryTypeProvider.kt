@@ -81,28 +81,28 @@ class SpriteEntryTypeProvider : EntryTypeProvider<SpriteEntryType>() {
             }
         }
 
-        discard(array().size - position())
+        discard(remaining())
         assertEmptyAndRelease()
         return type
     }
 
     private fun ByteBuffer.spriteHeader(): ByteBuffer {
-        discard(array().size - position() - 2)
-        val bytes = ByteArray(array().size - position())
+        discard(remaining() - 2)
+        val bytes = ByteArray(remaining())
         get(bytes)
         return ByteBuffer.wrap(bytes)
     }
 
     private fun ByteBuffer.spriteBuffer(spriteCount: Int): ByteBuffer {
-        discard((array().size - position()) - 7 - spriteCount * 8)
-        val bytes = ByteArray(array().size - position())
+        discard(remaining() - 7 - spriteCount * 8)
+        val bytes = ByteArray(remaining())
         get(bytes)
         return ByteBuffer.wrap(bytes)
     }
 
     private fun ByteBuffer.spritePalette(spriteCount: Int, paletteSize: Int): ByteBuffer {
-        discard((array().size - position()) - 7 - spriteCount * 8 - (paletteSize - 1) * 3)
-        val bytes = ByteArray(array().size - position())
+        discard(remaining() - 7 - spriteCount * 8 - (paletteSize - 1) * 3)
+        val bytes = ByteArray(remaining())
         get(bytes)
         return ByteBuffer.wrap(bytes)
     }

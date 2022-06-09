@@ -10,7 +10,6 @@ import io.ktor.utils.io.ByteReadChannel
 import io.ktor.utils.io.ByteWriteChannel
 import io.ktor.utils.io.ClosedWriteChannelException
 import io.ktor.utils.io.core.buildPacket
-import io.ktor.utils.io.core.writeFully
 import io.ktor.utils.io.core.writeShort
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.TimeoutCancellationException
@@ -96,7 +95,9 @@ class Client(
                 writeByte((assembler.opcode + serverCipher.getNext() and 0xff).toByte())
                 if (assembler.size == -1) writeByte(invoke.size.toByte())
                 else if (assembler.size == -2) writeShort(invoke.size.toShort())
-                writeFully(invoke)
+                repeat(invoke.size) {
+                    writeByte(invoke[it])
+                }
             }
             writePool.clear()
         }
@@ -107,7 +108,6 @@ class Client(
             }
             it.flush()
         }
-        readPacket.release()
     }
 
     internal fun invokeAndClearReadPool() {

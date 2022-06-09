@@ -1,5 +1,6 @@
 package script.packet.disassembler
 
+import io.ktor.util.moveToByteArray
 import xlitekt.game.packet.PublicChatPacket
 import xlitekt.game.packet.disassembler.onPacketDisassembler
 import xlitekt.shared.buffer.readUByte
@@ -11,10 +12,10 @@ import xlitekt.shared.buffer.readUShortSmart
  */
 onPacketDisassembler(opcode = 95, size = -1) {
     PublicChatPacket(
-        unknown = readUByte().toInt(),
-        color = readUByte().toInt(),
-        effect = readUByte().toInt(),
+        unknown = readUByte(),
+        color = readUByte(),
+        effect = readUByte(),
         length = readUShortSmart(),
-        data = array().copyOfRange(position(), array().size)
+        data = moveToByteArray()
     )
 }

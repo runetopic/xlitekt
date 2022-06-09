@@ -1,5 +1,6 @@
 package xlitekt.cache.provider.music
 
+import io.ktor.util.copy
 import io.ktor.util.moveToByteArray
 import xlitekt.cache.provider.EntryTypeProvider
 import xlitekt.shared.buffer.allocateDynamic
@@ -25,7 +26,7 @@ class MusicEntryTypeProvider : EntryTypeProvider<MusicEntryType>() {
         .associateBy(MusicEntryType::id)
 
     override fun ByteBuffer.loadEntryType(type: MusicEntryType): MusicEntryType {
-        val header = duplicate().header()
+        val header = copy().header()
         val tracks = header.readUByte()
         val division = header.readUShort()
         var offset = 14 + tracks * 10
@@ -39,7 +40,7 @@ class MusicEntryTypeProvider : EntryTypeProvider<MusicEntryType>() {
         var keyAfterTchOpcodes = 0
         var progmChangeOpcodes = 0
 
-        val body = duplicate().body()
+        val body = copy().body()
         var controlChangeIndex: Int
         var opcode: Int
         repeat(tracks) {
@@ -72,7 +73,7 @@ class MusicEntryTypeProvider : EntryTypeProvider<MusicEntryType>() {
         offset += chnnlAfterTchOpcodes + progmChangeOpcodes
         opcode = tracks + tempoOpcodes + ctrlChangeOpcodes + noteOnOpcodes + noteOffOpcodes + wheelChangeOpcodes + chnnlAfterTchOpcodes + keyAfterTchOpcodes + progmChangeOpcodes
 
-        val var13 = duplicate().offset(body.array().size - body.position())
+        val var13 = copy().offset(body.remaining())
 
         controlChangeIndex = 0
         while (controlChangeIndex < opcode) {
@@ -80,8 +81,8 @@ class MusicEntryTypeProvider : EntryTypeProvider<MusicEntryType>() {
             ++controlChangeIndex
         }
 
-        offset += duplicate().offset(body.array().size - body.position()) - var13
-        controlChangeIndex = duplicate().offset(body.array().size - body.position())
+        offset += copy().offset(body.remaining()) - var13
+        controlChangeIndex = copy().offset(body.remaining())
 
         var modulationWheelSize = 0
         var modulationWheel2Size = 0
@@ -116,73 +117,73 @@ class MusicEntryTypeProvider : EntryTypeProvider<MusicEntryType>() {
             }
         }
 
-        var commandsIndex = duplicate().offset(body.array().size - body.position())
+        var commandsIndex = copy().offset(body.remaining())
         body.discard(commandsSize)
 
-        var polyPressureIndex = duplicate().offset(body.array().size - body.position())
+        var polyPressureIndex = copy().offset(body.remaining())
         body.discard(keyAfterTchOpcodes)
 
-        var channelPressureIndex = duplicate().offset(body.array().size - body.position())
+        var channelPressureIndex = copy().offset(body.remaining())
         body.discard(chnnlAfterTchOpcodes)
 
-        var pitchWheelHighIndex = duplicate().offset(body.array().size - body.position())
+        var pitchWheelHighIndex = copy().offset(body.remaining())
         body.discard(wheelChangeOpcodes)
 
-        var modulationWheelOffset = duplicate().offset(body.array().size - body.position())
+        var modulationWheelOffset = copy().offset(body.remaining())
         body.discard(modulationWheelSize)
 
-        var channelVolumeOffset = duplicate().offset(body.array().size - body.position())
+        var channelVolumeOffset = copy().offset(body.remaining())
         body.discard(channelVolumeSize)
 
-        var panOffset = duplicate().offset(body.array().size - body.position())
+        var panOffset = copy().offset(body.remaining())
         body.discard(panSize)
 
-        var notesIndex = duplicate().offset(body.array().size - body.position())
+        var notesIndex = copy().offset(body.remaining())
         body.discard(noteOnOpcodes + noteOffOpcodes + keyAfterTchOpcodes)
 
-        var notesOnIndex = duplicate().offset(body.array().size - body.position())
+        var notesOnIndex = copy().offset(body.remaining())
         body.discard(noteOnOpcodes)
 
-        var otherIndex = duplicate().offset(body.array().size - body.position())
+        var otherIndex = copy().offset(body.remaining())
         body.discard(otherSize)
 
-        var notesOffIndex = duplicate().offset(body.array().size - body.position())
+        var notesOffIndex = copy().offset(body.remaining())
         body.discard(noteOffOpcodes)
 
-        var modulationWheel2Offset = duplicate().offset(body.array().size - body.position())
+        var modulationWheel2Offset = copy().offset(body.remaining())
         body.discard(modulationWheel2Size)
 
-        var channelVolume2Offset = duplicate().offset(body.array().size - body.position())
+        var channelVolume2Offset = copy().offset(body.remaining())
         body.discard(channelVolume2Size)
 
-        var pan2Offset = duplicate().offset(body.array().size - body.position())
+        var pan2Offset = copy().offset(body.remaining())
         body.discard(pan2Size)
 
-        var programChangeIndex = duplicate().offset(body.array().size - body.position())
+        var programChangeIndex = copy().offset(body.remaining())
         body.discard(progmChangeOpcodes)
 
-        var pitchWheelLowIndex = duplicate().offset(body.array().size - body.position())
+        var pitchWheelLowIndex = copy().offset(body.remaining())
         body.discard(wheelChangeOpcodes)
 
-        var nonRegisteredMsbIndex = duplicate().offset(body.array().size - body.position())
+        var nonRegisteredMsbIndex = copy().offset(body.remaining())
         body.discard(nonRegisteredMsbSize)
 
-        var nonRegisteredLsbIndex = duplicate().offset(body.array().size - body.position())
+        var nonRegisteredLsbIndex = copy().offset(body.remaining())
         body.discard(nonRegisteredLsbSize)
 
-        var registeredMsbIndex = duplicate().offset(body.array().size - body.position())
+        var registeredMsbIndex = copy().offset(body.remaining())
         body.discard(registeredNumberMsb)
 
-        var registeredLsbIndex = duplicate().offset(body.array().size - body.position())
+        var registeredLsbIndex = copy().offset(body.remaining())
         body.discard(registeredLsbSize)
 
-        var tempoOffset = duplicate().offset(body.array().size - body.position())
+        var tempoOffset = copy().offset(body.remaining())
         body.discard(tempoOpcodes * 3)
 
-        val midi = duplicate().midi(var13)
+        val midi = copy().midi(var13)
         val bytes = moveToByteArray()
 
-        val buffer = allocateDynamic(100_000) {
+        val buffer = allocateDynamic(1_000_000) {
             writeInt { 1297377380 }
             writeInt { 6 }
             writeShort { if (tracks > 1) 1 else 0 }
@@ -304,27 +305,26 @@ class MusicEntryTypeProvider : EntryTypeProvider<MusicEntryType>() {
     }
 
     private fun ByteBuffer.header(): ByteBuffer {
-        discard(array().size - position() - 3)
-        val bytes = ByteArray(array().size - position())
+        discard(remaining() - 3)
+        val bytes = ByteArray(remaining())
         get(bytes)
         return ByteBuffer.wrap(bytes)
     }
 
     private fun ByteBuffer.body(): ByteBuffer {
-        discard(array().size - position())
-        val bytes = ByteArray(array().size - position())
+        val bytes = ByteArray(remaining())
         get(bytes)
         return ByteBuffer.wrap(bytes)
     }
 
     private fun ByteBuffer.midi(offset: Int): ByteBuffer {
         discard(offset)
-        val bytes = ByteArray(array().size - position())
+        val bytes = ByteArray(remaining())
         get(bytes)
         return ByteBuffer.wrap(bytes)
     }
 
-    private fun ByteBuffer.offset(amount: Int) = (array().size - position()) - amount
+    private fun ByteBuffer.offset(amount: Int) = remaining() - amount
 
     private inline fun ByteBuffer.writeVarInt(value: () -> Int) = value.invoke().also {
         if (it and -128 != 0) {
@@ -343,11 +343,11 @@ class MusicEntryTypeProvider : EntryTypeProvider<MusicEntryType>() {
     }
 
     private inline fun ByteBuffer.writeLengthInt(value: () -> Int) = value.invoke().also {
-        val array = duplicate().array().copyOfRange(0, position())
-        array()[array.size - it - 4] = (it shr 24).toByte()
-        array()[array.size - it - 3] = (it shr 16).toByte()
-        array()[array.size - it - 2] = (it shr 8).toByte()
-        array()[array.size - it - 1] = it.toByte()
+        // val array = duplicate().array().copyOfRange(0, position())
+        array()[position() - it - 4] = (it shr 24).toByte()
+        array()[position() - it - 3] = (it shr 16).toByte()
+        array()[position() - it - 2] = (it shr 8).toByte()
+        array()[position() - it - 1] = it.toByte()
     }
 
     private companion object {

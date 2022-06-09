@@ -168,7 +168,7 @@ internal object CacheDumper {
             "title" to title,
             "titlescreen" to titlescreen,
             "fonts" to fonts,
-            // "musics" to musics,
+            "musics" to musics,
             "instruments" to instruments
         ).entries.parallelStream().forEach {
             val path = Path.of("./cache/data/dump/${it.key}/")

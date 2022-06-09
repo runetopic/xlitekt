@@ -1,12 +1,11 @@
 package xlitekt.shared.buffer
 
-import io.ktor.util.copy
 import java.nio.ByteBuffer
 
 /**
  * @author Jordan Abraham
  */
-fun ByteBuffer.readStringCp1252NullTerminated() = String(readUChars(copy().discardUntilDelimiter(0))).also {
+fun ByteBuffer.readStringCp1252NullTerminated() = String(readUChars(duplicate().discardUntilDelimiter(0))).also {
     discard(1)
 }
 
@@ -34,7 +33,7 @@ fun ByteBuffer.readUShortLittleEndianAdd() = readUByteAdd() or (readUByte() shl 
 fun ByteBuffer.readUMedium() = (readUByte() shl 16) or readUShort()
 
 fun ByteBuffer.readInt() = int
-fun ByteBuffer.readIntLittleEndian() = readUByte() or (readUByte() shl 8) or (readUByte() shl 16) or (readUByte() shl 24)
+fun ByteBuffer.readIntLittleEndian() = (readUByte() and 0xff) or (readUByte() shl 8) or (readUByte() shl 16) or (readUByte() shl 24)
 fun ByteBuffer.readIntV1() = readUShort() or (readUByte() shl 24) or (readUByte() shl 16)
 fun ByteBuffer.readIntV2() = (readUByte() shl 16) or (readUByte() shl 24) or readUShortLittleEndian()
 

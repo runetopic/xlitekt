@@ -45,17 +45,17 @@ class Zone(
      */
     fun invokeUpdateRequests(player: Player): Zone {
         val updates = HashSet<Packet>(requestSize())
-//        for (request in mapProjRequests) {
-//            updates.addMapProjAnim(request)
-//        }
+        for (request in mapProjRequests) {
+            updates.addMapProjAnim(request)
+        }
         for (request in objRequests) {
             val obj = request.key
             if (request.value) updates.addObj(player, obj) else updates.delObj(player, obj)
         }
-//        for (request in locRequests) {
-//            val loc = request.key
-//            if (request.value) updates.addLoc(player, loc) else updates.delLoc(player, loc)
-//        }
+        for (request in locRequests) {
+            val loc = request.key
+            if (request.value) updates.addLoc(player, loc) else updates.delLoc(player, loc)
+        }
         updates.write(player, location)
         return this
     }
@@ -110,15 +110,17 @@ class Zone(
                 if (!zone.active()) {
                     continue
                 }
-//                val updates = HashSet<Packet>(requestSize())
+                val updates = HashSet<Packet>(requestSize())
                 // If zone contains any of the following, send them to the client.
-//                for (obj in zone.objsSpawned.filter { it !in objRequests }) {
-//                    updates.addObj(actor, obj)
-//                }
-//                for (loc in zone.locsSpawned.filter { it !in locRequests }) {
-//                    updates.addLoc(actor, loc)
-//                }
-//                updates.write(actor, zone.location)
+                for (obj in zone.objsSpawned.filter { it !in objRequests }) {
+                    // Filter obj requests out as they will be added later in the loop.
+                    updates.addObj(actor, obj)
+                }
+                for (loc in zone.locsSpawned.filter { it !in locRequests }) {
+                    // Filter loc requests out as they will be added later in the loop.
+                    updates.addLoc(actor, loc)
+                }
+                updates.write(actor, zone.location)
             }
             players.add(actor)
         } else if (actor is NPC) {

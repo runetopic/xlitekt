@@ -40,7 +40,7 @@ class TitleScreenEntryTypeProvider : EntryTypeProvider<TitleScreenEntryType>() {
     }
 
     override fun ByteBuffer.loadEntryType(type: TitleScreenEntryType): TitleScreenEntryType {
-        discard(array().size - position())
+        discard(remaining())
         assertEmptyAndRelease()
         return type
     }

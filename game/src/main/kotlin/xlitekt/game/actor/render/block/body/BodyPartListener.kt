@@ -30,9 +30,6 @@ class BodyPartBuilder(
     inline fun bodyPart(builder: ByteBuffer.(Int) -> Unit) {
         val buffer = ByteBuffer.allocate(4)
         builder.invoke(buffer, kit)
-        val pos = buffer.position()
-        val final = ByteBuffer.allocate(pos)
-        final.put(buffer.array(), 0, pos)
-        this.data = final.array()
+        this.data = ByteBuffer.allocate(buffer.position()).put(buffer.array(), 0, buffer.position()).array()
     }
 }

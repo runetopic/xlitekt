@@ -6,10 +6,14 @@ import xlitekt.game.actor.render.block.body.onBodyPart
 import xlitekt.game.content.container.equipment.Equipment
 import xlitekt.shared.buffer.writeByte
 import xlitekt.shared.buffer.writeShort
+import xlitekt.shared.inject
+import xlitekt.shared.resource.ItemInfoMap
 
 /**
  * @author Jordan Abraham
  */
+
+val itemInfoMap by inject<ItemInfoMap>()
 
 /**
  * The head.
@@ -94,7 +98,18 @@ onBodyPart(index = Equipment.SLOT_OFFHAND) {
  */
 onBodyPart(index = 6, BodyPart.Arms) {
     bodyPart {
-        if (equipment.torso != null) {
+        if (equipment.torso == null) {
+            writeShort { 0x100 + kit }
+            return@bodyPart
+        }
+        val torso = equipment.torso!!
+        if (itemInfoMap[torso.id]?.equipment == null) {
+            writeShort { 0x100 + kit }
+            return@bodyPart
+        }
+        val itemInfo = itemInfoMap[torso.id]?.equipment!!
+
+        if (itemInfo.hideArms == true) {
             writeByte { 0 } // Hide arms.
         } else {
             writeShort { 0x100 + kit }
@@ -120,7 +135,18 @@ onBodyPart(index = Equipment.SLOT_LEGS, BodyPart.Legs) {
  */
 onBodyPart(index = 8, BodyPart.Head) {
     bodyPart {
-        if (equipment.head != null) {
+        if (equipment.head == null) {
+            writeShort { 0x100 + kit }
+            return@bodyPart
+        }
+        val head = equipment.head!!
+        if (itemInfoMap[head.id]?.equipment == null) {
+            writeShort { 0x100 + kit }
+            return@bodyPart
+        }
+        val itemInfo = itemInfoMap[head.id]?.equipment!!
+
+        if (itemInfo.hideHair == true) {
             writeByte { 0 } // Hide hair.
         } else {
             writeShort { 0x100 + kit }
@@ -160,11 +186,25 @@ onBodyPart(index = Equipment.SLOT_FEET, BodyPart.Feet) {
 onBodyPart(index = 11, BodyPart.Jaw) {
     bodyPart {
         val slot = if (gender == Gender.Male) Equipment.SLOT_HEAD else Equipment.SLOT_TORSO
+
         when (gender) {
-            Gender.Male -> if (equipment[slot] != null) {
-                writeByte { 0 } // Hide beard.
-            } else {
-                writeShort { 0x100 + kit }
+            Gender.Male -> {
+                if (equipment.head == null) {
+                    writeShort { 0x100 + kit }
+                    return@bodyPart
+                }
+                val head = equipment.head!!
+                if (itemInfoMap[head.id]?.equipment == null) {
+                    writeShort { 0x100 + kit }
+                    return@bodyPart
+                }
+                val itemInfo = itemInfoMap[head.id]?.equipment!!
+
+                if (itemInfo.showBeard == false) {
+                    writeByte { 0 } // Hide beard.
+                } else {
+                    writeShort { 0x100 + kit }
+                }
             }
             else -> writeByte { 0 }
         }

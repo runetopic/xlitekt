@@ -29,7 +29,6 @@ onPlayerUpdateBlock<PublicChat>(7, 0x20) {
             writeByte { it + 1 }
             writeSmart(formatted::length)
             put(bytes, 0, it)
-            // writeFully(bytes, 0, it)
         }
     }
 }

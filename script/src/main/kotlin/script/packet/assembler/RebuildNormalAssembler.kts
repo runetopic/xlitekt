@@ -43,7 +43,5 @@ onPacketAssembler<RebuildNormalPacket>(opcode = 54, size = -2) {
 
         writeShort { size }
         writeBytes { xteas }
-        // writeBytes(xteas::readBytes)
-        // xteas.release()
     }
 }

@@ -112,7 +112,7 @@ class InterfaceEntryTypeProvider : EntryTypeProvider<InterfaceEntryType>() {
         type.dragThreshold = readUByte()
         type.isScrollBar = readUByte().toBoolean()
         type.spellActionName = readStringCp1252NullTerminated()
-        discard(array().size - position()) // Discard the remaining buffer for the listeners.
+        discard(remaining()) // Discard the remaining buffer for the listeners.
     }
 
     private fun ByteBuffer.decodeLegacy(type: InterfaceEntryType) {

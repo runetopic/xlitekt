@@ -39,10 +39,7 @@ onPacketAssembler<PlayerInfoPacket>(opcode = 80, size = -2) {
         repeat(2) { lowDefinition(viewport, blocks, lowDefinitionUpdates, players, alternativeLowDefinitionUpdates, it == 0) }
         viewport.update()
         val pos = blocks.position()
-        val final = ByteBuffer.allocate(pos)
-        final.put(blocks.array(), 0, pos)
-        writeBytes(final::array)
-        // writePacket(blocks.build())
+        writeBytes(ByteBuffer.allocate(pos).put(blocks.array(), 0, pos)::array)
     }
 }
 

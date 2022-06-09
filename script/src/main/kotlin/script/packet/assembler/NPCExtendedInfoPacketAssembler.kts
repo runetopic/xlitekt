@@ -35,10 +35,7 @@ onPacketAssembler<NPCInfoPacket>(opcode = 90, size = -2) {
             }
         }
         val pos = blocks.position()
-        val final = ByteBuffer.allocate(pos)
-        final.put(blocks.array(), 0, pos)
-        writeBytes(final::array)
-        // writePacket(blocks.build())
+        writeBytes(ByteBuffer.allocate(pos).put(blocks.array(), 0, pos)::array)
     }
 }
 
