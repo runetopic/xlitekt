@@ -13,11 +13,14 @@ inline fun allocate(limit: Int, block: ByteBuffer.() -> Unit): ByteArray = ByteB
     .rewind()
     .moveToByteArray()
 
-inline fun allocateDynamic(limit: Int, block: ByteBuffer.() -> Unit): ByteArray = ByteBuffer.allocate(limit).also(block).run {
-    limit(position())
-    rewind()
-    moveToByteArray()
-}
+inline fun allocateDynamic(limit: Int, block: ByteBuffer.() -> Unit): ByteArray = ByteBuffer
+    .allocate(limit)
+    .also(block)
+    .run {
+        limit(position())
+        rewind()
+        moveToByteArray()
+    }
 
 fun ByteBuffer.writeStringCp1252NullTerminated(value: String) {
     value.toByteArray().forEach(::put)
