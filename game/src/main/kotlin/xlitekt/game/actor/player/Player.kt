@@ -10,6 +10,7 @@ import xlitekt.game.actor.render.Render
 import xlitekt.game.actor.speed
 import xlitekt.game.content.container.equipment.Equipment
 import xlitekt.game.content.container.inventory.Inventory
+import xlitekt.game.content.prayer.Prayer
 import xlitekt.game.content.skill.Skill
 import xlitekt.game.content.skill.Skills
 import xlitekt.game.content.ui.Interfaces
@@ -25,7 +26,6 @@ import xlitekt.game.packet.RebuildNormalPacket
 import xlitekt.game.packet.RunClientScriptPacket
 import xlitekt.game.packet.SetMapFlagPacket
 import xlitekt.game.packet.UpdateRunEnergyPacket
-import xlitekt.game.packet.UpdateStatPacket
 import xlitekt.game.packet.VarpLargePacket
 import xlitekt.game.packet.VarpSmallPacket
 import xlitekt.game.packet.disassembler.handler.PacketHandler
@@ -58,6 +58,8 @@ class Player(
     val inventory: Inventory = Inventory(this)
     val equipment: Equipment = Equipment(this)
     var lastLoadedLocation = Location.None
+
+    override val prayer = Prayer(this)
 
     /**
      * This players connected client. This client is used for reading and writing packets.
@@ -165,10 +167,6 @@ inline fun Player.varp(id: Int, value: () -> Int) = value.invoke().also {
     }
 }
 
-fun Player.updateStat(skill: Skill, level: Int, experience: Double) {
-    write(UpdateStatPacket(skill.id, level, experience))
-}
-
 inline fun Player.message(message: () -> String) = write(MessageGamePacket(0, message.invoke(), false)) // TODO build messaging system
 fun Player.resetMiniMapFlag() = write(SetMapFlagPacket(255, 255))
 fun Player.script(scriptId: Int, vararg parameters: Any) = write(RunClientScriptPacket(scriptId, parameters))
@@ -194,9 +192,6 @@ fun Player.drainRunEnergy() {
 
     updateRunEnergy()
 }
-
-fun Player.addExperience(skill: Skill, experience: Double) =
-    this.skills.addExperience(skill, experience) { level, xp -> updateStat(skill, level, xp) }
 
 fun Player.restoreRunEnergy() {
     if (movement.isMoving() && VarPlayer.ToggleRun in vars || runEnergy >= 10_000f) return

@@ -21,7 +21,7 @@ onPacketHandler<OpLocPacket> {
     val locId = packet.locId
     val x = packet.x
     val z = packet.z
-    val running = packet.running
+    val running = packet.isModified
 
     if (!locEntryTypeProvider.exists(locId)) {
         logger.debug { "Invalid loc op objectId=$locId, x=$x, z=$z, running=$running" }
@@ -42,6 +42,22 @@ onPacketHandler<OpLocPacket> {
     val gameObject = objects.firstOrNull {
         it.id == locId && it.location.packedLocation == location.packedLocation
     } ?: return@onPacketHandler
+
+//    // Teleport movement (ctrl+click teleporting)
+//    if (player.rights >= 2 && packet.isModified) {
+//        player.teleportTo { waypoints.last }
+//        return@onPacketHandler
+//    }
+//
+//    // Toggles Actor's speed only for the duration of the movement (if isModified=true)
+//    player.speed { (VarPlayer.ToggleRun in player.vars).let { if (packet.isModified) !it else it } }
+
+    val action: () -> Unit =
+        if (gameObject.id == 409) {
+            { player.prayer.prayAtAltar(gameObject) }
+        } else {
+            { player.angleTo(gameObject) }
+        }
 
     with(player) {
         cancelAll()

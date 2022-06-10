@@ -7,14 +7,14 @@ import xlitekt.game.actor.player.message
  * Tyler Telis
  */
 object Commands {
-    private val commands = mutableSetOf<CommandListener>()
+    private val commandSet = mutableSetOf<CommandListener>()
 
     fun execute(input: String, player: Player): Boolean {
         val command = input.split(" ")
 
         if (command.isEmpty()) return false
 
-        commands.filter { it.command == command.first() }.forEach { listener ->
+        commandSet.filter { it.command.contains(command.first()) }.forEach { listener ->
             if (!listener.filter(player)) return@forEach
             listener.use(player, command.drop(1))
             return true
@@ -26,9 +26,13 @@ object Commands {
         return false
     }
 
-    fun onCommand(command: String): CommandListener {
-        val listener = CommandListener(command)
-        commands += listener
+    fun onCommand(vararg commands: String, description: String = "", syntax: Set<String>? = null): CommandListener {
+        val listener = CommandListener(commands, description, syntax ?: setOf("::${commands.first()}"))
+        this.commandSet += listener
         return listener
+    }
+
+    fun getCommandSet(): Set<CommandListener> {
+        return commandSet.toSet()
     }
 }

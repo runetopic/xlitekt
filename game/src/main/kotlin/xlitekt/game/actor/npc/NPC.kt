@@ -2,6 +2,7 @@ package xlitekt.game.actor.npc
 
 import xlitekt.cache.provider.config.npc.NPCEntryTypeProvider
 import xlitekt.game.actor.Actor
+import xlitekt.game.content.prayer.Prayer
 import xlitekt.game.event.EventBus
 import xlitekt.game.event.impl.Events
 import xlitekt.game.world.map.Location
@@ -25,6 +26,8 @@ class NPC(
 
     override fun totalHitpoints(): Int = 100
     override fun currentHitpoints(): Int = 100
+
+    override val prayer: Prayer = Prayer(this)
 
     override fun toString(): String = "NPC(id=$id, entry=$entry)"
 }

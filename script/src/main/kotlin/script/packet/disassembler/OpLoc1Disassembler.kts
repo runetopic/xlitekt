@@ -17,6 +17,6 @@ onPacketDisassembler(opcode = 81, size = 7) {
         x = readUShortLittleEndian(),
         locId = readUShort(),
         z = readUShortLittleEndianAdd(),
-        running = readUByteNegate().toBoolean()
+        isModified = readUByteNegate().toBoolean()
     )
 }

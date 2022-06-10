@@ -38,5 +38,6 @@ onPacketHandler<OpHeldPacket> {
 
     val listener = player.interfaces.listeners.find { it.userInterface.interfaceInfo.id == fromInterfaceId } ?: return@onPacketHandler
     listener.opHeld(event)
-    logger.debug { "Clicked op held fromInterfaceId=$fromInterfaceId, toInterfaceId=$toInterfaceId, fromChildId=$fromChildId, toChildId=$toChildId, fromSlotId=$fromSlotId, toSlotId=$toSlotId, fromItemId=$fromItemId, toItemId=$toItemId, index=$index" }
+    logger.debug { event }
+//    logger.debug { "Clicked op held fromInterfaceId=$fromInterfaceId, toInterfaceId=$toInterfaceId, fromChildId=$fromChildId, toChildId=$toChildId, fromSlotId=$fromSlotId, toSlotId=$toSlotId, fromItemId=$fromItemId, toItemId=$toItemId, index=$index" }
 }

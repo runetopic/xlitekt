@@ -1,24 +1,47 @@
 package script.command
 
-import xlitekt.game.actor.animate
-import xlitekt.game.actor.player.addExperience
 import xlitekt.game.actor.player.message
 import xlitekt.game.actor.queueNormal
+import xlitekt.game.actor.teleportTo
 import xlitekt.game.content.command.Commands.onCommand
 import xlitekt.game.content.item.FloorItem
 import xlitekt.game.content.item.Item
 import xlitekt.game.content.projectile.Projectile
 import xlitekt.game.content.skill.Skill
 import xlitekt.game.content.ui.UserInterface
+import xlitekt.game.world.World
 import xlitekt.game.world.map.CollisionMap
 import xlitekt.game.world.map.GameObject
 import xlitekt.game.world.map.Location
 import xlitekt.game.world.map.transform
 import xlitekt.game.world.map.withinDistance
+import xlitekt.shared.inject
 
 /**
  * @author Jordan Abraham
  */
+private val world by inject<World>()
+
+onCommand("home").use {
+    this.teleportTo { Location(3221, 3219, 0) }
+}
+
+onCommand("moveup").use {
+    this.teleportTo { Location(location.x, location.z, location.level + 1) }
+}
+
+onCommand("movedown").use {
+    this.teleportTo { Location(location.x, location.z, location.level - 1) }
+}
+
+onCommand("climb").use {
+    this.teleportTo { Location(location.x, location.z + 6400, location.level) }
+}
+
+onCommand("undoclimb").use {
+    this.teleportTo { Location(location.x, location.z - 6400, location.level) }
+}
+
 onCommand("gp").use {
     inventory.addItem(Item(995, Int.MAX_VALUE)) {
         message { "Spawned max cash." }

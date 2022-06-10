@@ -26,6 +26,15 @@ onPacketHandler<OpNPCPacket> {
         return@onPacketHandler
     }
 
+//    // Teleport movement (ctrl+click teleporting)
+//    if (player.rights >= 2 && packet.isModified) {
+//        player.teleportTo { waypoints.last }
+//        return@onPacketHandler
+//    }
+//
+//    // Toggles Actor's speed only for the duration of the movement (if isModified=true)
+//    player.speed { (VarPlayer.ToggleRun in player.vars).let { if (packet.isModified) !it else it } }
+
     with(player) {
         cancelAll()
         queueStrong {

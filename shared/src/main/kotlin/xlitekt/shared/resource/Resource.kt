@@ -4,6 +4,7 @@ import io.ktor.server.application.ApplicationEnvironment
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.decodeFromStream
 import xlitekt.shared.lazy
+import xlitekt.shared.resource.prayer.PrayerInfoResource
 
 class MapSquares(list: Map<Int, MapSquareResource>) : HashMap<Int, MapSquareResource>(list)
 class Sequences(list: Map<String, SequenceResource>) : HashMap<String, SequenceResource>(list)
@@ -16,6 +17,7 @@ class NPCSpawns(list: List<NPCSpawnsResource>) : ArrayList<NPCSpawnsResource>(li
 class NPCExamines(list: Map<Int, ExamineNPCResource>) : HashMap<Int, ExamineNPCResource>(list)
 class ObjectExamines(list: Map<Int, ExamineObjectResource>) : HashMap<Int, ExamineObjectResource>(list)
 class ItemExamines(list: Map<Int, ExamineItemResource>) : HashMap<Int, ExamineItemResource>(list)
+class PrayerInfoMap(list: Map<String, PrayerInfoResource>) : HashMap<String, PrayerInfoResource>(list)
 class ItemSequences(list: Map<Int, ItemSequenceResource>) : HashMap<Int, ItemSequenceResource>(list)
 
 object Resource {
@@ -33,7 +35,7 @@ object Resource {
     fun examineItemResource(): ItemExamines = ItemExamines(loadResource<List<ExamineItemResource>>("game.resources.item_examines").associateBy(ExamineItemResource::itemId))
     fun itemInfoResource(): ItemInfoMap = ItemInfoMap(loadResource<List<ItemInfoResource>>("game.resources.item_info").associateBy(ItemInfoResource::id))
     fun itemSequenceResource(): ItemSequences = ItemSequences(loadResource<List<ItemSequenceResource>>("game.resources.item_sequences").associateBy(ItemSequenceResource::id))
+    fun prayerInfoResource(): PrayerInfoMap = PrayerInfoMap(loadResource<List<PrayerInfoResource>>("game.resources.prayer_info").associateBy(PrayerInfoResource::name))
 
-    private inline fun <reified T> loadResource(path: String): T =
-        json.decodeFromStream(Resource::class.java.getResourceAsStream(lazy<ApplicationEnvironment>().config.property(path).getString())!!)
+    private inline fun <reified T> loadResource(path: String): T = json.decodeFromStream(Resource::class.java.getResourceAsStream(lazy<ApplicationEnvironment>().config.property(path).getString())!!)
 }

@@ -1,5 +1,6 @@
 package xlitekt.shared.buffer
 
+import io.ktor.utils.io.core.*
 import java.nio.ByteBuffer
 
 /**
@@ -21,6 +22,8 @@ fun ByteBuffer.readUByte() = get().toInt() and 0xff
 fun ByteBuffer.readUByteSubtract() = readUByte() - 128 and 0xff
 fun ByteBuffer.readUByteAdd() = readUByte() + 128 and 0xff
 fun ByteBuffer.readUByteNegate() = -readUByte() and 0xff
+
+fun ByteBuffer.readByteSubtract() = 128 - readByte()
 
 fun ByteBuffer.readShort() = short.toInt()
 fun ByteBuffer.readUShort() = short.toInt() and 0xffff

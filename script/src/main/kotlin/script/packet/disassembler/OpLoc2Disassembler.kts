@@ -14,7 +14,7 @@ onPacketDisassembler(opcode = 94, size = 7) {
     OpLocPacket(
         index = 2,
         z = readUShortLittleEndian(),
-        running = readByte().toBoolean(),
+        isModified = readByte().toBoolean(),
         x = readUShortAdd(),
         locId = readUShortLittleEndian()
     )

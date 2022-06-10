@@ -35,6 +35,7 @@ import xlitekt.game.actor.render.block.LowDefinitionRenderingBlock
 import xlitekt.game.actor.render.block.NPCRenderingBlockListener
 import xlitekt.game.actor.render.block.PlayerRenderingBlockListener
 import xlitekt.game.actor.render.block.RenderingBlock
+import xlitekt.game.content.prayer.Prayer
 import xlitekt.game.queue.ActorScriptQueue
 import xlitekt.game.queue.QueuedScriptPriority
 import xlitekt.game.queue.SuspendableQueuedScript
@@ -51,13 +52,15 @@ import java.util.Optional
  * @author Jordan Abraham
  */
 abstract class Actor(
-    open var location: Location,
+    open var location: Location
 ) {
     val movement = Movement()
     val bonuses = Bonuses()
     var previousLocation = Location.None
 
     val queue = ActorScriptQueue()
+
+    abstract val prayer: Prayer
 
     /**
      * This actor index.
@@ -358,6 +361,7 @@ fun Actor.routeTo(location: Location, reachAction: (() -> Unit)? = null) {
         destZ = location.z,
         level = location.level
     )
+
     movement.route(
         MovementRequest(
             reachAction,
@@ -394,6 +398,7 @@ fun Actor.routeTo(gameObject: GameObject, reachAction: (() -> Unit)? = null) {
         rotation = rotation,
         shape = shape
     )
+
     movement.route(
         MovementRequest(
             reachAction,
@@ -425,6 +430,7 @@ fun Actor.routeTo(npc: NPC, reachAction: (() -> Unit)? = null) {
         destHeight = npc.entry?.size,
         shape = 10
     )
+
     movement.route(
         MovementRequest(
             reachAction,

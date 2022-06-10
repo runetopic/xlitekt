@@ -34,6 +34,9 @@ enum class Skill(val id: Int) {
         const val DEFAULT_HERBLORE_LEVEL = 3
         const val DEFAULT_LEVEL = 1
 
+        const val MAX_LEVEL = 99
+        const val MAX_EXPERIENCE = 200000000.0
+
         fun getXpForLevel(level: Int): Double {
             val summation = (1 until level.coerceIn(0, 127)).sumOf { floor(2.0.pow(it / 7.0) * 300 + it) }
             return floor(summation / 4.0).coerceIn(0.0, 200000000.0)

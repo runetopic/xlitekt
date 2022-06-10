@@ -6,7 +6,9 @@ import xlitekt.game.actor.player.Player
  * Tyler Telis
  */
 class CommandListener(
-    val command: String,
+    val command: Array<out String>,
+    val description: String,
+    val syntax: Set<String>,
     var filter: Player.() -> Boolean = { true },
     var use: Player.(List<String>) -> Unit = {},
 ) {

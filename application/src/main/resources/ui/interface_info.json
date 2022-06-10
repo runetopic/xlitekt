@@ -50,6 +50,11 @@
     "resizableChildId": 85
   },
   {
+    "id": 214,
+    "name": "skill_guide",
+    "resizableChildId": 16
+  },
+  {
     "id": 216,
     "name": "emotes",
     "resizableChildId": 87

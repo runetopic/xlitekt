@@ -99,6 +99,7 @@ class Movement {
             }
             return
         }
+
         movementRequest = Optional.of(request)
         for (i in 0..min(waypoints.lastIndex, 24)) {
             checkpoints.enqueue(waypoints.getInt(i))

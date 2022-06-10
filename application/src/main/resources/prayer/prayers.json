@@ -1,0 +1,211 @@
+[
+  {
+    "name": "thick_skin",
+    "requiredLevel": 1,
+    "drainRate": 3,
+    "prayerType": "DEFENCE",
+    "varbit": 4104
+  },
+  {
+    "name": "burst_of_strength",
+    "requiredLevel": 4,
+    "drainRate": 3,
+    "prayerType": "STRENGTH",
+    "varbit":4105
+  },
+  {
+    "name": "clarity_of_thought",
+    "requiredLevel": 7,
+    "drainRate": 3,
+    "prayerType": "ATTACK",
+    "varbit": 4106
+  },
+  {
+    "name": "sharp_eye",
+    "requiredLevel": 8,
+    "drainRate": 3,
+    "prayerType": "RANGE",
+    "varbit": 4122
+  },
+  {
+    "name": "mystic_will",
+    "requiredLevel": 9,
+    "drainRate": 3,
+    "prayerType": "MAGIC",
+    "varbit": 4123
+  },
+  {
+    "name": "rock_skin",
+    "requiredLevel": 10,
+    "drainRate": 6,
+    "prayerType": "DEFENCE",
+    "varbit":4107
+  },
+  {
+    "name": "superhuman_strength",
+    "requiredLevel": 13,
+    "drainRate": 6,
+    "prayerType": "STRENGTH",
+    "varbit": 4108
+  },
+  {
+    "name": "improved_reflexes",
+    "requiredLevel": 16,
+    "drainRate": 6,
+    "prayerType": "ATTACK",
+    "varbit": 4109
+  },
+  {
+    "name": "rapid_restore",
+    "requiredLevel": 19,
+    "drainRate": 1,
+    "prayerType": "RAPID_RESTORE",
+    "varbit": 4110
+  },
+  {
+    "name": "rapid_heal",
+    "requiredLevel": 22,
+    "drainRate": 2,
+    "prayerType": "RAPID_HEAL",
+    "varbit": 4111
+  },
+  {
+    "name": "protect_item",
+    "requiredLevel": 25,
+    "drainRate": 2,
+    "prayerType": "PROTECT_ITEM",
+    "varbit": 4112
+  },
+  {
+    "name": "hawk_eye",
+    "requiredLevel": 26,
+    "drainRate": 6,
+    "prayerType": "RANGE",
+    "varbit": 4124
+  },
+  {
+    "name": "mystic_lore",
+    "requiredLevel": 27,
+    "drainRate": 6,
+    "prayerType": "MAGIC",
+    "varbit": 4125
+  },
+  {
+    "name": "steel_skin",
+    "requiredLevel": 28,
+    "drainRate": 12,
+    "prayerType": "DEFENCE",
+    "varbit": 4113
+  },
+  {
+    "name": "ultimate_strength",
+    "requiredLevel": 31,
+    "drainRate": 12,
+    "prayerType": "STRENGTH",
+    "varbit": 4114
+  },
+  {
+    "name": "incredible_reflexes",
+    "requiredLevel": 34,
+    "drainRate": 12,
+    "prayerType": "ATTACK",
+    "varbit": 4115
+  },
+  {
+    "name": "protect_from_magic",
+    "requiredLevel": 37,
+    "drainRate": 12,
+    "prayerType": "UTILITY",
+    "varbit": 4116,
+    "icon": "PROTECT_FROM_MAGIC"
+  },
+  {
+    "name": "protect_from_missiles",
+    "requiredLevel": 40,
+    "drainRate": 12,
+    "prayerType": "UTILITY",
+    "varbit": 4117,
+    "icon": "PROTECT_FROM_MISSILES"
+  },
+  {
+    "name": "protect_from_melee",
+    "requiredLevel": 43,
+    "drainRate": 12,
+    "prayerType": "UTILITY",
+    "varbit": 4118,
+    "icon": "PROTECT_FROM_MELEE"
+  },
+  {
+    "name": "eagle_eye",
+    "requiredLevel": 44,
+    "drainRate": 12,
+    "prayerType": "RANGE",
+    "varbit": 4126
+  },
+  {
+    "name": "mystic_might",
+    "requiredLevel": 45,
+    "drainRate": 12,
+    "prayerType": "MAGIC",
+    "varbit": 4127
+  },
+  {
+    "name": "retribution",
+    "requiredLevel": 46,
+    "drainRate": 3,
+    "prayerType": "UTILITY",
+    "varbit": 4119,
+    "icon": "RETRIBUTION"
+  },
+  {
+    "name": "redemption",
+    "requiredLevel": 49,
+    "drainRate": 6,
+    "prayerType": "UTILITY",
+    "varbit": 4120,
+    "icon": "REDEMPTION"
+  },
+  {
+    "name": "smite",
+    "requiredLevel": 52,
+    "drainRate": 18,
+    "prayerType": "UTILITY",
+    "varbit": 4121,
+    "icon": "SMITE"
+  },
+  {
+    "name": "preserve",
+    "requiredLevel": 55,
+    "drainRate": 2,
+    "prayerType": "PRESERVE",
+    "varbit": 5466
+  },
+  {
+    "name": "chivalry",
+    "requiredLevel": 60,
+    "drainRate": 24,
+    "prayerType": "MULTI_COMBAT",
+    "varbit": 4128
+  },
+  {
+    "name": "piety",
+    "requiredLevel": 70,
+    "drainRate": 24,
+    "prayerType": "MULTI_COMBAT",
+    "varbit": 4129
+  },
+  {
+    "name": "rigour",
+    "requiredLevel": 74,
+    "drainRate": 24,
+    "prayerType": "MULTI_COMBAT",
+    "varbit": 5464
+  },
+  {
+    "name": "augury",
+    "requiredLevel": 77,
+    "drainRate": 24,
+    "prayerType": "MULTI_COMBAT",
+    "varbit": 5465
+  }
+]

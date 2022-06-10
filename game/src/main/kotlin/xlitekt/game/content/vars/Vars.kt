@@ -29,21 +29,21 @@ class Vars(
      */
     operator fun set(key: Var, value: Int): Int = when (key.varType) {
         VarType.VAR_PLAYER -> {
+            player.varp(key.info.id) { value }
             when (value) {
                 0 -> vars.remove(key.info.id)
                 else -> vars[key.info.id] = value
             }
-            player.varp(key.info.id) { value }
             value
         }
         VarType.VAR_BIT -> {
             varbits.entryType(key.info.id)?.run {
                 val parentValue = toVarpParent(this, value)
+                player.varp(index) { parentValue }
                 when (parentValue) {
                     0 -> vars.remove(index)
                     else -> vars[index] = parentValue
                 }
-                player.varp(index) { parentValue }
                 parentValue
             } ?: -1
         }

@@ -13,6 +13,6 @@ onPacketDisassembler(opcode = 37, size = 3) {
     OpNPCPacket(
         index = 1,
         npcIndex = readUShortSubtract(),
-        running = readUByteSubtract().toBoolean()
+        isModified = readUByteSubtract().toBoolean()
     )
 }

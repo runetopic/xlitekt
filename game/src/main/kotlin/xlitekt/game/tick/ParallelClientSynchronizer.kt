@@ -16,12 +16,14 @@ class ParallelClientSynchronizer : Synchronizer() {
             it.invokeAndClearReadPool()
             it.process()
             it.syncMovement(syncPlayers)
+            it.prayer.process()
             it.syncRenderingBlocks()
         }
 
         val npcs = world.npcs()
 
         npcs.parallelStream().forEach {
+            it.prayer.process()
             it.syncMovement(syncPlayers)
             it.syncRenderingBlocks()
         }

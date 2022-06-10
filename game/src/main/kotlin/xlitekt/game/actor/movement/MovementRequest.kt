@@ -9,5 +9,5 @@ data class MovementRequest(
     val reachAction: (() -> Unit)?,
     val waypoints: IntArrayList,
     val failed: Boolean,
-    val alternative: Boolean,
+    val alternative: Boolean
 )

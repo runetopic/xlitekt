@@ -16,4 +16,5 @@ sealed class VarBit(override val name: String) : Var(name) {
     object ScrollWheelChangesZoomDistance : VarBit("scroll_wheel_changes_zoom_distance")
     object HitSplatTinting : VarBit("hit_splat_tinting")
     object AppearanceDesignerGenderSelect : VarBit("appearance_designer_gender_select")
+    object SkillGuide : VarBit("skill_guide")
 }
