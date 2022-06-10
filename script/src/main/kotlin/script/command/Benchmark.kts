@@ -18,7 +18,7 @@ private val world by inject<World>()
 
 onCommand("benchmark").use {
     repeat(World.MAX_PLAYERS) {
-        val bot = Player(username = it.toString(), password = "")
+        val bot = Player(username = it.toString(), password = "", brandNew = false)
         bot.location = Location(Random.nextInt(3200, 3280), Random.nextInt(3200, 3280), 0)
         world.addPlayer(bot)
         bot.vars.flip { VarPlayer.ToggleRun }

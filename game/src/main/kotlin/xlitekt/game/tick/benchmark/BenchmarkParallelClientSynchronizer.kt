@@ -6,7 +6,6 @@ import xlitekt.game.actor.hit
 import xlitekt.game.actor.player.process
 import xlitekt.game.actor.render.HitBar
 import xlitekt.game.actor.render.HitType
-import xlitekt.game.actor.resetMovement
 import xlitekt.game.actor.routeTo
 import xlitekt.game.actor.spotAnimate
 import xlitekt.game.tick.Synchronizer
@@ -35,7 +34,6 @@ class BenchmarkParallelClientSynchronizer : Synchronizer() {
                 it.chat(it.rights, 0) { "Hello Xlite." }
                 it.spotAnimate { 574 }
                 it.hit(HitBar.DEFAULT, null, HitType.values().random(), 0) { Random.nextInt(1, 127) }
-                it.resetMovement()
                 it.routeTo(
                     Location(
                         Random.nextInt(first!!.location.x - 5, first.location.x + 5),
@@ -59,7 +57,6 @@ class BenchmarkParallelClientSynchronizer : Synchronizer() {
 
         val npcFindersTime = measureTime {
             npcs.parallelStream().forEach {
-                it.resetMovement()
                 it.routeTo(
                     Location(
                         Random.nextInt(it.location.x - 5, it.location.x + 5),
