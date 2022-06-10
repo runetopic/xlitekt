@@ -13,8 +13,7 @@ import xlitekt.game.actor.player.Player
 import xlitekt.game.actor.player.drainRunEnergy
 import xlitekt.game.actor.player.message
 import xlitekt.game.actor.player.rebuildNormal
-import xlitekt.game.actor.player.renderAppearance
-import xlitekt.game.actor.prayer.Prayer
+import xlitekt.game.content.prayer.Prayer
 import xlitekt.game.actor.render.HitBar
 import xlitekt.game.actor.render.HitSplat
 import xlitekt.game.actor.render.HitType
@@ -43,11 +42,7 @@ import xlitekt.game.world.map.Location
 import xlitekt.game.world.map.directionTo
 import xlitekt.game.world.map.zone.Zone
 import xlitekt.shared.inject
-import xlitekt.shared.resource.prayer.PrayerIconType
-import xlitekt.shared.resource.prayer.Prayers
 import java.util.Optional
-import xlitekt.game.actor.player.restoreRunEnergy
-import xlitekt.game.content.vars.VarPlayer
 import kotlin.collections.HashSet
 
 /**
@@ -62,7 +57,7 @@ abstract class Actor(
     val bonuses = Bonuses()
     var previousLocation = Location.None
 
-    abstract val prayer: Prayer?
+    abstract val prayer: Prayer
 
     /**
      * This actor index.
@@ -541,15 +536,3 @@ private inline fun Actor.faceLocation(location: () -> Location) {
     if (this is Player) throw IllegalStateException("Player does not support this render.")
     render(FaceLocation(location.invoke()))
 }
-
-inline fun Actor.prayerIcon(prayerIcon: () -> PrayerIconType) {
-    if (this is Player) {
-        this.appearance.headIcon = Optional.of(prayerIcon.invoke().overheadId)
-        this.renderAppearance()
-    } else {
-        // npc overhead icons
-    }
-}
-
-inline fun Actor.switchPrayer(prayer: () -> Prayers) = this.prayer?.switch(prayer.invoke())
-inline fun Actor.activatePrayer(prayer: () -> Prayers) = this.prayer?.activate(prayer.invoke())

@@ -3,9 +3,12 @@ package xlitekt.game.content.skill
 import kotlinx.serialization.Serializable
 import xlitekt.game.actor.player.*
 import xlitekt.game.actor.player.serializer.SkillsSerializer
+import xlitekt.game.content.skill.Skill.Companion.MAX_EXPERIENCE
+import xlitekt.game.content.skill.Skill.Companion.MAX_LEVEL
 import xlitekt.game.content.skill.Skill.Companion.MAX_SKILLS
 import xlitekt.game.content.skill.Skill.Companion.getLevelForXp
-import xlitekt.game.content.skill.Skill.Companion.getXPForLevel
+import xlitekt.game.content.skill.Skill.Companion.getXpForLevel
+import xlitekt.game.packet.UpdateStatPacket
 
 @Serializable(SkillsSerializer::class)
 class Skills(
@@ -29,51 +32,65 @@ class Skills(
     fun level(skill: Skill): Int = levels[skill.id]
     fun xp(skill: Skill): Double = experience[skill.id]
 
-    fun setLevel(skill: Skill, level: Int, player: Player) {
-        val newLevel = level.coerceIn(0, 99)
-        this.levels[skill.id] = newLevel
+    internal fun setLevel(skill: Skill, level: Int) = this.levels.set(skill.id, level)
+    internal fun setExperience(skill: Skill, experience: Double) = this.experience.set(skill.id, experience)
 
-        this.updateStat(skill, player)
-    }
+    fun isMaxLevel(skill: Skill): Boolean = this.levels[skill.id] == MAX_LEVEL
+    fun isMaxExperience(skill: Skill): Boolean = this.experience[skill.id] == MAX_EXPERIENCE
+}
 
-    fun setLevelToNormal(skill: Skill, player: Player): Int {
-        val level = getLevelForXp(this.experience[skill.id])
-        this.levels[skill.id] = level
+fun Player.updateStat(skill: Skill) = this.updateStat(skill, this.skills.level(skill), this.skills.xp(skill))
 
-        this.updateStat(skill, player)
-        return level
-    }
+fun Player.updateStat(skill: Skill, level: Int, experience: Double) {
+    write(UpdateStatPacket(skill.id, level, experience))
+}
 
-    fun setExperience(skill: Skill, experience: Double, player: Player) {
-        val newExperience = experience.coerceIn(0.0, 200000000.0)
-        this.experience[skill.id] = newExperience
+fun Player.addExperience(skill: Skill, experience: Double): Double {
+    val newExperience = this.skills.xp(skill) + experience
+    this.setLevelByExperience(skill, newExperience)
 
-        this.updateStat(skill, player)
-    }
+    return newExperience
+}
 
-    fun setExperienceByLevel(skill: Skill, level: Int, player: Player): Double {
-        val newLevel = level.coerceIn(0, 99)
-        this.levels[skill.id] = newLevel
+fun Player.setLevel(skill: Skill, level: Int) {
+    val newLevel = level.coerceIn(0, MAX_LEVEL)
+    this.skills.setLevel(skill, newLevel)
 
-        val experience = getXPForLevel(newLevel)
-        this.experience[skill.id] = experience
+    this.updateStat(skill)
+}
 
-        this.updateStat(skill, player)
-        return experience
-    }
+fun Player.getBaseLevel(skill: Skill): Int = getLevelForXp(this.skills.xp(skill))
 
-    fun setLevelByExperience(skill: Skill, experience: Double, player: Player): Int {
-        val newExperience = experience.coerceIn(0.0, 200000000.0)
-        this.experience[skill.id] = newExperience
+// not sure what to call this
+fun Player.isLevelNormal(skill: Skill): Boolean = getLevelForXp(this.skills.xp(skill)) == this.skills.level(skill)
 
-        val level = getLevelForXp(newExperience)
-        this.levels[skill.id] = level
+fun Player.setLevelToBase(skill: Skill): Int {
+    val level = getLevelForXp(this.skills.xp(skill))
+    this.skills.setLevel(skill, level)
 
-        this.updateStat(skill, player)
-        return level
-    }
+    this.updateStat(skill)
+    return level
+}
 
-    private fun updateStat(skill: Skill, player: Player) {
-        player.updateStat(skill, this.levels[skill.id], this.experience[skill.id])
-    }
+fun Player.setExperienceByLevel(skill: Skill, level: Int): Double {
+    val newLevel = level.coerceIn(0, MAX_LEVEL)
+    this.skills.setLevel(skill, newLevel)
+
+    val experience = getXpForLevel(newLevel)
+    this.skills.setExperience(skill, experience)
+
+    this.updateStat(skill)
+    return experience
+}
+
+fun Player.setLevelByExperience(skill: Skill, experience: Double): Int {
+    val newExperience = experience.coerceIn(0.0, MAX_EXPERIENCE)
+    if (newExperience == MAX_EXPERIENCE && this.skills.isMaxExperience(skill)) return MAX_LEVEL
+    this.skills.setExperience(skill, newExperience)
+
+    val level = getLevelForXp(newExperience)
+    this.skills.setLevel(skill, level)
+
+    this.updateStat(skill)
+    return level
 }

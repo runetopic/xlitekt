@@ -6,11 +6,11 @@ import org.jctools.maps.NonBlockingHashMapLong
 import xlitekt.game.actor.Actor
 import xlitekt.game.actor.movementType
 import xlitekt.game.actor.player.serializer.PlayerSerializer
-import xlitekt.game.actor.prayer.Prayer
 import xlitekt.game.actor.render.Render
 import xlitekt.game.actor.speed
 import xlitekt.game.content.container.equipment.Equipment
 import xlitekt.game.content.container.inventory.Inventory
+import xlitekt.game.content.prayer.Prayer
 import xlitekt.game.content.skill.Skill
 import xlitekt.game.content.skill.Skills
 import xlitekt.game.content.ui.Interfaces
@@ -25,7 +25,6 @@ import xlitekt.game.packet.Packet
 import xlitekt.game.packet.RebuildNormalPacket
 import xlitekt.game.packet.RunClientScriptPacket
 import xlitekt.game.packet.UpdateRunEnergyPacket
-import xlitekt.game.packet.UpdateStatPacket
 import xlitekt.game.packet.VarpLargePacket
 import xlitekt.game.packet.VarpSmallPacket
 import xlitekt.game.packet.disassembler.handler.PacketHandler
@@ -166,10 +165,6 @@ inline fun Player.varp(id: Int, value: () -> Int) = value.invoke().also {
     }
 }
 
-fun Player.updateStat(skill: Skill, level: Int, experience: Double) {
-    write(UpdateStatPacket(skill.id, level, experience))
-}
-
 inline fun Player.message(message: () -> String) = write(MessageGamePacket(0, message.invoke(), false)) // TODO build messaging system
 fun Player.script(scriptId: Int, vararg parameters: Any) = write(RunClientScriptPacket(scriptId, parameters))
 fun Player.updateRunEnergy() = write(UpdateRunEnergyPacket(runEnergy / 100f))
@@ -202,24 +197,4 @@ fun Player.restoreRunEnergy() {
     val restore = (floor(agilityLevel.toFloat()) / 6f) + 8f
     runEnergy += restore
     updateRunEnergy()
-}
-
-fun Player.setLevelToNormal(skill: Skill): Int {
-    return this.skills.setLevelToNormal(skill, this)
-}
-
-fun Player.setLevel(skill: Skill, level: Int) {
-    this.skills.setLevel(skill, level, this)
-}
-
-fun Player.setExperience(skill: Skill, experience: Double) {
-    this.skills.setExperience(skill, experience, this)
-}
-
-fun Player.setExperienceByLevel(skill: Skill, level: Int): Double {
-    return this.skills.setExperienceByLevel(skill, level, this)
-}
-
-fun Player.setLevelByExperience(skill: Skill, experience: Double): Int {
-    return this.skills.setLevelByExperience(skill, experience, this)
 }

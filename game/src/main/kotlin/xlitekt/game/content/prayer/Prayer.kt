@@ -1,18 +1,21 @@
-package xlitekt.game.actor.prayer
+package xlitekt.game.content.prayer
 
 import xlitekt.game.actor.Actor
 import xlitekt.game.actor.angleTo
 import xlitekt.game.actor.player.Player
 import xlitekt.game.actor.player.message
-import xlitekt.game.actor.player.setLevel
-import xlitekt.game.actor.player.setLevelToNormal
-import xlitekt.game.actor.prayerIcon
+import xlitekt.game.actor.player.renderAppearance
 import xlitekt.game.content.skill.Skill
+import xlitekt.game.content.skill.getBaseLevel
+import xlitekt.game.content.skill.setLevel
+import xlitekt.game.content.skill.setLevelToBase
 import xlitekt.game.world.map.GameObject
 import xlitekt.shared.resource.prayer.PrayerIconType
 import xlitekt.shared.resource.prayer.PrayerInfoResource
 import xlitekt.shared.resource.prayer.PrayerType
 import xlitekt.shared.resource.prayer.Prayers
+import java.util.*
+import kotlin.concurrent.timerTask
 import kotlin.math.floor
 
 /**
@@ -20,7 +23,7 @@ import kotlin.math.floor
  */
 
 class Prayer(
-    private val player: Actor
+    private val actor: Actor
 ) {
     private val activePrayerMap: MutableMap<PrayerType, PrayerInfoResource?> = PrayerType.values().associateWith { null }.toMutableMap()
 
@@ -32,39 +35,38 @@ class Prayer(
 
         if (!this.isActive()) return
 
-        if (this.player.currentHitpoints() <= 0) {
+        if (this.actor.currentHitpoints() <= 0) {
             println("Praying player is dead!?!??@#")
             this.turnOff()
             return
         }
 
-        val drain = this.getDrainRate().also { if (it == 0) return }
-
-        // TODO if player Prayer Level = 0 or player Prayer Points = 0
-        if (this.player is Player && this.player.skills.level(Skill.PRAYER) == 0) {
-            player.message { "You have run out of prayer points, you can recharge at an altar." }
+        if (this.actor is Player && this.getCurrentPrayerPoints() == 0) {
+            actor.message { "You have run out of prayer points, you can recharge at an altar." }
             this.turnOff()
             return
         }
 
-        this.drainCounter += drain
-        val resistance = 60 + (this.player.bonuses.prayer * 2)
+        if (actor is Player) {
+            actor.message { "Ticking prayer: ${this.activeDrainRate} ${this.activePrayers}" }
+        }
+
+        if (this.activeDrainRate == 0) return
+
+        this.drainCounter += this.activeDrainRate
+        val resistance = 60 + (this.actor.bonuses.prayer * 2)
 
         if (this.drainCounter > resistance) {
             val spentPoints = floor(this.drainCounter.toDouble() / resistance).toInt()
-            if (this.player is Player) {
-                val currentPoints = this.player.skills.level(Skill.PRAYER)
+            if (this.actor is Player) {
+                val currentPoints = this.actor.skills.level(Skill.PRAYER)
                 val newPoints = currentPoints - spentPoints
 
                 // set prayer points
-                this.player.setLevel(Skill.PRAYER, newPoints)
+                this.actor.setLevel(Skill.PRAYER, newPoints)
                 // update drainCounter
                 this.drainCounter -= resistance * spentPoints
             }
-        }
-
-        if (player is Player) {
-            player.message { "Ticking prayer: $drain ${this.activePrayers}" }
         }
     }
 
@@ -83,21 +85,29 @@ class Prayer(
         } else {
             // | Turning New Prayer On |
 
+            // TODO dragon scim special attack disables overheads for 5 seconds
+
             if (this.getCurrentPrayerPoints() <= 0) return
 
             // turn off conflicting prayers
             PrayerType.getConflictingTypes(prayerInfo.prayerType)?.let { this.deactivate(*it) }
 
             // update activePrayerMap
-            this.activePrayers++
-            this.activeDrainRate += prayerInfo.drainRate
+            activePrayers++
             this.activePrayerMap[prayerInfo.prayerType] = prayerInfo
+            Timer().schedule(
+                timerTask {
+                    activeDrainRate += prayerInfo.drainRate
+                    println("after time $activeDrainRate")
+                },
+                1200
+            )
 
             // TODO turn on the prayer's varbit
 //            if (this.player is Player) this.player.vars[prayerInfo.varbit] = 1
 
             // if the prayer has an overhead icon turn it on
-            prayerInfo.icon?.let { this.player.prayerIcon { it } }
+            prayerInfo.icon?.let { this.actor.prayerIcon { it } }
         }
 
         // debugging
@@ -124,18 +134,18 @@ class Prayer(
             this.activeDrainRate -= current.drainRate
             this.activePrayerMap[it] = null
 
-            println("deactivating $current")
+            println("deactivating $current ${this.activeDrainRate}")
 
             // turn off the prayer icon if the prayer has one
-            current.icon?.let { this.player.prayerIcon { PrayerIconType.NONE } }
+            current.icon?.let { this.actor.prayerIcon { PrayerIconType.NONE } }
 
             // check if actor is a Player to access var system
-            if (this.player is Player) {
+            if (this.actor is Player) {
                 // TODO turn off the prayer's varbit
-                this.player.vars[current.varbit] = 0
+                this.actor.vars[current.varbit] = 0
 
                 // TODO if no prayers are active and the quick prayer varbit is on turn it off
-                if (!this.isActive() && this.player.vars[4103] == 1) this.player.vars[4103] = 0
+                if (!this.isActive() && this.actor.vars[4103] == 1) this.actor.vars[4103] = 0
             }
         }
     }
@@ -143,8 +153,8 @@ class Prayer(
     fun turnOff() {
         println("Turning prayers off")
         this.deactivate(*PrayerType.values())
-        if (this.player is Player && this.player.vars[4103] == 1) {
-            this.player.vars[4103] = 0
+        if (this.actor is Player && this.actor.vars[4103] == 1) {
+            this.actor.vars[4103] = 0
             println("Turned off the quick prayers varbit")
         }
     }
@@ -162,19 +172,19 @@ class Prayer(
     }
 
     fun rechargePrayerPoints(): Int {
-        if (this.player is Player) {
+        if (this.actor is Player) {
             val points = this.getCurrentPrayerPoints()
-            if (points >= Skill.getLevelForXp(this.player.skills.xp(Skill.PRAYER))) {
-                this.player.message { "You already have full Prayer points." }
-                return points
+            if (points >= this.getMaxPrayerPoints()) {
+                this.actor.message { "You already have full Prayer points." }
+                return 0
             }
-            return this.player.setLevelToNormal(Skill.PRAYER)
+            return this.actor.setLevelToBase(Skill.PRAYER) - points
         }
-        return 99 // npc prayer points a thing?
+        return 0 // npc prayer points a thing?
     }
 
     fun prayAtAltar(gameObject: GameObject? = null) {
-        gameObject?.let { this.player.angleTo(it) }
+        gameObject?.let { this.actor.angleTo(it) }
 
         // TODO animations and sounds
 
@@ -193,9 +203,36 @@ class Prayer(
 
     fun getDrainRate(): Int = this.activeDrainRate
 
-    fun isFull(): Boolean = if (this.player is Player) this.getCurrentPrayerPoints() >= Skill.getLevelForXp(this.player.skills.xp(Skill.PRAYER)) else true
+    fun isFull(): Boolean = if (this.actor is Player) this.getCurrentPrayerPoints() >= this.getMaxPrayerPoints() else true
+    // TODO is prayer empty?
 
-    fun getCurrentPrayerPoints(): Int = if (this.player is Player) this.player.skills.level(Skill.PRAYER) else 99 // npc prayer points a thing?
+    fun getMaxPrayerPoints(): Int = if (this.actor is Player) this.actor.getBaseLevel(Skill.PRAYER) else 99
+
+    fun getCurrentPrayerPoints(): Int = if (this.actor is Player) this.actor.skills.level(Skill.PRAYER) else 99 // npc prayer points a thing?
+
+    // TODO set prayer points (canBoost: Boolean)
+    // TODO get missing prayer points
+    // TODO isBoosted?, isDrained?
+    // TODO boostPrayerPoints
+    // TODO reducePrayerPoints
+
+//    fun setPrayerPoints(points: Int, canBoost: Boolean) {
+//        if (this.actor is Player) {
+//            if (points > this.getMaxPrayerPoints()) {
+//                if (canBoost) points else this.getMaxPrayerPoints()
+//            }
+//            this.actor.skills.setLevel(Skill.PRAYER, points)
+//        }
+//    }
 
     fun getActivePrayers(): Map<PrayerType, PrayerInfoResource?> = this.activePrayerMap.filter { it.value != null }.toMap()
+}
+
+fun Actor.prayerIcon(prayerIcon: () -> PrayerIconType) {
+    if (this is Player) {
+        this.appearance.headIcon = Optional.of(prayerIcon.invoke().overheadId)
+        this.renderAppearance()
+    } else {
+        // npc overhead icons
+    }
 }

@@ -2,7 +2,7 @@ package xlitekt.game.actor.npc
 
 import xlitekt.cache.provider.config.npc.NPCEntryTypeProvider
 import xlitekt.game.actor.Actor
-import xlitekt.game.actor.prayer.Prayer
+import xlitekt.game.content.prayer.Prayer
 import xlitekt.game.event.EventBus
 import xlitekt.game.event.impl.Events
 import xlitekt.game.world.map.Location
