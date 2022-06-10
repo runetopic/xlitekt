@@ -38,44 +38,6 @@ onCommand("q").use {
     }
 }
 
-onCommand("fletch").use {
-    queueNormal {
-        if (!inventory.hasItem(946)) {
-            message { "You need a knife to fletch fuck face." }
-            return@queueNormal
-        }
-
-        var logCount = inventory.count { it?.id == 1511 }
-
-        if (logCount == 0) {
-            message { "You need logs to fletch fuck face." }
-            return@queueNormal
-        }
-
-        while (inventory.hasItem(946) && inventory.hasItem(1511)) {
-            val level = skills.level(Skill.FLETCHING)
-            val experience = skills.xp(Skill.FLETCHING)
-
-            message { "Level $level $experience" }
-
-            logCount = inventory.count { it?.id == 1511 }
-
-            message { "Logs $logCount" }
-            animate { 1280 }
-            val log = inventory.first { it?.id == 1511 } ?: return@queueNormal
-
-            inventory.removeItem(log) {
-                inventory.addItem(Item(52, 3)) {
-                    message { "You make some fucking arrow shafts because that's all you know how to make." }
-                    addExperience(Skill.FLETCHING, 5_000.0)
-                }
-            }
-
-            wait(5)
-        }
-    }
-}
-
 onCommand("xp").use {
     message { "${Skill.getLevelForXp(30_000.0)}" }
 }
