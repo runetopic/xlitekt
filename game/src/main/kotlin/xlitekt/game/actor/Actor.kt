@@ -349,27 +349,25 @@ inline fun Actor.speed(running: () -> Boolean) = running.invoke().also {
  * @param reachAction A callback function to invoke when the actor reaches the destination.
  */
 fun Actor.routeTo(location: Location, reachAction: (() -> Unit)? = null) {
-    this.queue(priority = QueuedScriptPriority.Strong) {
-        resetMovement()
-        val route = PathFinders.findPath(
-            smart = true,
-            srcX = executor.location.x,
-            srcZ = executor.location.z,
-            destX = location.x,
-            destZ = location.z,
-            level = executor.location.level
+    resetMovement()
+    val route = PathFinders.findPath(
+        smart = this::class == Player::class,
+        srcX = this.location.x,
+        srcZ = this.location.z,
+        destX = location.x,
+        destZ = location.z,
+        level = location.level
+    )
+    movement.route(
+        MovementRequest(
+            reachAction,
+            IntArrayList(route.coords.size).also { points ->
+                route.coords.map { points.add(Location(it.x, it.y, this@routeTo.location.level).packedLocation) }
+            },
+            route.failed,
+            route.alternative
         )
-        movement.route(
-            MovementRequest(
-                reachAction,
-                IntArrayList(route.coords.size).also { points ->
-                    route.coords.map { points.add(Location(it.x, it.y, executor.location.level).packedLocation) }
-                },
-                route.failed,
-                route.alternative
-            )
-        )
-    }
+    )
 }
 
 /**
@@ -385,7 +383,7 @@ fun Actor.routeTo(gameObject: GameObject, reachAction: (() -> Unit)? = null) {
     val width = gameObject.entry?.width
     val height = gameObject.entry?.height
     val route = PathFinders.findPath(
-        smart = this is Player,
+        smart = this::class == Player::class,
         srcX = location.x,
         srcZ = location.z,
         destX = dest.x,
@@ -414,11 +412,10 @@ fun Actor.routeTo(gameObject: GameObject, reachAction: (() -> Unit)? = null) {
  * @param reachAction A callback function to invoke when the actor reaches the destination.
  */
 fun Actor.routeTo(npc: NPC, reachAction: (() -> Unit)? = null) {
-    faceActor(npc::index)
     resetMovement()
     val dest = npc.location
     val route = PathFinders.findPath(
-        smart = this is Player,
+        smart = this::class == Player::class,
         srcX = location.x,
         srcZ = location.z,
         destX = dest.x,
@@ -541,7 +538,12 @@ private inline fun Actor.faceLocation(location: () -> Location) {
     render(FaceLocation(location.invoke()))
 }
 
-fun Actor.queue(priority: QueuedScriptPriority = QueuedScriptPriority.Normal, task: SuspendableQueuedScript<Actor>): Boolean {
+fun Actor.queueWeak(task: SuspendableQueuedScript<Actor>) = queue(priority = QueuedScriptPriority.Weak, task)
+fun Actor.queueNormal(task: SuspendableQueuedScript<Actor>) = queue(priority = QueuedScriptPriority.Normal, task)
+fun Actor.queueStrong(task: SuspendableQueuedScript<Actor>) = queue(priority = QueuedScriptPriority.Strong, task)
+fun Actor.queueSoft(task: SuspendableQueuedScript<Actor>) = queue(priority = QueuedScriptPriority.Soft, task)
+
+private fun Actor.queue(priority: QueuedScriptPriority = QueuedScriptPriority.Normal, task: SuspendableQueuedScript<Actor>): Boolean {
     queue.queue(this, priority, task)
     return true
 }

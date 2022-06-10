@@ -17,7 +17,7 @@ val scriptDispatcher = Executors.newSingleThreadExecutor().asCoroutineDispatcher
 abstract class QueuedScriptList<T : Actor>(
     protected val queue: LinkedList<QueuedScript<T>> = LinkedList()
 ) : List<QueuedScript<T>> by queue {
-    abstract fun process()
+    abstract fun process(actor: T)
 
     /**
      * This function queues a script up in the script list.

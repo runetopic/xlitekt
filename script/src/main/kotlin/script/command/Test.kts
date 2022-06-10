@@ -3,7 +3,7 @@ package script.command
 import xlitekt.game.actor.animate
 import xlitekt.game.actor.player.addExperience
 import xlitekt.game.actor.player.message
-import xlitekt.game.actor.queue
+import xlitekt.game.actor.queueNormal
 import xlitekt.game.content.command.Commands.onCommand
 import xlitekt.game.content.item.FloorItem
 import xlitekt.game.content.item.Item
@@ -14,6 +14,7 @@ import xlitekt.game.world.map.CollisionMap
 import xlitekt.game.world.map.GameObject
 import xlitekt.game.world.map.Location
 import xlitekt.game.world.map.transform
+import xlitekt.game.world.map.withinDistance
 
 /**
  * @author Jordan Abraham
@@ -24,26 +25,36 @@ onCommand("gp").use {
     }
 }
 
-onCommand("fletch").use {
-    queue {
-        val player = this@use
-        val inventory = player.inventory
+onCommand("q").use {
+    queueNormal {
+        while (true) {
+            val location = Location(3222, 3222)
 
+            waitUntil {
+                this@use.location.withinDistance(location, 2)
+            }
+            message { "Fuck you" }
+        }
+    }
+}
+
+onCommand("fletch").use {
+    queueNormal {
         if (!inventory.hasItem(946)) {
             message { "You need a knife to fletch fuck face." }
-            return@queue
+            return@queueNormal
         }
 
         var logCount = inventory.count { it?.id == 1511 }
 
         if (logCount == 0) {
             message { "You need logs to fletch fuck face." }
-            return@queue
+            return@queueNormal
         }
 
         while (inventory.hasItem(946) && inventory.hasItem(1511)) {
-            val level = player.skills.level(Skill.FLETCHING)
-            val experience = player.skills.xp(Skill.FLETCHING)
+            val level = skills.level(Skill.FLETCHING)
+            val experience = skills.xp(Skill.FLETCHING)
 
             message { "Level $level $experience" }
 
@@ -51,7 +62,7 @@ onCommand("fletch").use {
 
             message { "Logs $logCount" }
             animate { 1280 }
-            val log = inventory.first { it?.id == 1511 } ?: return@queue
+            val log = inventory.first { it?.id == 1511 } ?: return@queueNormal
 
             inventory.removeItem(log) {
                 inventory.addItem(Item(52, 3)) {

@@ -11,11 +11,11 @@ class ActorScriptQueue : QueuedScriptList<Actor>() {
     /**
      * This will process all the queued script items and handle the suspension and priority accordingly.
      */
-    override fun process() {
+    override fun process(actor: Actor) {
         while (queue.isNotEmpty()) {
             val script = queue.peekFirst() ?: break
 
-            if (script.priority == QueuedScriptPriority.Normal && script.executor is Player && script.executor.interfaces.modalOpen()) break
+            if (actor::class == Player::class && (script.priority == QueuedScriptPriority.Normal && (actor as Player).interfaces.modalOpen())) break
 
             if (!script.executed) script.execute()
 

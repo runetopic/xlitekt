@@ -1,8 +1,6 @@
 package xlitekt.game.actor.player
 
 // ktlint-disable no-wildcard-imports
-import kotlin.math.abs
-import kotlin.math.floor
 import kotlinx.serialization.Serializable
 import org.jctools.maps.NonBlockingHashMapLong
 import xlitekt.game.actor.Actor
@@ -35,6 +33,8 @@ import xlitekt.game.queue.QueuedScriptPriority
 import xlitekt.game.world.World
 import xlitekt.game.world.map.Location
 import xlitekt.shared.lazy
+import kotlin.math.abs
+import kotlin.math.floor
 
 /**
  * @author Jordan Abraham
@@ -52,7 +52,6 @@ class Player(
     var brandNew: Boolean = true,
     val skills: Skills = Skills()
 ) : Actor(location) {
-
     val viewport = Viewport(this)
     val interfaces = Interfaces(this)
     val vars = Vars(this)
@@ -212,7 +211,7 @@ fun Player.process() {
     if (queue.any { it.priority == QueuedScriptPriority.Strong }) {
         interfaces.closeModal()
     }
-    queue.process()
+    queue.process(this)
     // This makes sure they continue running and processing until the next tick, when we need to toggle their run off if the energy is depleted, and they are running
     if (runEnergy <= 0.0f && VarPlayer.ToggleRun in vars) {
         vars.flip { VarPlayer.ToggleRun }

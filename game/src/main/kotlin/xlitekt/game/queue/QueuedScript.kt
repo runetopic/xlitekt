@@ -14,8 +14,8 @@ import kotlin.coroutines.suspendCoroutine
  * @author Tyler Telis
  * @author Tom (Got some inspiration and coroutine ideas from rsmod)
  */
-data class QueuedScript<T>(
-    val executor: T,
+data class QueuedScript<T : Actor>(
+    private val executor: T,
     val priority: QueuedScriptPriority,
 ) : Continuation<Unit> {
     /**
@@ -117,7 +117,7 @@ data class QueuedScript<T>(
      * This function sets the current stage to a LocationCondition to allow the script to wait until the location matches.
      */
     suspend fun waitForLocation(location: Location): Unit = suspendCoroutine {
-        stage = QueuedScriptStage(QueuedScriptConditions.LocationCondition((executor as Actor).location, location), it)
+        stage = QueuedScriptStage(QueuedScriptConditions.LocationCondition(executor.location, location), it)
     }
 
     /**

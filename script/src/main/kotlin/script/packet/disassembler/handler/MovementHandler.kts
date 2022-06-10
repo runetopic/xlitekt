@@ -1,6 +1,7 @@
 package script.packet.disassembler.handler
 
 import xlitekt.game.actor.cancelAll
+import xlitekt.game.actor.queueStrong
 import xlitekt.game.actor.routeTo
 import xlitekt.game.packet.MovementPacket
 import xlitekt.game.packet.disassembler.handler.onPacketHandler
@@ -10,6 +11,8 @@ onPacketHandler<MovementPacket> {
     val destination = Location(packet.destinationX, packet.destinationZ, player.location.level)
     with(player) {
         cancelAll()
-        routeTo(destination)
+        queueStrong {
+            routeTo(destination)
+        }
     }
 }

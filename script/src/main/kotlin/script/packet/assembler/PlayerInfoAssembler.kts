@@ -33,7 +33,7 @@ import kotlin.math.abs
 private val blockBufferLimit = Short.MAX_VALUE.toInt()
 
 onPacketAssembler<PlayerInfoPacket>(opcode = 80, size = -2) {
-    allocateDynamic(65535) {
+    allocateDynamic(blockBufferLimit + 1000) {
         val blocks = ByteBuffer.allocate(blockBufferLimit)
         viewport.resize()
         repeat(2) { highDefinition(viewport, blocks, highDefinitionUpdates, movementStepsUpdates, alternativeHighDefinitionUpdates, it == 0) }

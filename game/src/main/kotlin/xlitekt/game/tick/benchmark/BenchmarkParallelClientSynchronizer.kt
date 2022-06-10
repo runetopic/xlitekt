@@ -3,8 +3,10 @@ package xlitekt.game.tick.benchmark
 import com.github.michaelbull.logging.InlineLogger
 import xlitekt.game.actor.chat
 import xlitekt.game.actor.hit
+import xlitekt.game.actor.player.process
 import xlitekt.game.actor.render.HitBar
 import xlitekt.game.actor.render.HitType
+import xlitekt.game.actor.resetMovement
 import xlitekt.game.actor.routeTo
 import xlitekt.game.actor.spotAnimate
 import xlitekt.game.tick.Synchronizer
@@ -13,7 +15,6 @@ import xlitekt.game.world.map.Location
 import xlitekt.game.world.map.zone.Zone
 import kotlin.random.Random
 import kotlin.time.measureTime
-import xlitekt.game.actor.resetMovement
 
 /**
  * @author Jordan Abraham
@@ -48,6 +49,7 @@ class BenchmarkParallelClientSynchronizer : Synchronizer() {
         val playerSyncFirstBlock = measureTime {
             players.parallelStream().forEach {
                 it.invokeAndClearReadPool()
+                it.process()
                 it.syncMovement(syncPlayers)
                 it.syncRenderingBlocks()
             }
