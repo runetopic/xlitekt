@@ -1,7 +1,5 @@
 package xlitekt.game.world.map.zone
 
-import io.ktor.utils.io.core.buildPacket
-import io.ktor.utils.io.core.readBytes
 import org.jctools.maps.NonBlockingHashSet
 import xlitekt.game.actor.Actor
 import xlitekt.game.actor.npc.NPC
@@ -23,8 +21,6 @@ import xlitekt.game.world.map.GameObject
 import xlitekt.game.world.map.Location
 import xlitekt.game.world.map.localX
 import xlitekt.game.world.map.localZ
-import xlitekt.shared.buffer.writeByte
-import xlitekt.shared.buffer.writeBytes
 import xlitekt.shared.inject
 
 /**
@@ -116,10 +112,12 @@ class Zone(
                 }
                 val updates = HashSet<Packet>(requestSize())
                 // If zone contains any of the following, send them to the client.
-                for (obj in zone.objsSpawned) {
+                for (obj in zone.objsSpawned.filter { it !in objRequests }) {
+                    // Filter obj requests out as they will be added later in the loop.
                     updates.addObj(actor, obj)
                 }
-                for (loc in zone.locsSpawned) {
+                for (loc in zone.locsSpawned.filter { it !in locRequests }) {
+                    // Filter loc requests out as they will be added later in the loop.
                     updates.addLoc(actor, loc)
                 }
                 updates.write(actor, zone.location)
@@ -343,12 +341,10 @@ private fun HashSet<Packet>.write(player: Player, baseLocation: Location) {
         player.write(first())
         return
     }
-    val bytes = buildPacket {
-        for (packet in this@write) {
-            writeByte(ZoneUpdate.zoneUpdateMap[packet::class]!!::index)
-            val assembler = PacketAssemblerListener.listeners[packet::class]!!
-            writeBytes(assembler.packet.invoke(packet)::readBytes)
-        }
-    }.readBytes()
+    var bytes = byteArrayOf()
+    for (packet in this) {
+        val block = PacketAssemblerListener.listeners[packet::class]!!
+        bytes += byteArrayOf(ZoneUpdate.zoneUpdateMap[packet::class]!!.index.toByte()) + block.packet.invoke(packet)
+    }
     player.write(UpdateZonePartialEnclosedPacket(localX, localZ, bytes))
 }

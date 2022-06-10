@@ -1,8 +1,8 @@
 package script.block.player
 
-import io.ktor.utils.io.core.buildPacket
 import xlitekt.game.actor.render.Render.Sequence
 import xlitekt.game.actor.render.block.onPlayerUpdateBlock
+import xlitekt.shared.buffer.allocate
 import xlitekt.shared.buffer.writeByteNegate
 import xlitekt.shared.buffer.writeShortAdd
 
@@ -10,8 +10,8 @@ import xlitekt.shared.buffer.writeShortAdd
  * @author Jordan Abraham
  */
 onPlayerUpdateBlock<Sequence>(8, 0x2) {
-    buildPacket {
-        writeShortAdd { id }
-        writeByteNegate { delay }
+    allocate(3) {
+        writeShortAdd(id)
+        writeByteNegate(delay)
     }
 }

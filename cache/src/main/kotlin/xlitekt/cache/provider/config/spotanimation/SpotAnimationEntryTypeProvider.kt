@@ -1,9 +1,10 @@
 package xlitekt.cache.provider.config.spotanimation
 
-import io.ktor.utils.io.core.ByteReadPacket
-import io.ktor.utils.io.core.readUByte
-import io.ktor.utils.io.core.readUShort
 import xlitekt.cache.provider.EntryTypeProvider
+import xlitekt.shared.buffer.discard
+import xlitekt.shared.buffer.readUByte
+import xlitekt.shared.buffer.readUShort
+import java.nio.ByteBuffer
 
 /**
  * @author Jordan Abraham
@@ -14,23 +15,23 @@ class SpotAnimationEntryTypeProvider : EntryTypeProvider<SpotAnimationEntryType>
         .index(CONFIG_INDEX)
         .group(SPOT_ANIMATION_CONFIG)
         .files()
-        .map { ByteReadPacket(it.data).loadEntryType(SpotAnimationEntryType(it.id)) }
+        .map { ByteBuffer.wrap(it.data).loadEntryType(SpotAnimationEntryType(it.id)) }
         .associateBy(SpotAnimationEntryType::id)
 
-    override fun ByteReadPacket.loadEntryType(type: SpotAnimationEntryType): SpotAnimationEntryType {
-        when (val opcode = readUByte().toInt()) {
+    override fun ByteBuffer.loadEntryType(type: SpotAnimationEntryType): SpotAnimationEntryType {
+        when (val opcode = readUByte()) {
             0 -> { assertEmptyAndRelease(); return type }
-            1 -> type.archive = readUShort().toInt()
-            2 -> type.sequence = readUShort().toInt()
-            4 -> type.widthScale = readUShort().toInt()
-            5 -> type.heightScale = readUShort().toInt()
-            6 -> type.orientation = readUShort().toInt()
-            7 -> type.ambient = readUByte().toInt()
-            8 -> type.contrast = readUByte().toInt()
-            40 -> repeat(readUByte().toInt()) {
+            1 -> type.archive = readUShort()
+            2 -> type.sequence = readUShort()
+            4 -> type.widthScale = readUShort()
+            5 -> type.heightScale = readUShort()
+            6 -> type.orientation = readUShort()
+            7 -> type.ambient = readUByte()
+            8 -> type.contrast = readUByte()
+            40 -> repeat(readUByte()) {
                 discard(4) // Discard recolor.
             }
-            41 -> repeat(readUByte().toInt()) {
+            41 -> repeat(readUByte()) {
                 discard(4) // Discard retexture.
             }
             else -> throw IllegalArgumentException("Missing opcode $opcode.")

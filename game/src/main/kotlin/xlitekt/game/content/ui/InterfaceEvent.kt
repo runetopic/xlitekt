@@ -1,5 +1,8 @@
 package xlitekt.game.content.ui
 
+/**
+ * @author Tyler Telis
+ */
 sealed class InterfaceEvent(val value: Int) {
     object Continue : InterfaceEvent(1 shl 0)
     object ClickOption1 : InterfaceEvent(1 shl 1)

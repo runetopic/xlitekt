@@ -1,9 +1,9 @@
 package script.packet.disassembler
 
-import io.ktor.utils.io.core.*
 import xlitekt.game.packet.OpNPCPacket
 import xlitekt.game.packet.disassembler.onPacketDisassembler
 import xlitekt.shared.buffer.readUByteAdd
+import xlitekt.shared.buffer.readUShortLittleEndian
 import xlitekt.shared.toBoolean
 
 /**
@@ -12,7 +12,7 @@ import xlitekt.shared.toBoolean
 onPacketDisassembler(opcode = 74, size = 3) {
     OpNPCPacket(
         index = 4,
-        npcIndex = readShortLittleEndian().toInt(),
+        npcIndex = readUShortLittleEndian(),
         isModified = readUByteAdd().toBoolean()
     )
 }

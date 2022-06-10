@@ -22,7 +22,7 @@ onInterface<Settings> {
     onOpen {
         setEvent(childId = 41, slots = 0..21, ClickOption1)
         setEvent(childId = 55, slots = 0..21, ClickOption1)
-        setEvent(childId = 69, slots = 0..21,  ClickOption1)
+        setEvent(childId = 69, slots = 0..21, ClickOption1)
         setEvent(childId = 81, slots = 1..5, ClickOption1)
         setEvent(childId = 82, slots = 1..4, ClickOption1)
         setEvent(childId = 84, slots = 1..3, ClickOption1)

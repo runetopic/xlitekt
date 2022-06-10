@@ -1,8 +1,8 @@
 package xlitekt.cache.provider.config.struct
 
-import io.ktor.utils.io.core.ByteReadPacket
-import io.ktor.utils.io.core.readUByte
 import xlitekt.cache.provider.EntryTypeProvider
+import xlitekt.shared.buffer.readUByte
+import java.nio.ByteBuffer
 
 /**
  * @author Jordan Abraham
@@ -13,11 +13,11 @@ class StructEntryTypeProvider : EntryTypeProvider<StructEntryType>() {
         .index(CONFIG_INDEX)
         .group(STRUCT_CONFIG)
         .files()
-        .map { ByteReadPacket(it.data).loadEntryType(StructEntryType(it.id)) }
+        .map { ByteBuffer.wrap(it.data).loadEntryType(StructEntryType(it.id)) }
         .associateBy(StructEntryType::id)
 
-    override tailrec fun ByteReadPacket.loadEntryType(type: StructEntryType): StructEntryType {
-        when (val opcode = readUByte().toInt()) {
+    override tailrec fun ByteBuffer.loadEntryType(type: StructEntryType): StructEntryType {
+        when (val opcode = readUByte()) {
             0 -> { assertEmptyAndRelease(); return type }
             249 -> type.params = readStringIntParameters()
             else -> throw IllegalArgumentException("Missing opcode $opcode.")

@@ -1,5 +1,6 @@
 package xlitekt.game.tick
 
+import xlitekt.game.actor.player.process
 import xlitekt.game.world.map.zone.Zone
 
 /**
@@ -12,9 +13,10 @@ class ParallelClientSynchronizer : Synchronizer() {
         val syncPlayers = world.playersMapped()
 
         players.parallelStream().forEach {
-            it.prayer.process()
             it.invokeAndClearReadPool()
+            it.process()
             it.syncMovement(syncPlayers)
+            it.prayer.process()
             it.syncRenderingBlocks()
         }
 

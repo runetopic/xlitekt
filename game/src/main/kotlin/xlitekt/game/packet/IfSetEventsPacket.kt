@@ -1,7 +1,5 @@
 package xlitekt.game.packet
 
-import xlitekt.game.content.ui.InterfaceEvent
-
 /**
  * @author Tyler Telis
  */

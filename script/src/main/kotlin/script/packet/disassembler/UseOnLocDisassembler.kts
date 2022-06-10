@@ -3,9 +3,7 @@ import io.ktor.utils.io.core.readIntLittleEndian
 import io.ktor.utils.io.core.readUShort
 import xlitekt.game.packet.UseOnLocPacket
 import xlitekt.game.packet.disassembler.onPacketDisassembler
-import xlitekt.shared.buffer.readUByteNegate
-import xlitekt.shared.buffer.readUShortAdd
-import xlitekt.shared.buffer.readUShortLittleEndian
+import xlitekt.shared.buffer.*
 import xlitekt.shared.toBoolean
 
 /**
@@ -16,8 +14,8 @@ val logger = InlineLogger()
 onPacketDisassembler(opcode = 28, size = 15) {
 
     val isModified = readUByteNegate().toBoolean()
-    val locId = readUShort().toInt()
-    val itemId = readUShort().toInt()
+    val locId = readUShort()
+    val itemId = readUShort()
     val z = readUShortLittleEndian()
     val packedInterface = readIntLittleEndian()
     val slotId = readUShortAdd()

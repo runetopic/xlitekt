@@ -1,9 +1,9 @@
 package xlitekt.cache.provider.config.varbit
 
-import io.ktor.utils.io.core.ByteReadPacket
-import io.ktor.utils.io.core.readUByte
-import io.ktor.utils.io.core.readUShort
 import xlitekt.cache.provider.EntryTypeProvider
+import xlitekt.shared.buffer.readUByte
+import xlitekt.shared.buffer.readUShort
+import java.nio.ByteBuffer
 
 class VarBitEntryTypeProvider : EntryTypeProvider<VarBitEntryType>() {
 
@@ -13,16 +13,16 @@ class VarBitEntryTypeProvider : EntryTypeProvider<VarBitEntryType>() {
         .index(CONFIG_INDEX)
         .group(VARBIT_CONFIG)
         .files()
-        .map { ByteReadPacket(it.data).loadEntryType(VarBitEntryType(it.id)) }
+        .map { ByteBuffer.wrap(it.data).loadEntryType(VarBitEntryType(it.id)) }
         .associateBy(VarBitEntryType::id)
 
-    override tailrec fun ByteReadPacket.loadEntryType(type: VarBitEntryType): VarBitEntryType {
-        when (val opcode = readUByte().toInt()) {
+    override tailrec fun ByteBuffer.loadEntryType(type: VarBitEntryType): VarBitEntryType {
+        when (val opcode = readUByte()) {
             0 -> { assertEmptyAndRelease(); return type }
             1 -> {
-                type.index = readUShort().toInt()
-                type.leastSignificantBit = readUByte().toInt()
-                type.mostSignificantBit = readUByte().toInt()
+                type.index = readUShort()
+                type.leastSignificantBit = readUByte()
+                type.mostSignificantBit = readUByte()
             }
             else -> throw IllegalArgumentException("Missing opcode $opcode.")
         }

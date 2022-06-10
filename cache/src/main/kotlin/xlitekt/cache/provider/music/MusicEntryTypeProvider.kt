@@ -1,18 +1,17 @@
 package xlitekt.cache.provider.music
 
-import io.ktor.utils.io.core.BytePacketBuilder
-import io.ktor.utils.io.core.ByteReadPacket
-import io.ktor.utils.io.core.buildPacket
-import io.ktor.utils.io.core.readBytes
-import io.ktor.utils.io.core.readFully
-import io.ktor.utils.io.core.readUByte
-import io.ktor.utils.io.core.readUShort
+import io.ktor.util.copy
+import io.ktor.util.moveToByteArray
 import xlitekt.cache.provider.EntryTypeProvider
+import xlitekt.shared.buffer.allocateDynamic
+import xlitekt.shared.buffer.discard
+import xlitekt.shared.buffer.readUByte
+import xlitekt.shared.buffer.readUShort
 import xlitekt.shared.buffer.readVarInt
 import xlitekt.shared.buffer.writeByte
-import xlitekt.shared.buffer.writeBytes
 import xlitekt.shared.buffer.writeInt
 import xlitekt.shared.buffer.writeShort
+import java.nio.ByteBuffer
 
 /**
  * @author Jordan Abraham
@@ -23,13 +22,13 @@ class MusicEntryTypeProvider : EntryTypeProvider<MusicEntryType>() {
         .index(MUSIC_INDEX)
         .groups()
         .onEach { require((glossary[it.nameHash]?.toNameHash() ?: it.nameHash) == it.nameHash) }
-        .map { ByteReadPacket(it.data).loadEntryType(MusicEntryType(it.id, name = glossary[it.nameHash] ?: it.nameHash.toString())) }
+        .map { ByteBuffer.wrap(it.data).loadEntryType(MusicEntryType(it.id, name = glossary[it.nameHash] ?: it.nameHash.toString())) }
         .associateBy(MusicEntryType::id)
 
-    override fun ByteReadPacket.loadEntryType(type: MusicEntryType): MusicEntryType {
+    override fun ByteBuffer.loadEntryType(type: MusicEntryType): MusicEntryType {
         val header = copy().header()
-        val tracks = header.readUByte().toInt()
-        val division = header.readUShort().toInt()
+        val tracks = header.readUByte()
+        val division = header.readUShort()
         var offset = 14 + tracks * 10
 
         var tempoOpcodes = 0
@@ -47,7 +46,7 @@ class MusicEntryTypeProvider : EntryTypeProvider<MusicEntryType>() {
         repeat(tracks) {
             opcode = -1
             while (true) {
-                controlChangeIndex = body.readUByte().toInt()
+                controlChangeIndex = body.readUByte()
                 if (controlChangeIndex != opcode) {
                     ++offset
                 }
@@ -74,7 +73,7 @@ class MusicEntryTypeProvider : EntryTypeProvider<MusicEntryType>() {
         offset += chnnlAfterTchOpcodes + progmChangeOpcodes
         opcode = tracks + tempoOpcodes + ctrlChangeOpcodes + noteOnOpcodes + noteOffOpcodes + wheelChangeOpcodes + chnnlAfterTchOpcodes + keyAfterTchOpcodes + progmChangeOpcodes
 
-        val var13 = copy().offset(body.remaining.toInt())
+        val var13 = copy().offset(body.remaining())
 
         controlChangeIndex = 0
         while (controlChangeIndex < opcode) {
@@ -82,8 +81,8 @@ class MusicEntryTypeProvider : EntryTypeProvider<MusicEntryType>() {
             ++controlChangeIndex
         }
 
-        offset += copy().offset(body.remaining.toInt()) - var13
-        controlChangeIndex = copy().offset(body.remaining.toInt())
+        offset += copy().offset(body.remaining()) - var13
+        controlChangeIndex = copy().offset(body.remaining())
 
         var modulationWheelSize = 0
         var modulationWheel2Size = 0
@@ -100,7 +99,7 @@ class MusicEntryTypeProvider : EntryTypeProvider<MusicEntryType>() {
         var controllerNumber = 0
 
         repeat(ctrlChangeOpcodes) {
-            controllerNumber = controllerNumber + body.readUByte().toInt() and 127
+            controllerNumber = controllerNumber + body.readUByte() and 127
             when (controllerNumber) {
                 0, 32 -> ++progmChangeOpcodes
                 1 -> ++modulationWheelSize
@@ -118,78 +117,78 @@ class MusicEntryTypeProvider : EntryTypeProvider<MusicEntryType>() {
             }
         }
 
-        var commandsIndex = copy().offset(body.remaining.toInt())
+        var commandsIndex = copy().offset(body.remaining())
         body.discard(commandsSize)
 
-        var polyPressureIndex = copy().offset(body.remaining.toInt())
+        var polyPressureIndex = copy().offset(body.remaining())
         body.discard(keyAfterTchOpcodes)
 
-        var channelPressureIndex = copy().offset(body.remaining.toInt())
+        var channelPressureIndex = copy().offset(body.remaining())
         body.discard(chnnlAfterTchOpcodes)
 
-        var pitchWheelHighIndex = copy().offset(body.remaining.toInt())
+        var pitchWheelHighIndex = copy().offset(body.remaining())
         body.discard(wheelChangeOpcodes)
 
-        var modulationWheelOffset = copy().offset(body.remaining.toInt())
+        var modulationWheelOffset = copy().offset(body.remaining())
         body.discard(modulationWheelSize)
 
-        var channelVolumeOffset = copy().offset(body.remaining.toInt())
+        var channelVolumeOffset = copy().offset(body.remaining())
         body.discard(channelVolumeSize)
 
-        var panOffset = copy().offset(body.remaining.toInt())
+        var panOffset = copy().offset(body.remaining())
         body.discard(panSize)
 
-        var notesIndex = copy().offset(body.remaining.toInt())
+        var notesIndex = copy().offset(body.remaining())
         body.discard(noteOnOpcodes + noteOffOpcodes + keyAfterTchOpcodes)
 
-        var notesOnIndex = copy().offset(body.remaining.toInt())
+        var notesOnIndex = copy().offset(body.remaining())
         body.discard(noteOnOpcodes)
 
-        var otherIndex = copy().offset(body.remaining.toInt())
+        var otherIndex = copy().offset(body.remaining())
         body.discard(otherSize)
 
-        var notesOffIndex = copy().offset(body.remaining.toInt())
+        var notesOffIndex = copy().offset(body.remaining())
         body.discard(noteOffOpcodes)
 
-        var modulationWheel2Offset = copy().offset(body.remaining.toInt())
+        var modulationWheel2Offset = copy().offset(body.remaining())
         body.discard(modulationWheel2Size)
 
-        var channelVolume2Offset = copy().offset(body.remaining.toInt())
+        var channelVolume2Offset = copy().offset(body.remaining())
         body.discard(channelVolume2Size)
 
-        var pan2Offset = copy().offset(body.remaining.toInt())
+        var pan2Offset = copy().offset(body.remaining())
         body.discard(pan2Size)
 
-        var programChangeIndex = copy().offset(body.remaining.toInt())
+        var programChangeIndex = copy().offset(body.remaining())
         body.discard(progmChangeOpcodes)
 
-        var pitchWheelLowIndex = copy().offset(body.remaining.toInt())
+        var pitchWheelLowIndex = copy().offset(body.remaining())
         body.discard(wheelChangeOpcodes)
 
-        var nonRegisteredMsbIndex = copy().offset(body.remaining.toInt())
+        var nonRegisteredMsbIndex = copy().offset(body.remaining())
         body.discard(nonRegisteredMsbSize)
 
-        var nonRegisteredLsbIndex = copy().offset(body.remaining.toInt())
+        var nonRegisteredLsbIndex = copy().offset(body.remaining())
         body.discard(nonRegisteredLsbSize)
 
-        var registeredMsbIndex = copy().offset(body.remaining.toInt())
+        var registeredMsbIndex = copy().offset(body.remaining())
         body.discard(registeredNumberMsb)
 
-        var registeredLsbIndex = copy().offset(body.remaining.toInt())
+        var registeredLsbIndex = copy().offset(body.remaining())
         body.discard(registeredLsbSize)
 
-        var tempoOffset = copy().offset(body.remaining.toInt())
+        var tempoOffset = copy().offset(body.remaining())
         body.discard(tempoOpcodes * 3)
 
         val midi = copy().midi(var13)
-        val bytes = readBytes()
+        val bytes = moveToByteArray()
 
-        val buffer = buildPacket {
-            writeInt { 1297377380 }
-            writeInt { 6 }
-            writeShort { if (tracks > 1) 1 else 0 }
-            writeShort { tracks }
-            writeShort { division }
+        val buffer = allocateDynamic(1_000_000) {
+            writeInt(1297377380)
+            writeInt(6)
+            writeShort(if (tracks > 1) 1 else 0)
+            writeShort(tracks)
+            writeShort(division)
 
             var channel = 0
             var note = 0
@@ -205,10 +204,10 @@ class MusicEntryTypeProvider : EntryTypeProvider<MusicEntryType>() {
 
             loop@
             for (var60 in 0 until tracks) {
-                writeInt { 1297379947 }
-                writeInt { 0 } // Temporary length.
+                writeInt(1297379947)
+                writeInt(0) // Temporary length.
 
-                val startSize = this@buildPacket.size
+                val startSize = this@allocateDynamic.position()
                 var id = -1
                 while (true) {
                     writeVarInt(midi::readVarInt)
@@ -217,41 +216,41 @@ class MusicEntryTypeProvider : EntryTypeProvider<MusicEntryType>() {
                     id = status and 15
                     if (status == 7) {
                         // if (var65) writeByte { 255 } This is in the client, but it breaks in midi player.
-                        writeByte { 255 } // This is the fix.
-                        writeByte { 47 }
-                        writeByte { 0 }
-                        writeLengthInt { this@buildPacket.size - startSize } // Replace the length from above.
+                        writeByte(255) // This is the fix.
+                        writeByte(47)
+                        writeByte(0)
+                        writeLengthInt { this@allocateDynamic.position() - startSize } // Replace the length from above.
                         continue@loop
                     }
                     if (status == 23) {
                         // if (var65) writeByte { 255 } This is in the client, but it breaks in midi player.
-                        writeByte { 255 } // This is the fix.
-                        writeByte { 81 }
-                        writeByte { 3 }
-                        writeByte(bytes[tempoOffset++]::toInt)
-                        writeByte(bytes[tempoOffset++]::toInt)
-                        writeByte(bytes[tempoOffset++]::toInt)
+                        writeByte(255) // This is the fix.
+                        writeByte(81)
+                        writeByte(3)
+                        writeByte(bytes[tempoOffset++].toInt())
+                        writeByte(bytes[tempoOffset++].toInt())
+                        writeByte(bytes[tempoOffset++].toInt())
                     } else {
                         channel = channel xor (status shr 4)
                         when (id) {
                             0 -> {
-                                if (switch) writeByte { channel + 144 }
+                                if (switch) writeByte(channel + 144)
                                 note += bytes[notesIndex++]
                                 noteOn += bytes[notesOnIndex++]
-                                writeByte { note and 127 }
-                                writeByte { noteOn and 127 }
+                                writeByte(note and 127)
+                                writeByte(noteOn and 127)
                             }
                             1 -> {
-                                if (switch) writeByte { channel + 128 }
+                                if (switch) writeByte(channel + 128)
                                 note += bytes[notesIndex++]
                                 noteOff += bytes[notesOffIndex++]
-                                writeByte { note and 127 }
-                                writeByte { noteOff and 127 }
+                                writeByte(note and 127)
+                                writeByte(noteOff and 127)
                             }
                             2 -> {
-                                if (switch) writeByte { channel + 176 }
+                                if (switch) writeByte(channel + 176)
                                 controllerNumber = controllerNumber + bytes[controlChangeIndex++] and 127
-                                writeByte { controllerNumber }
+                                writeByte(controllerNumber)
                                 val change = when (controllerNumber) {
                                     0, 32 -> bytes[programChangeIndex++]
                                     1 -> bytes[modulationWheelOffset++]
@@ -269,30 +268,30 @@ class MusicEntryTypeProvider : EntryTypeProvider<MusicEntryType>() {
                                 }
                                 val controlChange = change + var59[controllerNumber]
                                 var59[controllerNumber] = controlChange
-                                writeByte { controlChange and 127 }
+                                writeByte(controlChange and 127)
                             }
                             3 -> {
-                                if (switch) writeByte { channel + 224 }
+                                if (switch) writeByte(channel + 224)
                                 pitchWheel += bytes[pitchWheelLowIndex++]
                                 pitchWheel += bytes[pitchWheelHighIndex++].toInt() shl 7
-                                writeByte { pitchWheel and 127 }
-                                writeByte { pitchWheel shr 7 and 127 }
+                                writeByte(pitchWheel and 127)
+                                writeByte(pitchWheel shr 7 and 127)
                             }
                             4 -> {
-                                if (switch) writeByte { channel + 208 }
+                                if (switch) writeByte(channel + 208)
                                 channelPressure += bytes[channelPressureIndex++]
-                                writeByte { channelPressure and 127 }
+                                writeByte(channelPressure and 127)
                             }
                             5 -> {
-                                if (switch) writeByte { channel + 160 }
+                                if (switch) writeByte(channel + 160)
                                 note += bytes[notesIndex++]
                                 polyPressure += bytes[polyPressureIndex++]
-                                writeByte { note and 127 }
-                                writeByte { polyPressure and 127 }
+                                writeByte(note and 127)
+                                writeByte(polyPressure and 127)
                             }
                             6 -> {
-                                if (switch) writeByte { channel + 192 }
-                                writeByte(bytes[programChangeIndex++]::toInt)
+                                if (switch) writeByte(channel + 192)
+                                writeByte(bytes[programChangeIndex++].toInt())
                             }
                             else -> throw IllegalArgumentException("Out of bounds. Was $id.")
                         }
@@ -300,57 +299,54 @@ class MusicEntryTypeProvider : EntryTypeProvider<MusicEntryType>() {
                 }
             }
         }
-        type.bytes = buffer.readBytes()
-        buffer.release()
+        type.bytes = buffer
         assertEmptyAndRelease()
         return type
     }
 
-    private fun ByteReadPacket.header(): ByteReadPacket {
-        discard(remaining.toInt() - 3)
-        val bytes = ByteArray(remaining.toInt())
-        readFully(bytes)
-        return ByteReadPacket(bytes)
+    private fun ByteBuffer.header(): ByteBuffer {
+        discard(remaining() - 3)
+        val bytes = ByteArray(remaining())
+        get(bytes)
+        return ByteBuffer.wrap(bytes)
     }
 
-    private fun ByteReadPacket.body(): ByteReadPacket {
-        val bytes = ByteArray(remaining.toInt())
-        readFully(bytes)
-        return ByteReadPacket(bytes)
+    private fun ByteBuffer.body(): ByteBuffer {
+        val bytes = ByteArray(remaining())
+        get(bytes)
+        return ByteBuffer.wrap(bytes)
     }
 
-    private fun ByteReadPacket.midi(offset: Int): ByteReadPacket {
+    private fun ByteBuffer.midi(offset: Int): ByteBuffer {
         discard(offset)
-        val bytes = ByteArray(remaining.toInt())
-        readFully(bytes)
-        return ByteReadPacket(bytes)
+        val bytes = ByteArray(remaining())
+        get(bytes)
+        return ByteBuffer.wrap(bytes)
     }
 
-    private fun ByteReadPacket.offset(amount: Int) = remaining.toInt() - amount
+    private fun ByteBuffer.offset(amount: Int) = remaining() - amount
 
-    private inline fun BytePacketBuilder.writeVarInt(value: () -> Int) = value.invoke().also {
+    private inline fun ByteBuffer.writeVarInt(value: () -> Int) = value.invoke().also {
         if (it and -128 != 0) {
             if (it and -16384 != 0) {
                 if (it and -2097152 != 0) {
                     if (it and -268435456 != 0) {
-                        writeByte { it ushr 28 or 128 }
+                        writeByte(it ushr 28 or 128)
                     }
-                    writeByte { it ushr 21 or 128 }
+                    writeByte(it ushr 21 or 128)
                 }
-                writeByte { it ushr 14 or 128 }
+                writeByte(it ushr 14 or 128)
             }
-            writeByte { it ushr 7 or 128 }
+            writeByte(it ushr 7 or 128)
         }
-        writeByte { it and 127 }
+        writeByte(it and 127)
     }
 
-    private inline fun BytePacketBuilder.writeLengthInt(value: () -> Int) = value.invoke().also {
-        val array = build().readBytes()
-        array[array.size - it - 4] = (it shr 24).toByte()
-        array[array.size - it - 3] = (it shr 16).toByte()
-        array[array.size - it - 2] = (it shr 8).toByte()
-        array[array.size - it - 1] = it.toByte()
-        writeBytes { array }
+    private inline fun ByteBuffer.writeLengthInt(value: () -> Int) = value.invoke().also {
+        array()[position() - it - 4] = (it shr 24).toByte()
+        array()[position() - it - 3] = (it shr 16).toByte()
+        array()[position() - it - 2] = (it shr 8).toByte()
+        array()[position() - it - 1] = it.toByte()
     }
 
     private companion object {

@@ -3,6 +3,7 @@ package script.packet.disassembler
 import io.ktor.utils.io.core.readInt
 import xlitekt.game.packet.OpHeldPacket
 import xlitekt.game.packet.disassembler.onPacketDisassembler
+import xlitekt.shared.buffer.readInt
 import xlitekt.shared.buffer.readUShortAdd
 
 /**

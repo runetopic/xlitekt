@@ -1,5 +1,6 @@
 package script.packet.disassembler.handler
 
+import xlitekt.game.actor.queueSoft
 import xlitekt.game.content.ui.InterfaceLayout
 import xlitekt.game.content.vars.VarBit
 import xlitekt.game.packet.WindowStatusPacket
@@ -15,5 +16,7 @@ onPacketHandler<WindowStatusPacket> {
         interfaceLayout = InterfaceLayout.RESIZABLE_MODERN
     }
     if (player.interfaces.currentInterfaceLayout == interfaceLayout) return@onPacketHandler
-    player.interfaces.switchLayout(interfaceLayout)
+    player.queueSoft {
+        player.interfaces.switchLayout(interfaceLayout)
+    }
 }

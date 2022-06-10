@@ -14,7 +14,7 @@ import xlitekt.shared.lazy
  */
 class NPC(
     val id: Int,
-    override var location: Location
+    override var location: Location,
 ) : Actor(location) {
     inline val entry get() = lazy<NPCEntryTypeProvider>().entryType(id)
 

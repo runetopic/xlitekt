@@ -181,6 +181,8 @@ abstract class Container(
     fun replaceAll(src: List<Item?>) {
         src.forEachIndexed(items::set)
     }
+
+    fun hasItem(id: Int): Boolean = slotId(id) != -1
 }
 
 typealias ContainerUpdate = (Item).(List<Int>) -> Unit

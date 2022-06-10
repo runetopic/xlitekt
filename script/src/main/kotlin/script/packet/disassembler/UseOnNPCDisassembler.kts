@@ -4,6 +4,8 @@ import com.github.michaelbull.logging.InlineLogger
 import io.ktor.utils.io.core.readInt
 import xlitekt.game.packet.UseOnNPCPacket
 import xlitekt.game.packet.disassembler.onPacketDisassembler
+import xlitekt.shared.buffer.readByte
+import xlitekt.shared.buffer.readInt
 import xlitekt.shared.buffer.readUShortLittleEndian
 import xlitekt.shared.toBoolean
 

@@ -1,8 +1,8 @@
 package script.packet.disassembler
 
-import io.ktor.utils.io.core.readUByte
 import xlitekt.game.packet.MovementPacket
 import xlitekt.game.packet.disassembler.onPacketDisassembler
+import xlitekt.shared.buffer.readUByte
 import xlitekt.shared.buffer.readUShortAdd
 import xlitekt.shared.buffer.readUShortLittleEndianAdd
 import xlitekt.shared.toBoolean

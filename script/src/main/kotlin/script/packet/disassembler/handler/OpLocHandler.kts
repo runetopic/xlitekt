@@ -4,7 +4,7 @@ import com.github.michaelbull.logging.InlineLogger
 import xlitekt.cache.provider.config.loc.LocEntryTypeProvider
 import xlitekt.game.actor.angleTo
 import xlitekt.game.actor.cancelAll
-import xlitekt.game.actor.player.message
+import xlitekt.game.actor.queueStrong
 import xlitekt.game.actor.routeTo
 import xlitekt.game.packet.OpLocPacket
 import xlitekt.game.packet.disassembler.handler.onPacketHandler
@@ -61,9 +61,10 @@ onPacketHandler<OpLocPacket> {
 
     with(player) {
         cancelAll()
-        routeTo(
-            gameObject = gameObject,
-            reachAction = action
-        )
+        queueStrong {
+            routeTo(gameObject) {
+                angleTo(gameObject)
+            }
+        }
     }
 }

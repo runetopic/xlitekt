@@ -21,7 +21,7 @@ onPacketDisassembler(opcode = 97, size = -2) {
     var lastTime: Long = 0
     var keycodes = ArrayList<Int>()
 
-    repeat(remaining.toInt() / 4) {
+    repeat(remaining().toInt() / 4) {
         readUMedium().let { if (it != 0) lastTime = it.toLong() }
         keycodes.add(readByteSubtract())
     }

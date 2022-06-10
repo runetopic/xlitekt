@@ -1,15 +1,17 @@
 package xlitekt.cache.provider.ui
 
-import io.ktor.utils.io.core.ByteReadPacket
-import io.ktor.utils.io.core.readInt
-import io.ktor.utils.io.core.readShort
-import io.ktor.utils.io.core.readUByte
-import io.ktor.utils.io.core.readUShort
 import xlitekt.cache.provider.EntryTypeProvider
+import xlitekt.shared.buffer.discard
+import xlitekt.shared.buffer.readByte
+import xlitekt.shared.buffer.readInt
+import xlitekt.shared.buffer.readShort
 import xlitekt.shared.buffer.readStringCp1252NullTerminated
+import xlitekt.shared.buffer.readUByte
 import xlitekt.shared.buffer.readUMedium
+import xlitekt.shared.buffer.readUShort
 import xlitekt.shared.packInterface
 import xlitekt.shared.toBoolean
+import java.nio.ByteBuffer
 
 /**
  * @author Jordan Abraham
@@ -21,135 +23,135 @@ class InterfaceEntryTypeProvider : EntryTypeProvider<InterfaceEntryType>() {
         .groups()
         .flatMap { group ->
             group.files().map {
-                ByteReadPacket(it.data).loadEntryType(InterfaceEntryType(group.id.packInterface(it.id), isModern = it.data[0].toInt() == -1))
+                ByteBuffer.wrap(it.data).loadEntryType(InterfaceEntryType(group.id.packInterface(it.id), isModern = it.data[0].toInt() == -1))
             }
         }
         .associateBy(InterfaceEntryType::id)
 
-    override fun ByteReadPacket.loadEntryType(type: InterfaceEntryType): InterfaceEntryType = type.apply {
+    override fun ByteBuffer.loadEntryType(type: InterfaceEntryType): InterfaceEntryType = type.apply {
         if (isModern) decodeModern(this) else decodeLegacy(this)
         assertEmptyAndRelease()
     }
 
-    private fun ByteReadPacket.decodeModern(type: InterfaceEntryType) {
+    private fun ByteBuffer.decodeModern(type: InterfaceEntryType) {
         discard(1) // Unused.
-        type.type = readUByte().toInt()
-        type.contentType = readUShort().toInt()
-        type.rawX = readShort().toInt()
-        type.rawY = readShort().toInt()
-        type.rawWidth = readUShort().toInt()
-        type.rawHeight = if (type.type == 9) readShort().toInt() else readUShort().toInt()
-        type.widthAlignment = readByte().toInt()
-        type.heightAlignment = readByte().toInt()
-        type.xAlignment = readByte().toInt()
-        type.yAlignment = readByte().toInt()
-        type.parentId = readUShort().toInt().let { if (it == 0xffff) -1 else it + type.id and 0xffff.inv() }
-        type.isHidden = readUByte().toInt().toBoolean()
+        type.type = readUByte()
+        type.contentType = readUShort()
+        type.rawX = readShort()
+        type.rawY = readShort()
+        type.rawWidth = readUShort()
+        type.rawHeight = if (type.type == 9) readShort() else readUShort()
+        type.widthAlignment = readByte()
+        type.heightAlignment = readByte()
+        type.xAlignment = readByte()
+        type.yAlignment = readByte()
+        type.parentId = readUShort().let { if (it == 0xffff) -1 else it + type.id and 0xffff.inv() }
+        type.isHidden = readUByte().toBoolean()
 
         when (type.type) {
             0 -> {
-                type.scrollWidth = readUShort().toInt()
-                type.scrollHeight = readUShort().toInt()
-                type.noClickThrough = readUByte().toInt().toBoolean()
+                type.scrollWidth = readUShort()
+                type.scrollHeight = readUShort()
+                type.noClickThrough = readUByte().toBoolean()
             }
             3 -> {
                 type.color = readInt()
-                type.fill = readUByte().toInt().toBoolean()
-                type.transparencyTop = readUByte().toInt()
+                type.fill = readUByte().toBoolean()
+                type.transparencyTop = readUByte()
             }
             4 -> {
-                type.fontId = readUShort().toInt().let { if (it == 0xffff) -1 else it }
+                type.fontId = readUShort().let { if (it == 0xffff) -1 else it }
                 type.text = readStringCp1252NullTerminated()
-                type.textLineHeight = readUByte().toInt()
-                type.textXAlignment = readUByte().toInt()
-                type.textYAlignment = readUByte().toInt()
-                type.textShadowed = readUByte().toInt().toBoolean()
+                type.textLineHeight = readUByte()
+                type.textXAlignment = readUByte()
+                type.textYAlignment = readUByte()
+                type.textShadowed = readUByte().toBoolean()
                 type.color = readInt()
             }
             5 -> {
                 type.spriteId2 = readInt()
-                type.spriteAngle = readUShort().toInt()
-                type.spriteTiling = readUByte().toInt().toBoolean()
-                type.transparencyTop = readUByte().toInt()
-                type.outline = readUByte().toInt()
+                type.spriteAngle = readUShort()
+                type.spriteTiling = readUByte().toBoolean()
+                type.transparencyTop = readUByte()
+                type.outline = readUByte()
                 type.spriteShadow = readInt()
-                type.spriteFlipV = readUByte().toInt().toBoolean()
-                type.spriteFlipH = readUByte().toInt().toBoolean()
+                type.spriteFlipV = readUByte().toBoolean()
+                type.spriteFlipH = readUByte().toBoolean()
             }
             6 -> {
                 type.modelType = 1
-                type.modelId = readUShort().toInt().let { if (it == 0xffff) -1 else it }
-                type.modelOffsetX = readShort().toInt()
-                type.modelOffsetY = readShort().toInt()
-                type.modelAngleX = readUShort().toInt()
-                type.modelAngleY = readUShort().toInt()
-                type.modelAngleZ = readUShort().toInt()
-                type.modelZoom = readUShort().toInt()
-                type.sequenceId = readUShort().toInt().let { if (it == 0xffff) -1 else it }
-                type.modelOrthog = readUByte().toInt().toBoolean()
+                type.modelId = readUShort().let { if (it == 0xffff) -1 else it }
+                type.modelOffsetX = readShort()
+                type.modelOffsetY = readShort()
+                type.modelAngleX = readUShort()
+                type.modelAngleY = readUShort()
+                type.modelAngleZ = readUShort()
+                type.modelZoom = readUShort()
+                type.sequenceId = readUShort().let { if (it == 0xffff) -1 else it }
+                type.modelOrthog = readUByte().toBoolean()
                 discard(2) // Unused.
-                if (type.widthAlignment != 0) type.field3280 = readUShort().toInt()
+                if (type.widthAlignment != 0) type.field3280 = readUShort()
                 if (type.heightAlignment != 0) discard(2) // Unused.
             }
             9 -> {
-                type.lineWid = readUByte().toInt()
+                type.lineWid = readUByte()
                 type.color = readInt()
-                type.field3359 = readUByte().toInt().toBoolean()
+                type.field3359 = readUByte().toBoolean()
             }
         }
         type.flags = readUMedium()
         type.dataText = readStringCp1252NullTerminated()
 
         type.actions = buildList {
-            repeat(readUByte().toInt()) {
+            repeat(readUByte()) {
                 add(readStringCp1252NullTerminated())
             }
         }
 
-        type.dragZoneSize = readUByte().toInt()
-        type.dragThreshold = readUByte().toInt()
-        type.isScrollBar = readUByte().toInt().toBoolean()
+        type.dragZoneSize = readUByte()
+        type.dragThreshold = readUByte()
+        type.isScrollBar = readUByte().toBoolean()
         type.spellActionName = readStringCp1252NullTerminated()
-        discard(remaining) // Discard the remaining buffer for the listeners.
+        discard(remaining()) // Discard the remaining buffer for the listeners.
     }
 
-    private fun ByteReadPacket.decodeLegacy(type: InterfaceEntryType) {
-        type.type = readUByte().toInt()
-        type.buttonType = readUByte().toInt()
-        type.contentType = readUShort().toInt()
-        type.rawX = readShort().toInt()
-        type.rawY = readShort().toInt()
-        type.rawWidth = readUShort().toInt()
-        type.rawHeight = readUShort().toInt()
-        type.transparencyTop = readUByte().toInt()
-        type.parentId = readUShort().toInt().let { if (it == 0xffff) -1 else it + type.id and 0xffff.inv() }
-        type.mouseOverRedirect = readUShort().toInt().let { if (it == 0xffff) -1 else it }
+    private fun ByteBuffer.decodeLegacy(type: InterfaceEntryType) {
+        type.type = readUByte()
+        type.buttonType = readUByte()
+        type.contentType = readUShort()
+        type.rawX = readShort()
+        type.rawY = readShort()
+        type.rawWidth = readUShort()
+        type.rawHeight = readUShort()
+        type.transparencyTop = readUByte()
+        type.parentId = readUShort().let { if (it == 0xffff) -1 else it + type.id and 0xffff.inv() }
+        type.mouseOverRedirect = readUShort().let { if (it == 0xffff) -1 else it }
 
-        repeat(readUByte().toInt()) { // cs1 comparisons/values.
+        repeat(readUByte()) { // cs1 comparisons/values.
             discard(3) // Discard the cs1 comparisons and values.
         }
 
-        repeat(readUByte().toInt()) { // cs1 instructions.
-            repeat(readUShort().toInt()) {
+        repeat(readUByte()) { // cs1 instructions.
+            repeat(readUShort()) {
                 discard(2) // Discard the cs1 instructions values.
             }
         }
 
         when (type.type) {
             0 -> {
-                type.scrollHeight = readUShort().toInt()
-                type.isHidden = readUByte().toInt().toBoolean()
+                type.scrollHeight = readUShort()
+                type.isHidden = readUByte().toBoolean()
             }
             1 -> discard(3) // Unused.
             2 -> {
                 type.itemIds = List(type.rawWidth * type.rawHeight) { 0 }
                 type.itemQuantities = List(type.rawWidth * type.rawHeight) { 0 }
                 discard(4) // Discard flags.
-                type.paddingX = readUByte().toInt()
-                type.paddingY = readUByte().toInt()
+                type.paddingX = readUByte()
+                type.paddingY = readUByte()
 
                 repeat(20) {
-                    if (readUByte().toInt() == 1) {
+                    if (readUByte() == 1) {
                         discard(8) // Discard inventory sprites and offsets.
                     }
                 }
@@ -162,33 +164,33 @@ class InterfaceEntryTypeProvider : EntryTypeProvider<InterfaceEntryType>() {
                 type.spellName = readStringCp1252NullTerminated()
                 discard(2) // Discard flags.
             }
-            3 -> type.fill = readUByte().toInt().toBoolean()
+            3 -> type.fill = readUByte().toBoolean()
             5 -> {
                 type.spriteId2 = readInt()
                 type.spriteId = readInt()
             }
             6 -> {
                 type.modelType = 1
-                type.modelId = readUShort().toInt().let { if (it == 0xffff) -1 else it }
+                type.modelId = readUShort().let { if (it == 0xffff) -1 else it }
 
                 type.modelType2 = 1
-                type.modelId2 = readUShort().toInt().let { if (it == 0xffff) -1 else it }
+                type.modelId2 = readUShort().let { if (it == 0xffff) -1 else it }
 
-                type.sequenceId = readUShort().toInt().let { if (it == 0xffff) -1 else it }
-                type.sequenceId2 = readUShort().toInt().let { if (it == 0xffff) -1 else it }
-                type.modelZoom = readUShort().toInt()
-                type.modelAngleX = readUShort().toInt()
-                type.modelAngleY = readUShort().toInt()
+                type.sequenceId = readUShort().let { if (it == 0xffff) -1 else it }
+                type.sequenceId2 = readUShort().let { if (it == 0xffff) -1 else it }
+                type.modelZoom = readUShort()
+                type.modelAngleX = readUShort()
+                type.modelAngleY = readUShort()
             }
             7 -> {
                 type.itemIds = List(type.rawWidth * type.rawHeight) { 0 }
                 type.itemQuantities = List(type.rawWidth * type.rawHeight) { 0 }
-                type.textXAlignment = readUByte().toInt()
-                type.fontId = readUShort().toInt().let { if (it == 0xffff) -1 else it }
-                type.textShadowed = readUByte().toInt().toBoolean()
+                type.textXAlignment = readUByte()
+                type.fontId = readUShort().let { if (it == 0xffff) -1 else it }
+                type.textShadowed = readUByte().toBoolean()
                 type.color = readInt()
-                type.paddingX = readShort().toInt()
-                type.paddingY = readShort().toInt()
+                type.paddingX = readShort()
+                type.paddingY = readShort()
                 discard(1) // Discard flags.
 
                 repeat(5) {
@@ -200,11 +202,11 @@ class InterfaceEntryTypeProvider : EntryTypeProvider<InterfaceEntryType>() {
 
         if (type.type == 1 || type.type == 3 || type.type == 4) {
             if (type.type != 3) {
-                type.textXAlignment = readUByte().toInt()
-                type.textYAlignment = readUByte().toInt()
-                type.textLineHeight = readUByte().toInt()
-                type.fontId = readUShort().toInt().let { if (it == 0xffff) -1 else it }
-                type.textShadowed = readUByte().toInt().toBoolean()
+                type.textXAlignment = readUByte()
+                type.textYAlignment = readUByte()
+                type.textLineHeight = readUByte()
+                type.fontId = readUShort().let { if (it == 0xffff) -1 else it }
+                type.textShadowed = readUByte().toBoolean()
                 if (type.type == 4) {
                     type.text = readStringCp1252NullTerminated()
                     type.text2 = readStringCp1252NullTerminated()

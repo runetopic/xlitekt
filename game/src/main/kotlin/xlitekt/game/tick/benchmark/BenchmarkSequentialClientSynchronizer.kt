@@ -3,6 +3,7 @@ package xlitekt.game.tick.benchmark
 import com.github.michaelbull.logging.InlineLogger
 import xlitekt.game.actor.chat
 import xlitekt.game.actor.hit
+import xlitekt.game.actor.player.process
 import xlitekt.game.actor.render.HitBar
 import xlitekt.game.actor.render.HitType
 import xlitekt.game.actor.routeTo
@@ -40,6 +41,7 @@ class BenchmarkSequentialClientSynchronizer : Synchronizer() {
         val playerSyncFirstBlock = measureTime {
             players.forEach {
                 it.invokeAndClearReadPool()
+                it.process()
                 it.syncMovement(syncPlayers)
                 it.syncRenderingBlocks()
             }

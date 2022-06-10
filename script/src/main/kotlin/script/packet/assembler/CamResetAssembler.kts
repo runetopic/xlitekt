@@ -1,12 +1,12 @@
 package script.packet.assembler
 
-import io.ktor.utils.io.core.buildPacket
 import xlitekt.game.packet.CamResetPacket
 import xlitekt.game.packet.assembler.onPacketAssembler
+import xlitekt.shared.buffer.allocate
 
 /**
  * @author Jordan Abraham
  */
 onPacketAssembler<CamResetPacket>(opcode = 35, size = 0) {
-    buildPacket { }
+    allocate(0) { }
 }

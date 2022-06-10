@@ -4,6 +4,7 @@ import com.github.michaelbull.logging.InlineLogger
 import io.ktor.utils.io.core.readUShort
 import xlitekt.game.packet.MouseClickPacket
 import xlitekt.game.packet.disassembler.onPacketDisassembler
+import xlitekt.shared.buffer.readUShort
 
 /**
  * @author Justin Kenney
