@@ -1,9 +1,10 @@
 package xlitekt.game.content.ui
 
-import com.github.michaelbull.logging.InlineLogger
 import xlitekt.cache.provider.config.enum.EnumEntryTypeProvider
+import xlitekt.game.actor.cancelAll
 import xlitekt.game.actor.player.Player
 import xlitekt.game.actor.player.message
+import xlitekt.game.actor.resetMovement
 import xlitekt.game.content.item.Item
 import xlitekt.game.content.ui.InterfaceMap.addInterfaceListener
 import xlitekt.game.packet.IfCloseSubPacket
@@ -24,7 +25,6 @@ class Interfaces(
     private val player: Player,
     private val interfaces: MutableList<UserInterface> = mutableListOf()
 ) : MutableList<UserInterface> by interfaces {
-    private val logger = InlineLogger()
 
     val listeners = mutableListOf<UserInterfaceListener>()
 
@@ -46,7 +46,7 @@ class Interfaces(
         this -= openInventory
     }
 
-    private fun modalOpen() = currentModal() != null
+    fun modalOpen() = currentModal() != null
 
     private fun currentModal() = findLast { it.interfaceInfo.resizableChildId == MODAL_CHILD_ID || it.interfaceInfo.resizableChildId == MODAL_CHILD_ID_EXTENDED }
     private fun inventoryOpen() = currentInventory() != null
@@ -57,7 +57,11 @@ class Interfaces(
     private fun UserInterface.isInventory() = interfaceInfo.resizableChildId == INVENTORY_CHILD_ID
 
     operator fun plusAssign(userInterface: UserInterface) {
-        if (modalOpen() && userInterface.isModal()) closeModal()
+        player.cancelAll()
+        if (userInterface.isModal()) {
+            if (modalOpen()) closeModal()
+            player.resetMovement(true)
+        }
         if (inventoryOpen() && userInterface.isInventory()) closeInventory()
         this.add(userInterface)
         openInterface(userInterface)

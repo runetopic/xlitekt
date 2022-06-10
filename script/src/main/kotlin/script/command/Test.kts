@@ -1,15 +1,20 @@
 package script.command
 
+import xlitekt.game.actor.animate
+import xlitekt.game.actor.player.addExperience
 import xlitekt.game.actor.player.message
+import xlitekt.game.actor.queueNormal
 import xlitekt.game.content.command.Commands.onCommand
 import xlitekt.game.content.item.FloorItem
 import xlitekt.game.content.item.Item
 import xlitekt.game.content.projectile.Projectile
+import xlitekt.game.content.skill.Skill
 import xlitekt.game.content.ui.UserInterface
 import xlitekt.game.world.map.CollisionMap
 import xlitekt.game.world.map.GameObject
 import xlitekt.game.world.map.Location
 import xlitekt.game.world.map.transform
+import xlitekt.game.world.map.withinDistance
 
 /**
  * @author Jordan Abraham
@@ -18,6 +23,23 @@ onCommand("gp").use {
     inventory.addItem(Item(995, Int.MAX_VALUE)) {
         message { "Spawned max cash." }
     }
+}
+
+onCommand("q").use {
+    queueNormal {
+        while (true) {
+            val location = Location(3222, 3222)
+
+            waitUntil {
+                this@use.location.withinDistance(location, 2)
+            }
+            message { "Fuck you" }
+        }
+    }
+}
+
+onCommand("xp").use {
+    message { "${Skill.getLevelForXp(30_000.0)}" }
 }
 
 onCommand("add").use {

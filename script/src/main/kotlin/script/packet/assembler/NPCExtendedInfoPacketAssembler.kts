@@ -25,8 +25,9 @@ import java.util.Optional
  * @author Tyler Telis
  */
 onPacketAssembler<NPCInfoPacket>(opcode = 90, size = -2) {
-    allocateDynamic(25_000) {
-        val blocks = ByteBuffer.allocate(5000)
+    val limit = highDefinitionUpdates.map { it.value.orElse(byteArrayOf()).size }.sum() * 2
+    allocateDynamic(limit + 200) {
+        val blocks = ByteBuffer.allocate(limit)
         withBitAccess {
             writeBits(8, viewport.npcs.size)
             highDefinition(viewport, blocks, highDefinitionUpdates, movementStepsUpdates)

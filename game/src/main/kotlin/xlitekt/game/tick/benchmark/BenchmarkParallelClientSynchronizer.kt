@@ -1,9 +1,9 @@
 package xlitekt.game.tick.benchmark
 
 import com.github.michaelbull.logging.InlineLogger
-import xlitekt.game.actor.cancelAll
 import xlitekt.game.actor.chat
 import xlitekt.game.actor.hit
+import xlitekt.game.actor.player.process
 import xlitekt.game.actor.render.HitBar
 import xlitekt.game.actor.render.HitType
 import xlitekt.game.actor.routeTo
@@ -34,7 +34,6 @@ class BenchmarkParallelClientSynchronizer : Synchronizer() {
                 it.chat(it.rights, 0) { "Hello Xlite." }
                 it.spotAnimate { 574 }
                 it.hit(HitBar.DEFAULT, null, HitType.values().random(), 0) { Random.nextInt(1, 127) }
-                it.cancelAll()
                 it.routeTo(
                     Location(
                         Random.nextInt(first!!.location.x - 5, first.location.x + 5),
@@ -48,6 +47,7 @@ class BenchmarkParallelClientSynchronizer : Synchronizer() {
         val playerSyncFirstBlock = measureTime {
             players.parallelStream().forEach {
                 it.invokeAndClearReadPool()
+                it.process()
                 it.syncMovement(syncPlayers)
                 it.syncRenderingBlocks()
             }
@@ -57,7 +57,6 @@ class BenchmarkParallelClientSynchronizer : Synchronizer() {
 
         val npcFindersTime = measureTime {
             npcs.parallelStream().forEach {
-                it.cancelAll()
                 it.routeTo(
                     Location(
                         Random.nextInt(it.location.x - 5, it.location.x + 5),

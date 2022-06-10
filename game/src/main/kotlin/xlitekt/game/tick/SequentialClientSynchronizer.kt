@@ -1,5 +1,6 @@
 package xlitekt.game.tick
 
+import xlitekt.game.actor.player.process
 import xlitekt.game.world.map.zone.Zone
 
 /**
@@ -13,6 +14,7 @@ class SequentialClientSynchronizer : Synchronizer() {
 
         players.forEach {
             it.invokeAndClearReadPool()
+            it.process()
             it.syncMovement(syncPlayers)
             it.syncRenderingBlocks()
         }

@@ -1,5 +1,6 @@
 package xlitekt.game.tick
 
+import java.util.Optional
 import org.jctools.maps.NonBlockingHashMapLong
 import org.jctools.maps.NonBlockingHashSet
 import xlitekt.game.actor.movement.MovementStep
@@ -13,15 +14,10 @@ import xlitekt.game.packet.NPCInfoPacket
 import xlitekt.game.packet.PlayerInfoPacket
 import xlitekt.game.tick.NPCInfoUpdates.HighDefinitionNPCUpdates
 import xlitekt.game.tick.NPCInfoUpdates.MovementStepsNPCUpdates
-import xlitekt.game.tick.PlayerInfoUpdates.AlternativeHighDefinitionPlayerUpdates
-import xlitekt.game.tick.PlayerInfoUpdates.AlternativeLowDefinitionPlayerUpdates
-import xlitekt.game.tick.PlayerInfoUpdates.HighDefinitionPlayerUpdates
-import xlitekt.game.tick.PlayerInfoUpdates.LowDefinitionPlayerUpdates
-import xlitekt.game.tick.PlayerInfoUpdates.MovementStepsPlayerUpdates
+import xlitekt.game.tick.PlayerInfoUpdates.*
 import xlitekt.game.world.World
 import xlitekt.game.world.map.zone.Zone
 import xlitekt.shared.inject
-import java.util.Optional
 
 /**
  * @author Jordan Abraham

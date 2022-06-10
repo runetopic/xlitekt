@@ -13,6 +13,7 @@ import xlitekt.game.actor.player.Player
 import xlitekt.game.actor.player.drainRunEnergy
 import xlitekt.game.actor.player.message
 import xlitekt.game.actor.player.rebuildNormal
+import xlitekt.game.actor.player.resetMiniMapFlag
 import xlitekt.game.actor.render.HitBar
 import xlitekt.game.actor.render.HitSplat
 import xlitekt.game.actor.render.HitType
@@ -34,7 +35,9 @@ import xlitekt.game.actor.render.block.LowDefinitionRenderingBlock
 import xlitekt.game.actor.render.block.NPCRenderingBlockListener
 import xlitekt.game.actor.render.block.PlayerRenderingBlockListener
 import xlitekt.game.actor.render.block.RenderingBlock
-import xlitekt.game.packet.SetMapFlagPacket
+import xlitekt.game.queue.ActorScriptQueue
+import xlitekt.game.queue.QueuedScriptPriority
+import xlitekt.game.queue.SuspendableQueuedScript
 import xlitekt.game.world.World
 import xlitekt.game.world.map.GameObject
 import xlitekt.game.world.map.Location
@@ -48,12 +51,13 @@ import java.util.Optional
  * @author Jordan Abraham
  */
 abstract class Actor(
-    open var location: Location
+    open var location: Location,
 ) {
     val movement = Movement()
-
     val bonuses = Bonuses()
     var previousLocation = Location.None
+
+    val queue = ActorScriptQueue()
 
     /**
      * This actor index.
@@ -113,14 +117,14 @@ abstract class Actor(
                 val reached = location.packedLocation == it.waypoints.last() && !it.alternative
                 if (this is Player && !reached) {
                     message { "You can't reach that." }
-                    write(SetMapFlagPacket(255, 255))
+                    resetMiniMapFlag()
                 }
                 if (reached) {
                     it.reachAction?.invoke()
                 }
                 movement.movementRequest = Optional.empty()
             }
-            cancelSoft()
+            resetMovement()
         } else {
             if (this is Player) {
                 if (shouldRebuildMap()) rebuildNormal(players) { false }
@@ -295,26 +299,27 @@ fun Actor.angleTo(npc: NPC) {
 }
 
 /**
- * Cancels soft actions this actor is doing.
- * This cancels the facingActorIndex flag.
+ * Cancels all the actions an actor is doing.
  */
-fun Actor.cancelSoft() {
+fun Actor.cancelAll() {
+    queue.cancelAllScripts()
+}
+
+/**
+ * Resets movement related information.
+ * This also cancels the facingActorIndex flag.
+ */
+fun Actor.resetMovement(resetFlag: Boolean = false) {
+    movement.reset()
+    if (resetFlag && this is Player) {
+        resetMiniMapFlag()
+    }
     facingActorIndex.ifPresent {
         if (this is Player) {
             faceActor { -1 }
         }
         facingActorIndex = Optional.empty()
     }
-}
-
-/**
- * Cancels everything this actor is currently doing.
- * This cancels soft actions.
- * This cancels all movement.
- */
-fun Actor.cancelAll() {
-    cancelSoft()
-    movement.reset()
 }
 
 /**
@@ -344,19 +349,20 @@ inline fun Actor.speed(running: () -> Boolean) = running.invoke().also {
  * @param reachAction A callback function to invoke when the actor reaches the destination.
  */
 fun Actor.routeTo(location: Location, reachAction: (() -> Unit)? = null) {
+    resetMovement()
     val route = PathFinders.findPath(
-        smart = this is Player,
+        smart = this::class == Player::class,
         srcX = this.location.x,
         srcZ = this.location.z,
         destX = location.x,
         destZ = location.z,
-        level = this.location.level
+        level = location.level
     )
     movement.route(
         MovementRequest(
             reachAction,
             IntArrayList(route.coords.size).also { points ->
-                route.coords.map { points.add(Location(it.x, it.y, this.location.level).packedLocation) }
+                route.coords.map { points.add(Location(it.x, it.y, this@routeTo.location.level).packedLocation) }
             },
             route.failed,
             route.alternative
@@ -370,13 +376,14 @@ fun Actor.routeTo(location: Location, reachAction: (() -> Unit)? = null) {
  * @param reachAction A callback function to invoke when the actor reaches the destination.
  */
 fun Actor.routeTo(gameObject: GameObject, reachAction: (() -> Unit)? = null) {
+    resetMovement()
     val dest = gameObject.location
     val rotation = gameObject.rotation
     val shape = gameObject.shape
     val width = gameObject.entry?.width
     val height = gameObject.entry?.height
     val route = PathFinders.findPath(
-        smart = this is Player,
+        smart = this::class == Player::class,
         srcX = location.x,
         srcZ = location.z,
         destX = dest.x,
@@ -405,9 +412,10 @@ fun Actor.routeTo(gameObject: GameObject, reachAction: (() -> Unit)? = null) {
  * @param reachAction A callback function to invoke when the actor reaches the destination.
  */
 fun Actor.routeTo(npc: NPC, reachAction: (() -> Unit)? = null) {
+    resetMovement()
     val dest = npc.location
     val route = PathFinders.findPath(
-        smart = this is Player,
+        smart = this::class == Player::class,
         srcX = location.x,
         srcZ = location.z,
         destX = dest.x,
@@ -528,4 +536,14 @@ inline fun Actor.overheadChat(message: () -> String) {
 private inline fun Actor.faceLocation(location: () -> Location) {
     if (this is Player) throw IllegalStateException("Player does not support this render.")
     render(FaceLocation(location.invoke()))
+}
+
+fun Actor.queueWeak(task: SuspendableQueuedScript<Actor>) = queue(priority = QueuedScriptPriority.Weak, task)
+fun Actor.queueNormal(task: SuspendableQueuedScript<Actor>) = queue(priority = QueuedScriptPriority.Normal, task)
+fun Actor.queueStrong(task: SuspendableQueuedScript<Actor>) = queue(priority = QueuedScriptPriority.Strong, task)
+fun Actor.queueSoft(task: SuspendableQueuedScript<Actor>) = queue(priority = QueuedScriptPriority.Soft, task)
+
+private fun Actor.queue(priority: QueuedScriptPriority = QueuedScriptPriority.Normal, task: SuspendableQueuedScript<Actor>): Boolean {
+    queue.queue(this, priority, task)
+    return true
 }
