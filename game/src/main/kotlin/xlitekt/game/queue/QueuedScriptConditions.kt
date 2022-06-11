@@ -13,7 +13,7 @@ sealed class QueuedScriptConditions {
     class WaitCondition(ticks: Int) : QueuedScriptConditions() {
         private val ticks = AtomicInteger(ticks)
 
-        override fun resume(): Boolean = ticks.decrementAndGet() <= 0
+        override fun resume(): Boolean = ticks.decrementAndGet() < 0
     }
 
     class LocationCondition(private val location: Location, private val destination: Location) : QueuedScriptConditions() {

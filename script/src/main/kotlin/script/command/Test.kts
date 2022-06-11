@@ -44,7 +44,7 @@ onCommand("xp").use {
 
 onCommand("add").use {
 //    val item = FloorItem(4151, 1, location)
-    val loc = GameObject(1124, location, 22, 0)
+    val loc = GameObject(1342, location, 10, 0)
     if (zone().requestAddLoc(loc)) {
         CollisionMap.addObjectCollision(loc)
         message { "true" }

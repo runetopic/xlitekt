@@ -6,6 +6,7 @@ import xlitekt.game.actor.angleTo
 import xlitekt.game.actor.cancelAll
 import xlitekt.game.actor.queueStrong
 import xlitekt.game.actor.routeTo
+import xlitekt.game.content.interact.interact
 import xlitekt.game.packet.OpLocPacket
 import xlitekt.game.packet.disassembler.handler.onPacketHandler
 import xlitekt.game.world.map.Location
@@ -43,11 +44,14 @@ onPacketHandler<OpLocPacket> {
         it.id == locId && it.location.packedLocation == location.packedLocation
     } ?: return@onPacketHandler
 
+    val clickedOption = gameObject.entry?.actions?.firstOrNull() ?: "*"
+
     with(player) {
         cancelAll()
         queueStrong {
             routeTo(gameObject) {
                 angleTo(gameObject)
+                interact(clickedOption, gameObject)
             }
         }
     }

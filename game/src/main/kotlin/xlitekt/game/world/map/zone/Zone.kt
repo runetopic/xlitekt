@@ -71,14 +71,14 @@ class Zone(
         if (objRequests.isNotEmpty()) {
             for (request in objRequests) {
                 val obj = request.key
-                if (request.value) objsSpawned.add(obj) else objsSpawned.remove(objsSpawned.first { it.id == obj.id && it.location == obj.location })
+                if (request.value) objsSpawned.add(obj) else objsSpawned.remove(objsSpawned.firstOrNull { it.id == obj.id && it.location == obj.location })
             }
             objRequests.clear()
         }
         if (locRequests.isNotEmpty()) {
             for (request in locRequests) {
                 val loc = request.key
-                if (request.value) locsSpawned.add(loc) else locsSpawned.remove(locsSpawned.first { it.id == loc.id && it.location == loc.location })
+                if (request.value) locsSpawned.add(loc) else locsSpawned.remove(locsSpawned.firstOrNull { it.id == loc.id && it.location == loc.location })
             }
             locRequests.clear()
         }
