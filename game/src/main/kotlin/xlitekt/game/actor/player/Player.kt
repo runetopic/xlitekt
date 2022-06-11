@@ -1,6 +1,5 @@
 package xlitekt.game.actor.player
 
-// ktlint-disable no-wildcard-imports
 import kotlinx.serialization.Serializable
 import org.jctools.maps.NonBlockingHashMapLong
 import xlitekt.game.actor.Actor

@@ -377,7 +377,7 @@ typealias ReachedAction = () -> Unit
  * @param gameObject The game object to route to.
  * @param reachedAction A callback function to invoke when the actor reaches the destination.
  */
-fun Actor.routeTo(gameObject: GameObject, reachedAction: ReachedAction? = null) {
+fun Actor.routeTo(gameObject: GameObject, reachAction: (() -> Unit)? = null) {
     resetMovement()
     val dest = gameObject.location
     val rotation = gameObject.rotation
@@ -398,7 +398,7 @@ fun Actor.routeTo(gameObject: GameObject, reachedAction: ReachedAction? = null) 
     )
     movement.route(
         MovementRequest(
-            reachedAction,
+            reachAction,
             IntArrayList(route.coords.size).also { points ->
                 route.coords.map { points.add(Location(it.x, it.y, this@routeTo.location.level).packedLocation) }
             },

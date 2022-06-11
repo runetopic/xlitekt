@@ -11,6 +11,6 @@ import xlitekt.game.world.map.Location
 data class RebuildNormalPacket(
     val viewport: Viewport,
     val location: Location,
-    val update: Boolean,
+    val initialize: Boolean,
     val players: NonBlockingHashMapLong<Player>
 ) : Packet

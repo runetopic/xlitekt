@@ -1,6 +1,8 @@
 package script.packet.assembler
 
-import io.ktor.util.moveToByteArray
+import io.ktor.utils.io.core.BytePacketBuilder
+import io.ktor.utils.io.core.readBytes
+import io.ktor.utils.io.core.writeFully
 import org.jctools.maps.NonBlockingHashMapLong
 import script.packet.assembler.PlayerInfoAssembler.ActivityUpdateType.Adding
 import script.packet.assembler.PlayerInfoAssembler.ActivityUpdateType.Moving
@@ -20,10 +22,8 @@ import xlitekt.game.packet.assembler.onPacketAssembler
 import xlitekt.game.world.map.Location
 import xlitekt.game.world.map.withinDistance
 import xlitekt.shared.buffer.BitAccess
-import xlitekt.shared.buffer.allocateDynamic
+import xlitekt.shared.buffer.buildDynamicPacket
 import xlitekt.shared.buffer.withBitAccess
-import xlitekt.shared.buffer.writeBytes
-import java.nio.ByteBuffer
 import java.util.Optional
 import kotlin.math.abs
 
@@ -33,21 +33,19 @@ import kotlin.math.abs
 private val blockBufferLimit = Short.MAX_VALUE.toInt()
 
 onPacketAssembler<PlayerInfoPacket>(opcode = 80, size = -2) {
-    allocateDynamic(blockBufferLimit + 1000) {
-        val blocks = ByteBuffer.allocate(blockBufferLimit)
+    buildDynamicPacket {
+        val blocks = BytePacketBuilder()
         viewport.resize()
         repeat(2) { highDefinition(viewport, blocks, highDefinitionUpdates, movementStepsUpdates, alternativeHighDefinitionUpdates, it == 0) }
         repeat(2) { lowDefinition(viewport, blocks, lowDefinitionUpdates, players, alternativeLowDefinitionUpdates, it == 0) }
         viewport.update()
-        blocks.limit(blocks.position())
-        blocks.rewind()
-        writeBytes(blocks.moveToByteArray())
+        writeFully(blocks.build().readBytes())
     }
 }
 
-fun ByteBuffer.highDefinition(
+fun BytePacketBuilder.highDefinition(
     viewport: Viewport,
-    blocks: ByteBuffer,
+    blocks: BytePacketBuilder,
     highDefinitionUpdates: NonBlockingHashMapLong<Optional<ByteArray>>,
     movementStepsUpdates: NonBlockingHashMapLong<Optional<MovementStep>>,
     alternativeHighDefinitionUpdates: NonBlockingHashMapLong<Optional<ByteArray>>,
@@ -84,16 +82,16 @@ fun ByteBuffer.highDefinition(
                 viewport.locations[index] = other.location.regionLocation
             }
             if (updates.isPresent) {
-                blocks.writeBytes(alternativeHighDefinitionUpdates[other.indexL]?.orElse(updates.get())!!)
+                blocks.writeFully(alternativeHighDefinitionUpdates[other.indexL]?.orElse(updates.get())!!)
             }
         }
     }
     skipPlayers(skip)
 }
 
-fun ByteBuffer.lowDefinition(
+fun BytePacketBuilder.lowDefinition(
     viewport: Viewport,
-    blocks: ByteBuffer,
+    blocks: BytePacketBuilder,
     lowDefinitionUpdates: NonBlockingHashMapLong<Optional<ByteArray>>,
     players: NonBlockingHashMapLong<Player>,
     alternativeLowDefinitionUpdates: NonBlockingHashMapLong<Optional<ByteArray>>,
@@ -106,7 +104,7 @@ fun ByteBuffer.lowDefinition(
         val other = players[index.toLong()]
         val updates = other?.let { lowDefinitionUpdates[other.indexL] } ?: Optional.empty()
         // Check the activities this player is doing.
-        val activity = viewport.lowDefinitionActivities(other, updates, blocks.position() + ((bitIndex + 7) / 8))
+        val activity = viewport.lowDefinitionActivities(other, updates, blocks.size + ((bitIndex + 7) / 8))
         if (other == null || activity == null) {
             viewport.setNsn(index)
             skip++
@@ -119,7 +117,7 @@ fun ByteBuffer.lowDefinition(
         // Write corresponding bits depending on the activity type the player is doing.
         activity.writeBits(this@withBitAccess, viewport, index, current = other.location, previous = other.previousLocation, step = Optional.empty())
         if (activity is Adding) {
-            blocks.writeBytes(alternativeLowDefinitionUpdates[other.indexL]?.orElse(updates.get())!!)
+            blocks.writeFully(alternativeLowDefinitionUpdates[other.indexL]?.orElse(updates.get())!!)
             // Add them to our array.
             viewport.players[index] = other
             viewport.setNsn(index)

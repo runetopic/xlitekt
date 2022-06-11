@@ -3,7 +3,7 @@ package script.packet.assembler
 import xlitekt.game.actor.render.HintArrowType
 import xlitekt.game.packet.HintArrowPacket
 import xlitekt.game.packet.assembler.onPacketAssembler
-import xlitekt.shared.buffer.allocate
+import xlitekt.shared.buffer.buildFixedPacket
 import xlitekt.shared.buffer.fill
 import xlitekt.shared.buffer.writeByte
 import xlitekt.shared.buffer.writeShort
@@ -13,7 +13,7 @@ import xlitekt.shared.buffer.writeShort
  * @author Tyler Telis
  */
 onPacketAssembler<HintArrowPacket>(opcode = 43, size = 6) {
-    allocate(6) {
+    buildFixedPacket(6) {
         writeByte(type.id)
 
         when (type) {
