@@ -1,10 +1,9 @@
 package script.packet.assembler
 
-import io.ktor.utils.io.core.writeInt
 import xlitekt.game.packet.UpdateFriendListPacket
 import xlitekt.game.packet.assembler.onPacketAssembler
-import xlitekt.shared.buffer.buildDynamicPacket
 import xlitekt.shared.buffer.writeByte
+import xlitekt.shared.buffer.writeInt
 import xlitekt.shared.buffer.writeShort
 import xlitekt.shared.buffer.writeStringCp1252NullTerminated
 import xlitekt.shared.toInt
@@ -14,20 +13,18 @@ import xlitekt.shared.toInt
  * @author Tyler Telis
  */
 onPacketAssembler<UpdateFriendListPacket>(opcode = 38, size = -2) {
-    buildDynamicPacket {
-        for (friend in friends) {
-            writeByte(friend.visible.toInt())
-            writeStringCp1252NullTerminated(friend.displayName)
-            writeStringCp1252NullTerminated("")
-            writeShort(friend.visible.toInt())
-            writeByte(0x2)
-            writeByte(0x1)
-            if (friend.visible) {
-                writeStringCp1252NullTerminated("")
-                writeByte(1)
-                writeInt(1)
-            }
-            writeStringCp1252NullTerminated("")
+    for (friend in friends) {
+        it.writeByte(friend.visible.toInt())
+        it.writeStringCp1252NullTerminated(friend.displayName)
+        it.writeStringCp1252NullTerminated("")
+        it.writeShort(friend.visible.toInt())
+        it.writeByte(0x2)
+        it.writeByte(0x1)
+        if (friend.visible) {
+            it.writeStringCp1252NullTerminated("")
+            it.writeByte(1)
+            it.writeInt(1)
         }
+        it.writeStringCp1252NullTerminated("")
     }
 }

@@ -1,10 +1,9 @@
 package script.packet.assembler
 
-import io.ktor.utils.io.core.writeInt
 import xlitekt.game.packet.UpdateContainerFullPacket
 import xlitekt.game.packet.assembler.onPacketAssembler
-import xlitekt.shared.buffer.buildDynamicPacket
 import xlitekt.shared.buffer.writeByteAdd
+import xlitekt.shared.buffer.writeInt
 import xlitekt.shared.buffer.writeShort
 import xlitekt.shared.buffer.writeShortLittleEndian
 import kotlin.math.min
@@ -14,19 +13,17 @@ import kotlin.math.min
  * @author Tyler Telis
  */
 onPacketAssembler<UpdateContainerFullPacket>(opcode = 88, size = -2) {
-    buildDynamicPacket {
-        writeInt(packedInterface)
-        writeShort(containerKey)
-        writeShort(items.size)
-        repeat(items.size) {
-            val item = items[it]
-            val id = item?.id ?: -1
-            val amount = item?.amount ?: 0
-            writeByteAdd(min(amount, 0xff))
-            if (amount >= 0xff) {
-                writeInt(amount)
-            }
-            writeShortLittleEndian(id + 1)
+    it.writeInt(packedInterface)
+    it.writeShort(containerKey)
+    it.writeShort(items.size)
+    repeat(items.size) { slot ->
+        val item = items[slot]
+        val id = item?.id ?: -1
+        val amount = item?.amount ?: 0
+        it.writeByteAdd(min(amount, 0xff))
+        if (amount >= 0xff) {
+            it.writeInt(amount)
         }
+        it.writeShortLittleEndian(id + 1)
     }
 }

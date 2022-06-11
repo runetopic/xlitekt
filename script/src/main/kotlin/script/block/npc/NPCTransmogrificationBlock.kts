@@ -1,15 +1,12 @@
 package script.block.npc
 
 import xlitekt.game.actor.render.Render.NPCTransmogrification
-import xlitekt.game.actor.render.block.onNPCUpdateBlock
-import xlitekt.shared.buffer.buildFixedPacket
+import xlitekt.game.actor.render.block.fixedNpcUpdateBlock
 import xlitekt.shared.buffer.writeShortLittleEndian
 
 /**
  * @author Jordan Abraham
  */
-onNPCUpdateBlock<NPCTransmogrification>(0, 0x20) {
-    buildFixedPacket(2) {
-        writeShortLittleEndian(id)
-    }
+fixedNpcUpdateBlock<NPCTransmogrification>(index = 0, mask = 0x20, size = 2) {
+    it.writeShortLittleEndian(id)
 }

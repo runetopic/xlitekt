@@ -1,6 +1,6 @@
 package xlitekt.shared.buffer
 
-import io.ktor.util.moveToByteArray
+import xlitekt.shared.toInt
 import java.nio.ByteBuffer
 
 /**
@@ -8,12 +8,6 @@ import java.nio.ByteBuffer
  * Extension functions for the ByteBuffer class used for building packets with a fixed capacity.
  * Extension functions for the ByteBuffer class used for unpacking packets.
  */
-inline fun buildFixedPacket(capacity: Int, block: ByteBuffer.() -> Unit): ByteArray = ByteBuffer
-    .allocate(capacity)
-    .also(block)
-    .rewind()
-    .moveToByteArray()
-
 fun ByteBuffer.readStringCp1252NullTerminated() = String(readUChars(duplicate().discardUntilDelimiter(0))).also {
     discard(1)
 }
@@ -155,4 +149,52 @@ fun ByteBuffer.discardUntilDelimiter(delimiter: Int): Int {
         count++
     }
     return count
+}
+
+inline fun ByteBuffer.withBitAccess(block: BitAccess.() -> Unit) {
+    val bitAccess = BitAccess(this)
+    block.invoke(bitAccess)
+    position((bitAccess.bitIndex + 7) / 8)
+}
+
+class BitAccess(val buffer: ByteBuffer) {
+    var bitIndex = buffer.position() * 8
+
+    fun writeBit(value: Boolean) {
+        writeBits(1, value.toInt())
+    }
+
+    fun writeBits(count: Int, value: Int) {
+        var numBits = count
+
+        var byteIndex = bitIndex shr 3
+        var bitOffset = 8 - (bitIndex and 7)
+        bitIndex += numBits
+
+        while (numBits > bitOffset) {
+            val max = masks[bitOffset]
+            val tmp = buffer.get(byteIndex).toInt() and max.inv() or (value shr numBits - bitOffset and max)
+            buffer.put(byteIndex++, tmp.toByte())
+            numBits -= bitOffset
+            bitOffset = 8
+        }
+
+        var dataValue = buffer.get(byteIndex).toInt()
+        val mask = masks[numBits]
+        if (numBits == bitOffset) {
+            dataValue = dataValue and mask.inv() or (value and mask)
+        } else {
+            dataValue = dataValue and (mask shl bitOffset - numBits).inv()
+            dataValue = dataValue or (value and mask shl bitOffset - numBits)
+        }
+        buffer.put(byteIndex, dataValue.toByte())
+    }
+
+    companion object {
+        val masks = IntArray(32)
+
+        init {
+            masks.indices.forEach { masks[it] = (1 shl it) - 1 }
+        }
+    }
 }

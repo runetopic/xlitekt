@@ -1,7 +1,6 @@
 package script.packet.assembler
 
 import io.ktor.utils.io.core.BytePacketBuilder
-import io.ktor.utils.io.core.readBytes
 import io.ktor.utils.io.core.writeFully
 import org.jctools.maps.NonBlockingHashMapLong
 import script.packet.assembler.NPCInfoPacketAssembler.ActivityUpdateType.Adding
@@ -16,8 +15,9 @@ import xlitekt.game.packet.assembler.onPacketAssembler
 import xlitekt.game.world.map.Location
 import xlitekt.game.world.map.withinDistance
 import xlitekt.shared.buffer.BitAccess
-import xlitekt.shared.buffer.buildDynamicPacket
+import xlitekt.shared.buffer.dynamicBuffer
 import xlitekt.shared.buffer.withBitAccess
+import xlitekt.shared.buffer.writeBytes
 import java.util.Optional
 
 /**
@@ -25,18 +25,18 @@ import java.util.Optional
  * @author Tyler Telis
  */
 onPacketAssembler<NPCInfoPacket>(opcode = 78, size = -2) {
-    buildDynamicPacket {
-        val blocks = BytePacketBuilder()
-        withBitAccess {
-            writeBits(8, viewport.npcs.size)
-            highDefinition(viewport, blocks, highDefinitionUpdates, movementStepsUpdates)
-            lowDefinition(viewport, blocks, highDefinitionUpdates)
-            if (blocks.isNotEmpty) {
-                writeBits(15, Short.MAX_VALUE.toInt())
+    it.writeBytes(
+        dynamicBuffer {
+            it.withBitAccess {
+                writeBits(8, viewport.npcs.size)
+                highDefinition(viewport, this@dynamicBuffer, highDefinitionUpdates, movementStepsUpdates)
+                lowDefinition(viewport, this@dynamicBuffer, highDefinitionUpdates)
+                if (isNotEmpty) {
+                    writeBits(15, Short.MAX_VALUE.toInt())
+                }
             }
         }
-        writeFully(blocks.build().readBytes())
-    }
+    )
 }
 
 fun BitAccess.highDefinition(
