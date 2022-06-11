@@ -1,17 +1,14 @@
 package script.block.npc
 
 import xlitekt.game.actor.render.Render.SpotAnimation
-import xlitekt.game.actor.render.block.onNPCUpdateBlock
-import xlitekt.shared.buffer.buildFixedPacket
+import xlitekt.game.actor.render.block.fixedNpcUpdateBlock
 import xlitekt.shared.buffer.writeIntV2
 import xlitekt.shared.buffer.writeShortLittleEndianAdd
 
 /**
  * @author Jordan Abraham
  */
-onNPCUpdateBlock<SpotAnimation>(4, 0x2) {
-    buildFixedPacket(6) {
-        writeShortLittleEndianAdd(id)
-        writeIntV2(packedMetaData())
-    }
+fixedNpcUpdateBlock<SpotAnimation>(index = 4, mask = 0x2, size = 6) {
+    it.writeShortLittleEndianAdd(id)
+    it.writeIntV2(packedMetaData())
 }

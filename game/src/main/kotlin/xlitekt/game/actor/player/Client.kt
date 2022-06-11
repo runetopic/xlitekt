@@ -10,8 +10,7 @@ import io.ktor.utils.io.ByteReadChannel
 import io.ktor.utils.io.ByteWriteChannel
 import io.ktor.utils.io.ClosedWriteChannelException
 import io.ktor.utils.io.close
-import io.ktor.utils.io.core.buildPacket
-import io.ktor.utils.io.core.writeFully
+import io.ktor.utils.io.writeFully
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.TimeoutCancellationException
 import kotlinx.coroutines.channels.ClosedReceiveChannelException
@@ -30,6 +29,7 @@ import xlitekt.shared.inject
 import xlitekt.shared.lazy
 import java.io.IOException
 import java.net.SocketException
+import java.nio.ByteBuffer
 
 /**
  * @author Jordan Abraham
@@ -45,8 +45,8 @@ class Client(
     private lateinit var serverCipher: ISAAC
     lateinit var player: Player
 
-    private val writePool = ArrayList<Packet>(64)
     private val readPool = NonBlockingHashSet<PacketHandler<Packet>>()
+    private val writePool = ByteBuffer.allocateDirect(40000)
 
     fun disconnect(reason: String) {
         logger.debug { "Client disconnected for reason={$reason}." }
@@ -56,7 +56,6 @@ class Client(
         writeChannel?.close()
         socket?.close()
         readPool.clear()
-        writePool.clear()
     }
 
     fun setIsaacCiphers(clientCipher: ISAAC, serverCipher: ISAAC) {
@@ -77,7 +76,29 @@ class Client(
     }
 
     internal fun addToWritePool(packet: Packet) {
-        writePool.add(packet)
+        val assembler = PacketAssemblerListener.listeners[packet::class]
+        if (assembler == null) {
+            disconnect("Unhandled packet found when trying to write. Packet was $packet.")
+            return
+        }
+        if (assembler.opcode > Byte.MAX_VALUE) {
+            writePool.writeByte((128 + serverCipher.getNext()))
+        }
+        writePool.writeByte((assembler.opcode + serverCipher.getNext() and 0xff))
+        if (assembler.size != -1 && assembler.size != -2) {
+            assembler.packet.invoke(packet, writePool)
+        } else {
+            val startPosition = writePool.position()
+            writePool.position(writePool.position() + if (assembler.size == -1) 1 else 2)
+            val offsetPosition = writePool.position()
+            assembler.packet.invoke(packet, writePool)
+            val endPosition = writePool.position()
+            val size = endPosition - offsetPosition
+            writePool.position(startPosition)
+            if (assembler.size == -1) writePool.writeByte(size)
+            else writePool.writeShort(size)
+            writePool.position(endPosition)
+        }
     }
 
     internal fun addToReadPool(packetHandler: PacketHandler<Packet>) {
@@ -87,32 +108,16 @@ class Client(
     }
 
     internal fun invokeAndClearWritePool() {
-        val readPacket = buildPacket {
-            for (packet in writePool) {
-                val assembler = PacketAssemblerListener.listeners[packet::class]
-                if (assembler == null) {
-                    disconnect("Unhandled packet found when trying to write. Packet was $packet.")
-                    return@buildPacket
-                }
-                val bytes = assembler.packet.invoke(packet)
-                if (assembler.opcode > Byte.MAX_VALUE) {
-                    writeByte((128 + serverCipher.getNext()))
-                }
-                writeByte((assembler.opcode + serverCipher.getNext() and 0xff))
-                if (assembler.size == -1) writeByte(bytes.size)
-                else if (assembler.size == -2) writeShort(bytes.size)
-                writeFully(bytes)
-            }
-            writePool.clear()
-        }
         writeChannel?.let {
             if (it.isClosedForWrite) return
             // This way we only have to suspend once per client.
             runBlocking(Dispatchers.IO) {
-                it.writePacket(readPacket)
+                it.writeFully(writePool.flip())
             }
             it.flush()
         }
+        // Set write pool back to default.
+        writePool.clear()
     }
 
     internal fun invokeAndClearReadPool() {

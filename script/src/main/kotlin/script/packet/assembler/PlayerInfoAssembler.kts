@@ -1,7 +1,6 @@
 package script.packet.assembler
 
 import io.ktor.utils.io.core.BytePacketBuilder
-import io.ktor.utils.io.core.readBytes
 import io.ktor.utils.io.core.writeFully
 import org.jctools.maps.NonBlockingHashMapLong
 import script.packet.assembler.PlayerInfoAssembler.ActivityUpdateType.Adding
@@ -22,28 +21,30 @@ import xlitekt.game.packet.assembler.onPacketAssembler
 import xlitekt.game.world.map.Location
 import xlitekt.game.world.map.withinDistance
 import xlitekt.shared.buffer.BitAccess
-import xlitekt.shared.buffer.buildDynamicPacket
+import xlitekt.shared.buffer.dynamicBuffer
 import xlitekt.shared.buffer.withBitAccess
+import xlitekt.shared.buffer.writeBytes
+import java.nio.ByteBuffer
 import java.util.Optional
 import kotlin.math.abs
 
 /**
  * @author Jordan Abraham
  */
-private val blockBufferLimit = Short.MAX_VALUE.toInt()
+private val blockBufferLimit = 15000
 
 onPacketAssembler<PlayerInfoPacket>(opcode = 80, size = -2) {
-    buildDynamicPacket {
-        val blocks = BytePacketBuilder()
-        viewport.resize()
-        repeat(2) { highDefinition(viewport, blocks, highDefinitionUpdates, movementStepsUpdates, alternativeHighDefinitionUpdates, it == 0) }
-        repeat(2) { lowDefinition(viewport, blocks, lowDefinitionUpdates, players, alternativeLowDefinitionUpdates, it == 0) }
-        viewport.update()
-        writeFully(blocks.build().readBytes())
-    }
+    viewport.resize()
+    it.writeBytes(
+        dynamicBuffer {
+            repeat(2) { nsn -> it.highDefinition(viewport, this, highDefinitionUpdates, movementStepsUpdates, alternativeHighDefinitionUpdates, nsn == 0) }
+            repeat(2) { nsn -> it.lowDefinition(viewport, this, lowDefinitionUpdates, players, alternativeLowDefinitionUpdates, nsn == 0) }
+        }
+    )
+    viewport.update()
 }
 
-fun BytePacketBuilder.highDefinition(
+fun ByteBuffer.highDefinition(
     viewport: Viewport,
     blocks: BytePacketBuilder,
     highDefinitionUpdates: NonBlockingHashMapLong<Optional<ByteArray>>,
@@ -59,7 +60,7 @@ fun BytePacketBuilder.highDefinition(
         val updates = other?.let { highDefinitionUpdates[other.indexL] } ?: Optional.empty()
         val movementStep = other?.let { movementStepsUpdates[other.indexL] } ?: Optional.empty()
         // Check the activities this player is doing.
-        val activity = viewport.highDefinitionActivities(other, updates, movementStep)
+        val activity = viewport.highDefinitionActivities(other, updates, movementStep, blocks.size + ((bitIndex + 7) / 8))
         if (other == null || activity == null) {
             viewport.setNsn(index)
             skip++
@@ -89,7 +90,7 @@ fun BytePacketBuilder.highDefinition(
     skipPlayers(skip)
 }
 
-fun BytePacketBuilder.lowDefinition(
+fun ByteBuffer.lowDefinition(
     viewport: Viewport,
     blocks: BytePacketBuilder,
     lowDefinitionUpdates: NonBlockingHashMapLong<Optional<ByteArray>>,
@@ -150,16 +151,16 @@ fun BitAccess.skipPlayers(count: Int): Int {
     return -1
 }
 
-fun Viewport.highDefinitionActivities(other: Player?, highDefinitionUpdate: Optional<ByteArray>, movementStep: Optional<MovementStep>): ActivityUpdateType? {
+fun Viewport.highDefinitionActivities(other: Player?, highDefinitionUpdate: Optional<ByteArray>, movementStep: Optional<MovementStep>, size: Int): ActivityUpdateType? {
     val ourLocation = player.location
-    val theirLocation = other?.location
+    val theirLocation = other?.location ?: Location.None
     return when {
         // If the player needs to be removed from high definition to low definition.
-        other?.isOnline() == false || theirLocation == null || !theirLocation.withinDistance(ourLocation, viewDistance) -> Removing
+        other?.isOnline() == false || theirLocation == Location.None || !theirLocation.withinDistance(ourLocation, viewDistance) -> Removing
         // If the player is moving (Teleporting, Walking, Running).
         movementStep.isPresent -> if (movementStep.get().speed == MovementSpeed.Teleporting) Teleporting else Moving
         // If the player has block updates.
-        highDefinitionUpdate.isPresent -> Updating
+        size + (highDefinitionUpdate.orElse(byteArrayOf())?.size ?: 0) <= blockBufferLimit && highDefinitionUpdate.isPresent -> Updating
         else -> null
     }
 }

@@ -1,9 +1,9 @@
 package xlitekt.game.actor.render.block.body
 
-import io.ktor.util.moveToByteArray
+import io.ktor.utils.io.core.BytePacketBuilder
 import xlitekt.game.actor.render.Render
 import xlitekt.game.content.container.equipment.Equipment
-import java.nio.ByteBuffer
+import xlitekt.shared.buffer.dynamicBuffer
 
 /**
  * @author Jordan Abraham
@@ -28,11 +28,9 @@ class BodyPartBuilder(
 ) {
     var data: ByteArray? = null
 
-    inline fun bodyPart(builder: ByteBuffer.(Int) -> Unit) {
-        val buffer = ByteBuffer.allocate(4)
-        builder.invoke(buffer, kit)
-        buffer.limit(buffer.position())
-        buffer.rewind()
-        this.data = buffer.moveToByteArray()
+    inline fun bodyPart(builder: BytePacketBuilder.(Int) -> Unit) {
+        this.data = dynamicBuffer {
+            builder.invoke(this, kit)
+        }
     }
 }

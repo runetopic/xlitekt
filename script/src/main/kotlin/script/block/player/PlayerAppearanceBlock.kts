@@ -2,17 +2,15 @@ package script.block.player
 
 import io.ktor.utils.io.core.BytePacketBuilder
 import io.ktor.utils.io.core.writeFully
+import io.ktor.utils.io.core.writeShort
 import xlitekt.game.actor.render.Render.Appearance
 import xlitekt.game.actor.render.block.body.BodyPartBuilder
 import xlitekt.game.actor.render.block.body.BodyPartColor
 import xlitekt.game.actor.render.block.body.BodyPartInfo
 import xlitekt.game.actor.render.block.body.BodyPartListener
-import xlitekt.game.actor.render.block.onPlayerUpdateBlock
-import xlitekt.shared.buffer.buildDynamicPacket
-import xlitekt.shared.buffer.buildFixedPacket
-import xlitekt.shared.buffer.writeByte
+import xlitekt.game.actor.render.block.dynamicPlayerUpdateBlock
+import xlitekt.shared.buffer.dynamicBuffer
 import xlitekt.shared.buffer.writeBytesAdd
-import xlitekt.shared.buffer.writeShort
 import xlitekt.shared.buffer.writeStringCp1252NullTerminated
 import xlitekt.shared.inject
 import xlitekt.shared.resource.ItemSequences
@@ -22,35 +20,33 @@ val itemSequences by inject<ItemSequences>()
 /**
  * @author Jordan Abraham
  */
-onPlayerUpdateBlock<Appearance>(5, 0x1) {
-    val appearance = buildDynamicPacket {
-        writeByte(gender.id)
-        writeByte(skullIcon.orElse(-1))
-        writeByte(headIcon.orElse(-1))
-        if (transform.isPresent) writeTransmogrification(this@onPlayerUpdateBlock) else writeIdentityKit(this@onPlayerUpdateBlock)
+dynamicPlayerUpdateBlock<Appearance>(index = 5, mask = 0x1, size = -1) {
+    val appearance = dynamicBuffer {
+        writeByte(gender.id.toByte())
+        writeByte(skullIcon.orElse(-1).toByte())
+        writeByte(headIcon.orElse(-1).toByte())
+        if (transform.isPresent) writeTransmogrification(this@dynamicPlayerUpdateBlock) else writeIdentityKit(this@dynamicPlayerUpdateBlock)
         color(bodyPartColors.entries)
-        animate(this@onPlayerUpdateBlock)
+        animate(this@dynamicPlayerUpdateBlock)
         writeStringCp1252NullTerminated(displayName)
         writeByte(126) // Combat level
         writeShort(0) // Total level
         writeByte(0) // Hidden
     }
-    buildFixedPacket(appearance.size + 1) {
-        writeByte(appearance.size)
-        writeBytesAdd(appearance)
-    }
+    it.writeByte(appearance.size.toByte())
+    it.writeBytesAdd(appearance)
 }
 
 fun BytePacketBuilder.animate(render: Appearance) = if (render.transform.isEmpty) {
     val sequences = itemSequences[render.equipment.mainhand?.id]?.renderAnimations ?: intArrayOf(808, 823, 819, 820, 821, 822, 824)
-    sequences.forEach(::writeShort)
+    sequences.map(Int::toShort).forEach(::writeShort)
 } else {
     // TODO load npc defs for walking and stand anims for transmog.
 }
 
 fun BytePacketBuilder.writeTransmogrification(render: Appearance) {
-    writeShort(65535)
-    writeShort(render.transform.get())
+    writeShort(65535.toShort())
+    writeShort(render.transform.get().toShort())
 }
 
 fun BytePacketBuilder.writeIdentityKit(render: Appearance) {
@@ -61,4 +57,4 @@ fun BytePacketBuilder.writeIdentityKit(render: Appearance) {
     }
 }
 
-fun BytePacketBuilder.color(colors: Set<Map.Entry<BodyPartColor, Int>>) = colors.sortedBy { it.key.id }.forEach { writeByte(it.value) }
+fun BytePacketBuilder.color(colors: Set<Map.Entry<BodyPartColor, Int>>) = colors.sortedBy { it.key.id }.forEach { writeByte(it.value.toByte()) }

@@ -1,6 +1,7 @@
 package xlitekt.game.packet.assembler
 
 import xlitekt.game.packet.Packet
+import java.nio.ByteBuffer
 
 /**
  * @author Jordan Abraham
@@ -8,5 +9,5 @@ import xlitekt.game.packet.Packet
 data class PacketAssembler(
     val opcode: Int,
     val size: Int,
-    val packet: Packet.() -> ByteArray
+    val packet: Packet.(ByteBuffer) -> Unit
 )

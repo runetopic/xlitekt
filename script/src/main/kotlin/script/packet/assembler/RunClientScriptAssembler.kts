@@ -1,38 +1,35 @@
 package script.packet.assembler
 
-import io.ktor.utils.io.core.writeInt
 import xlitekt.game.content.container.Container
 import xlitekt.game.content.item.Item
 import xlitekt.game.packet.RunClientScriptPacket
 import xlitekt.game.packet.assembler.onPacketAssembler
-import xlitekt.shared.buffer.buildDynamicPacket
+import xlitekt.shared.buffer.writeInt
 import xlitekt.shared.buffer.writeStringCp1252NullTerminated
 
 /**
  * @author Jordan Abraham
  */
 onPacketAssembler<RunClientScriptPacket>(opcode = 71, size = -2) {
-    buildDynamicPacket {
-        parameters.let {
-            val params = buildString {
-                (it.size - 1 downTo 0).forEach { count ->
-                    append(mapParameterType(it, count))
-                }
-            }
-            writeStringCp1252NullTerminated(params)
-            var index = 0
-            (it.size - 1 downTo 0).forEach { count ->
-                when (params[count]) {
-                    's' -> writeStringCp1252NullTerminated(it[index++] as String) // String
-                    'o' -> writeInt((it[index++] as Item).id) // Item
-                    'i' -> writeInt(it[index++] as Int) // Int
-                    'v' -> writeInt((it[index++] as Container).id)
-                    else -> throw IllegalStateException("Run client script type was not found during parameter type write. The found type was ${params[count]}")
-                }
+    parameters.let { array ->
+        val params = buildString {
+            (array.size - 1 downTo 0).forEach { count ->
+                append(mapParameterType(array, count))
             }
         }
-        writeInt(id)
+        it.writeStringCp1252NullTerminated(params)
+        var index = 0
+        (array.size - 1 downTo 0).forEach { count ->
+            when (params[count]) {
+                's' -> it.writeStringCp1252NullTerminated(array[index++] as String) // String
+                'o' -> it.writeInt((array[index++] as Item).id) // Item
+                'i' -> it.writeInt(array[index++] as Int) // Int
+                'v' -> it.writeInt((array[index++] as Container).id)
+                else -> throw IllegalStateException("Run client script type was not found during parameter type write. The found type was ${params[count]}")
+            }
+        }
     }
+    it.writeInt(id)
 }
 
 fun mapParameterType(it: Array<out Any>, count: Int) = when (it[count]) {

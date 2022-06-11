@@ -4,8 +4,8 @@ import io.ktor.util.copy
 import io.ktor.util.moveToByteArray
 import io.ktor.utils.io.core.writeInt
 import xlitekt.cache.provider.EntryTypeProvider
-import xlitekt.shared.buffer.buildDynamicPacket
 import xlitekt.shared.buffer.discard
+import xlitekt.shared.buffer.dynamicBuffer
 import xlitekt.shared.buffer.readUByte
 import xlitekt.shared.buffer.readUShort
 import xlitekt.shared.buffer.readVarInt
@@ -183,7 +183,7 @@ class MusicEntryTypeProvider : EntryTypeProvider<MusicEntryType>() {
         val midi = copy().midi(var13)
         val bytes = moveToByteArray()
 
-        val buffer = buildDynamicPacket {
+        val buffer = dynamicBuffer {
             writeInt(1297377380)
             writeInt(6)
             writeShort(if (tracks > 1) 1 else 0)

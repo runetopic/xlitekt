@@ -1,5 +1,6 @@
 package xlitekt.game.world.map.zone
 
+import io.ktor.util.moveToByteArray
 import org.jctools.maps.NonBlockingHashSet
 import xlitekt.game.actor.Actor
 import xlitekt.game.actor.npc.NPC
@@ -21,7 +22,9 @@ import xlitekt.game.world.map.GameObject
 import xlitekt.game.world.map.Location
 import xlitekt.game.world.map.localX
 import xlitekt.game.world.map.localZ
+import xlitekt.shared.buffer.writeByte
 import xlitekt.shared.inject
+import java.nio.ByteBuffer
 
 /**
  * @author Jordan Abraham
@@ -344,7 +347,10 @@ private fun HashSet<Packet>.write(player: Player, baseLocation: Location) {
     var bytes = byteArrayOf()
     for (packet in this) {
         val block = PacketAssemblerListener.listeners[packet::class]!!
-        bytes += byteArrayOf(ZoneUpdate.zoneUpdateMap[packet::class]!!.index.toByte()) + block.packet.invoke(packet)
+        val buffer = ByteBuffer.allocate(1 + block.size)
+        buffer.writeByte(ZoneUpdate.zoneUpdateMap[packet::class]!!.index)
+        block.packet.invoke(packet, buffer)
+        bytes += buffer.rewind().moveToByteArray()
     }
     player.write(UpdateZonePartialEnclosedPacket(localX, localZ, bytes))
 }

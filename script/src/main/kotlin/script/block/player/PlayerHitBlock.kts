@@ -1,10 +1,8 @@
 package script.block.player
 
 import xlitekt.game.actor.render.Render.Hit
-import xlitekt.game.actor.render.block.onPlayerUpdateBlock
-import xlitekt.shared.buffer.buildDynamicPacket
-import xlitekt.shared.buffer.buildFixedPacket
-import xlitekt.shared.buffer.writeByte
+import xlitekt.game.actor.render.block.dynamicPlayerUpdateBlock
+import xlitekt.shared.buffer.dynamicBuffer
 import xlitekt.shared.buffer.writeByteAdd
 import xlitekt.shared.buffer.writeByteNegate
 import xlitekt.shared.buffer.writeBytes
@@ -13,44 +11,42 @@ import xlitekt.shared.buffer.writeSmart
 /**
  * @author Jordan Abraham
  */
-onPlayerUpdateBlock<Hit>(1, 0x4) {
-    val splatsNormal = buildDynamicPacket {
-        splats.forEach {
-            writeSmart(it.type.id)
-            writeSmart(it.damage)
-            writeSmart(it.delay)
+dynamicPlayerUpdateBlock<Hit>(index = 1, mask = 0x4, size = -1) {
+    val splatsNormal = dynamicBuffer {
+        splats.forEach { splat ->
+            writeSmart(splat.type.id)
+            writeSmart(splat.damage)
+            writeSmart(splat.delay)
         }
     }
 
-    val splatsTinted = buildDynamicPacket {
-        splats.forEach {
-            val type = it.type
-            val interacting = it.isInteracting(actor, it.source)
+    val splatsTinted = dynamicBuffer {
+        splats.forEach { splat ->
+            val type = splat.type
+            val interacting = splat.isInteracting(actor, splat.source)
             writeSmart(if (!interacting) type.id + 1 else type.id)
-            writeSmart(it.damage)
-            writeSmart(it.delay)
+            writeSmart(splat.damage)
+            writeSmart(splat.delay)
         }
     }
 
-    val barsNormal = buildDynamicPacket {
-        bars.forEach {
-            writeSmart(it.id)
+    val barsNormal = dynamicBuffer {
+        bars.forEach { bar ->
+            writeSmart(bar.id)
             writeSmart(0)
             writeSmart(0)
-            writeByteAdd(it.percentage(actor))
+            writeByteAdd(bar.percentage(actor))
         }
     }
 
-    buildFixedPacket(splatsNormal.size + splatsTinted.size + (barsNormal.size * 2) + 4) {
-        // Normal block.
-        writeByte(splats.size)
-        writeBytes(splatsNormal)
-        writeByteNegate(bars.size)
-        writeBytes(barsNormal)
-        // Tinted block.
-        writeByte(splats.size)
-        writeBytes(splatsTinted)
-        writeByteNegate(bars.size)
-        writeBytes(barsNormal)
-    }
+    // Normal block.
+    it.writeByte(splats.size.toByte())
+    it.writeBytes(splatsNormal)
+    it.writeByteNegate(bars.size)
+    it.writeBytes(barsNormal)
+    // Tinted block.
+    it.writeByte(splats.size.toByte())
+    it.writeBytes(splatsTinted)
+    it.writeByteNegate(bars.size)
+    it.writeBytes(barsNormal)
 }
