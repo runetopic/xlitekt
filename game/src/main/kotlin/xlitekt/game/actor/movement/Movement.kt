@@ -36,7 +36,7 @@ class Movement {
             return null
         }
         if (steps.isEmpty) {
-            enqueueSteps(currentLocation)
+            tryEnqueueSteps(currentLocation)
         }
         // Poll the first step to move to.
         var step = if (steps.isEmpty) return null else steps.dequeueInt()
@@ -58,7 +58,7 @@ class Movement {
                 // If the player is running, then we poll the second step to move to.
                 step = if (steps.isEmpty) {
                     // If the second step is unavailable, then we try to queue more and poll for the second step again.
-                    enqueueSteps(Location(step))
+                    tryEnqueueSteps(Location(step))
                     if (steps.isEmpty) {
                         // If a second step is not able to be found, then we adjust the step the player has to walking.
                         modifiedSpeed = MovementSpeed.Walking
@@ -117,7 +117,7 @@ class Movement {
      * Queues steps from a dequeued checkpoint.
      * @param location The starting location to base the amount of steps from to the dequeued checkpoint.
      */
-    private fun enqueueSteps(location: Location) {
+    private fun tryEnqueueSteps(location: Location) {
         if (checkpoints.isEmpty) return
         steps.clear()
         val waypoint = Location(checkpoints.dequeueInt())
@@ -125,17 +125,17 @@ class Movement {
             steps.enqueue(waypoint.packedLocation)
             return
         }
-        var currentX = location.x
-        var currentZ = location.z
+        val currentX = location.x
+        val currentZ = location.z
         val waypointX = waypoint.x
         val waypointZ = waypoint.z
-        val xSign = (waypointX - currentX).sign
-        val zSign = (waypointZ - currentZ).sign
-        while (currentX != waypointX || currentZ != waypointZ) {
-            currentX += xSign
-            currentZ += zSign
-            steps.enqueue(Location(currentX, currentZ, location.level).packedLocation)
-        }
+        enqueueSteps(currentX, currentZ, waypointX, waypointZ, (waypointX - currentX).sign, (waypointZ - currentZ).sign, location.level)
+    }
+
+    private tailrec fun enqueueSteps(currentX: Int, currentZ: Int, waypointX: Int, waypointZ: Int, xSign: Int, zSign: Int, level: Int) {
+        if (currentX == waypointX && currentZ == waypointZ) return
+        steps.enqueue(Location(currentX + xSign, currentZ + zSign, level).packedLocation)
+        return enqueueSteps(currentX + xSign, currentZ + zSign, waypointX, waypointZ, xSign, zSign, level)
     }
 
     fun isMoving(): Boolean = !steps.isEmpty || !checkpoints.isEmpty
