@@ -1,6 +1,5 @@
 package xlitekt.game.tick
 
-import java.util.Optional
 import org.jctools.maps.NonBlockingHashMapLong
 import org.jctools.maps.NonBlockingHashSet
 import xlitekt.game.actor.movement.MovementStep
@@ -18,6 +17,7 @@ import xlitekt.game.tick.PlayerInfoUpdates.*
 import xlitekt.game.world.World
 import xlitekt.game.world.map.zone.Zone
 import xlitekt.shared.inject
+import java.util.Optional
 
 /**
  * @author Jordan Abraham

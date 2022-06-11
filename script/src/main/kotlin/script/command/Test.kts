@@ -1,7 +1,5 @@
 package script.command
 
-import xlitekt.game.actor.animate
-import xlitekt.game.actor.player.addExperience
 import xlitekt.game.actor.player.message
 import xlitekt.game.actor.queueNormal
 import xlitekt.game.content.command.Commands.onCommand

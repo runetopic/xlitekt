@@ -1,18 +1,18 @@
 package script.packet.assembler
 
+import io.ktor.utils.io.core.writeInt
 import xlitekt.game.content.container.Container
 import xlitekt.game.content.item.Item
 import xlitekt.game.packet.RunClientScriptPacket
 import xlitekt.game.packet.assembler.onPacketAssembler
-import xlitekt.shared.buffer.allocateDynamic
-import xlitekt.shared.buffer.writeInt
+import xlitekt.shared.buffer.buildDynamicPacket
 import xlitekt.shared.buffer.writeStringCp1252NullTerminated
 
 /**
  * @author Jordan Abraham
  */
 onPacketAssembler<RunClientScriptPacket>(opcode = 71, size = -2) {
-    allocateDynamic(256) {
+    buildDynamicPacket {
         parameters.let {
             val params = buildString {
                 (it.size - 1 downTo 0).forEach { count ->

@@ -2,7 +2,7 @@ package script.block.npc
 
 import xlitekt.game.actor.render.Render.Hit
 import xlitekt.game.actor.render.block.onNPCUpdateBlock
-import xlitekt.shared.buffer.allocateDynamic
+import xlitekt.shared.buffer.buildDynamicPacket
 import xlitekt.shared.buffer.writeByteAdd
 import xlitekt.shared.buffer.writeByteNegate
 import xlitekt.shared.buffer.writeSmart
@@ -11,7 +11,7 @@ import xlitekt.shared.buffer.writeSmart
  * @author Jordan Abraham
  */
 onNPCUpdateBlock<Hit>(2, 0x1) {
-    allocateDynamic(100) {
+    buildDynamicPacket {
         writeByteAdd(splats.size)
         splats.forEach {
             val type = it.type

@@ -1,6 +1,8 @@
 package script.packet.assembler
 
-import io.ktor.util.moveToByteArray
+import io.ktor.utils.io.core.BytePacketBuilder
+import io.ktor.utils.io.core.readBytes
+import io.ktor.utils.io.core.writeFully
 import org.jctools.maps.NonBlockingHashMapLong
 import script.packet.assembler.NPCExtendedInfoPacketAssembler.ActivityUpdateType.Adding
 import script.packet.assembler.NPCExtendedInfoPacketAssembler.ActivityUpdateType.Moving
@@ -14,10 +16,8 @@ import xlitekt.game.packet.assembler.onPacketAssembler
 import xlitekt.game.world.map.Location
 import xlitekt.game.world.map.withinDistance
 import xlitekt.shared.buffer.BitAccess
-import xlitekt.shared.buffer.allocateDynamic
+import xlitekt.shared.buffer.buildDynamicPacket
 import xlitekt.shared.buffer.withBitAccess
-import xlitekt.shared.buffer.writeBytes
-import java.nio.ByteBuffer
 import java.util.Optional
 
 /**
@@ -25,26 +25,23 @@ import java.util.Optional
  * @author Tyler Telis
  */
 onPacketAssembler<NPCInfoPacket>(opcode = 90, size = -2) {
-    val limit = highDefinitionUpdates.map { it.value.orElse(byteArrayOf()).size }.sum() * 2
-    allocateDynamic(limit + 200) {
-        val blocks = ByteBuffer.allocate(limit)
+    buildDynamicPacket {
+        val blocks = BytePacketBuilder()
         withBitAccess {
             writeBits(8, viewport.npcs.size)
             highDefinition(viewport, blocks, highDefinitionUpdates, movementStepsUpdates)
             lowDefinition(viewport, blocks, highDefinitionUpdates)
-            if (blocks.position() > 0) {
+            if (blocks.isNotEmpty) {
                 writeBits(15, Short.MAX_VALUE.toInt())
             }
         }
-        blocks.limit(blocks.position())
-        blocks.rewind()
-        writeBytes(blocks.moveToByteArray())
+        writeFully(blocks.build().readBytes())
     }
 }
 
 fun BitAccess.highDefinition(
     viewport: Viewport,
-    blocks: ByteBuffer,
+    blocks: BytePacketBuilder,
     highDefinitionUpdates: NonBlockingHashMapLong<Optional<ByteArray>>,
     movementStepsUpdates: NonBlockingHashMapLong<Optional<MovementStep>>
 ) {
@@ -62,13 +59,13 @@ fun BitAccess.highDefinition(
         val updating = highDefinitionUpdates[it.indexL]?.isPresent == true
         activity.writeBits(this, it, updating, playerLocation, movementStepsUpdates[it.indexL] ?: Optional.empty())
         if (activity !is Removing) {
-            if (updating) blocks.writeBytes(highDefinitionUpdates[it.indexL]!!.get())
+            if (updating) blocks.writeFully(highDefinitionUpdates[it.indexL]!!.get())
         }
     }
     viewport.npcs.removeAll { !it.location.withinDistance(playerLocation) }
 }
 
-fun BitAccess.lowDefinition(viewport: Viewport, blocks: ByteBuffer, highDefinitionUpdates: NonBlockingHashMapLong<Optional<ByteArray>>) {
+fun BitAccess.lowDefinition(viewport: Viewport, blocks: BytePacketBuilder, highDefinitionUpdates: NonBlockingHashMapLong<Optional<ByteArray>>) {
     val player = viewport.player
     player.zone().neighboringNpcs().forEach {
         val updates = highDefinitionUpdates[it.indexL]
@@ -80,7 +77,7 @@ fun BitAccess.lowDefinition(viewport: Viewport, blocks: ByteBuffer, highDefiniti
             activity.writeBits(this, it, updating, playerLocation = player.location, step = Optional.empty())
             if (activity is Adding) {
                 viewport.npcs += it
-                if (updating) blocks.writeBytes(highDefinitionUpdates[it.indexL]!!.get())
+                if (updating) blocks.writeFully(highDefinitionUpdates[it.indexL]!!.get())
             }
         }
     }

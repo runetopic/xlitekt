@@ -2,8 +2,8 @@ package script.block.player
 
 import xlitekt.game.actor.render.Render.Hit
 import xlitekt.game.actor.render.block.onPlayerUpdateBlock
-import xlitekt.shared.buffer.allocate
-import xlitekt.shared.buffer.allocateDynamic
+import xlitekt.shared.buffer.buildDynamicPacket
+import xlitekt.shared.buffer.buildFixedPacket
 import xlitekt.shared.buffer.writeByte
 import xlitekt.shared.buffer.writeByteAdd
 import xlitekt.shared.buffer.writeByteNegate
@@ -14,7 +14,7 @@ import xlitekt.shared.buffer.writeSmart
  * @author Jordan Abraham
  */
 onPlayerUpdateBlock<Hit>(1, 0x4) {
-    val splatsNormal = allocateDynamic(splats.size * 6) {
+    val splatsNormal = buildDynamicPacket {
         splats.forEach {
             writeSmart(it.type.id)
             writeSmart(it.damage)
@@ -22,7 +22,7 @@ onPlayerUpdateBlock<Hit>(1, 0x4) {
         }
     }
 
-    val splatsTinted = allocateDynamic(splats.size * 6) {
+    val splatsTinted = buildDynamicPacket {
         splats.forEach {
             val type = it.type
             val interacting = it.isInteracting(actor, it.source)
@@ -32,7 +32,7 @@ onPlayerUpdateBlock<Hit>(1, 0x4) {
         }
     }
 
-    val barsNormal = allocateDynamic(bars.size * 7) {
+    val barsNormal = buildDynamicPacket {
         bars.forEach {
             writeSmart(it.id)
             writeSmart(0)
@@ -41,7 +41,7 @@ onPlayerUpdateBlock<Hit>(1, 0x4) {
         }
     }
 
-    allocate(splatsNormal.size + splatsTinted.size + (barsNormal.size * 2) + 4) {
+    buildFixedPacket(splatsNormal.size + splatsTinted.size + (barsNormal.size * 2) + 4) {
         // Normal block.
         writeByte(splats.size)
         writeBytes(splatsNormal)

@@ -11,7 +11,7 @@ import io.ktor.utils.io.ByteWriteChannel
 import io.ktor.utils.io.ClosedWriteChannelException
 import io.ktor.utils.io.close
 import io.ktor.utils.io.core.buildPacket
-import io.ktor.utils.io.core.writeShort
+import io.ktor.utils.io.core.writeFully
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.TimeoutCancellationException
 import kotlinx.coroutines.channels.ClosedReceiveChannelException
@@ -24,11 +24,12 @@ import xlitekt.game.packet.assembler.PacketAssemblerListener
 import xlitekt.game.packet.disassembler.handler.PacketHandler
 import xlitekt.game.packet.disassembler.handler.PacketHandlerListener
 import xlitekt.game.world.World
+import xlitekt.shared.buffer.writeByte
+import xlitekt.shared.buffer.writeShort
 import xlitekt.shared.inject
 import xlitekt.shared.lazy
 import java.io.IOException
 import java.net.SocketException
-import java.nio.BufferOverflowException
 
 /**
  * @author Jordan Abraham
@@ -41,7 +42,7 @@ class Client(
     val logger = InlineLogger()
     val seed = ((Math.random() * 99999999.0).toLong() shl 32) + (Math.random() * 99999999.0).toLong()
     lateinit var clientCipher: ISAAC
-    lateinit var serverCipher: ISAAC
+    private lateinit var serverCipher: ISAAC
     lateinit var player: Player
 
     private val writePool = ArrayList<Packet>(64)
@@ -93,21 +94,14 @@ class Client(
                     disconnect("Unhandled packet found when trying to write. Packet was $packet.")
                     return@buildPacket
                 }
-                try {
-                    val invoke = assembler.packet.invoke(packet)
-                    if (assembler.opcode > Byte.MAX_VALUE) {
-                        writeByte((128 + serverCipher.getNext()).toByte())
-                    }
-                    writeByte((assembler.opcode + serverCipher.getNext() and 0xff).toByte())
-                    if (assembler.size == -1) writeByte(invoke.size.toByte())
-                    else if (assembler.size == -2) writeShort(invoke.size.toShort())
-                    repeat(invoke.size) {
-                        writeByte(invoke[it])
-                    }
-                } catch (exception: BufferOverflowException) {
-                    disconnect(exception.toString())
-                    return@buildPacket
+                val bytes = assembler.packet.invoke(packet)
+                if (assembler.opcode > Byte.MAX_VALUE) {
+                    writeByte((128 + serverCipher.getNext()))
                 }
+                writeByte((assembler.opcode + serverCipher.getNext() and 0xff))
+                if (assembler.size == -1) writeByte(bytes.size)
+                else if (assembler.size == -2) writeShort(bytes.size)
+                writeFully(bytes)
             }
             writePool.clear()
         }

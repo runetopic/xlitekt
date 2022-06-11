@@ -2,14 +2,14 @@ package xlitekt.cache.provider.music
 
 import io.ktor.util.copy
 import io.ktor.util.moveToByteArray
+import io.ktor.utils.io.core.writeInt
 import xlitekt.cache.provider.EntryTypeProvider
-import xlitekt.shared.buffer.allocateDynamic
+import xlitekt.shared.buffer.buildDynamicPacket
 import xlitekt.shared.buffer.discard
 import xlitekt.shared.buffer.readUByte
 import xlitekt.shared.buffer.readUShort
 import xlitekt.shared.buffer.readVarInt
 import xlitekt.shared.buffer.writeByte
-import xlitekt.shared.buffer.writeInt
 import xlitekt.shared.buffer.writeShort
 import java.nio.ByteBuffer
 
@@ -183,7 +183,7 @@ class MusicEntryTypeProvider : EntryTypeProvider<MusicEntryType>() {
         val midi = copy().midi(var13)
         val bytes = moveToByteArray()
 
-        val buffer = allocateDynamic(1_000_000) {
+        val buffer = buildDynamicPacket {
             writeInt(1297377380)
             writeInt(6)
             writeShort(if (tracks > 1) 1 else 0)
@@ -207,7 +207,7 @@ class MusicEntryTypeProvider : EntryTypeProvider<MusicEntryType>() {
                 writeInt(1297379947)
                 writeInt(0) // Temporary length.
 
-                val startSize = this@allocateDynamic.position()
+                val startSize = this.size
                 var id = -1
                 while (true) {
                     writeVarInt(midi::readVarInt)
@@ -219,7 +219,7 @@ class MusicEntryTypeProvider : EntryTypeProvider<MusicEntryType>() {
                         writeByte(255) // This is the fix.
                         writeByte(47)
                         writeByte(0)
-                        writeLengthInt { this@allocateDynamic.position() - startSize } // Replace the length from above.
+                        writeLengthInt { this.size - startSize } // Replace the length from above.
                         continue@loop
                     }
                     if (status == 23) {
