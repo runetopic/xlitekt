@@ -18,7 +18,7 @@ import java.util.concurrent.ConcurrentMap
 
 class World(
     private val players: PlayerList = PlayerList(MAX_PLAYERS),
-    private val npcs: NPCList = NPCList(MAX_NPCs),
+    private val npcs: NPCList = NPCList(MAX_NPCS),
     internal val loginRequests: ConcurrentMap<Player, Client> = ConcurrentHashMap(),
     internal val logoutRequests: ConcurrentHashMap.KeySetView<Player, Boolean> = ConcurrentHashMap.newKeySet()
 ) {
@@ -92,6 +92,6 @@ class World(
 
     companion object {
         const val MAX_PLAYERS = 2048
-        const val MAX_NPCs = Short.MAX_VALUE.toInt()
+        const val MAX_NPCS = Short.MAX_VALUE.toInt()
     }
 }

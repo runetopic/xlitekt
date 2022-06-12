@@ -11,13 +11,9 @@ import xlitekt.game.actor.render.block.invokeHighDefinitionPlayerRenderingBlocks
 import xlitekt.game.actor.render.block.invokeLowDefinitionPlayerRenderingBlocks
 import xlitekt.game.packet.NPCInfoPacket
 import xlitekt.game.packet.PlayerInfoPacket
-import xlitekt.game.tick.NPCInfoUpdates.HighDefinitionNPCUpdates
-import xlitekt.game.tick.NPCInfoUpdates.MovementStepsNPCUpdates
-import xlitekt.game.tick.PlayerInfoUpdates.*
 import xlitekt.game.world.World
 import xlitekt.game.world.map.zone.Zone
 import xlitekt.shared.inject
-import java.util.Optional
 
 /**
  * @author Jordan Abraham
@@ -26,26 +22,37 @@ abstract class Synchronizer : Runnable {
 
     protected val world by inject<World>()
 
+    internal object ZoneUpdates : NonBlockingHashSet<Zone>()
+
+    private val highDefinitionPlayerUpdates = arrayOfNulls<ByteArray?>(World.MAX_PLAYERS)
+    private val lowDefinitionPlayerUpdates = arrayOfNulls<ByteArray?>(World.MAX_PLAYERS)
+    private val alternativeHighDefinitionPlayerUpdates = arrayOfNulls<ByteArray?>(World.MAX_PLAYERS)
+    private val alternativeLowDefinitionPlayerUpdates = arrayOfNulls<ByteArray?>(World.MAX_PLAYERS)
+    private val movementStepsPlayerUpdates = arrayOfNulls<MovementStep?>(World.MAX_PLAYERS)
+
+    private val highDefinitionNPCUpdates = arrayOfNulls<ByteArray?>(World.MAX_NPCS)
+    private val movementStepsNPCUpdates = arrayOfNulls<MovementStep?>(World.MAX_NPCS)
+
     protected fun Player.syncMovement(players: NonBlockingHashMapLong<Player>) {
-        processMovement(players)?.let { MovementStepsPlayerUpdates.add(indexL, it) }
+        processMovement(players)?.let { movementStepsPlayerUpdates[index] = it }
     }
 
     protected fun NPC.syncMovement(players: NonBlockingHashMapLong<Player>) {
-        processMovement(players)?.let { MovementStepsNPCUpdates.add(indexL, it) }
+        processMovement(players)?.let { movementStepsNPCUpdates[index] = it }
     }
 
     protected fun Player.syncRenderingBlocks() {
         val highDefinition = highDefinitionRenderingBlocks()
-        if (highDefinition.isNotEmpty()) HighDefinitionPlayerUpdates.add(indexL, highDefinition.invokeHighDefinitionPlayerRenderingBlocks(this))
-        LowDefinitionPlayerUpdates.add(indexL, lowDefinitionRenderingBlocks().invokeLowDefinitionPlayerRenderingBlocks())
-        if (highDefinition.isNotEmpty()) AlternativeHighDefinitionPlayerUpdates.add(indexL, alternativeHighDefinitionRenderingBlocks().invokeAlternativeDefinitionPlayerRenderingBlocks())
-        AlternativeLowDefinitionPlayerUpdates.add(indexL, alternativeLowDefinitionRenderingBlocks().invokeAlternativeDefinitionPlayerRenderingBlocks())
+        if (highDefinition.isNotEmpty()) highDefinitionPlayerUpdates[index] = highDefinition.invokeHighDefinitionPlayerRenderingBlocks(this)
+        lowDefinitionPlayerUpdates[index] = lowDefinitionRenderingBlocks().invokeLowDefinitionPlayerRenderingBlocks()
+        if (highDefinition.isNotEmpty()) alternativeHighDefinitionPlayerUpdates[index] = alternativeHighDefinitionRenderingBlocks().invokeAlternativeDefinitionPlayerRenderingBlocks()
+        alternativeLowDefinitionPlayerUpdates[index] = alternativeLowDefinitionRenderingBlocks().invokeAlternativeDefinitionPlayerRenderingBlocks()
     }
 
     protected fun NPC.syncRenderingBlocks() {
         val blocks = highDefinitionRenderingBlocks()
         if (blocks.isEmpty()) return
-        HighDefinitionNPCUpdates.add(indexL, blocks.invokeHighDefinitionNPCRenderingBlocks())
+        highDefinitionNPCUpdates[index] = blocks.invokeHighDefinitionNPCRenderingBlocks()
         resetDefinitionRenderingBlocks()
     }
 
@@ -60,18 +67,18 @@ abstract class Synchronizer : Runnable {
             PlayerInfoPacket(
                 players = players,
                 viewport = viewport,
-                highDefinitionUpdates = HighDefinitionPlayerUpdates,
-                lowDefinitionUpdates = LowDefinitionPlayerUpdates,
-                alternativeHighDefinitionUpdates = AlternativeHighDefinitionPlayerUpdates,
-                alternativeLowDefinitionUpdates = AlternativeLowDefinitionPlayerUpdates,
-                movementStepsUpdates = MovementStepsPlayerUpdates
+                highDefinitionUpdates = highDefinitionPlayerUpdates,
+                lowDefinitionUpdates = lowDefinitionPlayerUpdates,
+                alternativeHighDefinitionUpdates = alternativeHighDefinitionPlayerUpdates,
+                alternativeLowDefinitionUpdates = alternativeLowDefinitionPlayerUpdates,
+                movementStepsUpdates = movementStepsPlayerUpdates
             )
         )
         write(
             NPCInfoPacket(
                 viewport = viewport,
-                highDefinitionUpdates = HighDefinitionNPCUpdates,
-                movementStepsUpdates = MovementStepsNPCUpdates
+                highDefinitionUpdates = highDefinitionNPCUpdates,
+                movementStepsUpdates = movementStepsNPCUpdates
             )
         )
         invokeAndClearWritePool()
@@ -80,40 +87,15 @@ abstract class Synchronizer : Runnable {
 
     protected fun resetSynchronizer() {
         // Player
-        MovementStepsPlayerUpdates.clear()
-        HighDefinitionPlayerUpdates.clear()
-        LowDefinitionPlayerUpdates.clear()
-        AlternativeHighDefinitionPlayerUpdates.clear()
-        AlternativeLowDefinitionPlayerUpdates.clear()
+        highDefinitionPlayerUpdates.fill(null, 0, World.MAX_PLAYERS)
+        lowDefinitionPlayerUpdates.fill(null, 0, World.MAX_PLAYERS)
+        alternativeHighDefinitionPlayerUpdates.fill(null, 0, World.MAX_PLAYERS)
+        alternativeLowDefinitionPlayerUpdates.fill(null, 0, World.MAX_PLAYERS)
+        movementStepsPlayerUpdates.fill(null, 0, World.MAX_PLAYERS)
         // NPC
-        HighDefinitionNPCUpdates.clear()
-        MovementStepsNPCUpdates.clear()
+        highDefinitionNPCUpdates.fill(null, 0, World.MAX_NPCS)
+        movementStepsNPCUpdates.fill(null, 0, World.MAX_NPCS)
         // Zones
         ZoneUpdates.clear()
-    }
-}
-
-internal object ZoneUpdates : NonBlockingHashSet<Zone>()
-
-internal sealed class PlayerInfoUpdates<T : Any> : NonBlockingHashMapLong<Optional<T>>(World.MAX_PLAYERS) {
-
-    object HighDefinitionPlayerUpdates : PlayerInfoUpdates<ByteArray>()
-    object LowDefinitionPlayerUpdates : PlayerInfoUpdates<ByteArray>()
-    object AlternativeHighDefinitionPlayerUpdates : PlayerInfoUpdates<ByteArray>()
-    object AlternativeLowDefinitionPlayerUpdates : PlayerInfoUpdates<ByteArray>()
-    object MovementStepsPlayerUpdates : PlayerInfoUpdates<MovementStep>()
-
-    fun add(index: Long, update: T) {
-        put(index, Optional.of(update))
-    }
-}
-
-internal sealed class NPCInfoUpdates<T : Any> : NonBlockingHashMapLong<Optional<T>>() {
-
-    object HighDefinitionNPCUpdates : NPCInfoUpdates<ByteArray>()
-    object MovementStepsNPCUpdates : NPCInfoUpdates<MovementStep>()
-
-    fun add(index: Long, update: T) {
-        put(index, Optional.of(update))
     }
 }

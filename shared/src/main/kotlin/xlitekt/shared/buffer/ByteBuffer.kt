@@ -5,7 +5,7 @@ import java.nio.ByteBuffer
 
 /**
  * @author Jordan Abraham
- * Extension functions for the ByteBuffer class used for building packets with a fixed capacity.
+ * Extension functions for the ByteBuffer class used for building packets.
  * Extension functions for the ByteBuffer class used for unpacking packets.
  */
 fun ByteBuffer.readStringCp1252NullTerminated() = String(readUChars(duplicate().discardUntilDelimiter(0))).also {
