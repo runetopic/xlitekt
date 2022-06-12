@@ -23,9 +23,8 @@ import xlitekt.game.world.map.Location
 import xlitekt.game.world.map.localX
 import xlitekt.game.world.map.localZ
 import xlitekt.shared.buffer.writeByte
-import xlitekt.shared.inject
-import java.nio.ByteBuffer
 import xlitekt.shared.lazy
+import java.nio.ByteBuffer
 
 /**
  * @author Jordan Abraham

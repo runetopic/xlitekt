@@ -1,5 +1,8 @@
 package xlitekt.game.actor.render.block.body
 
+/**
+ * @author Jordan Abraham
+ */
 @JvmInline
 value class BodyPartColor(private val packedBodyPartColor: Int) {
     val id get() = packedBodyPartColor shr 8

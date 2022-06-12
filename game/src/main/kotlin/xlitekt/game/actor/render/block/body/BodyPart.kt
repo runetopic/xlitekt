@@ -2,6 +2,9 @@ package xlitekt.game.actor.render.block.body
 
 import xlitekt.game.actor.render.Render.Appearance.Gender
 
+/**
+ * @author Jordan Abraham
+ */
 @JvmInline
 value class BodyPart(val id: Int) {
     fun packBodyPart(gender: Gender) = id + gender.id * 7
