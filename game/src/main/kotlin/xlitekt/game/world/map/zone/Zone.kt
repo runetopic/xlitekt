@@ -25,6 +25,7 @@ import xlitekt.game.world.map.localZ
 import xlitekt.shared.buffer.writeByte
 import xlitekt.shared.inject
 import java.nio.ByteBuffer
+import xlitekt.shared.lazy
 
 /**
  * @author Jordan Abraham
@@ -245,7 +246,7 @@ class Zone(
         for (x in -3..3) {
             for (z in -3..3) {
                 if (x == 0 && z == 0) zones.add(this)
-                else zones.add(world.zone(location.zoneLocation.transform(x, z).location))
+                else zones.add(lazy<World>().zone(location.zoneLocation.transform(x, z).location))
             }
         }
         neighboringZones = zones
@@ -255,8 +256,14 @@ class Zone(
         locs.add(gameObject)
     }
 
-    private companion object {
-        val world by inject<World>()
+    internal companion object {
+        val zoneUpdatesIndexes = mapOf(
+            ObjAddPacket::class to 4,
+            ObjDelPacket::class to 7,
+            LocAddPacket::class to 6,
+            LocDelPacket::class to 0,
+            MapProjAnimPacket::class to 8
+        )
     }
 }
 
@@ -348,7 +355,7 @@ private fun HashSet<Packet>.write(player: Player, baseLocation: Location) {
     for (packet in this) {
         val block = PacketAssemblerListener.listeners[packet::class]!!
         val buffer = ByteBuffer.allocate(1 + block.size)
-        buffer.writeByte(ZoneUpdate.zoneUpdateMap[packet::class]!!.index)
+        buffer.writeByte(Zone.zoneUpdatesIndexes[packet::class]!!)
         block.packet.invoke(packet, buffer)
         bytes += buffer.rewind().moveToByteArray()
     }
