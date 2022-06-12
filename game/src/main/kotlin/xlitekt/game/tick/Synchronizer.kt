@@ -62,7 +62,6 @@ abstract class Synchronizer : Runnable {
     }
 
     protected fun Player.syncClient(players: NonBlockingHashMapLong<Player>) {
-        println(movementStepsPlayerUpdates.filterNotNull())
         write(
             PlayerInfoPacket(
                 players = players,

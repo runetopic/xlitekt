@@ -68,7 +68,7 @@ abstract class Actor(
     /**
      * Represents this actor current location zone.
      */
-    private var zone = Optional.empty<Zone>()
+    private var zone = world.zone(Location.None)
 
     /**
      * Represents this actor 7x7 build area of zones.
@@ -132,10 +132,8 @@ abstract class Actor(
                 drainRunEnergy()
             }
         }
-        if (shouldRebuildZones() && zone.isPresent) {
-            if (zone.isPresent) {
-                zone.get().leaveZone(this, world.zone(location))
-            }
+        if (shouldRebuildZones()) {
+            zone.leaveZone(this, world.zone(location))
         }
     }
 
@@ -226,14 +224,14 @@ abstract class Actor(
     /**
      * Returns the current zone this actor is inside of.
      */
-    fun zone(): Zone = zone.orElse(world.zone(location))
+    fun zone(): Zone = zone
 
     /**
      * Set this actor current zone.
      * @param zone The zone to set.
      */
     fun setZone(zone: Zone) {
-        this.zone = Optional.of(zone)
+        this.zone = zone
     }
 
     /**

@@ -33,9 +33,6 @@ class Movement {
         val previousLocation = actor.previousLocation
         actor.previousLocation = currentLocation
         if (checkpoints.isEmpty && steps.isEmpty) {
-            if (actor is Player) {
-                println("null")
-            }
             return null
         }
         if (steps.isEmpty) {
