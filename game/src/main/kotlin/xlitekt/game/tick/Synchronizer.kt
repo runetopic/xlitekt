@@ -1,7 +1,6 @@
 package xlitekt.game.tick
 
 import org.jctools.maps.NonBlockingHashMapLong
-import org.jctools.maps.NonBlockingHashSet
 import xlitekt.game.actor.movement.MovementStep
 import xlitekt.game.actor.npc.NPC
 import xlitekt.game.actor.player.Player
@@ -22,7 +21,7 @@ abstract class Synchronizer : Runnable {
 
     protected val world by inject<World>()
 
-    internal object ZoneUpdates : NonBlockingHashSet<Zone>()
+    private val zoneUpdates = HashSet<Zone>()
 
     private val highDefinitionPlayerUpdates = arrayOfNulls<ByteArray?>(World.MAX_PLAYERS)
     private val lowDefinitionPlayerUpdates = arrayOfNulls<ByteArray?>(World.MAX_PLAYERS)
@@ -58,11 +57,12 @@ abstract class Synchronizer : Runnable {
 
     protected fun Player.syncZones() {
         zones().filter(Zone::updating).forEach {
-            ZoneUpdates.add(it.invokeUpdateRequests(this))
+            zoneUpdates.add(it.invokeUpdateRequests(this))
         }
     }
 
     protected fun Player.syncClient(players: NonBlockingHashMapLong<Player>) {
+        println(movementStepsPlayerUpdates.filterNotNull())
         write(
             PlayerInfoPacket(
                 players = players,
@@ -87,15 +87,16 @@ abstract class Synchronizer : Runnable {
 
     protected fun resetSynchronizer() {
         // Player
-        highDefinitionPlayerUpdates.fill(null, 0, World.MAX_PLAYERS)
-        lowDefinitionPlayerUpdates.fill(null, 0, World.MAX_PLAYERS)
-        alternativeHighDefinitionPlayerUpdates.fill(null, 0, World.MAX_PLAYERS)
-        alternativeLowDefinitionPlayerUpdates.fill(null, 0, World.MAX_PLAYERS)
-        movementStepsPlayerUpdates.fill(null, 0, World.MAX_PLAYERS)
+        highDefinitionPlayerUpdates.fill(null, 0)
+        lowDefinitionPlayerUpdates.fill(null, 0)
+        alternativeHighDefinitionPlayerUpdates.fill(null, 0)
+        alternativeLowDefinitionPlayerUpdates.fill(null, 0)
+        movementStepsPlayerUpdates.fill(null, 0)
         // NPC
-        highDefinitionNPCUpdates.fill(null, 0, World.MAX_NPCS)
-        movementStepsNPCUpdates.fill(null, 0, World.MAX_NPCS)
+        highDefinitionNPCUpdates.fill(null, 0)
+        movementStepsNPCUpdates.fill(null, 0)
         // Zones
-        ZoneUpdates.clear()
+        zoneUpdates.forEach(Zone::finalizeUpdateRequests)
+        zoneUpdates.clear()
     }
 }

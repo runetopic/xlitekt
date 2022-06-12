@@ -8,14 +8,13 @@ import kotlin.time.measureTime
  */
 class PhasedSynchronizer(
     private val synchronizers: List<Runnable>
-) : Synchronizer() {
+) : Runnable {
     private val logger = InlineLogger()
 
     override fun run() {
         try {
             val time = measureTime {
                 synchronizers.forEach(Runnable::run)
-                resetSynchronizer()
             }
             logger.debug { "Synchronization completed in $time." }
         } catch (exception: Exception) {

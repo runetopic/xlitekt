@@ -9,9 +9,7 @@ import xlitekt.game.actor.render.HitType
 import xlitekt.game.actor.routeTo
 import xlitekt.game.actor.spotAnimate
 import xlitekt.game.tick.Synchronizer
-import xlitekt.game.tick.ZoneUpdates
 import xlitekt.game.world.map.Location
-import xlitekt.game.world.map.zone.Zone
 import kotlin.random.Random
 import kotlin.time.measureTime
 
@@ -79,7 +77,7 @@ class BenchmarkParallelClientSynchronizer : Synchronizer() {
                 it.syncZones()
                 it.syncClient(syncPlayers)
             }
-            ZoneUpdates.parallelStream().forEach(Zone::finalizeUpdateRequests)
+            resetSynchronizer()
         }
 
         logger.debug { "Players Pathfinders Took $playerFindersTime for ${players.size} players. [TICK=$tick]" }

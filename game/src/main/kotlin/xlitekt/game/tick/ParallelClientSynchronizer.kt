@@ -1,7 +1,6 @@
 package xlitekt.game.tick
 
 import xlitekt.game.actor.player.process
-import xlitekt.game.world.map.zone.Zone
 
 /**
  * @author Jordan Abraham
@@ -31,6 +30,6 @@ class ParallelClientSynchronizer : Synchronizer() {
             it.syncClient(syncPlayers)
         }
 
-        ZoneUpdates.parallelStream().forEach(Zone::finalizeUpdateRequests)
+        resetSynchronizer()
     }
 }
