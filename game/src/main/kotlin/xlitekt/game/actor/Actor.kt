@@ -49,8 +49,6 @@ import xlitekt.game.world.map.withinDistance
 import xlitekt.game.world.map.zone.Zone
 import xlitekt.shared.inject
 import java.util.Optional
-import xlitekt.game.content.interact.GameObjectInteraction
-import xlitekt.game.content.interact.InteractionMap
 
 /**
  * @author Tyler Telis

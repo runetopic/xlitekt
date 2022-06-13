@@ -9,6 +9,8 @@ import xlitekt.game.actor.render.Render
 import xlitekt.game.actor.speed
 import xlitekt.game.content.container.equipment.Equipment
 import xlitekt.game.content.container.inventory.Inventory
+import xlitekt.game.content.interact.GameObjectInteraction
+import xlitekt.game.content.interact.InteractionMap
 import xlitekt.game.content.skill.Skill
 import xlitekt.game.content.skill.Skills
 import xlitekt.game.content.ui.Interfaces
@@ -30,13 +32,11 @@ import xlitekt.game.packet.VarpSmallPacket
 import xlitekt.game.packet.disassembler.handler.PacketHandler
 import xlitekt.game.queue.QueuedScriptPriority
 import xlitekt.game.world.World
+import xlitekt.game.world.map.GameObject
 import xlitekt.game.world.map.Location
 import xlitekt.shared.lazy
 import kotlin.math.abs
 import kotlin.math.floor
-import xlitekt.game.content.interact.GameObjectInteraction
-import xlitekt.game.content.interact.InteractionMap
-import xlitekt.game.world.map.GameObject
 
 /**
  * @author Jordan Abraham
