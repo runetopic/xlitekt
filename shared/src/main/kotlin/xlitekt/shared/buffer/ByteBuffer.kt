@@ -5,6 +5,7 @@ import java.nio.ByteBuffer
 
 /**
  * @author Jordan Abraham
+ * Extension functions for the ByteBuffer class for unpacking cache data.
  * Extension functions for the ByteBuffer class used for building packets.
  */
 fun ByteBuffer.readStringCp1252NullTerminated() = String(readUChars(duplicate().discardUntilDelimiter(0))).also {
