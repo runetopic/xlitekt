@@ -10,5 +10,5 @@ import xlitekt.shared.inject
 private val provider by inject<HuffmanEntryTypeProvider>()
 
 onPacketHandler<PublicChatPacket> {
-    player.chat(player.rights, packet.color shl 8 or packet.effect) { packet.data.fromHuffman(provider.entryType(0)?.huffman!!, this.packet.length) }
+    player.chat(player.rights, packet.color shl 8 or packet.effect) { packet.data.fromHuffman(provider.entryType(0)?.huffman!!, packet.length) }
 }

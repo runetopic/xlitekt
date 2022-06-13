@@ -1,6 +1,6 @@
 package script.packet.disassembler
 
-import io.ktor.util.moveToByteArray
+import io.ktor.utils.io.core.readBytes
 import xlitekt.game.packet.PublicChatPacket
 import xlitekt.game.packet.disassembler.onPacketDisassembler
 import xlitekt.shared.buffer.readUByte
@@ -11,11 +11,12 @@ import xlitekt.shared.buffer.readUShortSmart
  * @author Tyler Telis
  */
 onPacketDisassembler(opcode = 95, size = -1) {
+    val mark = availableForRead
     PublicChatPacket(
         unknown = readUByte(),
         color = readUByte(),
         effect = readUByte(),
         length = readUShortSmart(),
-        data = moveToByteArray()
+        data = readPacket(it - (mark - availableForRead)).readBytes()
     )
 }

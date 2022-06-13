@@ -11,7 +11,7 @@ import xlitekt.shared.buffer.readUShort
  */
 onPacketDisassembler(opcode = 48, size = 5) {
     WindowStatusPacket(
-        displayMode = readByte(),
+        displayMode = readByte().toInt(),
         width = readUShort(),
         height = readUShort()
     )
