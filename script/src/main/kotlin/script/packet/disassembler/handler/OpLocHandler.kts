@@ -50,10 +50,6 @@ onPacketHandler<OpLocPacket> {
 
     val clickedOption = gameObject.entry?.actions?.firstOrNull() ?: "*"
 
-    val gameObjectInteraction = GameObjectInteraction(player, gameObject, clickedOption)
-
-    handledObjectInteractions[gameObject.id]?.invoke(gameObjectInteraction)
-
     with(player) {
         cancelAll()
         queueStrong {
