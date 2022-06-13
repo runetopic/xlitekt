@@ -1,32 +1,8 @@
-# xlitekt
-[![wakatime](https://wakatime.com/badge/user/00b793fe-9bcc-4e7a-88c2-7c1879c548ce/project/392eeeea-4500-4c18-904b-2c0d662dfb81.svg)](https://wakatime.com/badge/user/00b793fe-9bcc-4e7a-88c2-7c1879c548ce/project/392eeeea-4500-4c18-904b-2c0d662dfb81) ![](https://tokei.rs/b1/github/runetopic/xlitekt)
+<p align="center"><img src="https://github.com/runetopic/xlitekt/blob/main/assets/xlite%20logo.png"/></p>
 
-# Introduction
-XliteKt is an open-source, and forever open-source Kotlin based OSRS Emulator for educational purposes. Currently built around the game
-update: [#202](https://oldschool.runescape.wiki/w/5_January) (Nex)
-
-The goal behind this project is to provide the community with a powerful, yet simple to use framework that is _heavily_
-documented. 
-
-Developers:
- - [tyler27 (me)](https://github.com/tyler27)
- - [ultraviolet-jordan](https://github.com/ultraviolet-jordan)
- - [justin51](https://github.com/justin51)
-
-# Features
-- Embedded HTTP server to deliver client configuration files.
-- Cache data loading.
-- Client cache files updating.
-- Client game login.
-- ISAAC and RSA.
-- Full synchronization between connected clients and game server.
-- Full clipping.
-- Player updating.
-- Npc updating.
-- Basic UI support.
-- Basic vars support.
-- Basic commands support.
-- And more!
+[![Discord](https://img.shields.io/discord/212385463418355713?color=%237289DA&logo=Discord&logoColor=%237289DA)](https://discord.gg/3scgBkrfMG)
+[![wakatime](https://wakatime.com/badge/user/00b793fe-9bcc-4e7a-88c2-7c1879c548ce/project/392eeeea-4500-4c18-904b-2c0d662dfb81.svg)](https://wakatime.com/badge/user/00b793fe-9bcc-4e7a-88c2-7c1879c548ce/project/392eeeea-4500-4c18-904b-2c0d662dfb81)
+ ![](https://tokei.rs/b1/github/runetopic/xlitekt)
 
 # Getting Started
 _Make sure to download the latest #202 cache version from one of the archives below. We don't push this to github for
@@ -113,6 +89,26 @@ Maps are loaded using the xteas provided from OpenRS2, which follows this format
   }
 ]
 ```
+
+# Features
+- Embedded HTTP server to deliver client configuration files.
+- Cache data loading.
+- Client cache files updating.
+- Client game login.
+- ISAAC and RSA.
+- Full synchronization between connected clients and game server.
+- Full clipping.
+- Player updating.
+- Npc updating.
+- Basic UI support.
+- Basic vars support.
+- Basic commands support.
+- And more!
+
+# Developers
+ - [tyler27](https://github.com/tyler27)
+ - [ultraviolet-jordan](https://github.com/ultraviolet-jordan)
+ - [justin51](https://github.com/justin51)
 
 # Benchmarking & Performance
 XliteKt aims to be a very fast server which can easily handle thousands of players simultaneously and scales very well with better hardware. 
