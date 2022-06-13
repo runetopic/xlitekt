@@ -1,6 +1,7 @@
 package xlitekt.synchronizer
 
 import com.github.michaelbull.logging.InlineLogger
+import org.jctools.maps.NonBlockingHashSet
 import xlitekt.game.Game
 import xlitekt.game.actor.chat
 import xlitekt.game.actor.hit
@@ -27,7 +28,6 @@ import xlitekt.synchronizer.task.NpcsSynchronizerTask
 import xlitekt.synchronizer.task.PlayersSynchronizerTask
 import xlitekt.synchronizer.task.ZonesSynchronizerTask
 import java.util.concurrent.ForkJoinPool
-import java.util.concurrent.TimeUnit
 import kotlin.random.Random
 import kotlin.time.measureTime
 
@@ -54,7 +54,7 @@ class SynchronizerBenchmark(
     private val npcMovementUpdatesBuilder = MovementUpdatesBuilder<NPC>()
     private val npcHighDefinitionUpdatesBuilder = NpcHighDefinitionUpdatesBuilder()
 
-    private val zoneUpdates = HashSet<Zone>()
+    private val zoneUpdates = NonBlockingHashSet<Zone>()
 
     private val playersSynchronizerTask = PlayersSynchronizerTask(
         listOf(
@@ -162,7 +162,7 @@ class SynchronizerBenchmark(
                     logger.debug { "Client Sync Took $clientSyncTime for ${players.size} players. [TICK=$tick]" }
                 }
 
-                job.get(600L, TimeUnit.MILLISECONDS)
+                job.get()
             }
             logger.debug { "Synchronizer completed in $time targeting ${forkJoinPool.parallelism} threads." }
         } catch (exception: Exception) {

@@ -1,6 +1,7 @@
 package xlitekt.synchronizer.task
 
 import org.jctools.maps.NonBlockingHashMapLong
+import org.jctools.maps.NonBlockingHashSet
 import xlitekt.game.actor.player.Player
 import xlitekt.game.world.map.zone.Zone
 
@@ -8,7 +9,7 @@ import xlitekt.game.world.map.zone.Zone
  * @author Jordan Abraham
  */
 class ZonesSynchronizerTask(
-    private val zoneUpdates: MutableSet<Zone>
+    private val zoneUpdates: NonBlockingHashSet<Zone>
 ) : SynchronizerTask<Player> {
     override fun execute(syncPlayers: NonBlockingHashMapLong<Player>, actors: List<Player>) {
         actors.parallelStream().forEach {
