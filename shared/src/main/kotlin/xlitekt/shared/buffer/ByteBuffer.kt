@@ -57,8 +57,8 @@ fun ByteBuffer.readUShortSmart(): Int {
 
 fun ByteBuffer.readUIntSmart(): Int {
     val peek = readUByte()
-    return if (peek < 0) (peek shl 24) or (peek shl 16) or (peek shl 8) or peek else {
-        (peek shl 8 or readUByte()).let { if (it == 32767) -1 else it }.toInt()
+    return if (peek < 0) ((peek shl 24) or (readUByte() shl 16) or (readUByte() shl 8) or readUByte()) and Integer.MAX_VALUE else {
+        (peek shl 8 or readUByte()).toShort().let { if (it == Short.MAX_VALUE) -1 else it }.toInt()
     }
 }
 

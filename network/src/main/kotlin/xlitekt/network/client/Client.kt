@@ -2,7 +2,6 @@ package xlitekt.network.client
 
 import com.runetopic.cryptography.fromXTEA
 import com.runetopic.cryptography.toISAAC
-import io.ktor.utils.io.discardExact
 import kotlinx.coroutines.withTimeout
 import xlitekt.game.actor.player.Client
 import xlitekt.game.actor.player.Client.Companion.checksums
@@ -305,13 +304,13 @@ private suspend fun Client.readPackets(player: Player) = try {
         if (disassembler == null) {
             logger.debug { "No packet disassembler found for packet opcode $opcode." }
             // Discard the bytes from the read channel.
-            readChannel.discardExact(size.toLong())
+            readChannel.discard(size.toLong())
             continue
         }
         if (disassembler.value.size != -1 && disassembler.value.size != size) {
             logger.debug { "Packet disassembler size is not equal to the packet array size. Disassembler size was ${disassembler.value.size} and found size was $size." }
             // Discard the bytes from the read channel.
-            readChannel.discardExact(size.toLong())
+            readChannel.discard(size.toLong())
             continue
         }
         // Attempt to invoke the packet with the read channel. This will consume the correct number of bytes from the channel
@@ -320,7 +319,7 @@ private suspend fun Client.readPackets(player: Player) = try {
         if (disassembled == null) {
             logger.debug { "Disassembled packet returned null. Opcode was $opcode." }
             // Discard the bytes from the read channel if the packet was not found.
-            readChannel.discardExact(size.toLong())
+            readChannel.discard(size.toLong())
             continue
         }
         player.read(PacketHandler(player, disassembled))
