@@ -2,7 +2,6 @@ package script.packet.assembler
 
 import io.ktor.utils.io.core.BytePacketBuilder
 import io.ktor.utils.io.core.writeFully
-import org.jctools.maps.NonBlockingHashMapLong
 import script.packet.assembler.NPCExtendedInfoPacketAssembler.ActivityUpdateType.Adding
 import script.packet.assembler.NPCExtendedInfoPacketAssembler.ActivityUpdateType.Moving
 import script.packet.assembler.NPCExtendedInfoPacketAssembler.ActivityUpdateType.Removing
@@ -18,7 +17,6 @@ import xlitekt.shared.buffer.BitAccess
 import xlitekt.shared.buffer.dynamicBuffer
 import xlitekt.shared.buffer.withBitAccess
 import xlitekt.shared.buffer.writeBytes
-import java.util.Optional
 
 /**
  * @author Jordan Abraham
@@ -42,13 +40,13 @@ onPacketAssembler<NPCInfoPacket>(opcode = 90, size = -2) {
 fun BitAccess.highDefinition(
     viewport: Viewport,
     blocks: BytePacketBuilder,
-    highDefinitionUpdates: NonBlockingHashMapLong<Optional<ByteArray>>,
-    movementStepsUpdates: NonBlockingHashMapLong<Optional<MovementStep>>
+    highDefinitionUpdates: Array<ByteArray?>,
+    movementStepsUpdates: Array<MovementStep?>
 ) {
     val playerLocation = viewport.player.location
     viewport.npcs.forEach {
         // Check the activities this npc is doing.
-        val activity = highDefinitionActivities(it, playerLocation, highDefinitionUpdates[it.indexL], movementStepsUpdates[it.indexL])
+        val activity = highDefinitionActivities(it, playerLocation, highDefinitionUpdates[it.index], movementStepsUpdates[it.index])
         if (activity == null) {
             // This npc has no activity update (false).
             writeBit(false)
@@ -56,28 +54,28 @@ fun BitAccess.highDefinition(
         }
         // This npc has an activity update (true).
         writeBit(true)
-        val updating = highDefinitionUpdates[it.indexL]?.isPresent == true
-        activity.writeBits(this, it, updating, playerLocation, movementStepsUpdates[it.indexL] ?: Optional.empty())
+        val updating = highDefinitionUpdates[it.index] != null
+        activity.writeBits(this, it, updating, playerLocation, movementStepsUpdates[it.index])
         if (activity !is Removing) {
-            if (updating) blocks.writeFully(highDefinitionUpdates[it.indexL]!!.get())
+            if (updating) blocks.writeFully(highDefinitionUpdates[it.index]!!)
         }
     }
     viewport.npcs.removeAll { !it.location.withinDistance(playerLocation) }
 }
 
-fun BitAccess.lowDefinition(viewport: Viewport, blocks: BytePacketBuilder, highDefinitionUpdates: NonBlockingHashMapLong<Optional<ByteArray>>) {
+fun BitAccess.lowDefinition(viewport: Viewport, blocks: BytePacketBuilder, highDefinitionUpdates: Array<ByteArray?>) {
     val player = viewport.player
     player.zone().neighboringNpcs().forEach {
-        val updates = highDefinitionUpdates[it.indexL]
+        val updates = highDefinitionUpdates[it.index]
         // Check the activities this npc is doing.
         val activity = lowDefinitionActivities(viewport, it, player.location, updates)
         if (activity != null) {
-            val updating = updates?.isPresent == true
+            val updating = updates != null
             // Write the corresponding activity bits depending on what the npc is doing.
-            activity.writeBits(this, it, updating, playerLocation = player.location, step = Optional.empty())
+            activity.writeBits(this, it, updating, playerLocation = player.location, step = null)
             if (activity is Adding) {
                 viewport.npcs += it
-                if (updating) blocks.writeFully(highDefinitionUpdates[it.indexL]!!.get())
+                if (updating) blocks.writeFully(highDefinitionUpdates[it.index]!!)
             }
         }
     }
@@ -86,16 +84,16 @@ fun BitAccess.lowDefinition(viewport: Viewport, blocks: BytePacketBuilder, highD
 fun highDefinitionActivities(
     npc: NPC,
     playerLocation: Location,
-    update: Optional<ByteArray>?,
-    step: Optional<MovementStep>?
+    update: ByteArray?,
+    step: MovementStep?
 ): ActivityUpdateType? {
     return when {
         // If the npc is not within normal distance of the player.
         !npc.location.withinDistance(playerLocation) -> Removing
         // If the npc is moving.
-        step?.isPresent == true -> Moving
+        step != null -> Moving
         // If the npc has a block update.
-        update?.isPresent == true -> Updating
+        update != null -> Updating
         else -> null
     }
 }
@@ -104,41 +102,40 @@ fun lowDefinitionActivities(
     viewport: Viewport,
     npc: NPC?,
     playerLocation: Location,
-    updates: Optional<ByteArray>?
+    updates: ByteArray?
 ): ActivityUpdateType? {
     return when {
         // If the npc is within our normal distance and the server has not added them to the player viewport.
         npc != null && npc !in viewport.npcs && npc.location.withinDistance(playerLocation) -> Adding
-        updates?.isPresent == false -> null
+        updates == null -> null
         else -> null
     }
 }
 
 sealed class ActivityUpdateType {
     object Removing : ActivityUpdateType() {
-        override fun writeBits(bits: BitAccess, npc: NPC, updating: Boolean, playerLocation: Location, step: Optional<MovementStep>) {
+        override fun writeBits(bits: BitAccess, npc: NPC, updating: Boolean, playerLocation: Location, step: MovementStep?) {
             bits.writeBits(2, 3)
         }
     }
 
     object Moving : ActivityUpdateType() {
-        override fun writeBits(bits: BitAccess, npc: NPC, updating: Boolean, playerLocation: Location, step: Optional<MovementStep>) {
+        override fun writeBits(bits: BitAccess, npc: NPC, updating: Boolean, playerLocation: Location, step: MovementStep?) {
             bits.writeBits(2, 1) // walk only
-            val movementStep = step.orElseThrow()
-            val opcode = movementStep.direction.opcodeForNPCDirection
+            val opcode = step?.direction?.opcodeForNPCDirection ?: 0
             bits.writeBits(3, opcode)
             bits.writeBit(updating)
         }
     }
 
     object Updating : ActivityUpdateType() {
-        override fun writeBits(bits: BitAccess, npc: NPC, updating: Boolean, playerLocation: Location, step: Optional<MovementStep>) {
+        override fun writeBits(bits: BitAccess, npc: NPC, updating: Boolean, playerLocation: Location, step: MovementStep?) {
             bits.writeBits(2, 0)
         }
     }
 
     object Adding : ActivityUpdateType() {
-        override fun writeBits(bits: BitAccess, npc: NPC, updating: Boolean, playerLocation: Location, step: Optional<MovementStep>) {
+        override fun writeBits(bits: BitAccess, npc: NPC, updating: Boolean, playerLocation: Location, step: MovementStep?) {
             bits.writeBits(15, npc.index)
             bits.writeBits(1, 0) // if 1 == 1 read 32 bits they just don't use it atm. Looks like they're working on something
             bits.writeBit(updating)
@@ -155,6 +152,6 @@ sealed class ActivityUpdateType {
         npc: NPC,
         updating: Boolean,
         playerLocation: Location,
-        step: Optional<MovementStep>
+        step: MovementStep?
     )
 }

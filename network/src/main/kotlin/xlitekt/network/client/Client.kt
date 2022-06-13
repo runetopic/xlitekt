@@ -2,7 +2,6 @@ package xlitekt.network.client
 
 import com.runetopic.cryptography.fromXTEA
 import com.runetopic.cryptography.toISAAC
-import io.ktor.utils.io.core.readBytes
 import kotlinx.coroutines.withTimeout
 import xlitekt.game.actor.player.Client
 import xlitekt.game.actor.player.Client.Companion.checksums
@@ -301,20 +300,26 @@ private suspend fun Client.readPackets(player: Player) = try {
         val opcode = readChannel.readPacketOpcode(clientCipher)
         if (opcode < 0 || opcode >= sizes.size) continue
         val size = readChannel.readPacketSize(sizes[opcode])
-        // Take the bytes from the read channel before doing any checks.
-        val packet = ByteBuffer.wrap(readChannel.readPacket(size).readBytes())
         val disassembler = PacketDisassemblerListener.listeners.entries.firstOrNull { it.key == opcode }
         if (disassembler == null) {
             logger.debug { "No packet disassembler found for packet opcode $opcode." }
+            // Discard the bytes from the read channel.
+            readChannel.discard(size.toLong())
             continue
         }
         if (disassembler.value.size != -1 && disassembler.value.size != size) {
             logger.debug { "Packet disassembler size is not equal to the packet array size. Disassembler size was ${disassembler.value.size} and found size was $size." }
+            // Discard the bytes from the read channel.
+            readChannel.discard(size.toLong())
             continue
         }
-        val disassembled = PacketDisassemblerListener.listeners[disassembler.key]?.packet?.invoke(packet)
+        // Attempt to invoke the packet with the read channel. This will consume the correct number of bytes from the channel
+        // assuming the disassembler is correctly structured.
+        val disassembled = PacketDisassemblerListener.listeners[disassembler.key]?.packet?.invoke(readChannel, size)
         if (disassembled == null) {
             logger.debug { "Disassembled packet returned null. Opcode was $opcode." }
+            // Discard the bytes from the read channel if the packet was not found.
+            readChannel.discard(size.toLong())
             continue
         }
         player.read(PacketHandler(player, disassembled))

@@ -25,7 +25,6 @@ import xlitekt.shared.buffer.dynamicBuffer
 import xlitekt.shared.buffer.withBitAccess
 import xlitekt.shared.buffer.writeBytes
 import java.nio.ByteBuffer
-import java.util.Optional
 import kotlin.math.abs
 
 /**
@@ -47,9 +46,9 @@ onPacketAssembler<PlayerInfoPacket>(opcode = 80, size = -2) {
 fun ByteBuffer.highDefinition(
     viewport: Viewport,
     blocks: BytePacketBuilder,
-    highDefinitionUpdates: NonBlockingHashMapLong<Optional<ByteArray>>,
-    movementStepsUpdates: NonBlockingHashMapLong<Optional<MovementStep>>,
-    alternativeHighDefinitionUpdates: NonBlockingHashMapLong<Optional<ByteArray>>,
+    highDefinitionUpdates: Array<ByteArray?>,
+    movementStepsUpdates: Array<MovementStep?>,
+    alternativeHighDefinitionUpdates: Array<ByteArray?>,
     nsn: Boolean
 ) = withBitAccess {
     var skip = -1
@@ -57,8 +56,8 @@ fun ByteBuffer.highDefinition(
         val index = viewport.highDefinitions[it]
         if (viewport.isNsn(index) == nsn) continue
         val other = viewport.players[index]
-        val updates = other?.let { highDefinitionUpdates[other.indexL] } ?: Optional.empty()
-        val movementStep = other?.let { movementStepsUpdates[other.indexL] } ?: Optional.empty()
+        val updates = other?.let { highDefinitionUpdates[other.index] }
+        val movementStep = other?.let { movementStepsUpdates[other.index] }
         // Check the activities this player is doing.
         val activity = viewport.highDefinitionActivities(other, updates, movementStep, blocks.size + ((bitIndex + 7) / 8))
         if (other == null || activity == null) {
@@ -71,10 +70,7 @@ fun ByteBuffer.highDefinition(
         // This player has an activity update (true).
         writeBit(true)
         // Write corresponding bits depending on the activity type the player is doing.
-        activity.writeBits(
-            this@withBitAccess, viewport, index,
-            updates.isPresent, other.location, other.previousLocation, movementStep
-        )
+        activity.writeBits(this@withBitAccess, viewport, index, updates != null, other.location, other.previousLocation, movementStep)
         if (activity is Removing) {
             viewport.players[index] = null
         } else {
@@ -82,8 +78,8 @@ fun ByteBuffer.highDefinition(
                 // Update server with new location if this player moved.
                 viewport.locations[index] = other.location.regionLocation
             }
-            if (updates.isPresent) {
-                blocks.writeFully(alternativeHighDefinitionUpdates[other.indexL]?.orElse(updates.get())!!)
+            if (updates != null) {
+                blocks.writeFully(alternativeHighDefinitionUpdates[other.index] ?: updates)
             }
         }
     }
@@ -93,9 +89,9 @@ fun ByteBuffer.highDefinition(
 fun ByteBuffer.lowDefinition(
     viewport: Viewport,
     blocks: BytePacketBuilder,
-    lowDefinitionUpdates: NonBlockingHashMapLong<Optional<ByteArray>>,
+    lowDefinitionUpdates: Array<ByteArray?>,
     players: NonBlockingHashMapLong<Player>,
-    alternativeLowDefinitionUpdates: NonBlockingHashMapLong<Optional<ByteArray>>,
+    alternativeLowDefinitionUpdates: Array<ByteArray?>,
     nsn: Boolean
 ) = withBitAccess {
     var skip = -1
@@ -103,7 +99,7 @@ fun ByteBuffer.lowDefinition(
         val index = viewport.lowDefinitions[it]
         if (!viewport.isNsn(index) == nsn) continue
         val other = players[index.toLong()]
-        val updates = other?.let { lowDefinitionUpdates[other.indexL] } ?: Optional.empty()
+        val updates = other?.let { lowDefinitionUpdates[other.index] }
         // Check the activities this player is doing.
         val activity = viewport.lowDefinitionActivities(other, updates, blocks.size + ((bitIndex + 7) / 8))
         if (other == null || activity == null) {
@@ -116,9 +112,9 @@ fun ByteBuffer.lowDefinition(
         // This player has an activity update (true).
         writeBit(true)
         // Write corresponding bits depending on the activity type the player is doing.
-        activity.writeBits(this@withBitAccess, viewport, index, current = other.location, previous = other.previousLocation, step = Optional.empty())
+        activity.writeBits(this@withBitAccess, viewport, index, current = other.location, previous = other.previousLocation, step = null)
         if (activity is Adding) {
-            blocks.writeFully(alternativeLowDefinitionUpdates[other.indexL]?.orElse(updates.get())!!)
+            blocks.writeFully(alternativeLowDefinitionUpdates[other.index] ?: updates!!)
             // Add them to our array.
             viewport.players[index] = other
             viewport.setNsn(index)
@@ -151,37 +147,34 @@ fun BitAccess.skipPlayers(count: Int): Int {
     return -1
 }
 
-fun Viewport.highDefinitionActivities(other: Player?, highDefinitionUpdate: Optional<ByteArray>, movementStep: Optional<MovementStep>, size: Int): ActivityUpdateType? {
+fun Viewport.highDefinitionActivities(other: Player?, updates: ByteArray?, movementStep: MovementStep?, size: Int): ActivityUpdateType? {
     val ourLocation = player.location
     val theirLocation = other?.location ?: Location.None
     return when {
         // If the player needs to be removed from high definition to low definition.
         other?.isOnline() == false || theirLocation == Location.None || !theirLocation.withinDistance(ourLocation, viewDistance) -> Removing
         // If the player is moving (Teleporting, Walking, Running).
-        movementStep.isPresent -> if (movementStep.get().speed == MovementSpeed.Teleporting) Teleporting else Moving
+        movementStep != null -> if (movementStep.speed == MovementSpeed.Teleporting) Teleporting else Moving
         // If the player has block updates.
-        size + (highDefinitionUpdate.orElse(byteArrayOf())?.size ?: 0) <= blockBufferLimit && highDefinitionUpdate.isPresent -> Updating
+        size + (updates?.size ?: 0) <= blockBufferLimit && updates != null -> Updating
         else -> null
     }
 }
 
-fun Viewport.lowDefinitionActivities(other: Player?, updates: Optional<ByteArray>, size: Int): ActivityUpdateType? {
+fun Viewport.lowDefinitionActivities(other: Player?, updates: ByteArray?, size: Int): ActivityUpdateType? {
     val ourLocation = player.location
     val theirLocation = other?.location ?: Location.None
     return when {
         // If the player needs to be added from low definition to high definition.
-        size + (updates.orElse(byteArrayOf())?.size ?: 0) <= blockBufferLimit && other?.isOnline() == true && theirLocation != Location.None && theirLocation.withinDistance(
-            ourLocation,
-            viewDistance
-        ) -> Adding
-        updates.isEmpty -> null
+        size + (updates?.size ?: 0) <= blockBufferLimit && other?.isOnline() == true && theirLocation != Location.None && theirLocation.withinDistance(ourLocation, viewDistance) -> Adding
+        updates == null -> null
         else -> null
     }
 }
 
 sealed class ActivityUpdateType {
     object Removing : ActivityUpdateType() {
-        override fun writeBits(bits: BitAccess, viewport: Viewport, index: Int, updating: Boolean, current: Location, previous: Location, step: Optional<MovementStep>) {
+        override fun writeBits(bits: BitAccess, viewport: Viewport, index: Int, updating: Boolean, current: Location, previous: Location, step: MovementStep?) {
             // Player has no update.
             bits.writeBit(false)
             // The player is not moving.
@@ -191,7 +184,7 @@ sealed class ActivityUpdateType {
     }
 
     object Teleporting : ActivityUpdateType() {
-        override fun writeBits(bits: BitAccess, viewport: Viewport, index: Int, updating: Boolean, current: Location, previous: Location, step: Optional<MovementStep>) {
+        override fun writeBits(bits: BitAccess, viewport: Viewport, index: Int, updating: Boolean, current: Location, previous: Location, step: MovementStep?) {
             // If the player has pending block updates.
             bits.writeBit(updating)
             // Make the player teleport.
@@ -212,20 +205,19 @@ sealed class ActivityUpdateType {
     }
 
     object Moving : ActivityUpdateType() {
-        override fun writeBits(bits: BitAccess, viewport: Viewport, index: Int, updating: Boolean, current: Location, previous: Location, step: Optional<MovementStep>) {
-            val movementStep = step.orElseThrow()
-            val running = movementStep.speed.running
+        override fun writeBits(bits: BitAccess, viewport: Viewport, index: Int, updating: Boolean, current: Location, previous: Location, step: MovementStep?) {
+            val running = step?.speed?.running ?: false
             // If the player has pending block updates.
             bits.writeBit(updating)
             // Make the player walk or run.
             bits.writeBits(2, if (running) 2 else 1)
-            val opcode = movementStep.direction.opcodeForPlayerDirection
+            val opcode = step?.direction?.opcodeForPlayerDirection ?: 0
             bits.writeBits(if (running) 4 else 3, opcode)
         }
     }
 
     object Updating : ActivityUpdateType() {
-        override fun writeBits(bits: BitAccess, viewport: Viewport, index: Int, updating: Boolean, current: Location, previous: Location, step: Optional<MovementStep>) {
+        override fun writeBits(bits: BitAccess, viewport: Viewport, index: Int, updating: Boolean, current: Location, previous: Location, step: MovementStep?) {
             // The player has pending block updates.
             bits.writeBit(true)
             // The player is not moving.
@@ -234,7 +226,7 @@ sealed class ActivityUpdateType {
     }
 
     object Adding : ActivityUpdateType() {
-        override fun writeBits(bits: BitAccess, viewport: Viewport, index: Int, updating: Boolean, current: Location, previous: Location, step: Optional<MovementStep>) {
+        override fun writeBits(bits: BitAccess, viewport: Viewport, index: Int, updating: Boolean, current: Location, previous: Location, step: MovementStep?) {
             bits.writeBits(2, 0)
             // Update the player location.
             bits.updateLocation(viewport, index, current)
@@ -252,7 +244,7 @@ sealed class ActivityUpdateType {
         updating: Boolean = false,
         current: Location,
         previous: Location,
-        step: Optional<MovementStep>
+        step: MovementStep?
     )
 
     fun BitAccess.updateLocation(viewport: Viewport, index: Int, location: Location) {

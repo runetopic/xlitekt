@@ -27,6 +27,10 @@ data class RenderingBlock(
  *
  * Alternative rendering blocks are for rendering blocks that requires the outside player perspective.
  * An example of an alternative rendering block is for hit splat tinting as it requires the check of the outside player varbit.
+ *
+ * RenderingBlock byte buffers can be built in one of two ways. If the RenderingBlock has a known fixed size of bytes to build with,
+ * then the block is built with a ByteBuffer with a fixed capacity equal to that of the size of the RenderingBlock. If the RenderingBlock
+ * is defined with a size of -1, then this means the block requires a dynamically growing buffer when building. This is done with BytePacketBuilder.
  */
 internal fun Collection<HighDefinitionRenderingBlock>.invokeHighDefinitionPlayerRenderingBlocks(player: Player) = dynamicBuffer {
     writeMask(fold(0) { current, next -> current or next.renderingBlock.mask }.let { if (it > 0xff) it or 0x10 else it })
@@ -34,8 +38,10 @@ internal fun Collection<HighDefinitionRenderingBlock>.invokeHighDefinitionPlayer
         val renderingBlock = block.renderingBlock
         val size = renderingBlock.size
         if (size == -1) {
+            // If the rendering block has a size of -1, this means the block requires a buffer that can dynamically grow.
             dynamicBuffer { renderingBlock.dynamic?.invoke(block.render, this) }
         } else {
+            // If the rendering block has a fixed size then we can just allocate with ByteBuffer with a fixed capacity.
             ByteBuffer.allocate(size).also {
                 renderingBlock.fixed?.invoke(block.render, it)
             }.flip().moveToByteArray()
@@ -85,8 +91,10 @@ internal fun Collection<HighDefinitionRenderingBlock>.invokeHighDefinitionNPCRen
         val renderingBlock = block.renderingBlock
         val size = renderingBlock.size
         if (size == -1) {
+            // If the rendering block has a size of -1, this means the block requires a buffer that can dynamically grow.
             dynamicBuffer { renderingBlock.dynamic?.invoke(block.render, this) }
         } else {
+            // If the rendering block has a fixed size then we can just allocate with ByteBuffer with a fixed capacity.
             ByteBuffer.allocate(size).also {
                 renderingBlock.fixed?.invoke(block.render, it)
             }.flip().moveToByteArray()

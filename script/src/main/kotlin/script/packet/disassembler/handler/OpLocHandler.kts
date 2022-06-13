@@ -5,6 +5,7 @@ import xlitekt.cache.provider.config.loc.LocEntryTypeProvider
 import xlitekt.game.actor.angleTo
 import xlitekt.game.actor.cancelAll
 import xlitekt.game.actor.player.Player
+import xlitekt.game.actor.player.opLoc
 import xlitekt.game.actor.queueStrong
 import xlitekt.game.actor.routeTo
 import xlitekt.game.content.interact.GameObjectInteraction
@@ -58,8 +59,7 @@ onPacketHandler<OpLocPacket> {
         queueStrong {
             routeTo(gameObject) {
                 angleTo(gameObject)
-                player.target = gameObject
-                player.opScript = gameObjectInteraction
+                opLoc(clickedOption, gameObject)
             }
         }
     }

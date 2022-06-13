@@ -21,6 +21,14 @@ fun BytePacketBuilder.writeStringCp1252NullTerminated(value: String) {
     writeByte(0)
 }
 
+fun BytePacketBuilder.writeByte(value: Int) {
+    writeByte(value.toByte())
+}
+
+fun BytePacketBuilder.writeShort(value: Int) {
+    writeShort(value.toShort())
+}
+
 fun BytePacketBuilder.writeByteAdd(value: Int) {
     writeByte((value.toByte() + 128).toByte())
 }

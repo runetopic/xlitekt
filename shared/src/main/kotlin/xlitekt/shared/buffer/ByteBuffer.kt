@@ -5,8 +5,8 @@ import java.nio.ByteBuffer
 
 /**
  * @author Jordan Abraham
- * Extension functions for the ByteBuffer class used for building packets with a fixed capacity.
- * Extension functions for the ByteBuffer class used for unpacking packets.
+ * Extension functions for the ByteBuffer class for unpacking cache data.
+ * Extension functions for the ByteBuffer class used for building packets.
  */
 fun ByteBuffer.readStringCp1252NullTerminated() = String(readUChars(duplicate().discardUntilDelimiter(0))).also {
     discard(1)
@@ -45,9 +45,22 @@ tailrec fun ByteBuffer.readIncrSmallSmart(increment: Int = readUShortSmart(), of
     return readIncrSmallSmart(offset = offset + Short.MAX_VALUE)
 }
 
-fun ByteBuffer.readShortSmart() = if (tryPeek() < 128) readUByte() - 64 else readUShort() - 49152
-fun ByteBuffer.readUShortSmart() = if (tryPeek() < 128) readUByte() else readUShort() - (Short.MAX_VALUE + 1)
-fun ByteBuffer.readUIntSmart() = if (tryPeek() < 0) readInt() and Integer.MAX_VALUE else readUShort().toShort().let { if (it == Short.MAX_VALUE) -1 else it }.toInt()
+fun ByteBuffer.readShortSmart(): Int {
+    val peek = readUByte()
+    return if (peek < 128) peek - 64 else (peek shl 8 or readUByte()) - 49152
+}
+
+fun ByteBuffer.readUShortSmart(): Int {
+    val peek = readUByte()
+    return if (peek < 128) peek else (peek shl 8 or readUByte()) - 32768
+}
+
+fun ByteBuffer.readUIntSmart(): Int {
+    val peek = readUByte()
+    return if (peek < 0) ((peek shl 24) or (readUByte() shl 16) or (readUByte() shl 8) or readUByte()) and Integer.MAX_VALUE else {
+        (peek shl 8 or readUByte()).toShort().let { if (it == Short.MAX_VALUE) -1 else it }.toInt()
+    }
+}
 
 tailrec fun ByteBuffer.readVarInt(increment: Int = readByte(), offset: Int = 0): Int {
     if (increment >= 0) return offset or increment
@@ -137,7 +150,7 @@ fun ByteBuffer.fill(n: Int, value: Int) {
     repeat(n) { put(value.toByte()) }
 }
 
-fun ByteBuffer.tryPeek() = duplicate().readUByte()
+fun ByteBuffer.tryPeek() = this[position()].toInt() and 0xff
 
 fun ByteBuffer.discard(n: Int) {
     position(position() + n)

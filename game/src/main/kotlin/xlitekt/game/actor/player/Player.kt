@@ -34,6 +34,9 @@ import xlitekt.game.world.map.Location
 import xlitekt.shared.lazy
 import kotlin.math.abs
 import kotlin.math.floor
+import xlitekt.game.content.interact.GameObjectInteraction
+import xlitekt.game.content.interact.InteractionMap
+import xlitekt.game.world.map.GameObject
 
 /**
  * @author Jordan Abraham
@@ -217,4 +220,12 @@ fun Player.process() {
         speed { false }
     }
     restoreRunEnergy()
+}
+
+fun Player.opLoc(option: String, gameObject: GameObject) {
+    val gameObjectInteraction = GameObjectInteraction(this, gameObject, option)
+    val handledLocs = InteractionMap.handledObjectInteractions[gameObject.id] ?: return
+    handledLocs.invoke(gameObjectInteraction)
+    target = gameObject
+    opScript = gameObjectInteraction
 }
