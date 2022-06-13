@@ -8,6 +8,7 @@ import xlitekt.game.actor.movement.MovementRequest
 import xlitekt.game.actor.movement.MovementSpeed
 import xlitekt.game.actor.movement.MovementStep
 import xlitekt.game.actor.movement.pf.PathFinders
+import xlitekt.game.actor.movement.pf.PathFinders.reached
 import xlitekt.game.actor.npc.NPC
 import xlitekt.game.actor.player.Player
 import xlitekt.game.actor.player.drainRunEnergy
@@ -35,6 +36,8 @@ import xlitekt.game.actor.render.block.LowDefinitionRenderingBlock
 import xlitekt.game.actor.render.block.NPCRenderingBlockListener
 import xlitekt.game.actor.render.block.PlayerRenderingBlockListener
 import xlitekt.game.actor.render.block.RenderingBlock
+import xlitekt.game.content.interact.InteractableTarget
+import xlitekt.game.content.interact.InteractionScript
 import xlitekt.game.queue.ActorScriptQueue
 import xlitekt.game.queue.QueuedScriptPriority
 import xlitekt.game.queue.SuspendableQueuedScript
@@ -42,6 +45,7 @@ import xlitekt.game.world.World
 import xlitekt.game.world.map.GameObject
 import xlitekt.game.world.map.Location
 import xlitekt.game.world.map.directionTo
+import xlitekt.game.world.map.withinDistance
 import xlitekt.game.world.map.zone.Zone
 import xlitekt.shared.inject
 import java.util.Optional
@@ -51,11 +55,20 @@ import java.util.Optional
  * @author Jordan Abraham
  */
 abstract class Actor(
-    open var location: Location,
-) {
+    override var location: Location,
+) : InteractableTarget(location) {
     val movement = Movement()
     val bonuses = Bonuses()
     var previousLocation = Location.None
+
+    // TODO this should probably be another class like InteractableActor
+    var target: InteractableTarget? = null
+    var apRangeCalled: Boolean = false
+    var currentApRange: Int = 10
+    var apScript: InteractionScript? = null
+    var opScript: InteractionScript? = null
+    var persistent: Boolean = false
+    var delayed: Boolean = false
 
     val queue = ActorScriptQueue()
 
@@ -106,32 +119,43 @@ abstract class Actor(
     abstract fun totalHitpoints(): Int
     abstract fun currentHitpoints(): Int
 
+    fun inOperableDistance(): Boolean = when (target) {
+        is GameObject -> reached(this, target as GameObject)
+        else -> target != null && this.location.withinDistance(this.target!!.location, 1) && PathFinders.hasLineOfWalk(
+            srcX = this.location.x,
+            srcZ = this.location.z,
+            z = this.location.level,
+            destX = this.target!!.location.x,
+            destZ = this.target!!.location.z,
+            destWidth = this.target!!.width(),
+            destHeight = this.target!!.height(),
+            srcSize = this.size(),
+        )
+    }
+
+    fun inApproachDistance(): Boolean =
+        target != null && this.location.withinDistance(this.target!!.location, currentApRange) && PathFinders.hasLineOfSight(
+            srcX = this.location.x,
+            srcZ = this.location.z,
+            z = this.location.level,
+            destX = this.target!!.location.x,
+            destZ = this.target!!.location.z,
+            destWidth = this.target!!.width(),
+            destHeight = this.target!!.height(),
+            srcSize = this.size(),
+        )
+
     /**
      * Processes any pending movement this actor may have. This happens every tick.
      */
     internal fun processMovement(players: NonBlockingHashMapLong<Player>): MovementStep? = movement.process(this).also { step ->
         location = step?.location ?: location
 
-        if (step == null) {
-            movement.movementRequest.ifPresent {
-                val reached = location.packedLocation == it.waypoints.last() && !it.alternative
-                if (this is Player && !reached) {
-                    message { "You can't reach that." }
-                    resetMiniMapFlag()
-                }
-                if (reached) {
-                    it.reachAction?.invoke()
-                }
-                movement.movementRequest = Optional.empty()
-            }
-            resetMovement()
-        } else {
-            if (this is Player) {
-                if (shouldRebuildMap()) rebuildNormal(players) { false }
-
-                drainRunEnergy()
-            }
+        if (this is Player) {
+            if (shouldRebuildMap()) rebuildNormal(players) { false }
+            drainRunEnergy()
         }
+
         if (shouldRebuildZones() && zone.isPresent) {
             if (zone.isPresent) {
                 zone.get().leaveZone(this, world.zone(location))
@@ -303,6 +327,21 @@ fun Actor.angleTo(npc: NPC) {
  */
 fun Actor.cancelAll() {
     queue.cancelAllScripts()
+    apScript = null
+    opScript = null
+    currentApRange = 10
+    apRangeCalled = false
+    target = null
+    persistent = false
+}
+
+fun Actor.resetInteractions() {
+    apScript = null
+    opScript = null
+    currentApRange = 10
+    apRangeCalled = false
+    target = null
+    persistent = false
 }
 
 /**
@@ -369,8 +408,6 @@ fun Actor.routeTo(location: Location, reachAction: (() -> Unit)? = null) {
         )
     )
 }
-
-typealias ReachedAction = () -> Unit
 
 /**
  * Route this actor to a game object.
@@ -549,3 +586,88 @@ private fun Actor.queue(priority: QueuedScriptPriority = QueuedScriptPriority.No
     queue.queue(this, priority, task)
     return true
 }
+
+fun Actor.processInteractions(players: NonBlockingHashMapLong<Player>): MovementStep? {
+    var interacted = false
+    this.apRangeCalled = false
+
+    val opScript = this.opScript
+    val apScript = this.apScript
+
+    if (!delayed && !containsModal()) {
+        when {
+            opScript != null && inOperableDistance() && (target is Player || target is NPC) -> {
+                opScript.execute()
+                interacted = true
+            }
+            apScript != null && inApproachDistance() -> {
+                apScript.execute()
+                interacted = true
+            }
+            inApproachDistance() -> { /* no-op */ }
+            inOperableDistance() && (target is Player || target is NPC) -> {
+                if (this is Player) message { "Nothing interesting happens." }
+                interacted = true
+            }
+        }
+    }
+
+    val location = this.location
+
+    val movementUpdates = processMovement(players)
+
+    val moved = this.location != location
+
+    if (moved) {
+        // TODO update last movement clock. This is used for scripts arrivedelay
+    }
+
+    if (!delayed && !containsModal()) {
+        /* If the interacted boolean wasn't set to true, or if a script that executed above called aprange(n), process the second block. */
+        if (!interacted || apRangeCalled) {
+            when {
+                opScript != null && inOperableDistance() && ((target is Player || target is NPC) || !moved) -> {
+                    opScript.execute()
+                    interacted = true
+                }
+                apScript != null && inApproachDistance() -> {
+                    apRangeCalled = false
+                    apScript.execute()
+                    interacted = true
+                }
+                inApproachDistance() -> {
+                    if (this is Player) message { "Nothing interesting happens." }
+                    interacted = true
+                }
+                inOperableDistance() && ((target is Player || target is NPC) || !moved) -> {
+                    if (this is Player) message { "Nothing interesting happens." }
+                    interacted = true
+                }
+            }
+        }
+    }
+
+    if (!delayed && !containsModal()) {
+        movementUpdates.also { step ->
+            if (step?.location == null) {
+                movement.movementRequest.ifPresent {
+                    val reached = location.packedLocation == it.waypoints.last() && !it.alternative
+                    if (this is Player && !reached) {
+                        message { "You can't reach that." }
+                        resetMiniMapFlag()
+                    }
+                    if (reached) {
+                        it.reachAction?.invoke()
+                    }
+                    movement.movementRequest = Optional.empty()
+                }
+                resetMovement()
+            }
+        }
+        if (interacted && !apRangeCalled && !persistent) resetInteractions()
+    }
+
+    return movementUpdates
+}
+
+fun Actor.containsModal() = this is Player && this.interfaces.modalOpen()

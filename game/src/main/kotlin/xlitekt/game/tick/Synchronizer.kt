@@ -1,23 +1,23 @@
 package xlitekt.game.tick
 
-import java.util.Optional
 import org.jctools.maps.NonBlockingHashMapLong
 import org.jctools.maps.NonBlockingHashSet
 import xlitekt.game.actor.movement.MovementStep
 import xlitekt.game.actor.npc.NPC
 import xlitekt.game.actor.player.Player
+import xlitekt.game.actor.processInteractions
 import xlitekt.game.actor.render.block.invokeAlternativeDefinitionPlayerRenderingBlocks
 import xlitekt.game.actor.render.block.invokeHighDefinitionNPCRenderingBlocks
 import xlitekt.game.actor.render.block.invokeHighDefinitionPlayerRenderingBlocks
 import xlitekt.game.actor.render.block.invokeLowDefinitionPlayerRenderingBlocks
 import xlitekt.game.packet.NPCInfoPacket
 import xlitekt.game.packet.PlayerInfoPacket
-import xlitekt.game.tick.NPCInfoUpdates.HighDefinitionNPCUpdates
-import xlitekt.game.tick.NPCInfoUpdates.MovementStepsNPCUpdates
+import xlitekt.game.tick.NPCInfoUpdates.*
 import xlitekt.game.tick.PlayerInfoUpdates.*
 import xlitekt.game.world.World
 import xlitekt.game.world.map.zone.Zone
 import xlitekt.shared.inject
+import java.util.Optional
 
 /**
  * @author Jordan Abraham
@@ -27,11 +27,11 @@ abstract class Synchronizer : Runnable {
     protected val world by inject<World>()
 
     protected fun Player.syncMovement(players: NonBlockingHashMapLong<Player>) {
-        processMovement(players)?.let { MovementStepsPlayerUpdates.add(indexL, it) }
+        processInteractions(players)?.let { MovementStepsPlayerUpdates.add(indexL, it) }
     }
 
     protected fun NPC.syncMovement(players: NonBlockingHashMapLong<Player>) {
-        processMovement(players)?.let { MovementStepsNPCUpdates.add(indexL, it) }
+        processInteractions(players)?.let { MovementStepsNPCUpdates.add(indexL, it) }
     }
 
     protected fun Player.syncRenderingBlocks() {

@@ -1,7 +1,5 @@
 package script.command
 
-import xlitekt.game.actor.animate
-import xlitekt.game.actor.player.addExperience
 import xlitekt.game.actor.player.message
 import xlitekt.game.actor.queueNormal
 import xlitekt.game.content.command.Commands.onCommand
@@ -59,11 +57,11 @@ onCommand("add2").use {
 }
 
 onCommand("delete").use {
-    val loc = zone().locsSpawned.first()
-    if (zone().requestRemoveLoc(loc)) {
-        CollisionMap.removeObjectCollision(loc)
-        message { "true" }
-    }
+//    val loc = zone().locsSpawned.first()
+//    if (zone().requestRemoveLoc(loc)) {
+//        CollisionMap.removeObjectCollision(loc)
+//        message { "true" }
+//    }
 }
 
 onCommand("addall").use {
@@ -80,7 +78,7 @@ onCommand("addall").use {
 
 onCommand("deleteall").use {
     zones().forEach { zone ->
-        zone.objsSpawned.forEach(zone::requestRemoveObj)
+        zone.objs.forEach(zone::requestRemoveObj)
     }
 }
 

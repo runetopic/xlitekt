@@ -170,7 +170,10 @@ fun Viewport.lowDefinitionActivities(other: Player?, updates: Optional<ByteArray
     val theirLocation = other?.location ?: Location.None
     return when {
         // If the player needs to be added from low definition to high definition.
-        size + (updates.orElse(byteArrayOf())?.size ?: 0) <= blockBufferLimit && other?.isOnline() == true && theirLocation != Location.None && theirLocation.withinDistance(ourLocation, viewDistance) -> Adding
+        size + (updates.orElse(byteArrayOf())?.size ?: 0) <= blockBufferLimit && other?.isOnline() == true && theirLocation != Location.None && theirLocation.withinDistance(
+            ourLocation,
+            viewDistance
+        ) -> Adding
         updates.isEmpty -> null
         else -> null
     }

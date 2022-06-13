@@ -1,5 +1,6 @@
 package xlitekt.game.content.item
 
+import xlitekt.game.content.interact.InteractableTarget
 import xlitekt.game.world.map.Location
 
 /**
@@ -8,5 +9,5 @@ import xlitekt.game.world.map.Location
 data class FloorItem(
     val id: Int,
     val amount: Int,
-    val location: Location
-)
+    override val location: Location
+) : InteractableTarget(location)

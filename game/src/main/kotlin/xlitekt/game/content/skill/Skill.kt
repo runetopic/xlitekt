@@ -49,6 +49,10 @@ enum class Skill(val id: Int) {
             return if (includeVirtualLevels) 126 else 99
         }
 
+        fun interpolate(level: Int, lowChance: Int, highChance: Int): Int {
+            return lowChance + (highChance - lowChance) * (level - 1) / 98
+        }
+
         fun valueOf(int: Int): Skill = values().first { it.id == int }
 
         fun valueOf(value: String): Skill {

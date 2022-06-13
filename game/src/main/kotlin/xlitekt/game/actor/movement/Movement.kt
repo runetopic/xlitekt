@@ -138,7 +138,10 @@ class Movement {
         return enqueueSteps(currentX + xSign, currentZ + zSign, waypointX, waypointZ, xSign, zSign, level)
     }
 
-    fun isMoving(): Boolean = !steps.isEmpty || !checkpoints.isEmpty
+    fun hasSteps(): Boolean = !steps.isEmpty
+    fun hasCheckpoints(): Boolean = !checkpoints.isEmpty
+
+    fun isMoving(): Boolean = !hasSteps() || !hasCheckpoints()
 
     /**
      * Resets this movement.

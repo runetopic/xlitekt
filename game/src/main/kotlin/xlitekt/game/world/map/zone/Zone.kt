@@ -34,8 +34,8 @@ class Zone(
     val players: NonBlockingHashSet<Player> = NonBlockingHashSet(),
     val npcs: NonBlockingHashSet<NPC> = NonBlockingHashSet(),
     private val locs: HashSet<GameObject> = HashSet(64),
-    val locsSpawned: HashSet<GameObject> = HashSet(),
-    val objsSpawned: HashSet<FloorItem> = HashSet(),
+    private val locsSpawned: HashSet<GameObject> = HashSet(),
+    val objs: HashSet<FloorItem> = HashSet(),
 ) {
     private lateinit var neighboringZones: Set<Zone>
     private val objRequests = HashMap<FloorItem, Boolean>()
@@ -74,7 +74,7 @@ class Zone(
         if (objRequests.isNotEmpty()) {
             for (request in objRequests) {
                 val obj = request.key
-                if (request.value) objsSpawned.add(obj) else objsSpawned.remove(objsSpawned.firstOrNull { it.id == obj.id && it.location == obj.location })
+                if (request.value) objs.add(obj) else objs.remove(objs.firstOrNull { it.id == obj.id && it.location == obj.location })
             }
             objRequests.clear()
         }
@@ -115,7 +115,7 @@ class Zone(
                 }
                 val updates = HashSet<Packet>(requestSize())
                 // If zone contains any of the following, send them to the client.
-                for (obj in zone.objsSpawned.filter { it !in objRequests }) {
+                for (obj in zone.objs.filter { it !in objRequests }) {
                     // Filter obj requests out as they will be added later in the loop.
                     updates.addObj(actor, obj)
                 }
@@ -220,12 +220,12 @@ class Zone(
      * Returns a list of floor items that are inside this zone and neighboring zones.
      * By default, the range is limited to a standard 7x7 build area.
      */
-    fun neighboringObjs() = neighboringZones.map(Zone::objsSpawned).flatten()
+    fun neighboringObjs() = neighboringZones.map(Zone::objs).flatten()
 
     /**
      * Returns if this zone is active or not.
      */
-    fun active() = players.isNotEmpty() || npcs.isNotEmpty() || objsSpawned.isNotEmpty() || locsSpawned.isNotEmpty() || updating()
+    fun active() = players.isNotEmpty() || npcs.isNotEmpty() || objs.isNotEmpty() || locsSpawned.isNotEmpty() || updating()
 
     /**
      * Returns if this zone needs updating or not.
