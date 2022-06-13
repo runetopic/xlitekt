@@ -15,4 +15,5 @@ dependencies {
     implementation(project(":network"))
     implementation(project(":script"))
     implementation(project(":shared"))
+    implementation(project(":synchronizer"))
 }

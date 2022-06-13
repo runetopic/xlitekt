@@ -4,13 +4,9 @@ import com.github.michaelbull.logging.InlineLogger
 import xlitekt.cache.provider.config.loc.LocEntryTypeProvider
 import xlitekt.game.actor.angleTo
 import xlitekt.game.actor.cancelAll
-import xlitekt.game.actor.player.Player
 import xlitekt.game.actor.player.opLoc
 import xlitekt.game.actor.queueStrong
 import xlitekt.game.actor.routeTo
-import xlitekt.game.content.interact.GameObjectInteraction
-import xlitekt.game.content.interact.InteractionMap.handledObjectInteractions
-import xlitekt.game.content.interact.interact
 import xlitekt.game.packet.OpLocPacket
 import xlitekt.game.packet.disassembler.handler.onPacketHandler
 import xlitekt.game.world.map.Location

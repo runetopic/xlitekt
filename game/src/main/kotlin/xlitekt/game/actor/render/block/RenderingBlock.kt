@@ -32,7 +32,7 @@ data class RenderingBlock(
  * then the block is built with a ByteBuffer with a fixed capacity equal to that of the size of the RenderingBlock. If the RenderingBlock
  * is defined with a size of -1, then this means the block requires a dynamically growing buffer when building. This is done with BytePacketBuilder.
  */
-internal fun Collection<HighDefinitionRenderingBlock>.invokeHighDefinitionPlayerRenderingBlocks(player: Player) = dynamicBuffer {
+fun Collection<HighDefinitionRenderingBlock>.invokeHighDefinitionPlayerRenderingBlocks(player: Player) = dynamicBuffer {
     writeMask(fold(0) { current, next -> current or next.renderingBlock.mask }.let { if (it > 0xff) it or 0x10 else it })
     associateWith { block ->
         val renderingBlock = block.renderingBlock
@@ -59,7 +59,7 @@ internal fun Collection<HighDefinitionRenderingBlock>.invokeHighDefinitionPlayer
  * Creates a new ByteArray from a collection of LowDefinitionRenderingBlock for players.
  * This is used by the player info packet for building low definition blocks for players.
  */
-internal fun Collection<LowDefinitionRenderingBlock>.invokeLowDefinitionPlayerRenderingBlocks() = dynamicBuffer {
+fun Collection<LowDefinitionRenderingBlock>.invokeLowDefinitionPlayerRenderingBlocks() = dynamicBuffer {
     writeMask(fold(0) { current, next -> current or next.renderingBlock.mask }.let { if (it > 0xff) it or 0x10 else it })
     map(LowDefinitionRenderingBlock::bytes).forEach {
         for (b in it) {
@@ -72,7 +72,7 @@ internal fun Collection<LowDefinitionRenderingBlock>.invokeLowDefinitionPlayerRe
  * Creates a new ByteArray from a collection of AlternativeDefinitionRenderingBlock for players.
  * This is used by the player update for both high and low definition updates that require outside player checks.
  */
-internal fun Collection<AlternativeDefinitionRenderingBlock>.invokeAlternativeDefinitionPlayerRenderingBlocks() = dynamicBuffer {
+fun Collection<AlternativeDefinitionRenderingBlock>.invokeAlternativeDefinitionPlayerRenderingBlocks() = dynamicBuffer {
     writeMask(fold(0) { current, next -> current or next.renderingBlock.mask }.let { if (it > 0xff) it or 0x10 else it })
     map(AlternativeDefinitionRenderingBlock::bytes).forEach {
         for (b in it) {
@@ -85,7 +85,7 @@ internal fun Collection<AlternativeDefinitionRenderingBlock>.invokeAlternativeDe
  * Creates a new ByteArray from a collection of HighDefinitionRenderingBlock for npcs.
  * This is used by the npc update.
  */
-internal fun Collection<HighDefinitionRenderingBlock>.invokeHighDefinitionNPCRenderingBlocks() = dynamicBuffer {
+fun Collection<HighDefinitionRenderingBlock>.invokeHighDefinitionNPCRenderingBlocks() = dynamicBuffer {
     writeMask(fold(0) { current, next -> current or next.renderingBlock.mask }.let { if (it > 0xff) it or 0x4 else it })
     map { block ->
         val renderingBlock = block.renderingBlock

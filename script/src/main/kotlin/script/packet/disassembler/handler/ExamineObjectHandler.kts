@@ -2,7 +2,6 @@ package script.packet.disassembler.handler
 
 import xlitekt.cache.provider.config.loc.LocEntryTypeProvider
 import xlitekt.game.actor.player.message
-import xlitekt.game.content.interact.examine
 import xlitekt.game.packet.ExamineObjectPacket
 import xlitekt.game.packet.disassembler.handler.onPacketHandler
 import xlitekt.shared.inject
@@ -29,6 +28,6 @@ onPacketHandler<ExamineObjectPacket> {
         it.id == packet.objectID
     } ?: return@onPacketHandler
 
-    if (!player.examine(gameObject))
-        player.message { examine.message }
+//    if (!player.examine(gameObject))
+    player.message { examine.message }
 }

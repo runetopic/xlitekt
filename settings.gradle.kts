@@ -58,6 +58,7 @@ include(
         "game",
         "network",
         "script",
-        "shared"
+        "shared",
+        "synchronizer"
     )
 )

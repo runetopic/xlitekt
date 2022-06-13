@@ -10,7 +10,6 @@ import io.ktor.utils.io.ByteReadChannel
 import io.ktor.utils.io.ByteWriteChannel
 import io.ktor.utils.io.ClosedWriteChannelException
 import io.ktor.utils.io.close
-import io.ktor.utils.io.writeFully
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.TimeoutCancellationException
 import kotlinx.coroutines.channels.ClosedReceiveChannelException
@@ -88,16 +87,16 @@ class Client(
         if (assembler.size != -1 && assembler.size != -2) {
             assembler.packet.invoke(packet, writePool)
         } else {
-            val startPosition = writePool.position()
-            writePool.position(writePool.position() + if (assembler.size == -1) 1 else 2)
-            val offsetPosition = writePool.position()
+            val startPos = writePool.position()
+            val offset = startPos + if (assembler.size == -1) 1 else 2
+            writePool.position(offset)
             assembler.packet.invoke(packet, writePool)
-            val endPosition = writePool.position()
-            val size = endPosition - offsetPosition
-            writePool.position(startPosition)
+            val endPos = writePool.position()
+            val size = endPos - offset
+            writePool.position(startPos)
             if (assembler.size == -1) writePool.writeByte(size)
             else writePool.writeShort(size)
-            writePool.position(endPosition)
+            writePool.position(endPos)
         }
     }
 

@@ -19,8 +19,8 @@ import java.util.concurrent.ConcurrentMap
 class World(
     private val players: PlayerList = PlayerList(MAX_PLAYERS),
     private val npcs: NPCList = NPCList(MAX_NPCS),
-    internal val loginRequests: ConcurrentMap<Player, Client> = ConcurrentHashMap(),
-    internal val logoutRequests: ConcurrentHashMap.KeySetView<Player, Boolean> = ConcurrentHashMap.newKeySet()
+    val loginRequests: ConcurrentMap<Player, Client> = ConcurrentHashMap(),
+    val logoutRequests: ConcurrentHashMap.KeySetView<Player, Boolean> = ConcurrentHashMap.newKeySet()
 ) {
     private val maps by inject<MapSquareEntryTypeProvider>()
     private val npcSpawns by inject<NPCSpawns>()
@@ -72,7 +72,7 @@ class World(
     // Doing it this way to reduce cpu time.
     fun players() = players.filter { it != null && it.isOnline() } as List<Player>
 
-    internal fun playersMapped(): NonBlockingHashMapLong<Player> {
+    fun playersMapped(): NonBlockingHashMapLong<Player> {
         val list = players()
         val map = NonBlockingHashMapLong<Player>(list.size)
         for (i in 0..list.lastIndex) {

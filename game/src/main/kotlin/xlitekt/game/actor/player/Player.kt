@@ -78,7 +78,7 @@ class Player(
      * Initiates this player when logging into the game world.
      * This happens before anything else.
      */
-    internal fun init(client: Client, players: NonBlockingHashMapLong<Player>) {
+    fun init(client: Client, players: NonBlockingHashMapLong<Player>) {
         this.client = client
         previousLocation = location
         rebuildNormal(players) { true }
@@ -136,7 +136,7 @@ class Player(
      * The pool is then cleared after operation.
      * This happens every tick.
      */
-    internal fun invokeAndClearWritePool() = client?.invokeAndClearWritePool()
+    fun invokeAndClearWritePool() = client?.invokeAndClearWritePool()
 
     /**
      * Invokes and handles the pooled packets sent from the connected client.
@@ -144,7 +144,7 @@ class Player(
      * The pool is then cleared after operation.
      * This happens every tick.
      */
-    internal fun invokeAndClearReadPool() = client?.invokeAndClearReadPool()
+    fun invokeAndClearReadPool() = client?.invokeAndClearReadPool()
 
     /**
      * Returns if this player needs a map rebuild.

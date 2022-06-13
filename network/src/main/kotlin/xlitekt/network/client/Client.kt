@@ -162,7 +162,7 @@ private suspend fun Client.readLogin() {
                 return disconnect("Bad session.")
             }
             val rsaBlock = ByteBuffer.wrap(BigInteger(rsa).modPow(BigInteger(rsaExponent), BigInteger(rsaModulus)).toByteArray())
-            if (!rsaBlock.readByte().toInt().toBoolean()) {
+            if (!rsaBlock.readByte().toBoolean()) {
                 writeResponse(BAD_SESSION_OPCODE)
                 return disconnect("Bad session.")
             }
@@ -172,7 +172,7 @@ private suspend fun Client.readLogin() {
                 writeResponse(BAD_SESSION_OPCODE)
                 return disconnect("Bad Session. Client/Server seed miss-match. ClientSeed=$clientSeed Seed=$seed")
             }
-            when (val authenticationType = rsaBlock.readByte().toInt()) {
+            when (val authenticationType = rsaBlock.readByte()) {
                 1 -> rsaBlock.discard(4)
                 0, 3 -> rsaBlock.discard(3)
                 2 -> rsaBlock.discard(4)
@@ -187,10 +187,10 @@ private suspend fun Client.readLogin() {
             readChannel.readAvailable(xtea, 0, xtea.size)
             val xteaBlock = ByteBuffer.wrap(xtea.fromXTEA(32, clientKeys))
             val username = xteaBlock.readStringCp1252NullTerminated()
-            val clientSettings = xteaBlock.readByte().toInt()
+            val clientSettings = xteaBlock.readByte()
             val clientResizeable = (clientSettings shr 1) == 1
-            val clientWidth = xteaBlock.readUShort().toInt()
-            val clientHeight = xteaBlock.readUShort().toInt()
+            val clientWidth = xteaBlock.readUShort()
+            val clientHeight = xteaBlock.readUShort()
             xteaBlock.discard(24)
             val token = xteaBlock.readStringCp1252NullTerminated()
             if (token != Client.token) {
@@ -226,7 +226,7 @@ private suspend fun Client.readLogin() {
             xteaBlock.readInt()
             xteaBlock.readInt()
             xteaBlock.readStringCp1252NullCircumfixed()
-            val clientType = xteaBlock.readUByte().toInt()
+            val clientType = xteaBlock.readUByte()
             val cacheCRCs = IntArray(store.validIndexCount()) { store.index(it).crc }
             val clientCRCs = IntArray(21) { -1 }
             if (xteaBlock.readInt() != 0 || xteaBlock.readInt() != 0) {
