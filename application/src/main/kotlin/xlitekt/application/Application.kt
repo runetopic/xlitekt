@@ -20,6 +20,7 @@ import xlitekt.network.Network
 import xlitekt.network.networkModule
 import xlitekt.shared.lazy
 import xlitekt.shared.sharedModule
+import xlitekt.synchronizer.synchronizerModule
 import java.util.TimeZone
 import kotlin.script.templates.standard.ScriptTemplateWithArgs
 import kotlin.system.measureTimeMillis
@@ -98,7 +99,8 @@ fun Application.installKoin() {
             cacheModule,
             gameModule,
             networkModule,
-            sharedModule
+            sharedModule,
+            synchronizerModule
         )
     }
     log.debug("Installed koin modules.")

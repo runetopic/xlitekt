@@ -109,7 +109,7 @@ abstract class Actor(
     /**
      * Processes any pending movement this actor may have. This happens every tick.
      */
-    internal fun processMovement(players: NonBlockingHashMapLong<Player>): MovementStep? = movement.process(this).also { step ->
+    fun processMovement(players: NonBlockingHashMapLong<Player>): MovementStep? = movement.process(this).also { step ->
         location = step?.location ?: location
 
         if (step == null) {
@@ -140,7 +140,7 @@ abstract class Actor(
     /**
      * Returns a list of this actors high definition rendering blocks.
      */
-    internal fun highDefinitionRenderingBlocks() = highDefinitionRenderingBlocks.values
+    fun highDefinitionRenderingBlocks() = highDefinitionRenderingBlocks.values
 
     /**
      * Adds a high definition rendering block to a low definition one.
@@ -158,12 +158,12 @@ abstract class Actor(
     /**
      * Returns a list of this actors low definition rendering blocks.
      */
-    internal fun lowDefinitionRenderingBlocks() = lowDefinitionRenderingBlocks.values
+    fun lowDefinitionRenderingBlocks() = lowDefinitionRenderingBlocks.values
 
     /**
      * Happens after this actor has finished processing by the game loop.
      */
-    internal fun resetDefinitionRenderingBlocks() {
+    fun resetDefinitionRenderingBlocks() {
         // Clear the high definition blocks.
         highDefinitionRenderingBlocks.clear()
         // We only want to persist these types of low definition blocks.
@@ -193,8 +193,8 @@ abstract class Actor(
     /**
      * Returns a map of this players alternative rendering blocks.
      */
-    internal fun alternativeHighDefinitionRenderingBlocks() = alternativeHighDefinitionRenderingBlocks.values
-    internal fun alternativeLowDefinitionRenderingBlocks() = alternativeLowDefinitionRenderingBlocks.values
+    fun alternativeHighDefinitionRenderingBlocks() = alternativeHighDefinitionRenderingBlocks.values
+    fun alternativeLowDefinitionRenderingBlocks() = alternativeLowDefinitionRenderingBlocks.values
 
     /**
      * Returns if this actor needs a zones rebuild.
