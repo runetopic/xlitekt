@@ -81,31 +81,35 @@ class Synchronizer(
     )
 
     override fun run() {
-        if (!game.online) return
+        try {
+            if (!game.online) return
 
-        if (game.shuttingdown) {
-            if (!forkJoinPool.isShutdown) forkJoinPool.shutdown()
-            return
-        }
-
-        val time = measureTime {
-            val players = world.players()
-            val npcs = world.npcs()
-            val syncPlayers = world.playersMapped()
-
-            val job = forkJoinPool.submit {
-                logoutsSynchronizerTask.execute(syncPlayers, players)
-                loginsSynchronizerTask.execute(syncPlayers, players)
-                playersSynchronizerTask.execute(syncPlayers, players)
-                npcsSynchronizerTask.execute(syncPlayers, npcs)
-                zonesSynchronizerTask.execute(syncPlayers, players)
-                clientsSynchronizerTask.execute(syncPlayers, players)
-                zonesSynchronizerTask.finish()
-                clientsSynchronizerTask.finish()
+            if (game.shuttingdown) {
+                if (!forkJoinPool.isShutdown) forkJoinPool.shutdown()
+                return
             }
 
-            job.get(600L, TimeUnit.MILLISECONDS)
+            val time = measureTime {
+                val players = world.players()
+                val npcs = world.npcs()
+                val syncPlayers = world.playersMapped()
+
+                val job = forkJoinPool.submit {
+                    logoutsSynchronizerTask.execute(syncPlayers, players)
+                    loginsSynchronizerTask.execute(syncPlayers, players)
+                    playersSynchronizerTask.execute(syncPlayers, players)
+                    npcsSynchronizerTask.execute(syncPlayers, npcs)
+                    zonesSynchronizerTask.execute(syncPlayers, players)
+                    clientsSynchronizerTask.execute(syncPlayers, players)
+                    zonesSynchronizerTask.finish()
+                    clientsSynchronizerTask.finish()
+                }
+
+                job.get(600L, TimeUnit.MILLISECONDS)
+            }
+            logger.debug { "Synchronizer completed in $time targeting ${forkJoinPool.parallelism} threads." }
+        } catch (exception: Exception) {
+            logger.error(exception) { "Exception caught in synchronizer." }
         }
-        logger.debug { "Synchronizer completed in $time targeting ${forkJoinPool.parallelism} threads." }
     }
 }
