@@ -15,7 +15,8 @@ import kotlinx.coroutines.TimeoutCancellationException
 import kotlinx.coroutines.channels.ClosedReceiveChannelException
 import kotlinx.coroutines.runBlocking
 import org.jctools.maps.NonBlockingHashSet
-import xlitekt.game.packet.MovementPacket
+import xlitekt.game.packet.MoveGameClickPacket
+import xlitekt.game.packet.MoveMinimapClickPacket
 import xlitekt.game.packet.Packet
 import xlitekt.game.packet.PublicChatPacket
 import xlitekt.game.packet.assembler.PacketAssemblerListener
@@ -101,8 +102,9 @@ class Client(
     }
 
     internal fun addToReadPool(packetHandler: PacketHandler<Packet>) {
-        readPool.removeIf { it::packet::class == MovementPacket::class }
-        readPool.removeIf { it::packet::class == PublicChatPacket::class }
+        readPool.removeIf {
+            it::packet::class == MoveGameClickPacket::class || it::packet::class == MoveMinimapClickPacket::class || it::packet::class == PublicChatPacket::class
+        }
         readPool.add(packetHandler)
     }
 
