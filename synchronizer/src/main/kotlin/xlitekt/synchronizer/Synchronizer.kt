@@ -1,12 +1,14 @@
 package xlitekt.synchronizer
 
 import com.github.michaelbull.logging.InlineLogger
-import org.jctools.maps.NonBlockingHashSet
+import kotlinx.coroutines.asCoroutineDispatcher
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.runBlocking
 import xlitekt.game.Game
 import xlitekt.game.actor.npc.NPC
 import xlitekt.game.actor.player.Player
 import xlitekt.game.world.World
-import xlitekt.game.world.map.zone.Zone
 import xlitekt.shared.inject
 import xlitekt.synchronizer.builder.MovementUpdatesBuilder
 import xlitekt.synchronizer.builder.NpcHighDefinitionUpdatesBuilder
@@ -17,7 +19,9 @@ import xlitekt.synchronizer.builder.PlayerLowDefinitionUpdatesBuilder
 import xlitekt.synchronizer.task.ClientsSynchronizerTask
 import xlitekt.synchronizer.task.LoginsSynchronizerTask
 import xlitekt.synchronizer.task.LogoutsSynchronizerTask
+import xlitekt.synchronizer.task.NpcsBuildersTask
 import xlitekt.synchronizer.task.NpcsSynchronizerTask
+import xlitekt.synchronizer.task.PlayersBuildersTask
 import xlitekt.synchronizer.task.PlayersSynchronizerTask
 import xlitekt.synchronizer.task.ZonesSynchronizerTask
 import java.util.concurrent.ForkJoinPool
@@ -29,13 +33,12 @@ import kotlin.time.measureTime
 class Synchronizer(
     private val forkJoinPool: ForkJoinPool
 ) : Runnable {
-    private val logger = InlineLogger()
-
-    private val game by inject<Game>()
-    private val world by inject<World>()
+    private val dispatcher = forkJoinPool.asCoroutineDispatcher()
 
     private val loginsSynchronizerTask = LoginsSynchronizerTask()
     private val logoutsSynchronizerTask = LogoutsSynchronizerTask()
+    private val playersSynchronizerTask = PlayersSynchronizerTask()
+    private val npcsSynchronizerTask = NpcsSynchronizerTask()
 
     private val playerMovementUpdatesBuilder = MovementUpdatesBuilder<Player>()
     private val playerHighDefinitionUpdatesBuilder = PlayerHighDefinitionUpdatesBuilder()
@@ -46,9 +49,7 @@ class Synchronizer(
     private val npcMovementUpdatesBuilder = MovementUpdatesBuilder<NPC>()
     private val npcHighDefinitionUpdatesBuilder = NpcHighDefinitionUpdatesBuilder()
 
-    private val zoneUpdates = NonBlockingHashSet<Zone>()
-
-    private val playersSynchronizerTask = PlayersSynchronizerTask(
+    private val playersBuildersTask = PlayersBuildersTask(
         listOf(
             playerMovementUpdatesBuilder,
             playerHighDefinitionUpdatesBuilder,
@@ -58,16 +59,14 @@ class Synchronizer(
         )
     )
 
-    private val npcsSynchronizerTask = NpcsSynchronizerTask(
+    private val npcsBuildersTask = NpcsBuildersTask(
         listOf(
             npcMovementUpdatesBuilder,
             npcHighDefinitionUpdatesBuilder
         )
     )
 
-    private val zonesSynchronizerTask = ZonesSynchronizerTask(
-        zoneUpdates
-    )
+    private val zonesSynchronizerTask = ZonesSynchronizerTask()
 
     private val clientsSynchronizerTask = ClientsSynchronizerTask(
         playerMovementUpdatesBuilder,
@@ -88,27 +87,44 @@ class Synchronizer(
                 return
             }
 
+            val players = world.players()
+            val npcs = world.npcs()
+
             val time = measureTime {
-                val players = world.players()
-                val npcs = world.npcs()
                 val syncPlayers = world.playersMapped()
 
-                val job = forkJoinPool.submit {
-                    logoutsSynchronizerTask.execute(syncPlayers, players)
-                    loginsSynchronizerTask.execute(syncPlayers, players)
+                runBlocking(dispatcher) {
+                    awaitAll(
+                        async { logoutsSynchronizerTask.execute(syncPlayers, players) },
+                        async { loginsSynchronizerTask.execute(syncPlayers, players) }
+                    )
+
                     playersSynchronizerTask.execute(syncPlayers, players)
                     npcsSynchronizerTask.execute(syncPlayers, npcs)
                     zonesSynchronizerTask.execute(syncPlayers, players)
-                    clientsSynchronizerTask.execute(syncPlayers, players)
-                    zonesSynchronizerTask.finish()
-                    clientsSynchronizerTask.finish()
-                }
 
-                job.get()
+                    awaitAll(
+                        async { playersBuildersTask.execute(syncPlayers, players) },
+                        async { npcsBuildersTask.execute(syncPlayers, npcs) },
+                    )
+
+                    clientsSynchronizerTask.execute(syncPlayers, players)
+
+                    awaitAll(
+                        async { zonesSynchronizerTask.finish() },
+                        async { clientsSynchronizerTask.finish() }
+                    )
+                }
             }
-            logger.debug { "Synchronizer completed in $time targeting ${forkJoinPool.parallelism} threads." }
+            logger.debug { "[Synchronizer] [$time] [Threads=${forkJoinPool.parallelism}] [Players=${players.size}] [Npcs=${npcs.size}]" }
         } catch (exception: Exception) {
             logger.error(exception) { "Exception caught in synchronizer." }
         }
+    }
+
+    private companion object {
+        val logger = InlineLogger()
+        val game by inject<Game>()
+        val world by inject<World>()
     }
 }
