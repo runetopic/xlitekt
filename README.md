@@ -43,21 +43,30 @@ We will be writing a tutorial in the future for dumping packets sizes and other 
 **Please change the RSA tokens for a production based environment, these keys are just an example. Do not use this for anything other than local development.**
 ```shell
 game {
+    # Set to true if you want to benchmark the server performance.
     benchmarking = false
+    # Target number of cores for the server to use for synchronization.
+    # The maximum number of cores allowed = the number of cores on the CPU.
+    cores = 8
+    # Supported client build information.
     build {
         major = 202
         minor = 1
     }
+    # Client -> Server packet sizes in order by packet ID.
     packet {
         sizes = [ 3, 8, 16, -1, -1, 8, 2, 1, 8, 0, 8, 8, 0, 2, 16, 16, 8, 9, 11, 8, 8, 7, 2, 4, 7, 4, -1, 7, 15, 8, -1, 8, 9, 7, 15, 6, -1, 3, 11, 15, 4, 8, 8, 8, -1, -2, 3, 3, 5, -1, -1, -1, -1, 7, 7, 0, 7, -1, -1, 3, -2, 3, 8, 3, 8, 0, 8, 4, 7, 11, 3, 6, 8, 11, 3, 8, 7, 4, -1, 2, 15, 7, 8, 3, 14, 3, -1, 10, 8, 13, 3, -1, 3, -1, 7, -1, 0, -2, -1, -1, 2, -1, -1, -1, 3, -1 ]
     }
+    # The server cache files directory.
     cache {
         path = "./cache/"
     }
+    # The RSA exponent and modulus for the login block.
     rsa {
         exponent = "74319506585812759823290259020934858088666404737094871101540670473424793671202076033582991318775440709937362678616598621443723414224839661646087632908361014054642952231258678163322462341878133664959918342102621655539431162351843502897522597279543226584696172903586455624355061037387268986011976499046968675073"
         modulus = "101152132894052393265886644489429469067887733993499471826334750806131431774995232950094045980615261210482740859538462033841944288877997111341162261129657268035424385776764492943939466200272309679088830878857767599863397432612329236019641861788901097158810527108145428907942159175673330991981851896173021952237"
     }
+    # Server resources paths.
     resources {
         xteas = "/map/xteas202.json"
         interface_info = "/ui/interface_info.json"

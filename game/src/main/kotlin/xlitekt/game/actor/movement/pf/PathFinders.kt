@@ -1,5 +1,6 @@
 package xlitekt.game.actor.movement.pf
 
+import io.ktor.server.application.ApplicationEnvironment
 import org.rsmod.pathfinder.DumbPathFinder
 import org.rsmod.pathfinder.Route
 import org.rsmod.pathfinder.SmartPathFinder
@@ -10,6 +11,7 @@ import java.util.concurrent.ConcurrentLinkedDeque
 /**
  * @author Jordan Abraham
  */
+private val environment by inject<ApplicationEnvironment>()
 private val zoneFlags by inject<ZoneFlags>()
 
 private const val DEFAULT_DEST_WIDTH = 0
@@ -23,7 +25,7 @@ private val dumb = DumbPathFinder(
 )
 
 private val smart = ConcurrentLinkedDeque<SmartPathFinder>().also {
-    repeat(Runtime.getRuntime().availableProcessors()) { _ ->
+    repeat(environment.config.property("game.cores").getString().toInt()) { _ ->
         it.add(
             SmartPathFinder(
                 flags = zoneFlags.flags,
