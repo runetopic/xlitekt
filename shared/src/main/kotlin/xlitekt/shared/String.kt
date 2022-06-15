@@ -3,9 +3,10 @@ package xlitekt.shared
 /**
  * @author Jordan Abraham
  */
-fun String.formatChatMessage(): String {
+fun String.formatChatMessage() = buildString {
     val symbols = listOf('.', '!', '?', ':')
-    return replace("_", " ").lowercase().foldIndexed("") { index, current, next ->
-        current + if (index == 0 || current[index - 1] in symbols) next.uppercase() else next
+    val raw = replace("_", " ").lowercase()
+    raw.forEachIndexed { index, c ->
+        append(if (index == 0 || raw[index - 1] in symbols) c.uppercase() else c)
     }
 }
