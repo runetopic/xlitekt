@@ -17,7 +17,7 @@ private val provider by inject<NPCEntryTypeProvider>()
  */
 onPacketHandler<ExamineNPCPacket> {
     if (!provider.exists(packet.npcId)) return@onPacketHandler
-    val neighboringNpcs = player.zone().neighboringNpcs()
+    val neighboringNpcs = player.zone.neighboringNpcs()
 
     if (neighboringNpcs.isEmpty()) {
         logger.debug { "NPC-Examine NPC id ${packet.npcId} not found" }

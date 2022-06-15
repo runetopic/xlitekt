@@ -65,7 +65,7 @@ fun BitAccess.highDefinition(
 
 fun BitAccess.lowDefinition(viewport: Viewport, blocks: BytePacketBuilder, highDefinitionUpdates: Array<ByteArray?>) {
     val player = viewport.player
-    player.zone().neighboringNpcs().forEach {
+    player.zone.neighboringNpcs().forEach {
         val updates = highDefinitionUpdates[it.index]
         // Check the activities this npc is doing.
         val activity = lowDefinitionActivities(viewport, it, player.location, updates)

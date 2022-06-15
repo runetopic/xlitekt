@@ -31,7 +31,7 @@ onPacketHandler<OpLocPacket> {
     logger.debug { "Clicked loc op objectId=$locId, x=$x, z=$z, running=$running" }
 
     // The objects in our zone.
-    val objects = player.zone().neighboringLocs()
+    val objects = player.zone.neighboringLocs()
 
     // Server check if this zone objects contains the clicked object id.
     if (objects.none { it.id == locId }) return@onPacketHandler

@@ -152,7 +152,7 @@ fun Viewport.highDefinitionActivities(other: Player?, updates: ByteArray?, movem
     val theirLocation = other?.location ?: Location.None
     return when {
         // If the player needs to be removed from high definition to low definition.
-        other?.isOnline() == false || theirLocation == Location.None || !theirLocation.withinDistance(ourLocation, viewDistance) -> Removing
+        other?.online == false || theirLocation == Location.None || !theirLocation.withinDistance(ourLocation, viewDistance) -> Removing
         // If the player is moving (Teleporting, Walking, Running).
         movementStep != null -> if (movementStep.speed == MovementSpeed.Teleporting) Teleporting else Moving
         // If the player has block updates.
@@ -166,7 +166,7 @@ fun Viewport.lowDefinitionActivities(other: Player?, updates: ByteArray?, size: 
     val theirLocation = other?.location ?: Location.None
     return when {
         // If the player needs to be added from low definition to high definition.
-        size + (updates?.size ?: 0) <= blockBufferLimit && other?.isOnline() == true && theirLocation != Location.None && theirLocation.withinDistance(ourLocation, viewDistance) -> Adding
+        size + (updates?.size ?: 0) <= blockBufferLimit && other?.online == true && theirLocation != Location.None && theirLocation.withinDistance(ourLocation, viewDistance) -> Adding
         updates == null -> null
         else -> null
     }

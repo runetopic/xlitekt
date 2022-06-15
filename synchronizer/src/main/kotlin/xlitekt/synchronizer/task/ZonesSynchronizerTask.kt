@@ -13,7 +13,7 @@ class ZonesSynchronizerTask : SynchronizerTask<Player> {
 
     override fun execute(syncPlayers: NonBlockingHashMapLong<Player>, actors: List<Player>) {
         actors.parallelStream().forEach {
-            it.zones().filter(Zone::updating).forEach { zone ->
+            it.zones.filter(Zone::updating).forEach { zone ->
                 zoneUpdates.add(zone.invokeUpdateRequests(it))
             }
         }

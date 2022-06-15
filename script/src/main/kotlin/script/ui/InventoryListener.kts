@@ -25,7 +25,7 @@ onInterface<UserInterface.Inventory> {
             5 -> {
                 // drop
                 inventory.removeItem(slot, item) {
-                    zone().requestAddObj(FloorItem(item.id, item.amount, location))
+                    zone.requestAddObj(FloorItem(item.id, item.amount, location))
                 }
             }
         }

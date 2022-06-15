@@ -107,10 +107,8 @@ class SynchronizerBenchmark(
 
                 runBlocking(dispatcher) {
                     val loginsLogoutsTime = measureTime {
-                        awaitAll(
-                            async { logoutsSynchronizerTask.execute(syncPlayers, players) },
-                            async { loginsSynchronizerTask.execute(syncPlayers, players) }
-                        )
+                        logoutsSynchronizerTask.execute(syncPlayers, players)
+                        loginsSynchronizerTask.execute(syncPlayers, players)
                     }
                     logger.debug { "[$tick] [Logins and Logouts] [$loginsLogoutsTime]" }
 

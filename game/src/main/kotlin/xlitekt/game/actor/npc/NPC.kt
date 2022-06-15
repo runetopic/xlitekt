@@ -19,7 +19,7 @@ class NPC(
 
     fun init() {
         previousLocation = location
-        zone().enterZone(this)
+        zone.enterZone(this)
         lazy<EventBus>().notify(Events.NPCSpawnEvent(this))
     }
 

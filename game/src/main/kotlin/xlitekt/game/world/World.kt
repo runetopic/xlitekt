@@ -70,7 +70,7 @@ class World(
 
     @Suppress("UNCHECKED_CAST")
     // Doing it this way to reduce cpu time.
-    fun players() = players.filter { it != null && it.isOnline() } as List<Player>
+    fun players() = players.filter { it != null && it.online } as List<Player>
 
     fun playersMapped(): NonBlockingHashMapLong<Player> {
         val list = players()
