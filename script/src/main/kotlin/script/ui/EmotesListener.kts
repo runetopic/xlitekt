@@ -75,7 +75,7 @@ onInterface<Emotes> {
     }
 
     onClick {
-            val emote = enumValues<Emote>().find { emote -> emote.slotId == it.slotId } ?: return@onClick
+        val emote = enumValues<Emote>().find { emote -> emote.slotId == it.slotId } ?: return@onClick
         val sequence = sequences[emote.emoteName] ?: return@onClick
         // Not every emote has a spot animation associated with it.
         val spotAnimation = spotAnimations[emote.emoteName]

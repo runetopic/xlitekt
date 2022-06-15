@@ -1,6 +1,5 @@
 package script.packet.disassembler
 
-import xlitekt.game.packet.MoveGameClickPacket
 import xlitekt.game.packet.MoveMinimapClickPacket
 import xlitekt.game.packet.disassembler.onPacketDisassembler
 import xlitekt.shared.buffer.readUByte

@@ -43,7 +43,7 @@ onCommand("xp").use {
 onCommand("add").use {
 //    val item = FloorItem(4151, 1, location)
     val loc = GameObject(1342, location, 10, 0)
-    if (zone().requestAddLoc(loc)) {
+    if (zone.requestAddLoc(loc)) {
         CollisionMap.addObjectCollision(loc)
         message { "true" }
     }
@@ -53,7 +53,7 @@ onCommand("add2").use {
     val item = FloorItem(4151, 1, location)
 //    val loc = GameObject(1124, location, 22, 0)
 //    CollisionMap.addObjectCollision(loc)
-    message { "${zone().requestAddObj(item)}" }
+    message { "${zone.requestAddObj(item)}" }
 }
 
 onCommand("delete").use {
@@ -67,7 +67,7 @@ onCommand("delete").use {
 onCommand("addall").use {
 //    val zone = world.zone(Location(3222, 3222, 0))
 //    zone.requestAddObj(FloorItem(4151, 1, Location(3222, 3222, 0)))
-    zones().forEach { zone ->
+    zones.forEach { zone ->
         repeat(8) { x ->
             repeat(8) { z ->
                 zone.requestAddObj(FloorItem(4151, 1, Location(zone.location.x + x, zone.location.z + z, 0)))
@@ -77,18 +77,18 @@ onCommand("addall").use {
 }
 
 onCommand("deleteall").use {
-    zones().forEach { zone ->
+    zones.forEach { zone ->
         zone.objs.forEach(zone::requestRemoveObj)
     }
 }
 
 onCommand("test").use {
-    zone().npcs.forEach { println(it.entry?.name) }
+    zone.npcs.forEach { println(it.entry?.name) }
 }
 
 onCommand("proj").use {
     val projectile = Projectile(1465, location, location.transform(6, 0, 0), 43, 31, 36, 16, 64)
-    zone().requestAddMapProjAnim(projectile)
+    zone.requestAddMapProjAnim(projectile)
 }
 
 onCommand("design").use {

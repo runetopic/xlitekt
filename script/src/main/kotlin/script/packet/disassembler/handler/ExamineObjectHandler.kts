@@ -19,7 +19,7 @@ onPacketHandler<ExamineObjectPacket> {
     if (examine.message.isEmpty()) return@onPacketHandler
 
     // The objects in our zone.
-    val objects = player.zone().neighboringLocs()
+    val objects = player.zone.neighboringLocs()
 
     // Server check if this zone objects contains the clicked object id.
     if (objects.none { it.id == packet.objectID }) return@onPacketHandler

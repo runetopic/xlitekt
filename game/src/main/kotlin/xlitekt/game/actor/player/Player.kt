@@ -69,7 +69,8 @@ class Player(
     /**
      * This players online var. If true this player is processed by the game loop.
      */
-    private var online = false
+    var online = false
+        private set
 
     override fun totalHitpoints(): Int = 100
     override fun currentHitpoints(): Int = 100
@@ -84,7 +85,7 @@ class Player(
         rebuildNormal(players) { true }
         interfaces.openTop(interfaces.currentInterfaceLayout.interfaceId)
         invokeAndClearWritePool()
-        zone().enterZone(this)
+        zone.enterZone(this)
         login()
     }
 
@@ -114,12 +115,10 @@ class Player(
         online = false
         write(LogoutPacket(0))
         invokeAndClearWritePool()
-        zone().leaveZone(this)
+        zone.leaveZone(this)
         lazy<World>().removePlayer(this)
         lazy<PlayerJsonEncoderService>().requestSave(this)
     }
-
-    fun isOnline() = online
 
     /**
      * Pools a packet to be sent to the client.

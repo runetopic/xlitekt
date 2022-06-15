@@ -12,7 +12,7 @@ import xlitekt.game.packet.disassembler.handler.onPacketHandler
 private val logger = InlineLogger()
 
 onPacketHandler<OpNPCPacket> {
-    val neighboringNpcs = player.zone().neighboringNpcs()
+    val neighboringNpcs = player.zone.neighboringNpcs()
 
     if (neighboringNpcs.isEmpty() || neighboringNpcs.none { it.index == packet.npcIndex }) {
         logger.debug { "World does not contain NPC Index = ${packet.npcIndex}" }

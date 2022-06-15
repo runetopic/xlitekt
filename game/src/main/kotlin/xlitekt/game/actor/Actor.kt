@@ -81,12 +81,13 @@ abstract class Actor(
     /**
      * Represents this actor current location zone.
      */
-    private var zone = world.zone(Location.None)
+    var zone = world.zone(Location.None)
+        private set
 
     /**
      * Represents this actor 7x7 build area of zones.
      */
-    private val zones = HashSet<Zone>(49)
+    val zones = HashSet<Zone>(49)
 
     /**
      * High definition rendering blocks used for local updates.
@@ -223,7 +224,7 @@ abstract class Actor(
     /**
      * Returns if this actor needs a zones rebuild.
      */
-    private fun shouldRebuildZones() = zone().location.zoneId != location.zoneId
+    private fun shouldRebuildZones() = zone.location.zoneId != location.zoneId
 
     /**
      * Flags this actor with a new pending rendering block.
@@ -246,22 +247,12 @@ abstract class Actor(
     }
 
     /**
-     * Returns the current zone this actor is inside of.
-     */
-    fun zone(): Zone = zone
-
-    /**
      * Set this actor current zone.
      * @param zone The zone to set.
      */
     fun setZone(zone: Zone) {
         this.zone = zone
     }
-
-    /**
-     * Returns a list of this actor zones.
-     */
-    fun zones() = zones
 
     /**
      * Set this actor zones with a list of zones being removed and a list of zones being added.

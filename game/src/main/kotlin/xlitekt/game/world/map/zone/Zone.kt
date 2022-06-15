@@ -93,7 +93,7 @@ class Zone(
     fun enterZone(actor: Actor) {
         if (!::neighboringZones.isInitialized) setNeighboringZones()
         // This actor current zones.
-        val zones = actor.zones()
+        val zones = actor.zones
         // Zones that are being removed from this actor current zones.
         val removed = zones - neighboringZones
         // Zones that are being added to this actor current zones.
