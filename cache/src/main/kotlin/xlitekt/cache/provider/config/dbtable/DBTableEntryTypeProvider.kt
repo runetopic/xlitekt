@@ -32,7 +32,7 @@ class DBTableEntryTypeProvider : EntryTypeProvider<DBTableEntryType>() {
                     val isDefault = setting and 128 != 0
                     val var7 = IntArray(readUByte()) { readUShortSmart() }
                     type.field4668!![column] = var7
-                    if (isDefault) { // L: 54
+                    if (isDefault) {
                         if (type.field4669 == null) {
                             type.field4669 = arrayOfNulls(type.field4668!!.size)
                         }
