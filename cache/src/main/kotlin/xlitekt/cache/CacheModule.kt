@@ -37,6 +37,9 @@ import xlitekt.cache.provider.ui.InterfaceEntryTypeProvider
 import xlitekt.cache.provider.vorbis.VorbisEntryTypeProvider
 import xlitekt.shared.lazy
 import java.nio.file.Path
+import xlitekt.cache.provider.config.dbrow.DBRowEntryTypeProvider
+import xlitekt.cache.provider.config.dbtable.DBTableEntryTypeProvider
+import xlitekt.cache.provider.dbindex.DBIndexEntryTypeProvider
 
 /**
  * @author Jordan Abraham
@@ -88,4 +91,7 @@ val cacheModule = module(createdAtStart = true) {
     single { VorbisEntryTypeProvider() }
     single { SoundEffectEntryTypeProvider() }
     single { MusicEntryTypeProvider() }
+    single { DBIndexEntryTypeProvider() }
+    single { DBTableEntryTypeProvider() }
+    single { DBRowEntryTypeProvider() }
 }

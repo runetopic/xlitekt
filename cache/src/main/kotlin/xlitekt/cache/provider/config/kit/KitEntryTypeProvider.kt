@@ -18,7 +18,7 @@ class KitEntryTypeProvider : EntryTypeProvider<KitEntryType>() {
         .map { ByteBuffer.wrap(it.data).loadEntryType(KitEntryType(it.id)) }
         .associateBy(KitEntryType::id)
 
-    override fun ByteBuffer.loadEntryType(type: KitEntryType): KitEntryType {
+    override tailrec fun ByteBuffer.loadEntryType(type: KitEntryType): KitEntryType {
         when (val opcode = readUByte()) {
             0 -> { assertEmptyAndRelease(); return type }
             1 -> type.bodyPartId = readUByte()

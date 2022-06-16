@@ -16,6 +16,10 @@ import xlitekt.cache.cacheModule
 import xlitekt.cache.provider.EntryType
 import xlitekt.cache.provider.binary.title.TitleEntryType
 import xlitekt.cache.provider.binary.title.TitleEntryTypeProvider
+import xlitekt.cache.provider.config.dbrow.DBRowEntryType
+import xlitekt.cache.provider.config.dbrow.DBRowEntryTypeProvider
+import xlitekt.cache.provider.config.dbtable.DBTableEntryType
+import xlitekt.cache.provider.config.dbtable.DBTableEntryTypeProvider
 import xlitekt.cache.provider.config.enum.EnumEntryType
 import xlitekt.cache.provider.config.enum.EnumEntryTypeProvider
 import xlitekt.cache.provider.config.hitbar.HitBarEntryType
@@ -52,6 +56,8 @@ import xlitekt.cache.provider.config.varp.VarpEntryType
 import xlitekt.cache.provider.config.varp.VarpEntryTypeProvider
 import xlitekt.cache.provider.config.worldmap.WorldMapElementEntryType
 import xlitekt.cache.provider.config.worldmap.WorldMapElementEntryTypeProvider
+import xlitekt.cache.provider.dbindex.DBIndexEntryType
+import xlitekt.cache.provider.dbindex.DBIndexEntryTypeProvider
 import xlitekt.cache.provider.font.FontEntryType
 import xlitekt.cache.provider.font.FontEntryTypeProvider
 import xlitekt.cache.provider.instrument.InstrumentEntryType
@@ -122,6 +128,9 @@ internal object CacheDumper {
     private val fonts by inject<FontEntryTypeProvider>()
     private val musics by inject<MusicEntryTypeProvider>()
     private val instruments by inject<InstrumentEntryTypeProvider>()
+    private val dbIndexes by inject<DBIndexEntryTypeProvider>()
+    private val dbRows by inject<DBRowEntryTypeProvider>()
+    private val dbTables by inject<DBTableEntryTypeProvider>()
 
     private val json = Json {
         prettyPrint = true
@@ -169,7 +178,10 @@ internal object CacheDumper {
             "titlescreen" to titlescreen,
             "fonts" to fonts,
             "musics" to musics,
-            "instruments" to instruments
+            "instruments" to instruments,
+            "dbIndexes" to dbIndexes,
+            "dbRows" to dbRows,
+            "dbTables" to dbTables
         ).entries.parallelStream().forEach {
             val path = Path.of("./cache/data/dump/${it.key}/")
             if (path.notExists()) path.createDirectories()
@@ -311,6 +323,9 @@ internal object CacheDumper {
                 soundfont.sf2Soundbank.resources.forEach(soundbank::addResource)
                 soundfont.sf2Soundbank.save(File(path.toString(), "$id.sf2"))
             }
+            is DBIndexEntryType -> json.encodeToStream(this, Path.of("$path/$id.json").outputStream())
+            is DBRowEntryType -> json.encodeToStream(this, Path.of("$path/$id.json").outputStream())
+            is DBTableEntryType -> json.encodeToStream(this, Path.of("$path/$id.json").outputStream())
         }
     }
 
