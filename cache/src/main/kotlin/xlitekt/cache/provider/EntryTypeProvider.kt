@@ -48,7 +48,7 @@ abstract class EntryTypeProvider<R : EntryType> {
         const val FONT_INDEX = 13
         const val VORBIS_INDEX = 14
         const val INSTRUMENT_INDEX = 15
-        const val DBTABLES_INDEX = 21
+        const val DB_INDEXES_INDEX = 21
 
         // Config groups.
         const val FLOOR_UNDERLAY_CONFIG = 1
