@@ -13,7 +13,7 @@ import java.nio.ByteBuffer
 class DBIndexEntryTypeProvider : EntryTypeProvider<DBIndexEntryType>() {
 
     override fun load(): Map<Int, DBIndexEntryType> = store
-        .index(DBTABLES_INDEX)
+        .index(DB_INDEXES_INDEX)
         .groups()
         .flatMap { group ->
             group.files().map { ByteBuffer.wrap(it.data).loadEntryType(DBIndexEntryType((group.id shl 8 and 0xff) or (it.id and 0xff))) }
@@ -22,8 +22,8 @@ class DBIndexEntryTypeProvider : EntryTypeProvider<DBIndexEntryType>() {
 
     override fun ByteBuffer.loadEntryType(type: DBIndexEntryType): DBIndexEntryType {
         val size = method7754()
-        val field4670: MutableList<DBValue<*>?> = MutableList(size) { null }
-        val field4673: MutableList<Map<Any, List<Int>>?> = MutableList(size) { null }
+        val field4670 = MutableList<DBValue<*>?>(size) { null }
+        val field4673 = MutableList<Map<Any, List<Int>>?>(size) { null }
 
         repeat(size) {
             field4670[it] = DBValueIndexMap[readUByte()]
