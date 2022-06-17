@@ -1,6 +1,7 @@
 @Suppress("DSL_SCOPE_VIOLATION")
 // https://youtrack.jetbrains.com/issue/KTIJ-19369
 plugins {
+    application
     alias(deps.plugins.jvm)
 }
 
@@ -16,4 +17,10 @@ dependencies {
     implementation(project(":script"))
     implementation(project(":shared"))
     implementation(project(":synchronizer"))
+}
+
+application {
+    mainClass.set("xlitekt.application.ApplicationKt")
+    applicationDefaultJvmArgs = listOf("-XX:+UnlockExperimentalVMOptions", "-XX:+UseZGC")
+    tasks.run.get().workingDir = rootProject.projectDir
 }

@@ -5,19 +5,13 @@
  ![](https://tokei.rs/b1/github/runetopic/xlitekt)
 
 # Getting Started
-_Make sure to download the latest #202 cache version from one of the archives below. We don't push this to github for
-obvious reasons._
-
-Download a cache and xteas (JSON) from [archive.openrs2.org](https://archive.openrs2.org/).
-
-Place the cache you downloaded into the ``./cache/data/`` folder inside of the project. This path is configurable in
-the [application.conf](/src/main/resources/application.conf).
-
-**Generate RSA tokens and update your application.conf file**
-
-_This will eventually be a gradle task to generate new RSA keys. For now, you can reference the rune-server thread: [any-revision-enabling-rsa](https://www.rune-server.ee/runescape-development/rs2-server/tutorials/305532-any-revision-enabling-rsa.html)_
-
-**Install the corresponding xteas inside of the [map](/src/main/resources/map) folder in resources.**
+1. We provide an application-example.conf by default. Rename this file to ``application.conf``. The configurations are set up to run Xlite out of the box. Change any of the configurations to fit your needs.
+2. Download the supported revision cache (.dat2 format) and map keys (.json format) from [OpenRS2](https://archive.openrs2.org/caches).
+3. Place the cache files you downloaded into the ``./cache/data/`` directory. This is configurable in the application.conf under the application module.
+4. Place the map keys you downloaded into the ``./application/resources/map/`` directory. ``xteas202.json`` is an example of how the file should be named.
+5. Generate the server and client RSA key pair using the ``generateRSA`` Gradle task. Follow the additional instructions from the console after the task is executed. ``./gradlew generateRSA``
+6. Download the revision gamepack.jar from [Runestats](https://archive.runestats.com/osrs/) and place this in the ``./application/resources/client_config/`` directory. ``gamepack.jar`` is an example of how the file should be named.
+7. Run the application.
 
 # Application configuration
 
@@ -36,11 +30,8 @@ ktor {
     }
 }
 ```
-Configuration for game related properties. You will need to generate your RSA exponent and modulus, as well as the packet sizes.
+**Configuration for the game can be found in the ``game`` block.**
 
-We will be writing a tutorial in the future for dumping packets sizes and other information from the current OSRS client as well as the gradle task to generate RSA tokens.
-
-**Please change the RSA tokens for a production based environment, these keys are just an example. Do not use this for anything other than local development.**
 ```shell
 game {
     # Set to true if you want to benchmark the server performance.
@@ -76,27 +67,6 @@ game {
         varbits = "/var/varbits.json"
     }
 }
-```
-
-# Maps
-Maps are loaded using the xteas provided from OpenRS2, which follows this format:
-
-```json
-[
- {
-    "archive": 5,
-    "group": 5932,
-    "name_hash": -1153353684,
-    "name": "l44_81",
-    "mapsquare": 11345,
-    "key": [
-      52989138,
-      -933733387,
-      916753309,
-      1765351430
-    ]
-  }
-]
 ```
 
 # Features

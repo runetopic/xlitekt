@@ -57,6 +57,7 @@ include(
         "cache",
         "game",
         "network",
+        "rsa",
         "script",
         "shared",
         "synchronizer"

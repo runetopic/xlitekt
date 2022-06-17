@@ -5,6 +5,9 @@ import xlitekt.game.fs.PlayerJsonEncoderService
 import xlitekt.game.world.World
 import xlitekt.shared.inject
 
+/**
+ * @author Jordan Abraham
+ */
 class Game {
 
     var online = false
