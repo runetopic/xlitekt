@@ -347,7 +347,7 @@ internal object CacheDumper {
             is Int -> encoder.encodeInt(value)
             is Long -> encoder.encodeLong(value)
             is String -> encoder.encodeString(value)
-            else -> throw IllegalStateException("This can only be in context of INT or STRING.")
+            else -> throw IllegalStateException("This can only be in context of Int, Long or String.")
         }
     }
 }
