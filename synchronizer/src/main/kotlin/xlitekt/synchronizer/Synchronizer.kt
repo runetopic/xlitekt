@@ -94,15 +94,18 @@ class Synchronizer(
                 val syncPlayers = world.playersMapped()
 
                 runBlocking(dispatcher) {
-                    logoutsSynchronizerTask.execute(syncPlayers, players)
-                    loginsSynchronizerTask.execute(syncPlayers, players)
+                    awaitAll(
+                        async { logoutsSynchronizerTask.execute(syncPlayers, players) },
+                        async { loginsSynchronizerTask.execute(syncPlayers, players) }
+                    )
+
                     playersSynchronizerTask.execute(syncPlayers, players)
                     npcsSynchronizerTask.execute(syncPlayers, npcs)
                     zonesSynchronizerTask.execute(syncPlayers, players)
 
                     awaitAll(
                         async { playersBuildersTask.execute(syncPlayers, players) },
-                        async { npcsBuildersTask.execute(syncPlayers, npcs) },
+                        async { npcsBuildersTask.execute(syncPlayers, npcs) }
                     )
 
                     clientsSynchronizerTask.execute(syncPlayers, players)
