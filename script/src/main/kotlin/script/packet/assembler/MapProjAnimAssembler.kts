@@ -8,12 +8,12 @@ import xlitekt.shared.buffer.writeByteNegate
 import xlitekt.shared.buffer.writeShort
 import xlitekt.shared.buffer.writeShortLittleEndian
 import xlitekt.shared.buffer.writeShortLittleEndianAdd
-import xlitekt.shared.lazyInject
+import xlitekt.shared.insert
 
 /**
  * @author Jordan Abraham
  */
-lazyInject<PacketAssemblerListener>().assemblePacket<MapProjAnimPacket>(opcode = 64, size = 15) {
+insert<PacketAssemblerListener>().assemblePacket<MapProjAnimPacket>(opcode = 64, size = 15) {
     it.writeByteAdd(packedOffset) // packedOffset
     it.writeShortLittleEndian(-1) // targetIndex
     it.writeByteNegate(distanceX) // ?

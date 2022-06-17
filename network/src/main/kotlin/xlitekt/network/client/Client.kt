@@ -43,7 +43,7 @@ import xlitekt.shared.buffer.readStringCp1252NullTerminated
 import xlitekt.shared.buffer.readUByte
 import xlitekt.shared.buffer.readUMedium
 import xlitekt.shared.buffer.readUShort
-import xlitekt.shared.lazyInject
+import xlitekt.shared.insert
 import xlitekt.shared.toBoolean
 import java.math.BigInteger
 import java.nio.ByteBuffer
@@ -265,7 +265,7 @@ private suspend fun Client.readLogin() {
                 PlayerDecoder.decodeFromJson(username, password).let {
                     it.interfaces.currentInterfaceLayout = if (clientResizeable) InterfaceLayout.RESIZABLE else InterfaceLayout.FIXED
                     this.player = it
-                    lazyInject<World>().addPlayer(it)
+                    insert<World>().addPlayer(it)
                 }.also { if (it) writeLogin(LOGIN_SUCCESS_OPCODE) else writeLogin(BAD_SESSION_OPCODE) }
             } catch (exception: Exception) {
                 handleException(exception)
@@ -289,7 +289,7 @@ private suspend fun Client.writeLogin(response: Int) {
         writeShort(player.index.toShort())
         writeByte(0)
     }.flush()
-    lazyInject<World>().requestLogin(player, this)
+    insert<World>().requestLogin(player, this)
     readPackets(player)
 }
 

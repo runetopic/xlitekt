@@ -6,13 +6,13 @@ import xlitekt.shared.buffer.readUByteNegate
 import xlitekt.shared.buffer.readUShort
 import xlitekt.shared.buffer.readUShortLittleEndian
 import xlitekt.shared.buffer.readUShortLittleEndianAdd
-import xlitekt.shared.lazyInject
+import xlitekt.shared.insert
 import xlitekt.shared.toBoolean
 
 /**
  * @author Jordan Abraham
  */
-lazyInject<PacketDisassemblerListener>().disassemblePacket(opcode = 81, size = 7) {
+insert<PacketDisassemblerListener>().disassemblePacket(opcode = 81, size = 7) {
     OpLocPacket(
         index = 1,
         x = readUShortLittleEndian(),

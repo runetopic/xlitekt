@@ -5,12 +5,12 @@ import xlitekt.game.packet.assembler.PacketAssemblerListener
 import xlitekt.shared.buffer.writeByteSubtract
 import xlitekt.shared.buffer.writeShort
 import xlitekt.shared.buffer.writeShortLittleEndian
-import xlitekt.shared.lazyInject
+import xlitekt.shared.insert
 
 /**
  * @author Jordan Abraham
  */
-lazyInject<PacketAssemblerListener>().assemblePacket<ObjAddPacket>(opcode = 61, size = 5) {
+insert<PacketAssemblerListener>().assemblePacket<ObjAddPacket>(opcode = 61, size = 5) {
     it.writeShort(id)
     it.writeByteSubtract(packedOffset)
     it.writeShortLittleEndian(amount)

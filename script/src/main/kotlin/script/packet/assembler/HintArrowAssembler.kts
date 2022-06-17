@@ -6,13 +6,13 @@ import xlitekt.game.packet.assembler.PacketAssemblerListener
 import xlitekt.shared.buffer.fill
 import xlitekt.shared.buffer.writeByte
 import xlitekt.shared.buffer.writeShort
-import xlitekt.shared.lazyInject
+import xlitekt.shared.insert
 
 /**
  * @author Jordan Abraham
  * @author Tyler Telis
  */
-lazyInject<PacketAssemblerListener>().assemblePacket<HintArrowPacket>(opcode = 43, size = 6) {
+insert<PacketAssemblerListener>().assemblePacket<HintArrowPacket>(opcode = 43, size = 6) {
     it.writeByte(type.id)
 
     when (type) {

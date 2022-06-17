@@ -27,7 +27,7 @@ import xlitekt.game.world.World
 import xlitekt.shared.buffer.writeByte
 import xlitekt.shared.buffer.writeShort
 import xlitekt.shared.inject
-import xlitekt.shared.lazyInject
+import xlitekt.shared.insert
 import java.io.IOException
 import java.net.SocketException
 import java.nio.ByteBuffer
@@ -52,7 +52,7 @@ class Client(
     fun disconnect(reason: String) {
         logger.debug { "Client disconnected for reason={$reason}." }
         if (::player.isInitialized) {
-            player.let(lazyInject<World>()::requestLogout)
+            player.let(insert<World>()::requestLogout)
         }
         writeChannel?.close()
         socket?.close()

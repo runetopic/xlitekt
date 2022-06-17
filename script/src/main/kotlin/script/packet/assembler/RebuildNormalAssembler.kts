@@ -7,7 +7,7 @@ import xlitekt.shared.buffer.writeShort
 import xlitekt.shared.buffer.writeShortAdd
 import xlitekt.shared.buffer.writeShortLittleEndian
 import xlitekt.shared.inject
-import xlitekt.shared.lazyInject
+import xlitekt.shared.insert
 import xlitekt.shared.resource.MapSquares
 
 /**
@@ -16,7 +16,7 @@ import xlitekt.shared.resource.MapSquares
  */
 private val mapSquares by inject<MapSquares>()
 
-lazyInject<PacketAssemblerListener>().assemblePacket<RebuildNormalPacket>(opcode = 54, size = -2) {
+insert<PacketAssemblerListener>().assemblePacket<RebuildNormalPacket>(opcode = 54, size = -2) {
     if (initialize) {
         viewport.init(it, players)
     }

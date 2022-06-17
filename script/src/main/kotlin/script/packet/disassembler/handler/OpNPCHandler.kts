@@ -8,11 +8,11 @@ import xlitekt.game.actor.queueStrong
 import xlitekt.game.actor.routeTo
 import xlitekt.game.packet.OpNPCPacket
 import xlitekt.game.packet.disassembler.handler.PacketHandlerListener
-import xlitekt.shared.lazyInject
+import xlitekt.shared.insert
 
 private val logger = InlineLogger()
 
-lazyInject<PacketHandlerListener>().handlePacket<OpNPCPacket> {
+insert<PacketHandlerListener>().handlePacket<OpNPCPacket> {
     val neighboringNpcs = player.zone.neighboringNpcs()
 
     if (neighboringNpcs.isEmpty() || neighboringNpcs.none { it.index == packet.npcIndex }) {

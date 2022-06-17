@@ -5,13 +5,13 @@ import xlitekt.game.packet.PublicChatPacket
 import xlitekt.game.packet.disassembler.PacketDisassemblerListener
 import xlitekt.shared.buffer.readUByte
 import xlitekt.shared.buffer.readUShortSmart
-import xlitekt.shared.lazyInject
+import xlitekt.shared.insert
 
 /**
  * @author Jordan Abraham
  * @author Tyler Telis
  */
-lazyInject<PacketDisassemblerListener>().disassemblePacket(opcode = 95, size = -1) {
+insert<PacketDisassemblerListener>().disassemblePacket(opcode = 95, size = -1) {
     val mark = availableForRead
     PublicChatPacket(
         unknown = readUByte(),

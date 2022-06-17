@@ -6,12 +6,12 @@ import xlitekt.game.packet.RunClientScriptPacket
 import xlitekt.game.packet.assembler.PacketAssemblerListener
 import xlitekt.shared.buffer.writeInt
 import xlitekt.shared.buffer.writeStringCp1252NullTerminated
-import xlitekt.shared.lazyInject
+import xlitekt.shared.insert
 
 /**
  * @author Jordan Abraham
  */
-lazyInject<PacketAssemblerListener>().assemblePacket<RunClientScriptPacket>(opcode = 71, size = -2) {
+insert<PacketAssemblerListener>().assemblePacket<RunClientScriptPacket>(opcode = 71, size = -2) {
     parameters.let { array ->
         val params = buildString {
             (array.size - 1 downTo 0).forEach { count ->

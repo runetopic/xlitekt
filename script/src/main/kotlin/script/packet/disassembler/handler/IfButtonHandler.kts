@@ -6,7 +6,7 @@ import xlitekt.game.content.ui.UserInterfaceEvent
 import xlitekt.game.packet.IfButtonPacket
 import xlitekt.game.packet.disassembler.handler.PacketHandlerListener
 import xlitekt.shared.inject
-import xlitekt.shared.lazyInject
+import xlitekt.shared.insert
 import xlitekt.shared.packedToChildId
 import xlitekt.shared.packedToInterfaceId
 
@@ -16,7 +16,7 @@ import xlitekt.shared.packedToInterfaceId
 private val logger = InlineLogger()
 private val interfaces by inject<InterfaceEntryTypeProvider>()
 
-lazyInject<PacketHandlerListener>().handlePacket<IfButtonPacket> {
+insert<PacketHandlerListener>().handlePacket<IfButtonPacket> {
     val interfaceId = packet.packedInterface.packedToInterfaceId()
     val entry = interfaces.entryType(packet.packedInterface)
     val clickEvent = UserInterfaceEvent.ButtonClickEvent(

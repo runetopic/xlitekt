@@ -10,7 +10,7 @@ import xlitekt.game.packet.OpLocPacket
 import xlitekt.game.packet.disassembler.handler.PacketHandlerListener
 import xlitekt.game.world.map.Location
 import xlitekt.shared.inject
-import xlitekt.shared.lazyInject
+import xlitekt.shared.insert
 
 /**
  * @author Jordan Abraham
@@ -18,7 +18,7 @@ import xlitekt.shared.lazyInject
 private val logger = InlineLogger()
 private val locEntryTypeProvider by inject<LocEntryTypeProvider>()
 
-lazyInject<PacketHandlerListener>().handlePacket<OpLocPacket> {
+insert<PacketHandlerListener>().handlePacket<OpLocPacket> {
     val locId = packet.locId
     val x = packet.x
     val z = packet.z

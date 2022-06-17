@@ -6,14 +6,14 @@ import xlitekt.shared.buffer.writeByte
 import xlitekt.shared.buffer.writeInt
 import xlitekt.shared.buffer.writeShort
 import xlitekt.shared.buffer.writeStringCp1252NullTerminated
-import xlitekt.shared.lazyInject
+import xlitekt.shared.insert
 import xlitekt.shared.toInt
 
 /**
  * @author Jordan Abraham
  * @author Tyler Telis
  */
-lazyInject<PacketAssemblerListener>().assemblePacket<UpdateFriendListPacket>(opcode = 38, size = -2) {
+insert<PacketAssemblerListener>().assemblePacket<UpdateFriendListPacket>(opcode = 38, size = -2) {
     for (friend in friends) {
         it.writeByte(friend.visible.toInt())
         it.writeStringCp1252NullTerminated(friend.displayName)

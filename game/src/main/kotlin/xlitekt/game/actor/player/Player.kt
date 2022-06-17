@@ -31,7 +31,7 @@ import xlitekt.game.packet.disassembler.handler.PacketHandler
 import xlitekt.game.queue.QueuedScriptPriority
 import xlitekt.game.world.World
 import xlitekt.game.world.map.Location
-import xlitekt.shared.lazyInject
+import xlitekt.shared.insert
 import kotlin.math.abs
 import kotlin.math.floor
 
@@ -99,7 +99,7 @@ class Player(
         movementType { false }
         updateRunEnergy()
         speed { VarPlayer.ToggleRun in vars }
-        lazyInject<EventBus>().notify(Events.OnLoginEvent(this))
+        insert<EventBus>().notify(Events.OnLoginEvent(this))
         // Set the player online here, so they start processing by the main game loop.
         online = true
     }
@@ -113,8 +113,8 @@ class Player(
         write(LogoutPacket(0))
         invokeAndClearWritePool()
         zone.leaveZone(this)
-        lazyInject<World>().removePlayer(this)
-        lazyInject<PlayerJsonEncoderService>().requestSave(this)
+        insert<World>().removePlayer(this)
+        insert<PlayerJsonEncoderService>().requestSave(this)
     }
 
     /**

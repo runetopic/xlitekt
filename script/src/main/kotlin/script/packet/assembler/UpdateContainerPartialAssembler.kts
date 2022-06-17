@@ -6,14 +6,14 @@ import xlitekt.shared.buffer.writeByte
 import xlitekt.shared.buffer.writeInt
 import xlitekt.shared.buffer.writeShort
 import xlitekt.shared.buffer.writeSmart
-import xlitekt.shared.lazyInject
+import xlitekt.shared.insert
 import kotlin.math.min
 
 /**
  * @author Jordan Abraham
  * @author Tyler Telis
  */
-lazyInject<PacketAssemblerListener>().assemblePacket<UpdateContainerPartialPacket>(opcode = 84, size = -2) {
+insert<PacketAssemblerListener>().assemblePacket<UpdateContainerPartialPacket>(opcode = 84, size = -2) {
     it.writeInt(packedInterface)
     it.writeShort(containerKey)
     for (slot in slots) {

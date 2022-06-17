@@ -17,13 +17,13 @@ import xlitekt.shared.buffer.BitAccess
 import xlitekt.shared.buffer.dynamicBuffer
 import xlitekt.shared.buffer.withBitAccess
 import xlitekt.shared.buffer.writeBytes
-import xlitekt.shared.lazyInject
+import xlitekt.shared.insert
 
 /**
  * @author Jordan Abraham
  * @author Tyler Telis
  */
-lazyInject<PacketAssemblerListener>().assemblePacket<NPCInfoPacket>(opcode = 78, size = -2) {
+insert<PacketAssemblerListener>().assemblePacket<NPCInfoPacket>(opcode = 78, size = -2) {
     it.writeBytes(
         dynamicBuffer {
             it.withBitAccess {

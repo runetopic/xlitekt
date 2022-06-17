@@ -6,7 +6,7 @@ import xlitekt.game.actor.player.message
 import xlitekt.game.packet.ExamineNPCPacket
 import xlitekt.game.packet.disassembler.handler.PacketHandlerListener
 import xlitekt.shared.inject
-import xlitekt.shared.lazyInject
+import xlitekt.shared.insert
 import xlitekt.shared.resource.NPCExamines
 
 private val logger = InlineLogger()
@@ -16,7 +16,7 @@ private val provider by inject<NPCEntryTypeProvider>()
 /**
  * @author Justin Kenney
  */
-lazyInject<PacketHandlerListener>().handlePacket<ExamineNPCPacket> {
+insert<PacketHandlerListener>().handlePacket<ExamineNPCPacket> {
     if (!provider.exists(packet.npcId)) return@handlePacket
     val neighboringNpcs = player.zone.neighboringNpcs()
 

@@ -3,6 +3,6 @@ package script.packet.disassembler.handler
 import xlitekt.game.content.command.Commands
 import xlitekt.game.packet.ClientCheatPacket
 import xlitekt.game.packet.disassembler.handler.PacketHandlerListener
-import xlitekt.shared.lazyInject
+import xlitekt.shared.insert
 
-lazyInject<PacketHandlerListener>().handlePacket<ClientCheatPacket> { Commands.execute(this.packet.command, player) }
+insert<PacketHandlerListener>().handlePacket<ClientCheatPacket> { Commands.execute(this.packet.command, player) }

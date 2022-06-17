@@ -2,9 +2,9 @@ package script.packet.assembler
 
 import xlitekt.game.packet.NoTimeoutPacket
 import xlitekt.game.packet.assembler.PacketAssemblerListener
-import xlitekt.shared.lazyInject
+import xlitekt.shared.insert
 
 /**
  * @author Jordan Abraham
  */
-lazyInject<PacketAssemblerListener>().assemblePacket<NoTimeoutPacket>(opcode = 58, size = 0) {}
+insert<PacketAssemblerListener>().assemblePacket<NoTimeoutPacket>(opcode = 58, size = 0) {}

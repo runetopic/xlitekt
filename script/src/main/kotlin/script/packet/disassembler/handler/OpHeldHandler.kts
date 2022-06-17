@@ -4,7 +4,7 @@ import com.github.michaelbull.logging.InlineLogger
 import xlitekt.game.content.ui.UserInterfaceEvent
 import xlitekt.game.packet.OpHeldPacket
 import xlitekt.game.packet.disassembler.handler.PacketHandlerListener
-import xlitekt.shared.lazyInject
+import xlitekt.shared.insert
 import xlitekt.shared.packedToChildId
 import xlitekt.shared.packedToInterfaceId
 
@@ -13,7 +13,7 @@ import xlitekt.shared.packedToInterfaceId
  */
 private val logger = InlineLogger()
 
-lazyInject<PacketHandlerListener>().handlePacket<OpHeldPacket> {
+insert<PacketHandlerListener>().handlePacket<OpHeldPacket> {
     val index = packet.index
     val fromInterfaceId = packet.fromPackedInterface.packedToInterfaceId()
     val fromChildId = packet.fromPackedInterface.packedToChildId()

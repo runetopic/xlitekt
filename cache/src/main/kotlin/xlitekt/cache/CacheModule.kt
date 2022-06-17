@@ -38,7 +38,7 @@ import xlitekt.cache.provider.sprite.titlescreen.TitleScreenEntryTypeProvider
 import xlitekt.cache.provider.texture.TextureEntryTypeProvider
 import xlitekt.cache.provider.ui.InterfaceEntryTypeProvider
 import xlitekt.cache.provider.vorbis.VorbisEntryTypeProvider
-import xlitekt.shared.lazyInject
+import xlitekt.shared.insert
 import java.nio.file.Path
 
 /**
@@ -47,7 +47,7 @@ import java.nio.file.Path
 val cacheModule = module(createdAtStart = true) {
     single {
         val path = try {
-            lazyInject<ApplicationEnvironment>().config.property("game.cache.path").getString()
+            insert<ApplicationEnvironment>().config.property("game.cache.path").getString()
         } catch (e: NoBeanDefFoundException) {
             "./cache/data/"
         }

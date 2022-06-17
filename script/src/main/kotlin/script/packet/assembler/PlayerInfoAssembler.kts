@@ -24,7 +24,7 @@ import xlitekt.shared.buffer.BitAccess
 import xlitekt.shared.buffer.dynamicBuffer
 import xlitekt.shared.buffer.withBitAccess
 import xlitekt.shared.buffer.writeBytes
-import xlitekt.shared.lazyInject
+import xlitekt.shared.insert
 import java.nio.ByteBuffer
 import kotlin.math.abs
 
@@ -33,7 +33,7 @@ import kotlin.math.abs
  */
 private val blockBufferLimit = 15000
 
-lazyInject<PacketAssemblerListener>().assemblePacket<PlayerInfoPacket>(opcode = 80, size = -2) {
+insert<PacketAssemblerListener>().assemblePacket<PlayerInfoPacket>(opcode = 80, size = -2) {
     viewport.resize()
     it.writeBytes(
         dynamicBuffer {

@@ -26,7 +26,7 @@ import xlitekt.game.world.map.zone.Zone.Companion.zoneAssemblers
 import xlitekt.game.world.map.zone.Zone.Companion.zoneUpdatesIndexes
 import xlitekt.shared.buffer.writeByte
 import xlitekt.shared.inject
-import xlitekt.shared.lazyInject
+import xlitekt.shared.insert
 import java.nio.ByteBuffer
 
 /**
@@ -249,7 +249,7 @@ class Zone(
         for (x in -3..3) {
             for (z in -3..3) {
                 if (x == 0 && z == 0) zones.add(this)
-                else zones.add(lazyInject<World>().zone(location.zoneLocation.transform(x, z).location))
+                else zones.add(insert<World>().zone(location.zoneLocation.transform(x, z).location))
             }
         }
         neighboringZones = zones

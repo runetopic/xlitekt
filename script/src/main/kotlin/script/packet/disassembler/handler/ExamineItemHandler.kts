@@ -5,7 +5,7 @@ import xlitekt.game.actor.player.message
 import xlitekt.game.packet.ExamineItemPacket
 import xlitekt.game.packet.disassembler.handler.PacketHandlerListener
 import xlitekt.shared.inject
-import xlitekt.shared.lazyInject
+import xlitekt.shared.insert
 import xlitekt.shared.resource.ItemExamines
 
 private val itemExamines by inject<ItemExamines>()
@@ -14,7 +14,7 @@ private val provider by inject<ObjEntryTypeProvider>()
 /**
  * @author Justin Kenney
  */
-lazyInject<PacketHandlerListener>().handlePacket<ExamineItemPacket> {
+insert<PacketHandlerListener>().handlePacket<ExamineItemPacket> {
     if (!provider.exists(packet.itemId)) return@handlePacket
 
     val examine = itemExamines[packet.itemId] ?: return@handlePacket

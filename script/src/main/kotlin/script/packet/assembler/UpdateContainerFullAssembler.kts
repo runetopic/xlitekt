@@ -6,14 +6,14 @@ import xlitekt.shared.buffer.writeByteAdd
 import xlitekt.shared.buffer.writeInt
 import xlitekt.shared.buffer.writeShort
 import xlitekt.shared.buffer.writeShortLittleEndian
-import xlitekt.shared.lazyInject
+import xlitekt.shared.insert
 import kotlin.math.min
 
 /**
  * @author Jordan Abraham
  * @author Tyler Telis
  */
-lazyInject<PacketAssemblerListener>().assemblePacket<UpdateContainerFullPacket>(opcode = 88, size = -2) {
+insert<PacketAssemblerListener>().assemblePacket<UpdateContainerFullPacket>(opcode = 88, size = -2) {
     it.writeInt(packedInterface)
     it.writeShort(containerKey)
     it.writeShort(items.size)
