@@ -345,6 +345,7 @@ internal object CacheDumper {
 
         override fun serialize(encoder: Encoder, value: Any) = when (value) {
             is Int -> encoder.encodeInt(value)
+            is Long -> encoder.encodeLong(value)
             is String -> encoder.encodeString(value)
             else -> throw IllegalStateException("This can only be in context of INT or STRING.")
         }
