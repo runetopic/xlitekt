@@ -6,14 +6,15 @@ import xlitekt.game.actor.queueStrong
 import xlitekt.game.actor.routeTo
 import xlitekt.game.packet.MoveGameClickPacket
 import xlitekt.game.packet.MoveMinimapClickPacket
-import xlitekt.game.packet.disassembler.handler.onPacketHandler
+import xlitekt.game.packet.disassembler.handler.PacketHandlerListener
 import xlitekt.game.world.map.Location
+import xlitekt.shared.lazyInject
 
-onPacketHandler<MoveGameClickPacket> {
+lazyInject<PacketHandlerListener>().handlePacket<MoveGameClickPacket> {
     player.queueRoute(Location(packet.destinationX, packet.destinationZ, player.location.level))
 }
 
-onPacketHandler<MoveMinimapClickPacket> {
+lazyInject<PacketHandlerListener>().handlePacket<MoveMinimapClickPacket> {
     player.queueRoute(Location(packet.destinationX, packet.destinationZ, player.location.level))
 }
 

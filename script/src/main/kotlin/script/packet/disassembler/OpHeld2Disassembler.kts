@@ -1,14 +1,15 @@
 package script.packet.disassembler
 
 import xlitekt.game.packet.OpHeldPacket
-import xlitekt.game.packet.disassembler.onPacketDisassembler
+import xlitekt.game.packet.disassembler.PacketDisassemblerListener
 import xlitekt.shared.buffer.readIntLittleEndian
 import xlitekt.shared.buffer.readUShortLittleEndian
+import xlitekt.shared.lazyInject
 
 /**
  * @author Jordan Abraham
  */
-onPacketDisassembler(opcode = 31, size = 8) {
+lazyInject<PacketDisassemblerListener>().disassemblePacket(opcode = 31, size = 8) {
     OpHeldPacket(
         index = 2,
         fromItemId = readUShortLittleEndian(),

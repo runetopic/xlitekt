@@ -5,7 +5,7 @@ import xlitekt.game.actor.Actor
 import xlitekt.game.event.EventBus
 import xlitekt.game.event.impl.Events
 import xlitekt.game.world.map.Location
-import xlitekt.shared.lazy
+import xlitekt.shared.lazyInject
 
 /**
  * @author Tyler Telis
@@ -15,12 +15,12 @@ class NPC(
     val id: Int,
     override var location: Location,
 ) : Actor(location) {
-    inline val entry get() = lazy<NPCEntryTypeProvider>().entryType(id)
+    inline val entry get() = lazyInject<NPCEntryTypeProvider>().entryType(id)
 
     fun init() {
         previousLocation = location
         zone.enterZone(this)
-        lazy<EventBus>().notify(Events.NPCSpawnEvent(this))
+        lazyInject<EventBus>().notify(Events.NPCSpawnEvent(this))
     }
 
     override fun totalHitpoints(): Int = 100

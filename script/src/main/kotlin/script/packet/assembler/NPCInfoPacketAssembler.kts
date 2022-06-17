@@ -10,19 +10,20 @@ import xlitekt.game.actor.movement.MovementStep
 import xlitekt.game.actor.npc.NPC
 import xlitekt.game.actor.player.Viewport
 import xlitekt.game.packet.NPCInfoPacket
-import xlitekt.game.packet.assembler.onPacketAssembler
+import xlitekt.game.packet.assembler.PacketAssemblerListener
 import xlitekt.game.world.map.Location
 import xlitekt.game.world.map.withinDistance
 import xlitekt.shared.buffer.BitAccess
 import xlitekt.shared.buffer.dynamicBuffer
 import xlitekt.shared.buffer.withBitAccess
 import xlitekt.shared.buffer.writeBytes
+import xlitekt.shared.lazyInject
 
 /**
  * @author Jordan Abraham
  * @author Tyler Telis
  */
-onPacketAssembler<NPCInfoPacket>(opcode = 78, size = -2) {
+lazyInject<PacketAssemblerListener>().assemblePacket<NPCInfoPacket>(opcode = 78, size = -2) {
     it.writeBytes(
         dynamicBuffer {
             it.withBitAccess {

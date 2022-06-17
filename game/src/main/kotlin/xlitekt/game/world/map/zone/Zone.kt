@@ -22,8 +22,11 @@ import xlitekt.game.world.map.GameObject
 import xlitekt.game.world.map.Location
 import xlitekt.game.world.map.localX
 import xlitekt.game.world.map.localZ
+import xlitekt.game.world.map.zone.Zone.Companion.zoneAssemblers
+import xlitekt.game.world.map.zone.Zone.Companion.zoneUpdatesIndexes
 import xlitekt.shared.buffer.writeByte
-import xlitekt.shared.lazy
+import xlitekt.shared.inject
+import xlitekt.shared.lazyInject
 import java.nio.ByteBuffer
 
 /**
@@ -236,7 +239,7 @@ class Zone(
     /**
      * Returns the amount of update requests this zone currently has.
      */
-    internal fun requestSize() = objRequests.size + locRequests.size + mapProjRequests.size
+    private fun requestSize() = objRequests.size + locRequests.size + mapProjRequests.size
 
     /**
      * Initializes this zone neighboring zones into memory.
@@ -246,7 +249,7 @@ class Zone(
         for (x in -3..3) {
             for (z in -3..3) {
                 if (x == 0 && z == 0) zones.add(this)
-                else zones.add(lazy<World>().zone(location.zoneLocation.transform(x, z).location))
+                else zones.add(lazyInject<World>().zone(location.zoneLocation.transform(x, z).location))
             }
         }
         neighboringZones = zones
@@ -264,6 +267,7 @@ class Zone(
             LocDelPacket::class to 0,
             MapProjAnimPacket::class to 8
         )
+        val zoneAssemblers by inject<PacketAssemblerListener>()
     }
 }
 
@@ -353,9 +357,9 @@ private fun HashSet<Packet>.write(player: Player, baseLocation: Location) {
     }
     var bytes = byteArrayOf()
     for (packet in this) {
-        val block = PacketAssemblerListener.listeners[packet::class]!!
+        val block = zoneAssemblers[packet::class]!!
         val buffer = ByteBuffer.allocate(1 + block.size)
-        buffer.writeByte(Zone.zoneUpdatesIndexes[packet::class]!!)
+        buffer.writeByte(zoneUpdatesIndexes[packet::class]!!)
         block.packet.invoke(packet, buffer)
         bytes += buffer.rewind().moveToByteArray()
     }

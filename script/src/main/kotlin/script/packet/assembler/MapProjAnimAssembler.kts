@@ -1,18 +1,19 @@
 package script.packet.assembler
 
 import xlitekt.game.packet.MapProjAnimPacket
-import xlitekt.game.packet.assembler.onPacketAssembler
+import xlitekt.game.packet.assembler.PacketAssemblerListener
 import xlitekt.shared.buffer.writeByte
 import xlitekt.shared.buffer.writeByteAdd
 import xlitekt.shared.buffer.writeByteNegate
 import xlitekt.shared.buffer.writeShort
 import xlitekt.shared.buffer.writeShortLittleEndian
 import xlitekt.shared.buffer.writeShortLittleEndianAdd
+import xlitekt.shared.lazyInject
 
 /**
  * @author Jordan Abraham
  */
-onPacketAssembler<MapProjAnimPacket>(opcode = 64, size = 15) {
+lazyInject<PacketAssemblerListener>().assemblePacket<MapProjAnimPacket>(opcode = 64, size = 15) {
     it.writeByteAdd(packedOffset) // packedOffset
     it.writeShortLittleEndian(-1) // targetIndex
     it.writeByteNegate(distanceX) // ?

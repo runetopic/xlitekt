@@ -1,14 +1,15 @@
 package script.packet.assembler
 
 import xlitekt.game.packet.SetMapFlagPacket
-import xlitekt.game.packet.assembler.onPacketAssembler
+import xlitekt.game.packet.assembler.PacketAssemblerListener
 import xlitekt.shared.buffer.writeByte
+import xlitekt.shared.lazyInject
 
 /**
  * @author Jordan Abraham
  * @author Tyler Telis
  */
-onPacketAssembler<SetMapFlagPacket>(opcode = 93, size = 2) {
+lazyInject<PacketAssemblerListener>().assemblePacket<SetMapFlagPacket>(opcode = 93, size = 2) {
     it.writeByte(destinationX)
     it.writeByte(destinationZ)
 }

@@ -7,9 +7,10 @@ import xlitekt.game.actor.cancelAll
 import xlitekt.game.actor.queueStrong
 import xlitekt.game.actor.routeTo
 import xlitekt.game.packet.OpLocPacket
-import xlitekt.game.packet.disassembler.handler.onPacketHandler
+import xlitekt.game.packet.disassembler.handler.PacketHandlerListener
 import xlitekt.game.world.map.Location
 import xlitekt.shared.inject
+import xlitekt.shared.lazyInject
 
 /**
  * @author Jordan Abraham
@@ -17,7 +18,7 @@ import xlitekt.shared.inject
 private val logger = InlineLogger()
 private val locEntryTypeProvider by inject<LocEntryTypeProvider>()
 
-onPacketHandler<OpLocPacket> {
+lazyInject<PacketHandlerListener>().handlePacket<OpLocPacket> {
     val locId = packet.locId
     val x = packet.x
     val z = packet.z
@@ -25,7 +26,7 @@ onPacketHandler<OpLocPacket> {
 
     if (!locEntryTypeProvider.exists(locId)) {
         logger.debug { "Invalid loc op objectId=$locId, x=$x, z=$z, running=$running" }
-        return@onPacketHandler
+        return@handlePacket
     }
 
     logger.debug { "Clicked loc op objectId=$locId, x=$x, z=$z, running=$running" }
@@ -34,14 +35,14 @@ onPacketHandler<OpLocPacket> {
     val objects = player.zone.neighboringLocs()
 
     // Server check if this zone objects contains the clicked object id.
-    if (objects.none { it.id == locId }) return@onPacketHandler
+    if (objects.none { it.id == locId }) return@handlePacket
 
     // The location of the object clicked.
     val location = Location(x, z, player.location.level)
 
     val gameObject = objects.firstOrNull {
         it.id == locId && it.location.packedLocation == location.packedLocation
-    } ?: return@onPacketHandler
+    } ?: return@handlePacket
 
     with(player) {
         cancelAll()

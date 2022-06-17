@@ -6,11 +6,11 @@ import kotlin.reflect.KClass
 /**
  * @author Jordan Abraham
  */
-object PacketHandlerListener {
-    val listeners = mutableMapOf<KClass<*>, PacketHandler<Packet>.() -> Unit>()
-}
-
-@Suppress("UNCHECKED_CAST")
-inline fun <reified T : Packet> onPacketHandler(noinline listener: PacketHandler<T>.() -> Unit) {
-    PacketHandlerListener.listeners[T::class] = listener as PacketHandler<Packet>.() -> Unit
+class PacketHandlerListener(
+    val handlers: MutableMap<KClass<*>, PacketHandler<Packet>.() -> Unit> = mutableMapOf()
+) : Map<KClass<*>, PacketHandler<Packet>.() -> Unit> by handlers {
+    @Suppress("UNCHECKED_CAST")
+    inline fun <reified T : Packet> handlePacket(noinline listener: PacketHandler<T>.() -> Unit) {
+        handlers[T::class] = listener as PacketHandler<Packet>.() -> Unit
+    }
 }

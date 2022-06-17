@@ -1,7 +1,7 @@
 package xlitekt.shared.buffer
 
-import java.nio.ByteBuffer
 import xlitekt.shared.toInt
+import java.nio.ByteBuffer
 
 /**
  * @author Jordan Abraham

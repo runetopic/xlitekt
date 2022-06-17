@@ -1,14 +1,14 @@
 package script.packet.disassembler
 
 import xlitekt.game.packet.IfButtonPacket
-import xlitekt.game.packet.disassembler.onPacketDisassembler
-import xlitekt.shared.buffer.readInt
+import xlitekt.game.packet.disassembler.PacketDisassemblerListener
 import xlitekt.shared.buffer.readUShort
+import xlitekt.shared.lazyInject
 
 /**
  * @author Jordan Abraham
  */
-onPacketDisassembler(opcode = 19, size = 8) {
+lazyInject<PacketDisassemblerListener>().disassemblePacket(opcode = 19, size = 8) {
     IfButtonPacket(
         index = 4,
         packedInterface = readInt(),

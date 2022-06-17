@@ -13,8 +13,6 @@ inline fun <reified T : Any> inject(
     noinline parameters: ParametersDefinition? = null
 ): Lazy<T> = KoinPlatformTools.defaultContext().get().inject(qualifier, mode, parameters)
 
-inline fun <reified T : Any> lazy(
-    qualifier: Qualifier? = null,
+inline fun <reified T : Any> lazyInject(
     mode: LazyThreadSafetyMode = KoinPlatformTools.defaultLazyMode(),
-    noinline parameters: ParametersDefinition? = null
-): T = KoinPlatformTools.defaultContext().get().inject<T>(qualifier, mode, parameters).value
+): T = KoinPlatformTools.defaultContext().get().inject<T>(null, mode, null).value
