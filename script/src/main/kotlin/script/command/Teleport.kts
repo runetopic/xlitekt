@@ -2,13 +2,14 @@ package script.command
 
 import xlitekt.game.actor.player.message
 import xlitekt.game.actor.teleportTo
-import xlitekt.game.content.command.Commands.onCommand
+import xlitekt.game.content.command.CommandListener
 import xlitekt.game.world.map.Location
+import xlitekt.shared.insert
 
 // TODO make a color system so we're not using arbitrary hex codes throughout our app
 private val invalidSyntaxMessage = "Please use syntax: <col=FF0000>::tele x, z, level (Level is optional).</col>"
 
-onCommand("tele").use { arguments ->
+insert<CommandListener>().command("tele").use { arguments ->
     if (arguments.isEmpty()) {
         message { invalidSyntaxMessage }
         return@use

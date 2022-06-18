@@ -2,14 +2,15 @@ package script.ui
 
 import xlitekt.game.actor.player.message
 import xlitekt.game.actor.speed
+import xlitekt.game.content.ui.InterfaceListener
 import xlitekt.game.content.ui.UserInterface.MiniMap
-import xlitekt.game.content.ui.onInterface
 import xlitekt.game.content.vars.VarPlayer
+import xlitekt.shared.insert
 
 /**
  * @author Tyler Telis
  */
-onInterface<MiniMap> {
+insert<InterfaceListener>().userInterface<MiniMap> {
     onClick("Toggle Run") {
         if (runEnergy < 100f) {
             // TODO get the game messages for this

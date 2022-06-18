@@ -5,19 +5,20 @@ import io.ktor.utils.io.core.writeFully
 import io.ktor.utils.io.core.writeShort
 import xlitekt.cache.provider.binary.huffman.HuffmanEntryTypeProvider
 import xlitekt.game.actor.render.Render.PublicChat
-import xlitekt.game.actor.render.block.dynamicPlayerUpdateBlock
+import xlitekt.game.actor.render.block.PlayerRenderingBlockListener
 import xlitekt.shared.buffer.writeByteAdd
 import xlitekt.shared.buffer.writeByteNegate
 import xlitekt.shared.buffer.writeSmart
 import xlitekt.shared.formatChatMessage
 import xlitekt.shared.inject
+import xlitekt.shared.insert
 
 /**
  * @author Jordan Abraham
  */
 val provider by inject<HuffmanEntryTypeProvider>()
 
-dynamicPlayerUpdateBlock<PublicChat>(index = 7, mask = 0x20, size = -1) {
+insert<PlayerRenderingBlockListener>().dynamicPlayerUpdateBlock<PublicChat>(index = 7, mask = 0x20, size = -1) {
     it.writeShort(packedEffects.toShort())
     it.writeByteNegate(rights)
     it.writeByteAdd(0) // Auto chat

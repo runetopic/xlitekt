@@ -3,9 +3,10 @@ package script.ui
 import xlitekt.game.actor.animate
 import xlitekt.game.actor.spotAnimate
 import xlitekt.game.content.ui.InterfaceEvent.ClickOption1
+import xlitekt.game.content.ui.InterfaceListener
 import xlitekt.game.content.ui.UserInterface.Emotes
-import xlitekt.game.content.ui.onInterface
 import xlitekt.shared.inject
+import xlitekt.shared.insert
 import xlitekt.shared.resource.Sequences
 import xlitekt.shared.resource.SpotAnimations
 
@@ -69,7 +70,7 @@ private enum class Emote(
 private val sequences by inject<Sequences>()
 private val spotAnimations by inject<SpotAnimations>()
 
-onInterface<Emotes> {
+insert<InterfaceListener>().userInterface<Emotes> {
     onOpen {
         setEvent(childId = 1, slots = 0..50, ClickOption1)
     }

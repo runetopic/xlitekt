@@ -6,7 +6,6 @@ import xlitekt.game.actor.player.Player
 import xlitekt.game.actor.player.message
 import xlitekt.game.actor.resetMovement
 import xlitekt.game.content.item.Item
-import xlitekt.game.content.ui.InterfaceMap.addInterfaceListener
 import xlitekt.game.packet.IfCloseSubPacket
 import xlitekt.game.packet.IfMoveSubPacket
 import xlitekt.game.packet.IfOpenSubPacket
@@ -125,7 +124,7 @@ class Interfaces(
             currentInterfaceLayout
         )
 
-        val listener = addInterfaceListener(this, player)
+        val listener = interfaceListener.invokeUserInterface(this, player)
 
         listeners += listener
 
@@ -231,5 +230,6 @@ class Interfaces(
         const val INVENTORY_CHILD_ID = 73
 
         val enums by inject<EnumEntryTypeProvider>()
+        val interfaceListener by inject<InterfaceListener>()
     }
 }

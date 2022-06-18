@@ -6,11 +6,9 @@ import xlitekt.game.packet.Packet
 /**
  * @author Jordan Abraham
  */
-class PacketDisassemblerListener(
-    val disassemblers: MutableMap<Int, PacketDisassembler> = mutableMapOf()
-) : Map<Int, PacketDisassembler> by disassemblers {
+class PacketDisassemblerListener : MutableMap<Int, PacketDisassembler> by mutableMapOf() {
     @Suppress("UNCHECKED_CAST")
     inline fun <reified T : Packet> disassemblePacket(opcode: Int, size: Int, noinline packet: suspend ByteReadChannel.(Int) -> T) {
-        disassemblers[opcode] = PacketDisassembler(size, packet)
+        this[opcode] = PacketDisassembler(size, packet)
     }
 }

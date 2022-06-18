@@ -1,9 +1,10 @@
 package xlitekt.game.content.ui
 
-import xlitekt.game.content.ui.InterfaceMap.interfaceInfo
+import xlitekt.shared.inject
+import xlitekt.shared.resource.InterfaceInfoMap
 
 sealed class UserInterface(val name: String) {
-    val interfaceInfo by lazy { interfaceInfo(name) }
+    val interfaceInfo by lazy { interfaceInfoMap[name] ?: throw RuntimeException("Interface $name is not currently registered in the system.") }
 
     object AccountManagement : UserInterface("account_management")
     object Settings : UserInterface("settings")
@@ -28,4 +29,8 @@ sealed class UserInterface(val name: String) {
     object ChatChannel : UserInterface("chat_channel")
     object AdvancedSettings : UserInterface("advanced_settings")
     object PlayerAppearanceDesigner : UserInterface("player_appearance_designer")
+
+    private companion object {
+        val interfaceInfoMap by inject<InterfaceInfoMap>()
+    }
 }

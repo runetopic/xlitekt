@@ -3,12 +3,13 @@ package script.command
 import com.runetopic.cryptography.toISAAC
 import xlitekt.game.actor.player.Client
 import xlitekt.game.actor.player.Player
-import xlitekt.game.content.command.Commands.onCommand
+import xlitekt.game.content.command.CommandListener
 import xlitekt.game.content.vars.VarBit
 import xlitekt.game.content.vars.VarPlayer
 import xlitekt.game.world.World
 import xlitekt.game.world.map.Location
 import xlitekt.shared.inject
+import xlitekt.shared.insert
 import kotlin.random.Random
 
 /**
@@ -16,7 +17,7 @@ import kotlin.random.Random
  */
 private val world by inject<World>()
 
-onCommand("benchmark").use {
+insert<CommandListener>().command("benchmark").use {
     repeat(World.MAX_PLAYERS) {
         val bot = Player(username = it.toString(), password = "", brandNew = false)
         bot.location = Location(Random.nextInt(3200, 3280), Random.nextInt(3200, 3280), 0)

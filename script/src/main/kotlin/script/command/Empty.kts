@@ -1,6 +1,9 @@
-import xlitekt.game.content.command.Commands.onCommand
+package script.command
+
+import xlitekt.game.content.command.CommandListener
+import xlitekt.shared.insert
 
 /**
  * @author Tyler Telis
  */
-onCommand("empty").use { inventory.empty() }
+insert<CommandListener>().command("empty").use { inventory.empty() }

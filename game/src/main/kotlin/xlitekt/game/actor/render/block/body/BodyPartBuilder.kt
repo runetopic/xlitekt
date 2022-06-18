@@ -8,19 +8,6 @@ import xlitekt.shared.buffer.dynamicBuffer
 /**
  * @author Jordan Abraham
  */
-object BodyPartListener {
-    val listeners = mutableMapOf<Int, BodyPartInfo>()
-}
-
-fun onBodyPart(index: Int, bodyPart: BodyPart? = null, builder: BodyPartBuilder.() -> Unit) {
-    BodyPartListener.listeners[index] = BodyPartInfo(bodyPart, builder)
-}
-
-data class BodyPartInfo(
-    val bodyPart: BodyPart?,
-    val builder: BodyPartBuilder.() -> Unit
-)
-
 class BodyPartBuilder(
     val kit: Int,
     val gender: Render.Appearance.Gender,

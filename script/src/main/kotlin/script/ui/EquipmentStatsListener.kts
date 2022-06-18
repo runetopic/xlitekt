@@ -2,22 +2,23 @@ package script.ui
 
 import xlitekt.game.actor.player.Player
 import xlitekt.game.actor.player.script
+import xlitekt.game.content.ui.InterfaceListener
 import xlitekt.game.content.ui.UserInterface
 import xlitekt.game.content.ui.UserInterface.EquipmentStats
 import xlitekt.game.content.ui.UserInterfaceListener
-import xlitekt.game.content.ui.onInterface
+import xlitekt.shared.insert
 
 /**
  * @author Tyler Telis
  */
-onInterface<EquipmentStats> { player ->
+insert<InterfaceListener>().userInterface<EquipmentStats> { player ->
     onCreate {
         script(917, -1, -1)
     }
 
     onOpen {
         interfaces += UserInterface.EquipmentInventory
-        sendEquipmentBonusInfo(this@onInterface, player)
+        sendEquipmentBonusInfo(this@userInterface, player)
     }
 
     onClose {

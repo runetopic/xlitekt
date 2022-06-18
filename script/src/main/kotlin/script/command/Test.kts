@@ -2,7 +2,7 @@ package script.command
 
 import xlitekt.game.actor.player.message
 import xlitekt.game.actor.queueNormal
-import xlitekt.game.content.command.Commands.onCommand
+import xlitekt.game.content.command.CommandListener
 import xlitekt.game.content.item.FloorItem
 import xlitekt.game.content.item.Item
 import xlitekt.game.content.projectile.Projectile
@@ -13,17 +13,18 @@ import xlitekt.game.world.map.GameObject
 import xlitekt.game.world.map.Location
 import xlitekt.game.world.map.transform
 import xlitekt.game.world.map.withinDistance
+import xlitekt.shared.insert
 
 /**
  * @author Jordan Abraham
  */
-onCommand("gp").use {
+insert<CommandListener>().command("gp").use {
     inventory.addItem(Item(995, Int.MAX_VALUE)) {
         message { "Spawned max cash." }
     }
 }
 
-onCommand("q").use {
+insert<CommandListener>().command("q").use {
     queueNormal {
         while (true) {
             val location = Location(3222, 3222)
@@ -36,11 +37,11 @@ onCommand("q").use {
     }
 }
 
-onCommand("xp").use {
+insert<CommandListener>().command("xp").use {
     message { "${Skill.getLevelForXp(30_000.0)}" }
 }
 
-onCommand("add").use {
+insert<CommandListener>().command("add").use {
 //    val item = FloorItem(4151, 1, location)
     val loc = GameObject(1124, location, 22, 0)
     if (zone.requestAddLoc(loc)) {
@@ -49,14 +50,14 @@ onCommand("add").use {
     }
 }
 
-onCommand("add2").use {
+insert<CommandListener>().command("add2").use {
     val item = FloorItem(4151, 1, location)
 //    val loc = GameObject(1124, location, 22, 0)
 //    CollisionMap.addObjectCollision(loc)
     message { "${zone.requestAddObj(item)}" }
 }
 
-onCommand("delete").use {
+insert<CommandListener>().command("delete").use {
     val loc = zone.locsSpawned.first()
     if (zone.requestRemoveLoc(loc)) {
         CollisionMap.removeObjectCollision(loc)
@@ -64,7 +65,7 @@ onCommand("delete").use {
     }
 }
 
-onCommand("addall").use {
+insert<CommandListener>().command("addall").use {
 //    val zone = world.zone(Location(3222, 3222, 0))
 //    zone.requestAddObj(FloorItem(4151, 1, Location(3222, 3222, 0)))
     zones.forEach { zone ->
@@ -76,21 +77,21 @@ onCommand("addall").use {
     }
 }
 
-onCommand("deleteall").use {
+insert<CommandListener>().command("deleteall").use {
     zones.forEach { zone ->
         zone.objsSpawned.forEach(zone::requestRemoveObj)
     }
 }
 
-onCommand("test").use {
+insert<CommandListener>().command("test").use {
     zone.npcs.forEach { println(it.entry?.name) }
 }
 
-onCommand("proj").use {
+insert<CommandListener>().command("proj").use {
     val projectile = Projectile(1465, location, location.transform(6, 0, 0), 43, 31, 36, 16, 64)
     zone.requestAddMapProjAnim(projectile)
 }
 
-onCommand("design").use {
+insert<CommandListener>().command("design").use {
     interfaces += UserInterface.PlayerAppearanceDesigner
 }

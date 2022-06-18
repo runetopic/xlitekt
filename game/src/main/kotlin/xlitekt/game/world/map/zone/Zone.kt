@@ -357,11 +357,11 @@ private fun HashSet<Packet>.write(player: Player, baseLocation: Location) {
     }
     var bytes = byteArrayOf()
     for (packet in this) {
-        val block = zoneAssemblers[packet::class]!!
-        val buffer = ByteBuffer.allocate(1 + block.size)
+        val assembler = zoneAssemblers[packet::class]!!
+        val buffer = ByteBuffer.allocate(1 + assembler.size)
         buffer.writeByte(zoneUpdatesIndexes[packet::class]!!)
-        block.packet.invoke(packet, buffer)
-        bytes += buffer.rewind().moveToByteArray()
+        assembler.packet.invoke(packet, buffer)
+        bytes += buffer.flip().moveToByteArray()
     }
     player.write(UpdateZonePartialEnclosedPacket(localX, localZ, bytes))
 }
