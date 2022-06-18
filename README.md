@@ -8,13 +8,14 @@
 XliteKt is a from scratch game server emulator written in Kotlin.
 
 # Getting Started
-1. We provide an application-example.conf by default. Rename this file to ``application.conf``. The configurations are set up to run Xlite out of the box. Change any of the configurations to fit your needs.
-2. Download the supported revision cache (.dat2 format) and map keys (.json format) from [OpenRS2](https://archive.openrs2.org/caches).
-3. Place the cache files you downloaded into the ``./cache/data/`` directory. This is configurable in the application.conf under the application module.
-4. Place the map keys you downloaded into the ``./application/resources/map/`` directory. ``xteas202.json`` is an example of how the file should be named.
-5. Generate the server and client RSA key pair using the ``generateRSA`` Gradle task. Follow the additional instructions from the console after the task is executed. ``./gradlew generateRSA``
-6. Download the revision gamepack.jar from [Runestats](https://archive.runestats.com/osrs/) and place this in the ``./application/resources/client_config/`` directory. ``gamepack.jar`` is an example of how the file should be named.
-7. Run the application.
+1. Clone the client from our organization [here](https://github.com/runetopic/runelite-dev). This client will run XliteKt out of the box on localhost.
+2. We provide an application-example.conf by default. Rename this file to ``application.conf``. The configurations are set up to run Xlite out of the box. Change any of the configurations to fit your needs.
+3. Download the supported revision cache (.dat2 format) and map keys (.json format) from [OpenRS2](https://archive.openrs2.org/caches).
+4. Place the cache files you downloaded into the ``./cache/data/`` directory. This is configurable in the application.conf under the application module.
+5. Place the map keys you downloaded into the ``./application/resources/map/`` directory. ``xteas202.json`` is an example of how the file should be named.
+6. Generate the server and client RSA key pair using the ``generateRSA`` Gradle task. Follow the additional instructions from the console after the task is executed. ``./gradlew generateRSA``
+7. Download the revision gamepack.jar from [Runestats](https://archive.runestats.com/osrs/) and place this in the ``./application/resources/client_config/`` directory. ``gamepack.jar`` is an example of how the file should be named.
+8. Run the application.
 
 # Application configuration
 
