@@ -3,6 +3,9 @@
 [![Discord](https://img.shields.io/discord/212385463418355713?color=%237289DA&logo=Discord&logoColor=%237289DA)](https://discord.gg/3scgBkrfMG)
 [![wakatime](https://wakatime.com/badge/user/00b793fe-9bcc-4e7a-88c2-7c1879c548ce/project/392eeeea-4500-4c18-904b-2c0d662dfb81.svg)](https://wakatime.com/badge/user/00b793fe-9bcc-4e7a-88c2-7c1879c548ce/project/392eeeea-4500-4c18-904b-2c0d662dfb81)
  ![](https://tokei.rs/b1/github/runetopic/xlitekt)
+ 
+# Welcome
+XliteKt is a from scratch game server emulator written in Kotlin.
 
 # Getting Started
 1. We provide an application-example.conf by default. Rename this file to ``application.conf``. The configurations are set up to run Xlite out of the box. Change any of the configurations to fit your needs.
