@@ -1,0 +1,395 @@
+<!doctype html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <title>SoundEffectInstrument</title>
+<link href="../../../images/logo-icon.svg" rel="icon" type="image/svg">
+    <script>var pathToRoot = "../../../";</script>    <script>const storage = localStorage.getItem("dokka-dark-mode")
+const savedDarkMode = storage ? JSON.parse(storage) : false
+if(savedDarkMode === true){
+    document.getElementsByTagName("html")[0].classList.add("theme-dark")
+}</script>
+<script type="text/javascript" src="../../../scripts/sourceset_dependencies.js" async></script>
+<link href="../../../styles/style.css" rel="Stylesheet">
+<link href="../../../styles/jetbrains-mono.css" rel="Stylesheet">
+<link href="../../../styles/main.css" rel="Stylesheet">
+<link href="../../../styles/prism.css" rel="Stylesheet">
+<link href="../../../styles/logo-styles.css" rel="Stylesheet">
+<script type="text/javascript" src="../../../scripts/clipboard.js" async></script>
+<script type="text/javascript" src="../../../scripts/navigation-loader.js" async></script>
+<script type="text/javascript" src="../../../scripts/platform-content-handler.js" async></script>
+<script type="text/javascript" src="../../../scripts/main.js" defer></script>
+<script type="text/javascript" src="../../../scripts/prism.js" async></script></head>
+<body>
+<div class="navigation-wrapper" id="navigation-wrapper">
+    <div id="leftToggler"><span class="icon-toggler"></span></div>
+    <div class="library-name">
+<a href="../../../index.html">
+<span>xlitekt</span>            </a>    </div>
+    <div>1.0.0-SNAPSHOT
+    </div>
+    <div class="pull-right d-flex">
+        <button id="theme-toggle-button"><span id="theme-toggle"></span></button>
+        <div id="searchBar"></div>
+    </div>
+</div>
+<div id="container">
+    <div id="leftColumn">
+        <div id="sideMenu"></div>
+    </div>
+    <div id="main">
+<div class="main-content" id="content" pageids="cache::xlitekt.cache.provider.soundeffect/SoundEffectInstrument///PointingToDeclaration//-1154371176">
+  <div class="breadcrumbs"><a href="../../index.html">cache</a><span class="delimiter">/</span><a href="../index.html">xlitekt.cache.provider.soundeffect</a><span class="delimiter">/</span><a href="index.html">SoundEffectInstrument</a></div>
+  <div class="cover ">
+    <h1 class="cover"><span>Sound</span><wbr><span>Effect</span><wbr><span><span>Instrument</span></span></h1>
+    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":cache:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">data </span><span class="token keyword">class </span><a href="index.html">SoundEffectInstrument</a><span class="token punctuation">(</span><span class="parameters wrapped"><span class="parameter indented">&nbsp;&nbsp;&nbsp;&nbsp;<span class="token keyword">val </span>buffer<span class="token operator">: </span><a href="https://docs.oracle.com/javase/8/docs/api/java/nio/ByteBuffer.html">ByteBuffer</a><span class="token punctuation">, </span></span><span class="parameter indented">&nbsp;&nbsp;&nbsp;&nbsp;<span class="token keyword">var </span>oscillatorVolume<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int-array/index.html">IntArray</a><span class="token operator"> = </span>intArrayOf(0, 0, 0, 0, 0)<span class="token punctuation">, </span></span><span class="parameter indented">&nbsp;&nbsp;&nbsp;&nbsp;<span class="token keyword">var </span>oscillatorPitch<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int-array/index.html">IntArray</a><span class="token operator"> = </span>intArrayOf(0, 0, 0, 0, 0)<span class="token punctuation">, </span></span><span class="parameter indented">&nbsp;&nbsp;&nbsp;&nbsp;<span class="token keyword">var </span>oscillatorDelays<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int-array/index.html">IntArray</a><span class="token operator"> = </span>intArrayOf(0, 0, 0, 0, 0)<span class="token punctuation">, </span></span><span class="parameter indented">&nbsp;&nbsp;&nbsp;&nbsp;<span class="token keyword">var </span>delayTime<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a><span class="token operator"> = </span><span class="token constant">0</span><span class="token punctuation">, </span></span><span class="parameter indented">&nbsp;&nbsp;&nbsp;&nbsp;<span class="token keyword">var </span>delayDecay<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a><span class="token operator"> = </span><span class="token constant">100</span><span class="token punctuation">, </span></span><span class="parameter indented">&nbsp;&nbsp;&nbsp;&nbsp;<span class="token keyword">var </span>duration<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a><span class="token operator"> = </span><span class="token constant">500</span><span class="token punctuation">, </span></span><span class="parameter indented">&nbsp;&nbsp;&nbsp;&nbsp;<span class="token keyword">var </span>offset<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a><span class="token operator"> = </span><span class="token constant">0</span><span class="token punctuation">, </span></span><span class="parameter indented">&nbsp;&nbsp;&nbsp;&nbsp;<span class="token keyword">var </span>pitch<span class="token operator">: </span><a href="../-sound-effect-envelope/index.html">SoundEffectEnvelope</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter indented">&nbsp;&nbsp;&nbsp;&nbsp;<span class="token keyword">var </span>volume<span class="token operator">: </span><a href="../-sound-effect-envelope/index.html">SoundEffectEnvelope</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter indented">&nbsp;&nbsp;&nbsp;&nbsp;<span class="token keyword">var </span>pitchModifier<span class="token operator">: </span><a href="../-sound-effect-envelope/index.html">SoundEffectEnvelope</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter indented">&nbsp;&nbsp;&nbsp;&nbsp;<span class="token keyword">var </span>pitchModifierAmplitude<span class="token operator">: </span><a href="../-sound-effect-envelope/index.html">SoundEffectEnvelope</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter indented">&nbsp;&nbsp;&nbsp;&nbsp;<span class="token keyword">var </span>volumeMultiplier<span class="token operator">: </span><a href="../-sound-effect-envelope/index.html">SoundEffectEnvelope</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter indented">&nbsp;&nbsp;&nbsp;&nbsp;<span class="token keyword">var </span>volumeMultiplierAmplitude<span class="token operator">: </span><a href="../-sound-effect-envelope/index.html">SoundEffectEnvelope</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter indented">&nbsp;&nbsp;&nbsp;&nbsp;<span class="token keyword">var </span>release<span class="token operator">: </span><a href="../-sound-effect-envelope/index.html">SoundEffectEnvelope</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter indented">&nbsp;&nbsp;&nbsp;&nbsp;<span class="token keyword">var </span>attack<span class="token operator">: </span><a href="../-sound-effect-envelope/index.html">SoundEffectEnvelope</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter indented">&nbsp;&nbsp;&nbsp;&nbsp;<span class="token keyword">var </span>filter<span class="token operator">: </span><a href="../-sound-effect-audio-filter/index.html">SoundEffectAudioFilter</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter indented">&nbsp;&nbsp;&nbsp;&nbsp;<span class="token keyword">var </span>filterEnvelope<span class="token operator">: </span><a href="../-sound-effect-envelope/index.html">SoundEffectEnvelope</a><span class="token operator">?</span><span class="token operator"> = </span>null</span></span><span class="token punctuation">)</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><h4 class="">Author</h4><p class="paragraph">Jordan Abraham</p></div></div>
+  </div>
+  <div class="tabbedcontent">
+    <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="Constructors">Constructors</button><button class="section-tab" data-togglable="Functions">Functions</button><button class="section-tab" data-togglable="Properties">Properties</button></div>
+    <div class="tabs-section-body">
+      <h2 class="tabbedcontent">Constructors</h2>
+      <div class="table" data-togglable="Constructors"><a data-name="-1516595799%2FConstructors%2F-1154371176" anchor-label="SoundEffectInstrument" id="-1516595799%2FConstructors%2F-1154371176" data-filterable-set=":cache:dokkaHtmlPartial/main"></a>
+        <div class="table-row" data-filterable-current=":cache:dokkaHtmlPartial/main" data-filterable-set=":cache:dokkaHtmlPartial/main">
+          <div class="main-subrow keyValue TabbedContent">
+            <div class=""><span class="inline-flex">
+                <div><a href="-sound-effect-instrument.html"><span>Sound</span><wbr><span>Effect</span><wbr><span><span>Instrument</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1516595799%2FConstructors%2F-1154371176"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div>
+              <div class="title">
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":cache:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="-sound-effect-instrument.html"><span class="token function">SoundEffectInstrument</span></a><span class="token punctuation">(</span><span class="parameters wrapped"><span class="parameter indented">&nbsp;&nbsp;&nbsp;&nbsp;buffer<span class="token operator">: </span><a href="https://docs.oracle.com/javase/8/docs/api/java/nio/ByteBuffer.html">ByteBuffer</a><span class="token punctuation">, </span></span><span class="parameter indented">&nbsp;&nbsp;&nbsp;&nbsp;oscillatorVolume<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int-array/index.html">IntArray</a><span class="token operator"> = </span>intArrayOf(0, 0, 0, 0, 0)<span class="token punctuation">, </span></span><span class="parameter indented">&nbsp;&nbsp;&nbsp;&nbsp;oscillatorPitch<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int-array/index.html">IntArray</a><span class="token operator"> = </span>intArrayOf(0, 0, 0, 0, 0)<span class="token punctuation">, </span></span><span class="parameter indented">&nbsp;&nbsp;&nbsp;&nbsp;oscillatorDelays<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int-array/index.html">IntArray</a><span class="token operator"> = </span>intArrayOf(0, 0, 0, 0, 0)<span class="token punctuation">, </span></span><span class="parameter indented">&nbsp;&nbsp;&nbsp;&nbsp;delayTime<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a><span class="token operator"> = </span><span class="token constant">0</span><span class="token punctuation">, </span></span><span class="parameter indented">&nbsp;&nbsp;&nbsp;&nbsp;delayDecay<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a><span class="token operator"> = </span><span class="token constant">100</span><span class="token punctuation">, </span></span><span class="parameter indented">&nbsp;&nbsp;&nbsp;&nbsp;duration<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a><span class="token operator"> = </span><span class="token constant">500</span><span class="token punctuation">, </span></span><span class="parameter indented">&nbsp;&nbsp;&nbsp;&nbsp;offset<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a><span class="token operator"> = </span><span class="token constant">0</span><span class="token punctuation">, </span></span><span class="parameter indented">&nbsp;&nbsp;&nbsp;&nbsp;pitch<span class="token operator">: </span><a href="../-sound-effect-envelope/index.html">SoundEffectEnvelope</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter indented">&nbsp;&nbsp;&nbsp;&nbsp;volume<span class="token operator">: </span><a href="../-sound-effect-envelope/index.html">SoundEffectEnvelope</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter indented">&nbsp;&nbsp;&nbsp;&nbsp;pitchModifier<span class="token operator">: </span><a href="../-sound-effect-envelope/index.html">SoundEffectEnvelope</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter indented">&nbsp;&nbsp;&nbsp;&nbsp;pitchModifierAmplitude<span class="token operator">: </span><a href="../-sound-effect-envelope/index.html">SoundEffectEnvelope</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter indented">&nbsp;&nbsp;&nbsp;&nbsp;volumeMultiplier<span class="token operator">: </span><a href="../-sound-effect-envelope/index.html">SoundEffectEnvelope</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter indented">&nbsp;&nbsp;&nbsp;&nbsp;volumeMultiplierAmplitude<span class="token operator">: </span><a href="../-sound-effect-envelope/index.html">SoundEffectEnvelope</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter indented">&nbsp;&nbsp;&nbsp;&nbsp;release<span class="token operator">: </span><a href="../-sound-effect-envelope/index.html">SoundEffectEnvelope</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter indented">&nbsp;&nbsp;&nbsp;&nbsp;attack<span class="token operator">: </span><a href="../-sound-effect-envelope/index.html">SoundEffectEnvelope</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter indented">&nbsp;&nbsp;&nbsp;&nbsp;filter<span class="token operator">: </span><a href="../-sound-effect-audio-filter/index.html">SoundEffectAudioFilter</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter indented">&nbsp;&nbsp;&nbsp;&nbsp;filterEnvelope<span class="token operator">: </span><a href="../-sound-effect-envelope/index.html">SoundEffectEnvelope</a><span class="token operator">?</span><span class="token operator"> = </span>null</span></span><span class="token punctuation">)</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <h2 class="">Functions</h2>
+      <div class="table" data-togglable="Functions"><a data-name="-1839628307%2FFunctions%2F-1154371176" anchor-label="equals" id="-1839628307%2FFunctions%2F-1154371176" data-filterable-set=":cache:dokkaHtmlPartial/main"></a>
+        <div class="table-row" data-filterable-current=":cache:dokkaHtmlPartial/main" data-filterable-set=":cache:dokkaHtmlPartial/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="equals.html"><span><span>equals</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1839628307%2FFunctions%2F-1154371176"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div>
+              <div class="title">
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":cache:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">operator override </span><span class="token keyword">fun </span><a href="equals.html"><span class="token function">equals</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">other<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html">Any</a><span class="token operator">?</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+<a data-name="-783836583%2FFunctions%2F-1154371176" anchor-label="hashCode" id="-783836583%2FFunctions%2F-1154371176" data-filterable-set=":cache:dokkaHtmlPartial/main"></a>
+        <div class="table-row" data-filterable-current=":cache:dokkaHtmlPartial/main" data-filterable-set=":cache:dokkaHtmlPartial/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="hash-code.html"><span>hash</span><wbr><span><span>Code</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-783836583%2FFunctions%2F-1154371176"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div>
+              <div class="title">
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":cache:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="hash-code.html"><span class="token function">hashCode</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+<a data-name="-343449643%2FFunctions%2F-1154371176" anchor-label="synthesize" id="-343449643%2FFunctions%2F-1154371176" data-filterable-set=":cache:dokkaHtmlPartial/main"></a>
+        <div class="table-row" data-filterable-current=":cache:dokkaHtmlPartial/main" data-filterable-set=":cache:dokkaHtmlPartial/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="synthesize.html"><span><span>synthesize</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-343449643%2FFunctions%2F-1154371176"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div>
+              <div class="title">
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":cache:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="synthesize.html"><span class="token function">synthesize</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">var1<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">, </span></span><span class="parameter ">var2<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int-array/index.html">IntArray</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <h2 class="">Properties</h2>
+      <div class="table" data-togglable="Properties"><a data-name="1545199244%2FProperties%2F-1154371176" anchor-label="attack" id="1545199244%2FProperties%2F-1154371176" data-filterable-set=":cache:dokkaHtmlPartial/main"></a>
+        <div class="table-row" data-filterable-current=":cache:dokkaHtmlPartial/main" data-filterable-set=":cache:dokkaHtmlPartial/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="attack.html">attack</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1545199244%2FProperties%2F-1154371176"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div>
+              <div class="title">
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-depenent-content" data-active="" data-togglable=":cache:dokkaHtmlPartial/main"><a data-name="1545199244%2FProperties%2F-1154371176" anchor-label="attack" id="1545199244%2FProperties%2F-1154371176" data-filterable-set=":cache:dokkaHtmlPartial/main"></a><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">var </span><a href="attack.html">attack</a><span class="token operator">: </span><a href="../-sound-effect-envelope/index.html">SoundEffectEnvelope</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+<a data-name="1660510100%2FProperties%2F-1154371176" anchor-label="buffer" id="1660510100%2FProperties%2F-1154371176" data-filterable-set=":cache:dokkaHtmlPartial/main"></a>
+        <div class="table-row" data-filterable-current=":cache:dokkaHtmlPartial/main" data-filterable-set=":cache:dokkaHtmlPartial/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="buffer.html">buffer</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1660510100%2FProperties%2F-1154371176"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div>
+              <div class="title">
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-depenent-content" data-active="" data-togglable=":cache:dokkaHtmlPartial/main"><a data-name="1660510100%2FProperties%2F-1154371176" anchor-label="buffer" id="1660510100%2FProperties%2F-1154371176" data-filterable-set=":cache:dokkaHtmlPartial/main"></a><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">val </span><a href="buffer.html">buffer</a><span class="token operator">: </span><a href="https://docs.oracle.com/javase/8/docs/api/java/nio/ByteBuffer.html">ByteBuffer</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+<a data-name="255816765%2FProperties%2F-1154371176" anchor-label="delayDecay" id="255816765%2FProperties%2F-1154371176" data-filterable-set=":cache:dokkaHtmlPartial/main"></a>
+        <div class="table-row" data-filterable-current=":cache:dokkaHtmlPartial/main" data-filterable-set=":cache:dokkaHtmlPartial/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="delay-decay.html">delayDecay</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="255816765%2FProperties%2F-1154371176"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div>
+              <div class="title">
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-depenent-content" data-active="" data-togglable=":cache:dokkaHtmlPartial/main"><a data-name="255816765%2FProperties%2F-1154371176" anchor-label="delayDecay" id="255816765%2FProperties%2F-1154371176" data-filterable-set=":cache:dokkaHtmlPartial/main"></a><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">var </span><a href="delay-decay.html">delayDecay</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a><span class="token operator"> = </span><span class="token constant">100</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+<a data-name="-1712212138%2FProperties%2F-1154371176" anchor-label="delayTime" id="-1712212138%2FProperties%2F-1154371176" data-filterable-set=":cache:dokkaHtmlPartial/main"></a>
+        <div class="table-row" data-filterable-current=":cache:dokkaHtmlPartial/main" data-filterable-set=":cache:dokkaHtmlPartial/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="delay-time.html">delayTime</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1712212138%2FProperties%2F-1154371176"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div>
+              <div class="title">
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-depenent-content" data-active="" data-togglable=":cache:dokkaHtmlPartial/main"><a data-name="-1712212138%2FProperties%2F-1154371176" anchor-label="delayTime" id="-1712212138%2FProperties%2F-1154371176" data-filterable-set=":cache:dokkaHtmlPartial/main"></a><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">var </span><a href="delay-time.html">delayTime</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a><span class="token operator"> = </span><span class="token constant">0</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+<a data-name="781214464%2FProperties%2F-1154371176" anchor-label="duration" id="781214464%2FProperties%2F-1154371176" data-filterable-set=":cache:dokkaHtmlPartial/main"></a>
+        <div class="table-row" data-filterable-current=":cache:dokkaHtmlPartial/main" data-filterable-set=":cache:dokkaHtmlPartial/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="duration.html">duration</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="781214464%2FProperties%2F-1154371176"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div>
+              <div class="title">
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-depenent-content" data-active="" data-togglable=":cache:dokkaHtmlPartial/main"><a data-name="781214464%2FProperties%2F-1154371176" anchor-label="duration" id="781214464%2FProperties%2F-1154371176" data-filterable-set=":cache:dokkaHtmlPartial/main"></a><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">var </span><a href="duration.html">duration</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a><span class="token operator"> = </span><span class="token constant">500</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+<a data-name="-774752420%2FProperties%2F-1154371176" anchor-label="filter" id="-774752420%2FProperties%2F-1154371176" data-filterable-set=":cache:dokkaHtmlPartial/main"></a>
+        <div class="table-row" data-filterable-current=":cache:dokkaHtmlPartial/main" data-filterable-set=":cache:dokkaHtmlPartial/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="filter.html">filter</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-774752420%2FProperties%2F-1154371176"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div>
+              <div class="title">
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-depenent-content" data-active="" data-togglable=":cache:dokkaHtmlPartial/main"><a data-name="-774752420%2FProperties%2F-1154371176" anchor-label="filter" id="-774752420%2FProperties%2F-1154371176" data-filterable-set=":cache:dokkaHtmlPartial/main"></a><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">var </span><a href="filter.html">filter</a><span class="token operator">: </span><a href="../-sound-effect-audio-filter/index.html">SoundEffectAudioFilter</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+<a data-name="-1746337172%2FProperties%2F-1154371176" anchor-label="filterEnvelope" id="-1746337172%2FProperties%2F-1154371176" data-filterable-set=":cache:dokkaHtmlPartial/main"></a>
+        <div class="table-row" data-filterable-current=":cache:dokkaHtmlPartial/main" data-filterable-set=":cache:dokkaHtmlPartial/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="filter-envelope.html">filterEnvelope</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1746337172%2FProperties%2F-1154371176"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div>
+              <div class="title">
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-depenent-content" data-active="" data-togglable=":cache:dokkaHtmlPartial/main"><a data-name="-1746337172%2FProperties%2F-1154371176" anchor-label="filterEnvelope" id="-1746337172%2FProperties%2F-1154371176" data-filterable-set=":cache:dokkaHtmlPartial/main"></a><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">var </span><a href="filter-envelope.html">filterEnvelope</a><span class="token operator">: </span><a href="../-sound-effect-envelope/index.html">SoundEffectEnvelope</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+<a data-name="-1493335391%2FProperties%2F-1154371176" anchor-label="offset" id="-1493335391%2FProperties%2F-1154371176" data-filterable-set=":cache:dokkaHtmlPartial/main"></a>
+        <div class="table-row" data-filterable-current=":cache:dokkaHtmlPartial/main" data-filterable-set=":cache:dokkaHtmlPartial/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="offset.html">offset</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1493335391%2FProperties%2F-1154371176"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div>
+              <div class="title">
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-depenent-content" data-active="" data-togglable=":cache:dokkaHtmlPartial/main"><a data-name="-1493335391%2FProperties%2F-1154371176" anchor-label="offset" id="-1493335391%2FProperties%2F-1154371176" data-filterable-set=":cache:dokkaHtmlPartial/main"></a><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">var </span><a href="offset.html">offset</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a><span class="token operator"> = </span><span class="token constant">0</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+<a data-name="-1565570812%2FProperties%2F-1154371176" anchor-label="oscillatorDelays" id="-1565570812%2FProperties%2F-1154371176" data-filterable-set=":cache:dokkaHtmlPartial/main"></a>
+        <div class="table-row" data-filterable-current=":cache:dokkaHtmlPartial/main" data-filterable-set=":cache:dokkaHtmlPartial/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="oscillator-delays.html">oscillatorDelays</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1565570812%2FProperties%2F-1154371176"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div>
+              <div class="title">
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-depenent-content" data-active="" data-togglable=":cache:dokkaHtmlPartial/main"><a data-name="-1565570812%2FProperties%2F-1154371176" anchor-label="oscillatorDelays" id="-1565570812%2FProperties%2F-1154371176" data-filterable-set=":cache:dokkaHtmlPartial/main"></a><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">var </span><a href="oscillator-delays.html">oscillatorDelays</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int-array/index.html">IntArray</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+<a data-name="1472435974%2FProperties%2F-1154371176" anchor-label="oscillatorPitch" id="1472435974%2FProperties%2F-1154371176" data-filterable-set=":cache:dokkaHtmlPartial/main"></a>
+        <div class="table-row" data-filterable-current=":cache:dokkaHtmlPartial/main" data-filterable-set=":cache:dokkaHtmlPartial/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="oscillator-pitch.html">oscillatorPitch</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1472435974%2FProperties%2F-1154371176"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div>
+              <div class="title">
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-depenent-content" data-active="" data-togglable=":cache:dokkaHtmlPartial/main"><a data-name="1472435974%2FProperties%2F-1154371176" anchor-label="oscillatorPitch" id="1472435974%2FProperties%2F-1154371176" data-filterable-set=":cache:dokkaHtmlPartial/main"></a><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">var </span><a href="oscillator-pitch.html">oscillatorPitch</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int-array/index.html">IntArray</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+<a data-name="678514810%2FProperties%2F-1154371176" anchor-label="oscillatorVolume" id="678514810%2FProperties%2F-1154371176" data-filterable-set=":cache:dokkaHtmlPartial/main"></a>
+        <div class="table-row" data-filterable-current=":cache:dokkaHtmlPartial/main" data-filterable-set=":cache:dokkaHtmlPartial/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="oscillator-volume.html">oscillatorVolume</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="678514810%2FProperties%2F-1154371176"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div>
+              <div class="title">
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-depenent-content" data-active="" data-togglable=":cache:dokkaHtmlPartial/main"><a data-name="678514810%2FProperties%2F-1154371176" anchor-label="oscillatorVolume" id="678514810%2FProperties%2F-1154371176" data-filterable-set=":cache:dokkaHtmlPartial/main"></a><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">var </span><a href="oscillator-volume.html">oscillatorVolume</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int-array/index.html">IntArray</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+<a data-name="1835737478%2FProperties%2F-1154371176" anchor-label="pitch" id="1835737478%2FProperties%2F-1154371176" data-filterable-set=":cache:dokkaHtmlPartial/main"></a>
+        <div class="table-row" data-filterable-current=":cache:dokkaHtmlPartial/main" data-filterable-set=":cache:dokkaHtmlPartial/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="pitch.html">pitch</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1835737478%2FProperties%2F-1154371176"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div>
+              <div class="title">
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-depenent-content" data-active="" data-togglable=":cache:dokkaHtmlPartial/main"><a data-name="1835737478%2FProperties%2F-1154371176" anchor-label="pitch" id="1835737478%2FProperties%2F-1154371176" data-filterable-set=":cache:dokkaHtmlPartial/main"></a><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">var </span><a href="pitch.html">pitch</a><span class="token operator">: </span><a href="../-sound-effect-envelope/index.html">SoundEffectEnvelope</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+<a data-name="37541231%2FProperties%2F-1154371176" anchor-label="pitchModifier" id="37541231%2FProperties%2F-1154371176" data-filterable-set=":cache:dokkaHtmlPartial/main"></a>
+        <div class="table-row" data-filterable-current=":cache:dokkaHtmlPartial/main" data-filterable-set=":cache:dokkaHtmlPartial/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="pitch-modifier.html">pitchModifier</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="37541231%2FProperties%2F-1154371176"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div>
+              <div class="title">
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-depenent-content" data-active="" data-togglable=":cache:dokkaHtmlPartial/main"><a data-name="37541231%2FProperties%2F-1154371176" anchor-label="pitchModifier" id="37541231%2FProperties%2F-1154371176" data-filterable-set=":cache:dokkaHtmlPartial/main"></a><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">var </span><a href="pitch-modifier.html">pitchModifier</a><span class="token operator">: </span><a href="../-sound-effect-envelope/index.html">SoundEffectEnvelope</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+<a data-name="-84073656%2FProperties%2F-1154371176" anchor-label="pitchModifierAmplitude" id="-84073656%2FProperties%2F-1154371176" data-filterable-set=":cache:dokkaHtmlPartial/main"></a>
+        <div class="table-row" data-filterable-current=":cache:dokkaHtmlPartial/main" data-filterable-set=":cache:dokkaHtmlPartial/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="pitch-modifier-amplitude.html">pitchModifierAmplitude</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-84073656%2FProperties%2F-1154371176"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div>
+              <div class="title">
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-depenent-content" data-active="" data-togglable=":cache:dokkaHtmlPartial/main"><a data-name="-84073656%2FProperties%2F-1154371176" anchor-label="pitchModifierAmplitude" id="-84073656%2FProperties%2F-1154371176" data-filterable-set=":cache:dokkaHtmlPartial/main"></a><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">var </span><a href="pitch-modifier-amplitude.html">pitchModifierAmplitude</a><span class="token operator">: </span><a href="../-sound-effect-envelope/index.html">SoundEffectEnvelope</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+<a data-name="-991183777%2FProperties%2F-1154371176" anchor-label="release" id="-991183777%2FProperties%2F-1154371176" data-filterable-set=":cache:dokkaHtmlPartial/main"></a>
+        <div class="table-row" data-filterable-current=":cache:dokkaHtmlPartial/main" data-filterable-set=":cache:dokkaHtmlPartial/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="release.html">release</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-991183777%2FProperties%2F-1154371176"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div>
+              <div class="title">
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-depenent-content" data-active="" data-togglable=":cache:dokkaHtmlPartial/main"><a data-name="-991183777%2FProperties%2F-1154371176" anchor-label="release" id="-991183777%2FProperties%2F-1154371176" data-filterable-set=":cache:dokkaHtmlPartial/main"></a><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">var </span><a href="release.html">release</a><span class="token operator">: </span><a href="../-sound-effect-envelope/index.html">SoundEffectEnvelope</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+<a data-name="-944040454%2FProperties%2F-1154371176" anchor-label="volume" id="-944040454%2FProperties%2F-1154371176" data-filterable-set=":cache:dokkaHtmlPartial/main"></a>
+        <div class="table-row" data-filterable-current=":cache:dokkaHtmlPartial/main" data-filterable-set=":cache:dokkaHtmlPartial/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="volume.html">volume</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-944040454%2FProperties%2F-1154371176"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div>
+              <div class="title">
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-depenent-content" data-active="" data-togglable=":cache:dokkaHtmlPartial/main"><a data-name="-944040454%2FProperties%2F-1154371176" anchor-label="volume" id="-944040454%2FProperties%2F-1154371176" data-filterable-set=":cache:dokkaHtmlPartial/main"></a><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">var </span><a href="volume.html">volume</a><span class="token operator">: </span><a href="../-sound-effect-envelope/index.html">SoundEffectEnvelope</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+<a data-name="-2015231239%2FProperties%2F-1154371176" anchor-label="volumeMultiplier" id="-2015231239%2FProperties%2F-1154371176" data-filterable-set=":cache:dokkaHtmlPartial/main"></a>
+        <div class="table-row" data-filterable-current=":cache:dokkaHtmlPartial/main" data-filterable-set=":cache:dokkaHtmlPartial/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="volume-multiplier.html">volumeMultiplier</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-2015231239%2FProperties%2F-1154371176"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div>
+              <div class="title">
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-depenent-content" data-active="" data-togglable=":cache:dokkaHtmlPartial/main"><a data-name="-2015231239%2FProperties%2F-1154371176" anchor-label="volumeMultiplier" id="-2015231239%2FProperties%2F-1154371176" data-filterable-set=":cache:dokkaHtmlPartial/main"></a><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">var </span><a href="volume-multiplier.html">volumeMultiplier</a><span class="token operator">: </span><a href="../-sound-effect-envelope/index.html">SoundEffectEnvelope</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+<a data-name="-1754164994%2FProperties%2F-1154371176" anchor-label="volumeMultiplierAmplitude" id="-1754164994%2FProperties%2F-1154371176" data-filterable-set=":cache:dokkaHtmlPartial/main"></a>
+        <div class="table-row" data-filterable-current=":cache:dokkaHtmlPartial/main" data-filterable-set=":cache:dokkaHtmlPartial/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="volume-multiplier-amplitude.html">volumeMultiplierAmplitude</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1754164994%2FProperties%2F-1154371176"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div>
+              <div class="title">
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-depenent-content" data-active="" data-togglable=":cache:dokkaHtmlPartial/main"><a data-name="-1754164994%2FProperties%2F-1154371176" anchor-label="volumeMultiplierAmplitude" id="-1754164994%2FProperties%2F-1154371176" data-filterable-set=":cache:dokkaHtmlPartial/main"></a><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">var </span><a href="volume-multiplier-amplitude.html">volumeMultiplierAmplitude</a><span class="token operator">: </span><a href="../-sound-effect-envelope/index.html">SoundEffectEnvelope</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+        <div class="footer"><span class="go-to-top-icon"><a href="#content" id="go-to-top-link"></a></span><span>© 2022 Copyright</span><span class="pull-right"><span>Generated by </span><a href="https://github.com/Kotlin/dokka"><span>dokka</span><span class="padded-icon"></span></a></span>
+        </div>
+    </div>
+</div>
+
+</body></html>
+
