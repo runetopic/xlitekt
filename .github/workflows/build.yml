@@ -21,6 +21,14 @@ jobs:
       - name: Change wrapper permissions
         run: chmod +x ./gradlew
       - name: Build and analyze
+        run: ./gradlew clean build dokkaGfmMultiModule
+      - name: Publish Dokka
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: ./gradlew clean build dokkaGfmMultiModule
+        run: |
+          cp: /home/runner/work/xlitekt/xlitekt/
+          git config --local user.name "github-actions[bot]"
+          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docker/*
+          git commit -m "Update Dokker."
+          git push https://$USERNAME:$REPO_KEY@github.com/runetopic/xlitekt.git
