@@ -1,0 +1,6 @@
+//[cache](../../../index.md)/[xlitekt.cache.provider.instrument](../index.md)/[InstrumentEntryType](index.md)/[InstrumentEntryType](-instrument-entry-type.md)
+
+# InstrumentEntryType
+
+[jvm]\
+fun [InstrumentEntryType](-instrument-entry-type.md)(id: [Int](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html), audioBuffers: [Array](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-array/index.html)&lt;[InstrumentSample](../-instrument-sample/index.md)?&gt;? = null, pitchOffset: [ShortArray](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-short-array/index.html)? = null, volumeOffset: [ByteArray](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-byte-array/index.html)? = null, panOffset: [ByteArray](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-byte-array/index.html)? = null, field3117: [Array](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-array/index.html)&lt;[Instrument](../-instrument/index.md)?&gt;? = null, loopMode: [ByteArray](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-byte-array/index.html)? = null, offsets: [IntArray](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int-array/index.html)? = null, baseVelocity: [Int](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html) = 0)
