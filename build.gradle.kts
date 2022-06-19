@@ -1,3 +1,5 @@
+import org.jetbrains.dokka.gradle.DokkaMultiModuleTask
+import org.jetbrains.dokka.gradle.DokkaTask
 import org.jetbrains.kotlin.gradle.plugin.KotlinPluginWrapper
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
@@ -8,6 +10,7 @@ plugins {
     alias(deps.plugins.shadowjar)
     alias(deps.plugins.versions)
     alias(deps.plugins.serialization)
+    alias(deps.plugins.dokka)
 }
 
 group = "com.runetopic.xlite"
@@ -42,6 +45,9 @@ allprojects {
                 "-opt-in=kotlinx.serialization.ExperimentalSerializationApi",
                 "-opt-in=kotlin.ExperimentalUnsignedTypes"
             )
+        }
+        withType<DokkaMultiModuleTask> {
+            outputDirectory.set(projectDir.resolve("dokka"))
         }
     }
 }

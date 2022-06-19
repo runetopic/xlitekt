@@ -21,6 +21,7 @@ dependencyResolutionManagement {
             version("pathfinder", "2.1.4")
             version("fastutil", "8.5.8")
             version("jctools", "3.3.0")
+            version("dokka", "1.6.21")
 
             library("ktor-server-netty", "io.ktor", "ktor-server-netty").versionRef("ktor")
             library("koin-core", "io.insert-koin", "koin-core").versionRef("koin")
@@ -48,6 +49,7 @@ dependencyResolutionManagement {
             plugin("serialization", "org.jetbrains.kotlin.plugin.serialization").versionRef("kotlin")
             plugin("shadowjar", "com.github.johnrengelman.shadow").versionRef("shadowjar")
             plugin("versions", "com.github.ben-manes.versions").versionRef("versions")
+            plugin("dokka", "org.jetbrains.dokka").versionRef("dokka")
         }
     }
 }
