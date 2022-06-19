@@ -1,0 +1,6 @@
+//[shared](../../index.md)/[xlitekt.shared.buffer](index.md)/[discardUntilDelimiter](discard-until-delimiter.md)
+
+# discardUntilDelimiter
+
+[jvm]\
+fun [ByteBuffer](https://docs.oracle.com/javase/8/docs/api/java/nio/ByteBuffer.html).[discardUntilDelimiter](discard-until-delimiter.md)(delimiter: [Int](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html)): [Int](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html)

@@ -1,0 +1,48 @@
+//[cache](../../index.md)/[com.sun.media](index.md)
+
+# Package com.sun.media
+
+## Types
+
+| Name | Summary |
+|---|---|
+| [AudioFloatConverter](-audio-float-converter/index.md) | [jvm]<br>abstract class [AudioFloatConverter](-audio-float-converter/index.md)<br>This class is used to convert between 8,16,24,32,32+ bit signed/unsigned big/litle endian fixed/floating point byte buffers and float buffers. |
+| [AudioFloatInputStream](-audio-float-input-stream/index.md) | [jvm]<br>abstract class [AudioFloatInputStream](-audio-float-input-stream/index.md)<br>This class is used to create AudioFloatInputStream from AudioInputStream and byte buffers. |
+| [AudioSynthesizerPropertyInfo](-audio-synthesizer-property-info/index.md) | [jvm]<br>open class [AudioSynthesizerPropertyInfo](-audio-synthesizer-property-info/index.md)<br>Information about property used in opening AudioSynthesizer. |
+| [InvalidDataException](-invalid-data-exception/index.md) | [jvm]<br>open class [InvalidDataException](-invalid-data-exception/index.md) : [IOException](https://docs.oracle.com/javase/8/docs/api/java/io/IOException.html)<br>This exception is used when a file contains illegal or unexpected data. |
+| [InvalidFormatException](-invalid-format-exception/index.md) | [jvm]<br>open class [InvalidFormatException](-invalid-format-exception/index.md) : [InvalidDataException](-invalid-data-exception/index.md)<br>This exception is used when a reader is used to read file of a format it doesn't unterstand or support. |
+| [ModelByteBuffer](-model-byte-buffer/index.md) | [jvm]<br>open class [ModelByteBuffer](-model-byte-buffer/index.md)<br>This class is a pointer to a binary array either in memory or on disk. |
+| [ModelByteBufferWavetable](-model-byte-buffer-wavetable/index.md) | [jvm]<br>open class [ModelByteBufferWavetable](-model-byte-buffer-wavetable/index.md) : [ModelWavetable](-model-wavetable/index.md)<br>Wavetable oscillator for pre-loaded data. |
+| [ModelChannelMixer](-model-channel-mixer/index.md) | [jvm]<br>interface [ModelChannelMixer](-model-channel-mixer/index.md) : [MidiChannel](https://docs.oracle.com/javase/8/docs/api/javax/sound/midi/MidiChannel.html)<br>ModelChannelMixer is used to process channel voice mix output before going to master output. |
+| [ModelConnectionBlock](-model-connection-block/index.md) | [jvm]<br>open class [ModelConnectionBlock](-model-connection-block/index.md)<br>Connection blocks are used to connect source variable to a destination variable. |
+| [ModelDestination](-model-destination/index.md) | [jvm]<br>open class [ModelDestination](-model-destination/index.md)<br>This class is used to identify destinations in connection blocks, see ModelConnectionBlock. |
+| [ModelDirectedPlayer](-model-directed-player/index.md) | [jvm]<br>interface [ModelDirectedPlayer](-model-directed-player/index.md)<br>ModelDirectedPlayer is the one who is directed by ModelDirector to play ModelPerformer objects. |
+| [ModelDirector](-model-director/index.md) | [jvm]<br>interface [ModelDirector](-model-director/index.md)<br>A director chooses what performers should be played for each note on and note off events. |
+| [ModelIdentifier](-model-identifier/index.md) | [jvm]<br>open class [ModelIdentifier](-model-identifier/index.md)<br>This class stores the identity of source and destinations in connection blocks, see ModelConnectionBlock. |
+| [ModelInstrument](-model-instrument/index.md) | [jvm]<br>abstract class [ModelInstrument](-model-instrument/index.md) : [Instrument](https://docs.oracle.com/javase/8/docs/api/javax/sound/midi/Instrument.html)<br>The model instrument class. |
+| [ModelInstrumentComparator](-model-instrument-comparator/index.md) | [jvm]<br>open class [ModelInstrumentComparator](-model-instrument-comparator/index.md) : [Comparator](https://docs.oracle.com/javase/8/docs/api/java/util/Comparator.html)&lt;[T](https://docs.oracle.com/javase/8/docs/api/java/util/Comparator.html)&gt; <br>Instrument comparator class. |
+| [ModelMappedInstrument](-model-mapped-instrument/index.md) | [jvm]<br>open class [ModelMappedInstrument](-model-mapped-instrument/index.md) : [ModelInstrument](-model-instrument/index.md)<br>This class is used to map instrument to another patch. |
+| [ModelOscillator](-model-oscillator/index.md) | [jvm]<br>interface [ModelOscillator](-model-oscillator/index.md)<br>This interface is used for oscillators. |
+| [ModelOscillatorStream](-model-oscillator-stream/index.md) | [jvm]<br>interface [ModelOscillatorStream](-model-oscillator-stream/index.md)<br>This interface is used for audio streams from ModelOscillator. |
+| [ModelPatch](-model-patch/index.md) | [jvm]<br>open class [ModelPatch](-model-patch/index.md) : [Patch](https://docs.oracle.com/javase/8/docs/api/javax/sound/midi/Patch.html)<br>A extended patch object that has isPercussion function. |
+| [ModelPerformer](-model-performer/index.md) | [jvm]<br>open class [ModelPerformer](-model-performer/index.md)<br>This class is used to define how to synthesize audio in universal maner for both SF2 and DLS instruments. |
+| [ModelSource](-model-source/index.md) | [jvm]<br>open class [ModelSource](-model-source/index.md)<br>This class is used to identify sources in connection blocks, see ModelConnectionBlock. |
+| [ModelStandardDirector](-model-standard-director/index.md) | [jvm]<br>open class [ModelStandardDirector](-model-standard-director/index.md) : [ModelDirector](-model-director/index.md)<br>A standard director who chooses performers by there keyfrom,keyto,velfrom,velto properties. |
+| [ModelStandardIndexedDirector](-model-standard-indexed-director/index.md) | [jvm]<br>open class [ModelStandardIndexedDirector](-model-standard-indexed-director/index.md) : [ModelDirector](-model-director/index.md)<br>A standard indexed director who chooses performers by there keyfrom,keyto,velfrom,velto properties. |
+| [ModelStandardTransform](-model-standard-transform/index.md) | [jvm]<br>open class [ModelStandardTransform](-model-standard-transform/index.md) : [ModelTransform](-model-transform/index.md)<br>A standard transformer used in connection blocks. |
+| [ModelTransform](-model-transform/index.md) | [jvm]<br>interface [ModelTransform](-model-transform/index.md)<br>Model transform interface. |
+| [ModelWavetable](-model-wavetable/index.md) | [jvm]<br>interface [ModelWavetable](-model-wavetable/index.md) : [ModelOscillator](-model-oscillator/index.md)<br>This is a wavetable oscillator interface. |
+| [RIFFInvalidDataException](-r-i-f-f-invalid-data-exception/index.md) | [jvm]<br>open class [RIFFInvalidDataException](-r-i-f-f-invalid-data-exception/index.md) : [InvalidDataException](-invalid-data-exception/index.md)<br>This exception is used when a RIFF file contains illegal or unexpected data. |
+| [RIFFInvalidFormatException](-r-i-f-f-invalid-format-exception/index.md) | [jvm]<br>open class [RIFFInvalidFormatException](-r-i-f-f-invalid-format-exception/index.md) : [InvalidFormatException](-invalid-format-exception/index.md)<br>This exception is used when a reader is used to read RIFF file of a format it doesn't unterstand or support. |
+| [RIFFReader](-r-i-f-f-reader/index.md) | [jvm]<br>open class [RIFFReader](-r-i-f-f-reader/index.md) : [InputStream](https://docs.oracle.com/javase/8/docs/api/java/io/InputStream.html)<br>Resource Interchange File Format (RIFF) stream decoder. |
+| [RIFFWriter](-r-i-f-f-writer/index.md) | [jvm]<br>open class [RIFFWriter](-r-i-f-f-writer/index.md) : [OutputStream](https://docs.oracle.com/javase/8/docs/api/java/io/OutputStream.html)<br>Resource Interchange File Format (RIFF) stream encoder. |
+| [SF2GlobalRegion](-s-f2-global-region/index.md) | [jvm]<br>open class [SF2GlobalRegion](-s-f2-global-region/index.md) : [SF2Region](-s-f2-region/index.md)<br>Soundfont global region. |
+| [SF2Instrument](-s-f2-instrument/index.md) | [jvm]<br>open class [SF2Instrument](-s-f2-instrument/index.md) : [ModelInstrument](-model-instrument/index.md)<br>Soundfont instrument. |
+| [SF2InstrumentRegion](-s-f2-instrument-region/index.md) | [jvm]<br>open class [SF2InstrumentRegion](-s-f2-instrument-region/index.md) : [SF2Region](-s-f2-region/index.md)<br>Soundfont instrument region. |
+| [SF2Layer](-s-f2-layer/index.md) | [jvm]<br>open class [SF2Layer](-s-f2-layer/index.md) : [SoundbankResource](https://docs.oracle.com/javase/8/docs/api/javax/sound/midi/SoundbankResource.html)<br>Soundfont layer. |
+| [SF2LayerRegion](-s-f2-layer-region/index.md) | [jvm]<br>open class [SF2LayerRegion](-s-f2-layer-region/index.md) : [SF2Region](-s-f2-region/index.md)<br>Soundfont layer region. |
+| [SF2Modulator](-s-f2-modulator/index.md) | [jvm]<br>open class [SF2Modulator](-s-f2-modulator/index.md)<br>Soundfont modulator container. |
+| [SF2Region](-s-f2-region/index.md) | [jvm]<br>open class [SF2Region](-s-f2-region/index.md)<br>Soundfont general region. |
+| [SF2Sample](-s-f2-sample/index.md) | [jvm]<br>open class [SF2Sample](-s-f2-sample/index.md) : [SoundbankResource](https://docs.oracle.com/javase/8/docs/api/javax/sound/midi/SoundbankResource.html)<br>Soundfont sample storage. |
+| [SF2Soundbank](-s-f2-soundbank/index.md) | [jvm]<br>open class [SF2Soundbank](-s-f2-soundbank/index.md) : [Soundbank](https://docs.oracle.com/javase/8/docs/api/javax/sound/midi/Soundbank.html)<br>A SoundFont 2.04 soundbank reader. |
+| [SF2SoundbankReader](-s-f2-soundbank-reader/index.md) | [jvm]<br>open class [SF2SoundbankReader](-s-f2-soundbank-reader/index.md) : [SoundbankReader](https://docs.oracle.com/javase/8/docs/api/javax/sound/midi/spi/SoundbankReader.html)<br>This class is used to connect the SF2SoundBank class to the SoundbankReader SPI interface. |
