@@ -17,6 +17,8 @@ XliteKt is a from scratch game server emulator written in Kotlin.
 7. Download the revision gamepack.jar from [Runestats](https://archive.runestats.com/osrs/) and place this in the ``./application/resources/client_config/`` directory. ``gamepack.jar`` is an example of how the file should be named.
 8. Run the application.
 
+[Additional documentation can be found here](https://runetopic.github.io/xlitekt/).
+
 # Application configuration
 
 _Most everything will be setup and configured already for you around the build #202. So unless you're porting to a recent revision you'll really only need to worry about updating the RSA Keys in the application.conf file._
