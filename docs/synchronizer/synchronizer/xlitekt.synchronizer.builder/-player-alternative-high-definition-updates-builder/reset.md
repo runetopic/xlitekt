@@ -1,6 +1,0 @@
-//[synchronizer](../../../index.md)/[xlitekt.synchronizer.builder](../index.md)/[PlayerAlternativeHighDefinitionUpdatesBuilder](index.md)/[reset](reset.md)
-
-# reset
-
-[jvm]\
-open override fun [reset](reset.md)()
