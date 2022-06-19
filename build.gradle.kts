@@ -1,5 +1,4 @@
 import org.jetbrains.dokka.gradle.DokkaMultiModuleTask
-import org.jetbrains.dokka.gradle.DokkaTask
 import org.jetbrains.kotlin.gradle.plugin.KotlinPluginWrapper
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
@@ -47,7 +46,7 @@ allprojects {
             )
         }
         withType<DokkaMultiModuleTask> {
-            outputDirectory.set(projectDir.resolve("dokka"))
+            outputDirectory.set(projectDir.resolve("docs"))
         }
     }
 }

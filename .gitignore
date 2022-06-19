@@ -13,4 +13,4 @@ main_file_cache.*
 /application/src/main/resources/client_config/gamepack.jar
 /cache/data/dump/*
 !.github/workflows/build.yml
-dokka/*
+docs/*

@@ -22,14 +22,12 @@ jobs:
         run: chmod +x ./gradlew
       - name: Build and analyze
         run: ./gradlew clean build dokkaGfmMultiModule
-      - name: Publish Dokka
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Publish Documentation
         run: |
           cd /
           cd /home/runner/work/xlitekt/xlitekt/
           git config --local user.name "github-actions[bot]"
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add -f dokka/*
-          git commit -m "Publish Dokka."
+          git add -f docs/*
+          git commit -m "Publish documentation."
           git push
