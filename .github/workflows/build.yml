@@ -30,6 +30,7 @@ jobs:
           cd /home/runner/work/xlitekt/xlitekt/
           git config --local user.name "github-actions[bot]"
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config advice.addIgnoredFile false
           git add dokka/*
-          git commit -m "Update Dokka."
+          git commit -m "Publish Dokka."
           git push https://$USERNAME:$REPO_KEY@github.com/runetopic/xlitekt.git
