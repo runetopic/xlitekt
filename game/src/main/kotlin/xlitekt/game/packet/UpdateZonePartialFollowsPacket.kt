@@ -1,8 +1,6 @@
 package xlitekt.game.packet
 
 /**
- * @author Jordan Abraham
- *
  * <b>Information</b>
  *
  * Represents the UPDATE_ZONE_PARTIAL_FOLLOWS server -> client packet.
@@ -18,6 +16,8 @@ package xlitekt.game.packet
  * writeByte((localZ shr 3) shl 3)
  * writeByteSubtract((localX shr 3) shl 3)
  * ```
+ *
+ * @author Jordan Abraham
  *
  * @see ObjAddPacket
  * @see ObjDelPacket
