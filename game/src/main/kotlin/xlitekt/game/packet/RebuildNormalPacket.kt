@@ -6,8 +6,6 @@ import xlitekt.game.actor.player.Viewport
 import xlitekt.game.world.map.Location
 
 /**
- * @author Jordan Abraham
- *
  * <b>Information</b>
  *
  * Represents the REBUILD_NORMAL server -> client packet.
@@ -52,6 +50,8 @@ import xlitekt.game.world.map.Location
  *      }
  * }
  * ```
+ *
+ * @author Jordan Abraham
  *
  * @see Viewport.init
  * @see Location.packedLocation
