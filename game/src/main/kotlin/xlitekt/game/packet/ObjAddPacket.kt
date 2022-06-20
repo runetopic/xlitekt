@@ -1,8 +1,6 @@
 package xlitekt.game.packet
 
 /**
- * @author Jordan Abraham
- *
  * <b>Information</b>
  *
  * Represents the OBJ_ADD server -> client packet.
@@ -16,6 +14,8 @@ package xlitekt.game.packet
  * writeByteSubtract(packedOffset)
  * writeShortLittleEndian(amount)
  * ```
+ *
+ * @author Jordan Abraham
  *
  * @property id The id of the obj.
  * @property amount The amount of the obj.
