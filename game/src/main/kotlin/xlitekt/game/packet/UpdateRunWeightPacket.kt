@@ -1,8 +1,6 @@
 package xlitekt.game.packet
 
 /**
- * @author Tyler Telis
- *
  * <b>Information</b>
  *
  * Represents the UPDATE_RUNWEIGHT server -> client packet.
@@ -14,6 +12,8 @@ package xlitekt.game.packet
  * ```
  * writeShort(weight.toInt())
  * ```
+ *
+ * @author Tyler Telis
  *
  * @property weight The weight of the player.
  */
