@@ -1,8 +1,6 @@
 package xlitekt.game.packet
 
 /**
- * @author Tyler Telis
- *
  * <b>Information</b>
  *
  * Represents the IF_OPENSUB server -> client packet.
@@ -18,6 +16,8 @@ package xlitekt.game.packet
  * writeByteSubtract(if (walkable) 1 else 0)
  * writeInt(toPackedInterface)
  * ```
+ *
+ * @author Tyler Telis
  *
  * @property interfaceId The interface ID to use for the sub level interface.
  * @property toPackedInterface The top level packed interface to put this sub interface onto.
