@@ -1,8 +1,6 @@
 package xlitekt.game.packet
 
 /**
- * @author Jordan Abraham
- *
  * <b>Information</b>
  *
  * Represents the CLOSE_MODAL client -> server packet.
@@ -13,5 +11,7 @@ package xlitekt.game.packet
  * <b>Disassembly Exmaple</b>
  *
  * This packet has an empty body.
+ *
+ * @author Jordan Abraham
  */
 class CloseModalPacket : Packet
