@@ -3,12 +3,20 @@ package xlitekt.game.packet
 /**
  * @author Jordan Abraham
  *
+ * <b>Information</b>
  * Represents the UPDATE_ZONE_PARTIAL_ENCLOSED server -> client packet.
  *
  * This packet is used to send multiple updates together to a single specific zone.
  *
  * The client takes an input X and Z location and loops through the rest of the packet
  * bytes to send multiple updates to a single zone.
+ *
+ * <b>Assembly Example</b>
+ * ```
+ * writeByteNegate((localZ shr 3) shl 3)
+ * writeByte((localX shr 3) shl 3)
+ * writeBytes(bytes)
+ * ```
  *
  * @see ObjAddPacket
  * @see ObjDelPacket

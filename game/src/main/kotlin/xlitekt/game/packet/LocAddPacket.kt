@@ -3,9 +3,17 @@ package xlitekt.game.packet
 /**
  * @author Jordan Abraham
  *
+ * <b>Information</b>
  * Represents the LOC_ADD server -> client packet.
  *
  * This packet is used to add a loc to a zone.
+ *
+ * <b>Assembly Example</b>
+ * ```
+ * writeByteSubtract((shape shl 2) or (rotation and 0x3))
+ * writeByteSubtract(packedOffset)
+ * writeShortLittleEndianAdd(id)
+ * ```
  *
  * @property id The id of the loc.
  * @property shape The shape of the loc.

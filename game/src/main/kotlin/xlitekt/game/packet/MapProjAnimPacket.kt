@@ -3,9 +3,25 @@ package xlitekt.game.packet
 /**
  * @author Jordan Abraham
  *
+ * <b>Information</b>
  * Represents the MAP_PROJANIM server -> client packet.
  *
  * This packet is used to add a mapProjAnim to a zone.
+ *
+ * <b>Assembly Example</b>
+ * ```
+ * writeByteAdd(packedOffset)
+ * writeShortLittleEndian(-1)
+ * writeByteNegate(distanceX)
+ * writeShort(lifespan)
+ * writeByte(startHeight)
+ * writeShortLittleEndian(id)
+ * writeByte(steepness)
+ * writeByteNegate(angle)
+ * writeShortLittleEndianAdd(delay)
+ * writeByte(endHeight)
+ * writeByteAdd(distanceZ)
+ * ```
  *
  * @property id The id of the mapProjAnim. This is also the same as a normal spot animation.
  * @property distanceX The difference between the end location and start location on the X axis.
