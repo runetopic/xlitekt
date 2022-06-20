@@ -1,8 +1,6 @@
 package xlitekt.game.packet
 
 /**
- * @author Tyler Telis
- *
  * <b>Information</b>
  *
  * Represents the IF_CLOSESUB server -> client packet.
@@ -16,6 +14,8 @@ package xlitekt.game.packet
  * ```
  * writeInt(packedInterface)
  * ```
+ *
+ * @author Tyler Telis
  *
  * @property packedInterface The packed interface that is to be closed client sided (interfaceId shl 16 or childId).
  */
