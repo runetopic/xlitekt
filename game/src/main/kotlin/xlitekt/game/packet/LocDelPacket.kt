@@ -1,8 +1,6 @@
 package xlitekt.game.packet
 
 /**
- * @author Jordan Abraham
- *
  * <b>Information</b>
  *
  * Represents the LOC_DEL server -> client packet.
@@ -15,6 +13,8 @@ package xlitekt.game.packet
  * writeByte((shape shl 2) or (rotation and 0x3))
  * writeByteAdd(packedOffset)
  * ```
+ *
+ * @author Jordan Abraham
  *
  * @property shape The shape of the loc.
  * @property rotation The rotation of the loc.
