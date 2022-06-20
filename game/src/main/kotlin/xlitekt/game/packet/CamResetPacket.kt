@@ -11,6 +11,6 @@ package xlitekt.game.packet
  *
  * <b>Assembly Example</b>
  *
- * This packet has an empty body and does not require additional information to send to the client.
+ * This packet has an empty body.
  */
 class CamResetPacket : Packet
