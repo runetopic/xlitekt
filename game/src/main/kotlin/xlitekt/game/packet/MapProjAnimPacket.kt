@@ -1,8 +1,6 @@
 package xlitekt.game.packet
 
 /**
- * @author Jordan Abraham
- *
  * <b>Information</b>
  *
  * Represents the MAP_PROJANIM server -> client packet.
@@ -24,6 +22,8 @@ package xlitekt.game.packet
  * writeByte(endHeight)
  * writeByteAdd(distanceZ)
  * ```
+ *
+ * @author Jordan Abraham
  *
  * @property id The id of the mapProjAnim. This is also the same as a normal spot animation.
  * @property distanceX The difference between the end location and start location on the X axis.
