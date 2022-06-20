@@ -17,6 +17,14 @@ package xlitekt.game.packet
  *
  * @author Jordan Abraham
  *
+ * @see ObjAddPacket
+ * @see ObjDelPacket
+ * @see LocDelPacket
+ * @see MapProjAnimPacket
+ * @see UpdateZoneFullFollowsPacket
+ * @see UpdateZonePartialEnclosedPacket
+ * @see UpdateZonePartialFollowsPacket
+ *
  * @property id The id of the loc.
  * @property shape The shape of the loc.
  * @property rotation The rotation of the loc.

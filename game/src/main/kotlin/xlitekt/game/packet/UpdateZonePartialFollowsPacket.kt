@@ -24,6 +24,7 @@ package xlitekt.game.packet
  * @see LocAddPacket
  * @see LocDelPacket
  * @see MapProjAnimPacket
+ * @see UpdateZoneFullFollowsPacket
  * @see UpdateZonePartialEnclosedPacket
  *
  * @property localX The X location of this zone relative to the location of the client player.

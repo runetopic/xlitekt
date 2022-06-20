@@ -16,6 +16,14 @@ package xlitekt.game.packet
  *
  * @author Jordan Abraham
  *
+ * @see ObjAddPacket
+ * @see LocAddPacket
+ * @see LocDelPacket
+ * @see MapProjAnimPacket
+ * @see UpdateZoneFullFollowsPacket
+ * @see UpdateZonePartialEnclosedPacket
+ * @see UpdateZonePartialFollowsPacket
+ *
  * @property id The id of the obj.
  * @property packedOffset The packed offset location of the obj relative to the client player location.
  */

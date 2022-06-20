@@ -27,8 +27,13 @@ package xlitekt.game.packet
  *
  * @author Jordan Abraham
  *
- * @see UpdateZonePartialFollowsPacket
+ * @see ObjAddPacket
+ * @see ObjDelPacket
+ * @see LocAddPacket
+ * @see LocDelPacket
+ * @see MapProjAnimPacket
  * @see UpdateZonePartialEnclosedPacket
+ * @see UpdateZonePartialFollowsPacket
  *
  * @property localX The X location of this zone relative to the location of the client player.
  * @property localZ The Z location of this zone relative to the location of the client player.

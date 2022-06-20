@@ -16,6 +16,14 @@ package xlitekt.game.packet
  *
  * @author Jordan Abraham
  *
+ * @see ObjAddPacket
+ * @see ObjDelPacket
+ * @see LocAddPacket
+ * @see MapProjAnimPacket
+ * @see UpdateZoneFullFollowsPacket
+ * @see UpdateZonePartialEnclosedPacket
+ * @see UpdateZonePartialFollowsPacket
+ *
  * @property shape The shape of the loc.
  * @property rotation The rotation of the loc.
  * @property packedOffset The packed offset location of the loc relative to the client player location.

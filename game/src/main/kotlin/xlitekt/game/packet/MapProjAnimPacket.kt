@@ -25,6 +25,14 @@ package xlitekt.game.packet
  *
  * @author Jordan Abraham
  *
+ * @see ObjAddPacket
+ * @see ObjDelPacket
+ * @see LocAddPacket
+ * @see LocDelPacket
+ * @see UpdateZoneFullFollowsPacket
+ * @see UpdateZonePartialEnclosedPacket
+ * @see UpdateZonePartialFollowsPacket
+ *
  * @property id The id of the mapProjAnim. This is also the same as a normal spot animation.
  * @property distanceX The difference between the end location and start location on the X axis.
  * @property distanceZ The difference between the end location and start location on the Z axis.
