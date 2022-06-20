@@ -1,8 +1,6 @@
 package xlitekt.game.packet
 
 /**
- * @author Jordan Abraham
- *
  * <b>Information</b>
  *
  * Represents the CAM_RESET server -> client packet.
@@ -12,5 +10,7 @@ package xlitekt.game.packet
  * <b>Assembly Example</b>
  *
  * This packet has an empty body.
+ *
+ * @author Jordan Abraham
  */
 class CamResetPacket : Packet
