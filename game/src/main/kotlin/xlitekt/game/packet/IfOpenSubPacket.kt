@@ -8,8 +8,8 @@ package xlitekt.game.packet
  * Represents the IF_OPENSUB server -> client packet.
  *
  * This packet is used to open a sub level interface. A sub level interface is that of which
- * is put onto a top level interface. An example of this is displaying the chat box interface
- * onto the fixed game mode top level interface.
+ * is contained in top level interface. An example of this is the chat box interface
+ * on the fixed game mode top level interface.
  *
  * <b>Assembly Example</b>
  *
