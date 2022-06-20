@@ -4,6 +4,7 @@ package xlitekt.game.packet
  * @author Jordan Abraham
  *
  * Represents the MAP_PROJANIM server -> client packet.
+ *
  * This packet is used to add a mapProjAnim to a zone.
  *
  * @property id The id of the mapProjAnim. This is also the same as a normal spot animation.

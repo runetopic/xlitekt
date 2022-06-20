@@ -4,6 +4,7 @@ package xlitekt.game.packet
  * @author Jordan Abraham
  *
  * Represents the OBJ_ADD server -> client packet.
+ *
  * This packet is used to add an obj to a zone.
  *
  * @property id The id of the obj.

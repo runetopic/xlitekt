@@ -4,6 +4,7 @@ package xlitekt.game.packet
  * @author Jordan Abraham
  *
  * Represents the OBJ_DEL server -> client packet.
+ *
  * This packet is used to delete an obj from a zone.
  *
  * @property id The id of the obj.

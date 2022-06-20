@@ -4,6 +4,7 @@ package xlitekt.game.packet
  * @author Jordan Abraham
  *
  * Represents the IF_BUTTON client -> server packet.
+ *
  * This packet is used to handle when the client clicks on an interface.
  *
  * @property index The index of this packet followed by IF_BUTTON. Examples: IF_BUTTON1, IF_BUTTON2.

@@ -4,6 +4,7 @@ package xlitekt.game.packet
  * @author Jordan Abraham
  *
  * Represents the LOC_ADD server -> client packet.
+ *
  * This packet is used to add a loc to a zone.
  *
  * @property id The id of the loc.

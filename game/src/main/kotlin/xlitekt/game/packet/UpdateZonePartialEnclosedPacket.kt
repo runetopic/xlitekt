@@ -4,21 +4,22 @@ package xlitekt.game.packet
  * @author Jordan Abraham
  *
  * Represents the UPDATE_ZONE_PARTIAL_ENCLOSED server -> client packet.
+ *
  * This packet is used to send multiple updates together to a single specific zone.
+ *
  * The client takes an input X and Z location and loops through the rest of the packet
  * bytes to send multiple updates to a single zone.
  *
- * @see ObjAddPacket To add a obj to a zone.
- * @see ObjDelPacket To delete a obj from a zone.
- * @see LocAddPacket To add a loc to a zone.
- * @see LocDelPacket To delete a loc from a zone.
- * @see MapProjAnimPacket To add a mapProjAnim to a zone.
- *
- * @see UpdateZonePartialFollowsPacket To send a single update to a zone instead of multiple updates.
+ * @see ObjAddPacket
+ * @see ObjDelPacket
+ * @see LocAddPacket
+ * @see LocDelPacket
+ * @see MapProjAnimPacket
+ * @see UpdateZonePartialFollowsPacket
  *
  * @property localX The X location of this zone relative to the location of the client player.
  * @property localZ The Z location of this zone relative to the location of the client player.
- * @property bytes The ByteArray of updates to send to the client for updates to a zone.
+ * @property bytes The [ByteArray] of updates to send to the client for updates to a zone.
  */
 data class UpdateZonePartialEnclosedPacket(
     val localX: Int,
