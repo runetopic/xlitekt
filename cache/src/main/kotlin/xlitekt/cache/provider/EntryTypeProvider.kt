@@ -38,7 +38,7 @@ abstract class EntryTypeProvider<R : EntryType> {
     protected fun String.toNameHash() = fold(0) { hash, next -> next.code + ((hash shl 5) - hash) }
 
     /**
-     * Returns the total number of [R]s contained within this provider.
+     * @return The total number of [EntryType]s contained within this provider.
      *
      * <b>Example</b>
      *
@@ -50,7 +50,9 @@ abstract class EntryTypeProvider<R : EntryType> {
     fun size() = entries.size
 
     /**
-     * Returns a [R] with the given id.
+     * Gets a [EntryType] with the given id.
+     *
+     * @return [EntryType]
      *
      * <b>Example</b>
      *
@@ -62,8 +64,10 @@ abstract class EntryTypeProvider<R : EntryType> {
     fun entryType(id: Int) = entries[id]
 
     /**
-     * Returns if the given id has an associated [R].
+     * Gets if the given id has an associated [EntryType].
      * This is widely used as a verifier for server logic as it is safe to compare against the cache information.
+     *
+     * @return [Boolean] True if this provider contains an [EntryType] with the given id.
      *
      * <b>Example</b>
      *
@@ -75,7 +79,9 @@ abstract class EntryTypeProvider<R : EntryType> {
     fun exists(id: Int) = entries.containsKey(id)
 
     /**
-     * Returns a [Collection] of [R]s contained within this provider.
+     * Gets a [Collection] of [EntryType]s contained within this provider.
+     *
+     * @return [Collection] of [EntryType]s.
      *
      * <b>Example</b>
      *
