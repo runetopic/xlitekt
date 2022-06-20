@@ -38,7 +38,9 @@ abstract class EntryTypeProvider<R : EntryType> {
     protected fun String.toNameHash() = fold(0) { hash, next -> next.code + ((hash shl 5) - hash) }
 
     /**
-     * @return The total number of [EntryType]s contained within this provider.
+     * Get the total number of [EntryType]s contained within this provider.
+     *
+     * @return [Int] The size.
      *
      * <b>Example</b>
      *
