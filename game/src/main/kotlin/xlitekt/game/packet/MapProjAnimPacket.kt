@@ -4,11 +4,13 @@ package xlitekt.game.packet
  * @author Jordan Abraham
  *
  * <b>Information</b>
+ *
  * Represents the MAP_PROJANIM server -> client packet.
  *
  * This packet is used to add a mapProjAnim to a zone.
  *
  * <b>Assembly Example</b>
+ *
  * ```
  * writeByteAdd(packedOffset)
  * writeShortLittleEndian(-1)

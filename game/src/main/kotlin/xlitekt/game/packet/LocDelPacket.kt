@@ -4,11 +4,13 @@ package xlitekt.game.packet
  * @author Jordan Abraham
  *
  * <b>Information</b>
+ *
  * Represents the LOC_DEL server -> client packet.
  *
  * This packet is used to delete a loc from a zone.
  *
  * <b>Assembly Example</b>
+ *
  * ```
  * writeByte((shape shl 2) or (rotation and 0x3))
  * writeByteAdd(packedOffset)

@@ -4,11 +4,13 @@ package xlitekt.game.packet
  * @author Jordan Abraham
  *
  * <b>Information</b>
+ *
  * Represents the OBJ_DEL server -> client packet.
  *
  * This packet is used to delete an obj from a zone.
  *
  * <b>Assembly Example</b>
+ *
  * ```
  * writeByteAdd(packedOffset)
  * writeShortLittleEndian(id)

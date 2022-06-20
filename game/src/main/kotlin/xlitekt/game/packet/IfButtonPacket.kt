@@ -4,11 +4,13 @@ package xlitekt.game.packet
  * @author Jordan Abraham
  *
  * <b>Information</b>
+ *
  * Represents the IF_BUTTON client -> server packet.
  *
  * This packet is used to handle when the client clicks on an interface.
  *
  * <b>Disassembly Example</b>
+ *
  * ```
  * val index = 1,
  * val packedInterface = readInt(),

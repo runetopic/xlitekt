@@ -4,6 +4,7 @@ package xlitekt.game.packet
  * @author Jordan Abraham
  *
  * <b>Information</b>
+ *
  * Represents the UPDATE_ZONE_FULL_FOLLOWS server -> client packet.
  *
  * This packet is used to clear a specific zone of updates.
@@ -20,6 +21,7 @@ package xlitekt.game.packet
  * ```
  *
  * <b>Assembly Example</b>
+ *
  * ```
  * writeByteAdd((localX shr 3) shl 3)
  * writeByte((localZ shr 3) shl 3)

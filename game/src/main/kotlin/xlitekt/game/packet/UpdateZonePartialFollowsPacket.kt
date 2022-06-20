@@ -4,6 +4,7 @@ package xlitekt.game.packet
  * @author Jordan Abraham
  *
  * <b>Information</b>
+ *
  * Represents the UPDATE_ZONE_PARTIAL_FOLLOWS server -> client packet.
  *
  * This packet is used to prepare the client to update a single specific zone.
@@ -12,6 +13,7 @@ package xlitekt.game.packet
  * which is next used by the following packets to update the zone.
  *
  * <b>Assembly Example</b>
+ *
  * ```
  * writeByte((localZ shr 3) shl 3)
  * writeByteSubtract((localX shr 3) shl 3)

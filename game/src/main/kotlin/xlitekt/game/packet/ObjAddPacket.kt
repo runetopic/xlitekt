@@ -4,11 +4,13 @@ package xlitekt.game.packet
  * @author Jordan Abraham
  *
  * <b>Information</b>
+ *
  * Represents the OBJ_ADD server -> client packet.
  *
  * This packet is used to add an obj to a zone.
  *
  * <b>Assembly Example</b>
+ *
  * ```
  * writeShort(id)
  * writeByteSubtract(packedOffset)
