@@ -1,8 +1,6 @@
 package xlitekt.game.packet
 
 /**
- * @author Jordan Abraham
- *
  * <b>Information</b>
  *
  * Represents the IF_OPENTOP server -> client packet.
@@ -16,6 +14,8 @@ package xlitekt.game.packet
  * ```
  * writeShort(interfaceId)
  * ```
+ *
+ * @author Jordan Abraham
  *
  * @property interfaceId The interface ID to use for the top level interface.
  */
