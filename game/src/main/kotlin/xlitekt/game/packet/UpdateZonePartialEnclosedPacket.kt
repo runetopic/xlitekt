@@ -1,8 +1,6 @@
 package xlitekt.game.packet
 
 /**
- * @author Jordan Abraham
- *
  * <b>Information</b>
  *
  * Represents the UPDATE_ZONE_PARTIAL_ENCLOSED server -> client packet.
@@ -19,6 +17,8 @@ package xlitekt.game.packet
  * writeByte((localX shr 3) shl 3)
  * writeBytes(bytes)
  * ```
+ *
+ * @author Jordan Abraham
  *
  * @see ObjAddPacket
  * @see ObjDelPacket
