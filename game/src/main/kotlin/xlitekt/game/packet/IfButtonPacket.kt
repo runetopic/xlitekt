@@ -1,8 +1,6 @@
 package xlitekt.game.packet
 
 /**
- * @author Jordan Abraham
- *
  * <b>Information</b>
  *
  * Represents the IF_BUTTON client -> server packet.
@@ -17,6 +15,8 @@ package xlitekt.game.packet
  * val slotId = readUShort(),
  * val itemId = readUShort()
  * ```
+ *
+ * @author Jordan Abraham
  *
  * @property index The index of this packet followed by IF_BUTTON. Examples: IF_BUTTON1, IF_BUTTON2.
  * @property packedInterface The packed interface that was clicked by the client. (interfaceId shl 16 or childId).
