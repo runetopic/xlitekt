@@ -1,8 +1,6 @@
 package xlitekt.game.packet
 
 /**
- * @author Jordan Abraham
- *
  * <b>Information</b>
  *
  * Represents the OBJ_DEL server -> client packet.
@@ -15,6 +13,8 @@ package xlitekt.game.packet
  * writeByteAdd(packedOffset)
  * writeShortLittleEndian(id)
  * ```
+ *
+ * @author Jordan Abraham
  *
  * @property id The id of the obj.
  * @property packedOffset The packed offset location of the obj relative to the client player location.
