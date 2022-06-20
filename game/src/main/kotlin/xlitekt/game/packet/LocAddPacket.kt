@@ -1,8 +1,6 @@
 package xlitekt.game.packet
 
 /**
- * @author Jordan Abraham
- *
  * <b>Information</b>
  *
  * Represents the LOC_ADD server -> client packet.
@@ -16,6 +14,8 @@ package xlitekt.game.packet
  * writeByteSubtract(packedOffset)
  * writeShortLittleEndianAdd(id)
  * ```
+ *
+ * @author Jordan Abraham
  *
  * @property id The id of the loc.
  * @property shape The shape of the loc.
