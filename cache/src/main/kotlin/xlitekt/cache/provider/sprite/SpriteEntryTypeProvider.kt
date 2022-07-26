@@ -3278,9 +3278,3 @@ class SpriteEntryTypeProvider : EntryTypeProvider<SpriteEntryType>() {
         )
     }
 }
-
-fun main() {
-    (0..49).forEach {
-        println(216 shl 16 or it)
-    }
-}
