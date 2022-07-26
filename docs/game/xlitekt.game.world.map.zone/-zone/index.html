@@ -1,0 +1,380 @@
+<!doctype html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <title>Zone</title>
+<link href="../../../images/logo-icon.svg" rel="icon" type="image/svg"><script>var pathToRoot = "../../../";</script>    <script>const storage = localStorage.getItem("dokka-dark-mode")
+const savedDarkMode = storage ? JSON.parse(storage) : false
+if(savedDarkMode === true){
+    document.getElementsByTagName("html")[0].classList.add("theme-dark")
+}</script>
+<script type="text/javascript" src="../../../scripts/sourceset_dependencies.js" async></script>
+<link href="../../../styles/style.css" rel="Stylesheet">
+<link href="../../../styles/jetbrains-mono.css" rel="Stylesheet">
+<link href="../../../styles/main.css" rel="Stylesheet">
+<link href="../../../styles/prism.css" rel="Stylesheet">
+<link href="../../../styles/logo-styles.css" rel="Stylesheet">
+<script type="text/javascript" src="../../../scripts/clipboard.js" async></script>
+<script type="text/javascript" src="../../../scripts/navigation-loader.js" async></script>
+<script type="text/javascript" src="../../../scripts/platform-content-handler.js" async></script>
+<script type="text/javascript" src="../../../scripts/main.js" defer></script>
+<script type="text/javascript" src="../../../scripts/prism.js" async></script></head>
+<body>
+<div class="navigation-wrapper" id="navigation-wrapper">
+    <div id="leftToggler"><span class="icon-toggler"></span></div>
+    <div class="library-name">
+<a href="../../../index.html">
+<span>xlitekt</span>            </a>    </div>
+    <div>1.0.0-SNAPSHOT
+    </div>
+    <div class="pull-right d-flex">
+        <button id="theme-toggle-button"><span id="theme-toggle"></span></button>
+        <div id="searchBar"></div>
+    </div>
+</div>
+<div id="container">
+    <div id="leftColumn">
+        <div id="sideMenu"></div>
+    </div>
+    <div id="main">
+<div class="main-content" id="content" pageids="game::xlitekt.game.world.map.zone/Zone///PointingToDeclaration//-2124257962">
+  <div class="breadcrumbs"><a href="../../index.html">game</a><span class="delimiter">/</span><a href="../index.html">xlitekt.game.world.map.zone</a><span class="delimiter">/</span><a href="index.html">Zone</a></div>
+  <div class="cover ">
+    <h1 class="cover"><span><span>Zone</span></span></h1>
+    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":game:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="index.html">Zone</a><span class="token punctuation">(</span><span class="parameters wrapped"><span class="parameter indented">&nbsp;&nbsp;&nbsp;&nbsp;<span class="token keyword">val </span>location<span class="token operator">: </span><a href="../../xlitekt.game.world.map/-location/index.html">Location</a><span class="token punctuation">, </span></span><span class="parameter indented">&nbsp;&nbsp;&nbsp;&nbsp;<span class="token keyword">val </span>players<span class="token operator">: </span><span data-unresolved-link="org.jctools.maps/NonBlockingHashSet///PointingToDeclaration/">NonBlockingHashSet</span><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../../xlitekt.game.actor.player/-player/index.html">Player</a><span class="token operator">&gt;</span><span class="token operator"> = </span>NonBlockingHashSet()<span class="token punctuation">, </span></span><span class="parameter indented">&nbsp;&nbsp;&nbsp;&nbsp;<span class="token keyword">val </span>npcs<span class="token operator">: </span><span data-unresolved-link="org.jctools.maps/NonBlockingHashSet///PointingToDeclaration/">NonBlockingHashSet</span><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../../xlitekt.game.actor.npc/-n-p-c/index.html">NPC</a><span class="token operator">&gt;</span><span class="token operator"> = </span>NonBlockingHashSet()<span class="token punctuation">, </span></span><span class="parameter indented">&nbsp;&nbsp;&nbsp;&nbsp;locs<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-hash-set/index.html">HashSet</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../../xlitekt.game.world.map/-game-object/index.html">GameObject</a><span class="token operator">&gt;</span><span class="token operator"> = </span>HashSet(64)<span class="token punctuation">, </span></span><span class="parameter indented">&nbsp;&nbsp;&nbsp;&nbsp;<span class="token keyword">val </span>locsSpawned<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-hash-set/index.html">HashSet</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../../xlitekt.game.world.map/-game-object/index.html">GameObject</a><span class="token operator">&gt;</span><span class="token operator"> = </span>HashSet()<span class="token punctuation">, </span></span><span class="parameter indented">&nbsp;&nbsp;&nbsp;&nbsp;<span class="token keyword">val </span>objsSpawned<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-hash-set/index.html">HashSet</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../../xlitekt.game.content.item/-floor-item/index.html">FloorItem</a><span class="token operator">&gt;</span><span class="token operator"> = </span>HashSet()</span></span><span class="token punctuation">)</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><h4 class="">Author</h4><p class="paragraph">Jordan Abraham</p></div></div>
+  </div>
+  <div class="tabbedcontent">
+    <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="Constructors">Constructors</button><button class="section-tab" data-togglable="Functions">Functions</button><button class="section-tab" data-togglable="Properties">Properties</button></div>
+    <div class="tabs-section-body">
+      <h2 class="tabbedcontent">Constructors</h2>
+      <div class="table" data-togglable="Constructors"><a data-name="1488433443%2FConstructors%2F-2124257962" anchor-label="Zone" id="1488433443%2FConstructors%2F-2124257962" data-filterable-set=":game:dokkaHtmlPartial/main"></a>
+        <div class="table-row" data-filterable-current=":game:dokkaHtmlPartial/main" data-filterable-set=":game:dokkaHtmlPartial/main">
+          <div class="main-subrow keyValue TabbedContent">
+            <div class=""><span class="inline-flex">
+                <div><a href="-zone.html"><span><span>Zone</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1488433443%2FConstructors%2F-2124257962"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div>
+              <div class="title">
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":game:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="-zone.html"><span class="token function">Zone</span></a><span class="token punctuation">(</span><span class="parameters wrapped"><span class="parameter indented">&nbsp;&nbsp;&nbsp;&nbsp;location<span class="token operator">: </span><a href="../../xlitekt.game.world.map/-location/index.html">Location</a><span class="token punctuation">, </span></span><span class="parameter indented">&nbsp;&nbsp;&nbsp;&nbsp;players<span class="token operator">: </span><span data-unresolved-link="org.jctools.maps/NonBlockingHashSet///PointingToDeclaration/">NonBlockingHashSet</span><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../../xlitekt.game.actor.player/-player/index.html">Player</a><span class="token operator">&gt;</span><span class="token operator"> = </span>NonBlockingHashSet()<span class="token punctuation">, </span></span><span class="parameter indented">&nbsp;&nbsp;&nbsp;&nbsp;npcs<span class="token operator">: </span><span data-unresolved-link="org.jctools.maps/NonBlockingHashSet///PointingToDeclaration/">NonBlockingHashSet</span><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../../xlitekt.game.actor.npc/-n-p-c/index.html">NPC</a><span class="token operator">&gt;</span><span class="token operator"> = </span>NonBlockingHashSet()<span class="token punctuation">, </span></span><span class="parameter indented">&nbsp;&nbsp;&nbsp;&nbsp;locs<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-hash-set/index.html">HashSet</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../../xlitekt.game.world.map/-game-object/index.html">GameObject</a><span class="token operator">&gt;</span><span class="token operator"> = </span>HashSet(64)<span class="token punctuation">, </span></span><span class="parameter indented">&nbsp;&nbsp;&nbsp;&nbsp;locsSpawned<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-hash-set/index.html">HashSet</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../../xlitekt.game.world.map/-game-object/index.html">GameObject</a><span class="token operator">&gt;</span><span class="token operator"> = </span>HashSet()<span class="token punctuation">, </span></span><span class="parameter indented">&nbsp;&nbsp;&nbsp;&nbsp;objsSpawned<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-hash-set/index.html">HashSet</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../../xlitekt.game.content.item/-floor-item/index.html">FloorItem</a><span class="token operator">&gt;</span><span class="token operator"> = </span>HashSet()</span></span><span class="token punctuation">)</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <h2 class="">Functions</h2>
+      <div class="table" data-togglable="Functions"><a data-name="501423692%2FFunctions%2F-2124257962" anchor-label="active" id="501423692%2FFunctions%2F-2124257962" data-filterable-set=":game:dokkaHtmlPartial/main"></a>
+        <div class="table-row" data-filterable-current=":game:dokkaHtmlPartial/main" data-filterable-set=":game:dokkaHtmlPartial/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="active.html"><span><span>active</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="501423692%2FFunctions%2F-2124257962"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div>
+              <div class="title">
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":game:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="active.html"><span class="token function">active</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">Returns if this zone is active or not.</p></div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+<a data-name="325751589%2FFunctions%2F-2124257962" anchor-label="enterZone" id="325751589%2FFunctions%2F-2124257962" data-filterable-set=":game:dokkaHtmlPartial/main"></a>
+        <div class="table-row" data-filterable-current=":game:dokkaHtmlPartial/main" data-filterable-set=":game:dokkaHtmlPartial/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="enter-zone.html"><span>enter</span><wbr><span><span>Zone</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="325751589%2FFunctions%2F-2124257962"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div>
+              <div class="title">
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":game:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="enter-zone.html"><span class="token function">enterZone</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">actor<span class="token operator">: </span><a href="../../xlitekt.game.actor/-actor/index.html">Actor</a></span></span><span class="token punctuation">)</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">Make an actor enter this zone.</p></div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+<a data-name="-1038884985%2FFunctions%2F-2124257962" anchor-label="finalizeUpdateRequests" id="-1038884985%2FFunctions%2F-2124257962" data-filterable-set=":game:dokkaHtmlPartial/main"></a>
+        <div class="table-row" data-filterable-current=":game:dokkaHtmlPartial/main" data-filterable-set=":game:dokkaHtmlPartial/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="finalize-update-requests.html"><span>finalize</span><wbr><span>Update</span><wbr><span><span>Requests</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1038884985%2FFunctions%2F-2124257962"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div>
+              <div class="title">
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":game:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="finalize-update-requests.html"><span class="token function">finalizeUpdateRequests</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">Finalizes this zone update requests. Updates corresponding collections in this zone and clears the update requests.</p></div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+<a data-name="1541824949%2FFunctions%2F-2124257962" anchor-label="invokeUpdateRequests" id="1541824949%2FFunctions%2F-2124257962" data-filterable-set=":game:dokkaHtmlPartial/main"></a>
+        <div class="table-row" data-filterable-current=":game:dokkaHtmlPartial/main" data-filterable-set=":game:dokkaHtmlPartial/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="invoke-update-requests.html"><span>invoke</span><wbr><span>Update</span><wbr><span><span>Requests</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1541824949%2FFunctions%2F-2124257962"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div>
+              <div class="title">
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":game:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="invoke-update-requests.html"><span class="token function">invokeUpdateRequests</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">player<span class="token operator">: </span><a href="../../xlitekt.game.actor.player/-player/index.html">Player</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">Zone</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">Updates a player with updates about this zone. This happens every tick.</p></div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+<a data-name="1465689037%2FFunctions%2F-2124257962" anchor-label="leaveZone" id="1465689037%2FFunctions%2F-2124257962" data-filterable-set=":game:dokkaHtmlPartial/main"></a>
+        <div class="table-row" data-filterable-current=":game:dokkaHtmlPartial/main" data-filterable-set=":game:dokkaHtmlPartial/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="leave-zone.html"><span>leave</span><wbr><span><span>Zone</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1465689037%2FFunctions%2F-2124257962"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div>
+              <div class="title">
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":game:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="leave-zone.html"><span class="token function">leaveZone</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">actor<span class="token operator">: </span><a href="../../xlitekt.game.actor/-actor/index.html">Actor</a><span class="token punctuation">, </span></span><span class="parameter ">nextZone<span class="token operator">: </span><a href="index.html">Zone</a><span class="token operator">?</span><span class="token operator"> = </span>null</span></span><span class="token punctuation">)</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">Make an actor leave this zone. The actor is immediately required to enter a new zone upon leaving. nextZone is nullable for logout.</p></div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+<a data-name="-449055515%2FFunctions%2F-2124257962" anchor-label="neighboringLocs" id="-449055515%2FFunctions%2F-2124257962" data-filterable-set=":game:dokkaHtmlPartial/main"></a>
+        <div class="table-row" data-filterable-current=":game:dokkaHtmlPartial/main" data-filterable-set=":game:dokkaHtmlPartial/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="neighboring-locs.html"><span>neighboring</span><wbr><span><span>Locs</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-449055515%2FFunctions%2F-2124257962"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div>
+              <div class="title">
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":game:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="neighboring-locs.html"><span class="token function">neighboringLocs</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../../xlitekt.game.world.map/-game-object/index.html">GameObject</a><span class="token operator">&gt;</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">Returns a list of game objects that are inside this zone and neighboring zones. By default, the range is limited to a standard 7x7 build area.</p></div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+<a data-name="682411334%2FFunctions%2F-2124257962" anchor-label="neighboringNpcs" id="682411334%2FFunctions%2F-2124257962" data-filterable-set=":game:dokkaHtmlPartial/main"></a>
+        <div class="table-row" data-filterable-current=":game:dokkaHtmlPartial/main" data-filterable-set=":game:dokkaHtmlPartial/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="neighboring-npcs.html"><span>neighboring</span><wbr><span><span>Npcs</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="682411334%2FFunctions%2F-2124257962"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div>
+              <div class="title">
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":game:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="neighboring-npcs.html"><span class="token function">neighboringNpcs</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../../xlitekt.game.actor.npc/-n-p-c/index.html">NPC</a><span class="token operator">&gt;</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">Returns a list of npcs that are inside this zone and neighboring zones. By default, the range is limited to a 7x7 area since by default npcs are only visible within 15 tiles.</p></div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+<a data-name="-1211779108%2FFunctions%2F-2124257962" anchor-label="neighboringObjs" id="-1211779108%2FFunctions%2F-2124257962" data-filterable-set=":game:dokkaHtmlPartial/main"></a>
+        <div class="table-row" data-filterable-current=":game:dokkaHtmlPartial/main" data-filterable-set=":game:dokkaHtmlPartial/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="neighboring-objs.html"><span>neighboring</span><wbr><span><span>Objs</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1211779108%2FFunctions%2F-2124257962"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div>
+              <div class="title">
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":game:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="neighboring-objs.html"><span class="token function">neighboringObjs</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../../xlitekt.game.content.item/-floor-item/index.html">FloorItem</a><span class="token operator">&gt;</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">Returns a list of floor items that are inside this zone and neighboring zones. By default, the range is limited to a standard 7x7 build area.</p></div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+<a data-name="-829013648%2FFunctions%2F-2124257962" anchor-label="neighboringPlayers" id="-829013648%2FFunctions%2F-2124257962" data-filterable-set=":game:dokkaHtmlPartial/main"></a>
+        <div class="table-row" data-filterable-current=":game:dokkaHtmlPartial/main" data-filterable-set=":game:dokkaHtmlPartial/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="neighboring-players.html"><span>neighboring</span><wbr><span><span>Players</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-829013648%2FFunctions%2F-2124257962"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div>
+              <div class="title">
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":game:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="neighboring-players.html"><span class="token function">neighboringPlayers</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../../xlitekt.game.actor.player/-player/index.html">Player</a><span class="token operator">&gt;</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">Returns a list of players that are inside this zone and neighboring zones. By default, the range is limited to a standard 7x7 build area.</p></div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+<a data-name="1354440972%2FFunctions%2F-2124257962" anchor-label="requestAddLoc" id="1354440972%2FFunctions%2F-2124257962" data-filterable-set=":game:dokkaHtmlPartial/main"></a>
+        <div class="table-row" data-filterable-current=":game:dokkaHtmlPartial/main" data-filterable-set=":game:dokkaHtmlPartial/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="request-add-loc.html"><span>request</span><wbr><span>Add</span><wbr><span><span>Loc</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1354440972%2FFunctions%2F-2124257962"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div>
+              <div class="title">
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":game:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="request-add-loc.html"><span class="token function">requestAddLoc</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">gameObject<span class="token operator">: </span><a href="../../xlitekt.game.world.map/-game-object/index.html">GameObject</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">Requests a game object to be added to this zone. Returns true if this game object is able to be added.</p></div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+<a data-name="-1793981516%2FFunctions%2F-2124257962" anchor-label="requestAddMapProjAnim" id="-1793981516%2FFunctions%2F-2124257962" data-filterable-set=":game:dokkaHtmlPartial/main"></a>
+        <div class="table-row" data-filterable-current=":game:dokkaHtmlPartial/main" data-filterable-set=":game:dokkaHtmlPartial/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="request-add-map-proj-anim.html"><span>request</span><wbr><span>Add</span><wbr><span>Map</span><wbr><span>Proj</span><wbr><span><span>Anim</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1793981516%2FFunctions%2F-2124257962"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div>
+              <div class="title">
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":game:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="request-add-map-proj-anim.html"><span class="token function">requestAddMapProjAnim</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">projectile<span class="token operator">: </span><a href="../../xlitekt.game.content.projectile/-projectile/index.html">Projectile</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">Requests a map proj anim to be added to this zone. Returns true if this map proj anim is able to be added.</p></div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+<a data-name="1741016073%2FFunctions%2F-2124257962" anchor-label="requestAddObj" id="1741016073%2FFunctions%2F-2124257962" data-filterable-set=":game:dokkaHtmlPartial/main"></a>
+        <div class="table-row" data-filterable-current=":game:dokkaHtmlPartial/main" data-filterable-set=":game:dokkaHtmlPartial/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="request-add-obj.html"><span>request</span><wbr><span>Add</span><wbr><span><span>Obj</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1741016073%2FFunctions%2F-2124257962"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div>
+              <div class="title">
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":game:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="request-add-obj.html"><span class="token function">requestAddObj</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">floorItem<span class="token operator">: </span><a href="../../xlitekt.game.content.item/-floor-item/index.html">FloorItem</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">Requests a floor item to be added to this zone. Returns true if this floor item is able to be added.</p></div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+<a data-name="-1075403647%2FFunctions%2F-2124257962" anchor-label="requestRemoveLoc" id="-1075403647%2FFunctions%2F-2124257962" data-filterable-set=":game:dokkaHtmlPartial/main"></a>
+        <div class="table-row" data-filterable-current=":game:dokkaHtmlPartial/main" data-filterable-set=":game:dokkaHtmlPartial/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="request-remove-loc.html"><span>request</span><wbr><span>Remove</span><wbr><span><span>Loc</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1075403647%2FFunctions%2F-2124257962"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div>
+              <div class="title">
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":game:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="request-remove-loc.html"><span class="token function">requestRemoveLoc</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">gameObject<span class="token operator">: </span><a href="../../xlitekt.game.world.map/-game-object/index.html">GameObject</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">Requests a game object to be removed from this zone. Returns true if this game object is able to be removed. Returns false if this game object is already requested to be removed.</p></div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+<a data-name="-1172421058%2FFunctions%2F-2124257962" anchor-label="requestRemoveObj" id="-1172421058%2FFunctions%2F-2124257962" data-filterable-set=":game:dokkaHtmlPartial/main"></a>
+        <div class="table-row" data-filterable-current=":game:dokkaHtmlPartial/main" data-filterable-set=":game:dokkaHtmlPartial/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="request-remove-obj.html"><span>request</span><wbr><span>Remove</span><wbr><span><span>Obj</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1172421058%2FFunctions%2F-2124257962"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div>
+              <div class="title">
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":game:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="request-remove-obj.html"><span class="token function">requestRemoveObj</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">floorItem<span class="token operator">: </span><a href="../../xlitekt.game.content.item/-floor-item/index.html">FloorItem</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">Requests a floor item to be removed from this zone. Returns true if this floor item is able to be removed. Returns false if this floor item is already requested to be removed.</p></div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+<a data-name="-2076918580%2FFunctions%2F-2124257962" anchor-label="updating" id="-2076918580%2FFunctions%2F-2124257962" data-filterable-set=":game:dokkaHtmlPartial/main"></a>
+        <div class="table-row" data-filterable-current=":game:dokkaHtmlPartial/main" data-filterable-set=":game:dokkaHtmlPartial/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="updating.html"><span><span>updating</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-2076918580%2FFunctions%2F-2124257962"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div>
+              <div class="title">
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":game:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="updating.html"><span class="token function">updating</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">Returns if this zone needs updating or not.</p></div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <h2 class="">Properties</h2>
+      <div class="table" data-togglable="Properties"><a data-name="-1060606147%2FProperties%2F-2124257962" anchor-label="location" id="-1060606147%2FProperties%2F-2124257962" data-filterable-set=":game:dokkaHtmlPartial/main"></a>
+        <div class="table-row" data-filterable-current=":game:dokkaHtmlPartial/main" data-filterable-set=":game:dokkaHtmlPartial/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="location.html"><span><span>location</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1060606147%2FProperties%2F-2124257962"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div>
+              <div class="title">
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-depenent-content" data-active="" data-togglable=":game:dokkaHtmlPartial/main"><a data-name="-1060606147%2FProperties%2F-2124257962" anchor-label="location" id="-1060606147%2FProperties%2F-2124257962" data-filterable-set=":game:dokkaHtmlPartial/main"></a><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">val </span><a href="location.html">location</a><span class="token operator">: </span><a href="../../xlitekt.game.world.map/-location/index.html">Location</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+<a data-name="-792165567%2FProperties%2F-2124257962" anchor-label="locsSpawned" id="-792165567%2FProperties%2F-2124257962" data-filterable-set=":game:dokkaHtmlPartial/main"></a>
+        <div class="table-row" data-filterable-current=":game:dokkaHtmlPartial/main" data-filterable-set=":game:dokkaHtmlPartial/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="locs-spawned.html"><span>locs</span><wbr><span><span>Spawned</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-792165567%2FProperties%2F-2124257962"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div>
+              <div class="title">
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-depenent-content" data-active="" data-togglable=":game:dokkaHtmlPartial/main"><a data-name="-792165567%2FProperties%2F-2124257962" anchor-label="locsSpawned" id="-792165567%2FProperties%2F-2124257962" data-filterable-set=":game:dokkaHtmlPartial/main"></a><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">val </span><a href="locs-spawned.html">locsSpawned</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-hash-set/index.html">HashSet</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../../xlitekt.game.world.map/-game-object/index.html">GameObject</a><span class="token operator">&gt;</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+<a data-name="489993824%2FProperties%2F-2124257962" anchor-label="npcs" id="489993824%2FProperties%2F-2124257962" data-filterable-set=":game:dokkaHtmlPartial/main"></a>
+        <div class="table-row" data-filterable-current=":game:dokkaHtmlPartial/main" data-filterable-set=":game:dokkaHtmlPartial/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="npcs.html"><span><span>npcs</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="489993824%2FProperties%2F-2124257962"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div>
+              <div class="title">
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-depenent-content" data-active="" data-togglable=":game:dokkaHtmlPartial/main"><a data-name="489993824%2FProperties%2F-2124257962" anchor-label="npcs" id="489993824%2FProperties%2F-2124257962" data-filterable-set=":game:dokkaHtmlPartial/main"></a><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">val </span><a href="npcs.html">npcs</a><span class="token operator">: </span><span data-unresolved-link="org.jctools.maps/NonBlockingHashSet///PointingToDeclaration/">NonBlockingHashSet</span><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../../xlitekt.game.actor.npc/-n-p-c/index.html">NPC</a><span class="token operator">&gt;</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+<a data-name="-1604137878%2FProperties%2F-2124257962" anchor-label="objsSpawned" id="-1604137878%2FProperties%2F-2124257962" data-filterable-set=":game:dokkaHtmlPartial/main"></a>
+        <div class="table-row" data-filterable-current=":game:dokkaHtmlPartial/main" data-filterable-set=":game:dokkaHtmlPartial/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="objs-spawned.html"><span>objs</span><wbr><span><span>Spawned</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1604137878%2FProperties%2F-2124257962"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div>
+              <div class="title">
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-depenent-content" data-active="" data-togglable=":game:dokkaHtmlPartial/main"><a data-name="-1604137878%2FProperties%2F-2124257962" anchor-label="objsSpawned" id="-1604137878%2FProperties%2F-2124257962" data-filterable-set=":game:dokkaHtmlPartial/main"></a><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">val </span><a href="objs-spawned.html">objsSpawned</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-hash-set/index.html">HashSet</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../../xlitekt.game.content.item/-floor-item/index.html">FloorItem</a><span class="token operator">&gt;</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+<a data-name="642286102%2FProperties%2F-2124257962" anchor-label="players" id="642286102%2FProperties%2F-2124257962" data-filterable-set=":game:dokkaHtmlPartial/main"></a>
+        <div class="table-row" data-filterable-current=":game:dokkaHtmlPartial/main" data-filterable-set=":game:dokkaHtmlPartial/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="players.html"><span><span>players</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="642286102%2FProperties%2F-2124257962"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div>
+              <div class="title">
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-depenent-content" data-active="" data-togglable=":game:dokkaHtmlPartial/main"><a data-name="642286102%2FProperties%2F-2124257962" anchor-label="players" id="642286102%2FProperties%2F-2124257962" data-filterable-set=":game:dokkaHtmlPartial/main"></a><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">val </span><a href="players.html">players</a><span class="token operator">: </span><span data-unresolved-link="org.jctools.maps/NonBlockingHashSet///PointingToDeclaration/">NonBlockingHashSet</span><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../../xlitekt.game.actor.player/-player/index.html">Player</a><span class="token operator">&gt;</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      <div class="footer">
+        <span class="go-to-top-icon"><a href="#content" id="go-to-top-link"></a></span><span>© 2022 Copyright</span><span class="pull-right"><span>Generated by </span><a href="https://github.com/Kotlin/dokka"><span>dokka</span><span class="padded-icon"></span></a></span>
+      </div>
+    </div>
+</div>
+
+</body></html>
+

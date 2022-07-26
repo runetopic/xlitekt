@@ -7,6 +7,8 @@ import org.koin.dsl.module
 import xlitekt.cache.provider.EntryTypeProvider
 import xlitekt.cache.provider.binary.huffman.HuffmanEntryTypeProvider
 import xlitekt.cache.provider.binary.title.TitleEntryTypeProvider
+import xlitekt.cache.provider.config.dbrow.DBRowEntryTypeProvider
+import xlitekt.cache.provider.config.dbtable.DBTableEntryTypeProvider
 import xlitekt.cache.provider.config.enum.EnumEntryTypeProvider
 import xlitekt.cache.provider.config.hitbar.HitBarEntryTypeProvider
 import xlitekt.cache.provider.config.hitsplat.HitSplatEntryTypeProvider
@@ -25,6 +27,7 @@ import xlitekt.cache.provider.config.varbit.VarBitEntryTypeProvider
 import xlitekt.cache.provider.config.varc.VarcEntryTypeProvider
 import xlitekt.cache.provider.config.varp.VarpEntryTypeProvider
 import xlitekt.cache.provider.config.worldmap.WorldMapElementEntryTypeProvider
+import xlitekt.cache.provider.dbindex.DBIndexEntryTypeProvider
 import xlitekt.cache.provider.font.FontEntryTypeProvider
 import xlitekt.cache.provider.instrument.InstrumentEntryTypeProvider
 import xlitekt.cache.provider.map.MapSquareEntryTypeProvider
@@ -35,7 +38,7 @@ import xlitekt.cache.provider.sprite.titlescreen.TitleScreenEntryTypeProvider
 import xlitekt.cache.provider.texture.TextureEntryTypeProvider
 import xlitekt.cache.provider.ui.InterfaceEntryTypeProvider
 import xlitekt.cache.provider.vorbis.VorbisEntryTypeProvider
-import xlitekt.shared.lazy
+import xlitekt.shared.insert
 import java.nio.file.Path
 
 /**
@@ -44,7 +47,7 @@ import java.nio.file.Path
 val cacheModule = module(createdAtStart = true) {
     single {
         val path = try {
-            lazy<ApplicationEnvironment>().config.property("game.cache.path").getString()
+            insert<ApplicationEnvironment>().config.property("game.cache.path").getString()
         } catch (e: NoBeanDefFoundException) {
             "./cache/data/"
         }
@@ -88,4 +91,7 @@ val cacheModule = module(createdAtStart = true) {
     single { VorbisEntryTypeProvider() }
     single { SoundEffectEntryTypeProvider() }
     single { MusicEntryTypeProvider() }
+    single { DBIndexEntryTypeProvider() }
+    single { DBTableEntryTypeProvider() }
+    single { DBRowEntryTypeProvider() }
 }

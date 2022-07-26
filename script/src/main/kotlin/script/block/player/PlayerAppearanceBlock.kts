@@ -4,23 +4,25 @@ import io.ktor.utils.io.core.BytePacketBuilder
 import io.ktor.utils.io.core.writeFully
 import io.ktor.utils.io.core.writeShort
 import xlitekt.game.actor.render.Render.Appearance
+import xlitekt.game.actor.render.block.PlayerRenderingBlockListener
+import xlitekt.game.actor.render.block.body.BodyPartBlock
+import xlitekt.game.actor.render.block.body.BodyPartBlockListener
 import xlitekt.game.actor.render.block.body.BodyPartBuilder
 import xlitekt.game.actor.render.block.body.BodyPartColor
-import xlitekt.game.actor.render.block.body.BodyPartInfo
-import xlitekt.game.actor.render.block.body.BodyPartListener
-import xlitekt.game.actor.render.block.dynamicPlayerUpdateBlock
 import xlitekt.shared.buffer.dynamicBuffer
 import xlitekt.shared.buffer.writeBytesAdd
 import xlitekt.shared.buffer.writeStringCp1252NullTerminated
 import xlitekt.shared.inject
+import xlitekt.shared.insert
 import xlitekt.shared.resource.ItemSequences
-
-val itemSequences by inject<ItemSequences>()
 
 /**
  * @author Jordan Abraham
  */
-dynamicPlayerUpdateBlock<Appearance>(index = 5, mask = 0x1, size = -1) {
+val itemSequences by inject<ItemSequences>()
+val bodyPartBlockListener by inject<BodyPartBlockListener>()
+
+insert<PlayerRenderingBlockListener>().dynamicPlayerUpdateBlock<Appearance>(index = 5, mask = 0x1, size = -1) {
     val appearance = dynamicBuffer {
         writeByte(gender.id.toByte())
         writeByte(skullIcon.orElse(-1).toByte())
@@ -50,10 +52,11 @@ fun BytePacketBuilder.writeTransmogrification(render: Appearance) {
 }
 
 fun BytePacketBuilder.writeIdentityKit(render: Appearance) {
-    BodyPartListener.listeners.entries.sortedBy(MutableMap.MutableEntry<Int, BodyPartInfo>::key).forEach {
+    bodyPartBlockListener.entries.sortedBy(MutableMap.MutableEntry<Int, BodyPartBlock>::key).forEach {
         val bodyPartBuilder = BodyPartBuilder(render.bodyParts.getOrDefault(it.value.bodyPart, 0), render.gender, render.equipment)
         it.value.builder.invoke(bodyPartBuilder)
-        writeFully(bodyPartBuilder.data ?: byteArrayOf())
+        val block = bodyPartBuilder.data
+        if (block != null) writeFully(block)
     }
 }
 

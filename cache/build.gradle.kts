@@ -3,9 +3,9 @@
 plugins {
     alias(deps.plugins.jvm)
     alias(deps.plugins.serialization)
+    alias(deps.plugins.dokka)
 }
 
 dependencies {
-    implementation(deps.kotlinx.serialization.json)
     implementation(project(":shared"))
 }

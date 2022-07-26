@@ -3,9 +3,10 @@ package script.block.player.body
 import io.ktor.utils.io.core.writeShort
 import xlitekt.game.actor.render.Render.Appearance.Gender
 import xlitekt.game.actor.render.block.body.BodyPart
-import xlitekt.game.actor.render.block.body.onBodyPart
+import xlitekt.game.actor.render.block.body.BodyPartBlockListener
 import xlitekt.game.content.container.equipment.Equipment
 import xlitekt.shared.inject
+import xlitekt.shared.insert
 import xlitekt.shared.resource.ItemInfoMap
 
 /**
@@ -17,7 +18,7 @@ val itemInfoMap by inject<ItemInfoMap>()
 /**
  * The head.
  */
-onBodyPart(index = Equipment.SLOT_HEAD) {
+insert<BodyPartBlockListener>().bodyPartBlock(index = Equipment.SLOT_HEAD) {
     bodyPart {
         if (equipment.head != null) {
             writeShort((0x200 + equipment.head!!.id).toShort())
@@ -30,7 +31,7 @@ onBodyPart(index = Equipment.SLOT_HEAD) {
 /**
  * The back.
  */
-onBodyPart(index = Equipment.SLOT_BACK) {
+insert<BodyPartBlockListener>().bodyPartBlock(index = Equipment.SLOT_BACK) {
     bodyPart {
         if (equipment.back != null) {
             writeShort((0x200 + equipment.back!!.id).toShort())
@@ -43,7 +44,7 @@ onBodyPart(index = Equipment.SLOT_BACK) {
 /**
  * The neck.
  */
-onBodyPart(index = Equipment.SLOT_NECK) {
+insert<BodyPartBlockListener>().bodyPartBlock(index = Equipment.SLOT_NECK) {
     bodyPart {
         if (equipment.neck != null) {
             writeShort((0x200 + equipment.neck!!.id).toShort())
@@ -56,7 +57,7 @@ onBodyPart(index = Equipment.SLOT_NECK) {
 /**
  * The main-hand.
  */
-onBodyPart(index = Equipment.SLOT_MAINHAND) {
+insert<BodyPartBlockListener>().bodyPartBlock(index = Equipment.SLOT_MAINHAND) {
     bodyPart {
         if (equipment.mainhand != null) {
             writeShort((0x200 + equipment.mainhand!!.id).toShort())
@@ -69,7 +70,7 @@ onBodyPart(index = Equipment.SLOT_MAINHAND) {
 /**
  * The torso.
  */
-onBodyPart(index = Equipment.SLOT_TORSO, BodyPart.Torso) {
+insert<BodyPartBlockListener>().bodyPartBlock(index = Equipment.SLOT_TORSO, BodyPart.Torso) {
     bodyPart {
         if (equipment.torso != null) {
             writeShort((0x200 + equipment.torso!!.id).toShort())
@@ -82,7 +83,7 @@ onBodyPart(index = Equipment.SLOT_TORSO, BodyPart.Torso) {
 /**
  * The off-hand.
  */
-onBodyPart(index = Equipment.SLOT_OFFHAND) {
+insert<BodyPartBlockListener>().bodyPartBlock(index = Equipment.SLOT_OFFHAND) {
     bodyPart {
         if (equipment.offhand != null) {
             writeShort((0x200 + equipment.offhand!!.id).toShort())
@@ -95,31 +96,20 @@ onBodyPart(index = Equipment.SLOT_OFFHAND) {
 /**
  * The arms.
  */
-onBodyPart(index = 6, BodyPart.Arms) {
+insert<BodyPartBlockListener>().bodyPartBlock(index = 6, BodyPart.Arms) {
     bodyPart {
-        if (equipment.torso == null) {
-            writeShort((0x100 + kit).toShort())
-            return@bodyPart
-        }
-        val torso = equipment.torso!!
-        if (itemInfoMap[torso.id]?.equipment == null) {
-            writeShort((0x100 + kit).toShort())
-            return@bodyPart
-        }
-        val itemInfo = itemInfoMap[torso.id]?.equipment!!
-
-        if (itemInfo.hideArms == true) {
-            writeByte(0) // Hide arms.
-        } else {
-            writeShort((0x100 + kit).toShort())
-        }
+        itemInfoMap[equipment.torso?.id]?.equipment?.let {
+            if (it.hideArms == true) {
+                writeByte(0) // Hide arms.
+            } else writeShort((0x100 + kit).toShort())
+        } ?: writeShort((0x100 + kit).toShort())
     }
 }
 
 /**
  * The legs.
  */
-onBodyPart(index = Equipment.SLOT_LEGS, BodyPart.Legs) {
+insert<BodyPartBlockListener>().bodyPartBlock(index = Equipment.SLOT_LEGS, BodyPart.Legs) {
     bodyPart {
         if (equipment.legs != null) {
             writeShort((0x200 + equipment.legs!!.id).toShort())
@@ -132,31 +122,20 @@ onBodyPart(index = Equipment.SLOT_LEGS, BodyPart.Legs) {
 /**
  * The hair.
  */
-onBodyPart(index = 8, BodyPart.Head) {
+insert<BodyPartBlockListener>().bodyPartBlock(index = 8, BodyPart.Head) {
     bodyPart {
-        if (equipment.head == null) {
-            writeShort((0x100 + kit).toShort())
-            return@bodyPart
-        }
-        val head = equipment.head!!
-        if (itemInfoMap[head.id]?.equipment == null) {
-            writeShort((0x100 + kit).toShort())
-            return@bodyPart
-        }
-        val itemInfo = itemInfoMap[head.id]?.equipment!!
-
-        if (itemInfo.hideHair == true) {
-            writeByte(0) // Hide hair.
-        } else {
-            writeShort((0x100 + kit).toShort())
-        }
+        itemInfoMap[equipment.head?.id]?.equipment?.let {
+            if (it.hideHair == true) {
+                writeByte(0) // Hide hair.
+            } else writeShort((0x100 + kit).toShort())
+        } ?: writeShort((0x100 + kit).toShort())
     }
 }
 
 /**
  * The hands.
  */
-onBodyPart(index = Equipment.SLOT_HANDS, BodyPart.Hands) {
+insert<BodyPartBlockListener>().bodyPartBlock(index = Equipment.SLOT_HANDS, BodyPart.Hands) {
     bodyPart {
         if (equipment.hands != null) {
             writeShort((0x200 + equipment.hands!!.id).toShort())
@@ -169,7 +148,7 @@ onBodyPart(index = Equipment.SLOT_HANDS, BodyPart.Hands) {
 /**
  * The feet.
  */
-onBodyPart(index = Equipment.SLOT_FEET, BodyPart.Feet) {
+insert<BodyPartBlockListener>().bodyPartBlock(index = Equipment.SLOT_FEET, BodyPart.Feet) {
     bodyPart {
         if (equipment.feet != null) {
             writeShort((0x200 + equipment.feet!!.id).toShort())
@@ -182,29 +161,14 @@ onBodyPart(index = Equipment.SLOT_FEET, BodyPart.Feet) {
 /**
  * The jaw.
  */
-onBodyPart(index = 11, BodyPart.Jaw) {
+insert<BodyPartBlockListener>().bodyPartBlock(index = 11, BodyPart.Jaw) {
     bodyPart {
-        val slot = if (gender == Gender.Male) Equipment.SLOT_HEAD else Equipment.SLOT_TORSO
-
         when (gender) {
-            Gender.Male -> {
-                if (equipment.head == null) {
-                    writeShort((0x100 + kit).toShort())
-                    return@bodyPart
-                }
-                val head = equipment.head!!
-                if (itemInfoMap[head.id]?.equipment == null) {
-                    writeShort((0x100 + kit).toShort())
-                    return@bodyPart
-                }
-                val itemInfo = itemInfoMap[head.id]?.equipment!!
-
-                if (itemInfo.showBeard == false) {
+            Gender.Male -> itemInfoMap[equipment.head?.id]?.equipment?.let {
+                if (it.showBeard == false) {
                     writeByte(0) // Hide beard.
-                } else {
-                    writeShort((0x100 + kit).toShort())
-                }
-            }
+                } else writeShort((0x100 + kit).toShort())
+            } ?: writeShort((0x100 + kit).toShort())
             else -> writeByte(0)
         }
     }

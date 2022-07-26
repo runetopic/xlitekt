@@ -8,12 +8,13 @@ import xlitekt.game.actor.render.Render.Appearance.Gender
 import xlitekt.game.actor.render.block.body.BodyPart
 import xlitekt.game.actor.render.block.body.BodyPartColor
 import xlitekt.game.content.ui.InterfaceEvent
+import xlitekt.game.content.ui.InterfaceListener
 import xlitekt.game.content.ui.UserInterface.PlayerAppearanceDesigner
-import xlitekt.game.content.ui.onInterface
 import xlitekt.game.content.vars.VarBit
 import xlitekt.game.event.impl.Events
 import xlitekt.game.event.onEvent
 import xlitekt.shared.inject
+import xlitekt.shared.insert
 import xlitekt.shared.toIntInv
 
 /**
@@ -21,7 +22,7 @@ import xlitekt.shared.toIntInv
  */
 val kits by inject<KitEntryTypeProvider>()
 
-onInterface<PlayerAppearanceDesigner> {
+insert<InterfaceListener>().userInterface<PlayerAppearanceDesigner> {
     onCreate {
         repeat(69) {
             setEvent(it, 0..68, InterfaceEvent.ClickOption1)

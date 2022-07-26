@@ -34,7 +34,7 @@ import xlitekt.game.queue.QueuedScriptPriority
 import xlitekt.game.world.World
 import xlitekt.game.world.map.GameObject
 import xlitekt.game.world.map.Location
-import xlitekt.shared.lazy
+import xlitekt.shared.insert
 import kotlin.math.abs
 import kotlin.math.floor
 
@@ -102,7 +102,7 @@ class Player(
         movementType { false }
         updateRunEnergy()
         speed { VarPlayer.ToggleRun in vars }
-        lazy<EventBus>().notify(Events.OnLoginEvent(this))
+        insert<EventBus>().notify(Events.OnLoginEvent(this))
         // Set the player online here, so they start processing by the main game loop.
         online = true
     }
@@ -116,8 +116,8 @@ class Player(
         write(LogoutPacket(0))
         invokeAndClearWritePool()
         zone.leaveZone(this)
-        lazy<World>().removePlayer(this)
-        lazy<PlayerJsonEncoderService>().requestSave(this)
+        insert<World>().removePlayer(this)
+        insert<PlayerJsonEncoderService>().requestSave(this)
     }
 
     /**
@@ -212,19 +212,21 @@ fun Player.process() {
     if (queue.any { it.priority == QueuedScriptPriority.Strong }) {
         interfaces.closeModal()
     }
-    queue.process(this)
     // This makes sure they continue running and processing until the next tick, when we need to toggle their run off if the energy is depleted, and they are running
     if (runEnergy <= 0.0f && VarPlayer.ToggleRun in vars) {
         vars.flip { VarPlayer.ToggleRun }
         speed { false }
     }
+
+    queue.process(this)
     restoreRunEnergy()
 }
 
-fun Player.opLoc(option: String, gameObject: GameObject) {
+fun Player.opLoc(option: String, gameObject: GameObject): Boolean {
     val gameObjectInteraction = GameObjectInteraction(this, gameObject, option)
-    val handledLocs = InteractionMap.handledObjectInteractions[gameObject.id] ?: return
+    val handledLocs = InteractionMap.handledObjectInteractions[gameObject.id] ?: return false
     handledLocs.invoke(gameObjectInteraction)
     target = gameObject
     opScript = gameObjectInteraction
+    return true
 }

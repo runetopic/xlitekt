@@ -1,14 +1,15 @@
+import org.jetbrains.dokka.gradle.DokkaMultiModuleTask
 import org.jetbrains.kotlin.gradle.plugin.KotlinPluginWrapper
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 @Suppress("DSL_SCOPE_VIOLATION")
 // https://youtrack.jetbrains.com/issue/KTIJ-19369
 plugins {
-    application
     alias(deps.plugins.jvm)
     alias(deps.plugins.shadowjar)
     alias(deps.plugins.versions)
     alias(deps.plugins.serialization)
+    alias(deps.plugins.dokka)
 }
 
 group = "com.runetopic.xlite"
@@ -44,11 +45,10 @@ allprojects {
                 "-opt-in=kotlin.ExperimentalUnsignedTypes"
             )
         }
+        withType<DokkaMultiModuleTask> {
+            outputDirectory.set(projectDir.resolve("docs"))
+        }
     }
-}
-
-application {
-    mainClass.set("xlitekt.application.ApplicationKt")
 }
 
 java {

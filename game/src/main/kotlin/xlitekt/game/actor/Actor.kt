@@ -232,11 +232,11 @@ abstract class Actor(
      */
     fun render(render: Render) {
         if (this is NPC) {
-            val renderingBlock = NPCRenderingBlockListener.listeners[render::class] ?: return
+            val renderingBlock = npcRenderingBlockListener[render::class] ?: return
             // Insert the rendering block into the TreeMap based on its index. This is to preserve order based on the client.
             highDefinitionRenderingBlocks[renderingBlock.indexL] = HighDefinitionRenderingBlock(render, renderingBlock)
         } else if (this is Player) {
-            val renderingBlock = PlayerRenderingBlockListener.listeners[render::class] ?: return
+            val renderingBlock = playerRenderingBlockListener[render::class] ?: return
             // Insert the rendering block into the TreeMap based on its index. This is to preserve order based on the client.
             highDefinitionRenderingBlocks[renderingBlock.indexL] = HighDefinitionRenderingBlock(render, renderingBlock)
             when (render) {
@@ -266,6 +266,8 @@ abstract class Actor(
 
     private companion object {
         val world by inject<World>()
+        val playerRenderingBlockListener by inject<PlayerRenderingBlockListener>()
+        val npcRenderingBlockListener by inject<NPCRenderingBlockListener>()
     }
 }
 

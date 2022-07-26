@@ -3,21 +3,22 @@
 [![Discord](https://img.shields.io/discord/212385463418355713?color=%237289DA&logo=Discord&logoColor=%237289DA)](https://discord.gg/3scgBkrfMG)
 [![wakatime](https://wakatime.com/badge/user/00b793fe-9bcc-4e7a-88c2-7c1879c548ce/project/392eeeea-4500-4c18-904b-2c0d662dfb81.svg)](https://wakatime.com/badge/user/00b793fe-9bcc-4e7a-88c2-7c1879c548ce/project/392eeeea-4500-4c18-904b-2c0d662dfb81)
  ![](https://tokei.rs/b1/github/runetopic/xlitekt)
+ 
+# Welcome
+XliteKt is a from scratch game server emulator written in Kotlin.
 
 # Getting Started
-_Make sure to download the latest #202 cache version from one of the archives below. We don't push this to github for
-obvious reasons._
+1. Clone the client from our organization [here](https://github.com/runetopic/runelite-dev). This client will run XliteKt out of the box on localhost.
+2. We provide an application-example.conf by default. Rename this file to ``application.conf``. The configurations are set up to run Xlite out of the box. Change any of the configurations to fit your needs.
+3. Download the supported revision cache (.dat2 format) and map keys (.json format) from [OpenRS2](https://archive.openrs2.org/caches).
+4. Place the cache files you downloaded into the ``./cache/data/`` directory. This is configurable in the application.conf under the application module.
+5. Place the map keys you downloaded into the ``./application/resources/map/`` directory. ``xteas202.json`` is an example of how the file should be named.
+6. Generate the server and client RSA key pair using the ``generateRSA`` Gradle task. Follow the additional instructions from the console after the task is executed. ``./gradlew generateRSA``
+7. Download the revision gamepack.jar from [Runestats](https://archive.runestats.com/osrs/) and place this in the ``./application/resources/client_config/`` directory. ``gamepack.jar`` is an example of how the file should be named.
+8. Run the application.
 
-Download a cache and xteas (JSON) from [archive.openrs2.org](https://archive.openrs2.org/).
-
-Place the cache you downloaded into the ``./cache/data/`` folder inside of the project. This path is configurable in
-the [application.conf](/src/main/resources/application.conf).
-
-**Generate RSA tokens and update your application.conf file**
-
-_This will eventually be a gradle task to generate new RSA keys. For now, you can reference the rune-server thread: [any-revision-enabling-rsa](https://www.rune-server.ee/runescape-development/rs2-server/tutorials/305532-any-revision-enabling-rsa.html)_
-
-**Install the corresponding xteas inside of the [map](/src/main/resources/map) folder in resources.**
+## Documentation
+https://runetopic.github.io/xlitekt/
 
 # Application configuration
 
@@ -36,11 +37,8 @@ ktor {
     }
 }
 ```
-Configuration for game related properties. You will need to generate your RSA exponent and modulus, as well as the packet sizes.
+**Configuration for the game can be found in the ``game`` block.**
 
-We will be writing a tutorial in the future for dumping packets sizes and other information from the current OSRS client as well as the gradle task to generate RSA tokens.
-
-**Please change the RSA tokens for a production based environment, these keys are just an example. Do not use this for anything other than local development.**
 ```shell
 game {
     # Set to true if you want to benchmark the server performance.
@@ -66,7 +64,7 @@ game {
         exponent = "74319506585812759823290259020934858088666404737094871101540670473424793671202076033582991318775440709937362678616598621443723414224839661646087632908361014054642952231258678163322462341878133664959918342102621655539431162351843502897522597279543226584696172903586455624355061037387268986011976499046968675073"
         modulus = "101152132894052393265886644489429469067887733993499471826334750806131431774995232950094045980615261210482740859538462033841944288877997111341162261129657268035424385776764492943939466200272309679088830878857767599863397432612329236019641861788901097158810527108145428907942159175673330991981851896173021952237"
     }
-    # Server resources paths.
+    # Server data resources paths.
     resources {
         xteas = "/map/xteas202.json"
         interface_info = "/ui/interface_info.json"
@@ -76,27 +74,6 @@ game {
         varbits = "/var/varbits.json"
     }
 }
-```
-
-# Maps
-Maps are loaded using the xteas provided from OpenRS2, which follows this format:
-
-```json
-[
- {
-    "archive": 5,
-    "group": 5932,
-    "name_hash": -1153353684,
-    "name": "l44_81",
-    "mapsquare": 11345,
-    "key": [
-      52989138,
-      -933733387,
-      916753309,
-      1765351430
-    ]
-  }
-]
 ```
 
 # Features
@@ -147,6 +124,3 @@ Then use the ::benchmark command in-game.
 - Synchronization completed in 45.760100ms.
 ============================================================
 ```
-
-## Documentation
-https://runetopic.github.io/xlitekt/

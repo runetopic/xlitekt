@@ -18,7 +18,7 @@ import xlitekt.game.Game
 import xlitekt.game.gameModule
 import xlitekt.network.Network
 import xlitekt.network.networkModule
-import xlitekt.shared.lazy
+import xlitekt.shared.insert
 import xlitekt.shared.sharedModule
 import xlitekt.synchronizer.synchronizerModule
 import java.util.TimeZone
@@ -39,7 +39,7 @@ fun Application.module() {
         installKoin()
         installKotlinScript()
         installHttpServer()
-        lazy<Game>().start()
+        insert<Game>().start()
     }
 
     log.info(
@@ -59,7 +59,7 @@ fun Application.module() {
         """.trimIndent()
     )
     log.info("XliteKt launched in $time ms.")
-    lazy<Network>().awaitOnPort(environment.config.property("ktor.deployment.port").getString().toInt())
+    insert<Network>().awaitOnPort(environment.config.property("ktor.deployment.port").getString().toInt())
 }
 
 val JavConfig: ByteArray = object {}::class.java.getResourceAsStream("/client_config/jav_config.ws")!!.readAllBytes()
@@ -118,8 +118,8 @@ fun Application.addShutdownHook() {
     Runtime.getRuntime().addShutdownHook(
         Thread {
             log.info("Running shutdown hook...")
-            lazy<Network>().shutdown()
-            lazy<Game>().shutdown()
+            insert<Network>().shutdown()
+            insert<Game>().shutdown()
         }
     )
 }

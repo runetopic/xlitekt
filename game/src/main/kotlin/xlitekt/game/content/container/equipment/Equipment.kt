@@ -6,7 +6,7 @@ import xlitekt.game.content.container.Container
 import xlitekt.game.content.item.Item
 import xlitekt.game.packet.UpdateContainerFullPacket
 import xlitekt.game.packet.UpdateContainerPartialPacket
-import xlitekt.game.packet.UpdateWeightPacket
+import xlitekt.game.packet.UpdateRunWeightPacket
 import xlitekt.shared.inject
 import xlitekt.shared.resource.EquipmentSlot
 import xlitekt.shared.resource.ItemInfoMap
@@ -168,7 +168,7 @@ class Equipment(
         player.weight = items.filterNotNull().sumOf { itemInfoMap[it.id]?.weight ?: 0.0 }.toFloat()
 
         player.write(
-            UpdateWeightPacket(player.weight)
+            UpdateRunWeightPacket(player.weight)
         )
     }
 

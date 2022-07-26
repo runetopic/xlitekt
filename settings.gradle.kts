@@ -7,20 +7,21 @@ dependencyResolutionManagement {
 
     versionCatalogs {
         create("deps") {
-            version("kotlin", "1.7.0")
-            version("ktor", "2.0.2")
+            version("kotlin", "1.7.10")
+            version("ktor", "2.0.3")
             version("koin", "3.2.0")
             version("slf4j", "1.7.36")
             version("cache", "1.4.24-SNAPSHOT")
             version("cryptography", "1.0.10-SNAPSHOT")
             version("kotlinx", "1.3.3")
             version("kotlin-inline-logger", "1.0.4")
-            version("classgraph", "4.8.147")
+            version("classgraph", "4.8.149")
             version("shadowjar", "7.1.2")
             version("versions", "0.42.0")
             version("pathfinder", "2.1.4")
             version("fastutil", "8.5.8")
             version("jctools", "3.3.0")
+            version("dokka", "1.7.0")
 
             library("ktor-server-netty", "io.ktor", "ktor-server-netty").versionRef("ktor")
             library("koin-core", "io.insert-koin", "koin-core").versionRef("koin")
@@ -48,6 +49,7 @@ dependencyResolutionManagement {
             plugin("serialization", "org.jetbrains.kotlin.plugin.serialization").versionRef("kotlin")
             plugin("shadowjar", "com.github.johnrengelman.shadow").versionRef("shadowjar")
             plugin("versions", "com.github.ben-manes.versions").versionRef("versions")
+            plugin("dokka", "org.jetbrains.dokka").versionRef("dokka")
         }
     }
 }
@@ -57,6 +59,7 @@ include(
         "cache",
         "game",
         "network",
+        "rsa",
         "script",
         "shared",
         "synchronizer"

@@ -7,6 +7,7 @@ import xlitekt.game.actor.player.Client
 import xlitekt.game.actor.player.Client.Companion.checksums
 import xlitekt.game.actor.player.Client.Companion.majorBuild
 import xlitekt.game.actor.player.Client.Companion.minorBuild
+import xlitekt.game.actor.player.Client.Companion.packetDisassemblerListener
 import xlitekt.game.actor.player.Client.Companion.rsaExponent
 import xlitekt.game.actor.player.Client.Companion.rsaModulus
 import xlitekt.game.actor.player.Client.Companion.sizes
@@ -14,7 +15,6 @@ import xlitekt.game.actor.player.Client.Companion.store
 import xlitekt.game.actor.player.Player
 import xlitekt.game.actor.player.PlayerDecoder
 import xlitekt.game.content.ui.InterfaceLayout
-import xlitekt.game.packet.disassembler.PacketDisassemblerListener
 import xlitekt.game.packet.disassembler.handler.PacketHandler
 import xlitekt.game.world.World
 import xlitekt.network.client.ClientRequestOpcode.HANDSHAKE_JS5_OPCODE
@@ -43,7 +43,7 @@ import xlitekt.shared.buffer.readStringCp1252NullTerminated
 import xlitekt.shared.buffer.readUByte
 import xlitekt.shared.buffer.readUMedium
 import xlitekt.shared.buffer.readUShort
-import xlitekt.shared.lazy
+import xlitekt.shared.insert
 import xlitekt.shared.toBoolean
 import java.math.BigInteger
 import java.nio.ByteBuffer
@@ -265,7 +265,7 @@ private suspend fun Client.readLogin() {
                 PlayerDecoder.decodeFromJson(username, password).let {
                     it.interfaces.currentInterfaceLayout = if (clientResizeable) InterfaceLayout.RESIZABLE else InterfaceLayout.FIXED
                     this.player = it
-                    lazy<World>().addPlayer(it)
+                    insert<World>().addPlayer(it)
                 }.also { if (it) writeLogin(LOGIN_SUCCESS_OPCODE) else writeLogin(BAD_SESSION_OPCODE) }
             } catch (exception: Exception) {
                 handleException(exception)
@@ -289,7 +289,7 @@ private suspend fun Client.writeLogin(response: Int) {
         writeShort(player.index.toShort())
         writeByte(0)
     }.flush()
-    lazy<World>().requestLogin(player, this)
+    insert<World>().requestLogin(player, this)
     readPackets(player)
 }
 
@@ -300,7 +300,7 @@ private suspend fun Client.readPackets(player: Player) = try {
         val opcode = readChannel.readPacketOpcode(clientCipher)
         if (opcode < 0 || opcode >= sizes.size) continue
         val size = readChannel.readPacketSize(sizes[opcode])
-        val disassembler = PacketDisassemblerListener.listeners.entries.firstOrNull { it.key == opcode }
+        val disassembler = packetDisassemblerListener.entries.firstOrNull { it.key == opcode }
         if (disassembler == null) {
             logger.debug { "No packet disassembler found for packet opcode $opcode." }
             // Discard the bytes from the read channel.
@@ -315,7 +315,7 @@ private suspend fun Client.readPackets(player: Player) = try {
         }
         // Attempt to invoke the packet with the read channel. This will consume the correct number of bytes from the channel
         // assuming the disassembler is correctly structured.
-        val disassembled = PacketDisassemblerListener.listeners[disassembler.key]?.packet?.invoke(readChannel, size)
+        val disassembled = packetDisassemblerListener[disassembler.key]?.packet?.invoke(readChannel, size)
         if (disassembled == null) {
             logger.debug { "Disassembled packet returned null. Opcode was $opcode." }
             // Discard the bytes from the read channel if the packet was not found.

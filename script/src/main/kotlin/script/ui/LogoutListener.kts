@@ -1,16 +1,17 @@
 package script.ui
 
+import xlitekt.game.content.ui.InterfaceListener
 import xlitekt.game.content.ui.UserInterface.Logout
-import xlitekt.game.content.ui.onInterface
 import xlitekt.game.world.World
 import xlitekt.shared.inject
+import xlitekt.shared.insert
 
 /**
  * @author Jordan Abraham
  */
 val world by inject<World>()
 
-onInterface<Logout> {
+insert<InterfaceListener>().userInterface<Logout> {
     onClick("Logout") {
         world.requestLogout(this)
     }

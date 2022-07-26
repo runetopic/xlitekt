@@ -50,7 +50,7 @@ fun Player.chopTree(gameObject: GameObject, currentTool: AxeType, treeType: Tree
 
         val added = inventory.addItem(Item(treeType.reward, 1)) {
             addExperience(Skill.WOODCUTTING, treeType.experience)
-            message { "You get some ${this.entry?.name?.lowercase(Locale.getDefault()) ?: "logs"}." }
+            message { "You get some ${this.entry?.name?.lowercase() ?: "logs"}." }
         }
 
         if (added && treeType.alwaysFelled()) {

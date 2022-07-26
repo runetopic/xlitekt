@@ -9,6 +9,10 @@ import xlitekt.shared.inject
 import xlitekt.shared.toBoolean
 import java.nio.ByteBuffer
 
+/**
+ * @author Jordan Abraham
+ * @author Tyler Telis
+ */
 abstract class EntryTypeProvider<R : EntryType> {
     internal val entries by lazy(::load)
     protected val store by inject<Js5Store>()
@@ -16,11 +20,6 @@ abstract class EntryTypeProvider<R : EntryType> {
     protected abstract fun load(): Map<Int, R>
     protected abstract fun ByteBuffer.loadEntryType(type: R): R
     internal open fun postLoadEntryType(type: R) {}
-
-    fun size() = entries.size
-    fun entryType(id: Int): R? = entries[id]
-    fun exists(id: Int): Boolean = entries.containsKey(id)
-    fun entries(): Collection<R> = entries.values
 
     protected fun ByteBuffer.readStringIntParameters(): Map<Int, Any> = buildMap {
         repeat(readUByte()) {
@@ -33,7 +32,67 @@ abstract class EntryTypeProvider<R : EntryType> {
         check(remaining() == 0) { "The remaining buffer is not empty. Remaining=${remaining()}" }
     }
 
+    /**
+     * Folds a String to a RuneScape cache name hash.
+     */
     protected fun String.toNameHash() = fold(0) { hash, next -> next.code + ((hash shl 5) - hash) }
+
+    /**
+     * Get the total number of [EntryType]s contained within this provider.
+     *
+     * @return [Int] The size.
+     *
+     * <b>Example</b>
+     *
+     * ```
+     * val provider by inject<ObjEntryTypeProvider>()
+     * val size = provider.size()
+     * ```
+     */
+    fun size() = entries.size
+
+    /**
+     * Gets a [EntryType] with the given id.
+     *
+     * @return [EntryType]
+     *
+     * <b>Example</b>
+     *
+     * ```
+     * val provider by inject<ObjEntryTypeProvider>()
+     * val entry = provider.entryType(abyssal_whip_4151)
+     * ```
+     */
+    fun entryType(id: Int) = entries[id]
+
+    /**
+     * Gets if the given id has an associated [EntryType].
+     * This is widely used as a verifier for server logic as it is safe to compare against the cache information.
+     *
+     * @return [Boolean] True if this provider contains an [EntryType] with the given id.
+     *
+     * <b>Example</b>
+     *
+     * ```
+     * val provider by inject<ObjEntryTypeProvider>()
+     * val exists = provider.exists(abyssal_whip_4151)
+     * ```
+     */
+    fun exists(id: Int) = entries.containsKey(id)
+
+    /**
+     * Gets a [Collection] of [EntryType]s contained within this provider.
+     *
+     * @return [Collection] of [EntryType]s.
+     *
+     * <b>Example</b>
+     *
+     * ```
+     * val provider by inject<ObjEntryTypeProvider>()
+     * val entries = provider.entries()
+     * ```
+     */
+    fun entries() = entries.values
 
     internal companion object {
         // Indexes.
@@ -48,6 +107,7 @@ abstract class EntryTypeProvider<R : EntryType> {
         const val FONT_INDEX = 13
         const val VORBIS_INDEX = 14
         const val INSTRUMENT_INDEX = 15
+        const val DB_INDEXES_INDEX = 21
 
         // Config groups.
         const val FLOOR_UNDERLAY_CONFIG = 1
@@ -68,5 +128,7 @@ abstract class EntryTypeProvider<R : EntryType> {
         const val HITBAR_CONFIG = 33
         const val STRUCT_CONFIG = 34
         const val WORLD_MAP_CONFIG = 35
+        const val DB_ROW_CONFIG = 38
+        const val DB_TABLE_CONFIG = 39
     }
 }

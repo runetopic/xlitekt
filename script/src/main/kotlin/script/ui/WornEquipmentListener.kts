@@ -3,15 +3,16 @@ package script.ui
 import xlitekt.game.actor.cancelAll
 import xlitekt.game.actor.player.message
 import xlitekt.game.actor.player.renderAppearance
+import xlitekt.game.content.ui.InterfaceListener
 import xlitekt.game.content.ui.UserInterface
 import xlitekt.game.content.ui.UserInterface.WornEquipment
-import xlitekt.game.content.ui.onInterface
 import xlitekt.shared.inject
+import xlitekt.shared.insert
 import xlitekt.shared.resource.ItemExamines
 
 private val itemExamines by inject<ItemExamines>()
 
-onInterface<WornEquipment> {
+insert<InterfaceListener>().userInterface<WornEquipment> {
     onClick("View equipment stats") {
         interfaces += UserInterface.EquipmentStats
     }

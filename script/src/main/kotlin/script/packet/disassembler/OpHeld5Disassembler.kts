@@ -1,15 +1,16 @@
 package script.packet.disassembler
 
 import xlitekt.game.packet.OpHeldPacket
-import xlitekt.game.packet.disassembler.onPacketDisassembler
+import xlitekt.game.packet.disassembler.PacketDisassemblerListener
 import xlitekt.shared.buffer.readIntV2
 import xlitekt.shared.buffer.readUShort
 import xlitekt.shared.buffer.readUShortLittleEndianSubtract
+import xlitekt.shared.insert
 
 /**
  * @author Jordan Abraham
  */
-onPacketDisassembler(opcode = 43, size = 8) {
+insert<PacketDisassemblerListener>().disassemblePacket(opcode = 43, size = 8) {
     OpHeldPacket(
         index = 5,
         fromPackedInterface = readIntV2(),

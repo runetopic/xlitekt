@@ -2,11 +2,12 @@ package script.command
 
 import xlitekt.game.actor.player.Viewport.Companion.PREFERRED_VIEW_DISTANCE
 import xlitekt.game.actor.player.message
-import xlitekt.game.content.command.Commands.onCommand
+import xlitekt.game.content.command.CommandListener
+import xlitekt.shared.insert
 
 private val invalidSyntaxMessage = "Please use syntax: ::viewport static or ::viewport dynamic"
 
-onCommand("viewport").use { arguments ->
+insert<CommandListener>().command("viewport").use { arguments ->
     if (arguments.isEmpty()) {
         message { invalidSyntaxMessage }
         return@use

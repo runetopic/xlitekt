@@ -40,6 +40,12 @@ fun ByteBuffer.readIntLittleEndian() = readUShortLittleEndian() or (readUByte() 
 fun ByteBuffer.readIntV1() = readUShort() or (readUByte() shl 24) or (readUByte() shl 16)
 fun ByteBuffer.readIntV2() = (readUByte() shl 16) or (readUByte() shl 24) or readUShortLittleEndian()
 
+fun ByteBuffer.readLong(): Long {
+    val f = readInt().toLong() and 0xffffffff
+    val s = readInt().toLong() and 0xffffffff
+    return (f shl 32) + s
+}
+
 tailrec fun ByteBuffer.readIncrSmallSmart(increment: Int = readUShortSmart(), offset: Int = 0): Int {
     if (increment != Short.MAX_VALUE.toInt()) return offset + increment
     return readIncrSmallSmart(offset = offset + Short.MAX_VALUE)
@@ -65,6 +71,11 @@ fun ByteBuffer.readUIntSmart(): Int {
 tailrec fun ByteBuffer.readVarInt(increment: Int = readByte(), offset: Int = 0): Int {
     if (increment >= 0) return offset or increment
     return readVarInt(offset = (offset or (increment and 127)) shl 7)
+}
+
+tailrec fun ByteBuffer.method7754(opcode: Int = readUByte(), offset: Int = 0, value: Int = 0): Int {
+    if (opcode <= Byte.MAX_VALUE) return value
+    return method7754(opcode, offset = offset + 7, value = value or ((opcode and 127) shl offset))
 }
 
 fun ByteBuffer.writeStringCp1252NullTerminated(value: String) {

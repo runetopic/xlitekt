@@ -1,0 +1,290 @@
+<!doctype html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <title>QueuedScript</title>
+<link href="../../../images/logo-icon.svg" rel="icon" type="image/svg"><script>var pathToRoot = "../../../";</script>    <script>const storage = localStorage.getItem("dokka-dark-mode")
+const savedDarkMode = storage ? JSON.parse(storage) : false
+if(savedDarkMode === true){
+    document.getElementsByTagName("html")[0].classList.add("theme-dark")
+}</script>
+<script type="text/javascript" src="../../../scripts/sourceset_dependencies.js" async></script>
+<link href="../../../styles/style.css" rel="Stylesheet">
+<link href="../../../styles/jetbrains-mono.css" rel="Stylesheet">
+<link href="../../../styles/main.css" rel="Stylesheet">
+<link href="../../../styles/prism.css" rel="Stylesheet">
+<link href="../../../styles/logo-styles.css" rel="Stylesheet">
+<script type="text/javascript" src="../../../scripts/clipboard.js" async></script>
+<script type="text/javascript" src="../../../scripts/navigation-loader.js" async></script>
+<script type="text/javascript" src="../../../scripts/platform-content-handler.js" async></script>
+<script type="text/javascript" src="../../../scripts/main.js" defer></script>
+<script type="text/javascript" src="../../../scripts/prism.js" async></script></head>
+<body>
+<div class="navigation-wrapper" id="navigation-wrapper">
+    <div id="leftToggler"><span class="icon-toggler"></span></div>
+    <div class="library-name">
+<a href="../../../index.html">
+<span>xlitekt</span>            </a>    </div>
+    <div>1.0.0-SNAPSHOT
+    </div>
+    <div class="pull-right d-flex">
+        <button id="theme-toggle-button"><span id="theme-toggle"></span></button>
+        <div id="searchBar"></div>
+    </div>
+</div>
+<div id="container">
+    <div id="leftColumn">
+        <div id="sideMenu"></div>
+    </div>
+    <div id="main">
+<div class="main-content" id="content" pageids="game::xlitekt.game.queue/QueuedScript///PointingToDeclaration//-2124257962">
+  <div class="breadcrumbs"><a href="../../index.html">game</a><span class="delimiter">/</span><a href="../index.html">xlitekt.game.queue</a><span class="delimiter">/</span><a href="index.html">QueuedScript</a></div>
+  <div class="cover ">
+    <h1 class="cover"><span>Queued</span><wbr><span><span>Script</span></span></h1>
+    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":game:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">data </span><span class="token keyword">class </span><a href="index.html">QueuedScript</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="index.html">T</a><span class="token operator"> : </span><a href="../../xlitekt.game.actor/-actor/index.html">Actor</a><span class="token operator">&gt;</span><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">executor<span class="token operator">: </span><a href="index.html">T</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>priority<span class="token operator">: </span><a href="../-queued-script-priority/index.html">QueuedScriptPriority</a></span></span><span class="token punctuation">)</span> : <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.coroutines/-continuation/index.html">Continuation</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html">Unit</a><span class="token operator">&gt; </span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><h4 class="">Author</h4><p class="paragraph">Tyler Telis</p><p class="paragraph">Tom (Got some inspiration and coroutine ideas from rsmod)</p></div></div>
+  </div>
+  <div class="tabbedcontent">
+    <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="Constructors">Constructors</button><button class="section-tab" data-togglable="Functions">Functions</button><button class="section-tab" data-togglable="Properties">Properties</button></div>
+    <div class="tabs-section-body">
+      <h2 class="tabbedcontent">Constructors</h2>
+      <div class="table" data-togglable="Constructors"><a data-name="-163364675%2FConstructors%2F-2124257962" anchor-label="QueuedScript" id="-163364675%2FConstructors%2F-2124257962" data-filterable-set=":game:dokkaHtmlPartial/main"></a>
+        <div class="table-row" data-filterable-current=":game:dokkaHtmlPartial/main" data-filterable-set=":game:dokkaHtmlPartial/main">
+          <div class="main-subrow keyValue TabbedContent">
+            <div class=""><span class="inline-flex">
+                <div><a href="-queued-script.html"><span>Queued</span><wbr><span><span>Script</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-163364675%2FConstructors%2F-2124257962"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div>
+              <div class="title">
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":game:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><span class="token operator">&lt;</span><span class="token keyword"></span><a href="index.html">T</a><span class="token operator"> : </span><a href="../../xlitekt.game.actor/-actor/index.html">Actor</a><span class="token operator">&gt; </span><a href="-queued-script.html"><span class="token function">QueuedScript</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">executor<span class="token operator">: </span><a href="index.html">T</a><span class="token punctuation">, </span></span><span class="parameter ">priority<span class="token operator">: </span><a href="../-queued-script-priority/index.html">QueuedScriptPriority</a></span></span><span class="token punctuation">)</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <h2 class="">Functions</h2>
+      <div class="table" data-togglable="Functions"><a data-name="-1431644898%2FFunctions%2F-2124257962" anchor-label="execute" id="-1431644898%2FFunctions%2F-2124257962" data-filterable-set=":game:dokkaHtmlPartial/main"></a>
+        <div class="table-row" data-filterable-current=":game:dokkaHtmlPartial/main" data-filterable-set=":game:dokkaHtmlPartial/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="execute.html"><span><span>execute</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1431644898%2FFunctions%2F-2124257962"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div>
+              <div class="title">
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":game:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="execute.html"><span class="token function">execute</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">Marks the script as executed and resumes our execution.</p></div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+<a data-name="607537367%2FFunctions%2F-2124257962" anchor-label="resumeWith" id="607537367%2FFunctions%2F-2124257962" data-filterable-set=":game:dokkaHtmlPartial/main"></a>
+        <div class="table-row" data-filterable-current=":game:dokkaHtmlPartial/main" data-filterable-set=":game:dokkaHtmlPartial/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="resume-with.html"><span>resume</span><wbr><span><span>With</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="607537367%2FFunctions%2F-2124257962"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div>
+              <div class="title">
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":game:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="resume-with.html"><span class="token function">resumeWith</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">result<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-result/index.html">Result</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html">Unit</a><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">The function that gets executed when we resume the queued script with the result. We set the current stage to null to allow for continuation. If an exception is caught within the result, we print it to the console.</p></div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+<a data-name="-2051790856%2FFunctions%2F-2124257962" anchor-label="suspended" id="-2051790856%2FFunctions%2F-2124257962" data-filterable-set=":game:dokkaHtmlPartial/main"></a>
+        <div class="table-row" data-filterable-current=":game:dokkaHtmlPartial/main" data-filterable-set=":game:dokkaHtmlPartial/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="suspended.html"><span><span>suspended</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-2051790856%2FFunctions%2F-2124257962"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div>
+              <div class="title">
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":game:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="suspended.html"><span class="token function">suspended</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">Returns if the queued script is suspended. E.g: the script is suspended when the stage is null</p></div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+<a data-name="-1404667342%2FFunctions%2F-2124257962" anchor-label="terminate" id="-1404667342%2FFunctions%2F-2124257962" data-filterable-set=":game:dokkaHtmlPartial/main"></a>
+        <div class="table-row" data-filterable-current=":game:dokkaHtmlPartial/main" data-filterable-set=":game:dokkaHtmlPartial/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="terminate.html"><span><span>terminate</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1404667342%2FFunctions%2F-2124257962"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div>
+              <div class="title">
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":game:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="terminate.html"><span class="token function">terminate</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">Terminates the queued script and invokes the termination script.</p></div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+<a data-name="-981388400%2FFunctions%2F-2124257962" anchor-label="wait" id="-981388400%2FFunctions%2F-2124257962" data-filterable-set=":game:dokkaHtmlPartial/main"></a>
+        <div class="table-row" data-filterable-current=":game:dokkaHtmlPartial/main" data-filterable-set=":game:dokkaHtmlPartial/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="wait.html"><span><span>wait</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-981388400%2FFunctions%2F-2124257962"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div>
+              <div class="title">
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":game:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">suspend </span><span class="token keyword">fun </span><a href="wait.html"><span class="token function">wait</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">ticks<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a></span></span><span class="token punctuation">)</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">This function sets the current stage to a WaitCondition to allow the script to wait for a specified number of ticks.</p></div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+<a data-name="609160689%2FFunctions%2F-2124257962" anchor-label="waitForInput" id="609160689%2FFunctions%2F-2124257962" data-filterable-set=":game:dokkaHtmlPartial/main"></a>
+        <div class="table-row" data-filterable-current=":game:dokkaHtmlPartial/main" data-filterable-set=":game:dokkaHtmlPartial/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="wait-for-input.html"><span>wait</span><wbr><span>For</span><wbr><span><span>Input</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="609160689%2FFunctions%2F-2124257962"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div>
+              <div class="title">
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":game:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">suspend </span><span class="token keyword">fun </span><a href="wait-for-input.html"><span class="token function">waitForInput</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">This function sets the current stage to a PredicateCondition, that checks if the input is not null and waits for it. This is used for dialogues/input dialogues that require waiting for user input.</p></div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+<a data-name="2025024056%2FFunctions%2F-2124257962" anchor-label="waitForLocation" id="2025024056%2FFunctions%2F-2124257962" data-filterable-set=":game:dokkaHtmlPartial/main"></a>
+        <div class="table-row" data-filterable-current=":game:dokkaHtmlPartial/main" data-filterable-set=":game:dokkaHtmlPartial/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="wait-for-location.html"><span>wait</span><wbr><span>For</span><wbr><span><span>Location</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="2025024056%2FFunctions%2F-2124257962"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div>
+              <div class="title">
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":game:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">suspend </span><span class="token keyword">fun </span><a href="wait-for-location.html"><span class="token function">waitForLocation</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">location<span class="token operator">: </span><a href="../../xlitekt.game.world.map/-location/index.html">Location</a></span></span><span class="token punctuation">)</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">This function sets the current stage to a LocationCondition to allow the script to wait until the location matches.</p></div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+<a data-name="-971921416%2FFunctions%2F-2124257962" anchor-label="waitUntil" id="-971921416%2FFunctions%2F-2124257962" data-filterable-set=":game:dokkaHtmlPartial/main"></a>
+        <div class="table-row" data-filterable-current=":game:dokkaHtmlPartial/main" data-filterable-set=":game:dokkaHtmlPartial/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="wait-until.html"><span>wait</span><wbr><span><span>Until</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-971921416%2FFunctions%2F-2124257962"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div>
+              <div class="title">
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":game:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">suspend </span><span class="token keyword">fun </span><a href="wait-until.html"><span class="token function">waitUntil</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">predicate<span class="token operator">: </span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a></span></span><span class="token punctuation">)</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">This function sets the current stage to a PredicateCondition to allow the script to wait until the predicate matches.</p></div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <h2 class="">Properties</h2>
+      <div class="table" data-togglable="Properties"><a data-name="-1771361244%2FProperties%2F-2124257962" anchor-label="context" id="-1771361244%2FProperties%2F-2124257962" data-filterable-set=":game:dokkaHtmlPartial/main"></a>
+        <div class="table-row" data-filterable-current=":game:dokkaHtmlPartial/main" data-filterable-set=":game:dokkaHtmlPartial/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="context.html"><span><span>context</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1771361244%2FProperties%2F-2124257962"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div>
+              <div class="title">
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-depenent-content" data-active="" data-togglable=":game:dokkaHtmlPartial/main"><a data-name="-1771361244%2FProperties%2F-2124257962" anchor-label="context" id="-1771361244%2FProperties%2F-2124257962" data-filterable-set=":game:dokkaHtmlPartial/main"></a><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">val </span><a href="context.html">context</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.coroutines/-coroutine-context/index.html">CoroutineContext</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><a data-name="-1771361244%2FProperties%2F-2124257962" anchor-label="context" id="-1771361244%2FProperties%2F-2124257962" data-filterable-set=":game:dokkaHtmlPartial/main"></a><p class="paragraph">This is the coroutine's context, which starts off as an empty context for each script.</p></div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+<a data-name="-213512208%2FProperties%2F-2124257962" anchor-label="continuation" id="-213512208%2FProperties%2F-2124257962" data-filterable-set=":game:dokkaHtmlPartial/main"></a>
+        <div class="table-row" data-filterable-current=":game:dokkaHtmlPartial/main" data-filterable-set=":game:dokkaHtmlPartial/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="continuation.html"><span><span>continuation</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-213512208%2FProperties%2F-2124257962"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div>
+              <div class="title">
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-depenent-content" data-active="" data-togglable=":game:dokkaHtmlPartial/main"><a data-name="-213512208%2FProperties%2F-2124257962" anchor-label="continuation" id="-213512208%2FProperties%2F-2124257962" data-filterable-set=":game:dokkaHtmlPartial/main"></a><div class="symbol monospace"><span class="token keyword">lateinit </span><span class="token keyword">var </span><a href="continuation.html">continuation</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.coroutines/-continuation/index.html">Continuation</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html">Unit</a><span class="token operator">&gt;</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><a data-name="-213512208%2FProperties%2F-2124257962" anchor-label="continuation" id="-213512208%2FProperties%2F-2124257962" data-filterable-set=":game:dokkaHtmlPartial/main"></a><p class="paragraph">The continuation unit to invoke whe we need to resume this script.</p></div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+<a data-name="-330361192%2FProperties%2F-2124257962" anchor-label="executed" id="-330361192%2FProperties%2F-2124257962" data-filterable-set=":game:dokkaHtmlPartial/main"></a>
+        <div class="table-row" data-filterable-current=":game:dokkaHtmlPartial/main" data-filterable-set=":game:dokkaHtmlPartial/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="executed.html"><span><span>executed</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-330361192%2FProperties%2F-2124257962"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div>
+              <div class="title">
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-depenent-content" data-active="" data-togglable=":game:dokkaHtmlPartial/main"><a data-name="-330361192%2FProperties%2F-2124257962" anchor-label="executed" id="-330361192%2FProperties%2F-2124257962" data-filterable-set=":game:dokkaHtmlPartial/main"></a><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">var </span><a href="executed.html">executed</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token operator"> = </span><span class="token boolean">false</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><a data-name="-330361192%2FProperties%2F-2124257962" anchor-label="executed" id="-330361192%2FProperties%2F-2124257962" data-filterable-set=":game:dokkaHtmlPartial/main"></a><p class="paragraph">If the script has been exectuted or not.</p></div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+<a data-name="1422025705%2FProperties%2F-2124257962" anchor-label="input" id="1422025705%2FProperties%2F-2124257962" data-filterable-set=":game:dokkaHtmlPartial/main"></a>
+        <div class="table-row" data-filterable-current=":game:dokkaHtmlPartial/main" data-filterable-set=":game:dokkaHtmlPartial/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="input.html"><span><span>input</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1422025705%2FProperties%2F-2124257962"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div>
+              <div class="title">
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-depenent-content" data-active="" data-togglable=":game:dokkaHtmlPartial/main"><a data-name="1422025705%2FProperties%2F-2124257962" anchor-label="input" id="1422025705%2FProperties%2F-2124257962" data-filterable-set=":game:dokkaHtmlPartial/main"></a><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">var </span><a href="input.html">input</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html">Any</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><a data-name="1422025705%2FProperties%2F-2124257962" anchor-label="input" id="1422025705%2FProperties%2F-2124257962" data-filterable-set=":game:dokkaHtmlPartial/main"></a><p class="paragraph">Any input value that the script has been waiting for</p></div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+<a data-name="752264739%2FProperties%2F-2124257962" anchor-label="priority" id="752264739%2FProperties%2F-2124257962" data-filterable-set=":game:dokkaHtmlPartial/main"></a>
+        <div class="table-row" data-filterable-current=":game:dokkaHtmlPartial/main" data-filterable-set=":game:dokkaHtmlPartial/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="priority.html"><span><span>priority</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="752264739%2FProperties%2F-2124257962"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div>
+              <div class="title">
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-depenent-content" data-active="" data-togglable=":game:dokkaHtmlPartial/main"><a data-name="752264739%2FProperties%2F-2124257962" anchor-label="priority" id="752264739%2FProperties%2F-2124257962" data-filterable-set=":game:dokkaHtmlPartial/main"></a><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">val </span><a href="priority.html">priority</a><span class="token operator">: </span><a href="../-queued-script-priority/index.html">QueuedScriptPriority</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+<a data-name="2140949860%2FProperties%2F-2124257962" anchor-label="terminationScript" id="2140949860%2FProperties%2F-2124257962" data-filterable-set=":game:dokkaHtmlPartial/main"></a>
+        <div class="table-row" data-filterable-current=":game:dokkaHtmlPartial/main" data-filterable-set=":game:dokkaHtmlPartial/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="termination-script.html"><span>termination</span><wbr><span><span>Script</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="2140949860%2FProperties%2F-2124257962"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div>
+              <div class="title">
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-depenent-content" data-active="" data-togglable=":game:dokkaHtmlPartial/main"><a data-name="2140949860%2FProperties%2F-2124257962" anchor-label="terminationScript" id="2140949860%2FProperties%2F-2124257962" data-filterable-set=":game:dokkaHtmlPartial/main"></a><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">var </span><a href="termination-script.html">terminationScript</a><span class="token operator">: </span><a href="../index.html#-1567077484%2FClasslikes%2F-2124257962">QueuedScriptUnit</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="index.html">T</a><span class="token operator">&gt;</span><span class="token operator">?</span><span class="token operator"> = </span>null<span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><a data-name="2140949860%2FProperties%2F-2124257962" anchor-label="terminationScript" id="2140949860%2FProperties%2F-2124257962" data-filterable-set=":game:dokkaHtmlPartial/main"></a><p class="paragraph">The termination script to exectute upon terminating the queued script.</p></div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      <div class="footer">
+        <span class="go-to-top-icon"><a href="#content" id="go-to-top-link"></a></span><span>© 2022 Copyright</span><span class="pull-right"><span>Generated by </span><a href="https://github.com/Kotlin/dokka"><span>dokka</span><span class="padded-icon"></span></a></span>
+      </div>
+    </div>
+</div>
+
+</body></html>
+

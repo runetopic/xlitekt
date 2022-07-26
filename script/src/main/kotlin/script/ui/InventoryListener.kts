@@ -3,10 +3,11 @@ package script.ui
 import xlitekt.game.actor.cancelAll
 import xlitekt.game.actor.player.renderAppearance
 import xlitekt.game.content.item.FloorItem
+import xlitekt.game.content.ui.InterfaceListener
 import xlitekt.game.content.ui.UserInterface
-import xlitekt.game.content.ui.onInterface
+import xlitekt.shared.insert
 
-onInterface<UserInterface.Inventory> {
+insert<InterfaceListener>().userInterface<UserInterface.Inventory> {
     onOpHeld {
         val slot = it.fromSlotId
         val item = inventory[slot] ?: return@onOpHeld

@@ -3,7 +3,8 @@ package script.packet.disassembler.handler
 import com.github.michaelbull.logging.InlineLogger
 import xlitekt.game.content.ui.UserInterfaceEvent
 import xlitekt.game.packet.OpHeldPacket
-import xlitekt.game.packet.disassembler.handler.onPacketHandler
+import xlitekt.game.packet.disassembler.handler.PacketHandlerListener
+import xlitekt.shared.insert
 import xlitekt.shared.packedToChildId
 import xlitekt.shared.packedToInterfaceId
 
@@ -12,7 +13,7 @@ import xlitekt.shared.packedToInterfaceId
  */
 private val logger = InlineLogger()
 
-onPacketHandler<OpHeldPacket> {
+insert<PacketHandlerListener>().handlePacket<OpHeldPacket> {
     val index = packet.index
     val fromInterfaceId = packet.fromPackedInterface.packedToInterfaceId()
     val fromChildId = packet.fromPackedInterface.packedToChildId()
@@ -36,7 +37,7 @@ onPacketHandler<OpHeldPacket> {
         toItemId = toItemId,
     )
 
-    val listener = player.interfaces.listeners.find { it.userInterface.interfaceInfo.id == fromInterfaceId } ?: return@onPacketHandler
+    val listener = player.interfaces.listeners.find { it.userInterface.interfaceInfo.id == fromInterfaceId } ?: return@handlePacket
     listener.opHeld(event)
     logger.debug { "Clicked op held fromInterfaceId=$fromInterfaceId, toInterfaceId=$toInterfaceId, fromChildId=$fromChildId, toChildId=$toChildId, fromSlotId=$fromSlotId, toSlotId=$toSlotId, fromItemId=$fromItemId, toItemId=$toItemId, index=$index" }
 }

@@ -1,18 +1,19 @@
 package script.packet.assembler
 
 import xlitekt.game.packet.UpdateFriendListPacket
-import xlitekt.game.packet.assembler.onPacketAssembler
+import xlitekt.game.packet.assembler.PacketAssemblerListener
 import xlitekt.shared.buffer.writeByte
 import xlitekt.shared.buffer.writeInt
 import xlitekt.shared.buffer.writeShort
 import xlitekt.shared.buffer.writeStringCp1252NullTerminated
+import xlitekt.shared.insert
 import xlitekt.shared.toInt
 
 /**
  * @author Jordan Abraham
  * @author Tyler Telis
  */
-onPacketAssembler<UpdateFriendListPacket>(opcode = 38, size = -2) {
+insert<PacketAssemblerListener>().assemblePacket<UpdateFriendListPacket>(opcode = 38, size = -2) {
     for (friend in friends) {
         it.writeByte(friend.visible.toInt())
         it.writeStringCp1252NullTerminated(friend.displayName)

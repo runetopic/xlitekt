@@ -3,7 +3,7 @@ package xlitekt.shared.resource
 import io.ktor.server.application.ApplicationEnvironment
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.decodeFromStream
-import xlitekt.shared.lazy
+import xlitekt.shared.insert
 
 class MapSquares(list: Map<Int, MapSquareResource>) : HashMap<Int, MapSquareResource>(list)
 class Sequences(list: Map<String, SequenceResource>) : HashMap<String, SequenceResource>(list)
@@ -35,5 +35,5 @@ object Resource {
     fun itemSequenceResource(): ItemSequences = ItemSequences(loadResource<List<ItemSequenceResource>>("game.resources.item_sequences").associateBy(ItemSequenceResource::id))
 
     private inline fun <reified T> loadResource(path: String): T =
-        json.decodeFromStream(Resource::class.java.getResourceAsStream(lazy<ApplicationEnvironment>().config.property(path).getString())!!)
+        json.decodeFromStream(Resource::class.java.getResourceAsStream(insert<ApplicationEnvironment>().config.property(path).getString())!!)
 }

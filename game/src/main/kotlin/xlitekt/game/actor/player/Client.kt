@@ -20,13 +20,14 @@ import xlitekt.game.packet.MoveMinimapClickPacket
 import xlitekt.game.packet.Packet
 import xlitekt.game.packet.PublicChatPacket
 import xlitekt.game.packet.assembler.PacketAssemblerListener
+import xlitekt.game.packet.disassembler.PacketDisassemblerListener
 import xlitekt.game.packet.disassembler.handler.PacketHandler
 import xlitekt.game.packet.disassembler.handler.PacketHandlerListener
 import xlitekt.game.world.World
 import xlitekt.shared.buffer.writeByte
 import xlitekt.shared.buffer.writeShort
 import xlitekt.shared.inject
-import xlitekt.shared.lazy
+import xlitekt.shared.insert
 import java.io.IOException
 import java.net.SocketException
 import java.nio.ByteBuffer
@@ -35,7 +36,7 @@ import java.nio.ByteBuffer
  * @author Jordan Abraham
  */
 class Client(
-    val socket: Socket? = null,
+    private val socket: Socket? = null,
     val readChannel: ByteReadChannel? = null,
     val writeChannel: ByteWriteChannel? = null
 ) {
@@ -51,7 +52,7 @@ class Client(
     fun disconnect(reason: String) {
         logger.debug { "Client disconnected for reason={$reason}." }
         if (::player.isInitialized) {
-            player.let(lazy<World>()::requestLogout)
+            player.let(insert<World>()::requestLogout)
         }
         writeChannel?.close()
         socket?.close()
@@ -76,7 +77,7 @@ class Client(
     }
 
     internal fun addToWritePool(packet: Packet) {
-        val assembler = PacketAssemblerListener.listeners[packet::class]
+        val assembler = packetAssemblerListener[packet::class]
         if (assembler == null) {
             disconnect("Unhandled packet found when trying to write. Packet was $packet.")
             return
@@ -123,13 +124,16 @@ class Client(
 
     internal fun invokeAndClearReadPool() {
         for (packet in readPool) {
-            PacketHandlerListener.listeners[packet.packet::class]?.invoke(packet)
+            packetHandlerListener[packet.packet::class]?.invoke(packet)
         }
         readPool.clear()
     }
 
     companion object {
         private val environment by inject<ApplicationEnvironment>()
+        private val packetHandlerListener by inject<PacketHandlerListener>()
+        private val packetAssemblerListener by inject<PacketAssemblerListener>()
+        val packetDisassemblerListener by inject<PacketDisassemblerListener>()
         val majorBuild = environment.config.property("game.build.major").getString().toInt()
         val minorBuild = environment.config.property("game.build.minor").getString().toInt()
         val rsaExponent = environment.config.property("game.rsa.exponent").getString()
