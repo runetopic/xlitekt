@@ -2,9 +2,13 @@ package xlitekt.game.actor.movement.pf
 
 import io.ktor.server.application.ApplicationEnvironment
 import org.rsmod.pathfinder.DumbPathFinder
+import org.rsmod.pathfinder.LineValidator
 import org.rsmod.pathfinder.Route
 import org.rsmod.pathfinder.SmartPathFinder
 import org.rsmod.pathfinder.ZoneFlags
+import org.rsmod.pathfinder.reach.DefaultReachStrategy
+import xlitekt.game.actor.Actor
+import xlitekt.game.world.map.GameObject
 import xlitekt.shared.inject
 import java.util.concurrent.ConcurrentLinkedDeque
 
@@ -37,6 +41,52 @@ private val smart = ConcurrentLinkedDeque<SmartPathFinder>().also {
 }
 
 object PathFinders {
+    private const val SIZE = 128
+    private const val DEFAULT_FLAG = 0
+    private const val USE_ROUTE_BLOCKER_FLAGS = true
+    private val flags: Array<IntArray?> = zoneFlags.flags
+    private val lineValidator = LineValidator(searchMapSize = SIZE, flags = flags, defaultFlag = DEFAULT_FLAG)
+
+    fun hasLineOfSight(
+        srcX: Int,
+        srcZ: Int,
+        destX: Int,
+        destZ: Int,
+        z: Int,
+        srcSize: Int = -1,
+        destWidth: Int = 0,
+        destHeight: Int = 0,
+    ): Boolean = lineValidator.hasLineOfSight(srcX, srcZ, z, destX, destZ, srcSize, destWidth, destHeight)
+
+    fun hasLineOfWalk(
+        srcX: Int,
+        srcZ: Int,
+        destX: Int,
+        destZ: Int,
+        z: Int,
+        srcSize: Int = -1,
+        destWidth: Int = 0,
+        destHeight: Int = 0,
+    ): Boolean = lineValidator.hasLineOfWalk(srcX, srcZ, z, destX, destZ, srcSize, destWidth, destHeight)
+
+    fun reached(source: Actor, destination: GameObject): Boolean {
+        if (source.location.level != destination.location.level) return false
+        return DefaultReachStrategy.reached(
+            zoneFlags.flags,
+            DEFAULT_FLAG,
+            x = source.location.x,
+            y = source.location.z,
+            z = source.location.level,
+            destX = destination.location.x,
+            destY = destination.location.z,
+            destHeight = destination.entry?.height ?: 1,
+            destWidth = destination.entry?.width ?: 1,
+            srcSize = source.size(), // TODO these needs to be based on the actors size
+            rotation = destination.rotation,
+            shape = destination.shape,
+            accessBitMask = 0 // TODO access flags.
+        )
+    }
 
     fun findPath(
         smart: Boolean,

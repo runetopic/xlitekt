@@ -9,25 +9,31 @@ import xlitekt.game.content.skill.Skill.Companion.MAX_SKILLS
 import xlitekt.game.content.skill.Skill.Companion.getLevelForXp
 import xlitekt.game.content.skill.Skill.Companion.getXpForLevel
 
+fun defaultLevelsAndExperience(): Pair<IntArray, DoubleArray> {
+    val defaultExperience = getXpForLevel(DEFAULT_LEVEL)
+
+    val levels = IntArray(MAX_SKILLS)
+    val experience = DoubleArray(MAX_SKILLS)
+
+    Skill.values().forEach {
+        val (level, xp) = when (it) {
+            Skill.HITPOINTS -> DEFAULT_HITPOINTS_LEVEL to getXpForLevel(DEFAULT_HITPOINTS_LEVEL)
+            Skill.HERBLORE -> DEFAULT_HERBLORE_LEVEL to getXpForLevel(DEFAULT_HERBLORE_LEVEL)
+            else -> DEFAULT_LEVEL to defaultExperience
+        }
+        levels[it.id] = level
+        experience[it.id] = xp
+    }
+    return Pair(levels, experience)
+}
+
+val defaultLevelsAndExperience = defaultLevelsAndExperience()
+
 @Serializable(SkillsSerializer::class)
 class Skills(
-    private val levels: IntArray = IntArray(MAX_SKILLS),
-    private val experience: DoubleArray = DoubleArray(MAX_SKILLS)
+    private val levels: IntArray = defaultLevelsAndExperience.first,
+    private val experience: DoubleArray = defaultLevelsAndExperience.second
 ) {
-    init {
-        val defaultExperience = getXpForLevel(DEFAULT_LEVEL)
-
-        Skill.values().forEach {
-            val (level, experience) = when (it) {
-                Skill.HITPOINTS -> DEFAULT_HITPOINTS_LEVEL to getXpForLevel(DEFAULT_HITPOINTS_LEVEL)
-                Skill.HERBLORE -> DEFAULT_HERBLORE_LEVEL to getXpForLevel(DEFAULT_HERBLORE_LEVEL)
-                else -> DEFAULT_LEVEL to defaultExperience
-            }
-            this.levels[it.id] = level
-            this.experience[it.id] = experience
-        }
-    }
-
     fun level(skill: Skill): Int = levels[skill.id]
     fun xp(skill: Skill): Double = experience[skill.id]
 

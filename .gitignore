@@ -14,3 +14,4 @@ main_file_cache.*
 /cache/data/dump/*
 !.github/workflows/build.yml
 docs/*
+/docs/

@@ -12,7 +12,7 @@ import xlitekt.shared.insert
  */
 insert<InterfaceListener>().userInterface<MiniMap> {
     onClick("Toggle Run") {
-        if (runEnergy < 100f) {
+        if (runEnergy < 101f) {
             // TODO get the game messages for this
             message { "You don't have enough energy left to run!" }
             vars[VarPlayer.ToggleRun] = 0

@@ -50,8 +50,12 @@ class Inventory(
     /**
      * Adds an item to the player's inventory, and if the item is added we invoke a function with the slotId of the newly added item.
      */
-    fun addItem(item: Item, function: (Item).(Int) -> Unit) {
-        if (addItem(item)) function.invoke(item, slotId(item))
+    fun addItem(item: Item, function: (Item).(Int) -> Unit): Boolean {
+        if (addItem(item)) {
+            function.invoke(item, slotId(item))
+            return true
+        }
+        return false
     }
 
     fun removeItem(item: Item, slotId: Int = slotId(item), function: (Item).(List<Int>) -> Unit) {

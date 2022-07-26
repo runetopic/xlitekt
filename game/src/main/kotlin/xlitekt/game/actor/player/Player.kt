@@ -9,6 +9,8 @@ import xlitekt.game.actor.render.Render
 import xlitekt.game.actor.speed
 import xlitekt.game.content.container.equipment.Equipment
 import xlitekt.game.content.container.inventory.Inventory
+import xlitekt.game.content.interact.GameObjectInteraction
+import xlitekt.game.content.interact.InteractionMap
 import xlitekt.game.content.skill.Skill
 import xlitekt.game.content.skill.Skills
 import xlitekt.game.content.ui.Interfaces
@@ -30,6 +32,7 @@ import xlitekt.game.packet.VarpSmallPacket
 import xlitekt.game.packet.disassembler.handler.PacketHandler
 import xlitekt.game.queue.QueuedScriptPriority
 import xlitekt.game.world.World
+import xlitekt.game.world.map.GameObject
 import xlitekt.game.world.map.Location
 import xlitekt.shared.insert
 import kotlin.math.abs
@@ -209,11 +212,21 @@ fun Player.process() {
     if (queue.any { it.priority == QueuedScriptPriority.Strong }) {
         interfaces.closeModal()
     }
-    queue.process(this)
     // This makes sure they continue running and processing until the next tick, when we need to toggle their run off if the energy is depleted, and they are running
     if (runEnergy <= 0.0f && VarPlayer.ToggleRun in vars) {
         vars.flip { VarPlayer.ToggleRun }
         speed { false }
     }
+
+    queue.process(this)
     restoreRunEnergy()
+}
+
+fun Player.opLoc(option: String, gameObject: GameObject): Boolean {
+    val gameObjectInteraction = GameObjectInteraction(this, gameObject, option)
+    val handledLocs = InteractionMap.handledObjectInteractions[gameObject.id] ?: return false
+    handledLocs.invoke(gameObjectInteraction)
+    target = gameObject
+    opScript = gameObjectInteraction
+    return true
 }
